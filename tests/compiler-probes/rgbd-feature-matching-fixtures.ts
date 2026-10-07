@@ -73,10 +73,10 @@ export function descriptorOracle(gray:number[][],depth:number[][],pixels:number[
   });return {descriptor,point,enabled,invalidCount};
 }
 
-export function calibratedPointOracle(depth:number[][],pixel:number[],rgb:number[],optics:number[],disparityNoise=.1,baseline=.05,noiseReferenceFx=848/(2*Math.tan(87*Math.PI/360))) {
+export function calibratedPointOracle(depth:number[][],pixel:number[],rgb:number[],optics:number[],disparityNoise=.1,baseline=.05,noiseReferenceFx=848/(2*Math.tan(87*Math.PI/360)),depthUnits=1) {
   const height=depth.length,width=depth[0].length;
   const invalid={valid:0,point:[0,0,0] as Point,axialDepth:0};
-  if(!pixel.every((p,k)=>Number.isFinite(p)&&p>=0&&p<(k===0?width:height))||
+  if(!(depthUnits>0&&depthUnits<=1e6)||!pixel.every((p,k)=>Number.isFinite(p)&&p>=0&&p<(k===0?width:height))||
     ![...rgb.slice(0,2),...optics.slice(0,2)].every(x=>x>=1e-6&&x<=1e6)||
     ![...rgb.slice(2),...optics.slice(2)].every(x=>finiteBound(x,1e6))||!(disparityNoise>=0&&disparityNoise<=1&&baseline>=1e-6&&baseline<=10&&noiseReferenceFx>=1e-6&&noiseReferenceFx<=1e6))return invalid;
   const address=pixel.map((p,k)=>{const mapped=(p-rgb[k+2])*optics[k]/rgb[k]+optics[k+2],nearest=Math.round(mapped);return Math.abs(mapped-nearest)<=1e-9?nearest:mapped;});
@@ -84,9 +84,9 @@ export function calibratedPointOracle(depth:number[][],pixel:number[],rgb:number
   const [x,y]=address,[left,top]=address.map(Math.floor),dx=x-left,dy=y-top;
   const samples:[[number,number],number][]=[[[left,top],(1-dx)*(1-dy)],[[left+1,top],dx*(1-dy)],[[left,top+1],(1-dx)*dy],[[left+1,top+1],dx*dy]];
   const used=samples.filter(([,w])=>w>0);
-  if(used.some(([[x,y]])=>x>=width||y>=height||!(depth[y][x]>.28&&depth[y][x]<9.95)))return invalid;
-  const values=used.map(([[x,y]])=>depth[y][x]),minimum=Math.min(...values),maximum=Math.max(...values);
+  if(used.some(([[x,y]])=>x>=width||y>=height||!(depth[y][x]*depthUnits>.28&&depth[y][x]*depthUnits<9.95)))return invalid;
+  const values=used.map(([[x,y]])=>depth[y][x]*depthUnits),minimum=Math.min(...values),maximum=Math.max(...values);
   if(maximum-minimum>.03+.025*minimum+3*minimum**2*disparityNoise/(noiseReferenceFx*baseline))return invalid;
-  const inverse=used.reduce((sum,[[x,y],weight])=>sum+weight/depth[y][x],0),z=1/inverse;
+  const inverse=used.reduce((sum,[[x,y],weight])=>sum+weight/(depth[y][x]*depthUnits),0),z=1/inverse;
   return {valid:1,point:[(pixel[0]-rgb[2])*z/rgb[0],(pixel[1]-rgb[3])*z/rgb[1],z] as Point,axialDepth:z};
 }

@@ -111,6 +111,13 @@ from new preparation. This gate stays separate from production-node tests.
 
 ## Single compiled program
 
+The current full-resolution descriptor check is documented in
+[Native D435 descriptor](../../dev/modelica-d435-descriptor-2026-10-07.md):
+actual 848x480 RGB3/350-feature WASM passes numerical checks in Node and a
+static browser worker. Its kernel profile identifies repeated whole-image
+argument copies. This component proof does not admit complete SLAM or change
+the production compiler pin; the original capability gate below remains separate.
+
 `modelica-native-program.test.ts` is staged for RUM-011. It requires the new
 official `prepare_native_program` API, and compares a single WASM executable
 against the older compiler-issued stage modules for every Y bit in a 160×90

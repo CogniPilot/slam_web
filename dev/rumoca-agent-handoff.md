@@ -5667,3 +5667,78 @@ pass; source bookends match. Receipt:
 only the test gained those explicit per-point assertions. All 215 unit tests,
 TypeScript and production build pass. Browser smoke: 20 pass, one optional
 compiler-candidate skip. Native/WASM SLAM admission is still refused as recorded.
+
+### Full D435 descriptor issuance and array-copy cost, 2026-10-07
+
+The same PR 390 paired package (`7e8ec61d2adf`, WASM `444f029e` above)
+now issues the **unchanged production descriptor math at 480x848 RGB3,
+350 features and 49 descriptor cells**. Test-only wrapper:
+`tests/compiler-probes/fixtures/D435DescriptorFrame.mo`. Exact composed source:
+`dev/artifacts/modelica-d435-descriptor-2026-10-07/source.mo`, SHA256
+`1440092c07ed435a80649f1949a2397dfd94b4281e947e83ded5362ba7140d87`.
+
+All five numerical test groups pass: 27 actual WASM evaluations, every one
+of 18551 public outputs checked against the independent oracle, readonly P,
+raw Z16 at depthUnits=.001, physical noise scale, held poisoned images,
+NaN/Infinity and participation masks, malformed counts, reset/recovery,
+exact source/module identity and JSON reload. This is Node execution of the
+issued module, not browser/full-SLAM or sustained throughput qualification.
+
+- Profile schema73/f64-v3; module 41954 bytes, four stages, SHA256
+  `57b92bd2647728db9a3c325272cc63d890eaa3bcd8cccc20fcb73c1a72e9d79b`.
+- Preparation 110.4 s; bounded command 111.4 s, 4.67 GiB peak RSS.
+- Artifact JSON approximately 130 MiB: 1647443 bindings, 1628874 input names.
+  Actual linear memory is only 676 pages (44.3 MB). A 10-second perf sample
+  during preparation is dominated by V8 marking/GC, not numerical kernels.
+- Warm evaluate-only calls roughly 43-57 ms; activeCount=0 still 44.6 ms;
+  imageEnabled=false 11.95 ms. These timings exclude input fixture generation,
+  host comparisons and artifact admission; two-core CPU affinity, nice 15.
+
+**Concrete reusable performance request:** the emitted `DescribeRGBDFrame`
+function (WASM function 5) loops 350 slots. Inside that loop, immediately before
+`call 4` (`RGBDCalibratedPoint`), `memory.copy` copies **3256320 bytes**,
+the entire 480x848 f64 depth image, into a callee argument area. That is
+**1,139,712,000 bytes per acquired frame** from this one copy site alone,
+including inactive slots while imageEnabled=true. `eval_assignments` also
+copies the complete 13031080-byte P block into scratch before execution.
+Please lower readonly array function arguments as immutable views/references
+with proven lifetime/aliasing, while retaining private local writes and
+transactional public outputs on faults. Do not require app-side inlining,
+manual pointer arithmetic or a source-specific kernel.
+
+Please also issue compiler-owned compact array bindings/input span metadata;
+enumerating 1.6 million scalar names dominates cold preparation, transfer and
+consumer validation. Preserve exact shape, type, default, source and module
+identity rather than having this app strip or invent layout metadata. Raw
+U8/U16 ingress and CV-f32 remain separate unqualified compiler contracts.
+
+The full `D435FastSLAMStep` definedness refusal and compiler-owned State carry
+requests above remain the primary integration blockers. Production remains
+pinned to 0.10.0. Native descriptor fixture/gate commands and detailed profiling
+receipts are being finalized in `dev/modelica-d435-descriptor-2026-10-07.md`.
+
+### Descriptor browser proof and clean kernel perf, 2026-10-07
+
+The identical full-native descriptor module now passes in a **static Chromium
+worker**: five changing/zero-count/held/reset frames, 92755 independent output
+comparisons, readonly f64 P and Boolean input lane. Cold consumer admission is
+8.89 s; acquired warm calls are 41.9-46.0 ms, held 9.4 ms. The bounded browser
+command finishes in 13.9 s at 2.12 GiB peak process-tree RSS. Source/artifact
+files are fetched directly by the worker; automation carries no large JSON.
+No sensor ingress, detector, full SLAM or mobile performance claim follows.
+
+A separate **10-second perf recording wholly inside an owned evaluate-only
+window** has 998 cycles:u samples, zero lost samples. **77.33% of weighted
+cycles are `__memmove_avx_unaligned_erms` with WASM `memory_copy_wrapper` in
+the stack.** Retained V8 symbol maps resolve another 14.79% to WASM function 6
+(stage/argument marshalling), 4.15% to function 5, 1.56% to function 1, and
+1.03% to function 4. The full run performs 681 identical, checked kernel calls
+in 30.04 s. The 30-call medians are 43.86 ms (350 features), 41.82 ms (one),
+42.08 ms (zero), and 10.09 ms (held). No fixture/oracle/loading work is inside
+the sampled interval; the issued module and public numerical gates are unchanged.
+
+Please prioritize readonly array argument borrowing and compact declaration
+metadata after the full-SLAM admission blockers. This profile supplies a
+specific reusable compiler target rather than requiring application math or
+source-specific rewrites. Receipts, WAT and the independent perf summarizer:
+`dev/artifacts/modelica-d435-descriptor-2026-10-07/`.
