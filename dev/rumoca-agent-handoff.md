@@ -6170,10 +6170,57 @@ Retained-call/copy instrumentation proves all output bits and readonly inputs:
 Function28 sites171/174, original WAT lines45533/45573, each copy a 6144-byte
 vector 1191168 times for the small loop (7318536192 bytes per site), or 529664
 times for dense 128/256. Stationary function35 still captures 73728-byte matrices
-arrays per slot, including disabled slots. Logical widths are not DRAM traffic.
+per slot, including disabled slots. Logical widths are not DRAM traffic.
 These plain-array components do not exercise the record-copy defect above.
 
 Full report, strict gates, browser and reusable copy/perf probes:
 `dev/modelica-pose-graph-storage-2026-10-07.md`.
 Receipts/frozen sources: `dev/artifacts/modelica-pose-graph-native-2026-10-07/`.
 Large WAT/traces/maps: `$HOME/scratch/slam_web/profiles/pose-graph-native-2026-10-07/`.
+
+### Exact merged-main WASM retest, 2026-10-07 (application)
+
+The main Build WASM job 113050416059 is now successful. Downloaded artifact
+11516745404 (`wasm-package`) from run 37696799014, head
+f0e83f00ab218d8baf2b0a6611ac7753358e9edc. Actual release-full-web reports
+0.10.2 / f0e83f00ab21, compiler WASM SHA256
+53195c8518d8a8723f7899ba0b3b77a24d1f2d0f95fc8bf701cea96f54577c0e.
+Package: `$HOME/scratch/slam_web/downloads/rumoca-f0e83f00-wasm/release-full-web`.
+No application pin change.
+
+- Full unchanged `5d485ddd` Step still refuses ToDae at
+  `problem__nodeCount` / byte659592 in 5.468 s.
+- Complete unchanged `c93b6acb` optimizer still refuses scratch >64 MiB
+  in 2.506 s. This is now reproduced on actual merged main, not only the
+  paired review package.
+- Full Initialize traps `RuntimeError: unreachable`, rather than timing out:
+  98.56 s in the first attempt, 96.96 s in the diagnostic repeat. The repeat
+  records compiler linear memory growing from 4784128 to **4294967296 bytes**
+  (4 GiB), peak process-tree RSS 4585348 KiB. No host watchdog/RSS limit fired.
+- Full Reset also traps `RuntimeError: unreachable` after 50.16 s, compiler
+  linear memory **3933339648 bytes**, peak process-tree RSS 4099008 KiB.
+  No module issues. Please investigate the trap and memory growth in these
+  owners, in addition to the known inline-fold/cache work.
+  Initialize reaching the wasm32 memory ceiling is measured; the exact
+  allocation owner still needs compiler-side evidence. It is separate from
+  the issued optimizer's 64 MiB scratch-planning limit.
+- Main PGRun prepares in 2.023 s. Its entire
+  artifact is identical to the numerically tested review artifact **except
+  compiler identity**: module bytes/hash, source hash, ABI, layout, defaults,
+  typed lanes, schedule, imports and faults all match. The equivalence receipt
+  does not replace the still-refused complete optimizer.
+
+`dev/probe-native-program.mjs` now records compiler memory before/after and
+exception stacks. This build has no WASM name section. Initialize's trap
+stack indices are 18383,17401,11250,115,856,607,16655; Reset starts
+18383,17401,18821,14230,10613,484,97,97,255,92. Full offsets/stacks and actual
+reports are under
+`$HOME/scratch/slam_web/tmp/pose-graph-native-2026-10-07/main-f0/` and frozen in
+`dev/artifacts/modelica-pose-graph-native-2026-10-07/main-f0/`.
+
+The run's Linux test failure is separately diagnosed in job113050415755:
+Fourbar MSL regression cannot find MODELICAPATH/cached MSL; heavy Solve
+quadrotor regressions cannot find cached CMM. sccache setup/post also fail.
+Raw log: `$HOME/scratch/slam_web/tmp/rumoca-main-f0-linux.log`.
+Those logs do not establish a compiler numerical regression or a green run;
+please repair the dependency setup independently of SLAM admission.

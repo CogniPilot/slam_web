@@ -127,3 +127,26 @@ The app does not rewrite the issued module for execution.
 `$HOME/scratch/slam_web/profiles/pose-graph-native-2026-10-07/`; compact receipts
 and frozen proof sources remain in the evidence directory. No performance fix
 or complete browser SLAM integration is claimed here.
+
+## Exact merged-main retest
+
+The successful main WASM build from run 37696799014, artifact 11516745404,
+reports version 0.10.2 / revision `f0e83f00ab21`; compiler WASM SHA256
+`53195c8518d8a8723f7899ba0b3b77a24d1f2d0f95fc8bf701cea96f54577c0e`.
+The full Step still refuses its `problem__nodeCount` conditional in 5.468 s;
+the complete optimizer still refuses scratch above 64 MiB in 2.506 s.
+
+Full Initialize traps after 96.96 s in a diagnostic repeat, with measured
+compiler linear memory reaching 4294967296 bytes (4 GiB). Reset traps after
+50.16 s, with 3933339648 bytes of compiler linear memory. Neither host memory
+nor time watchdog fired. Stack indices and offsets are retained; this package
+has no WASM name section. These compiler working-memory failures are distinct
+from the issued optimizer's scratch limit. The exact trap/allocation owner
+still needs compiler-side diagnosis; no full program issues.
+
+Main independently issues the PGRun artifact in 2.023 s. Every artifact field
+except compiler identity matches the tested review artifact, including module
+bytes, ABI, layouts, defaults and typed lanes. The numerical execution evidence
+therefore binds the same executable; complete optimizer acceptance is still
+missing. Actual reports, identity and equivalence receipt are frozen under
+`main-f0/` in the evidence directory. The application pin remains unchanged.

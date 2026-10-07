@@ -16,8 +16,9 @@ const report = {status: 'RUNNING', recordedAt: new Date().toISOString(), model,
 const save = () => fs.writeFileSync(reportFile, JSON.stringify(report, null, 2) + '\n');
 save();
 const compiler = await import(pathToFileURL(path.resolve(directory, 'rumoca_bind_wasm.js')).href);
-await compiler.default({module_or_path: wasm});
+const instance = await compiler.default({module_or_path: wasm});
 report.compiler = {version: compiler.get_version(), revision: compiler.get_git_commit()};
+report.compilerMemoryBeforeBytes = instance.memory?.buffer.byteLength;
 save();
 const start = performance.now();
 try {
@@ -36,7 +37,9 @@ try {
 } catch (error) {
   report.status = 'REFUSED';
   report.refusal = String(error);
+  report.refusalStack = error instanceof Error ? error.stack : undefined;
 } finally {
+  report.compilerMemoryAfterBytes = instance.memory?.buffer.byteLength;
   report.elapsedMs = performance.now() - start;
   save();
   console.log(JSON.stringify(report));
