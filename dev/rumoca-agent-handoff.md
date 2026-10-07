@@ -5145,7 +5145,7 @@ Actual Chromium checks reproduce a Rumoca 0.10.0 `lsp_diagnostics` WASM trap whe
 
 The original strict browser diagnostics assertions remain in tests/browser/editor-compiler-admission.spec.ts, runnable with npm run test:browser:compiler-admission. This currently fails; it is not full-SLAM or LSP qualification. The supported inertial demo editor gate remains strict for physics, sensors, INS and evaluation. An unused D435FastNativeFrame wrapper was removed from the shared image-profile package because it referenced FAST from the Harris-only editor document; the actual D435FastFeatures target remains. No compiler-owned tree was changed for this release.
 
-## Source-directory organization staged, 2026-10-07
+## Source-directory organization landed locally, 2026-10-07
 
 A source-only directory reorganization is prepared on the application's
 `refactor/modelica-library` branch in
@@ -5157,8 +5157,9 @@ existing component name to its new path. Modelica identifiers, mathematical
 bodies and the ordered compiler composition are preserved. This is a directory
 refactor, not a new qualified package namespace or a compiler fix.
 
-The current published main branch still has flat source paths while its Pages
-CI run finishes. Once this refactor lands, use the shared path map and
+The local application main branch now includes the refactor; the published
+branch still has flat paths while its existing Pages CI run finishes.
+Use the shared path map and
 `dev/export-rgbd-slam-source.mjs` rather than assuming `models/<name>.mo`.
 Previously saved workspace path keys migrate without replacing source text;
 frozen compiler deliveries and historical evidence retain their original paths.

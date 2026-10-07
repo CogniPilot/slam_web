@@ -76,6 +76,7 @@ npm run dev
 the supported demo's CI checks pass on `main`.
 
 - [Development, tests, and compiler review](docs/development.md)
+- [Modelica source guide](models/README.md)
 - [Camera and sensor details](docs/camera.md)
 - [Editable SLAM workspace](docs/modelica-slam-source-workspace.md)
 - [Architecture and current SLAM integration](docs/architecture.md)
