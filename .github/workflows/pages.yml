@@ -151,7 +151,7 @@ jobs:
           retention-days: 7
   deploy:
     if: >-
-      always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
+      always() && !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
       needs.build.result == 'success' &&
       (needs.browser.result == 'success' ||
       (github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks))

@@ -70,3 +70,30 @@ the hosted browser gates.
 
 Local Nix validation after the profile changes passed 208 unit tests and the
 production build (9.42 seconds for Vite).
+
+## Release verification
+
+Manual run [37655137621](https://github.com/CogniPilot/slam_web/actions/runs/37655137621)
+published commit `3e4db3a` successfully on October 7, 2026. Build and unit tests
+passed on GitHub; hosted browser checks were explicitly skipped for this run.
+The Pages deployment step took 4 minutes 24 seconds after artifact upload.
+
+Before publication finished, the exact uploaded `github-pages` artifact was
+downloaded and extracted into a fresh detached checkout. Both normal CI smoke
+shards passed under the locked Nix environment with SwiftShader: 14 passed,
+one optional compiler-candidate test skipped, in 81.6 seconds including
+dependency installation. Peak owned process RSS was 2.51 GiB. A strict static
+server mounted the same artifact at `/slam_web/`; a phone-sized browser loaded
+the real workers and assets, started with Run alone, and produced valid depth
+data with the software warning visible and no browser or HTTP errors.
+
+After publication, the public site returned HTTP 200. A separate browser check
+against `https://cognipilot.github.io/slam_web/` used an RTX 3090 and a 390 by 844
+viewport. Run started real Modelica physics, the drone was visible inside the
+view frustum, and native 848 by 480 depth data was valid. No browser or HTTP
+errors were recorded. This verifies the desktop GPU with a phone-sized layout;
+it does not establish performance on a physical mobile device.
+
+The deployment condition also rejects cancelled runs, including manual runs
+whose build completed before cancellation. Ordinary pushes still require both
+browser shards; the manual bypass remains explicit and defaults to false.
