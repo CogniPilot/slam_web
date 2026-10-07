@@ -1,0 +1,63 @@
+{
+  "status": "CORRECTION_ADDENDUM_ORIGINAL_ARCHIVE_UNCHANGED_REVISED_SOURCE_ISSUANCE_PENDING",
+  "artifact": "dev/artifacts/u8-rgb-input-binding-correction",
+  "manifestSha256": "6835f03219963efcdb84bbeb29d33cf87b2470d5e82ecdbe52c8aabd77cea8ab",
+  "originalArchive": {
+    "manifestSha256": "3f966dc45c7f9871e78034459ad009ae25136daa464f7fe23a5391f414bbb578",
+    "allManifestEntriesRehashed": true,
+    "modified": false,
+    "integerFixtureSha256": "de65428d23a2cbd772522f90675cb831e70f03d8eced9bfe518b81a5ac6d1446"
+  },
+  "correction": {
+    "invalidRecommendation": "Real(integerExpression) as builtin conversion",
+    "standardRoute": "Automatic Integer-to-Real coercion at a Real assignment/use context",
+    "spec": "https://specification.modelica.org/maint/3.6/arrays.html#standard-type-coercion",
+    "section": "10.6.13",
+    "compilerBuiltinFixRequested": false
+  },
+  "originalActualResults": {
+    "parentProduced": true,
+    "models": [
+      "IntegerRGB.Small",
+      "IntegerRGB.Full"
+    ],
+    "failure": "ToDae: unresolved Flat reference Real",
+    "producerSha256": "262ee681e0cdb87b499ee8907508d8ea77c9640caa2b480bb3eda782886d1457",
+    "solveIssued": false,
+    "nativeIssued": false
+  },
+  "correctedSource": {
+    "path": "tests/compiler-probes/fixtures/IntegerRGB.mo",
+    "sha256": "34d7d36a1c236d90758dc9e7eae514a3d16a44b27a67d9d4dc3c44f9fc79fc98",
+    "semanticChange": "Replace invalid Real(...) syntax with Real channel temporaries assigned from Integer elements before same ordered sum",
+    "retains": [
+      "assertions",
+      "RGBA layout",
+      "original addition order",
+      "Small3x5",
+      "Full90x160"
+    ],
+    "issuanceStatus": "PENDING_IN_THIS_ADDENDUM",
+    "executedByThisAgent": false
+  },
+  "remaining": [
+    "checked external rawU8 binding/storage receipt",
+    "source-selected Binary32 ownership/backend acceptance",
+    "unchanged semanticReal numeric mapping",
+    "full mixed graph linking"
+  ],
+  "claims": {
+    "compilerModified": false,
+    "cargoRun": false,
+    "cacheModified": false,
+    "originalFixturesModified": false,
+    "correctedFixtureCompiledByThisAgent": false,
+    "rawU8BindingAdmitted": false,
+    "binary32Admitted": false
+  },
+  "fastDiagnosticSupplement": {
+    "patchSha256": "dc0465595f23f8ce5b1f104ac9dc5e78ffb4a057259c6d779726abd72b3ed1c9",
+    "manifestSha256": "f7dde0fd0ee7512eba5bf5d05874efb3fa7770d59f556ac6d82920695331bb34",
+    "reportSha256": "3a2ad845307a85a8fdc053a948cfb06b118e629b93a6e4b95711966e5a71f94b"
+  }
+}

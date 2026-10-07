@@ -1,0 +1,106 @@
+{
+  "status": "UNINSTRUMENTED_ALTERNATING_FULL14400_REGISTRATION_COMPARISON_PASS",
+  "recordedAt": "2026-10-04T19:09:54.055Z",
+  "engine": "v24.21.0",
+  "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+  "fixtureSha256": "198eed047645de02b4e50439e014ede03b7076951d21ece008d5862773458e5a",
+  "moduleSha256": [
+    "70b84c03bd56a2d5682b5c0459465323be9fb323e1f59d07502b58bf2ee3edd6",
+    "dc0ec01cc8de4536af0ff513614abfb579758df11b2f98facf1a0d846bd36a17"
+  ],
+  "artifactSha256": [
+    "da97330d2b26e25707d3c9aaa9fdef2e5f9e6234ea277a735e64ca252c3927b7",
+    "c6db3eea4d6845363f0239c76980e999f4e69a1c1c378a3a1c0b93013e140512"
+  ],
+  "moduleBytes": [
+    78866,
+    71810
+  ],
+  "warmCallsPerModule": 100,
+  "blocks": [
+    {
+      "round": 0,
+      "candidate": 0,
+      "calls": 100,
+      "meanExecutionMs": 13.262990960000007
+    },
+    {
+      "round": 0,
+      "candidate": 1,
+      "calls": 100,
+      "meanExecutionMs": 9.19437642
+    },
+    {
+      "round": 1,
+      "candidate": 1,
+      "calls": 100,
+      "meanExecutionMs": 9.16474072
+    },
+    {
+      "round": 1,
+      "candidate": 0,
+      "calls": 100,
+      "meanExecutionMs": 13.12622507
+    },
+    {
+      "round": 2,
+      "candidate": 0,
+      "calls": 100,
+      "meanExecutionMs": 13.383223010000002
+    },
+    {
+      "round": 2,
+      "candidate": 1,
+      "calls": 100,
+      "meanExecutionMs": 9.27333302000001
+    },
+    {
+      "round": 3,
+      "candidate": 1,
+      "calls": 100,
+      "meanExecutionMs": 9.220405429999992
+    },
+    {
+      "round": 3,
+      "candidate": 0,
+      "calls": 100,
+      "meanExecutionMs": 13.133848209999996
+    },
+    {
+      "round": 4,
+      "candidate": 0,
+      "calls": 100,
+      "meanExecutionMs": 13.178535570000003
+    },
+    {
+      "round": 4,
+      "candidate": 1,
+      "calls": 100,
+      "meanExecutionMs": 9.453172889999987
+    },
+    {
+      "round": 5,
+      "candidate": 1,
+      "calls": 100,
+      "meanExecutionMs": 9.354672630000005
+    },
+    {
+      "round": 5,
+      "candidate": 0,
+      "calls": 100,
+      "meanExecutionMs": 13.223797549999981
+    }
+  ],
+  "baselineMeanExecutionMs": 13.218103395,
+  "candidateMeanExecutionMs": 9.276783518333334,
+  "speedup": 1.4248584510868012,
+  "everyOutputBitsEqual": true,
+  "inputBytesImmutable": true,
+  "capacity": 14400,
+  "probeSha256": "9281434ab6e846e4c849f544ec0e6401dfb019e9f3273e0d4902dcd163b14453",
+  "consumerSha256": "4a7c91686f588fae29e49698209064391818914eba696971b08ccaefbd294c50",
+  "scope": "Uninstrumented alternating sixblocks per module,100calls/block, identical full14400 source/inputs. Excludes preparation, input copies, sensors, feature matching, filter and rendering.",
+  "productionPinChanged": false,
+  "runtimeIntegrated": false,
+  "fullSlam": false
+}

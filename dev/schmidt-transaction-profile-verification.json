@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "status": "FULL21_NODE_PERF_AND_GENERATED_CODE_DIAGNOSIS",
+  "recordedAt": "2026-10-05T08:41:33.148Z",
+  "sourceSha256": "f8fe0faaed21654ce80f440434bf1685a6572dfd74f9e9199507262b9e2f96b1",
+  "artifactSha256": "a6d5832b60aab84880e5e0d593f49ba3ebeb996cd7c3af59ec04f38ca7f79c13",
+  "moduleSha256": "b57eed180b9e04613f3d22d043a31e9ecea04f99aefaec534c356ac831e14751",
+  "fixtureSha256": "9afd018eb2d6842b8201541901ba82b8b45ec2f5be254baa094a88fbfa42a67c",
+  "probeSha256": "d126303ce9647596cfbae1b542f0386cfa4c51f1490b6d00d0bba47918c6c171",
+  "consumerSha256": "c623a897a15910fc1e1897c139907d03d71e242adac7c1423bf87cd5ff335c3c",
+  "unprofiled": {
+    "medianStepMs": 1.05221643,
+    "blocks": 12,
+    "stepsPerBlock": 600,
+    "actualReturnedStateCells": 388,
+    "cpuAffinity": "14",
+    "nice": 15
+  },
+  "perf": {
+    "event": "cpu-clock:u",
+    "frequency": 499,
+    "clock": "mono",
+    "callGraph": "fp",
+    "hotWindowMonotonicNs": [
+      {
+        "phase": "hot-start",
+        "ns": "724147749392659"
+      },
+      {
+        "phase": "hot-end",
+        "ns": "724157973773825"
+      }
+    ],
+    "lostSamples": 0,
+    "psdSelfPercent": 73.60000000000001,
+    "entrySelfPercent": 20.49,
+    "self": [
+      {
+        "percent": 20.49,
+        "functionIndex": 44
+      },
+      {
+        "percent": 11.44,
+        "functionIndex": 24
+      },
+      {
+        "percent": 11.35,
+        "functionIndex": 23
+      },
+      {
+        "percent": 11.29,
+        "functionIndex": 29
+      },
+      {
+        "percent": 11.05,
+        "functionIndex": 31
+      },
+      {
+        "percent": 10.96,
+        "functionIndex": 32
+      },
+      {
+        "percent": 4.52,
+        "functionIndex": 22
+      },
+      {
+        "percent": 4.37,
+        "functionIndex": 30
+      },
+      {
+        "percent": 4.31,
+        "functionIndex": 21
+      },
+      {
+        "percent": 4.31,
+        "functionIndex": 20
+      }
+    ]
+  },
+  "generatedCode": {
+    "allPrivateScalarRegistersAreFrameCellRanges": true,
+    "sourceOwner": "rumoca-exec-wasm/src/typed_call/{layout,emit,numbers}.rs",
+    "diagnosis": "Scalar intermediate loads/stores are emitted into linear scratch memory. Annotation shows sampled stores/copies; this is not a hardware-memory-latency measurement. Array copies are not established as the dominant cost.",
+    "fullWatSha256": "70d2ee45b7e33fbce6e8c5a568b8679bb86dd842448e7a6a321f7bd377287df3"
+  },
+  "sourceExperiment": {
+    "productionSourceChanged": false,
+    "sourceSha256": "df0812d775a4be588db500f97a0f900d2894d0f7c074cb64ab31c7714e7a1955",
+    "moduleSha256": "d101a4cdcc421d6677e511e03c6c251fb5b0b26982ffc95fbf495aaffde65d0c",
+    "medianStepMs": 1.026484601666666,
+    "correctness": {
+      "fixtureCases": 20,
+      "checks": 7876,
+      "maximumError": 7.641665078494952e-13,
+      "carriedCellsPerStep": 388
+    },
+    "scope": "Scratch-only PSD branch refactor keeps used sums/order/checks and passes the same20independent fixture expectations. Timings were separate unpaired runs; no reliable causal speedup claim. Not promoted."
+  },
+  "failures": [
+    "First two fixture profiling attempts used the wrong expected-field JSON schema and stopped before timing; raw logs retained in Scratch.",
+    "perf annotate does not support --time here; rejected command output archived. Successful symbol annotation covers whole profiled process; perf report alone selects exact hot window."
+  ],
+  "scope": "Actual complete21state filter transaction plus388output-to-input state copies in Node/V8 on oneCPU. No sensors/frontend/selection/mapping/viewer/browser or whole-simulation throughput/GPU claim. Source candidate is not current production Modelica.",
+  "rawPerf": {
+    "path": "$HOME/scratch/slam_web/profiles/schmidt-transaction/perf-hot/perf.data",
+    "sha256": "99cfc0b2bb48f1a532e189181a602855918039bea56aec2fe81d566f327ac378",
+    "jitProcessedPath": "$HOME/scratch/slam_web/profiles/schmidt-transaction/perf-hot/perf.jit.data"
+  },
+  "files": [
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/timing-current/report.json",
+      "sha256": "4a36cd7feede70d5ef60978411e621013a5e0af807a42444a047ba15d8ecd5d2",
+      "bytes": 2047
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/timing-current/run.log",
+      "sha256": "8fe28a0048c7aa674384db815962997bbed27a7d93c039eb6d868cddcf66554d",
+      "bytes": 1640
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/timing-current/resource.json",
+      "sha256": "2c0b1721c7df4c84ea670d860e9010bdcc919a3915bc6d8cfba24e4f97e89e44",
+      "bytes": 723
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/optimized/report.json",
+      "sha256": "df6a9254c002fe5accbb61a23dee2d259dc2517b42a82616332459b025a9536e",
+      "bytes": 2060
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/optimized/run.log",
+      "sha256": "567fd00017361469c3806a7e106a5e04e07e849cc82971f5462df04463ca6202",
+      "bytes": 1653
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/optimized/resource.json",
+      "sha256": "52012d991bf9248e0fc629c28e679b3122c08cf2cf2b56e64d94c1a71588971e",
+      "bytes": 717
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/perf-hot/report.json",
+      "sha256": "b90c856b46e857580c6da3f85c2e587418bd0088d2c3a023fe5935a410a504a3",
+      "bytes": 1292
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/perf-hot/run.log",
+      "sha256": "6bed2b20769a1fb5e4b537c82ccde17fd06c28dc0e405773d12c3b09f583824c",
+      "bytes": 1526
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/perf-hot/resource.json",
+      "sha256": "3edea36ec4d41e84bab31c7e26075e208424738990e398da01ae75aa3a2a57bd",
+      "bytes": 1075
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/perf-hot/hot-report.txt",
+      "sha256": "321597bd981cdd8e8acee15b13b59a90ea1b60980cb67650bcac86486c2cbfab",
+      "bytes": 2016
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/perf-hot/psd21-annotate-whole.txt",
+      "sha256": "f9db51a0efa4ed0c5585e5186e032c33ac6b54672953bb695f11695c934dfd27",
+      "bytes": 57974
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/perf-hot/psd21-annotate.txt",
+      "sha256": "72ee7b000f2854e212ed370580eac1aa675f1c248b8cb142c6ae0757829456cf",
+      "bytes": 4991
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/perf-hot/inject.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/executed-probe.mjs",
+      "sha256": "d126303ce9647596cfbae1b542f0386cfa4c51f1490b6d00d0bba47918c6c171",
+      "bytes": 6421
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/consumer.mjs",
+      "sha256": "c623a897a15910fc1e1897c139907d03d71e242adac7c1423bf87cd5ff335c3c",
+      "bytes": 12499
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/baseline-wat.gz",
+      "sha256": "10901549ca722a47fa430d335db450d5b31234691a50f37846fcfbaf00400ac0",
+      "bytes": 185792
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/owner-source-map.json",
+      "sha256": "9405dd694c660ae3ccf8f61b09a47eb36d1b5a89fc3f44cc9afc6e8037e65868",
+      "bytes": 11817
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/candidate/source.mo",
+      "sha256": "df0812d775a4be588db500f97a0f900d2894d0f7c074cb64ab31c7714e7a1955",
+      "bytes": 62862
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/candidate/prepare-resource.json",
+      "sha256": "85a2a097874fa6a598cf270982689bc6912b783c6c0fa51655a58f0bf528c984",
+      "bytes": 545
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/candidate/module.wasm",
+      "sha256": "d101a4cdcc421d6677e511e03c6c251fb5b0b26982ffc95fbf495aaffde65d0c",
+      "bytes": 799256
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/candidate/native.json.gz",
+      "sha256": "54bf053af5821f38c09906324b3a1c8162d762938849b7faa0738ed6a7c59954",
+      "bytes": 280233
+    },
+    {
+      "path": "dev/artifacts/schmidt-transaction-profile/perf.data",
+      "sha256": "99cfc0b2bb48f1a532e189181a602855918039bea56aec2fe81d566f327ac378",
+      "bytes": 1291176
+    }
+  ]
+}

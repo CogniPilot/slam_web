@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "status": "GENERIC_SCALAR_CELL_CODEGEN_SOURCE_BROWSER_AND_MATCHED_RUNTIME_PASS",
+  "recordedAt": "2026-10-04T19:32:28.063Z",
+  "scope": "Exact 8-byte copy and single-cell emitter optimization; unchanged full14400 registration source. No sensor/matching/filter/rendering throughput included.",
+  "compilerBranch": "slam-native-functions",
+  "compilerHead": "03e6b59a47f1",
+  "codeClosure": {
+    "manifest": "$HOME/scratch/slam_web/tmp/scalar-cell-upstream-code-closure.sha256",
+    "sha256": "f0dac31b81995ca4b48ca06f343898493a4cdf50348c59633510c0aaac821dfd"
+  },
+  "patch": {
+    "path": "$HOME/scratch/slam_web/tmp/scalar-cell-fast-path-final.patch",
+    "sha256": "3accad2cf8ea91a004e4b5167318aa26588e76bbddbe8b1ab150ec8dd65e2758"
+  },
+  "emittedOperations": [
+    "For exact 8-byte copies, one i64.load then one i64.store preserves raw bits and overlapping-copy semantics",
+    "For count==1, straight-line body with initial local3=0 and final local3=1; bulk and zero-count paths retain existing behavior"
+  ],
+  "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+  "moduleSha256": "dc0ec01cc8de4536af0ff513614abfb579758df11b2f98facf1a0d846bd36a17",
+  "artifactSha256": "c6db3eea4d6845363f0239c76980e999f4e69a1c1c378a3a1c0b93013e140512",
+  "actualWasmi": {
+    "emitterTests": 4,
+    "typedCallTests": 58,
+    "guards": {
+      "unit": {
+        "command": [
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "env",
+          "CARGO_TARGET_DIR=/home/jgoppert/scratch/slam_web/build/rumoca-native-target",
+          "TMPDIR=/home/jgoppert/scratch/slam_web/tmp",
+          "CARGO_BUILD_JOBS=2",
+          "RUST_TEST_THREADS=2",
+          "RAYON_NUM_THREADS=2",
+          "cargo",
+          "test",
+          "-j2",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "--features",
+          "rumoca-bind-wasm/native-assignments",
+          "--lib",
+          "typed_call::emit::tests"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/scalar-cell-unit-corrected.log",
+        "elapsedMs": 3614.187674,
+        "peakRssKiB": 917912,
+        "minimumAvailableKiB": 56279168,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      },
+      "integration": {
+        "command": [
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "env",
+          "CARGO_TARGET_DIR=/home/jgoppert/scratch/slam_web/build/rumoca-native-target",
+          "TMPDIR=/home/jgoppert/scratch/slam_web/tmp",
+          "CARGO_BUILD_JOBS=2",
+          "RUST_TEST_THREADS=2",
+          "RAYON_NUM_THREADS=2",
+          "cargo",
+          "test",
+          "-j2",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "--features",
+          "rumoca-bind-wasm/native-assignments",
+          "--test",
+          "typed_calls"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/scalar-cell-typed-calls.log",
+        "elapsedMs": 11967.132131999999,
+        "peakRssKiB": 553432,
+        "minimumAvailableKiB": 56379512,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "scope": "Bits/NaN/signedzero/integers/booleans/overlap/bounds/faults, source-edit and recovery controls. Focused gates; not full workspace/MSL acceptance."
+  },
+  "browser": {
+    "record": "dev/modelica-scalar-cell-codegen-browser-verification.json",
+    "browser": "154.0.8037.92",
+    "caseCount": 9,
+    "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "moduleSha256": "dc0ec01cc8de4536af0ff513614abfb579758df11b2f98facf1a0d846bd36a17"
+  },
+  "preparation": {
+    "record": "dev/modelica-scalar-cell-codegen-preparation-resource.json",
+    "scope": "Successful current-source issuance; not a matched compilation-speed benchmark"
+  },
+  "runtimeComparison": {
+    "record": "dev/modelica-scalar-cell-codegen-comparison-verification.json",
+    "engine": "v24.21.0",
+    "baselineMeanMs": 13.218103395,
+    "candidateMeanMs": 9.276783518333334,
+    "speedup": 1.4248584510868012,
+    "everyOutputBitsEqual": true,
+    "inputBytesImmutable": true,
+    "capacity": 14400,
+    "method": "100warmcalls/module then six alternating blocks/module of100calls; no perf instrumentation"
+  },
+  "generatedCode": {
+    "baselineModuleBytes": 78866,
+    "candidateModuleBytes": 71810,
+    "staticEightByteMemoryCopySites": {
+      "baseline": 255,
+      "candidate": 0
+    },
+    "staticOneCellLoopPatterns": {
+      "baseline": 536,
+      "candidate": 144
+    },
+    "note": "Remaining one-cell loops belong to other emission paths; optimization does not remove every scalar loop"
+  },
+  "profiling": {
+    "baselineRecord": "dev/modelica-registration-runtime-profile-verification.json",
+    "candidate": {
+      "status": "ACTUAL_SOURCE_ISSUED_REGISTRATION_RUNTIME_PROFILE_COMPLETE",
+      "recordedAt": "2026-10-04T19:04:57.551Z",
+      "engine": "v24.21.0",
+      "pid": 1541473,
+      "calls": 1632,
+      "elapsedMs": 15000.650656000002,
+      "meanExecutionMs": 9.189689393382361,
+      "p50ExecutionMs": 9.126682000000073,
+      "p95ExecutionMs": 9.594123999999283,
+      "inputBytesImmutable": true,
+      "capacity": 14400,
+      "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+      "artifactSha256": "c6db3eea4d6845363f0239c76980e999f4e69a1c1c378a3a1c0b93013e140512",
+      "moduleSha256": "dc0ec01cc8de4536af0ff513614abfb579758df11b2f98facf1a0d846bd36a17",
+      "compiler": {
+        "version": "0.10.1",
+        "git_commit": "03e6b59a47f1"
+      },
+      "moduleBytes": 71810,
+      "consumerSha256": "4a7c91686f588fae29e49698209064391818914eba696971b08ccaefbd294c50",
+      "bundleSha256": "28571bdc83453abe9e4c1d7b3bce4ab9a247b6b6fea720a2eba228c56474feb2",
+      "mathImports": [
+        "pow"
+      ],
+      "abi": {
+        "export": "eval_assignments",
+        "arguments": [
+          "yPtr:i32",
+          "pPtr:i32",
+          "time:f64",
+          "scratchPtr:i32",
+          "reservedZero:i32"
+        ],
+        "memory_import": "env.memory",
+        "memory_shared": false,
+        "memory_pages": 41,
+        "y_offset": 0,
+        "p_offset": 208,
+        "y_count": 26,
+        "p_count": 100805,
+        "reserved_pointer_value": 0,
+        "result": "status:i32",
+        "success_status": 0,
+        "scratch_bytes": 1859016,
+        "transactional_y": true,
+        "p_readonly": true,
+        "scratch_offset": 806648
+      },
+      "runtimeIntegrated": false,
+      "fullSlam": false,
+      "scope": "Complete unchanged full14400 registration module, fixed measured inputs,100warmcalls. Timed window excludes compilation, input copies, sensors, descriptors, filter and rendering. Node perf instrumentation can affect latency."
+    },
+    "profiler": {
+      "event": "cpu-clock:u",
+      "frequencyHz": 99,
+      "clock": "CLOCK_MONOTONIC (-k1)",
+      "callGraph": "dwarf,8192",
+      "jitInjection": "perf inject --jit",
+      "samples": 1571,
+      "lostSamples": 0
+    },
+    "baselineCopySelfPercent": 14.67,
+    "candidateCopySelfPercent": 3.25,
+    "rawEvidence": {
+      "directory": "$HOME/scratch/slam_web/profiles/registration-runtime-scalar-cells",
+      "rawTraceSha256": "3d6a886a9722c1fd3a6abfe2f29f6bed3740dcf47ad2a638b2993294ea2f9f71",
+      "jitTraceSha256": "6c0b99595acc20a110f9abe26fe3248fa6ca5636fec561ecb3e6328139317a1d",
+      "watSha256": "3d7d7ccbfa2082cc06d37e1cd46676a4fa1d9f48101aec5b3b362e876bb9c3b4"
+    }
+  },
+  "limitations": [
+    "Focused backend tests passed; latest combined workspace/MSL/Clippy gates and fresh browser compiler package remain pending",
+    "Browser executes native compiler-issued module; this does not prove source compilation inside the latest browser compiler package",
+    "Other host tasks ran on separately pinned CPU cores",
+    "Descriptor/matcher have no issued artifact; full SLAM and whole-pipeline10x remain incomplete"
+  ],
+  "productionPinChanged": false,
+  "runtimeIntegrated": false,
+  "fullSlam": false
+}

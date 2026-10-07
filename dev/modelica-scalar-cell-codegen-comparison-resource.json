@@ -1,0 +1,27 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "4,5",
+    "nice",
+    "-n",
+    "10",
+    "node",
+    "dev/compare-modelica-native-registration.mjs",
+    "dev/artifacts/registration-relative-pose-filter-chain/independent-fixtures.json",
+    "dev/artifacts/registration-relative-pose-chain/registration.artifact.json",
+    "/home/jgoppert/scratch/slam_web/tmp/slam-native-horn-scalar-cells-v3.json",
+    "/home/jgoppert/scratch/slam_web/profiles/registration-runtime-scalar-cells/comparison.json"
+  ],
+  "log": "/home/jgoppert/scratch/slam_web/profiles/registration-runtime-scalar-cells/comparison.log",
+  "elapsedMs": 17387.762482,
+  "peakRssKiB": 348800,
+  "minimumAvailableKiB": 57433864,
+  "peakCacheBytes": null,
+  "rssLimitMiB": 4096,
+  "availableFloorMiB": 16384,
+  "rssScope": "owned process group and identified descendants, including detached browser groups",
+  "secondsLimit": 60,
+  "signal": null,
+  "exitCode": 0
+}

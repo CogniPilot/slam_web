@@ -1,0 +1,308 @@
+{
+  "status": "IMMUTABLE_REVIEW_PATCHES_ARCHIVED; merged compiler gates pending",
+  "recordedAt": "2026-10-05T14:55:49.327Z",
+  "compilerBranch": "slam-native-functions",
+  "preservationCommit": "14694fd7e",
+  "fetchedMain": "91eb8cb883cadfa3dd4184f0ff4a85bc63b5452b",
+  "batchAndCvTestsExecuted": false,
+  "rootMergeProposalsOwnerApplied": true,
+  "fullCvProposalPublished": false,
+  "scope": "Private source proposals/regression fixtures, exact preimages and patches; no compiler numerical/performance acceptance inferred from copying/formatting.",
+  "files": [
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/compiler.patch",
+      "bytes": 9156,
+      "sha256": "1d20d0f053b653a94c79fffdd28c046902a7823f74f952e218c61fb74ef70b28"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/README.md",
+      "bytes": 4165,
+      "sha256": "81341b20e7eb4f144eef1bfc2d255d5690f0027bec2afbf826d5f96c515ad178"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/source-before.sha256",
+      "bytes": 559,
+      "sha256": "a7f0f3f6d236507927202366094ab790acf363a0050328e3d0aef0728dffb515"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/source-after.sha256",
+      "bytes": 702,
+      "sha256": "4bc67a5696d3606699d47efc48dcc211c8ec38f8f356b7d0b5c58c5c72532661"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/manifest.sha256",
+      "bytes": 330,
+      "sha256": "bfc007ecbd86c62aab1eb9f5579f03addf9964fa4618f4adab9c22282ee0f91d"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/original/crates/rumoca-bind-wasm/src/simulation_session_api.rs",
+      "bytes": 7222,
+      "sha256": "4832eeecee0020dd95903c74e40602977815aa88a2397ce93c4cf4f46e74d2b7"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/original/crates/rumoca-bind-wasm/src/tests/simulation_runtime_tests.rs",
+      "bytes": 35537,
+      "sha256": "e3a634c3d23be119e388e036ddc76c32d2a098ef661732050c75138a4d0c15c9"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/original/crates/rumoca-sim/src/diffsol.rs",
+      "bytes": 66523,
+      "sha256": "3507abc0e98218ee4c14d9d8d353f8d244743147d0a6fd1e36bc08dab170d509"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/original/crates/rumoca-sim/src/me_backend.rs",
+      "bytes": 6351,
+      "sha256": "0fc7b46c62d94522c463f82ac123ec7d35901ba7168e3e973569f8bf2722f8e2"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/original/crates/rumoca-sim/src/simulation_session.rs",
+      "bytes": 12677,
+      "sha256": "410f47622900e233bc0ad362e7e933b35bce6c43a176f4348bc296f2a9c7bdc0"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/modified/crates/rumoca-bind-wasm/src/simulation_session_api.rs",
+      "bytes": 8049,
+      "sha256": "1185e992f0e64ba3366bdb666fe8009a72a8501d34c59e3e59c33cd2cc785838"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/modified/crates/rumoca-bind-wasm/src/tests/simulation_runtime_tests.rs",
+      "bytes": 35558,
+      "sha256": "cc1321220d18a0015379bb807a927b6e5c83db48cacf23685c75b7b0ab74ef17"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/modified/crates/rumoca-bind-wasm/src/tests/simulation_runtime_tests/selected_reads.rs",
+      "bytes": 3478,
+      "sha256": "2f2d6f64a31520098b97cd6bc248441167a5bacbebf89f8d330ae7eb44f5469c"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/modified/crates/rumoca-sim/src/diffsol.rs",
+      "bytes": 66451,
+      "sha256": "e6d4305b902256494d5650daa1ef64e0406e14adaacc0ba8b7ffbc3fb1c7613f"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/modified/crates/rumoca-sim/src/me_backend.rs",
+      "bytes": 6315,
+      "sha256": "2dfadd3d77a53d55d301c074f4caf381354cdfe68a3aa36986fd3fc0bf8f5282"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/session-batched-read-review/modified/crates/rumoca-sim/src/simulation_session.rs",
+      "bytes": 13130,
+      "sha256": "a5c835cce5d8f65e03a4a892345f7f1b3add4aec99e2a242b74198941bf9b1df"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/compiler.patch",
+      "bytes": 34324,
+      "sha256": "a9034ee304ce8093ea66bf8cc3f6be7890916d1bdfd926d99e396757e65d0903"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/README.md",
+      "bytes": 3401,
+      "sha256": "c7a265e1162149aa167c2f4f78ab9a2fe0ed92c4d97b68f8627561db229683df"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/source-before.sha256",
+      "bytes": 431,
+      "sha256": "c5a193031fd79a1aebf03ebb6c24591089385625f93a4b3ac72dba55714d9e48"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/source-after.sha256",
+      "bytes": 1077,
+      "sha256": "5f9130efefae49f8dad568540254a7629ae7f3f4951eed363998e34be0b555c3"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/manifest.sha256",
+      "bytes": 330,
+      "sha256": "c382a1cf3180dfb491bdb3a94ec372d3a134573cc092ac32b3f5ba46cb8ac6e4"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/original/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/calls.rs",
+      "bytes": 7006,
+      "sha256": "dad9f546982ca673c9ce6a661e65864fd0ee3c4965cd62616c4ae1c2a71d18d2"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/original/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/program.rs",
+      "bytes": 9156,
+      "sha256": "3ef618c6625065c02f701b2363a875c67a8f99af48a773d9cce9ff9e277c8050"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/original/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/program/execution.rs",
+      "bytes": 2837,
+      "sha256": "0f83368d00d1f803a040c8e5bf422fbe5b166b8b158beea453485db96d29e1e8"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/modified/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/calls.rs",
+      "bytes": 7027,
+      "sha256": "afe773464cf5d9a891e37398879013f2319fbd47dc6d9b4625d42e595cca06ae"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/modified/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/calls/cv_transactions.rs",
+      "bytes": 4277,
+      "sha256": "32c7a6f20c723ecde749df35c21ec170dd0fc4a235396e73e3737bd644e713e9"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/modified/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/program.rs",
+      "bytes": 9164,
+      "sha256": "71f0a6c5da0f5c65bc8284083fdb78a2ca9d3826c7b1c70cb00d8c181a213533"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/modified/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/program/cv.rs",
+      "bytes": 3876,
+      "sha256": "f403a88c6f1617257aa7f1d9e4302131ffe321e81073fb6d894b2fec11de02f2"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/modified/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/program/execution.rs",
+      "bytes": 3257,
+      "sha256": "281e19ede72581687697db2de6693fca4b40a7ba1aea66b9e78a13725eb40951"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/modified/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/program/fixtures/TinyNativeHarrisFrame.mo",
+      "bytes": 3394,
+      "sha256": "f7e781bdb764ed57e5a6f37cdcefd218b9a6573e015f9dea4ac277aadfda32e7"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-regression-review/modified/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/program/fixtures/tiny-independent-cases.json",
+      "bytes": 17865,
+      "sha256": "423dd2500757a5ad6f3968aa1f47e3fc74bd5702d6190c42d92e44b299d51bed"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/FullRGBAHarrisDetector.mo",
+      "bytes": 12204,
+      "sha256": "6aa4c714a3a120bd1f0b4e9a5fa2107f47d83c4626479c8d8bc693617966070a"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/README.md",
+      "bytes": 8991,
+      "sha256": "0b65566b9150e6d59b933a0b7f92dad3f602186c307b41c7c46b6a3468120e39"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/TinyNativeHarrisFrame-edited.mo",
+      "bytes": 3395,
+      "sha256": "0a7dfc26df15a19a35c1ca1d27e61c61fef7ad0078a08a48d6738b293c5c2dac"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/TinyNativeHarrisFrame.mo",
+      "bytes": 3394,
+      "sha256": "f7e781bdb764ed57e5a6f37cdcefd218b9a6573e015f9dea4ac277aadfda32e7"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/audited-sources.sha256",
+      "bytes": 599,
+      "sha256": "58a95561b3a6a079447975767428df5d0fbe417e7e5406d51999ba31819349db"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/independent-full-reference.mjs",
+      "bytes": 3886,
+      "sha256": "911eabe7dee23e0ba3208c77f9886073d1bb6cb6439fa3f82c56e941a7e7437f"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/source-preimages/FeatureSelection.mo",
+      "bytes": 9389,
+      "sha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/source-preimages/HarrisFullResolution.mo",
+      "bytes": 4263,
+      "sha256": "f6e5cef64642b580a2c3bc89abe91d8182c0bcf74597adc159c514c68e056067"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/tiny-independent-cases.json",
+      "bytes": 17865,
+      "sha256": "423dd2500757a5ad6f3968aa1f47e3fc74bd5702d6190c42d92e44b299d51bed"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/full-source-cv-review/manifest.sha256",
+      "bytes": 847,
+      "sha256": "fc514cc98a5588e9d964c2f031d3840df4ac197632638e8a6c108ad20e3318d3"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-conflicts/before/crates/rumoca-eval-solve/src/typed_program/number.rs",
+      "bytes": 15469,
+      "sha256": "15e8ddb229f1a8be7168f72f7d4a594daf3f94a7e921bda748b773795e590406"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-conflicts/after/crates/rumoca-eval-solve/src/typed_program/number.rs",
+      "bytes": 15069,
+      "sha256": "44a6cf868b8ed58d158c9b8a9213bece6baf4c7c97f8d8cfcc29c8666b789049"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-conflicts/before/crates/rumoca-exec-cranelift/src/emit/typed_program.rs",
+      "bytes": 74592,
+      "sha256": "e4c57d199bcafcb06f1865b8bfc160c530fd2ce54a5cbe20f197774c75a0c09a"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-conflicts/after/crates/rumoca-exec-cranelift/src/emit/typed_program.rs",
+      "bytes": 74038,
+      "sha256": "43955ff75b3068939b34f7dd75bece3f131785d285ff6f5a8087eab9050750a1"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-conflicts/before/crates/rumoca-sim/src/lib.rs",
+      "bytes": 26318,
+      "sha256": "7dc12cf59e61da81729683616f3b57f029490b1761194e80d8e97d4fe90897fa"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-conflicts/after/crates/rumoca-sim/src/lib.rs",
+      "bytes": 25587,
+      "sha256": "c7b777a45ac4207d562d41e34825e1cd13fb75bdb713f04e2a2c59628da7c7e4"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-conflicts/manifest.json",
+      "bytes": 1374,
+      "sha256": "2248c69d1ec3b1a3f3e9e6577cbb419cdb1d14a170613878d20ea1197233116a"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-conflicts/merged-proposals.patch",
+      "bytes": 7507,
+      "sha256": "4007088b9f1c72d40d636e971f4fd827bc8ec5fdd6bb164b90b814cc4b0ee4d3"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/before/crates/rumoca-eval-solve/src/prepared/construction.rs",
+      "bytes": 17140,
+      "sha256": "dad7e03ef3344b5e861e3db1be77616c81923c665a9f4381cc728e7d0dfe53c4"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/after/crates/rumoca-eval-solve/src/prepared/construction.rs",
+      "bytes": 14092,
+      "sha256": "d089f4e01e15b84c9b605d99861d7e9597f687b33a0b227949ef8c06f66f0402"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/before/crates/rumoca-eval-solve/src/refresh_plan.rs",
+      "bytes": 72979,
+      "sha256": "c65f8e4cfb584c37946ff51f8f04a53725950b21c202506f8d60004ceb82cc62"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/after/crates/rumoca-eval-solve/src/refresh_plan.rs",
+      "bytes": 71956,
+      "sha256": "fc07abfe9ef1c210d1f11c4ba6b93be7e8c4fe1f12ee46ad1cfdffe69c3f27ec"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/before/crates/rumoca-eval-solve/src/refresh_plan/target_catalog.rs",
+      "bytes": 3637,
+      "sha256": "962d630114908a330d9c26eacb6ffc3c004cbfd8e1d97763238dfbd8d1dc0883"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/after/crates/rumoca-eval-solve/src/refresh_plan/target_catalog.rs",
+      "bytes": 7403,
+      "sha256": "1d7586f06dc3b9aabc2805296aac7c4fdb59581e8397b4964c9476e3b9a774a7"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/before/crates/rumoca-eval-solve/src/refresh_plan/causal_proofs.rs",
+      "bytes": 2069,
+      "sha256": "4ca73d34bef0287755a4cd4fd9dbc5b3291cc69a178c076d1b47bf806cda48ca"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/after/crates/rumoca-eval-solve/src/refresh_plan/causal_proofs.rs",
+      "bytes": 1573,
+      "sha256": "c4e9f69d000fcf87704879631601d1a15c0bd352043f0e459be1d0bcbce77f31"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/manifest.json",
+      "bytes": 1484,
+      "sha256": "5c7799e0c19065c8a8b44abd4a8e87cc703ecbdcfb4205cf00c47b71cd8bc46c"
+    },
+    {
+      "path": "dev/artifacts/rumoca-api-and-merge-review/upstream-root-refresh/merged-proposals.patch",
+      "bytes": 14010,
+      "sha256": "a2a0a41309ebaaf6e19edad2ee6e0c9443ff174ce2ca5537fb3abc1c29c537ca"
+    }
+  ]
+}

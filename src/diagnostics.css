@@ -1,0 +1,6 @@
+.estimator-diagnostics{margin-top:12px;padding:12px 15px;color:#a8bfd0;font-size:11px;line-height:1.8}
+.estimator-diagnostics summary{color:#d7e1e9;cursor:pointer;font-weight:600}
+.diagnostic-controls{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0}
+.estimator-diagnostics small{display:block;color:#8396a7;margin-top:5px}
+#frame-timings{font-size:10px;color:#8396a7;font-variant-numeric:tabular-nums}
+.scene-controls{flex-wrap:wrap;justify-content:flex-end}

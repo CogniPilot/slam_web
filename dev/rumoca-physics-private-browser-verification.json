@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 1,
+  "status": "FULL_PLANT_PRIVATE_KERNEL_PARITY_PASS_MATCHED_COMPILER_SPEED_REGRESSION",
+  "recordedAt": "2026-10-05T04:47:28.152Z",
+  "productionPinChanged": false,
+  "source": {
+    "plantSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+    "compilerManifestSha256": "a5a1bf428e65ec5300503fedbe1aa786f5e2f9469ed0220334e82ce4966b56d9",
+    "compilerManifestFiles": 2404,
+    "beforeCheck": "dev/artifacts/physics-private-browser/source-before-check.log",
+    "afterCheck": "dev/artifacts/physics-private-browser/source-after-check.log",
+    "compilerBranch": "slam-native-functions",
+    "compilerRevision": "03e6b59a47f1",
+    "compilerDirty": true,
+    "wasmSha256": "46bda124c7d8b0aa426fc9be5e214addf5bcfff6c4d3d2cb9b8f523a2de9e125",
+    "jsSha256": "c87d8559fadf55302abf590de2aabe72d3f2fb8b8f8401879f2adab3d60974d1",
+    "artifactLocation": "$HOME/scratch/slam_web/tmp/target-value-browser-build/compiler"
+  },
+  "build": {
+    "command": [
+      "nice",
+      "-n",
+      "10",
+      "taskset",
+      "-c",
+      "8-11",
+      "bash",
+      "/home/jgoppert/scratch/slam_web/tmp/target-value-browser-build/build.sh"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/target-value-browser-build/build.log",
+    "elapsedMs": 102271.867804,
+    "peakRssKiB": 2436496,
+    "minimumAvailableKiB": 50950488,
+    "cacheDirectory": "/home/jgoppert/scratch/slam_web/build/rumoca-wasm-target",
+    "peakCacheBytes": 1253699584,
+    "cacheLimitMiB": 7680,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 600,
+    "signal": null,
+    "exitCode": 0
+  },
+  "activation": {
+    "browser": "154.0.8037.92",
+    "comparisons": 349162,
+    "maxScaledDifference": 4.547473508864641e-13,
+    "tolerance": 2e-9,
+    "privateModules": 363,
+    "privateCalls": 5046814,
+    "privateNonzeroStatuses": 0,
+    "controls": [
+      {
+        "policy": "interpreter",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "policy": "auto",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "policy": "auto",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "policy": "interpreter",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "sourceEdit": true,
+        "frames": 120,
+        "events": 133,
+        "allVisibleFieldsCompared": true
+      }
+    ],
+    "scope": "Observed instantiated module hashes retained; private hashes are not matched against native inventory hashes. Complete unchanged plant parity includes reset, rollback, repeated time and mass source edit. Counter timings are not used as performance evidence."
+  },
+  "sameBuildTiming": {
+    "countersEnabled": false,
+    "interpreterAdvanceMs": 4.307795698732458,
+    "autoAdvanceMs": 3.2177419310615907,
+    "autoSpeedup": 1.3387635773858468,
+    "runs": [
+      {
+        "policy": "interpreter",
+        "advancePerCameraFrameMs": 4.416881719968652,
+        "frames": 930,
+        "events": 1033
+      },
+      {
+        "policy": "auto",
+        "advancePerCameraFrameMs": 3.2795698892685676,
+        "frames": 930,
+        "events": 1033
+      },
+      {
+        "policy": "auto",
+        "advancePerCameraFrameMs": 3.155913972854614,
+        "frames": 930,
+        "events": 1033
+      },
+      {
+        "policy": "interpreter",
+        "advancePerCameraFrameMs": 4.1987096774962644,
+        "frames": 930,
+        "events": 1033
+      }
+    ],
+    "scope": "Same-build Auto/Interpreter full Modelica quadrotor with unchanged adaptive integrator, tolerances and high-rate endpoint schedule. When enabled, diagnostic wrappers count generated eval_residual, eval_assignments and eval_private calls without changing arguments/results; Interpreter must use none and Auto must use assignments during advance. If private coverage is required, Auto must additionally use private target-value kernels during advance, with zero failure statuses. Observed private module hashes identify browser-instantiated bytes; they have not been matched to native inventory module hashes. ABBA advance timing includes cold first30frames and parity/JSON controls between runs, and counters when enabled; no causal whole-pipeline or CPU-hit-share claim. Projections remain canonical, so kernel hits do not establish a complete native RHS."
+  },
+  "matchedCompilerComparison": {
+    "baseline": {
+      "jsSha256": "c87d8559fadf55302abf590de2aabe72d3f2fb8b8f8401879f2adab3d60974d1",
+      "wasmSha256": "084ebb6713ab2a693cea6b887f9da879736b7f6d98f829afcde11a540a18001e",
+      "wasmBytes": 35803870
+    },
+    "candidate": {
+      "jsSha256": "c87d8559fadf55302abf590de2aabe72d3f2fb8b8f8401879f2adab3d60974d1",
+      "wasmSha256": "46bda124c7d8b0aa426fc9be5e214addf5bcfff6c4d3d2cb9b8f523a2de9e125",
+      "wasmBytes": 35837109
+    },
+    "baselineAdvanceMs": 2.55698924808092,
+    "candidateAdvanceMs": 3.182311829700265,
+    "candidateSpeedup": 0.8035005319770179,
+    "candidateLatencyIncrease": 0.2445542475740421,
+    "comparisons": 277877,
+    "visibleFields": 269,
+    "maxScaledDifference": 3.410605131648481e-13,
+    "runs": [
+      {
+        "compiler": "baseline",
+        "advancePerCameraFrameMs": 2.6324731192281168
+      },
+      {
+        "compiler": "candidate",
+        "advancePerCameraFrameMs": 3.2302150576345383
+      },
+      {
+        "compiler": "candidate",
+        "advancePerCameraFrameMs": 3.1344086017659913
+      },
+      {
+        "compiler": "baseline",
+        "advancePerCameraFrameMs": 2.481505376933723
+      }
+    ],
+    "scope": "Auto execution for both immutable compiler artifacts, same worker and baseline/candidate/candidate/baseline order. Same unchanged full plant, 90/20/90/10 Hz endpoint schedule, adaptive solver and tolerances. Advance timings include cold first30 frames and exclude preparation, snapshot extraction, sensors, rendering and all SLAM algorithms. Compiler artifacts contain multiple changes, so differences cannot be attributed to one patch. Shared-host load is not controlled by this probe."
+  },
+  "profile": {
+    "samples": 3409,
+    "advanceSampledUs": 2749708,
+    "generatedKernelInclusiveFraction": 0.0528128804949471,
+    "projectionSingletonInclusiveFraction": 0.2916829714282389,
+    "typedPureCallInclusiveFraction": 0.532145958770895,
+    "linearSolveInclusiveFraction": 0.0019336598649747536,
+    "unclassifiedWasmLeafUs": 0,
+    "mainInterpretedPath": "refresh_causal_seed_rows -> refresh_slots_once -> apply_target_assignment_rows_unchecked_with_context -> eval_row_prepared_fast -> typed_program::eval_pure_call",
+    "scope": "Weighted CDP samples with overlapping inclusive groups. Generated kernel classification excludes V8 entry trampolines. The profile is not an uninstrumented timing comparison.",
+    "refreshPhaseComparison": {
+      "baseline": {
+        "compilerWasmSha256": "084ebb6713ab2a693cea6b887f9da879736b7f6d98f829afcde11a540a18001e",
+        "sourceProfileSha256": "e41d67940971b8377ab5ae2d617c3bfb14a5ceedb92ab5370de843208b69c03e",
+        "groups": {
+          "advance": 2158001,
+          "pureCallSeed": 0,
+          "pureCallProjection": 1434940,
+          "pureCallOther": 0,
+          "projection": 1977931,
+          "privateStatusBridge": 0
+        },
+        "scope": "Weighted inclusive CDP samples. Pure-call stages are disjoint; projection and bridge groups overlap. Separate profile times do not establish isolated patch causation or unprofiled timing."
+      },
+      "candidate": {
+        "compilerWasmSha256": "46bda124c7d8b0aa426fc9be5e214addf5bcfff6c4d3d2cb9b8f523a2de9e125",
+        "sourceProfileSha256": "fb99669457e42e29ab7004bb87414c6956c45c65db7a2b75480bd8b66f5e03a6",
+        "groups": {
+          "advance": 2749708,
+          "pureCallSeed": 1463246,
+          "pureCallProjection": 0,
+          "pureCallOther": 0,
+          "projection": 802043,
+          "privateStatusBridge": 506169
+        },
+        "scope": "Weighted inclusive CDP samples. Pure-call stages are disjoint; projection and bridge groups overlap. Separate profile times do not establish isolated patch causation or unprofiled timing."
+      },
+      "reproducedBy": "dev/analyze-physics-refresh-phases.mjs",
+      "interpretation": "Remaining interpreted pure-call work moves from projection into causal seed refresh; profiles collected at different times do not isolate individual patches. Native refresh dispatch already exists. Investigate actual sequence certification and backend compilation refusal."
+    }
+  },
+  "nextAction": "Inspect compiler-issued causal seed sequence certification and pre-admission cost/region granularity. Fewer fused calls must preserve complete source prefixes, fault order and state publication. Do not update preview pin on this regression.",
+  "limitations": [
+    "Full Modelica RGB-D SLAM remains incomplete; these tests execute physics only.",
+    "All timings exclude camera, depth, LiDAR, rendering and SLAM; no 10x or Gazebo comparison.",
+    "Source differences between compiler artifacts include several patches; no isolated patch causal speed claim.",
+    "Concurrent externally owned host builds were present; interleaving controls drift but does not establish machine isolation.",
+    "The matched fixed20 MSL/OMC delta covers this frozen compiler only; subsequent typed-view and matrix emitter changes require their own validation."
+  ],
+  "artifacts": {
+    "dev/artifacts/physics-private-browser/build.sh": {
+      "bytes": 933,
+      "sha256": "66ce1b5f2b30c6b443568a5dac71771726871def82704c5a9305ded33232dcc1"
+    },
+    "dev/artifacts/physics-private-browser/build.log": {
+      "bytes": 149141,
+      "sha256": "3004a708c3dc55d94d1acd790759c9fd77e0c320e848c50ef0ee0e4b573dfe10"
+    },
+    "dev/artifacts/physics-private-browser/build-resource.json": {
+      "bytes": 604,
+      "sha256": "6c202d447ed6b31284b1c7c624fd647f508e682eddef86344c3f302ff46b7af6"
+    },
+    "dev/artifacts/physics-private-browser/source-before.sha256": {
+      "bytes": 295915,
+      "sha256": "a5a1bf428e65ec5300503fedbe1aa786f5e2f9469ed0220334e82ce4966b56d9"
+    },
+    "dev/artifacts/physics-private-browser/source-before-check.log": {
+      "bytes": 146867,
+      "sha256": "5f5963cba83f7c1f6a814da5a0c006cf71c42e019dcc628afc6a193447c74b5d"
+    },
+    "dev/artifacts/physics-private-browser/source-after-check.log": {
+      "bytes": 146867,
+      "sha256": "5f5963cba83f7c1f6a814da5a0c006cf71c42e019dcc628afc6a193447c74b5d"
+    },
+    "dev/artifacts/physics-private-browser/activation/report.json": {
+      "bytes": 77947,
+      "sha256": "e120f2a70eaedf86671e5c3f067f9182d41a823aecc6142716d5e3cb59813929"
+    },
+    "dev/artifacts/physics-private-browser/activation/resource.json": {
+      "bytes": 628,
+      "sha256": "f026a9fcfa0eb01789c588ac1bdafe93f700ae8629ac067ebacb1af68c280236"
+    },
+    "dev/artifacts/physics-private-browser/uninstrumented/report.json": {
+      "bytes": 14534,
+      "sha256": "8f38f66f6a1e2fc86df0a2f8e1b2583cdcd8b2d4d8614794700ef1124a2f6306"
+    },
+    "dev/artifacts/physics-private-browser/uninstrumented/resource.json": {
+      "bytes": 630,
+      "sha256": "3b2765ed9d76d73a8cc6e8814e21e92ac87e60ffb612de2752c8749e99b75371"
+    },
+    "dev/artifacts/physics-private-browser/auto-profile/report.json": {
+      "bytes": 18830,
+      "sha256": "c44c4c8f3c672fe694a7abee21b91e1c3b65c1c6bcdac53483b8d43fe678359c"
+    },
+    "dev/artifacts/physics-private-browser/auto-profile/resource.json": {
+      "bytes": 632,
+      "sha256": "3ff83b89490e3b268f519d3459a85f4003192c6372d3a4c7cf5718a578b92dc2"
+    },
+    "dev/artifacts/physics-private-browser/auto-profile/worker.cpuprofile": {
+      "bytes": 377024,
+      "sha256": "fb99669457e42e29ab7004bb87414c6956c45c65db7a2b75480bd8b66f5e03a6"
+    },
+    "dev/artifacts/physics-private-browser/auto-profile/hot-ancestor-paths.json": {
+      "bytes": 19085,
+      "sha256": "4438fcc3e106189cfbead5b7fe73e4704bb356e1a87a6830d261439404641888"
+    },
+    "dev/artifacts/physics-private-browser/compiler-comparison/report.json": {
+      "bytes": 7077,
+      "sha256": "9b56426e9c103543761812aab5d8bf016ea820a949ebb33c3ca32fa4520f9a8d"
+    },
+    "dev/artifacts/physics-private-browser/compiler-comparison/resource.json": {
+      "bytes": 737,
+      "sha256": "ea7ac4aca0bef499186f162ca70a583a7d60c8847473da55ae2adfc16a205169"
+    },
+    "dev/artifacts/physics-private-browser/sources/dev/probe-physics-portable-me.mjs": {
+      "bytes": 14494,
+      "sha256": "7b4d2b54b99cb3ef2d90c24d7b493a47211573d9081456389d5ae575811f4f22"
+    },
+    "dev/artifacts/physics-private-browser/sources/dev/probe-physics-compiler-comparison.mjs": {
+      "bytes": 7749,
+      "sha256": "72b38d1fed9192abf66ebc1c469683e530a64461a1530242623fac4b92c77dc4"
+    },
+    "dev/artifacts/physics-private-browser/sources/dev/probe-physics-browser-cpu.mjs": {
+      "bytes": 8066,
+      "sha256": "276c4f87cdd3208e774a30d9e78488b5cce78808150a21503e498283ffae85c6"
+    },
+    "dev/artifacts/physics-private-browser/sources/dev/analyze-physics-cpu-profile.mjs": {
+      "bytes": 4186,
+      "sha256": "791a6c045941fe1d00fa40392334dff2bd9ab56fc64d03cf43226d062065d013"
+    },
+    "dev/artifacts/physics-private-browser/sources/src/sensor-clock.ts": {
+      "bytes": 2369,
+      "sha256": "9107844d8a524ca3dfa4ddb26f6fe475ee97d109ff2b5d3064b3bd7a8a49eb55"
+    },
+    "dev/artifacts/physics-private-browser/sources/src/physics-snapshot.ts": {
+      "bytes": 1251,
+      "sha256": "ddf12e7f90e9610d1d309701e8d5919d56daefc6e0cf79b07da0f54619195393"
+    },
+    "dev/artifacts/physics-private-browser/sources/models/LabQuadrotor.mo": {
+      "bytes": 18397,
+      "sha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658"
+    },
+    "dev/artifacts/physics-private-browser/auto-profile/baseline-phase-attribution.json": {
+      "bytes": 571,
+      "sha256": "6e577641567f4895f7aa0853130fa423095d11ed0407d64ab39d905948e08f54"
+    },
+    "dev/artifacts/physics-private-browser/auto-profile/candidate-phase-attribution.json": {
+      "bytes": 575,
+      "sha256": "f96c8c37fda78cc1903808703bad2d15ae5820212f7356232519d166c9ec24e4"
+    },
+    "dev/artifacts/physics-private-browser/auto-profile/initial-scalar-profile-path-mismatch.json": {
+      "bytes": 898,
+      "sha256": "b7e2083fdb41ff5741977fb9bfd4804565ba4cd736560a8b018fb2c8c9347781"
+    },
+    "dev/artifacts/physics-private-browser/auto-profile/baseline-worker.cpuprofile": {
+      "bytes": 371536,
+      "sha256": "e41d67940971b8377ab5ae2d617c3bfb14a5ceedb92ab5370de843208b69c03e"
+    },
+    "dev/artifacts/physics-private-browser/auto-profile/baseline-original-report.json": {
+      "bytes": 3669,
+      "sha256": "48ff14559c6660a5071030f1959a37cd0b3435f2470033fad987cc65af1eb3d5"
+    },
+    "dev/artifacts/physics-private-browser/sources/dev/analyze-physics-refresh-phases.mjs": {
+      "bytes": 3261,
+      "sha256": "e3da11c5691ba7ab3348ef4247dba7fa44a8971fe091b0ae97361a825c45e1a3"
+    }
+  },
+  "matchedMslCanary": {
+    "verification": "dev/rumoca-matched-msl-canary-verification.json",
+    "sha256": "74b7164c02988956c9c157a033ace9eef0695e17407b05ec3653d832e55bee10",
+    "status": "FIXED20_MATCHED_DELTA_RECORDED_NO_OUTCOME_OR_TRACE_REGRESSION",
+    "scope": "SPEC0033 Tier1 fixed20 matched delta only. Not full MSL parity, Tier2 capability completion, production pin activation or whole-pipeline speedup.",
+    "laterTensorViewPatchCovered": false
+  }
+}

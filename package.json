@@ -1,0 +1,31 @@
+{
+  "name": "slam-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "assets": "node scripts/assets.mjs",
+    "test": "vitest run",
+    "test:browser": "playwright test",
+    "test:compiler-admission": "vitest run --config vitest.compiler.config.ts"
+  },
+  "dependencies": {
+    "@cognipilot/rumoca": "0.10.0",
+    "@cognipilot/synapse-fbs": "0.10.0",
+    "flatbuffers": "^25.9.23",
+    "monaco-editor": "0.55.1",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "@types/node": "24.10.0",
+    "@types/three": "0.180.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.6",
+    "vitest": "4.1.11",
+    "wabt": "1.0.39"
+  }
+}

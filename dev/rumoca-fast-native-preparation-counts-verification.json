@@ -1,0 +1,148 @@
+{
+  "status": "BLOCKED_RSS_LIMIT_NO_ARTIFACT",
+  "scope": "One unchanged full160x90 FastNativeFrame source attempt using copied compiler with diagnostic-only metrics overlay; no numerical execution.",
+  "source": {
+    "model": "FastNativeFrame",
+    "sourceSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+    "producer": {
+      "executable": "/home/jgoppert/scratch/slam_web/tmp/fast-native-preparation-diagnostic/diagnostic-producer",
+      "binarySha256": "a04a1d082d4de3cb8e12ee7fcad97131b5b059a2903b5a7fdce452732c113711",
+      "sourceManifestSha256": "ab1819fccee7b380d7c3a0104ecab4f109e5eab555e8b925aa34ab04d2a7be01",
+      "mainSourceManifestSha256": "06b5b1563716e26eb880680395341ad1a1b57e5727a6c2cdf00a19f26212901e",
+      "features": [
+        "console_error_panic_hook",
+        "default",
+        "full-web",
+        "native-assignments",
+        "sim-rk45"
+      ],
+      "profile": {
+        "opt_level": "1",
+        "debuginfo": "line-tables-only",
+        "debug_assertions": true,
+        "overflow_checks": true,
+        "test": true
+      },
+      "diagnosticOnly": true
+    }
+  },
+  "sourceBookends": {
+    "main": {
+      "matched": true,
+      "manifestSha256": "06b5b1563716e26eb880680395341ad1a1b57e5727a6c2cdf00a19f26212901e",
+      "files": 2791
+    },
+    "copy": {
+      "matched": true,
+      "manifestSha256": "ab1819fccee7b380d7c3a0104ecab4f109e5eab555e8b925aa34ab04d2a7be01",
+      "files": 2792
+    }
+  },
+  "resource": {
+    "exitCode": 137,
+    "stopped": "rss-limit",
+    "signal": "SIGKILL",
+    "elapsedMs": 245631.189916,
+    "peakRssKiB": 8406428,
+    "minimumAvailableKiB": 51806188,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "secondsLimit": 600,
+    "captureNote": "Values transcribed exactly from authoritative guardian stdout of agent session 62022 after terminal completion; initial stdout was not automatically saved to file.",
+    "log": "$HOME/scratch/slam_web/tmp/fast-native-preparation-diagnostic/run/replay.log",
+    "cpuAffinity": "6,7",
+    "nice": 15,
+    "workers": 4
+  },
+  "sourcePasses": 3,
+  "completeDependencyPasses": 2,
+  "finalFrontier": "third before_coverage; no third dependency_progress/complete marker",
+  "counts": {
+    "families": 13537,
+    "reads": 633864,
+    "producerReadPairsPerOldDerive": 8580616968,
+    "edgesPerCompletePass": 90552,
+    "edgeCapacityPerCompletePass": 103488,
+    "edgeCapacityBytes": 827904,
+    "valueOpCapacityBytesPerPass": 140298496,
+    "readCapacityBytesPerPass": 25354560
+  },
+  "artifacts": {
+    "solveIssued": false,
+    "nativeIssued": false,
+    "numericalCases": 0
+  },
+  "limitations": [
+    "Observed sparse edge storage cannot explain RSS limit; allocation root cause remains unresolved.",
+    "v2 candidate-index implementation and performance are not tested by this diagnostic baseline.",
+    "Early source preparation perf is separate from late native certification and WASM runtime."
+  ],
+  "earlyProfile": "$HOME/scratch/slam_web/profiles/full-fast-early-diagnostic",
+  "rawReplay": {
+    "path": "$HOME/scratch/slam_web/tmp/fast-native-preparation-diagnostic/run/replay.log",
+    "bytes": 11287730,
+    "sha256": "63dd18ff012e9e56797c0e30c11b37e13ca8def81c4743f5ba1a98299a2b91dd"
+  },
+  "archive": [
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/run/source.mo",
+      "sha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+      "bytes": 3904
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/run/input-binding.json",
+      "sha256": "0211ea9e1b403d45687bb8868be398d0b5e96b332e302026b619a09d8a54bf7b",
+      "bytes": 871
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/run/resource.json",
+      "sha256": "6068e79d008b82c12960e508c3b7f5869a367bca9ccf9a470ba731e9e6d1b3cc",
+      "bytes": 564
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/run/metrics.json",
+      "sha256": "ac2467212355f739382f4700cd35bcbe799796b205e25b0d1ede4416aa44888e",
+      "bytes": 19877
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/main-source-before.sha256",
+      "sha256": "06b5b1563716e26eb880680395341ad1a1b57e5727a6c2cdf00a19f26212901e",
+      "bytes": 345559
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/main-source-after.sha256",
+      "sha256": "06b5b1563716e26eb880680395341ad1a1b57e5727a6c2cdf00a19f26212901e",
+      "bytes": 345559
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/diagnostic-source-before.sha256",
+      "sha256": "ab1819fccee7b380d7c3a0104ecab4f109e5eab555e8b925aa34ab04d2a7be01",
+      "bytes": 345692
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/run-source-after.sha256",
+      "sha256": "ab1819fccee7b380d7c3a0104ecab4f109e5eab555e8b925aa34ab04d2a7be01",
+      "bytes": 345692
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/producer-artifact.json",
+      "sha256": "5c3705ff185ef4efeb62a2614ddee370f34de2d47e16cf9912bcc232dc79d72b",
+      "bytes": 1238
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/producer-freeze.json",
+      "sha256": "4bc093935f72e93a10af183d91aba4a36a5ed957813db5ad1bd0743ad728a745",
+      "bytes": 697
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/diagnostic-ir-resource.json",
+      "sha256": "a15358cb2a8457f90c83b765dcfa27baad22717576a6f592e612528ae15f7ce4",
+      "bytes": 745
+    },
+    {
+      "path": "dev/artifacts/fast-native-preparation-counts/diagnostic-link-resource.json",
+      "sha256": "333e58169d4a434e48c029b32de6d2fe162845db5eaf60ca420cfabca902e5fe",
+      "bytes": 760
+    }
+  ]
+}

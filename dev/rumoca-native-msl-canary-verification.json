@@ -1,0 +1,1574 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-04T16:00:26.248Z",
+  "status": "BUILD_TIMEOUT_CANARY_PENDING",
+  "claim": "Tier1 fixed20 tripwire only; no cohort parity claim",
+  "upstream": {
+    "path": "/home/jgoppert/git/rumoca-native-functions",
+    "baseCommit": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "trackedPatchSha256": "b38557e77a8353c9924c8ce88f8ef591252f6a54e0d4ee10749d0f66ec154c66",
+    "untracked": [
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/dependencies.rs",
+        "sha256": "3b27c7a421f6a6442189d20cd75bdf7ebe292d27d3c0212dcb8bd55bf9a67700"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/fold_graph/closure.rs",
+        "sha256": "7e5c657a34d772c7f1095b7c54370d6b6c7d1bccd2fb21e09ed7ebfc44b9a5f9"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/fold_graph/closure/components.rs",
+        "sha256": "c850255b3790dfde845dc46a58e70c87996b0ccedfd8b8bb03a0c063cf635c3a"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/fold_graph/closure/tests.rs",
+        "sha256": "8e9eb17be10d60dd149f5053cc60f83f8a35180db22b029230f37d17d63f778c"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/fold_graph/fragments.rs",
+        "sha256": "51281e8593352c67998745aab1def06ff8ea3f45cc345a6231b4fb210535fdf1"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/fold_graph/fragments/tests.rs",
+        "sha256": "a176171c2cd62490781bceac785f9b98fac24a32e0f792aac5e7641e3d5d2fdf"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/literal_update_sweeps.rs",
+        "sha256": "8226c4d9636ca36c742b5d170322428c93c84972549d943e282f5308f6e613db"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/literal_update_sweeps/integration.rs",
+        "sha256": "309da227ef3b2485ee6c118407be03ef3ed36b6fa4e314cfd89b9b97fb41a2ad"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/literal_update_sweeps/profile.rs",
+        "sha256": "a5ba80218fd1c6513c2760a340502fe0b73c1e058361374b693966db942fdcd6"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/parameter_fragments.rs",
+        "sha256": "7ad16d3d71b3eba39b3ef0bfabe2fff1a72073f4fbcfa0c2e6ec979b00a7e191"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/parameter_fragments/integration.rs",
+        "sha256": "07e87f4c9efd0045b2c5a08bed2c09aa267f57d79587e586f8bf55a2bcb8087b"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/tests/literal_update_sweeps.rs",
+        "sha256": "e2c14e80cb7218f88b739381ef6d0ffac28aa90ca564826e82470f8505b6573c"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/tests/literal_update_sweeps/fixture.rs",
+        "sha256": "0140ac62fee4e3487201886901f09cd0b34f77fcb36eccd7cba524afc0ffcb91"
+      },
+      {
+        "path": "crates/rumoca-eval-solve/src/typed_program/tests/immutable_payloads.rs",
+        "sha256": "3f2b1020fdebb6c9995a3746c1d9858029102957b4a72c3d5025e827fae5ed35"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/emit/arena.rs",
+        "sha256": "27f1f2e8797bce1efd4f5650654062723880855796762eb8df96e23e9d993c63"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/emit/arena/arithmetic.rs",
+        "sha256": "038f22c2794dd3ad3670a11a2fd96fe901dd28732fb8062e44bb2f8c88bee5ee"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/emit/arena/layouts.rs",
+        "sha256": "8d2690a4b080f1f8d17a5ced499fa1fa1f7ddf9452286f1930d92685f75c3537"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call.rs",
+        "sha256": "4675a1446e0a4fee13440f1fe557605391d461799aa6fe79fd1848b0dd0f35b4"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/calls.rs",
+        "sha256": "a581fc36284f5ff7bd10b4d8304404e56419e57871332b932a8487e78f767708"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/control.rs",
+        "sha256": "eef095ad3359648286418fcbed456f4191cef52827a70f2b66e75b6509d694e7"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/control/domain.rs",
+        "sha256": "8a4f9a2a14cfa5b7ed1c6980ebf9e085fbacd8236a26b47e3fc295589afb84ae"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/emit.rs",
+        "sha256": "2fe47ce48db5276987665b99910d99085af00c5d9a73ce282d1c24ece9edd346"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/layout.rs",
+        "sha256": "693a5a2368ffb62f7e65113c88931b70698c6f4b707a2e7ccb3a1baee6421b20"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/layout/lifetimes.rs",
+        "sha256": "bdeb8d3ecfb4b4571ab1a00b17fe999a1d783350daea732683772a0d8dfdf3b7"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/layout/outputs.rs",
+        "sha256": "4e64ec77eddf8264236e827a59776f3521b19d4f2edc758ccf15f7dae7a983d0"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/link.rs",
+        "sha256": "f2226b50f89b81b1b37b5bde1d97b632eda3b2f66e5dd1306c74e0b1a52b14df"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/numbers.rs",
+        "sha256": "2acc661080dc98fd24553916030e8deed2d6c44cd64c38ecef52fb44175f7b0a"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/numbers/extrema.rs",
+        "sha256": "b00bdfd3461baccbe0926d2f292e87ab0907dc522c4836f2c8429092961dab4d"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/tensor.rs",
+        "sha256": "cd33fd640633f902ab894b590de179507a98a31d523745f6d1f425b30b408d27"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/native_array_assignments.rs",
+        "sha256": "36b319b9a48ced0e7b6e334fc3745e53ff2e93291216dc2975b66ad3c6a33bab"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/IntegerSeedFold.mo",
+        "sha256": "e3ab571f7ae72a329c9bb3ff22407e83a37dedf9b09f7950cda5733d91f62fe9"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/OrderedFrameFold.mo",
+        "sha256": "5c5229eef37d575247528f6645aff6ee219b00e990236c0a5c96b2424266bc31"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/OrderedTensorFrameFold.mo",
+        "sha256": "116d996193ec3260fd43e3cd5f28c05adb12d09b4d40e5bfadd2df77bddda771"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/aggregate_folds.rs",
+        "sha256": "8b8ede349e12a6a41b519de6545255e4a1cd613b79d2a51cd80e068e572012da"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/assertion_outputs.rs",
+        "sha256": "dc0eaa896927925dbb3faea03c242359e9a99d9ab3ff6dd6e929f5520cd3b1e3"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/calls.rs",
+        "sha256": "4ba61650fa0f310e61c88872e8b94745f302268ecdf6d56734e66f07065762da"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/capture_borrows.rs",
+        "sha256": "2f4646344968d27f59c6eee4930baed05c77e1936e36143c9b79eb5e2d9fd97c"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/carried_lifetimes.rs",
+        "sha256": "6932274f5759dea1250252343f6c794207bc1b45032e4c3c7f5f05b1134b8d1f"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/extrema_tensor.rs",
+        "sha256": "b023b6bb3fdaa32d6019962628da03e77f240024775db9c2ed9f25fbe68b5cd8"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/finite_domains.rs",
+        "sha256": "f869a391e2f4577af4c8c7f6c67648a3c7a8e57559de667acd35f66e901dd415"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/fixed_integer_tables/baseline.json",
+        "sha256": "f22d430e3618593892f6dde4cd5ae94d3815c04908496136b003c8169c557493"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/fixed_tables/baseline.json",
+        "sha256": "cd2bec17f43a2c63bca084475ff46b447f334257d519e60253d53da60edc1cb2"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/fixed_tables/gain-two.json",
+        "sha256": "5d44d8ded1306b95f15354a19d1355366c72b3307ab794339a4e799d5de7a97d"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/fixed_tables/subtract.json",
+        "sha256": "93abdd60267f3473e6c0a648f336d123ea2db2622f30da1cd24f4500f6735ed4"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/integer_tables/baseline.json",
+        "sha256": "967e3cb03dd62a13805afd1c4222db26f0d801bf0644a4c100799b17bce2c688"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/mod.rs",
+        "sha256": "62455b833113ad5ff01a68dedebf5ee1a0fb0ca5cb3ad6dc1e3f74d4ea3df6f3"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/registration_source.rs",
+        "sha256": "30a90dfcfde563dd8c0b53ba333db687c632a77aa039d769f6b0fa4132a05d7e"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/registration_source/eigen.rs",
+        "sha256": "a7b446c8f4076563f8baf84223e90687d0ade4c5d3beaa4d59ebf307a17eb98a"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/registration_source/fit.rs",
+        "sha256": "eb2654c093fadfd186c34ab446074a5a1d912c085547e82a08803e0026271caa"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/registration_source/fit/fixtures.rs",
+        "sha256": "120f47919621a301f8cdbfcd9fcba21d2ef4e2cbf116e213060e53fbad19c75f"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/returned_storage.rs",
+        "sha256": "e6078d91c6a7bd0f81f91bc03f643c00f79b99b3e23dd5cdb5c312d788948bb8"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/source_tables.rs",
+        "sha256": "ae252b9b0799e0869c30c70ac9b23e8263f39b06bac39c63d3a5e4cd129bd3dc"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/source_tables/baseline.json",
+        "sha256": "6152fb2486159ef9399e9cfa006e03a8490be748b4d91f9b4e2f5326da75546b"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/source_tables/gain-two.json",
+        "sha256": "f8e513f3a3fd0fb65fcf0f5d4317b8e2a7cfb0324a3fbfafabf391d221d64308"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/source_tables/subtract.json",
+        "sha256": "1d7a1581e163e2d6dc7c81ad39f5e13a2e21699fa6bdc6bfd3c9ba93fe795ff8"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/square.rs",
+        "sha256": "2eb85bb47ad1121a859968dcb53621fe072d5882182294fdacd0bf344cd18a36"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/tensor_source.rs",
+        "sha256": "b63f77a3fb0a26b8c29f47012f937361820c0eaf1641167154b24ec8f55b97e4"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/tensor_tables/baseline.json",
+        "sha256": "2075975e2ac14ba75c75f9e07bd758935177b232025a48b65307b55d0dd404aa"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/tensor_tables/gain-two.json",
+        "sha256": "0bae11123b36585ac7c35bec42beb9c4c8f7463a9b1ec7cb45fe7a10a7c15f2d"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/typed_calls.rs",
+        "sha256": "1723a4780e4d2bf5a2e450ef9cddc3ea80cd86d39ba4ac6f15725c625f4cdad8"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/coverage.rs",
+        "sha256": "d5e10cc796637ee897ac985a0b2050debd55565a3464a5bab8654b2494b6dbaf"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/range.rs",
+        "sha256": "8c64d24949c6097cff05529f5db2c8677e1591accc6e1d8e8cb024ad415b7f6c"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/range/dependency.rs",
+        "sha256": "9f3337b3124dc1baa894d162bcb0e1bb8c648173a45189fcdc9878b1c9abfdf3"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/targets.rs",
+        "sha256": "edb8942dd7b645695586981594bed2dc5090bff5249e70db45bba1791e1cce1d"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/tests/blocks.rs",
+        "sha256": "b3e04dd198769842f8707fe8f9e88432f3f313cefa0e6a5b1840a4c9cbad87ad"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/tests/permutations.rs",
+        "sha256": "36eae7819c51c99da059c2a9cb0feaea4f9218ca6e83ce80da9a20f1bbaac297"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/tests/ranges.rs",
+        "sha256": "088a67d8d4944dbbddf02d8e83998e95cb169586156a8917761e8369295fc852"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/tests/strided.rs",
+        "sha256": "9871b8f26577692c458994f9b83bacb4ef6eab9ac271720fa784b3fdfa1b9910"
+      },
+      {
+        "path": "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/accumulator_order_tests.rs",
+        "sha256": "3369371e6b44b6d86d3a6bc6eb075c7c5cefd1e0cc75fe776a92416ec7d3173b"
+      },
+      {
+        "path": "docs/verification/native-compact-array-assignments.md",
+        "sha256": "2e3dfd63d0898bd3ba10769b35e7e786d88a0ced6779309394b9de07cdf6b248"
+      },
+      {
+        "path": "docs/verification/native-typed-calls.md",
+        "sha256": "9095b38efb0731fd358bb8328fa1083c49b233921a25cd053686bb93746509d4"
+      }
+    ],
+    "trackedFiles": [
+      {
+        "path": "Cargo.lock",
+        "sha256": "0684a175d044e44846d1de269f6ce85e4e09eff8ae6feee63dc2d1320aec0df8"
+      },
+      {
+        "path": "crates/rumoca-bind-wasm/src/native_assignment_api.rs",
+        "sha256": "1a3c4949bd20eb5f9436fd7cd55fa2f1579a241c3c4a9071b5065829ec2fe5b0"
+      },
+      {
+        "path": "crates/rumoca-bind-wasm/src/native_program_api.rs",
+        "sha256": "a43b0fd5dcb88b545ab91e3e3836889dee596000482cb6c74d4112aa2cf6a7f1"
+      },
+      {
+        "path": "crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests.rs",
+        "sha256": "bf3075a9f2fb3150a659e7806cf519546eb0bdd7795a366ee0d25f1119a41d76"
+      },
+      {
+        "path": "crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/program.rs",
+        "sha256": "3ef618c6625065c02f701b2363a875c67a8f99af48a773d9cce9ff9e277c8050"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection.rs",
+        "sha256": "6b896ef6758e529bbc1ebb221c402efe8e72171ef7e636abc11b789a95bfc3eb"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/fold_graph.rs",
+        "sha256": "d5cbae4a5751e247695bebbdf89f12b54ce76c0ca55b6f68df52f1590272dae9"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/tests.rs",
+        "sha256": "d44c2f3d33065e29b2039df45d90c0d8cc4cb9ebe3248c7167764a8f34f173c5"
+      },
+      {
+        "path": "crates/rumoca-eval-dae/src/projection/tests/fold_context.rs",
+        "sha256": "9ba21317123fd02c8e9d6b39a1a0f06c9b2c7d55f1197be95acab29cc9eedd00"
+      },
+      {
+        "path": "crates/rumoca-eval-solve/src/typed_program/mod.rs",
+        "sha256": "831aaa947a8197855dd80518fa486a33e5fac493d330712e4c4ebd1462ff66a5"
+      },
+      {
+        "path": "crates/rumoca-eval-solve/src/typed_program/tests.rs",
+        "sha256": "15868ec0289cc93261d2fcafcca0451e577bda87a4e621c440a2cd2a60f23882"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/Cargo.toml",
+        "sha256": "d0964f1d05064a2e496bdc79ce1943ea5cc7a3066a1004f1d2d2263fe9f467e2"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/emit.rs",
+        "sha256": "f9c164c6e368d9f422d167cdfaf8f0e7672385943d5239667a2d66191ec6c539"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/emit/compute.rs",
+        "sha256": "596678a53eda68e722e7f4ed79b675b17504cc599c726d8b2de2c1b8d273ce1d"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/emit/compute/assignments.rs",
+        "sha256": "a58aef45428509f18f2403afb6c480d1164811e12b3e14b291db76e68b6eaeea"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/emit/tensor.rs",
+        "sha256": "60badcb0cf847090811d074342465a4853ef028bce2a08d290bfd1b2930a79bd"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/lib.rs",
+        "sha256": "673fdf0e679d13eea4afefe5d5bbb503398e01522aacc95db9ecdcb1c677abc7"
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/native_program.rs",
+        "sha256": "c892848f0d594dd3269984c09b81ecc88f440fb0aebe8e76278299082577172e"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/assignment_shape.rs",
+        "sha256": "75b52ad67134f381409cd3c00ee39aefcbab5de425fbed98bb137147bc9c7ca0"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/assignment_shape/producers.rs",
+        "sha256": "5729ac1deb0f8623a3908c5e71c982eadf8eeab7a832e2b4a963a7778f40564b"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment.rs",
+        "sha256": "46a8b0cbaa4024101f5ef1c8fe359b081d6a3542dec71ef30b4d8ae2b1bee3ab"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/scalar.rs",
+        "sha256": "c792c6f8d48836dd401a4ed135a79ba6b109a66bee51d5e17f301a1d12b58d2a"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/tests.rs",
+        "sha256": "d9890200ad96cbb608831076b59f050e369f442fea4a574fc6b6f78872237a11"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/native_assignment/tests/mixed.rs",
+        "sha256": "a820c486489253bbd9b5eb6647f38b8039de9c49c41da635599ad9d4ca02abc3"
+      },
+      {
+        "path": "crates/rumoca-ir-solve/src/refresh/source_outputs.rs",
+        "sha256": "77e89cf786c91f0d23c7db192073af2b8e8dd7e6b51a895e4df619d6567e6905"
+      },
+      {
+        "path": "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/accumulator_reductions.rs",
+        "sha256": "b5ae2b1806ae0cb96dc205281cc179e07a7ab5b6ab4660ceffa0daa9b4fea26f"
+      },
+      {
+        "path": "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/mod.rs",
+        "sha256": "64a1ab29bb7d88f67d80642e7fa405f44fa7b1e0ec0d69345ffce483277b641d"
+      },
+      {
+        "path": "crates/rumoca-phase-dae/src/construction/tests/functions.rs",
+        "sha256": "32b6c49202e1c3f5a32e2a45abaa94d46679d76d1c68967880215f3aa4298259"
+      }
+    ],
+    "dirtyClosureSha256": "6b7266c8bc206acccf652dc318f746dfcd6414e980eb537108c7a5966462b5b1"
+  },
+  "targets": {
+    "path": "infra/verification/msl-canary-20.json",
+    "sha256": "536004933ce502f7a8a4317e5dd6de2b700a6b176e84d2d6e7bbe0dcdf61eafa",
+    "models": [
+      "Modelica.Blocks.Examples.BooleanNetwork1",
+      "Modelica.Blocks.Examples.Noise.AutomaticSeed",
+      "Modelica.Clocked.Examples.Elementary.BooleanSignals.BackSample",
+      "Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse",
+      "Modelica.Clocked.Examples.Elementary.IntegerSignals.BackSample",
+      "Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep",
+      "Modelica.Clocked.Examples.Elementary.RealSignals.Sample1",
+      "Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp",
+      "Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController",
+      "Modelica.Electrical.Analog.Examples.DemoPowerSupply",
+      "Modelica.Electrical.Analog.Examples.OpAmps.Comparator",
+      "Modelica.Electrical.Analog.Examples.OpAmps.OpAmpCircuits.Add",
+      "Modelica.Electrical.Analog.Examples.ShowSaturatingInductor",
+      "Modelica.Electrical.Digital.Examples.Counter",
+      "Modelica.Electrical.Digital.Examples.FullAdder",
+      "Modelica.Electrical.Polyphase.Examples.TransformerYD",
+      "Modelica.Math.Nonlinear.Examples.QuadratureLobatto3",
+      "Modelica.StateGraph.Examples.ShowCompositeStep",
+      "Modelica.Mechanics.Rotational.Examples.Friction",
+      "Modelica.Mechanics.Rotational.Examples.FirstGrounded"
+    ]
+  },
+  "toolchain": {
+    "rustc": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.95.0\nLLVM version: 22.1.2\n",
+    "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)\n",
+    "omcPath": "/nix/store/6iggbkckmny55dwflvz73pmjq45j8whw-openmodelica-unstable-2026-07-21/bin/omc",
+    "omcVersion": "a96aa1a-cmake",
+    "omcBinarySha256": "840e73b72019550d8ad43cfc50dcac3bb882c395a306cd8be5a3ab25659afca6",
+    "cache": "/tmp/slam-filter-schedule-target",
+    "cacheCompatibility": "Existing cache reports Rust stable1.95.0 and producer.dep source paths bind this upstream worktree; msl-fast profile has no prior artifacts."
+  },
+  "prerequisites": {
+    "mslVersion": "4.1.0",
+    "mslSource": "/home/jgoppert/git/rumoca/target/msl/ModelicaStandardLibrary-4.1.0",
+    "staging": "upstream target/msl symlink to existing pinned tree",
+    "omcLoad": "Actual OMC prerequisite loads of Complex, ModelicaServices and Modelica all returned true; ModelicaServices compatibility warning retained",
+    "script": "/tmp/slam-canary-omc-prerequisite.mos",
+    "mslFileCount": 4213,
+    "mslSourceClosureSha256": "5379849d1b1c94c43d76417fe80df2c606eed9f40fa728224509c2a5b0df5d66"
+  },
+  "baseline": {
+    "path": "crates/rumoca-test-msl/tests/msl_tests/msl_quality_baseline.json",
+    "sha256": "90253d3dd70a98c9354823c6a1d93b83c80ac621d2fc756b0b45b5297f1c0cbd",
+    "value": {
+      "quality_gate_version": 7,
+      "run_scope": "full",
+      "git_commit": "4e2c6cf07ca16ce744d8c409c16d9c5aa793eb6e",
+      "msl_version": "v4.1.0",
+      "omc_version": "a96aa1a-cmake",
+      "sim_timeout_seconds": 12,
+      "simulatable_attempted": 566,
+      "parse_models": 566,
+      "flatten_models": 493,
+      "dae_models": 305,
+      "compiled_models": 305,
+      "solve_models": 282,
+      "balanced_models": 293,
+      "unbalanced_models": 0,
+      "partial_models": 13,
+      "partial_model_names": [
+        "Modelica.Electrical.Analog.Examples.OpAmps.OpAmpCircuits.PartialOpAmp",
+        "Modelica.Electrical.PowerConverters.Examples.ACAC.ExampleTemplates.Dimmer",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.Thyristor1Pulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorBridge2Pulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorBridge2mPulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorCenterTap2Pulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorCenterTap2mPulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorCenterTapmPulse",
+        "Modelica.Electrical.PowerConverters.Examples.DCAC.ExampleTemplates.SinglePhaseTwoLevel",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ExampleTemplates.ChopperBuckBoost",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ExampleTemplates.ChopperStepDown",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ExampleTemplates.ChopperStepUp",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ExampleTemplates.HBridge"
+      ],
+      "balance_denominator": 293,
+      "initial_balanced_models": 293,
+      "initial_unbalanced_models": 0,
+      "sim_target_models": 566,
+      "sim_attempted": 286,
+      "ic_attempted": 240,
+      "ic_ok": 231,
+      "ic_solver_fail": 9,
+      "sim_ok": 214,
+      "sim_success_rate": 0.37809187279151946,
+      "runtime_context": {
+        "workers_used": 8,
+        "omc_threads": 1
+      },
+      "runtime_ratio_stats": {
+        "system_ratio_both_success": {
+          "sample_count": 214,
+          "min": 0.08087766905092365,
+          "median": 3.476629204116432,
+          "mean": 7.3220005652077,
+          "max": 46.39004892443598
+        },
+        "wall_ratio_both_success": {
+          "sample_count": 214,
+          "min": 0.498113371687208,
+          "median": 37.069722022543544,
+          "mean": 334.44933226823014,
+          "max": 2992.6516798298
+        }
+      },
+      "runtime_ratio_cohort_models": [
+        "Modelica.Blocks.Examples.BusUsage",
+        "Modelica.Blocks.Examples.BusUsage_Utilities.Part",
+        "Modelica.Blocks.Examples.CompareSincExpSine",
+        "Modelica.Blocks.Examples.DemoSignalCharacteristic",
+        "Modelica.Blocks.Examples.DemonstrateSignalExtrema",
+        "Modelica.Blocks.Examples.InverseModel",
+        "Modelica.Blocks.Examples.Modulation",
+        "Modelica.Blocks.Examples.Noise.Densities",
+        "Modelica.Blocks.Examples.PID_Controller",
+        "Modelica.Blocks.Examples.SinCosEncoder",
+        "Modelica.Blocks.Examples.SlewRateLimiter",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.AssignClock",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.AssignClockVectorized",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.Sample1",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.SampleClocked",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.SampleVectorizedAndClocked",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.TickBasedStep",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedStep",
+        "Modelica.Clocked.Examples.Elementary.ClockSignals.ShiftSample",
+        "Modelica.Clocked.Examples.Elementary.ClockSignals.SubSample",
+        "Modelica.Clocked.Examples.Elementary.ClockSignals.SuperSample",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.AssignClock",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.AssignClockVectorized",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.Sample1",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.SampleClocked",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.SampleVectorizedAndClocked",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.TickBasedStep",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.AssignClock",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.AssignClockToSquareWaveHold",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.AssignClockToTriggerHold",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.BackSample",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.Hold",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.HoldWithDAeffects1",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.HoldWithDAeffects2",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.Sample1",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.Sample2",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.Sample3",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.SampleClocked",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.ShiftSample",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.SubSample",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.SuperSample",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedStep",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TimeBasedRamp",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TimeBasedSine",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TimeBasedStep",
+        "Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController",
+        "Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteTextbookController",
+        "Modelica.Clocked.Examples.SimpleControlledDrive.Continuous",
+        "Modelica.Clocked.Examples.SimpleControlledDrive.ExactlyClockedWithDiscreteController",
+        "Modelica.ComplexBlocks.Examples.TestConversionBlock",
+        "Modelica.Electrical.Analog.Examples.CauerLowPassAnalog",
+        "Modelica.Electrical.Analog.Examples.CauerLowPassOPV",
+        "Modelica.Electrical.Analog.Examples.CharacteristicIdealDiodes",
+        "Modelica.Electrical.Analog.Examples.ChuaCircuit",
+        "Modelica.Electrical.Analog.Examples.CompareTransformers",
+        "Modelica.Electrical.Analog.Examples.ControlledSwitchWithArc",
+        "Modelica.Electrical.Analog.Examples.DemoPowerSupply",
+        "Modelica.Electrical.Analog.Examples.DemoPowerSupplyWithBuffer",
+        "Modelica.Electrical.Analog.Examples.HeatingRectifier",
+        "Modelica.Electrical.Analog.Examples.IdealTriacCircuit",
+        "Modelica.Electrical.Analog.Examples.InvertingAmp",
+        "Modelica.Electrical.Analog.Examples.Lines.CompareLosslessLines",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Adder",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Comparator",
+        "Modelica.Electrical.Analog.Examples.OpAmps.ControlCircuit",
+        "Modelica.Electrical.Analog.Examples.OpAmps.DifferentialAmplifier",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Differentiator",
+        "Modelica.Electrical.Analog.Examples.OpAmps.HighPass",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Integrator",
+        "Modelica.Electrical.Analog.Examples.OpAmps.InvertingAmplifier",
+        "Modelica.Electrical.Analog.Examples.OpAmps.LCOscillator",
+        "Modelica.Electrical.Analog.Examples.OpAmps.LowPass",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Multivibrator",
+        "Modelica.Electrical.Analog.Examples.OpAmps.NonInvertingAmplifier",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Subtracter",
+        "Modelica.Electrical.Analog.Examples.OpAmps.VoltageFollower",
+        "Modelica.Electrical.Analog.Examples.OvervoltageProtection",
+        "Modelica.Electrical.Analog.Examples.ParallelResonance",
+        "Modelica.Electrical.Analog.Examples.Rectifier",
+        "Modelica.Electrical.Analog.Examples.Resistor",
+        "Modelica.Electrical.Analog.Examples.SeriesResonance",
+        "Modelica.Electrical.Analog.Examples.ShowSaturatingInductor",
+        "Modelica.Electrical.Analog.Examples.ShowVariableResistor",
+        "Modelica.Electrical.Analog.Examples.SwitchWithArc",
+        "Modelica.Electrical.Batteries.Examples.SuperCapDischargeCharge",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCEE_Start",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_Cooling",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_CurrentControlled",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_Drive",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_Start",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_Temperature",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_withLosses",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCSE_SinglePhase",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCSE_Start",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_DOL",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_Initialize",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_Inverter",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_Steinmetz",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_YD",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_withLosses",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMS_Start",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMPM_Inverter",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMPM_ResistiveBraking",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMPM_VoltageSource",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMR_DOL",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMR_Inverter",
+        "Modelica.Electrical.Polyphase.Examples.TestSensors",
+        "Modelica.Electrical.Polyphase.Examples.TransformerYY",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.Rectifier1Pulse.Thyristor1Pulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.Rectifier1Pulse.Thyristor1Pulse_R_Characteristic",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.DiodeBridge2Pulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.HalfControlledBridge2Pulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.ThyristorBridge2Pulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.ThyristorBridge2Pulse_RL",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.ThyristorBridge2Pulse_RLV",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.ThyristorBridge2Pulse_RLV_Characteristic",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2mPulse.DiodeBridge2mPulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2mPulse.HalfControlledBridge2mPulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2mPulse.ThyristorBridge2mPulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2mPulse.ThyristorBridge2mPulse_RL",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2mPulse.ThyristorBridge2mPulse_RLV",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2Pulse.DiodeCenterTap2Pulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2Pulse.ThyristorCenterTap2Pulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2Pulse.ThyristorCenterTap2Pulse_RL",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2Pulse.ThyristorCenterTap2Pulse_RLV",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2Pulse.ThyristorCenterTap2Pulse_RLV_Characteristic",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2mPulse.DiodeCenterTap2mPulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2mPulse.ThyristorCenterTap2mPulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2mPulse.ThyristorCenterTap2mPulse_RL",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2mPulse.ThyristorCenterTap2mPulse_RLV",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTapmPulse.DiodeCenterTapmPulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTapmPulse.ThyristorCenterTapmPulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTapmPulse.ThyristorCenterTapmPulse_RL",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTapmPulse.ThyristorCenterTapmPulse_RLV",
+        "Modelica.Electrical.PowerConverters.Examples.DCAC.SinglePhaseTwoLevel.SinglePhaseTwoLevel_R",
+        "Modelica.Electrical.PowerConverters.Examples.DCAC.SinglePhaseTwoLevel.SinglePhaseTwoLevel_RL",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ChopperStepDown.ChopperStepDown_R",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ChopperStepDown.ChopperStepDown_RL",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ChopperStepUp.ChopperStepUp_R",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.HBridge.HBridge_R",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.HBridge.HBridge_RL",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.HBridge.HBridge_TrianglePWM_RL",
+        "Modelica.Electrical.Spice3.Examples.CoupledInductors",
+        "Modelica.Magnetic.FluxTubes.Examples.BasicExamples.SaturatedInductor",
+        "Modelica.Magnetic.FluxTubes.Examples.MovingCoilActuator.ArmatureStroke",
+        "Modelica.Magnetic.FluxTubes.Examples.SolenoidActuator.ComparisonQuasiStatic",
+        "Modelica.Mechanics.MultiBody.Examples.Constraints.PrismaticConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Constraints.RevoluteConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Constraints.SphericalConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Constraints.UniversalConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.DoublePendulum",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.DoublePendulumInitTip",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.ForceAndTorque",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.FreeBody",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.HeatLosses",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.InitSpringConstant",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.LineForceWithTwoMasses",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.Pendulum",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.PendulumWithSpringDamper",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.PointGravity",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.PointGravityWithPointMasses",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.RollingWheel",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.RollingWheelSetDriving",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.RollingWheelSetPulling",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.SpringDamperSystem",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.SpringMassSystem",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.SpringWithMass",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.Surfaces",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.ThreeSprings",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.UserDefinedGravityField",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.Engine1b",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.Fourbar1",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.Fourbar2",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.Fourbar_analytic",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.PlanarFourbar",
+        "Modelica.Mechanics.MultiBody.Examples.Rotational3DEffects.ActuatedDrive",
+        "Modelica.Mechanics.MultiBody.Examples.Rotational3DEffects.BevelGear1D",
+        "Modelica.Mechanics.MultiBody.Examples.Rotational3DEffects.GearConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Rotational3DEffects.GyroscopicEffects",
+        "Modelica.Mechanics.MultiBody.Examples.Rotational3DEffects.MovingActuatedDrive",
+        "Modelica.Mechanics.Rotational.Examples.Backlash",
+        "Modelica.Mechanics.Rotational.Examples.CompareBrakingTorque",
+        "Modelica.Mechanics.Rotational.Examples.EddyCurrentBrake",
+        "Modelica.Mechanics.Rotational.Examples.ElasticBearing",
+        "Modelica.Mechanics.Rotational.Examples.First",
+        "Modelica.Mechanics.Rotational.Examples.FirstGrounded",
+        "Modelica.Mechanics.Rotational.Examples.RollingWheel",
+        "Modelica.Mechanics.Translational.Examples.Accelerate",
+        "Modelica.Mechanics.Translational.Examples.CompareBrakingForce",
+        "Modelica.Mechanics.Translational.Examples.Damper",
+        "Modelica.Mechanics.Translational.Examples.EddyCurrentBrake",
+        "Modelica.Mechanics.Translational.Examples.ElastoGap",
+        "Modelica.Mechanics.Translational.Examples.InitialConditions",
+        "Modelica.Mechanics.Translational.Examples.Oscillator",
+        "Modelica.Mechanics.Translational.Examples.PreLoad",
+        "Modelica.Mechanics.Translational.Examples.Sensors",
+        "Modelica.Mechanics.Translational.Examples.SignConvention",
+        "Modelica.Mechanics.Translational.Examples.Vehicle",
+        "Modelica.Mechanics.Translational.Examples.WhyArrows",
+        "Modelica.Thermal.FluidHeatFlow.Examples.IndirectCooling",
+        "Modelica.Thermal.FluidHeatFlow.Examples.OneMass",
+        "Modelica.Thermal.FluidHeatFlow.Examples.ParallelCooling",
+        "Modelica.Thermal.FluidHeatFlow.Examples.ParallelPumpDropOut",
+        "Modelica.Thermal.FluidHeatFlow.Examples.PumpAndValve",
+        "Modelica.Thermal.FluidHeatFlow.Examples.PumpDropOut",
+        "Modelica.Thermal.FluidHeatFlow.Examples.SimpleCooling",
+        "Modelica.Thermal.FluidHeatFlow.Examples.TwoTanks",
+        "Modelica.Thermal.FluidHeatFlow.Examples.WaterPump",
+        "Modelica.Thermal.HeatTransfer.Examples.ControlledTemperature",
+        "Modelica.Thermal.HeatTransfer.Examples.Motor",
+        "Modelica.Thermal.HeatTransfer.Examples.TwoMasses"
+      ],
+      "trace_accuracy_stats": {
+        "models_compared": 192,
+        "missing_trace_models": 0,
+        "skipped_models": 22,
+        "policy_excluded_models": 22,
+        "trace_nonidentifiable_models": 0,
+        "agreement_high": 192,
+        "agreement_high_percent": 100,
+        "agreement_minor": 0,
+        "agreement_minor_percent": 0,
+        "agreement_deviation": 0,
+        "agreement_deviation_percent": 0,
+        "total_channels_compared": 37888,
+        "bad_channels_total": 0,
+        "severe_channels_total": 0,
+        "bad_channels_percent": 0,
+        "severe_channels_percent": 0,
+        "violation_mass_total": 0,
+        "violation_mass_mean_per_model": 0,
+        "violation_mass_mean_per_channel": 0,
+        "models_with_bad_channel": 0,
+        "models_with_severe_channel": 0,
+        "models_with_any_channel_deviation": 0,
+        "models_with_any_channel_deviation_percent": 0,
+        "max_model_channel_deviation_percent": 0,
+        "bounded_normalized_l1": {
+          "sample_count": 192,
+          "min": 0,
+          "median": 4.18343673343987e-11,
+          "mean": 0.000020559227071078744,
+          "max": 0.000999001079033892
+        },
+        "mean_model_mean_channel_bounded_normalized_l1": 0.00015271054979339939,
+        "max_model_max_channel_bounded_normalized_l1": 0.17976647441118312,
+        "model_mean_channel_bounded_normalized_l1": {
+          "sample_count": 192,
+          "min": 0,
+          "median": 8.456961692413088e-7,
+          "mean": 0.00015271054979339939,
+          "max": 0.0052197167076635555
+        },
+        "model_max_channel_bounded_normalized_l1": {
+          "sample_count": 192,
+          "min": 0,
+          "median": 0.000009936815845028067,
+          "mean": 0.006341005278742683,
+          "max": 0.17976647441118312
+        },
+        "initial_condition": {
+          "models_compared": 192,
+          "models_with_accurate_initial_conditions": 191,
+          "models_with_initial_condition_deviation": 1,
+          "models_with_unmeasured_initial_conditions": 0,
+          "accurate_initial_conditions_percent": 99.47916666666667,
+          "models_with_initial_condition_deviation_percent": 0.5208333333333334,
+          "models_with_unmeasured_initial_conditions_percent": 0,
+          "total_channels_compared": 37888,
+          "high_channels_total": 37881,
+          "near_channels_total": 0,
+          "deviation_channels_total": 7,
+          "severe_channels_total": 6,
+          "high_channels_percent": 99.98152449324324,
+          "near_channels_percent": 0,
+          "deviation_channels_percent": 0.018475506756756757,
+          "severe_channels_percent": 0.01583614864864865,
+          "violation_mass_total": 4.304182105156322,
+          "violation_mass_mean_per_model": 0.02241761513102251,
+          "violation_mass_mean_per_channel": 0.00011360277938018164,
+          "mean_channel_bounded_normalized_error": 0.00015089300081151818,
+          "max_channel_bounded_normalized_error": 0.9162886180653537
+        },
+        "state_selection": {
+          "models_compared": 192,
+          "exact_state_set_match_models": 133,
+          "state_count_match_models": 180,
+          "exact_state_set_match_percent": 69.27083333333333,
+          "state_count_match_percent": 93.75,
+          "total_rumoca_states": 687,
+          "total_omc_states": 667,
+          "total_matching_states": 448,
+          "total_rumoca_only_states": 239,
+          "total_omc_only_states": 219,
+          "max_model_state_set_difference": 21
+        }
+      },
+      "tensor_preservation": {
+        "models_reported": 0,
+        "family_bodies": 0,
+        "preserved_family_bodies": 0,
+        "scalarized_family_rows": 0,
+        "report_errors": 0,
+        "preservation_percent": null
+      },
+      "metric_schema_migration": {
+        "from_quality_gate_version": 2,
+        "to_quality_gate_version": 3,
+        "change": "reviewed-pointwise-oracle-boundaries-v1",
+        "strict_high_before": 118,
+        "strict_high_after": 113,
+        "policy_excluded_after": 9,
+        "excluded_strict_high_before": 5,
+        "excluded_non_high_before": 4,
+        "exclusions_file": "crates/rumoca-test-msl/tests/msl_tests/msl_trace_compare_exclusions.json",
+        "exclusions_sha256": "e064ffb80771c1e231e849afcaa25cc2a08b8b7f9bf449bf8651905e5dcdc4d0"
+      },
+      "reference_boundary_migration": {
+        "from_quality_gate_version": 6,
+        "to_quality_gate_version": 7,
+        "change": "reviewed-non-identifiable-discrete-and-internal-node-boundary-v1",
+        "strict_high_before": 166,
+        "strict_high_after": 166,
+        "policy_excluded_after": 23,
+        "excluded_strict_high_before": 0,
+        "excluded_non_high_before": 2,
+        "exclusions_file": "crates/rumoca-test-msl/tests/msl_tests/msl_trace_compare_exclusions.json",
+        "exclusions_sha256": "2f4742677e95825bc98f392ef063fdeb2b910b5de1b80c9e94e407a0de6f31dd",
+        "evidence_git_commit": "9e5b5c7d52e6dde1edc6164727a5620d5e0867bc",
+        "evidence_run": "msl-quality-0.10.0-reviewed-exclusions",
+        "policy_excluded_before": 21,
+        "previous": {
+          "from_quality_gate_version": 5,
+          "to_quality_gate_version": 6,
+          "change": "reviewed-conditioned-observable-reference-boundary-v1",
+          "strict_high_before": 166,
+          "strict_high_after": 166,
+          "policy_excluded_after": 21,
+          "excluded_strict_high_before": 0,
+          "excluded_non_high_before": 1,
+          "exclusions_file": "crates/rumoca-test-msl/tests/msl_tests/msl_trace_compare_exclusions.json",
+          "exclusions_sha256": "1da770784678228aff3c0d574bb48adce7138c5c54d252ce79883dd456d135b9",
+          "evidence_git_commit": "0de3f29c0ae9440061bef21c7eb9eb4650407015",
+          "evidence_run": "multibody-automatic-basis-full",
+          "policy_excluded_before": 20,
+          "previous": {
+            "from_quality_gate_version": 4,
+            "to_quality_gate_version": 5,
+            "change": "reviewed-reference-convergence-boundary-v1",
+            "strict_high_before": 160,
+            "strict_high_after": 160,
+            "policy_excluded_after": 20,
+            "excluded_strict_high_before": 0,
+            "excluded_non_high_before": 1,
+            "exclusions_file": "crates/rumoca-test-msl/tests/msl_tests/msl_trace_compare_exclusions.json",
+            "exclusions_sha256": "30f7c38e58307d6af4f69b844512679ec860f367f88670481edad5318d7d29f8",
+            "evidence_git_commit": "3d76411c1a41a1b27e6a0ecbf1cf3e204f0b47a4",
+            "evidence_run": "multibody-guarded-affine-full-11",
+            "policy_excluded_before": 19
+          }
+        }
+      },
+      "partial_classification_migration": {
+        "from_quality_gate_version": 3,
+        "to_quality_gate_version": 4,
+        "change": "source-static-partial-cohort-v1",
+        "evidence_git_commit": "5394156facb1e5ff9f099f21c0e833c4870c506f",
+        "sim_target_models": 566,
+        "partial_models_before": 11,
+        "partial_models_after": 13,
+        "affected_diagnostic_cohort": "failed-before-success-with-null-partial-classification",
+        "affected_models": [
+          "Modelica.Electrical.Analog.Examples.OpAmps.OpAmpCircuits.PartialOpAmp",
+          "Modelica.Electrical.PowerConverters.Examples.ACAC.ExampleTemplates.Dimmer"
+        ],
+        "partial_model_names_after": [
+          "Modelica.Electrical.Analog.Examples.OpAmps.OpAmpCircuits.PartialOpAmp",
+          "Modelica.Electrical.PowerConverters.Examples.ACAC.ExampleTemplates.Dimmer",
+          "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.Thyristor1Pulse",
+          "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorBridge2Pulse",
+          "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorBridge2mPulse",
+          "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorCenterTap2Pulse",
+          "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorCenterTap2mPulse",
+          "Modelica.Electrical.PowerConverters.Examples.ACDC.ExampleTemplates.ThyristorCenterTapmPulse",
+          "Modelica.Electrical.PowerConverters.Examples.DCAC.ExampleTemplates.SinglePhaseTwoLevel",
+          "Modelica.Electrical.PowerConverters.Examples.DCDC.ExampleTemplates.ChopperBuckBoost",
+          "Modelica.Electrical.PowerConverters.Examples.DCDC.ExampleTemplates.ChopperStepDown",
+          "Modelica.Electrical.PowerConverters.Examples.DCDC.ExampleTemplates.ChopperStepUp",
+          "Modelica.Electrical.PowerConverters.Examples.DCDC.ExampleTemplates.HBridge"
+        ]
+      },
+      "compiler_contract_migration": {
+        "from_contract": "permissive-dae-v1",
+        "to_contract": "checked-dae-v1",
+        "evidence_git_commit": "3fc9a6cb9c60e1137eb6151f29cb87e9ad35064b",
+        "sim_target_models": 566,
+        "stage_counts_before": {
+          "parse_models": 566,
+          "flatten_models": 555,
+          "dae_models": 545,
+          "compiled_models": 545,
+          "solve_models": 446,
+          "balanced_models": 532,
+          "unbalanced_models": 0,
+          "partial_models": 13,
+          "balance_denominator": 532,
+          "initial_balanced_models": 532,
+          "initial_unbalanced_models": 0,
+          "sim_attempted": 496,
+          "ic_attempted": 267,
+          "ic_ok": 252,
+          "ic_solver_fail": 15,
+          "sim_ok": 207
+        },
+        "stage_counts_after": {
+          "parse_models": 566,
+          "flatten_models": 444,
+          "dae_models": 228,
+          "compiled_models": 228,
+          "solve_models": 202,
+          "balanced_models": 217,
+          "unbalanced_models": 0,
+          "partial_models": 11,
+          "balance_denominator": 217,
+          "initial_balanced_models": 217,
+          "initial_unbalanced_models": 0,
+          "sim_attempted": 210,
+          "ic_attempted": 150,
+          "ic_ok": 146,
+          "ic_solver_fail": 4,
+          "sim_ok": 122
+        },
+        "phase_failure_counts_after": {
+          "Flatten": 82,
+          "Instantiate": 9,
+          "Resolve": 25,
+          "ToDae": 216,
+          "Typecheck": 6
+        },
+        "error_code_counts_after": {
+          "ED001": 24,
+          "ED008": 7,
+          "ED009": 3,
+          "ED010": 14,
+          "ED013": 22,
+          "ED018": 29,
+          "ED019": 111,
+          "ED020": 1,
+          "ED021": 5,
+          "EF004": 24,
+          "EF005": 11,
+          "EF016": 16,
+          "EF020": 1,
+          "EF024": 16,
+          "EF025": 12,
+          "EI007": 2,
+          "EI012": 6,
+          "EI027": 1,
+          "EL005": 60,
+          "EMSL_TIMEOUT_MODEL_ATTEMPT": 11,
+          "ER066": 23,
+          "ER130": 2,
+          "ET000": 1,
+          "ET004": 4,
+          "EX001": 6,
+          "EX002": 13
+        }
+      },
+      "pipeline_progress": {
+        "total_mo_files": 2555,
+        "parse_errors": 0,
+        "total_models": 566,
+        "parse_models": 566,
+        "flatten_models": 493,
+        "dae_models": 305,
+        "compiled_models": 305,
+        "solve_models": 282,
+        "balanced_models": 293,
+        "initial_balanced_models": 293,
+        "state_selection": {
+          "models_compared": 192,
+          "exact_state_set_match_models": 133,
+          "state_count_match_models": 180,
+          "exact_state_set_match_percent": 69.27083333333333,
+          "state_count_match_percent": 93.75,
+          "total_rumoca_states": 687,
+          "total_omc_states": 667,
+          "total_matching_states": 448,
+          "total_rumoca_only_states": 239,
+          "total_omc_only_states": 219,
+          "max_model_state_set_difference": 21
+        },
+        "omc_assertion_failure_models": 0,
+        "sim_target_models": 566,
+        "sim_attempted": 286,
+        "ic_attempted": 240,
+        "ic_ok": 231,
+        "ic_solver_fail": 9,
+        "sim_ok": 214,
+        "certified_simulations_strict_high": 192,
+        "reviewed_trace_exceptions": 22,
+        "unclassified_simulations": 0,
+        "classified_simulations_percent": 100,
+        "sim_nan": 0,
+        "sim_solver_fail": 68,
+        "sim_timeout": 4,
+        "tensor_preservation": {
+          "models_reported": 0,
+          "family_bodies": 0,
+          "preserved_family_bodies": 0,
+          "scalarized_family_rows": 0,
+          "report_errors": 0,
+          "preservation_percent": null
+        },
+        "error_code_counts": {
+          "ED001": 36,
+          "ED008": 48,
+          "ED009": 5,
+          "ED010": 14,
+          "ED013": 23,
+          "ED018": 4,
+          "ED019": 52,
+          "ED020": 6,
+          "EF004": 1,
+          "EF015": 1,
+          "EF016": 1,
+          "EF019": 8,
+          "EF020": 1,
+          "EF023": 17,
+          "EF024": 7,
+          "EF025": 4,
+          "EI007": 1,
+          "EI012": 8,
+          "EI027": 1,
+          "EI035": 1,
+          "EL005": 42,
+          "EMSL_TIMEOUT_MODEL_ATTEMPT": 6,
+          "ER130": 2,
+          "ET000": 14,
+          "ET004": 4,
+          "EX001": 2,
+          "EX002": 18
+        },
+        "unsupported_feature_counts": {},
+        "unsupported_feature_counts_by_backend": {},
+        "phase_failure_counts": {
+          "Flatten": 41,
+          "Instantiate": 11,
+          "Resolve": 2,
+          "ToDae": 188,
+          "Typecheck": 19
+        }
+      },
+      "mls_contract_coverage": {
+        "ARR": {
+          "models": 15,
+          "compiled": 10,
+          "solve_ir": 7,
+          "balanced": 7,
+          "sim_ok": 4,
+          "phase_counts": {
+            "Flatten": 1,
+            "Success": 7,
+            "ToDae": 3,
+            "Typecheck": 4
+          },
+          "error_code_counts": {
+            "ED013": 1,
+            "ED019": 2,
+            "EF025": 1,
+            "EL005": 3,
+            "ET004": 4
+          }
+        },
+        "CLK_SM": {
+          "models": 77,
+          "compiled": 77,
+          "solve_ir": 38,
+          "balanced": 38,
+          "sim_ok": 37,
+          "phase_counts": {
+            "Success": 38,
+            "ToDae": 39
+          },
+          "error_code_counts": {
+            "ED008": 13,
+            "ED009": 5,
+            "ED010": 11,
+            "ED018": 4,
+            "ED019": 5,
+            "ED020": 1,
+            "EL005": 1
+          }
+        },
+        "CONN_STRM": {
+          "models": 338,
+          "compiled": 304,
+          "solve_ir": 208,
+          "balanced": 228,
+          "sim_ok": 157,
+          "phase_counts": {
+            "Flatten": 7,
+            "Instantiate": 10,
+            "Resolve": 2,
+            "Success": 229,
+            "ToDae": 75,
+            "Typecheck": 15
+          },
+          "error_code_counts": {
+            "ED001": 9,
+            "ED008": 17,
+            "ED010": 3,
+            "ED013": 22,
+            "ED019": 19,
+            "ED020": 5,
+            "EF020": 1,
+            "EF023": 1,
+            "EF024": 3,
+            "EF025": 1,
+            "EI007": 1,
+            "EI012": 8,
+            "EI027": 1,
+            "EL005": 28,
+            "EMSL_TIMEOUT_MODEL_ATTEMPT": 6,
+            "ER130": 2,
+            "ET000": 14,
+            "EX001": 2,
+            "EX002": 15
+          }
+        },
+        "DECL_TYPE": {
+          "models": 3,
+          "compiled": 2,
+          "solve_ir": 0,
+          "balanced": 0,
+          "sim_ok": 0,
+          "phase_counts": {
+            "Flatten": 1,
+            "ToDae": 2
+          },
+          "error_code_counts": {
+            "ED019": 2,
+            "EF015": 1
+          }
+        },
+        "EQN_ALG_SIM": {
+          "models": 3,
+          "compiled": 1,
+          "solve_ir": 0,
+          "balanced": 0,
+          "sim_ok": 0,
+          "phase_counts": {
+            "Flatten": 2,
+            "ToDae": 1
+          },
+          "error_code_counts": {
+            "ED001": 1,
+            "EF004": 1,
+            "EF023": 1
+          }
+        },
+        "FUNC": {
+          "models": 28,
+          "compiled": 17,
+          "solve_ir": 0,
+          "balanced": 0,
+          "sim_ok": 0,
+          "phase_counts": {
+            "Flatten": 11,
+            "ToDae": 17
+          },
+          "error_code_counts": {
+            "ED019": 17,
+            "EF016": 1,
+            "EF019": 8,
+            "EF025": 2
+          }
+        },
+        "OTHER": {
+          "models": 102,
+          "compiled": 82,
+          "solve_ir": 29,
+          "balanced": 31,
+          "sim_ok": 16,
+          "phase_counts": {
+            "Flatten": 19,
+            "Instantiate": 1,
+            "Success": 31,
+            "ToDae": 51
+          },
+          "error_code_counts": {
+            "ED001": 26,
+            "ED008": 18,
+            "ED019": 7,
+            "EF023": 15,
+            "EF024": 4,
+            "EI035": 1,
+            "EL005": 10,
+            "EX002": 3
+          }
+        }
+      },
+      "parity_measured": true,
+      "certified_strict_high_models": [
+        "Modelica.Blocks.Examples.BusUsage",
+        "Modelica.Blocks.Examples.BusUsage_Utilities.Part",
+        "Modelica.Blocks.Examples.CompareSincExpSine",
+        "Modelica.Blocks.Examples.DemonstrateSignalExtrema",
+        "Modelica.Blocks.Examples.InverseModel",
+        "Modelica.Blocks.Examples.Modulation",
+        "Modelica.Blocks.Examples.Noise.Densities",
+        "Modelica.Blocks.Examples.PID_Controller",
+        "Modelica.Blocks.Examples.SinCosEncoder",
+        "Modelica.Blocks.Examples.SlewRateLimiter",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.AssignClock",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.AssignClockVectorized",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.Sample1",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.SampleClocked",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.SampleVectorizedAndClocked",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.TickBasedStep",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse",
+        "Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedStep",
+        "Modelica.Clocked.Examples.Elementary.ClockSignals.ShiftSample",
+        "Modelica.Clocked.Examples.Elementary.ClockSignals.SubSample",
+        "Modelica.Clocked.Examples.Elementary.ClockSignals.SuperSample",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.AssignClock",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.AssignClockVectorized",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.Sample1",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.SampleClocked",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.SampleVectorizedAndClocked",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.TickBasedStep",
+        "Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.AssignClock",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.AssignClockToSquareWaveHold",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.AssignClockToTriggerHold",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.BackSample",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.Hold",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.HoldWithDAeffects1",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.HoldWithDAeffects2",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.Sample1",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.Sample2",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.Sample3",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.SampleClocked",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.ShiftSample",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.SubSample",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.SuperSample",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedStep",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TimeBasedRamp",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TimeBasedSine",
+        "Modelica.Clocked.Examples.Elementary.RealSignals.TimeBasedStep",
+        "Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController",
+        "Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteTextbookController",
+        "Modelica.Clocked.Examples.SimpleControlledDrive.Continuous",
+        "Modelica.Clocked.Examples.SimpleControlledDrive.ExactlyClockedWithDiscreteController",
+        "Modelica.ComplexBlocks.Examples.TestConversionBlock",
+        "Modelica.Electrical.Analog.Examples.CauerLowPassAnalog",
+        "Modelica.Electrical.Analog.Examples.CauerLowPassOPV",
+        "Modelica.Electrical.Analog.Examples.CharacteristicIdealDiodes",
+        "Modelica.Electrical.Analog.Examples.CompareTransformers",
+        "Modelica.Electrical.Analog.Examples.DemoPowerSupply",
+        "Modelica.Electrical.Analog.Examples.HeatingRectifier",
+        "Modelica.Electrical.Analog.Examples.IdealTriacCircuit",
+        "Modelica.Electrical.Analog.Examples.InvertingAmp",
+        "Modelica.Electrical.Analog.Examples.Lines.CompareLosslessLines",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Adder",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Comparator",
+        "Modelica.Electrical.Analog.Examples.OpAmps.DifferentialAmplifier",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Differentiator",
+        "Modelica.Electrical.Analog.Examples.OpAmps.HighPass",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Integrator",
+        "Modelica.Electrical.Analog.Examples.OpAmps.InvertingAmplifier",
+        "Modelica.Electrical.Analog.Examples.OpAmps.LCOscillator",
+        "Modelica.Electrical.Analog.Examples.OpAmps.LowPass",
+        "Modelica.Electrical.Analog.Examples.OpAmps.NonInvertingAmplifier",
+        "Modelica.Electrical.Analog.Examples.OpAmps.Subtracter",
+        "Modelica.Electrical.Analog.Examples.OpAmps.VoltageFollower",
+        "Modelica.Electrical.Analog.Examples.OvervoltageProtection",
+        "Modelica.Electrical.Analog.Examples.ParallelResonance",
+        "Modelica.Electrical.Analog.Examples.Rectifier",
+        "Modelica.Electrical.Analog.Examples.Resistor",
+        "Modelica.Electrical.Analog.Examples.SeriesResonance",
+        "Modelica.Electrical.Analog.Examples.ShowSaturatingInductor",
+        "Modelica.Electrical.Analog.Examples.ShowVariableResistor",
+        "Modelica.Electrical.Batteries.Examples.SuperCapDischargeCharge",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCEE_Start",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_Cooling",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_Start",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_Temperature",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCPM_withLosses",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCSE_SinglePhase",
+        "Modelica.Electrical.Machines.Examples.DCMachines.DCSE_Start",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_DOL",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_Initialize",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_Inverter",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_Steinmetz",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_YD",
+        "Modelica.Electrical.Machines.Examples.InductionMachines.IMC_withLosses",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMPM_Inverter",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMPM_ResistiveBraking",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMPM_VoltageSource",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMR_DOL",
+        "Modelica.Electrical.Machines.Examples.SynchronousMachines.SMR_Inverter",
+        "Modelica.Electrical.Polyphase.Examples.TestSensors",
+        "Modelica.Electrical.Polyphase.Examples.TransformerYY",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.Rectifier1Pulse.Thyristor1Pulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.Rectifier1Pulse.Thyristor1Pulse_R_Characteristic",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.DiodeBridge2Pulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.HalfControlledBridge2Pulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.ThyristorBridge2Pulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.ThyristorBridge2Pulse_RL",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2Pulse.ThyristorBridge2Pulse_RLV",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierBridge2mPulse.ThyristorBridge2mPulse_RLV",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2Pulse.DiodeCenterTap2Pulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2Pulse.ThyristorCenterTap2Pulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2Pulse.ThyristorCenterTap2Pulse_RL",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2Pulse.ThyristorCenterTap2Pulse_RLV",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2mPulse.DiodeCenterTap2mPulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2mPulse.ThyristorCenterTap2mPulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTap2mPulse.ThyristorCenterTap2mPulse_RL",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTapmPulse.DiodeCenterTapmPulse",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTapmPulse.ThyristorCenterTapmPulse_R",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTapmPulse.ThyristorCenterTapmPulse_RL",
+        "Modelica.Electrical.PowerConverters.Examples.ACDC.RectifierCenterTapmPulse.ThyristorCenterTapmPulse_RLV",
+        "Modelica.Electrical.PowerConverters.Examples.DCAC.SinglePhaseTwoLevel.SinglePhaseTwoLevel_R",
+        "Modelica.Electrical.PowerConverters.Examples.DCAC.SinglePhaseTwoLevel.SinglePhaseTwoLevel_RL",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ChopperStepDown.ChopperStepDown_R",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ChopperStepDown.ChopperStepDown_RL",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.ChopperStepUp.ChopperStepUp_R",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.HBridge.HBridge_R",
+        "Modelica.Electrical.PowerConverters.Examples.DCDC.HBridge.HBridge_RL",
+        "Modelica.Electrical.Spice3.Examples.CoupledInductors",
+        "Modelica.Magnetic.FluxTubes.Examples.BasicExamples.SaturatedInductor",
+        "Modelica.Magnetic.FluxTubes.Examples.MovingCoilActuator.ArmatureStroke",
+        "Modelica.Mechanics.MultiBody.Examples.Constraints.PrismaticConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Constraints.RevoluteConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Constraints.SphericalConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Constraints.UniversalConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.DoublePendulum",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.DoublePendulumInitTip",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.ForceAndTorque",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.FreeBody",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.HeatLosses",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.InitSpringConstant",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.LineForceWithTwoMasses",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.Pendulum",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.PendulumWithSpringDamper",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.PointGravity",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.PointGravityWithPointMasses",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.RollingWheel",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.RollingWheelSetDriving",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.RollingWheelSetPulling",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.SpringDamperSystem",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.SpringMassSystem",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.SpringWithMass",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.Surfaces",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.ThreeSprings",
+        "Modelica.Mechanics.MultiBody.Examples.Elementary.UserDefinedGravityField",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.Engine1b",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.Fourbar1",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.Fourbar2",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.Fourbar_analytic",
+        "Modelica.Mechanics.MultiBody.Examples.Loops.PlanarFourbar",
+        "Modelica.Mechanics.MultiBody.Examples.Rotational3DEffects.ActuatedDrive",
+        "Modelica.Mechanics.MultiBody.Examples.Rotational3DEffects.GearConstraint",
+        "Modelica.Mechanics.MultiBody.Examples.Rotational3DEffects.GyroscopicEffects",
+        "Modelica.Mechanics.MultiBody.Examples.Rotational3DEffects.MovingActuatedDrive",
+        "Modelica.Mechanics.Rotational.Examples.Backlash",
+        "Modelica.Mechanics.Rotational.Examples.CompareBrakingTorque",
+        "Modelica.Mechanics.Rotational.Examples.EddyCurrentBrake",
+        "Modelica.Mechanics.Rotational.Examples.ElasticBearing",
+        "Modelica.Mechanics.Rotational.Examples.First",
+        "Modelica.Mechanics.Rotational.Examples.FirstGrounded",
+        "Modelica.Mechanics.Rotational.Examples.RollingWheel",
+        "Modelica.Mechanics.Translational.Examples.Accelerate",
+        "Modelica.Mechanics.Translational.Examples.CompareBrakingForce",
+        "Modelica.Mechanics.Translational.Examples.Damper",
+        "Modelica.Mechanics.Translational.Examples.EddyCurrentBrake",
+        "Modelica.Mechanics.Translational.Examples.ElastoGap",
+        "Modelica.Mechanics.Translational.Examples.InitialConditions",
+        "Modelica.Mechanics.Translational.Examples.Oscillator",
+        "Modelica.Mechanics.Translational.Examples.Sensors",
+        "Modelica.Mechanics.Translational.Examples.SignConvention",
+        "Modelica.Mechanics.Translational.Examples.Vehicle",
+        "Modelica.Mechanics.Translational.Examples.WhyArrows",
+        "Modelica.Thermal.FluidHeatFlow.Examples.IndirectCooling",
+        "Modelica.Thermal.FluidHeatFlow.Examples.OneMass",
+        "Modelica.Thermal.FluidHeatFlow.Examples.ParallelCooling",
+        "Modelica.Thermal.FluidHeatFlow.Examples.PumpAndValve",
+        "Modelica.Thermal.FluidHeatFlow.Examples.PumpDropOut",
+        "Modelica.Thermal.FluidHeatFlow.Examples.SimpleCooling",
+        "Modelica.Thermal.FluidHeatFlow.Examples.TwoTanks",
+        "Modelica.Thermal.FluidHeatFlow.Examples.WaterPump",
+        "Modelica.Thermal.HeatTransfer.Examples.ControlledTemperature",
+        "Modelica.Thermal.HeatTransfer.Examples.Motor",
+        "Modelica.Thermal.HeatTransfer.Examples.TwoMasses"
+      ],
+      "omc_context_migration": {
+        "from_omc_version": "OpenModelica 1.27.0~dev.beta.3",
+        "to_omc_version": "a96aa1a-cmake",
+        "sim_target_models": 566
+      },
+      "promoted_baseline_bridge": {
+        "from_quality_gate_version": 1,
+        "from_git_commit": "08fac54846fd73a3471bafc6609a0d34e74f9fe3",
+        "from_sha256": "2b0a478b922583106342272bbf85411c539d50d9b9e0ca54c4dbb87621f05fe8",
+        "to_quality_gate_version": 4,
+        "sim_target_models": 566,
+        "evidence_git_commits": [
+          "a499eb8f15bf6af9d28f5a7011e82edfe73803b4",
+          "3fc9a6cb9c60e1137eb6151f29cb87e9ad35064b",
+          "6d57e9644b4da542a5498ee42510551e7e7ade70",
+          "5394156facb1e5ff9f099f21c0e833c4870c506f"
+        ]
+      }
+    },
+    "delta": "No same-target-list prior Tier1 run available; after-run failures remain visible, no baseline promotion",
+    "historicalTripwire": {
+      "document": "/home/jgoppert/git/rumoca-native-functions/docs/verification/slam-cv-performance.md",
+      "documentSha256": "557809c619dd4a8bf1cbda373cabb5f8924ecfe204fb42fce07738bc287a4333",
+      "reported": {
+        "targets": 20,
+        "compiledBalanced": 11,
+        "simCompletion": 9,
+        "solverFailures": 2,
+        "typedToDaeRefusals": 9,
+        "parityMeasured": false
+      },
+      "boundary": "Historical documentation only. Original machine-readable run absent from this worktree, OMC was missing, and no measured same-list delta is claimed."
+    }
+  },
+  "budgets": {
+    "outerSeconds": 600,
+    "aggregateRssMiB": 8192,
+    "cacheMiB": 8192,
+    "availableMemoryReserveMiB": 16384,
+    "phaseSeconds": 10,
+    "solverSeconds": 12,
+    "simulationParentSeconds": 14,
+    "attemptsPerPhase": 1,
+    "stageParallelism": 4,
+    "simParallelism": 4,
+    "workerResidentAndSwapMiB": 6144,
+    "totalSimulationMemoryMiB": 16384,
+    "CARGO_BUILD_JOBS": 4,
+    "RUST_TEST_THREADS": 4,
+    "RAYON_NUM_THREADS": 4,
+    "cpus": [
+      8,
+      9
+    ],
+    "nice": 10
+  },
+  "command": "cargo xtask verify msl-parity --sim-targets-file infra/verification/msl-canary-20.json --results-dir /home/jgoppert/git/slam_web/dev/rumoca-native-msl-canary-results --stage-parallelism 4 --sim-parallelism 4 --model-worker-memory-mb 6144 --sim-total-memory-mb 16384 --monitor-interval-secs 10",
+  "log": "/home/jgoppert/git/slam_web/dev/rumoca-native-msl-canary.log",
+  "notRun": [
+    "Tier2 full566-model sweep: outside this fixed20 Tier1 task",
+    "StandardPR workspace/clippy/doc gates: validation-only task; no source edits"
+  ],
+  "result": {
+    "exitCode": 124,
+    "failedStage": "canonical xtask optimized msl-fast harness/worker build",
+    "reason": "Outer owned-process watchdog expired after600seconds before the fixed20 libtest or any model phase ran.",
+    "modelPhaseAttempts": 0,
+    "canaryExecuted": false,
+    "comparatorExecuted": false,
+    "modelsCompared": 0,
+    "parity": "unmeasured",
+    "tier1Delta": "not available: actual canary did not execute",
+    "tier1Complete": false,
+    "retries": 0,
+    "sourceClosureAfterSha256": "6b7266c8bc206acccf652dc318f746dfcd6414e980eb537108c7a5966462b5b1",
+    "sourceClosureUnchanged": true
+  },
+  "resource": {
+    "command": [
+      "taskset",
+      "-c",
+      "8,9",
+      "nice",
+      "-n",
+      "10",
+      "cargo",
+      "xtask",
+      "verify",
+      "msl-parity",
+      "--sim-targets-file",
+      "infra/verification/msl-canary-20.json",
+      "--results-dir",
+      "/home/jgoppert/git/slam_web/dev/rumoca-native-msl-canary-results",
+      "--stage-parallelism",
+      "4",
+      "--sim-parallelism",
+      "4",
+      "--model-worker-memory-mb",
+      "6144",
+      "--sim-total-memory-mb",
+      "16384",
+      "--monitor-interval-secs",
+      "10"
+    ],
+    "log": "/home/jgoppert/git/slam_web/dev/rumoca-native-msl-canary.log",
+    "elapsedMs": 600231.5663780001,
+    "peakRssKiB": 2604768,
+    "minimumAvailableKiB": 47333676,
+    "cacheDirectory": "/tmp/slam-filter-schedule-target",
+    "peakCacheBytes": 7402237952,
+    "cacheLimitMiB": 8192,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 600,
+    "stopped": "timeout",
+    "signal": "SIGKILL",
+    "exitCode": 124
+  },
+  "artifacts": {
+    "log": {
+      "path": "/home/jgoppert/git/slam_web/dev/rumoca-native-msl-canary.log",
+      "sha256": "7a3ad2350adb14c3d0271a0d71cad2ca00f5ff9720573f6db04ddd28b5773202"
+    },
+    "resource": {
+      "path": "/home/jgoppert/git/slam_web/dev/rumoca-native-msl-canary-resource.json",
+      "sha256": "442e48587a2a3a839cf538c17d853967d24b97c89ec82fd62d34ca75abba4ce9"
+    },
+    "parityConfig": {
+      "path": "/home/jgoppert/git/rumoca-native-functions/target/msl/parity-config.json",
+      "sha256": "10ddb3576ea8fb142f836e068ccadf8dce0a38be3984c9b26aa245cd0c678bf8",
+      "value": {
+        "results_dir": "/home/jgoppert/git/slam_web/dev/rumoca-native-msl-canary-results",
+        "sim_targets_file": "infra/verification/msl-canary-20.json",
+        "stage_parallelism": 4,
+        "model_worker_memory_mb": 6144,
+        "sim_parallelism": 4,
+        "sim_total_memory_mb": 16384
+      }
+    },
+    "xtask": {
+      "path": "/tmp/slam-filter-schedule-target/debug/xtask",
+      "sha256": "7c20a13690ff53ffa12df0341f2f3f007580b3c08b0ca0f5bbd30dc41396f125"
+    },
+    "nativeRuntimeModules": "No optimized harness/worker executable was produced; native module hashes unavailable."
+  },
+  "limits": [
+    "Stable Rust1.95 candidate toolchain matches existing cache; upstream nightly pin unchanged. This is not upstream pinned-nightly CI evidence.",
+    "Per-model10s phase/12s solver/14s parent budgets remain canonical defaults, but no model phase executed.",
+    "Polling monitor250ms can miss brief RSS spikes; owned processes were killed at outer timeout.",
+    "No failed model or target excluded, no fixture changes, no Rustsource edits, no retry/fallback/baseline promotion.",
+    "Production compiler package pins unchanged; full SLAM and10x throughput remain pending."
+  ]
+}

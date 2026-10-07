@@ -1,0 +1,64 @@
+{
+  "status": "ACTUAL_UNCHANGED_FULLFAST_PREPARATION_RSS_LIMIT_NO_MODULE_ISSUED",
+  "producerSha256": "fc24bf325b4f0b1e2374ec04bb0197d04588461e34ea2cfb62c626e0c68116d3",
+  "originalSourceSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+  "sourceRewritten": false,
+  "profile": {
+    "seconds": 15,
+    "hz": 99,
+    "callGraph": "dwarf,16384",
+    "lostSamples": 0,
+    "scope": "Actual isolated current merged Rumoca native source preparation; not sensor/rendering/per-frame WASM execution.",
+    "selfPercent": {
+      "Coverage::overlaps": 55.74,
+      "native_assignment::dependencies": 34.22
+    },
+    "rawTrace": "$HOME/scratch/slam_web/tmp/original-fast-merged-producer/perf.data"
+  },
+  "findings": [
+    "complete() compares each target coverage against all earlier coverages",
+    "dependencies() compares every read against every producer target",
+    "dependency_order() repeatedly scans for the first ready node"
+  ],
+  "next": "Generic indexed conservative bound queries retaining exact periodic overlap authority; stable deterministic topological ordering. Private compiler proposal delegated; no change applied yet.",
+  "wasmExecuted": false,
+  "resource": {
+    "command": [
+      "nice",
+      "-n",
+      "15",
+      "taskset",
+      "-c",
+      "31",
+      "/home/jgoppert/scratch/slam_web/tmp/merged-guard-interim-producer/final-producer",
+      "tests::native_mixed_assignment_tests::calls::native_registration_whole_program_source_inventory",
+      "--exact",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/original-fast-merged-producer/producer.log",
+    "elapsedMs": 225796.276656,
+    "peakRssKiB": 8400764,
+    "minimumAvailableKiB": 47085584,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 600,
+    "stopped": "rss-limit",
+    "signal": "SIGKILL",
+    "exitCode": 137
+  },
+  "bookends": {
+    "before": 2783,
+    "after": 2783,
+    "producerUnchanged": true,
+    "sourceUnchanged": true,
+    "exitCode": 137
+  },
+  "moduleIssued": false,
+  "canonicalInventoryIssued": false,
+  "publicPreviewChanged": false,
+  "expandedFixtureSha256": "5364308e50b63448ea8bd5687830c452613689329c33b7d7873160fa3a8a118d",
+  "note": "Compiler preparation exceeded the owned8GiB cap; no raised limit, detector source rewrite or replacement executable. Generic compiler dependency/certification work continues."
+}

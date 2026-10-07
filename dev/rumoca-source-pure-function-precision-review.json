@@ -1,0 +1,71 @@
+{
+  "schema": "rumoca-source-pure-function-precision-review-v1",
+  "date": "2026-10-05",
+  "status": "private-unapplied-source-patch-no-execution-proof",
+  "base": "14694fd7e4369b775b15cd2dafc86f0b06bd4608",
+  "archive": "dev/artifacts/source-pure-function-precision",
+  "patchSha256": "8fcc3225dc2289f2db8eb7a615b52b9c48ee1d5e625f5cb3067c116d113fed7f",
+  "manifestSha256": "90c6d408c46f606635331470c200f1c994e9e4a76f8dc1f18eaa9d824d4bfc44",
+  "checks": {
+    "rustfmtParseAndFormat": "pass",
+    "gitApplyCheckExactPreimages": "pass",
+    "cargo": "not-run",
+    "sourceCompilation": "not-run",
+    "canonicalTypedExecution": "not-run",
+    "wasm": "not-run",
+    "sourceFixtures": {
+      "drafted": 8,
+      "run": 0
+    }
+  },
+  "mainCompilerModified": false,
+  "sharedCacheModified": false,
+  "profile": {
+    "entry": "rumoca_phase_solve::lower_pure_function_call(DaeView, ExprId, PureFunctionPrecision)",
+    "defaults": "Binary64",
+    "binary32": "explicit exact pure-call graph only",
+    "identity": "branded DAE call occurrence; construction-issued nested owners and original source spans",
+    "integerDomain": "existing i64 FULL; no mixed-width backend admission",
+    "literalPolicy": "DAE/frontend values unchanged; Real literals rounded once by SolveValue::real; typed runtime operations round in the issued profile",
+    "wholeModel": "unchanged Binary64 registry/Y/P/state/event/formal profiles"
+  },
+  "gaps": [
+    "Source compile and eight semantic fixtures have not run.",
+    "Backend Binary32 patch is separate and unapplied; target opcode coverage remains its own admission responsibility.",
+    "No model-global precision partition, source configuration/frontend option, input buffer storage or mixed F32/F64 graph boundary is issued.",
+    "No frontend compile-time F32 arithmetic policy; already-evaluated constants retain frontend values.",
+    "No full detector, Map/Fold, native external/recursive body or mixed Integer/Boolean execution acceptance.",
+    "No persistent wire root/schema/config binding or browser API added for this extracted-call option.",
+    "Integration requires reviewing latest-main preimages and running affected tests, scoped Clippy and mandatory compiler gates."
+  ],
+  "sourceBookends": [
+    {
+      "file": "crates/rumoca-ir-solve/src/typed_program/program.rs",
+      "unchanged": true
+    },
+    {
+      "file": "crates/rumoca-phase-solve/src/lib.rs",
+      "unchanged": true
+    },
+    {
+      "file": "crates/rumoca-phase-solve/src/lower/typed_functions.rs",
+      "unchanged": true
+    },
+    {
+      "file": "crates/rumoca-phase-solve/src/lower/typed_functions/tensor.rs",
+      "unchanged": true
+    },
+    {
+      "file": "crates/rumoca-phase-solve/src/lower/typed_functions/indexed_values.rs",
+      "unchanged": true
+    },
+    {
+      "file": "crates/rumoca-phase-solve/src/lower/typed_functions/indexed_slices.rs",
+      "unchanged": true
+    },
+    {
+      "file": "crates/rumoca/tests/suite_core/main.rs",
+      "unchanged": true
+    }
+  ]
+}

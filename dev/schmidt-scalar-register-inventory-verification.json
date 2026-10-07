@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "status": "ORIGINAL_FULL21_READ_ONLY_SCALAR_REGISTER_INVENTORY",
+  "recordedAt": "2026-10-05T11:08:02.528Z",
+  "artifacts": [
+    {
+      "path": "dev/artifacts/schmidt-scalar-register-inventory/report.json",
+      "sha256": "a64619337b91f52572625132a054b9ad445fe38be794409659e21228630ef617"
+    },
+    {
+      "path": "dev/artifacts/schmidt-scalar-register-inventory/run.log",
+      "sha256": "51241dc86fb7d9452fe649009783ccea49ba1c76cc055ffc4858a7f2581623dc"
+    },
+    {
+      "path": "dev/artifacts/schmidt-scalar-register-inventory/resource.json",
+      "sha256": "1d2c43e81adfcfbf6317698729f45f3cd2c849b72a7aa645698a71f94390bf04"
+    },
+    {
+      "path": "dev/artifacts/schmidt-scalar-register-inventory/inventory-schmidt-scalar-registers.mjs",
+      "sha256": "73f298c4c58faffe5235c04950d3a922e418c320d9694aca8c028c719bb141d2"
+    }
+  ],
+  "elapsedMs": 300.118805,
+  "peakRssKiB": 126820,
+  "sourceSha256": "f8fe0faaed21654ce80f440434bf1685a6572dfd74f9e9199507262b9e2f96b1",
+  "moduleSha256": "b57eed180b9e04613f3d22d043a31e9ecea04f99aefaec534c356ac831e14751",
+  "solveSha256": "b734642dd18e4f515e451b8c36e0230ab3e1d611873c87a7a413bebfcf6be025",
+  "psdOwnerCount": 9,
+  "eachPsdOwnerScalarUpperBound": 150,
+  "scope": "Counts only, across the original complete owner and all nested region paths. Rank-zero registers are an upper bound; use analysis and frame-slot alias exclusions can lower actual local eligibility. Source/identity u64 values are not interpreted or reserialized. No native artifact, acceptance, local allocation, performance or full-SLAM claim.",
+  "performanceGainProven": false,
+  "fullSlam": false
+}

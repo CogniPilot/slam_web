@@ -1,0 +1,114 @@
+{
+  "recordedAt": "2026-10-04T08:14:14.522Z",
+  "worktree": "../rumoca-native-functions",
+  "branch": "slam-native-functions",
+  "base": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+  "status": "SCOPED_NATIVE_CONTROL_ORACLE_PASS_NOT_FULL_SOURCE_ADMISSION",
+  "sourceSha256": {
+    "crates/rumoca-exec-wasm/src/typed_call.rs": "ad31db3dc2fdcbc5357fcd5fcb718865352dac8eeb11afc7e70ace3a6c25fa9c",
+    "crates/rumoca-exec-wasm/src/typed_call/layout.rs": "61141424d707eb44d6d210bf74cabb46479f75f7f6b68e407473ae83accfa588",
+    "crates/rumoca-exec-wasm/src/typed_call/emit.rs": "5adc9a6a0fd66d4babdcc5ee959d6bc805d9dbcc09f647e2f2ab8256848b9843",
+    "crates/rumoca-exec-wasm/src/typed_call/control.rs": "f62c8b0b28570391b710c8f62fe4427c79031b1da7753b6f2f35e04a6225c150",
+    "crates/rumoca-exec-wasm/src/typed_call/numbers.rs": "655d060cabba4777e4e1dc625b416e3a06904f6e538f854145127aa9629a7be1",
+    "crates/rumoca-exec-wasm/tests/typed_calls.rs": "c5df5a0b958a8a1b112d01fe3582ad7ec9e6e373ce8a9218508227b40b6e1e4c",
+    "crates/rumoca-exec-wasm/tests/suite_typed_calls/mod.rs": "a7a9855b0e421a1a81a970be09d8cf68706cb8439ccf9d5a480c9409c7792b41",
+    "docs/verification/native-typed-calls.md": "fd07fa0b23c972cbbd39465b36d37b5546b5d054d0f42cc12cf7903f05fbf504"
+  },
+  "baseline": {
+    "record": "dev/rumoca-native-typed-call-verification.json",
+    "tests": 25,
+    "sourceSha256": {
+      "crates/rumoca-exec-wasm/Cargo.toml": "438a72079d2b06cd65a350647775fff450c274e702d0a58fffea99e355bf1e8c",
+      "crates/rumoca-exec-wasm/src/lib.rs": "673fdf0e679d13eea4afefe5d5bbb503398e01522aacc95db9ecdcb1c677abc7",
+      "crates/rumoca-exec-wasm/src/typed_call.rs": "7ebc47941a9bfc83305ed0462ecfdaa5aecdaa690fd3da38302f944d38ef2edc",
+      "crates/rumoca-exec-wasm/src/typed_call/emit.rs": "4f1a862680ddc9b4c93b60d133c6b91a64de9f5ff951b72930d320bd992ccde4",
+      "crates/rumoca-exec-wasm/src/typed_call/layout.rs": "b3bf6b91703b920c6beacce1d9e724630d4ef4441d0f4cdd63739803d2ecd965",
+      "crates/rumoca-exec-wasm/src/typed_call/numbers.rs": "655d060cabba4777e4e1dc625b416e3a06904f6e538f854145127aa9629a7be1",
+      "crates/rumoca-exec-wasm/tests/typed_calls.rs": "9b5958c674136d16cbc7283229cc41d7873fd5f808b00a1ab031b6ae64820e7d"
+    },
+    "structuredControl": "explicitly refused before extension"
+  },
+  "gates": {
+    "focused": {
+      "log": "/tmp/slam-native-typed-control-focused-fixed.log",
+      "passed": 8,
+      "elapsedMs": 5120.936783,
+      "peakRssKiB": 356092,
+      "sha256": "fff819d88c9f1a52cc2b26e542527c1069c2fc39cc9214be05d2171bb2a077b5"
+    },
+    "allTests": {
+      "log": "/tmp/slam-native-typed-control-all-tests.log",
+      "passed": 36,
+      "typedCallTests": 20,
+      "newControlTests": 11,
+      "elapsedMs": 24963.596055,
+      "peakRssKiB": 596784,
+      "sha256": "ae37c7a1fb8fce1f775397f66944df325eba36d405a110dab75dad6419b345a3"
+    },
+    "strictClippy": {
+      "log": "/tmp/slam-native-typed-control-clippy.log",
+      "passed": true,
+      "elapsedMs": 16843.092475,
+      "peakRssKiB": 723604,
+      "sha256": "488d1c3b0a0ec64823e16c766f9cbf247d190e629b5b9ebfc9d36d98b0a986ca"
+    }
+  },
+  "formatter": "cargo fmt --all -- --check PASS",
+  "diffCheck": "PASS",
+  "lock": {
+    "changed": false,
+    "sha256": "3689e520d1583ad2d362ae68d2b5144b892b4e21f32a2b39e12e8b0c97b676e9",
+    "cargoPolicy": "--locked throughout; no added dependencies"
+  },
+  "resources": {
+    "cpus": [
+      6,
+      7
+    ],
+    "cargoJobs": 2,
+    "rustTestThreads": 2,
+    "rayonThreads": 2,
+    "nice": 10,
+    "targetCache": "/dev/shm/slam-native-typed-call-root",
+    "peakCacheBytes": 1472831488,
+    "rssLimitMiB": 8192,
+    "cacheLimitMiB": 7680,
+    "secondsLimit": 600,
+    "rssScope": "sampled owned process group and identified descendants"
+  },
+  "admittedProfile": {
+    "fold": "one finite construction-checked StructuredIndexDomain binder; scalar carried tuple; typed tensor captures; nested admitted regions",
+    "conditional": "lazy selected checked region; complete typed capture/result tuples",
+    "iteration": "exact source-issued count/lower/signed-step; zero body executions for empty; no final binder increment",
+    "storage": "one reusable private frame per region; immutable captures; simultaneous carried snapshots; success-only top-level output publication",
+    "faults": "issued call owner, enclosing operation/branch path, region-local ordinal, exact original span",
+    "codeSizeProof": [
+      "3 versus14400 finite Fold domains: code-length difference<40 bytes, equal scratch size",
+      "14400-cell captured ordered Real Fold module<6000 bytes; complete output bit-exact to canonical evaluator"
+    ]
+  },
+  "oracleCoverage": [
+    "ascending/descending/empty domains",
+    "14,400-cell ordered cancellation and signed-zero arithmetic, complete carried tuple",
+    "lazy conversion faults and inactive branch",
+    "late fold overflow with earlier private stores, unchanged public output, recovery",
+    "region input aggregate cannot be consumed/mutated through UpdateElement",
+    "nested Conditional-in-Fold exact fault path",
+    "distinct nested Fold counters and lexical binder captures",
+    "i64 endpoint binders never advance beyond final value",
+    "empty faulting transition returns initial tuple",
+    "aggregate-carried and multi-binder exact-span compile refusals"
+  ],
+  "history": [
+    {
+      "log": "/tmp/slam-native-typed-control-focused.log",
+      "result": "Initial compile failed test-module path; fixed ordinary content-based suite module, no include/path workaround."
+    }
+  ],
+  "limitations": [
+    "Manual construction-issued checked typed-IR fixtures; no complete FeatureSelection/Horn source admission.",
+    "Aggregate-carried/multi-binder Fold, Map, nested Call, dynamic/While control and unsupported numerical operators remain compile refusals.",
+    "No application compiler pin, browser runtime, model schedule, deployment or full SLAM acceptance.",
+    "Whole-workspace architecture and fixed MSL canary/cohort gates were not run; bounded isolated executor scope only."
+  ]
+}

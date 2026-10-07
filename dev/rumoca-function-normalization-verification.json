@@ -1,0 +1,414 @@
+{
+  "status": "CHECKED_NORMALIZATION_GROUNDWORK_AND_CONSTANT_ASSERTIONS_PASS",
+  "recordedAt": "2026-10-05T23:11:27.211Z",
+  "compilerBranch": "slam-native-functions",
+  "sourceManifestSha256": "f7a19a9f3b46686d2710808821dd261fdd294d9331f900b438ac786bf270b70d",
+  "currentSourceRechecked": false,
+  "qualificationEvidence": "dev/artifacts/function-normalization/qualification",
+  "counts": {
+    "librarySuites": 3,
+    "libraryTestsPassed": 769,
+    "libraryTestsFailed": 0,
+    "brandCompileFailControlsPassed": 2,
+    "newRuntimeTests": 31
+  },
+  "stages": {
+    "library": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "env",
+        "CARGO_BUILD_JOBS=4",
+        "RUST_TEST_THREADS=4",
+        "RAYON_NUM_THREADS=4",
+        "TMPDIR=/home/jgoppert/scratch/slam_web/tmp/normalized-rewrite-final-zUgWUf",
+        "cargo",
+        "test",
+        "--manifest-path",
+        "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+        "-j4",
+        "--locked",
+        "--offline",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-eval-flat",
+        "--lib",
+        "--",
+        "--nocapture"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/tmp/normalized-rewrite-final-zUgWUf/library.log",
+      "elapsedMs": 63910.61267,
+      "peakRssKiB": 1250320,
+      "minimumAvailableKiB": 55714036,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "strict": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "env",
+        "CARGO_BUILD_JOBS=4",
+        "RUST_TEST_THREADS=4",
+        "RAYON_NUM_THREADS=4",
+        "TMPDIR=/home/jgoppert/scratch/slam_web/tmp/normalized-rewrite-final-zUgWUf",
+        "cargo",
+        "clippy",
+        "--manifest-path",
+        "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+        "-j4",
+        "--locked",
+        "--offline",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-eval-flat",
+        "--all-targets",
+        "--all-features",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/tmp/normalized-rewrite-final-zUgWUf/strict.log",
+      "elapsedMs": 11217.207587,
+      "peakRssKiB": 1290960,
+      "minimumAvailableKiB": 56646332,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "brand-docs": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "env",
+        "CARGO_BUILD_JOBS=4",
+        "RUST_TEST_THREADS=4",
+        "RAYON_NUM_THREADS=4",
+        "TMPDIR=/home/jgoppert/scratch/slam_web/tmp/normalized-rewrite-final-zUgWUf",
+        "cargo",
+        "test",
+        "--manifest-path",
+        "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+        "-j4",
+        "--locked",
+        "--offline",
+        "-p",
+        "rumoca-core",
+        "--doc",
+        "generated_function_locals",
+        "--",
+        "--nocapture"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/tmp/normalized-rewrite-final-zUgWUf/brand-docs.log",
+      "elapsedMs": 3530.731544,
+      "peakRssKiB": 337128,
+      "minimumAvailableKiB": 57324960,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "fmt": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "env",
+        "CARGO_BUILD_JOBS=4",
+        "RUST_TEST_THREADS=4",
+        "RAYON_NUM_THREADS=4",
+        "TMPDIR=/home/jgoppert/scratch/slam_web/tmp/normalized-rewrite-final-zUgWUf",
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/tmp/normalized-rewrite-final-zUgWUf/fmt.log",
+      "elapsedMs": 13468.345307,
+      "peakRssKiB": 117892,
+      "minimumAvailableKiB": 57636688,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    }
+  },
+  "productionNormalizationConsumersMigrated": false,
+  "normalizationNumericalScope": "Bounded planning graph controls, compared to existing source-expression/function evaluator; not DAE/Solve/WASM localization",
+  "localizationArtifactIssued": false,
+  "browserCompilerPromoted": false,
+  "fixed20CanaryRun": false,
+  "nativeFullFastPerformanceRechecked": false,
+  "fullSlamWorking": false,
+  "nextOwner": "Migrate ToDae function plans, compaction, definition analysis and construction to this single branded inventory, removing Empty guard markers and generated-name/Span side tables together",
+  "review": "dev/rumoca-mounted-normalization-review.md",
+  "lifetimeArrangement": "dev/rumoca-normalized-catalog-lifetimes.md",
+  "subsequentCompilerSourceChanges": {
+    "reason": "Conditional activation patch plus cache corrections qualified at manifest 712: 911 libraries pass, original 13 Solve return controls pass, two new selected-argument fault controls fail, new emitted-WASM actual gather refused. Full gate remains failed.",
+    "evidence": "dev/artifacts/conditional-projection-execution/review.md"
+  },
+  "latestProductionReturnEvidence": {
+    "sourceManifestSha256": "9f238178dd92cf0784e49faeb4bf232352db552a9f9a20dd91247f7878031920",
+    "aggregateGatePassed": false,
+    "libraryTests": {
+      "passed": 774,
+      "failed": 0
+    },
+    "runtimeTests": {
+      "passed": 11,
+      "failed": 2,
+      "total": 13
+    },
+    "runtimeFailure": "Constant invalid index rejected during dependency projection before either active or inactive runtime control executes.",
+    "wasmTests": {
+      "passed": 1,
+      "failed": 0
+    },
+    "browser": "browser-report.json",
+    "strict": {
+      "exitCode": 0,
+      "elapsedMs": 58108.410956,
+      "peakRssKiB": 1907348,
+      "minimumAvailableKiB": 50763252,
+      "packages": [
+        "rumoca-sim",
+        "rumoca-bind-wasm"
+      ],
+      "features": [
+        "rumoca-sim/native-solvers",
+        "rumoca-bind-wasm/native-assignments"
+      ],
+      "targets": [
+        "lib",
+        "tests"
+      ],
+      "warningsDenied": true
+    },
+    "compilerSourceStillMatchesPinnedGate": false,
+    "productionNormalizationConsumersMigrated": false,
+    "localizationArtifactIssued": false,
+    "browserCompilerPromoted": false,
+    "fullSlamWorking": false,
+    "path": "dev/artifacts/return-predicate-execution"
+  },
+  "latestConditionalProjectionEvidence": {
+    "schema": 1,
+    "sourceManifestSha256": "712ba33cbb593b3d021b493035fa2e22ab20faf919dbc09fceef6ba93e729e72",
+    "bookendsEqual": true,
+    "library": {
+      "passed": 911,
+      "failed": 0,
+      "suites": 4
+    },
+    "wasm": {
+      "passed": 1,
+      "failed": 1,
+      "failure": "Call-actual LoadIndexedRegister is refused by native assignment admission; emitted backend support is absent."
+    },
+    "sim": {
+      "passed": 14,
+      "failed": 2,
+      "total": 16,
+      "originalControlsPassed": 13,
+      "originalControlsTotal": 13,
+      "failure": "Demanded call-argument gathers return NaN without a runtime index fault in the evaluator."
+    },
+    "aggregateGatePassed": false,
+    "productionNormalizationConsumersMigrated": false,
+    "localizationArtifactIssued": false,
+    "browserCompilerPromoted": false,
+    "fullSlamWorking": false,
+    "spec0040Sha256": "8b8a78049f1130c498736a62e91d5e8531923ab44c872a55c98ad513c525dde5",
+    "subsequentStrict": {
+      "passed": true,
+      "sourceManifestSha256": "a40ed113bd9bed13b8871458b4ec263e72ac3c5387645f14ff083b064a8615f1",
+      "scope": "Four owning libraries and tests, all targets/all features, -D warnings; helper extraction to reduce nesting after original strict failure.",
+      "libraryTestsRechecked": false
+    },
+    "path": "dev/artifacts/conditional-projection-execution",
+    "compilerSourceStillMatchesPinnedGate": false
+  },
+  "latestNativeGatherEvidence": {
+    "schema": 1,
+    "sourceManifestSha256": "28c65cac53798f42dba2e074cd9296396e04d0ebcd68c6f78024dfb1026db4ed",
+    "patchSha256": "1b419a4b227f585dd3da7da56f0ffe7480561e6d960a2051b6940010c006bdce",
+    "focused": {
+      "passed": 8,
+      "failed": 0
+    },
+    "browser": {
+      "models": 2,
+      "invocations": 24,
+      "passed": true,
+      "serverRequired": false,
+      "scope": "Compiled artifacts execute in actual Chromium Blob workers on about:blank; the browser compiler itself was not rebuilt or promoted."
+    },
+    "broad": {
+      "ownerLibraries": {
+        "passed": 567,
+        "failed": 0,
+        "sourceManifestSha256": "28c65cac53798f42dba2e074cd9296396e04d0ebcd68c6f78024dfb1026db4ed"
+      },
+      "strict": {
+        "passed": true,
+        "sourceManifestSha256": "d370b23a7c49fa3dcde27c4f41ca045e04f5c416ab2df273c13ade52ec61ba8e",
+        "scope": "ir-solve, exec-wasm, bind-wasm native-assignments; lib/tests; warnings denied"
+      },
+      "sourceChangedOnlyForClippyHelpers": true
+    },
+    "tier1CanaryDeltaRecorded": false,
+    "capabilityQualificationComplete": false,
+    "connectedLocalizationIssued": false,
+    "fullSlamWorking": false,
+    "path": "dev/artifacts/native-checked-gather/execution"
+  },
+  "latestDemandedGatherEvidence": {
+    "schema": 1,
+    "patchSha256": "b0d9eeced2a30dabcff06d5c6268f0fb3f40ceb17f2025421db3a61ddb339711",
+    "sourceManifestSha256": "0f017c41ec5f9a1cfa9e718eaf2afeb2cfc66dd99a19fd052b086e1324e3d1af",
+    "bookendsEqual": true,
+    "focusedEvaluator": {
+      "passed": 7,
+      "failed": 0
+    },
+    "productionReturns": {
+      "passed": 16,
+      "failed": 0,
+      "scope": "SolveRuntime eval_at through eval_dae_at; does not qualify Cranelift native execution."
+    },
+    "strict": {
+      "passed": false,
+      "reason": "One lint corrected after focused checks; both subsequent strict retries stopped by the host-memory reserve. The resumed run reached compilation and stopped after 65.75 seconds, with matching source bookends.",
+      "resumedSourceManifestSha256": "a857fd839dddfdefc9835c69ff4424ce1066c3eae47ec5699dcabad45ce422c6",
+      "resumedStatus": 137,
+      "stopReason": "available-memory-floor",
+      "peakOwnedRssKiB": 2049088,
+      "minimumHostAvailableKiB": 16591700
+    },
+    "postTestChange": "Equivalent range comparison for strict lint; numeric tests not rerun at the later source pin.",
+    "tier1CanaryDeltaRecorded": false,
+    "capabilityQualificationComplete": false,
+    "connectedLocalizationIssued": false,
+    "fullSlamWorking": false,
+    "path": "dev/artifacts/eval-demanded-gather/execution",
+    "subsequentQualification": {
+      "sourceManifestSha256": "9871d0e2e0890471f28597b398ef2cf2512beaf7da1ecb0f5e10627e9f9ef516",
+      "strictPassed": true,
+      "evaluatorLibraryPassed": 267,
+      "completeSimPassed": false,
+      "path": "dev/artifacts/eval-demanded-gather/combined-qualification"
+    }
+  },
+  "latestCombinedGatherEvidence": {
+    "sourceManifestSha256": "9871d0e2e0890471f28597b398ef2cf2512beaf7da1ecb0f5e10627e9f9ef516",
+    "bookendsEqual": true,
+    "strict": {
+      "passed": true,
+      "scope": "eval-solve, sim(native-solvers), ir-solve and exec-wasm; lib/tests; warnings denied"
+    },
+    "ownerLibraries": [
+      {
+        "crate": "rumoca-eval-solve",
+        "passed": 267,
+        "failed": 0
+      },
+      {
+        "crate": "rumoca-exec-wasm",
+        "passed": 35,
+        "failed": 0
+      },
+      {
+        "crate": "rumoca-ir-solve",
+        "passed": 532,
+        "failed": 0
+      }
+    ],
+    "ownerLibraryTotalPassed": 834,
+    "sim": {
+      "status": 124,
+      "complete": false,
+      "stopReason": "timeout",
+      "observedFailures": 3,
+      "functionReturnControlsObservedPassed": 16,
+      "diagnosticReruns": {
+        "failed": 3,
+        "cause": "ToDae structured equation family rows outside partition (EachStart) or overlapping ownership (Fourbar1). No simulation execution reached in these three probes.",
+        "sourceCausalAttribution": "Undetermined; earlier phase than demanded-gather execution."
+      }
+    },
+    "fixed20DeltaRecorded": false,
+    "capabilityQualificationComplete": false,
+    "connectedLocalizationIssued": false,
+    "fullSlamWorking": false,
+    "path": "dev/artifacts/eval-demanded-gather/combined-qualification"
+  },
+  "latestBrowserAdapterEvidence": {
+    "path": "dev/artifacts/native-checked-gather/adapter-execution",
+    "consumerSha256": "d1672a12ab826ebb93d27abab5db86dc9f877df30f05dcb8cebd1164d4cdd097",
+    "testsPassed": 3,
+    "malformedIdentityCases": 14,
+    "typeCheckPassed": true,
+    "browserModels": 2,
+    "browserInvocations": 18,
+    "browserStatus": "ACTUAL_NATIVE_GATHER_ADAPTER_BROWSER_PASS",
+    "serverRequired": false,
+    "browserCompilerPromoted": false,
+    "connectedLocalizationIssued": false,
+    "fullSlamWorking": false
+  }
+}

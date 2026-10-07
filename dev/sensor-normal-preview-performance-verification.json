@@ -1,0 +1,428 @@
+{
+  "status": "NORMAL_PRIORITY_UNRESTRICTED_SHARED_HOST_CHARACTERIZATION_PASS_10X_PENDING",
+  "scope": "Actual hardware Chromium production preview, full RGB/depth/cloud+64-beam LiDAR and Modelica INS/detector. Full visual SLAM is not measured.",
+  "conditions": {
+    "affinity": "0-31",
+    "nice": 0,
+    "sampling": "No CDP CPU profiler, native perf, GPU timer queries, V8 perf maps, or Chromium tracing. Normal Runtime timing and per-frame harness metadata remain.",
+    "metadata": "One-time CDP process discovery/CPU deltas and procfs metadata outside measured loop",
+    "host": "Shared host; unrelated external rumoca-worker build present per root reservation. No unrelated process modified; no clean-machine claim.",
+    "heldTruth": "Awaited sequential Runtime.step using same selected-default capture barrier that passed independent sensor-rate gates. No simulation frames pipelined or capture drops."
+  },
+  "summary": {
+    "cpuProfiling": false,
+    "settings": {
+      "environment": "city",
+      "sceneDetail": "high",
+      "lidarEnabled": true,
+      "depthCloudEnabled": true,
+      "sensorRates": {
+        "cameraHz": 90,
+        "lidarHz": 20,
+        "imuHz": 90,
+        "gpsHz": 10
+      }
+    },
+    "workload": {
+      "profile": "Modelica inertial propagation with RGB-D feature detection; full SLAM is not measured",
+      "seed": 7,
+      "detectorPreset": "Modelica Harris · full resolution",
+      "detectorLanguage": "modelica",
+      "algorithmPreset": "Modelica inertial propagation",
+      "runtime": "modelica",
+      "carsEnabled": true,
+      "peopleEnabled": true,
+      "lightingMode": "day",
+      "depthCloudEnabled": true,
+      "sensorRates": {
+        "cameraHz": 90,
+        "lidarHz": 20,
+        "imuHz": 90,
+        "gpsHz": 10
+      },
+      "sourceSha256": {
+        "physics": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+        "sensor": "0e0b0654ebb293edd48968761eafac977b5f2b90955f012a4ea18ac078ac963a",
+        "evaluation": "f6dc00fb7971fcfacaf50364949d2469fe7d289e84f11640e989ad52f35bea3b",
+        "detector": "faa81a704d6d923720173e686c4d20102f47bb34b29ff591b9b76c12b5b853f7",
+        "algorithm": "04c4435fa1a6c5c929a245a8c76ac4bafcfde3eb54734677fb592f7ba2c2f1ce",
+        "graph": "34d6cd925f8e4dda44bdd23fdcdeed4dd3b586342f188b894785cfc8c2028074"
+      }
+    },
+    "bundleManifest": "bundle.json",
+    "readback": "sync",
+    "targetSimulationRate": 10,
+    "targetFrameMs": 1.1111111111111112,
+    "simulationRate": 0.6229287618695685,
+    "startSimulationTime": 0.1111111111111111,
+    "flowCounts": {
+      "lab/sensors/imu/0": 900,
+      "lab/node/physics/truth": 900,
+      "lab/camera/info": 900,
+      "lab/node/sensor/frame": 900,
+      "lab/node/detector/features": 900,
+      "lab/node/slam/estimate": 900,
+      "lab/node/map/estimate": 900,
+      "lab/node/evaluation/metrics": 900,
+      "lab/slam/odometry": 900,
+      "lab/sensors/lidar/0": 200,
+      "lab/navigation/gps": 100
+    },
+    "browserCpu": {
+      "seconds": 30.65,
+      "meanActiveCores": 1.9092766551302272,
+      "method": "CDP process CPU deltas after warmup; CPU sampling disabled"
+    },
+    "mainCpuThrottle": 1,
+    "graphics": {
+      "api": "WebGL 2",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+      "vendor": "Google Inc. (NVIDIA Corporation)",
+      "acceleration": "hardware-reported",
+      "powerPreference": "high-performance"
+    },
+    "frames": 900,
+    "elapsedMs": 16053.199999928474,
+    "meanFrameMs": 17.795555555025736,
+    "meanNodeMs": {
+      "physics": 4.6820000008742015,
+      "sensor": 7.094444444841809,
+      "detector": 3.211999997297923,
+      "slam": 0.5193333355585734,
+      "map": 0.031888887484868365,
+      "evaluation": 0.538111111720403
+    },
+    "final": {
+      "sequence": 909,
+      "time": 10.11111111111111,
+      "totalMs": 13.099999904632568,
+      "nodes": {
+        "physics": 2.6999999284744263,
+        "sensor": 5.200000047683716,
+        "detector": 2.6999999284744263,
+        "slam": 0.5,
+        "map": 0,
+        "evaluation": 0.40000009536743164
+      },
+      "workers": {
+        "physics": {
+          "roundTripMs": 2.299999952316284
+        },
+        "detector": {
+          "roundTripMs": 2.6999999284744263,
+          "queueMs": 0,
+          "inputMs": 0.10000002384185791,
+          "computeMs": 1.5,
+          "outputMs": 0.8000000715255737,
+          "workerMs": 2.4000000953674316
+        },
+        "slam": {
+          "roundTripMs": 0.5
+        },
+        "evaluation": {
+          "roundTripMs": 0.40000009536743164,
+          "queueMs": 0,
+          "workerMs": 0.20000004768371582
+        }
+      },
+      "transport": {
+        "lab/node/physics/truth": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/sensor/frame": {
+          "totalMs": 0,
+          "bufferBytes": 115200
+        },
+        "lab/node/detector/features": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/slam/estimate": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/map/estimate": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/evaluation/metrics": {
+          "totalMs": 0,
+          "bufferBytes": null
+        }
+      },
+      "camera": {
+        "readback": 2.200000047683716,
+        "renderSubmission": 1.2999999523162842,
+        "total": 3.5999999046325684,
+        "method": "synchronous WebGL readback in sensor worker"
+      },
+      "display": {
+        "timestamp": 18678,
+        "windowMs": 1000,
+        "targetFps": 30,
+        "fps": 30,
+        "captureHz": 0,
+        "visionHz": 0,
+        "lidarHz": 0,
+        "renderedFrames": 30,
+        "capturedFrames": 0,
+        "visionFrames": 0,
+        "lidarFrames": 0,
+        "meanFrameIntervalMs": 33.35,
+        "p95FrameIntervalMs": 34.60000002384186,
+        "meanRenderSubmitMs": 2.2833333452542623,
+        "longTasks": null
+      },
+      "ate": 0.478,
+      "points": 0,
+      "diagnostics": {
+        "model": "Modelica nominal INS",
+        "stateCount": 16
+      }
+    },
+    "workers": [],
+    "errors": []
+  },
+  "clock": {
+    "sequenceCount": 900,
+    "consecutive": true,
+    "maximumIntervalError": 1.736458199452784e-15
+  },
+  "viewer": {
+    "observedWindows": 17,
+    "aggregateWindows": 16,
+    "weightedFps": 30.032079721520716,
+    "minimumFps": 29.510131811922083,
+    "maximumFps": 30.49680275454993,
+    "maximumP95IntervalMs": 54.40000009536743,
+    "windowsBelow29_5Hz": 0,
+    "note": "First observed window excluded from aggregate; retained windows span completed wall-time viewer updates. Missed frame deadlines remain."
+  },
+  "processMetadata": {
+    "before": {
+      "loadavg": "3.93 5.05 3.75 6/2413 1862458",
+      "processes": [
+        {
+          "pid": 1862194,
+          "type": "browser",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862275,
+          "type": "renderer",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862276,
+          "type": "renderer",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862268,
+          "type": "renderer",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862233,
+          "type": "GPU",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862236,
+          "type": "network.mojom.NetworkService",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862246,
+          "type": "storage.mojom.StorageService",
+          "affinity": "0-31",
+          "nice": 0
+        }
+      ]
+    },
+    "after": {
+      "loadavg": "3.88 4.96 3.75 3/2402 1862642",
+      "processes": [
+        {
+          "pid": 1862194,
+          "type": "browser",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862275,
+          "type": "renderer",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862276,
+          "type": "renderer",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862268,
+          "type": "renderer",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862233,
+          "type": "GPU",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862236,
+          "type": "network.mojom.NetworkService",
+          "affinity": "0-31",
+          "nice": 0
+        },
+        {
+          "pid": 1862246,
+          "type": "storage.mojom.StorageService",
+          "affinity": "0-31",
+          "nice": 0
+        }
+      ]
+    },
+    "scope": "One-time process metadata outside measured loop; no CPU/GPU/native sampling"
+  },
+  "resource": {
+    "command": [
+      "env",
+      "-u",
+      "SLAM_PROFILE_PERF",
+      "-u",
+      "SLAM_PROFILE_GPU_TIMERS",
+      "-u",
+      "SLAM_PROFILE_JIT",
+      "-u",
+      "SLAM_PROFILE_NATIVE_TRACE",
+      "-u",
+      "SLAM_PROFILE_PACKED_READBACK",
+      "-u",
+      "SLAM_PROFILE_GEOMETRY_BATCHING",
+      "SLAM_PROFILE_CPU_PROFILING=0",
+      "SLAM_PROFILE_OUT=/home/jgoppert/scratch/slam_web/tmp/sensor-render-profile/unrestricted-normal",
+      "SLAM_PROFILE_FRAMES=900",
+      "SLAM_PROFILE_DETAIL=high",
+      "SLAM_PROFILE_SCENE=city",
+      "SLAM_PROFILE_LIDAR=1",
+      "SLAM_PROFILE_DEPTH_CLOUD=1",
+      "SLAM_PROFILE_READBACK=sync",
+      "SLAM_PROFILE_SENSOR_RATES={\"cameraHz\":90,\"lidarHz\":20,\"imuHz\":90,\"gpsHz\":10}",
+      "node",
+      "scripts/profile-browser.mjs"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/sensor-render-profile/unrestricted-normal/run.log",
+    "elapsedMs": 22671.846175000002,
+    "peakRssKiB": 2154340,
+    "minimumAvailableKiB": 56851520,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 180,
+    "signal": null,
+    "exitCode": 0
+  },
+  "preflight": {
+    "selectedBundle": {
+      "index.html": {
+        "bytes": 451,
+        "sha256": "1f005e96fab979d8883ac94bddcba2bfce93108a5e38c53a4a2875c9fd8dedb3"
+      },
+      "assets/editor.worker-h19R126F.js": {
+        "bytes": 251659,
+        "sha256": "a6f05ad5eeccc4470c76395a26ccb3bbba0bca46946d28f8d44cfdfccbaaa225"
+      },
+      "assets/index-B1mGwatl.js": {
+        "bytes": 3422085,
+        "sha256": "98d7b41d69945624067539ea7367eb4c9961af78e0a4f846e3ab97b8c3c81018"
+      },
+      "assets/modelica-lsp.worker-B-3Ki2Sb.js": {
+        "bytes": 6806,
+        "sha256": "c65d5e2342790c4e734f65afd6188941fb0cec43bc18be7ad1a960c8f0483de3"
+      },
+      "assets/modelica-runtime-math.worker-CCizLMX1.js": {
+        "bytes": 10117,
+        "sha256": "73dc76378f66853ddb6b53dae3d4747ddcbf293b391f95487b77d7bd79b01117"
+      },
+      "assets/modelica-state.worker-D8Xf8AWk.js": {
+        "bytes": 819246,
+        "sha256": "f9e78652431d40e0269b98ac10b4f920ef9181aecd714311d549b912cb1e2d70"
+      },
+      "assets/modelica-vision.worker-DuXKo6E9.js": {
+        "bytes": 852011,
+        "sha256": "119225fad29c443824fc94dfe157523f0b6ee2feeaa30a6a2a4144f135ba1d9e"
+      },
+      "assets/physics.worker-CNbjWayI.js": {
+        "bytes": 1653,
+        "sha256": "ddd52673d51e2d2d887e0f3b4fc7402df7a4b0caa7db3f9dd730e06d2cec8945"
+      },
+      "assets/sensor-render.worker-CKiEWxkI.js": {
+        "bytes": 723715,
+        "sha256": "77e4fd3ff969b78ea49429276de20fd44e4dbd922e3ef2777e2611c155b9ca35"
+      },
+      "assets/viewer.worker-BRivRdu2.js": {
+        "bytes": 721415,
+        "sha256": "9df091503aef1bdf6bb288bc75f8d1ac56594140bb090352c5041789bcffccaf"
+      }
+    },
+    "verified": true,
+    "sourceSha256": {
+      "scripts/profile-browser.mjs": "8b0b89f03c0b74d644464565453d2c39a32950b2af0e8884bb5f5dd4ecd36715",
+      "src/world.ts": "16743cb42b5ac63894522e8ca79d9850504e7b0249e0a7ddea3dd17b3f5da3bc",
+      "src/gpu-readback.ts": "134fb50e64454d4486ee7532fa6b42ea470e3668e1b187d727d4481bff3c70d7",
+      "src/sensor-render.worker.ts": "357ec6a2d94888f8a1109fdb0dd40f7a0dbafac1e6d0f35469840ce5ac7fae0e"
+    },
+    "conditions": "Normal nice0, affinity0–31, shared host with unrelated external rumoca-worker build; not clean-machine or matched gain",
+    "loadavg": "4.82 5.38 3.79 5/2258 1861484"
+  },
+  "raw": {
+    "bundle.json": {
+      "bytes": 1481,
+      "sha256": "d53484aac0fa40678a595d24ef4df062227768076fa123b0ff090020c84e6d7c"
+    },
+    "normal-process-metadata.json": {
+      "bytes": 1951,
+      "sha256": "1791de8e7b9ed2364eb0a2c385d6a6ce34141c843edae09616e0bb2516532188"
+    },
+    "preflight.json": {
+      "bytes": 2206,
+      "sha256": "37a600c191c73e2711cb2d681164711d6140da36f9c255bdf49e1ec49ac8c252"
+    },
+    "resource.json": {
+      "bytes": 1004,
+      "sha256": "182b57c51cdd3c8a5df9d98577f6eac6cc0c4b6cd4bdb6f947b8d6e3a6b0b61b"
+    },
+    "run.log": {
+      "bytes": 4940,
+      "sha256": "d3b08eba9e4359fd8a654868740c5b32b75d45b092c49f5462ee30db41d72d34"
+    },
+    "timings.json": {
+      "bytes": 2177995,
+      "sha256": "124850a38bb750b1a8358b0a08910041d959c3745909c65c74c5492263b82efe"
+    },
+    "world.png": {
+      "bytes": 780857,
+      "sha256": "c90aca20bed094e52b4c0be86ac5542e91e76e55ce2749e361c4f5c76a3a1698"
+    }
+  },
+  "limits": [
+    "Single available-machine observation; not an equal-work A/B speedup or statistical confidence interval.",
+    "Cannot attribute improvement over2-core/CDP ABBA conditions solely to affinity or sampler removal: both changed and shared-host load varied.",
+    "Startup, source compilation and10 warmup frames excluded from measured loop; resource guard includes them.",
+    "10x and full visual SLAM remain pending."
+  ],
+  "sameSelectedBundle": true
+}

@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 1,
+  "status": "FULL14400_NATIVE_PREPARATION_TIMEOUT_WITH_FINALIZED_PERF",
+  "recordedAt": "2026-10-04T22:55:41.410Z",
+  "source": {
+    "path": "models/SeededDepthFrame.mo",
+    "sha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+    "width": 160,
+    "height": 90,
+    "pixels": 14400
+  },
+  "producer": {
+    "path": "$HOME/scratch/slam_web/tmp/guard-replay/saturation-producer",
+    "sha256": "27df64656c5c504de5dc181f6ec89664ad597f582105865b9bb65e8cdbe6fd63",
+    "sourceClosure": {
+      "path": "dev/artifacts/seeded-depth-current-profile/producer-source-closure.sha256",
+      "sha256": "1f889e86d65dcd69909dec3dfbedb433f17009370ddd6eb6972d49d29f213c8b"
+    }
+  },
+  "resource": {
+    "command": [
+      "taskset",
+      "-c",
+      "12,13",
+      "nice",
+      "-n",
+      "10",
+      "/mnt/scratch/jgoppert/slam_web/tmp/guard-replay/saturation-producer",
+      "native_registration_whole_program_source_inventory",
+      "--nocapture"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-current-native-separated/prepare.log",
+    "elapsedMs": 30066.899725000003,
+    "peakRssKiB": 33676,
+    "minimumAvailableKiB": 55344384,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 30,
+    "stopped": "timeout",
+    "signal": "SIGKILL",
+    "exitCode": 124
+  },
+  "perf": {
+    "event": "cpu-clock:u",
+    "frequencyHz": 99,
+    "callGraph": "dwarf,8192",
+    "cpuAffinity": "12,13",
+    "target": {
+      "pid": 1908570,
+      "birth": "68881220"
+    },
+    "samples": 903,
+    "lostSamples": 0,
+    "normalFinalizationSignal": "SIGINT",
+    "tracePath": "$HOME/scratch/slam_web/profiles/seeded-depth-current-native-separated/perf.data",
+    "traceSha256": "4986ea23b66112eab452e2cb1f7efc3ad230f278c9de4f166677b009039e6cb3"
+  },
+  "finalMembershipCheckpoint": {
+    "ordinal": 80600000,
+    "order": [
+      "dense",
+      "field",
+      "expression",
+      "scalar",
+      "scope_budget",
+      "gap",
+      "word_budget",
+      "cutover"
+    ],
+    "counts": [
+      80594849,
+      0,
+      0,
+      0,
+      0,
+      5152,
+      0,
+      0
+    ]
+  },
+  "hotPath": {
+    "expressionProjectionSelfPercent": 14.4,
+    "defaultHasherWriteSelfEntriesPercent": [
+      14.06,
+      5.32
+    ],
+    "hashMapEntrySelfPercent": 3.77,
+    "visitedInsertSelfPercent": 3.21,
+    "enqueueFoldSelfPercent": 2.88
+  },
+  "evidence": [
+    {
+      "path": "dev/artifacts/seeded-depth-current-profile/profile.json",
+      "sha256": "71c92b9ba8c02457d5400a3b3f47b4c4a5d237403abffbef4a0466b16b5ee05e"
+    },
+    {
+      "path": "dev/artifacts/seeded-depth-current-profile/prepare-resource.json",
+      "sha256": "f08bbbcf11bb1b556596fa349decbbf259862b7e789bd47fcf0bbfb85a59b6c7"
+    },
+    {
+      "path": "dev/artifacts/seeded-depth-current-profile/perf.log",
+      "sha256": "57b6037d79166e855993a5a3e46be8b968137244e8dbe18c5df3ffc645674370"
+    },
+    {
+      "path": "dev/artifacts/seeded-depth-current-profile/perf-self.txt",
+      "sha256": "6046dba579f52ee188dd29a6dc783b2da189dc4016300ec15020d0b6427f1ffe"
+    }
+  ],
+  "rawPreparationLog": {
+    "path": "$HOME/scratch/slam_web/profiles/seeded-depth-current-native-separated/prepare.log",
+    "sha256": "85982894134b97b28086d1e410417b1b53b29be397bbc802d7b9a69f3a55c12d"
+  },
+  "interpretation": "Actual full source spends its observed preparation window in dependency projection, hashing and repeated fold traversal. Most membership events hit retained dense visited storage; the frontier is repeated work, not a large-memory allocation. No exact phase boundary or specific recurrence-only cause is established by this profile.",
+  "limitations": [
+    "Instrumented 30-second diagnostic with native counters enabled; not a compile-latency comparison or runtime benchmark.",
+    "Shared host has unrelated compiler work. This run uses CPUs12/13 separately from owned compiler gates.",
+    "Earlier CPU4/5 diagnostic overlaps the root focused build and is excluded from selected measurements; its trace remains in Scratch.",
+    "Full source still produced neither native nor Solve artifact."
+  ],
+  "nativeAdmitted": false,
+  "numericallyVerified": false,
+  "runtimeIntegrated": false,
+  "productionPinChanged": false,
+  "currentSizeMemoFollowup": {
+    "status": "FULL14400_NATIVE_PREPARATION_TIMEOUT_EXACT_STRUCTURAL_INCIDENCE_N_BY_N_FRONTIER",
+    "recordedAt": "2026-10-04T23:36:14.638Z",
+    "profile": "dev/artifacts/seeded-depth-size-profile/profile.json",
+    "resource": "dev/artifacts/seeded-depth-size-profile/prepare-resource.json",
+    "sourceSha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+    "producerSha256": "1da36c7933d3218f0e2d0eec9537c3ffa8358d2db275d8a2dffbdc3d1a7d9cc5",
+    "producerSourceClosureSha256": "7b84bf9afbeab357477f6c14623e21418895d0765071d0b36b5a95e014707ceb",
+    "samples": 904,
+    "lostSamples": 0,
+    "finalizedPerfSha256": "1bcfa2f42fb1a0d14518151788b40b5f996c620ad491d90704c66dfe88fc4e6c",
+    "rawPerfPath": "$HOME/scratch/slam_web/profiles/seeded-depth-size-memo/perf.data",
+    "rawPreparationLogSha256": "3b28e4ad031da34ba85d013a8d6c2c232da0e0cc185c6d988a53cfb27603e0c4",
+    "exactFrontier": {
+      "caller": "rumoca-phase-structural/src/incidence.rs:370",
+      "expression": 189,
+      "function": 2,
+      "fold": 0,
+      "carried": 4,
+      "update": 162,
+      "domainPoints": 14400,
+      "graphOrdinal1800SelectedScalar": 1799,
+      "foldPointCount": 26000000,
+      "finalMembershipCount": 79100000,
+      "interpretation": "Each requested output scalar repeats the full owned source-domain point traversal. Helper summary hits do not remove the root-array passthrough sweep. Sequential RNG recurrence remains required."
+    },
+    "proposal": {
+      "path": "$HOME/scratch/slam_web/tmp/seeded-depth-indexed-fold-proposal/indexed-write-fold.patch",
+      "sha256": "f83780550d6bb36ba287dcf9d02b2852303a4fa000cbcda0e6a6db907f01504b",
+      "state": "Scratch only, not compiled/applied/admitted"
+    },
+    "nativeArtifactProduced": false,
+    "solveArtifactProduced": false,
+    "limitations": [
+      "Instrumented diagnostic only; no compile-latency or runtime speedup claimed.",
+      "Current narrow Size memo does not remove the full source N-by-N array traversal within30seconds.",
+      "Index-write shortcut remains uncompiled; exact unchanged source and seeded-stream numerical gates still required."
+    ],
+    "evidence": [
+      {
+        "path": "dev/artifacts/seeded-depth-size-profile/profile.json",
+        "sha256": "c0600e0cfcd7e46d2a72435155d0a6d9a25422aa67512d04f306030c1cfe0ee3"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-size-profile/prepare-resource.json",
+        "sha256": "6ec7a1166516cda07c9dcc537632ec667c43d91bb8c658e838ffaa77ea36a9cd"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-size-profile/perf.log",
+        "sha256": "7b975cdb54ac52b906e999f9fab1204027a56579ec8db5244d4a461fb4a2edc0"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-size-profile/perf-self.txt",
+        "sha256": "bb352188a28ddf238058e72f279df22064222ad840b08f43752ab8cbc6802f4f"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-size-profile/selected-checkpoints.log",
+        "sha256": "14a8048627307866902dd1566e17d6cc13c7fe9b710c99fbd4439890c1658dc6"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-size-profile/producer-source-closure.sha256",
+        "sha256": "7b84bf9afbeab357477f6c14623e21418895d0765071d0b36b5a95e014707ceb"
+      }
+    ]
+  },
+  "indexedWriteFollowup": {
+    "status": "FULL14400_POSITIVE_INDEXED_WRITE_PROOF_REACHES_SOLVE_LOWERING_TIMEOUT",
+    "recordedAt": "2026-10-05T00:15:41.302Z",
+    "sourceSha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+    "producerSha256": "23e1866b4c1a3a117756350060c06c7d9a18f275d2dbc4066bdcabafe78d10a4",
+    "producerSourceClosureSha256": "d4deeb780ee2cd2fdd59d79e5593142c16705b6dcb57141a3c8f2cc29e197977",
+    "sourceClosureFiles": 2359,
+    "focusedProjectionControlsPassed": 98,
+    "strictNinePackageAllTargetsAllFeaturesPassed": true,
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "8,9",
+        "nice",
+        "-n",
+        "10",
+        "/mnt/scratch/jgoppert/slam_web/tmp/indexed-write-fold-gate/final-producer",
+        "native_registration_whole_program_source_inventory",
+        "--nocapture"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-indexed-write-final/prepare.log",
+      "elapsedMs": 30066.552383000002,
+      "peakRssKiB": 89708,
+      "minimumAvailableKiB": 55647876,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 30,
+      "stopped": "timeout",
+      "signal": "SIGKILL",
+      "exitCode": 124
+    },
+    "cpuAffinity": "8,9",
+    "samples": 904,
+    "lostSamples": 0,
+    "finalizedPerfSha256": "2cb82b5034e21bb9f11d5725522c7890e0f20cc11dc0da51878bbdb87a14135c",
+    "rawPerfPath": "$HOME/scratch/slam_web/profiles/seeded-depth-indexed-write-final/perf.data",
+    "rawPreparationLogSha256": "56595e1db2dc369fb6cb61aa3c92756412423695d4ddc7e8c92908692f9e1e23",
+    "firstPositiveCertificate": "SCALAR_INDEXED_WRITE_CERTIFICATE ordinal=0 function=2 fold=0 carried=4 scalar=0 update=162 value=159 parent_depth=0 domain_points=14400 extent=14400 selected_ordinal=Some(0) proof=owned_constant_binder",
+    "fullOutputProjectionCheckpoint": [
+      "SCALAR_FOLD_GRAPH ordinal=14400 function=2 fold=0 carried=4 scalar=14399 cursor=0 nodes=1 edges=0",
+      "SCALAR_FOLD_GRAPH ordinal=28800 function=2 fold=0 carried=5 scalar=14399 cursor=0 nodes=1 edges=0"
+    ],
+    "lastMembershipCheckpoint": "SCALAR_MEMBERSHIP_COUNTS order=dense,field,expression,scalar,scope_budget,gap,word_budget,cutover total=400000 counts=[289409, 0, 0, 0, 0, 110592, 0, 0]",
+    "hotPath": {
+      "variableScalarSlotSelfPercent": 61.62,
+      "packCoordinateSelfPercent": 19.03,
+      "registerSelfPercent": 7.96,
+      "typedPureCallEmissionSelfPercent": 1.88
+    },
+    "interpretation": "The actual unchanged full14400 source accepts the indexed-write projection certificate and traverses both complete output arrays. The first approximately10second finalized profile now identifies Solve scalar lowering, particularly repeated variable-slot validation and coordinate packing. Sequential state dependencies remain authoritative.",
+    "limitations": [
+      "Instrumented30second diagnostic and first approximately10second CPU sampling window, not matched preparation/runtime gain or entire wall-time attribution.",
+      "Neither native nor Solve artifact produced, so original seeded-stream numerical execution remains pending.",
+      "Membership checkpoint counts are observed work markers, not a speedup ratio.",
+      "Shared host; unchanged-source branch fixture/control acceptance is narrower than required full MSL/browser/upstream quality gates."
+    ],
+    "nativeArtifactProduced": false,
+    "solveArtifactProduced": false,
+    "numericallyVerified": false,
+    "runtimeIntegrated": false,
+    "productionPinChanged": false,
+    "evidence": [
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/profile.json",
+        "sha256": "d9803884a05445ffe3ed7638ff2d576fe2782c0a2aff554358c53fed7995fd7e"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/prepare-resource.json",
+        "sha256": "a17c37b359de8a7e3188408b56c9da75cba4684332879da1f6652299c0973dde"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/perf.log",
+        "sha256": "2cfadc60293bbe2890bd509e8dbefe1cfdd1eab21bb2e3141b6cd753932f0838"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/perf-self.txt",
+        "sha256": "97354fde94ff6923c751ccaf69d25156cfdcc02356409816aad47b610f78399b"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/perf-children.txt",
+        "sha256": "53aa8d7831b26cc886c75664e69ecc624b14c91742f1e03cf2f846085497f98b"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/final-controls.log",
+        "sha256": "d3c6f12ed3a421a7a949361509cec507098c3244acdeed1dcca3acbd44daa58a"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/final-controls-resource.json",
+        "sha256": "cb83c4fa2301d4126f52a3dd22ca7a9677cb1131f5946eb76257b17b7ac8906f"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/final-strict-clippy.log",
+        "sha256": "5760fdee9d04648cbc264f69a47115cffccc9413cd639943e6eaca8881835216"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/final-strict-clippy-resource.json",
+        "sha256": "7f2e9cb922963526b3e209278ab55a9ee61426fee99f465cafcad9cb5d58df88"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/final-source-closure.sha256",
+        "sha256": "d4deeb780ee2cd2fdd59d79e5593142c16705b6dcb57141a3c8f2cc29e197977"
+      },
+      {
+        "path": "dev/artifacts/seeded-depth-indexed-write-profile/selected-checkpoints.log",
+        "sha256": "2c6bbde5d152cbf3abf7dda57009378464059f53bb4371ad6c5572322e854f6e"
+      }
+    ]
+  },
+  "coordinateRangeFollowup": {
+    "report": "dev/modelica-coordinate-range-verification.json",
+    "reportSha256": "a78f8080e4d9026faf743f48940a77e87652d3822c542fde9e4dbd67f0ebbe6f",
+    "producer": {
+      "path": "/home/jgoppert/scratch/slam_web/tmp/tensor-coordinate-range-gate/final-producer",
+      "sha256": "11249d9eecc06d5f3bc3e623b476a4cb47cd0c3e90434e600a7d89aa6f4dc34f",
+      "sourceClosure": {
+        "base": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+        "files": 2365,
+        "sha256": "0ef0375505a289c8ac9f1836f169123d26125397f8adaf6ec8061759e7706a56",
+        "sourceFrozen": true,
+        "scope": "coordinate range validation and applied Abs owner patch",
+        "workers": 4,
+        "affinity": "8,9",
+        "incremental": false
+      },
+      "sourceManifest": "dev/artifacts/modelica-coordinate-range/source-closure.sha256",
+      "verifiedBeforeCopy": true
+    },
+    "actualSource": {
+      "path": "models/SeededDepthFrame.mo",
+      "sha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+      "dimensions": [
+        160,
+        90
+      ],
+      "pixels": 14400,
+      "unchanged": true,
+      "resource": {
+        "command": [
+          "env",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/git/slam_web/models/SeededDepthFrame.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=SeededDepthFrame",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/profiles/seeded-depth-coordinate-range-final/native.json",
+          "RUMOCA_NATIVE_SOURCE_PROFILE=1",
+          "RUST_TEST_THREADS=4",
+          "RAYON_NUM_THREADS=4",
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "/home/jgoppert/scratch/slam_web/tmp/tensor-coordinate-range-gate/final-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-coordinate-range-final/prepare.log",
+        "elapsedMs": 60095.178399000004,
+        "peakRssKiB": 95424,
+        "minimumAvailableKiB": 50146696,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 60,
+        "stopped": "timeout",
+        "signal": "SIGKILL",
+        "exitCode": 124
+      },
+      "nativeArtifactProduced": false,
+      "numericOracleExecuted": false
+    },
+    "lateProfile": {
+      "pid": 2214485,
+      "birth": "69549947",
+      "executable": "/mnt/scratch/jgoppert/slam_web/tmp/tensor-coordinate-range-gate/final-producer",
+      "start": "2026-10-05T00:38:54.890Z",
+      "end": "2026-10-05T00:39:05.035Z",
+      "args": [
+        "record",
+        "-e",
+        "cpu-clock:u",
+        "-F",
+        "99",
+        "--call-graph",
+        "dwarf,8192",
+        "-p",
+        "2214485",
+        "-o",
+        "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-coordinate-range-final/perf.data"
+      ],
+      "terminal": {
+        "exitCode": null,
+        "signal": "SIGINT"
+      },
+      "sha256": "4b782993d55728ec1264f9ab76e57fee004b536770b4bf2019c536b758a1db4c",
+      "scope": "10-second late sampling attached to existing60-second preparation after dependency checkpoints completed; not a fresh preparation or whole-wall allocation",
+      "samples": 903,
+      "lostSamples": 0,
+      "selfPercent": {
+        "btreeIntoIterDyingNext": 19.16,
+        "dependencyStateUnion": 16.5,
+        "dependencyWalkPureCall": 15.73,
+        "setRegister": 10.3,
+        "btreeCloneSubtree": 3.1
+      },
+      "frontier": "IR-Solve structural dependency extraction during late sampled window",
+      "caveats": [
+        "Busy self samples do not allocate whole preparation wall time",
+        "Optimized DWARF has unresolved/invalid parent frames; exact DependencySource/pass cannot be identified from this calltree",
+        "No before/after matched whole-prepare performance claim",
+        "Perf attached to same bounded preparation; no fresh blind profile retry"
+      ]
+    },
+    "nextOwnerDiagnosis": {
+      "owner": "rumoca-ir-solve/src/structural_pattern.rs",
+      "mechanism": "Known(BTreeSet) register reads deep-clone; union consumes/extends RHS; pure_call eagerly derives whole-input ranges; whole-input summaries clone per output; set_register replaces/drops prior sets.",
+      "proposal": "Consider immutable shared exact sets with empty/identity/idempotent union paths, preserving membership, ordered traversal and all fault/effect/fold semantics. Requires counters/independent controls before exact repeated-work attribution.",
+      "status": "Read-only diagnosis only; no live patch or acceptance claim"
+    }
+  },
+  "pairedMathExactFollowup": {
+    "status": "FULL14400_LATE_DEPENDENCY_SET_FRONTIER_REPRODUCED_NO_ARTIFACT",
+    "profilePath": "dev/artifacts/seeded-depth-paired-exact-math/profile.json",
+    "sourceClosureSha256": "6a363d4cf9c82b811392a5401b7c1fa645863117ff836fa0e09c34703d4a8ade",
+    "source": "/home/jgoppert/git/slam_web/models/SeededDepthFrame.mo",
+    "sourceSha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+    "model": "SeededDepthFrame",
+    "producer": "/mnt/scratch/jgoppert/slam_web/tmp/physics-critical-path/exact-schedule/final-producer",
+    "producerSha256": "3389e15ae8c7cf23f8f59a16f768de03d24cd4d6a2ac5f1871976768fd55ed13",
+    "cpuAffinity": "12,13",
+    "preparationSecondsLimit": 60,
+    "requestedSampleDelayMs": 25000,
+    "requestedSampleWindowMs": 10000,
+    "result": {
+      "exitCode": 124,
+      "signal": null
+    },
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "12,13",
+        "nice",
+        "-n",
+        "10",
+        "/mnt/scratch/jgoppert/slam_web/tmp/physics-critical-path/exact-schedule/final-producer",
+        "native_registration_whole_program_source_inventory",
+        "--nocapture"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-paired-exact-math/prepare.log",
+      "elapsedMs": 60099.570439,
+      "peakRssKiB": 97528,
+      "minimumAvailableKiB": 54338552,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "stopped": "timeout",
+      "signal": "SIGKILL",
+      "exitCode": 124
+    },
+    "recording": {
+      "args": [
+        "record",
+        "-e",
+        "cpu-clock:u",
+        "-F",
+        "99",
+        "--call-graph",
+        "dwarf,8192",
+        "-p",
+        "2319030",
+        "-o",
+        "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-paired-exact-math/perf.data"
+      ],
+      "target": {
+        "pid": 2319030,
+        "birth": "69828316"
+      },
+      "exitCode": null,
+      "signal": "SIGINT"
+    },
+    "traceSha256": "aa1bf453b6f3864dc90308d443581528b8d5a9c9928844363aeb87adc1b35340",
+    "nativeArtifactProduced": false,
+    "solveArtifactProduced": false,
+    "samples": 902,
+    "lostSamples": 0,
+    "diagnosis": {
+      "btreeDestructionSelfPercent": 18.29,
+      "unionSelfPercent": 17.63,
+      "pureCallSelfPercent": 12.53,
+      "setRegisterSelfPercent": 9.76,
+      "scope": "Late10second sample of same60second bounded source preparation. Optimized parent stacks partially incomplete; no exact pass/DependencySource or complexity claim."
+    },
+    "numericExecution": false,
+    "nextAction": "Shared immutable exact dependency sets with unchanged traversal, fixed-point convergence and eager faults."
+  },
+  "sharedExactSetsFollowup": {
+    "status": "FULL14400_SHARED_EXACT_SETS_STRUCTURAL_CHECKS_PASS_PREPARATION_TIMEOUT",
+    "sourceClosureSha256": "0c5e205da533d7868a8f94d98a13d3b38e24c3aa064140418209b18f74878938",
+    "profilePath": "dev/artifacts/seeded-depth-shared-exact-sets/profile.json",
+    "source": "/home/jgoppert/git/slam_web/models/SeededDepthFrame.mo",
+    "sourceSha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+    "model": "SeededDepthFrame",
+    "producer": "/mnt/scratch/jgoppert/slam_web/tmp/shared-dependency-state-gate/final-producer",
+    "producerSha256": "3d012949942b7793d27befa5bd899c81d1ababe68f996d7efbbfdb4d8fc7a78b",
+    "cpuAffinity": "12,13",
+    "preparationSecondsLimit": 60,
+    "requestedSampleDelayMs": 25000,
+    "requestedSampleWindowMs": 10000,
+    "result": {
+      "exitCode": 124,
+      "signal": null
+    },
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "12,13",
+        "nice",
+        "-n",
+        "10",
+        "/mnt/scratch/jgoppert/slam_web/tmp/shared-dependency-state-gate/final-producer",
+        "native_registration_whole_program_source_inventory",
+        "--nocapture"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-shared-exact-sets/prepare.log",
+      "elapsedMs": 60095.060979999995,
+      "peakRssKiB": 95188,
+      "minimumAvailableKiB": 56986040,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "stopped": "timeout",
+      "signal": "SIGKILL",
+      "exitCode": 124
+    },
+    "recording": {
+      "args": [
+        "record",
+        "-e",
+        "cpu-clock:u",
+        "-F",
+        "99",
+        "--call-graph",
+        "dwarf,8192",
+        "-p",
+        "2322813",
+        "-o",
+        "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-shared-exact-sets/perf.data"
+      ],
+      "target": {
+        "pid": 2322813,
+        "birth": "69873984"
+      },
+      "exitCode": null,
+      "signal": "SIGINT"
+    },
+    "traceSha256": "f6e37df743277b979c102c904af70987a9168487ec87887fc851b5851cb4e502",
+    "nativeArtifactProduced": false,
+    "solveArtifactProduced": false,
+    "structuralControls": {
+      "passed": 26,
+      "new": 8,
+      "previous": 18
+    },
+    "strictPassed": true,
+    "samples": 905,
+    "lostSamples": 0,
+    "diagnosis": {
+      "pureCallSelfPercent": 12.71,
+      "mallocSelfPercent": 11.38,
+      "unionSelfPercent": 9.06,
+      "terminalIntoSetSelfPercent": 7.62,
+      "btreeDestructionSelfPercent": 6.08,
+      "freeChunkSelfPercent": 5.52
+    },
+    "limitations": [
+      "A duplicate concurrent immutable fullDepth issuance ran on separate CPUs; no matched wall-time gain claim.",
+      "Optimized parent stacks partly incomplete.",
+      "No native or Solve artifact; no full-frame numerical execution or runtime integration."
+    ],
+    "nextAction": "Analyze empty/singleton allocations and ordered terminal materialization without changing any dependency source, error walk or carried RNG semantics."
+  }
+}

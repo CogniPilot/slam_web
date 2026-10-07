@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "status": "NODE_CHROMIUM_TYPED_CALL_LOCAL_BUDGET_BOUNDARY_PASS",
+  "recordedAt": "2026-10-05T10:57:03.777Z",
+  "artifacts": [
+    {
+      "path": "dev/artifacts/wasm-scalar-local-limit/report.json",
+      "sha256": "d1c2f31a48d00f62be332e6e0959f0e41f8a08544e1fd83cf56084b3dbcf1005"
+    },
+    {
+      "path": "dev/artifacts/wasm-scalar-local-limit/resource.json",
+      "sha256": "6a3a3e84d39189baca9f40ae597442d36aeedf5b28bdd476b86d255b329c6560"
+    },
+    {
+      "path": "dev/artifacts/wasm-scalar-local-limit/run.log",
+      "sha256": "c08a5c34335b60b74e6ec534fdd0d6efe6ea7b3f1bc3bbdd1af8869b583e6ac9"
+    },
+    {
+      "path": "dev/artifacts/wasm-scalar-local-limit/extra-0.wasm",
+      "sha256": "00766e31b3baf2b4736a841f2f6defa7a275f7582ae7c3f3703ba721c3692b66"
+    },
+    {
+      "path": "dev/artifacts/wasm-scalar-local-limit/extra-49989.wasm",
+      "sha256": "82f3562e7303d862c6b0639c1e046797bfc204d0255c49fbda4490e1b827e0f1"
+    },
+    {
+      "path": "dev/artifacts/wasm-scalar-local-limit/extra-49990.wasm",
+      "sha256": "d7df79c9bf40926631e20120bd3eec1b18684aaac4b794749f6a5d94cd5545b2"
+    },
+    {
+      "path": "dev/artifacts/wasm-scalar-local-limit/extra-49991.wasm",
+      "sha256": "89075b028df9a5c12288b4c6b75f15732c353acd5fcfee6f8024cf80f22487bf"
+    },
+    {
+      "path": "dev/artifacts/wasm-scalar-local-limit/probe-wasm-scalar-local-limit.mjs",
+      "sha256": "cd601d29798ffccc1e915e99a97a3e182cbe2c122bc8c17ff74f28d112cc6633"
+    }
+  ],
+  "node": "v24.21.0",
+  "browser": "154.0.8037.92",
+  "parameters": 3,
+  "fixedLocals": 7,
+  "maximumExtraLocals": 49990,
+  "declaredLocalBudgetIncludingParameters": 50000,
+  "elapsedMs": 1347.196569,
+  "peakRssKiB": 964244,
+  "source": {
+    "url": "https://chromium.googlesource.com/v8/v8/+/refs/heads/main/src/wasm/wasm-limits.h",
+    "inspectedBlob": "4f32fe1392cdd8411ae03a24342ce9598244dee6",
+    "declaredLimit": 50000
+  },
+  "scope": "Tiny hand-encoded modules with the typed-call emitter parameter/fixed-local counts. Exact acceptance/rejection and successful execution at the engine limit. No Rumoca compilation, scalar-plan semantics, local-allocation implementation, runtime speedup, other-browser or full-SLAM claim.",
+  "rumocaCompilerTested": false,
+  "performanceGainProven": false,
+  "fullSlam": false
+}

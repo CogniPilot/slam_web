@@ -1,0 +1,44 @@
+{
+  "observedAt": "2026-10-05T20:13:31.825Z",
+  "status": "REVIEWED_APPLIED_BROAD_BUILD_TIMEOUT",
+  "branch": "slam-native-functions",
+  "reviewed": [
+    {
+      "name": "rgb-constant-copy-audit",
+      "patchSha256": "ca91042faa6581616d77b0607a1243e25abaaad9e25c9e92a36022db990d7a07",
+      "exactPreimages": true
+    },
+    {
+      "name": "typed-tensor-division-review",
+      "patchSha256": "782e2407d56756bd8e8502eefc870f9856143a64e6f80d2c40b386f4d4fcbbf0",
+      "exactPreimages": true
+    },
+    {
+      "name": "typed-broadcast-native-review",
+      "patchSha256": "25075454248d5f71d4a79dab8014f9f57f5e88ec3c10d9598445fe8b081d0f22",
+      "exactPreimages": true
+    },
+    {
+      "name": "lazy-jacobian-column-cache-proposal",
+      "patchSha256": "d03dacd6d9641f85d5fbf743a4153af66d68ab427eab20e2b8ef434413aeb6a8",
+      "exactPreimages": true,
+      "privateUnitControls": {
+        "passed": 5,
+        "failed": 0
+      }
+    }
+  ],
+  "productionTests": "UNRUN_BUILD_TIMEOUT_BEFORE_TESTS",
+  "sourceNumericalReplay": "UNRUN",
+  "browserRuntimeIntegrated": false,
+  "priorQualification": {
+    "directory": "$HOME/scratch/slam_web/tmp/vision-source-fixes-ScakY6",
+    "exitCode": 124,
+    "elapsedMs": 600110,
+    "peakRssKiB": 3087284,
+    "sourceBookends": "PASS",
+    "strict": "UNRUN",
+    "fmt": "UNRUN",
+    "link": "UNRUN"
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-10-05T16:26:10.588Z",
+  "status": "PRIVATE_PATCH_REVIEW_AND_COPIED_APPLICATION_PASS_RUNTIME_PENDING",
+  "patchSha256": "d6534d01856ac7360d04ae678c84231c4c0c1841cf0e083ed4c5d847eecfae32",
+  "prerequisiteBatchPatchSha256": "1d20d0f053b653a94c79fffdd28c046902a7823f74f952e218c61fb74ef70b28",
+  "checks": {
+    "packageManifest": "PASS",
+    "exactPreimages": "PASS",
+    "privateApplyCheck": "PASS",
+    "exactAppliedPostimages": "PASS",
+    "rustRuntimeTests": "UNRUN",
+    "productionIntegration": "PENDING",
+    "performance": "UNMEASURED"
+  },
+  "scope": "Independent byte/application review of compiler-owned requested-map projection preserving one complete observation. No main compiler/cache writes or new public API execution.",
+  "files": [
+    {
+      "path": "dev/artifacts/session-selected-projection-review/check-package.pl",
+      "bytes": 1271,
+      "sha256": "896316f91062b0bae87c8bc493a36dcdcabf29b81df5098f13f0327b00a454ab"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/compiler.patch",
+      "bytes": 12648,
+      "sha256": "d6534d01856ac7360d04ae678c84231c4c0c1841cf0e083ed4c5d847eecfae32"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/manifest.sha256",
+      "bytes": 488,
+      "sha256": "92852b2e1d86dea44727d0b0a7d15c898a662da44a093fb43baf69196f5e67fa"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/modified/crates/rumoca-sim/src/me_backend.rs",
+      "bytes": 6078,
+      "sha256": "816dfd93d1a0118275850d35bd55cfa779d820fccf052cb6d4eee50928ae42f6"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/modified/crates/rumoca-solver/src/fmi_me/kernel.rs",
+      "bytes": 47868,
+      "sha256": "acc6f3e74108092aa27e26064cb313e601f03f31ed23f693100b3dc1289d0798"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/modified/crates/rumoca-solver/src/fmi_me/session.rs",
+      "bytes": 63014,
+      "sha256": "839359c9604b57ca612cbd95f3d8bad18a89d335f0ff9903fab0e666eca10673"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/modified/crates/rumoca-solver/src/fmi_me/session/selected_values.rs",
+      "bytes": 2016,
+      "sha256": "ac5dce55dbd77d1f332d9732053542c249c30732cc1e961249f2f5a0d913bd0f"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/modified/crates/rumoca-solver/src/fmi_me/session/selected_values/tests.rs",
+      "bytes": 8132,
+      "sha256": "7efc4f7d746fcecefa545b6ff9985ab9d2871d545db726bcc2f5e9b7cf215141"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/modified/crates/rumoca-solver/src/runtime/solve_runtime/relation_memory.rs",
+      "bytes": 48474,
+      "sha256": "77ab9e5bff9f8925a2e052b28ce52df915a860bebda9a908bf203a89b7b5f1e7"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/original/crates/rumoca-sim/src/me_backend.rs",
+      "bytes": 6315,
+      "sha256": "2dfadd3d77a53d55d301c074f4caf381354cdfe68a3aa36986fd3fc0bf8f5282"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/original/crates/rumoca-solver/src/fmi_me/kernel.rs",
+      "bytes": 47663,
+      "sha256": "1fce1d2e3e0c3980dca292e434292a5d11d1fa4bfffc20af1dd1ab3eed7eb771"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/original/crates/rumoca-solver/src/fmi_me/session.rs",
+      "bytes": 62993,
+      "sha256": "78fc70b171f0a8c7939849696dc9af7b676481af0a94ff794057aab4540efd69"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/original/crates/rumoca-solver/src/runtime/solve_runtime/relation_memory.rs",
+      "bytes": 48178,
+      "sha256": "2fafaea669c1581e6ff22f540080c3a55a48d30a47c4d7e590fcdad2c0f439d4"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/README.md",
+      "bytes": 5751,
+      "sha256": "9d4f2ea55a035ff86af0befee30378fcf80a255b45fcf1dacaa76e4557cf84c1"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/source-after.sha256",
+      "bytes": 707,
+      "sha256": "8dcc48b3b8f6b141dbae5810e1af603a2f7a6529d3727b5020e469fa29051c1c"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/source-before.sha256",
+      "bytes": 451,
+      "sha256": "aafc00989ed0bdefc3dce229f997ef81d84e84a4269658c1198a32164c79bd41"
+    },
+    {
+      "path": "dev/artifacts/session-selected-projection-review/stage.pl",
+      "bytes": 2320,
+      "sha256": "44e2d6f533ae75f6937c093e1b3e6c797b7eb19c07ecfbde8ef0285c19ab35f1"
+    }
+  ]
+}

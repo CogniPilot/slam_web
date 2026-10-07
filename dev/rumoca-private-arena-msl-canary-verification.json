@@ -1,0 +1,1601 @@
+{
+  "schemaVersion": 1,
+  "status": "FIXED20_CANONICAL_MATCHED_DELTA_RECORDED_NO_NUMERIC_OR_OUTCOME_REGRESSION",
+  "recordedAt": "2026-10-05T06:23:05.772Z",
+  "scope": "Tier1 fixed20 canonical native MSL/OMC tripwire only; excludes new WASM backend emission/runtime. Not Tier2/fullMSL, pin activation, fullSLAM or throughput claim.",
+  "productionCompilerPinChanged": false,
+  "fullSlam": false,
+  "baseline": {
+    "sourceClosure": "ebbaa651a9e2bc1d51872106094c400f6bdce5f50ce1666870af1cd67287607f",
+    "verification": "dev/rumoca-compact-msl-canary-verification.json",
+    "originalResultsSha256": "38662e54820cb94f2b5d99109e68124f6c0cb34787eeab245b0b0d0c3a55a16e",
+    "originalMissingOmcGateFailureRetained": true,
+    "nineOriginalTraceBytesUnchanged": true
+  },
+  "previousCandidate": {
+    "sourceClosure": "a5a1bf428e65ec5300503fedbe1aa786f5e2f9469ed0220334e82ce4966b56d9",
+    "verification": "dev/rumoca-matched-msl-canary-verification.json"
+  },
+  "candidate": {
+    "revision": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "dirty": true,
+    "sourceClosure": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+    "sourceEntries": 2418,
+    "sourceAndCorpusBookendsPassed": true,
+    "binaries": [
+      {
+        "name": "msl_tests",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/deps/msl_tests-f8b687c07e96fee7",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/binaries/msl_tests",
+        "sha256": "10f840ee024c6c21623c8983aedd3fa729d30b9c5eac1e054dabcd08e89d2d5b",
+        "bytes": 29146888,
+        "profile": {
+          "opt_level": "3",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": true
+        },
+        "cargoFresh": true
+      },
+      {
+        "name": "rumoca-worker",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-worker",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/binaries/rumoca-worker",
+        "sha256": "be65731322228783307edf1d0d4aee09f22e04635665d19bf36f9798a89d3f0e",
+        "bytes": 50323256,
+        "profile": {
+          "opt_level": "3",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "cargoFresh": true
+      },
+      {
+        "name": "rumoca-sim-worker",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-sim-worker",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/binaries/rumoca-sim-worker",
+        "sha256": "bcc5c7d417bd7ca563a0cc17f84e4919152650139598329e5f9f154512ba1d5f",
+        "bytes": 27499872,
+        "profile": {
+          "opt_level": "3",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "cargoFresh": true
+      },
+      {
+        "name": "rumoca-msl-tools",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-msl-tools",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/binaries/rumoca-msl-tools",
+        "sha256": "37ee366ebd4ba3d39aea439ab7fb4577f87241c79d2787e980d8613ac85c3abd",
+        "bytes": 49496896,
+        "profile": {
+          "opt_level": "3",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "cargoFresh": true
+      },
+      {
+        "name": "xtask",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/xtask",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/binaries/xtask",
+        "sha256": "a8f5a5abccf36e0447bd64039744964d84c9165284534588a2185d71d1d75d71",
+        "bytes": 33428440,
+        "profile": {
+          "opt_level": "1",
+          "debuginfo": "line-tables-only",
+          "debug_assertions": true,
+          "overflow_checks": true,
+          "test": false
+        },
+        "cargoFresh": true
+      }
+    ],
+    "cargoExecutablePathsFromJson": true,
+    "cargoReportsFresh": true,
+    "binaryHashesEqualPreviousCandidate": true,
+    "featureScope": {
+      "status": "CACHED_BINARY_IDENTITY_EXPECTED_FEATURE_RELEVANT_SOURCE_UNCHANGED",
+      "a5aToFinalChangedFiles": 27,
+      "allChangesInsideExecWasm": true,
+      "execWasmInMslFeatureClosure": false,
+      "selectedSourceEntries": 1690,
+      "selectedSourceClosureSha256": "e92e857254c18230888ef7ca39c55f29f8d18b4414e38d06a3622397e32fc622",
+      "packages": [
+        "crates/rumoca-core/",
+        "crates/rumoca-ir-ast/",
+        "crates/rumoca-ir-solve/",
+        "crates/rumoca-eval-solve/",
+        "crates/rumoca-ir-dae/",
+        "crates/rumoca-ir-flat/",
+        "crates/rumoca-phase-parse/",
+        "crates/rumoca-eval-dae/",
+        "crates/rumoca-eval-ast/",
+        "crates/rumoca-eval-flat/",
+        "crates/rumoca-phase-resolve/",
+        "crates/rumoca-phase-codegen/",
+        "vendor/diffsol/",
+        "crates/rumoca-phase-structural/",
+        "crates/rumoca-ir-galec/",
+        "crates/rumoca-phase-autodiff/",
+        "crates/rumoca-phase-typecheck/",
+        "crates/rumoca-phase-dae/",
+        "crates/rumoca-phase-flatten/",
+        "crates/rumoca-phase-instantiate/",
+        "crates/rumoca-solver/",
+        "crates/rumoca-solver-diffsol/",
+        "crates/rumoca-compile/",
+        "crates/rumoca-exec-cranelift/",
+        "crates/rumoca-phase-solve/",
+        "crates/rumoca-sim/",
+        "crates/rumoca-worker/",
+        "crates/rumoca-test-msl/"
+      ],
+      "localArtifacts": [
+        {
+          "name": "build-script-build",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_core",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_ir_ast",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_ir_solve",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_eval_solve",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_ir_dae",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_ir_flat",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "build-script-build",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_eval_dae",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_eval_ast",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_eval_flat",
+          "features": [
+            "default"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_resolve",
+          "features": [
+            "default"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "build-script-build",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "build-script-build",
+          "features": [
+            "default",
+            "faer",
+            "nalgebra"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_parse",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_structural",
+          "features": [
+            "default"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_ir_galec",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_codegen",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "diffsol",
+          "features": [
+            "default",
+            "faer",
+            "nalgebra"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_autodiff",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_typecheck",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_dae",
+          "features": [
+            "default"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_flatten",
+          "features": [
+            "default"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_instantiate",
+          "features": [
+            "default"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_solver",
+          "features": [
+            "default",
+            "sparse-linalg"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_solver_diffsol",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_compile",
+          "features": [
+            "default"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_exec_cranelift",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_phase_solve",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_sim",
+          "features": [
+            "report",
+            "solver-diffsol"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_worker",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca_test_msl",
+          "features": [
+            "default",
+            "msl-full-test"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca-msl-tools",
+          "features": [
+            "default",
+            "msl-full-test"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca-sim-worker",
+          "features": [
+            "default",
+            "msl-full-test"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        },
+        {
+          "name": "msl_tests",
+          "features": [
+            "default",
+            "msl-full-test"
+          ],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": true
+          },
+          "fresh": true
+        },
+        {
+          "name": "rumoca-worker",
+          "features": [],
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": 0,
+            "debug_assertions": false,
+            "overflow_checks": false,
+            "test": false
+          },
+          "fresh": true
+        }
+      ],
+      "limits": "Canary exercises canonical native compiler/solver path; pooled wasm32 arenas and typed-view WASM emission are covered by separate focused/browser gates, not these MSL executables."
+    }
+  },
+  "pins": {
+    "status": "VERIFIED",
+    "sourceClosure": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+    "sourceEntries": 2418,
+    "baselineExecutablesVerified": 5,
+    "previousCandidateExecutablesVerified": 5,
+    "baselineOriginalTraceBytesVerified": 9,
+    "baselineResultsSha256": "38662e54820cb94f2b5d99109e68124f6c0cb34787eeab245b0b0d0c3a55a16e",
+    "targetsSha256": "536004933ce502f7a8a4317e5dd6de2b700a6b176e84d2d6e7bbe0dcdf61eafa",
+    "corpusSha256": "f8d08dd72384678a8546c1368833d7d0028a75b63ef01bac0b211276e6a1ff46",
+    "corpusFiles": 2556,
+    "omcSha256": "840e73b72019550d8ad43cfc50dcac3bb882c395a306cd8be5a3ab25659afca6",
+    "qualitySnapshotSha256": "90253d3dd70a98c9354823c6a1d93b83c80ac621d2fc756b0b45b5297f1c0cbd",
+    "affinity": "6,7",
+    "nice": 15,
+    "fixedWorkers": 4
+  },
+  "policy": {
+    "fixed20": true,
+    "requestedWorkers": 4,
+    "environmentWorkers": 4,
+    "effectiveCompileWorkers": 2,
+    "affinity": "6,7",
+    "nice": 15,
+    "baselineAffinity": "10,11",
+    "baselineNice": 10,
+    "phaseSeconds": 10,
+    "solveIrSeconds": 10,
+    "solverSeconds": 12,
+    "simulationParentSeconds": 14,
+    "workerResidentAndSwapMiB": 6144,
+    "outerSeconds": 600,
+    "rssMiB": 8192,
+    "reserveMiB": 16384,
+    "attemptsPerModel": 1,
+    "retries": 0,
+    "filtersBeyondFixed20": 0,
+    "allowUnmeasuredSuccess": false,
+    "qualityPolicyUnchanged": true,
+    "qualityRatchet": "SKIPPED_FOCUSED_PARTIAL_SCOPE"
+  },
+  "builds": {
+    "mslFast": {
+      "command": [
+        "nix",
+        "develop",
+        "path:$HOME/git/slam_web#ci",
+        "--command",
+        "env",
+        "CARGO_TARGET_DIR=$HOME/scratch/slam_web/build/rumoca-native-target",
+        "TMPDIR=$HOME/scratch/slam_web/tmp",
+        "CARGO_BUILD_JOBS=4",
+        "RUST_TEST_THREADS=4",
+        "RAYON_NUM_THREADS=4",
+        "CARGO_INCREMENTAL=0",
+        "taskset",
+        "-c",
+        "6,7",
+        "nice",
+        "-n",
+        "15",
+        "cargo",
+        "build",
+        "--locked",
+        "-j4",
+        "--profile",
+        "msl-fast",
+        "-p",
+        "rumoca-worker",
+        "-p",
+        "rumoca-test-msl",
+        "--features",
+        "rumoca-test-msl/msl-full-test",
+        "--bin",
+        "rumoca-worker",
+        "--bin",
+        "rumoca-sim-worker",
+        "--bin",
+        "rumoca-msl-tools",
+        "--test",
+        "msl_tests",
+        "--message-format",
+        "json-render-diagnostics"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/build.log",
+      "elapsedMs": 4233.419009,
+      "peakRssKiB": 360436,
+      "minimumAvailableKiB": 59764664,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "xtask": {
+      "command": [
+        "nix",
+        "develop",
+        "path:$HOME/git/slam_web#ci",
+        "--command",
+        "env",
+        "CARGO_TARGET_DIR=$HOME/scratch/slam_web/build/rumoca-native-target",
+        "TMPDIR=$HOME/scratch/slam_web/tmp",
+        "CARGO_BUILD_JOBS=4",
+        "RUST_TEST_THREADS=4",
+        "RAYON_NUM_THREADS=4",
+        "CARGO_INCREMENTAL=0",
+        "taskset",
+        "-c",
+        "6,7",
+        "nice",
+        "-n",
+        "15",
+        "cargo",
+        "build",
+        "--locked",
+        "-j4",
+        "-p",
+        "xtask",
+        "--message-format",
+        "json-render-diagnostics"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/xtask-build.log",
+      "elapsedMs": 5590.006348999999,
+      "peakRssKiB": 360464,
+      "minimumAvailableKiB": 59785424,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    }
+  },
+  "run": {
+    "resource": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/binaries/xtask",
+        "verify",
+        "msl-parity",
+        "--sim-targets-file",
+        "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/canary-targets.json",
+        "--results-dir",
+        "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/results",
+        "--quality-baseline",
+        "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/quality-baseline.json",
+        "--stage-parallelism",
+        "4",
+        "--sim-parallelism",
+        "4",
+        "--model-attempt-timeout-secs",
+        "10",
+        "--ir-solve-timeout-secs",
+        "10",
+        "--sim-timeout-secs",
+        "12",
+        "--prebuilt-test-binary",
+        "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/binaries/msl_tests",
+        "--prebuilt-model-worker",
+        "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/binaries/rumoca-worker",
+        "--prebuilt-sim-worker",
+        "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/binaries/rumoca-sim-worker"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/canary.log",
+      "elapsedMs": 32484.66054,
+      "peakRssKiB": 2716764,
+      "minimumAvailableKiB": 57438468,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "selected": 20,
+    "compiled": 11,
+    "balanced": 11,
+    "todaeFailures": 9,
+    "simAttempted": 11,
+    "simOk": 9,
+    "solverFailures": 2,
+    "timeouts": 0,
+    "nonfinite": 0,
+    "outcomes": [
+      {
+        "model": "Modelica.Blocks.Examples.BooleanNetwork1",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED019",
+        "diagnostic": "Modelica.Blocks.Examples.BooleanNetwork1 failed in ToDae: unsupported Flat semantic owner `function return`: a non-guarded nested return requires a checked control-flow owner",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Blocks.Examples.Noise.AutomaticSeed",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED019",
+        "diagnostic": "Modelica.Blocks.Examples.Noise.AutomaticSeed failed in ToDae: unsupported Flat semantic owner `impure call context`: impure function `Modelica.Math.Random.Utilities.initializeImpureRandom.setInternalState` is called from a pure function body; MLS §12.3 permits an impure call only in an impure function, a `when` equation or statement, an initial equation or initial algorithm, or a `parameter` binding",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.BooleanSignals.BackSample",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED008",
+        "diagnostic": "Modelica.Clocked.Examples.Elementary.BooleanSignals.BackSample failed in ToDae: unresolved Flat reference `Modelica.Blocks.Types.Extrapolation.LastTwoPoints`",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.IntegerSignals.BackSample",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED008",
+        "diagnostic": "Modelica.Clocked.Examples.Elementary.IntegerSignals.BackSample failed in ToDae: unresolved Flat reference `Modelica.Blocks.Types.Extrapolation.LastTwoPoints`",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.RealSignals.Sample1",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.DemoPowerSupply",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.OpAmps.Comparator",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.OpAmps.OpAmpCircuits.Add",
+        "phase": "Success",
+        "simulation": "sim_solver_fail",
+        "errorCode": "EL005",
+        "diagnostic": "solve-IR evaluation failed: [EL005] DAE structural proof failed: structurally singular system: 57 matched out of 58 equations and 58 unknowns",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.ShowSaturatingInductor",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Electrical.Digital.Examples.Counter",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED010",
+        "diagnostic": "Modelica.Electrical.Digital.Examples.Counter failed in ToDae: invalid Appendix B discrete solved form: element assignments must cover a discrete coordinate exactly once",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Electrical.Digital.Examples.FullAdder",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED013",
+        "diagnostic": "Modelica.Electrical.Digital.Examples.FullAdder failed in ToDae: unsupported model algorithm in canonical DAE: sequential read of `Adder1.Adder2.AND.G2.y_auxiliary` after an earlier write requires an SSA event transition",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Electrical.Polyphase.Examples.TransformerYD",
+        "phase": "Success",
+        "simulation": "sim_solver_fail",
+        "errorCode": "EL005",
+        "diagnostic": "solve-IR evaluation failed: [EL005] DAE system is not computable: affine derivative coefficient is not compile-time numeric",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Math.Nonlinear.Examples.QuadratureLobatto3",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED019",
+        "diagnostic": "Modelica.Math.Nonlinear.Examples.QuadratureLobatto3 failed in ToDae: unsupported Flat semantic owner `function partial application`: MLS §12.4.2.1 partial application of `Modelica.Math.Nonlinear.Examples.UtilityFunctions.fun7` binds 2 of 3 formal parameters and denotes a function value, which the canonical DAE has no value shape for",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.StateGraph.Examples.ShowCompositeStep",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED010",
+        "diagnostic": "Modelica.StateGraph.Examples.ShowCompositeStep failed in ToDae: invalid Appendix B discrete solved form: a discrete-valued equation must have one unsubscripted resolved coordinate as its left-hand side",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Mechanics.Rotational.Examples.Friction",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED001",
+        "diagnostic": "Modelica.Mechanics.Rotational.Examples.Friction failed in ToDae: unbalanced model: 104 equations, 102 unknowns (balance = 2); unknowns[state=12 algebraic=71 output=9 discrete_real=0 discrete_value=10] equations[continuous=94 discrete_real=0 b1c_definition=10]",
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      },
+      {
+        "model": "Modelica.Mechanics.Rotational.Examples.FirstGrounded",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "baselineDifferences": [],
+        "previousCandidateDifferences": []
+      }
+    ]
+  },
+  "comparator": {
+    "authority": {
+      "name": "rumoca-msl-tools",
+      "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-msl-tools",
+      "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/binaries/rumoca-msl-tools",
+      "sha256": "0ad9c92ee5f569aa3de1d8217039dc7ec76f4d93659421819bbf1cce8c29d978",
+      "bytes": 49480912
+    },
+    "resource": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/binaries/rumoca-msl-tools",
+        "omc-simulation-reference",
+        "--target-models-file",
+        "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/canary-targets.json",
+        "--results-dir",
+        "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/comparator-results",
+        "--use-experiment-stop-time",
+        "--model-timeout-seconds",
+        "144",
+        "--workers",
+        "4",
+        "--omc-threads",
+        "1",
+        "--rumoca-sim-ok-only"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/msl-canary-private-arena-candidate/common-comparator.log",
+      "elapsedMs": 270.22774300000003,
+      "peakRssKiB": 0,
+      "minimumAvailableKiB": 60077440,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "modelsCompared": 9,
+    "totalChannels": 175,
+    "badChannels": 0,
+    "severeChannels": 0,
+    "high": 9,
+    "near": 0,
+    "deviation": 0,
+    "absent": 11,
+    "missing": 0,
+    "skipped": 0,
+    "nonidentifiable": 0,
+    "newOmCBatches": 0,
+    "validatedCachedReferences": 9,
+    "originalRumocaModelPhasesNotRerun": true,
+    "partialBandWrite": "PASS",
+    "partialBandCheck": "PASS"
+  },
+  "delta": {
+    "counts": {
+      "before_models": 20,
+      "after_models": 20,
+      "common_models": 20,
+      "new_models": 0,
+      "removed_models": 0,
+      "phase_fail_to_phase_pass": 0,
+      "phase_pass_to_phase_fail": 0,
+      "sim_solver_fail_to_sim_ok": 0,
+      "sim_ok_to_sim_solver_fail": 0,
+      "non_sim_ok_to_sim_ok": 0,
+      "sim_ok_to_non_sim_ok": 0,
+      "near_to_high_agreement": 0,
+      "high_to_non_high_agreement": 0
+    },
+    "bandTransitions": {
+      "status": "comparable",
+      "counts": {
+        "before_cohort_models": 20,
+        "after_cohort_models": 20,
+        "before_compared": 9,
+        "after_compared": 9,
+        "common_compared": 9,
+        "entered": 0,
+        "left": 0,
+        "band_changed": 0,
+        "coverage_dropped": 0,
+        "compared_variables_lost": 0,
+        "left_by_reason": {}
+      },
+      "entered": [],
+      "left": [],
+      "band_changed": [],
+      "coverage_dropped": []
+    },
+    "all20OutcomesAndDiagnosticsUnchanged": true,
+    "nineRawTraceFileBytesIdentical": true,
+    "traces": [
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse/sim-trace.json",
+        "sha256": "add3dd96b0f2ba85c6811fd3aac46707804f658086d37e63e50066f0199012be",
+        "bytes": 26001,
+        "traceKeys": [
+          "model_name",
+          "n_states",
+          "times",
+          "names",
+          "data",
+          "variable_meta"
+        ],
+        "sourcePath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/results/model_worker/Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse/sim-trace.json",
+        "candidateSha256": "add3dd96b0f2ba85c6811fd3aac46707804f658086d37e63e50066f0199012be",
+        "baselineBytesUnchanged": true,
+        "rawBytesIdentical": true,
+        "fieldsBitwiseIdentical": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep/sim-trace.json",
+        "sha256": "82899391256624d3d0fded7007040daef8d6345081a0e742fc76ccc2d86ae8ae",
+        "bytes": 12951,
+        "traceKeys": [
+          "model_name",
+          "n_states",
+          "times",
+          "names",
+          "data",
+          "variable_meta"
+        ],
+        "sourcePath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/results/model_worker/Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep/sim-trace.json",
+        "candidateSha256": "82899391256624d3d0fded7007040daef8d6345081a0e742fc76ccc2d86ae8ae",
+        "baselineBytesUnchanged": true,
+        "rawBytesIdentical": true,
+        "fieldsBitwiseIdentical": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.RealSignals.Sample1",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.Elementary.RealSignals.Sample1/sim-trace.json",
+        "sha256": "497ccd4621561d249cc5643770a065d06d49402a3dc8e295a92c91c7d5ec362d",
+        "bytes": 52584,
+        "traceKeys": [
+          "model_name",
+          "n_states",
+          "times",
+          "names",
+          "data",
+          "variable_meta"
+        ],
+        "sourcePath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/results/model_worker/Modelica.Clocked.Examples.Elementary.RealSignals.Sample1/sim-trace.json",
+        "candidateSha256": "497ccd4621561d249cc5643770a065d06d49402a3dc8e295a92c91c7d5ec362d",
+        "baselineBytesUnchanged": true,
+        "rawBytesIdentical": true,
+        "fieldsBitwiseIdentical": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp/sim-trace.json",
+        "sha256": "37349c2432f0e05603266316f259def2d6d1ba1da7bfe6745dc139f448f563b5",
+        "bytes": 17528,
+        "traceKeys": [
+          "model_name",
+          "n_states",
+          "times",
+          "names",
+          "data",
+          "variable_meta"
+        ],
+        "sourcePath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/results/model_worker/Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp/sim-trace.json",
+        "candidateSha256": "37349c2432f0e05603266316f259def2d6d1ba1da7bfe6745dc139f448f563b5",
+        "baselineBytesUnchanged": true,
+        "rawBytesIdentical": true,
+        "fieldsBitwiseIdentical": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController/sim-trace.json",
+        "sha256": "2cad7f1aab20a395370d0122b4c2de389fdf37180ee6dcb3c83da565eb53071e",
+        "bytes": 249839,
+        "traceKeys": [
+          "model_name",
+          "n_states",
+          "times",
+          "names",
+          "data",
+          "variable_meta"
+        ],
+        "sourcePath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/results/model_worker/Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController/sim-trace.json",
+        "candidateSha256": "2cad7f1aab20a395370d0122b4c2de389fdf37180ee6dcb3c83da565eb53071e",
+        "baselineBytesUnchanged": true,
+        "rawBytesIdentical": true,
+        "fieldsBitwiseIdentical": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.DemoPowerSupply",
+        "relativePath": "model_worker/Modelica.Electrical.Analog.Examples.DemoPowerSupply/sim-trace.json",
+        "sha256": "efcd5ec6191bb5e1d05bd043f92dc29a072262ead26e762f8aa324d183bac22d",
+        "bytes": 3572989,
+        "traceKeys": [
+          "model_name",
+          "n_states",
+          "times",
+          "names",
+          "data",
+          "variable_meta"
+        ],
+        "sourcePath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/results/model_worker/Modelica.Electrical.Analog.Examples.DemoPowerSupply/sim-trace.json",
+        "candidateSha256": "efcd5ec6191bb5e1d05bd043f92dc29a072262ead26e762f8aa324d183bac22d",
+        "baselineBytesUnchanged": true,
+        "rawBytesIdentical": true,
+        "fieldsBitwiseIdentical": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.OpAmps.Comparator",
+        "relativePath": "model_worker/Modelica.Electrical.Analog.Examples.OpAmps.Comparator/sim-trace.json",
+        "sha256": "96343278c2f2ff8da072fc9145fe600907608289cc9597bd40c960233b0f7ca5",
+        "bytes": 392125,
+        "traceKeys": [
+          "model_name",
+          "n_states",
+          "times",
+          "names",
+          "data",
+          "variable_meta"
+        ],
+        "sourcePath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/results/model_worker/Modelica.Electrical.Analog.Examples.OpAmps.Comparator/sim-trace.json",
+        "candidateSha256": "96343278c2f2ff8da072fc9145fe600907608289cc9597bd40c960233b0f7ca5",
+        "baselineBytesUnchanged": true,
+        "rawBytesIdentical": true,
+        "fieldsBitwiseIdentical": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.ShowSaturatingInductor",
+        "relativePath": "model_worker/Modelica.Electrical.Analog.Examples.ShowSaturatingInductor/sim-trace.json",
+        "sha256": "6ef23f8f8f29394821b26c3786e262376cbef5bc3f8e8f09a1e069c0e92e74a4",
+        "bytes": 246516,
+        "traceKeys": [
+          "model_name",
+          "n_states",
+          "times",
+          "names",
+          "data",
+          "variable_meta"
+        ],
+        "sourcePath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/results/model_worker/Modelica.Electrical.Analog.Examples.ShowSaturatingInductor/sim-trace.json",
+        "candidateSha256": "6ef23f8f8f29394821b26c3786e262376cbef5bc3f8e8f09a1e069c0e92e74a4",
+        "baselineBytesUnchanged": true,
+        "rawBytesIdentical": true,
+        "fieldsBitwiseIdentical": true
+      },
+      {
+        "model": "Modelica.Mechanics.Rotational.Examples.FirstGrounded",
+        "relativePath": "model_worker/Modelica.Mechanics.Rotational.Examples.FirstGrounded/sim-trace.json",
+        "sha256": "92348020dbd934eda5976f4aa853a2c3cba6bdefaea9b3a627d01b5bb9c93341",
+        "bytes": 911950,
+        "traceKeys": [
+          "model_name",
+          "n_states",
+          "times",
+          "names",
+          "data",
+          "variable_meta"
+        ],
+        "sourcePath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/results/model_worker/Modelica.Mechanics.Rotational.Examples.FirstGrounded/sim-trace.json",
+        "candidateSha256": "92348020dbd934eda5976f4aa853a2c3cba6bdefaea9b3a627d01b5bb9c93341",
+        "baselineBytesUnchanged": true,
+        "rawBytesIdentical": true,
+        "fieldsBitwiseIdentical": true
+      }
+    ]
+  },
+  "representationBoundary": {
+    "current": {
+      "models_compared": 0,
+      "exact_state_set_match_models": 0,
+      "state_count_match_models": 0,
+      "exact_state_set_match_percent": 0,
+      "state_count_match_percent": 0,
+      "total_rumoca_states": 0,
+      "total_omc_states": 0,
+      "total_matching_states": 0,
+      "total_rumoca_only_states": 0,
+      "total_omc_only_states": 0,
+      "max_model_state_set_difference": 0
+    },
+    "scope": "UNMEASURED current cached-reference state-selection metadata; historical baseline9 retained separately.",
+    "diagnosis": "compare_model_state_selection returns None because load_omc_state_names reads per-results omc_sim_work/<model>_init.xml; cached trace reuse does not materialize those XML files in this fresh results directory."
+  },
+  "limitations": [
+    "The27changed/addedfiles since A5A are all rumoca-exec-wasm. That crate is not enabled in the28-package canonical MSL feature union; five cached binaries are correctly identical. This canary cannot exercise pooled wasm32 arenas or new typed-view emission.",
+    "Current state-selection reporting is unmeasured: cached OMC trace reuse lacks per-results _init.xml files. Historical baseline8/9 exact state sets and9/9 state counts are preserved separately. No representation-regression or equality claim is inferred.",
+    "NineToDae andtwoEL005 solver refusals remain visible failures, not successful or omitted cases.",
+    "A partial focused workflow exit0 is not a full quality-ratchet pass or all-MSL proof.",
+    "CPU affinity/nice differ by root reservation; allquality/phase/worker policies are unchanged. Shared-host resources/timings establish no attributable performance delta.",
+    "The566-model snapshot remains only the ratchet input; no promotion or production pin change."
+  ],
+  "ownership": {
+    "compilerSourceCargo": "Explicitly released after final source/corpus/binary bookend",
+    "liveProcesses": 0
+  },
+  "evidence": [
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/source-before.sha256",
+      "sha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+      "originalSha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+      "bytes": 297674
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/source-after-build.sha256",
+      "sha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+      "originalSha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+      "bytes": 297674
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/source-after-canary.sha256",
+      "sha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+      "originalSha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+      "bytes": 297674
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/feature-relevant-source.sha256",
+      "sha256": "e92e857254c18230888ef7ca39c55f29f8d18b4414e38d06a3622397e32fc622",
+      "originalSha256": "e92e857254c18230888ef7ca39c55f29f8d18b4414e38d06a3622397e32fc622",
+      "bytes": 210694
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/a5a-to-final-source-changes.json",
+      "sha256": "240fec7b0459719cfc508b313334b6a3b6800b2ebf280889ac74f5cec40a72b6",
+      "originalSha256": "240fec7b0459719cfc508b313334b6a3b6800b2ebf280889ac74f5cec40a72b6",
+      "bytes": 6807
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/feature-scope-proof.json",
+      "sha256": "106eb73eeb0e44685ea3f016be53841c1279cea58a6fe04b55cb9068e113ae3d",
+      "originalSha256": "106eb73eeb0e44685ea3f016be53841c1279cea58a6fe04b55cb9068e113ae3d",
+      "bytes": 11370
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/preflight-pins.json",
+      "sha256": "3031ca075ed92aa95d3aca441e81749430dfdf34af340b18588f1b945ede3c91",
+      "originalSha256": "3031ca075ed92aa95d3aca441e81749430dfdf34af340b18588f1b945ede3c91",
+      "bytes": 788
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/postflight-audit.json",
+      "sha256": "92488bb91c8c7e9441659dbaa97b370023692f7ff59ed8237d98b9ad800311e4",
+      "originalSha256": "92488bb91c8c7e9441659dbaa97b370023692f7ff59ed8237d98b9ad800311e4",
+      "bytes": 17031
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/frozen-artifacts.json",
+      "sha256": "d8fe95c0524f0988a4e217de5c18ab0eff4d50efef0354219617e14cea680ea2",
+      "originalSha256": "d8fe95c0524f0988a4e217de5c18ab0eff4d50efef0354219617e14cea680ea2",
+      "bytes": 2970
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/canary-targets.json",
+      "sha256": "536004933ce502f7a8a4317e5dd6de2b700a6b176e84d2d6e7bbe0dcdf61eafa",
+      "originalSha256": "536004933ce502f7a8a4317e5dd6de2b700a6b176e84d2d6e7bbe0dcdf61eafa",
+      "bytes": 1217
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/quality-baseline.json",
+      "sha256": "90253d3dd70a98c9354823c6a1d93b83c80ac621d2fc756b0b45b5297f1c0cbd",
+      "originalSha256": "90253d3dd70a98c9354823c6a1d93b83c80ac621d2fc756b0b45b5297f1c0cbd",
+      "bytes": 47565
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/build.log",
+      "sha256": "4e6cf66715192bd9cc129b05083961633807d7a9fd2817243128e0132c333279",
+      "originalSha256": "0c6726b98b4f40aae338365580bc7db008fe8377803dcb108cb015455e3618a1",
+      "bytes": 400206
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/build-resource.json",
+      "sha256": "7f9b1573a87572230205e495486e18044d9d980e2157a51891df9eb2316e13a0",
+      "originalSha256": "0516fbcf8c8cf0feab4d612d4a2d61868b11c574488dbdd835e0d46da046f59a",
+      "bytes": 960
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/xtask-build.log",
+      "sha256": "825dc97bc01d63b553b9be8b0061a5512ebf6a2bb7d1bb96334cfd2dcf370c4d",
+      "originalSha256": "b2036059c943da1c75304cd8885849bb7bd55e2236c9221d83de2ea0c5c99964",
+      "bytes": 128397
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/xtask-build-resource.json",
+      "sha256": "bbd571c39445bea0ecfed0e1cd2c3905d3dbf3eb12bab98d9f10de707b7852f5",
+      "originalSha256": "ba90eb5e4b70fb76b1a5c83faca9201c538031f7f5942857022aeeef75a13319",
+      "bytes": 773
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/canary.log",
+      "sha256": "51e12d1e7424110ffc2d3cb49934285ad30bbce9a77d84b6cc9549a0857d4a09",
+      "originalSha256": "5d3dcbbbf48f33c6899125a50395bc0536d2e3eb8b5143abe78de126c3ed1a4c",
+      "bytes": 24733
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/canary-resource.json",
+      "sha256": "a40c74dd130c56e48272c64de6d9a052146453f68e7e206942595675d34e0ebb",
+      "originalSha256": "09928b11aa2d0037554fb3e3f44b13d0da2955acb0f450c4ba55c4bf4cc1391b",
+      "bytes": 1297
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/common-comparator.log",
+      "sha256": "8cd1177408c500c69205168e927ba7c08bb70fda2f6f64e8d31e417e45595005",
+      "originalSha256": "7a73e413b239ad581c64f12838845db89267d9323e0e50a9e8ff531d453e0dc5",
+      "bytes": 2290
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/common-comparator-resource.json",
+      "sha256": "b1d7863a3fbbb5312bb5d1aa4b7592f536e5185378568642466908e63fab2e93",
+      "originalSha256": "0916b423a82bd1e52abd4f3c37f0e3aa3fef55eab810de53f2051d706ea99cb0",
+      "bytes": 870
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/band-write.log",
+      "sha256": "f88610bd91dbe558e2bb5408da696fc68585978a02f1db4659d44d9b06a821eb",
+      "originalSha256": "81a9ba39f1eec5d11803e6e3fce3658fc6116551d55f1ea548b146f940196328",
+      "bytes": 316
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/band-check.log",
+      "sha256": "d21bbbdd7c32032b7b14f032c0f7ff03e8ab260664b00045e3b788414ef99d48",
+      "originalSha256": "27575f759e51c22be89ea6aa49e83728d023fedca30ea3627312409f8f7faeab",
+      "bytes": 224
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/transition.log",
+      "sha256": "dbca758e22525ce39ce0b0f21be941d2800be5e4bf709ad39561e31fb1d02bc4",
+      "originalSha256": "da7d54d43c2e498e18b69c65946431a9975729f2df2759ad0dd4940bcdd7d9a0",
+      "bytes": 373
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/transitions.json",
+      "sha256": "6f2cd842d23e53084e247fb20b7ea3d3816f2d306fcd8c0dd4be426290d22ccf",
+      "originalSha256": "dd5b95efc0a03d2c6712171a5bbde48663e104a7a201b30c3f53b749696e74ff",
+      "bytes": 2363
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/transitions.md",
+      "sha256": "3dbd89fb087e86e347f065a9314fa0e1441b261f87a04744a0139404ad0ed9c2",
+      "originalSha256": "3dbd89fb087e86e347f065a9314fa0e1441b261f87a04744a0139404ad0ed9c2",
+      "bytes": 539
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/results/msl_results.json",
+      "sha256": "be8961e61b5bef8ad757eb0f151066f57115dcdf3e9d80df4d1233e8c1997c9b",
+      "originalSha256": "be8961e61b5bef8ad757eb0f151066f57115dcdf3e9d80df4d1233e8c1997c9b",
+      "bytes": 32947
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/results/msl_simulation_targets.json",
+      "sha256": "df506e16d5f77d0b129db84d4e41cae747238b441cffac2320fac145137bbb54",
+      "originalSha256": "df506e16d5f77d0b129db84d4e41cae747238b441cffac2320fac145137bbb54",
+      "bytes": 5899
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/results/msl_compile_targets.json",
+      "sha256": "93be08c17ec8491728614ce8c6cf3b3907be67d8896ec909d0acf00f13d0c84d",
+      "originalSha256": "93be08c17ec8491728614ce8c6cf3b3907be67d8896ec909d0acf00f13d0c84d",
+      "bytes": 5848
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/results/omc_simulation_reference.json",
+      "sha256": "0bf6fc12ed8165cccd16bf8defc8337e01876b61ea80db71dcca3c075accee53",
+      "originalSha256": "64ece16a48cd10f57af9631f04019e598826cd45bf9d19c26057390433673c91",
+      "bytes": 23452
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/results/sim_trace_comparison.json",
+      "sha256": "c87e9416156010c8b494ebed03b5381ee3166ff74c47f1d4a815c14715391f68",
+      "originalSha256": "c87e9416156010c8b494ebed03b5381ee3166ff74c47f1d4a815c14715391f68",
+      "bytes": 115805
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/results/msl_band_table.json",
+      "sha256": "bd5923441725ec590e746e553678c2c33c53e694d48cc9b96c714c7cc6809651",
+      "originalSha256": "81584a148258c4d561dd707c48f542a37c0106cc7e4eca3548c6d20ee47b4cae",
+      "bytes": 11960
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/results/msl_quality_current.json",
+      "sha256": "b65cbe525f513eacfcbd1aafaa71694b8405b4475a8239eb973f5e2606fdc0af",
+      "originalSha256": "b65cbe525f513eacfcbd1aafaa71694b8405b4475a8239eb973f5e2606fdc0af",
+      "bytes": 14401
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/results/msl_parity_timing.json",
+      "sha256": "bbf0f24a72c35de7a6211b3799812364edb4319982d4bc4268a49de0a9295bd4",
+      "originalSha256": "bbf0f24a72c35de7a6211b3799812364edb4319982d4bc4268a49de0a9295bd4",
+      "bytes": 3013
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/results/msl_package_pass_rates.json",
+      "sha256": "fd06d71e09b194233ecccce3b3dc250c95d6ab4cf14a2fde31014d083dd269e6",
+      "originalSha256": "fd06d71e09b194233ecccce3b3dc250c95d6ab4cf14a2fde31014d083dd269e6",
+      "bytes": 5824
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/comparator-results/msl_results.json",
+      "sha256": "be8961e61b5bef8ad757eb0f151066f57115dcdf3e9d80df4d1233e8c1997c9b",
+      "originalSha256": "be8961e61b5bef8ad757eb0f151066f57115dcdf3e9d80df4d1233e8c1997c9b",
+      "bytes": 32947
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/comparator-results/msl_simulation_targets.json",
+      "sha256": "df506e16d5f77d0b129db84d4e41cae747238b441cffac2320fac145137bbb54",
+      "originalSha256": "df506e16d5f77d0b129db84d4e41cae747238b441cffac2320fac145137bbb54",
+      "bytes": 5899
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/comparator-results/msl_compile_targets.json",
+      "sha256": "93be08c17ec8491728614ce8c6cf3b3907be67d8896ec909d0acf00f13d0c84d",
+      "originalSha256": "93be08c17ec8491728614ce8c6cf3b3907be67d8896ec909d0acf00f13d0c84d",
+      "bytes": 5848
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/comparator-results/omc_simulation_reference.json",
+      "sha256": "3197cc8ce9885a4d4394de0983fdf1a62619e68b6de43675042e01967f7ca8a3",
+      "originalSha256": "dd0349ddffa0327b0b25b66d320fff84ab6d6a68e39f89aff225c34fa9416a7a",
+      "bytes": 23447
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/comparator-results/sim_trace_comparison.json",
+      "sha256": "66a0f373b36abe5d6370f3776f142776ef9faa74419eac563a1ab0e7e0bdf3a1",
+      "originalSha256": "66a0f373b36abe5d6370f3776f142776ef9faa74419eac563a1ab0e7e0bdf3a1",
+      "bytes": 115801
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/comparator-results/msl_band_table.json",
+      "sha256": "c60e06b69dbee5d185cf646f5419563b1369534c49a4644e8290d39fbcc74a41",
+      "originalSha256": "103ae98daec0ac2bc02f247d8fb7c8978a156b01cf2e6e5f2a1c3d9d3ae186ef",
+      "bytes": 11982
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/comparator-results/msl_quality_current.json",
+      "sha256": "b65cbe525f513eacfcbd1aafaa71694b8405b4475a8239eb973f5e2606fdc0af",
+      "originalSha256": "b65cbe525f513eacfcbd1aafaa71694b8405b4475a8239eb973f5e2606fdc0af",
+      "bytes": 14401
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/comparator-results/msl_parity_timing.json",
+      "sha256": "bbf0f24a72c35de7a6211b3799812364edb4319982d4bc4268a49de0a9295bd4",
+      "originalSha256": "bbf0f24a72c35de7a6211b3799812364edb4319982d4bc4268a49de0a9295bd4",
+      "bytes": 3013
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/comparator-results/msl_package_pass_rates.json",
+      "sha256": "fd06d71e09b194233ecccce3b3dc250c95d6ab4cf14a2fde31014d083dd269e6",
+      "originalSha256": "fd06d71e09b194233ecccce3b3dc250c95d6ab4cf14a2fde31014d083dd269e6",
+      "bytes": 5824
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/raw-traces/Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse.json",
+      "sha256": "add3dd96b0f2ba85c6811fd3aac46707804f658086d37e63e50066f0199012be",
+      "bytes": 26001
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/raw-traces/Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep.json",
+      "sha256": "82899391256624d3d0fded7007040daef8d6345081a0e742fc76ccc2d86ae8ae",
+      "bytes": 12951
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/raw-traces/Modelica.Clocked.Examples.Elementary.RealSignals.Sample1.json",
+      "sha256": "497ccd4621561d249cc5643770a065d06d49402a3dc8e295a92c91c7d5ec362d",
+      "bytes": 52584
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/raw-traces/Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp.json",
+      "sha256": "37349c2432f0e05603266316f259def2d6d1ba1da7bfe6745dc139f448f563b5",
+      "bytes": 17528
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/raw-traces/Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController.json",
+      "sha256": "2cad7f1aab20a395370d0122b4c2de389fdf37180ee6dcb3c83da565eb53071e",
+      "bytes": 249839
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/raw-traces/Modelica.Electrical.Analog.Examples.DemoPowerSupply.json",
+      "sha256": "efcd5ec6191bb5e1d05bd043f92dc29a072262ead26e762f8aa324d183bac22d",
+      "bytes": 3572989
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/raw-traces/Modelica.Electrical.Analog.Examples.OpAmps.Comparator.json",
+      "sha256": "96343278c2f2ff8da072fc9145fe600907608289cc9597bd40c960233b0f7ca5",
+      "bytes": 392125
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/raw-traces/Modelica.Electrical.Analog.Examples.ShowSaturatingInductor.json",
+      "sha256": "6ef23f8f8f29394821b26c3786e262376cbef5bc3f8e8f09a1e069c0e92e74a4",
+      "bytes": 246516
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/raw-traces/Modelica.Mechanics.Rotational.Examples.FirstGrounded.json",
+      "sha256": "92348020dbd934eda5976f4aa853a2c3cba6bdefaea9b3a627d01b5bb9c93341",
+      "bytes": 911950
+    },
+    {
+      "path": "dev/artifacts/msl-canary-private-arena/model-worker-evidence.json.gz",
+      "sha256": "2eaef17adf1c72ed2ba46ee3188cbfa39e0b5814634e11a221e6fe8362dc1b8a",
+      "bytes": 14217,
+      "entries": 71
+    }
+  ]
+}

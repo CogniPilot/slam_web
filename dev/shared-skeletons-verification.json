@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "status": "SHARED_ACTOR_RIGS_HARDWARE_PARITY_MATCHED_CAPTURE_LOCKSTEP_AND_PUBLIC_STARTUP_PASS",
+  "recordedAt": "2026-10-05T13:26:28.447Z",
+  "skeletonOwners": {
+    "original": 30,
+    "shared": 12,
+    "isolatedPerCharacter": true
+  },
+  "gpuProfile": [
+    {
+      "skeletonSharing": false,
+      "skeletonUpdates": 180,
+      "skeletonApiMs": 2.5,
+      "timerSupported": true,
+      "disjoint": false,
+      "graphics": {
+        "api": "WebGL 2",
+        "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+        "vendor": "Google Inc. (NVIDIA Corporation)",
+        "acceleration": "hardware-reported",
+        "powerPreference": "high-performance"
+      }
+    },
+    {
+      "skeletonSharing": true,
+      "skeletonUpdates": 72,
+      "skeletonApiMs": 0.5000001192092896,
+      "timerSupported": true,
+      "disjoint": false,
+      "graphics": {
+        "api": "WebGL 2",
+        "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+        "vendor": "Google Inc. (NVIDIA Corporation)",
+        "acceleration": "hardware-reported",
+        "powerPreference": "high-performance"
+      }
+    }
+  ],
+  "captureSummary": [
+    {
+      "lidarEnabled": false,
+      "groups": [
+        {
+          "skeletonSharing": false,
+          "captures": 4000,
+          "meanRpcMs": 3.7551500000059606,
+          "meanCameraMs": 3.2656000005304815
+        },
+        {
+          "skeletonSharing": true,
+          "captures": 4000,
+          "meanRpcMs": 3.2302749999165536,
+          "meanCameraMs": 2.7520750004351138
+        }
+      ],
+      "rpcReductionPercent": 13.977470942267923
+    },
+    {
+      "lidarEnabled": true,
+      "groups": [
+        {
+          "skeletonSharing": false,
+          "captures": 4000,
+          "meanRpcMs": 7.340174999952317,
+          "meanCameraMs": 6.539249999523163
+        },
+        {
+          "skeletonSharing": true,
+          "captures": 4000,
+          "meanRpcMs": 6.13819999986887,
+          "meanCameraMs": 5.349375
+        }
+      ],
+      "rpcReductionPercent": 16.37529078109521
+    }
+  ],
+  "lockstep": {
+    "originalRtf": 0.4849539418067175,
+    "sharedRtf": 0.5063203991930045,
+    "throughputIncreasePercent": 4.405873536502325,
+    "cameraHz": 90,
+    "lidarHz": 10,
+    "timedFrames": 1440,
+    "summary": [
+      {
+        "ordinal": 0,
+        "lidarEnabled": true,
+        "skeletonSharing": false,
+        "rtf": 0.48906930112282004,
+        "meanFrameMs": 22.693611112568114,
+        "nodeMs": {
+          "physics": 4.7088888893524805,
+          "sensor": 10.89333333671093,
+          "detector": 3.7447222239441342,
+          "slam": 0.7805555486016803,
+          "map": 0.04416666891839769,
+          "evaluation": 0.7888888882266151
+        },
+        "meanViewerFps": 30.001358656339196,
+        "approximateCpuCores": 1.651831564542325
+      },
+      {
+        "ordinal": 1,
+        "lidarEnabled": true,
+        "skeletonSharing": true,
+        "rtf": 0.4980389715495238,
+        "meanFrameMs": 22.2861111101177,
+        "nodeMs": {
+          "physics": 4.768611111574703,
+          "sensor": 9.61999999748336,
+          "detector": 4.1777777794334625,
+          "slam": 0.7847222208976745,
+          "map": 0.04666666852103339,
+          "evaluation": 0.7824999984767702
+        },
+        "meanViewerFps": 29.930728377093523,
+        "approximateCpuCores": 1.6211168523937
+      },
+      {
+        "ordinal": 2,
+        "lidarEnabled": true,
+        "skeletonSharing": true,
+        "rtf": 0.5146018268364853,
+        "meanFrameMs": 21.56666666865349,
+        "nodeMs": {
+          "physics": 4.8411111070050135,
+          "sensor": 9.10444444153044,
+          "detector": 3.9644444482194054,
+          "slam": 0.7358333329359691,
+          "map": 0.036666663818889195,
+          "evaluation": 0.7341666678587596
+        },
+        "meanViewerFps": 30.000737777483156,
+        "approximateCpuCores": 1.609417213431108
+      },
+      {
+        "ordinal": 3,
+        "lidarEnabled": true,
+        "skeletonSharing": false,
+        "rtf": 0.480838582490615,
+        "meanFrameMs": 23.082222223612998,
+        "nodeMs": {
+          "physics": 4.915277773804135,
+          "sensor": 10.07055555648274,
+          "detector": 4.136666666467985,
+          "slam": 0.7716666678587596,
+          "map": 0.026944443583488464,
+          "evaluation": 0.7247222238116794
+        },
+        "meanViewerFps": 29.939246289486313,
+        "approximateCpuCores": 1.5290666923201552
+      }
+    ]
+  },
+  "validation": {
+    "targetedTests": 7,
+    "typescriptPassed": true,
+    "typescriptToolResource": {
+      "exitCode": 0,
+      "elapsedMs": 7901.983434,
+      "peakRssKiB": 588424
+    },
+    "firstTestFailure": "Harness expected60 skeletons from RGB+depth update count; actual asset ownership is30. Corrected count, repeated controls pass.",
+    "rawSensorComparisons": 12,
+    "publicStartup": true,
+    "presetAutomaticStart": true,
+    "savedProjectMigration": true
+  },
+  "build": {
+    "entry": "./assets/index-D3Rhl9AY.js",
+    "sha256": "5a63e399a72fadfca3940917131519f0df8fe0864bdbbe017957360ac4204e1d",
+    "outDir": "$HOME/scratch/slam_web/build/skeleton-sharing-preview"
+  },
+  "compiler": {
+    "productionPinChanged": false,
+    "files": [
+      {
+        "path": "vendor/rumoca/rumoca_bind_wasm_bg.wasm",
+        "sha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4"
+      },
+      {
+        "path": "vendor/rumoca/rumoca_bind_wasm.js",
+        "sha256": "a42e7a8012425835b3a6a4087bf2d5a4d581d1a4a902e3b090a1b68e58b26eb4"
+      }
+    ]
+  },
+  "preview": "http://localhost:4173",
+  "productionChanged": true,
+  "fullSlam": false,
+  "scope": "Exact rig-owner sharing in Three.js presentation only. Raw RGB/axial-depth/depth-cloud/LiDAR parity and Modelica actor-animation matrices pass. Capture gains are matched held-pose diagnostics; lockstep comparison uses the current inertial baseline on four-CPU affinity with possible concurrent host activity. No fullModelica SLAM, 10x, steady-frame, cross-machine or absolute improvement over the earlier differently timed pipeline run claim.",
+  "rawReports": [
+    {
+      "path": "$HOME/scratch/slam_web/profiles/shared-skeletons/report.json",
+      "bytes": 892528,
+      "sha256": "06c519e311ede936a4be74431a51e39589589f2b85a7fd7ef73a7b991ead6f6c"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/profiles/shared-skeletons/matched-repeat/report.json",
+      "bytes": 4301343,
+      "sha256": "d525ff4c5fa6bb1457e95b0f5e1524982f2c5bedb94447bacf6b868d4bc4e811"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/profiles/shared-skeletons/lockstep/report.json",
+      "bytes": 3041,
+      "sha256": "02993c7f38010f242405c436c6d07dd70c7b3e970ca60dc7b006b2e6ae768c87"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "dev/artifacts/shared-skeletons/first-captures/report.json",
+      "bytes": 44365,
+      "sha256": "c87a86c7485ea80a2697f72a6fb93a948c8231053d438025eb3c2aab97eb4b37"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/first-captures/resource.json",
+      "bytes": 587,
+      "sha256": "a590bad896cbff720739ba6aa1c40c66a991192e0c60bf800341dd1884867e52"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/first-captures/run.log",
+      "bytes": 1378,
+      "sha256": "55c9f89a199ecd8cf3b5924212789108e91b9c1019d1623206b759d35ec4f1ac"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/matched-captures/report.json",
+      "bytes": 44590,
+      "sha256": "44ad0e18d24b09f41464427862a573b6e88e59cd564c56e1c9b4bf433d98fcfe"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/matched-captures/resource.json",
+      "bytes": 623,
+      "sha256": "63d9d977a32dd6951f5a313f32e9d578e8340f4c61ec5bea7adf64d9b3b0bb74"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/matched-captures/run.log",
+      "bytes": 1372,
+      "sha256": "dc9d7a10a2c3c77b8341525628d1aa163faaf77d82073c36df6e2089706b0bb1"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/lockstep/report.json",
+      "bytes": 3256,
+      "sha256": "70be0b06e7213f3c53e767915a5285269301d61e0f1aec6af4b6d44db211aa4e"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/lockstep/resource.json",
+      "bytes": 610,
+      "sha256": "00e14d21694a3d1d4f036a85e510b3de4331ab2ade6476427759fb06058a4b18"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/lockstep/run.log",
+      "bytes": 879,
+      "sha256": "3f5995435cab1e866eaade89f4a4abc73aeeddb1d4209afac610f63b8ae660a1"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/gates/final-tests.log",
+      "bytes": 1194,
+      "sha256": "722064c7a2b667ecd1d990e5ec8f40263920305e808bc97b4c53c330f373bbf1"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/gates/final-tests-resource.json",
+      "bytes": 667,
+      "sha256": "a8cb784d0d47a02488ae1ab05856746daa507565b4826c91af5ab0dfced09484"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/gates/build.log",
+      "bytes": 2557,
+      "sha256": "e11396635d1d3d514d67f50e99637f1550fb85c9e1e2dd0a37999219c823c656"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/gates/build-resource.json",
+      "bytes": 622,
+      "sha256": "b1aa8422b10d6f3c037da433e4d137779dd5c619d29baa08243e1f622d0d1844"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/gates/typescript.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/gates/tests.log",
+      "bytes": 1992,
+      "sha256": "994bab290576d10607b6473d17a78b6df80d425901eb3e58e80fca8dd23512b5"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/public-preview/run.log",
+      "bytes": 1574,
+      "sha256": "3c847f159a94ba3ce0acb1cd9b51c08db8ad0cd552970be24c1a44ff2016f705"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/public-preview/resource.json",
+      "bytes": 624,
+      "sha256": "2df146ecf856124033d4e72748313a0d1b0204876f54c43737814b651da630a7"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/public-preview/app-browser-report.json",
+      "bytes": 2084,
+      "sha256": "e8a54faa61b6dab706ad39be08af7c4b9adb4c40b1525541a88c6cd0199db886"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/probe-first.mjs",
+      "bytes": 6269,
+      "sha256": "7b19232653740364d949d252a0471d5b14d4c7faeb054d356ea72f72384480af"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/src/shared-cloned-skeletons.ts",
+      "bytes": 1070,
+      "sha256": "48bf457999f96da92d02541aae0df126cb44c75373c27c2944b34b4d8037b91e"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/src/world-actors.ts",
+      "bytes": 10113,
+      "sha256": "afb4a6c3a7775872766986b1c3bd660cc24c75422ac995a756f37e969e3dd48e"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/src/sensor-render.worker.ts",
+      "bytes": 8535,
+      "sha256": "d1fa629801c65e0f96c2d388d806e7a7384d33352b0539c3347742bc321a4a40"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/tests/shared-cloned-skeletons.test.ts",
+      "bytes": 1593,
+      "sha256": "e80c1b2b81f0166fa94b4ce16d2e68d9bfd320a19cae6d85887540a80eba95ec"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/tests/world-actors.test.ts",
+      "bytes": 8077,
+      "sha256": "f04ac1245a3f8b87d5b62fa656d41f7e4a04fda20b8e8c3f5f5fd971892d988e"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/tests/sensor-render-worker.test.ts",
+      "bytes": 9593,
+      "sha256": "af7ec7dd5e69e8818881380809a5028ebbe9690a568ff2973e0023b23ac201a5"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/dev/probe-shared-skeletons.mjs",
+      "bytes": 6691,
+      "sha256": "d96953d82b3c3cca3251af7e845e1eb2252e825c3c63a9f3674dff769dcd8e1b"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/dev/profile-live-lockstep.mjs",
+      "bytes": 7482,
+      "sha256": "cf7eee6d247c2764c9b99f7ae7becce1ba312f98268aeddcb32baff42f3cc04a"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/dev/probe-shared-skeleton-preview.mjs",
+      "bytes": 4343,
+      "sha256": "28a477d8b108124cddefc64c95d174b58bfcc501a9ce303d58fde8c1c71b326b"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/dev/archive-shared-skeletons.mjs",
+      "bytes": 6930,
+      "sha256": "af0b7b7c041dd05fcd7f98d1bb57676bad85ac0403dd696199308547a3a8f486"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/source/.gitignore",
+      "bytes": 96,
+      "sha256": "a4f9e39170b88c586fc9fd7567c45608ffeb0e488b40111c43ad7f78d694f4fc"
+    },
+    {
+      "path": "dev/artifacts/shared-skeletons/public-preview/index.html",
+      "bytes": 451,
+      "sha256": "f9bc88219a758b95740006512af6b84ac4aa2b1b0e26011f0411a869ac6ee46c"
+    }
+  ]
+}

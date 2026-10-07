@@ -1,0 +1,87 @@
+{
+  "assets": [
+    {
+      "file": "pedestrian-hoodie.glb",
+      "title": "Hoodie Character",
+      "creator": "Quaternius",
+      "license": "CC0-1.0",
+      "attribution": "https://poly.pizza/m/gKLBoRsyKe",
+      "source": "https://static.poly.pizza/bcd66ec5-5e81-4901-a222-47abc875fe2a.glb",
+      "bytes": 835636,
+      "sha256": "9d1613f6747ff669c8acb94182e8ab027a6d8bff242edd008ae2f35f35533952",
+      "triangles": 6206,
+      "skins": 4,
+      "clips": [
+        {
+          "name": "Idle",
+          "channels": 21
+        },
+        {
+          "name": "Walk",
+          "channels": 37
+        }
+      ]
+    },
+    {
+      "file": "pedestrian-casual.glb",
+      "title": "Casual Character",
+      "creator": "Quaternius",
+      "license": "CC0-1.0",
+      "attribution": "https://poly.pizza/m/kZ3DmIoGip",
+      "source": "https://static.poly.pizza/90a9e2d4-053f-42f1-99a2-8f5e1180ea7f.glb",
+      "bytes": 809460,
+      "sha256": "f458f5ed6cb41fc4f7f1021f5c8bd8da247ae9e6bcb5a94cee9289c49d20566a",
+      "triangles": 5776,
+      "skins": 4,
+      "clips": [
+        {
+          "name": "Idle",
+          "channels": 21
+        },
+        {
+          "name": "Walk",
+          "channels": 37
+        }
+      ]
+    },
+    {
+      "file": "traffic-hatchback.glb",
+      "title": "Car Hatchback",
+      "creator": "Kay Lousberg",
+      "license": "CC0-1.0",
+      "attribution": "https://poly.pizza/m/BG0KAhmGDt",
+      "source": "https://static.poly.pizza/7dc33135-12c6-4de4-b5f9-cf445fd35994.glb",
+      "bytes": 82232,
+      "sha256": "dae7f1e9d4358389fbdac957e51125b91208ebb710dfd1fd5bfd20711817f5c1",
+      "triangles": 1194,
+      "skins": 0,
+      "clips": []
+    },
+    {
+      "file": "traffic-sedan.glb",
+      "title": "Car",
+      "creator": "Quaternius",
+      "license": "CC0-1.0",
+      "attribution": "https://poly.pizza/m/Cz6yDaUcM9",
+      "source": "https://static.poly.pizza/59a67a6c-490e-472e-bae6-5a4d2541f1c7.glb",
+      "bytes": 164752,
+      "sha256": "bf00f2f0386a25aa310abc0424d22586e46a59ee6c737e6b375c97c9f01bd462",
+      "triangles": 2954,
+      "skins": 0,
+      "clips": []
+    },
+    {
+      "file": "traffic-van.glb",
+      "title": "Generic Van",
+      "creator": "PuKkBuMXDD",
+      "license": "CC-BY-3.0",
+      "attribution": "https://poly.pizza/m/BbRojf2v3H",
+      "source": "https://static.poly.pizza/233b6797-9ce6-4369-8458-0b7fe16444ef.glb",
+      "bytes": 192168,
+      "sha256": "674ad1ba089b45026b86fa9d26058414cd9f44e6bd03315eafb95a188f9fc736",
+      "triangles": 2465,
+      "skins": 0,
+      "clips": []
+    }
+  ]
+}

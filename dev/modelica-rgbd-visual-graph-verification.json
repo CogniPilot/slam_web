@@ -1,0 +1,34 @@
+{
+  "model": "RGBDVisualObservation",
+  "phase": "compile",
+  "status": "COMPILE_TIMEOUT_BEFORE_RESULT",
+  "sourceSha256": "19b9a03fdfef9a5d027510d56379f308b59f069922c6f730e7213c1ce9ed11f9",
+  "compilerWasmSha256": "1c8384cdbca344e66641a5d76eaee8ee2012bc106be052d8f3ce8472cb5f9cba",
+  "capacity": 350,
+  "descriptorSize": 49,
+  "fullSource": true,
+  "nativeAdmitted": false,
+  "numericallyVerified": false,
+  "runtimeIntegrated": false,
+  "productionPinChanged": false,
+  "compiler": {
+    "version": "0.10.1",
+    "revision": "03e6b59a47f1"
+  },
+  "elapsedMs": 180211.765453,
+  "peakOwnedRssKiB": 369404,
+  "exitCode": 124,
+  "sourceManifest": {
+    "model": "RGBDVisualObservation",
+    "sourceSha256": "19b9a03fdfef9a5d027510d56379f308b59f069922c6f730e7213c1ce9ed11f9",
+    "parts": {
+      "models/RGBDFeatureMatching.mo": "00c43a2d580bff3eb5f235d2788c734230412f1a7608011fd62a81326890fb1a",
+      "models/RigidPointRegistration.mo": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+      "models/RGBDRelativePose.mo": "adad8fb9fab1057293da6bb76e988853fceed9deef0809a902bd2a3680491045",
+      "models/RGBDVisualObservation.mo": "ae796839561f187687bf79be7f6de0e3a173af2efb925158c03f18c39dc99977"
+    },
+    "runtimeIntegrated": false,
+    "numericallyVerified": false
+  },
+  "currentSourceNote": "Probe used the exact historical combined source manifest. Current wrapper accepts rawRGBA4 and current descriptor source changed; no final combined graph admission or numerical proof yet."
+}

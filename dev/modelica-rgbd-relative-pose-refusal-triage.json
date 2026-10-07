@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-04T16:08:45.955Z",
+  "status": "EXPECTED_STATELESS_PROFILE_REFUSAL",
+  "source": {
+    "path": "models/RGBDRelativePose.mo",
+    "model": "RGBDRelativePose",
+    "sha256": "4f14db2b68408b539f2684e68c65ae57ca8741b6b21bc128a799ec4dbfa5ad4f",
+    "boundary": "Refusal source snapshot before parent changed shared rotation tolerance to a source constant. Current source is a separate version."
+  },
+  "compiler": {
+    "wasmPath": "/tmp/slam-native-web-review/rumoca_bind_wasm_bg.wasm",
+    "sha256": "1c8384cdbca344e66641a5d76eaee8ee2012bc106be052d8f3ce8472cb5f9cba"
+  },
+  "artifact": {
+    "path": "dev/modelica-rgbd-relative-pose-refusal-solve.json",
+    "sha256": "5d6c7e2add0459723949bcc95aebc5b645de3986ad7049349865f6d60f97dc0a",
+    "schema": 70
+  },
+  "observedError": "native assignments reject states, initialization equations, events, clocks, and external tables",
+  "failedPredicate": {
+    "path": "crates/rumoca-bind-wasm/src/native_assignment_api.rs",
+    "function": "checked_native_schedule",
+    "line": 50,
+    "expression": "rumoca_ir_solve::solve_has_initialization(problem)",
+    "value": true,
+    "query": {
+      "path": "crates/rumoca-ir-solve/src/feature_query.rs",
+      "line": 113,
+      "reason": "initialization.update_rhs and update_targets are nonempty"
+    }
+  },
+  "competingHypotheses": {
+    "states": 0,
+    "events": "All event/discrete programs, actions and schedules empty; no terminal event",
+    "clocks": "Periodic/activation/clock owner fields empty",
+    "externalTables": 0,
+    "declaredInitialEquations": "No initialization residual, projection plan or row roles; only dependent parameter update owners"
+  },
+  "parameterBindings": [
+    {
+      "name": "coordinateLimit",
+      "index": 0,
+      "byte_offset": 0
+    },
+    {
+      "name": "rotationTolerance",
+      "index": 1,
+      "byte_offset": 8
+    },
+    {
+      "name": "referenceCheck.tolerance",
+      "index": 2,
+      "byte_offset": 16
+    },
+    {
+      "name": "registrationCheck.tolerance",
+      "index": 3,
+      "byte_offset": 24
+    },
+    {
+      "name": "extrinsicsCheck.tolerance",
+      "index": 4,
+      "byte_offset": 32
+    }
+  ],
+  "initialization": {
+    "residual": {
+      "nodes": []
+    },
+    "row_roles": [],
+    "projection_plan": {
+      "blocks": []
+    },
+    "update_rhs": {
+      "programs": [
+        [
+          {
+            "LoadP": {
+              "dst": 0,
+              "index": 1
+            }
+          },
+          {
+            "StoreOutput": {
+              "src": 0
+            }
+          }
+        ],
+        [
+          {
+            "LoadP": {
+              "dst": 0,
+              "index": 1
+            }
+          },
+          {
+            "StoreOutput": {
+              "src": 0
+            }
+          }
+        ],
+        [
+          {
+            "LoadP": {
+              "dst": 0,
+              "index": 1
+            }
+          },
+          {
+            "StoreOutput": {
+              "src": 0
+            }
+          }
+        ]
+      ],
+      "program_spans": [
+        {
+          "source": 11643697360139377000,
+          "start": 217,
+          "end": 231
+        },
+        {
+          "source": 11643697360139377000,
+          "start": 217,
+          "end": 231
+        },
+        {
+          "source": 11643697360139377000,
+          "start": 217,
+          "end": 231
+        }
+      ],
+      "output_indices": [
+        0,
+        1,
+        2
+      ]
+    },
+    "update_targets": [
+      {
+        "P": {
+          "index": 2,
+          "byte_offset": 16
+        }
+      },
+      {
+        "P": {
+          "index": 3,
+          "byte_offset": 24
+        }
+      },
+      {
+        "P": {
+          "index": 4,
+          "byte_offset": 32
+        }
+      }
+    ],
+    "manifold_row_count": 0,
+    "given_state_indices": []
+  },
+  "sourceOwner": {
+    "declarations": [
+      "parameter Real tolerance = 1e-6 in RGBDProperRotation",
+      "parameter Real rotationTolerance = 1e-6 in RGBDRelativePose",
+      "Three RGBDProperRotation components pass tolerance=rotationTolerance"
+    ],
+    "lowering": "rumoca-phase-solve/src/lower/initial_parameters.rs::initialization_parameter_ownership selects each numeric binding with parameter reads; push_dependent_binding_rows emits LoadP(1) -> StoreOutput and P2/P3/P4 targets",
+    "assembly": "rumoca-phase-solve/src/lower/initialization.rs:ownership.lower_solved_parameter_reads appends these owners to initialization.update_rhs/update_targets",
+    "intent": "initial_parameters.rs lines40–43 explicitly preserve dependent parameter bindings so importer parameter changes remain correct."
+  },
+  "governing": [
+    "AGENTS.md routing index",
+    "SPEC_0033 §§2–4: concrete reproduction, earliest owner, preserve strict validators",
+    "SPEC_0007 and SPEC_0040: DAE/Solve semantic ownership; native host must not rewrite initialization",
+    "SPEC_0022 §3.17/3.19 and MLS§8.6: parameter versus constant and initialization semantics"
+  ],
+  "classification": "Source exceeds current stateless native profile; no compiler bug proven. The generic error is triggered by valid dependent parameter initialization ownership, not noEvent or input-component equations.",
+  "action": "Parent owns changing rotation tolerance into an editable shared source constant and rerunning actual native preparation. No upstream Rust changes or validator weakening.",
+  "triageChanges": "Read-only code/source inspection; wrote proof/raw evidence only. Did not prepare a source variant or edit Rust/source."
+}

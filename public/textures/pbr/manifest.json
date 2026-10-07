@@ -1,0 +1,278 @@
+{
+  "license": "CC0-1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "licenseEvidence": "https://polyhaven.com/license",
+  "provider": "Poly Haven",
+  "resolution": 512,
+  "assets": [
+    {
+      "kind": "brick",
+      "id": "brick_wall_001",
+      "name": "Brick Wall 001",
+      "source": "https://polyhaven.com/a/brick_wall_001",
+      "authors": {
+        "Rob Tuytel": "Processing",
+        "Dimitrios Savva": "Photography"
+      },
+      "metres": [
+        3.0,
+        3.0
+      ],
+      "files": [
+        {
+          "role": "color",
+          "file": "brick-color.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brick_wall_001/brick_wall_001_diffuse_1k.jpg",
+          "originalSha256": "6a1233ec0186703de830354d89f122991e61e67fb67e0846c7eaf6c5aefea902",
+          "sha256": "71ba9964d015031a567da0f128ee215ba608ede3a78b747fd3d427ba5965ee6c",
+          "bytes": 108194,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "normal",
+          "file": "brick-normal.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brick_wall_001/brick_wall_001_nor_gl_1k.jpg",
+          "originalSha256": "8afbe3919308b168a6b7235fe7b930f670cfffa1a34de39ee790d55c9d7bda09",
+          "sha256": "1f059eda765162ce0f58b62f23b2696325d60492f9eeb33cbe0f438b994002c9",
+          "bytes": 144854,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "arm",
+          "file": "brick-arm.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brick_wall_001/brick_wall_001_arm_1k.jpg",
+          "originalSha256": "8e6ab4cecd82c4305c9511065b0795bd579df89df8364a76a7359c1278bed38d",
+          "sha256": "0d0f748b13492f60b80a6f8ec64a4887753922c4e48fb171b30c1f768b2c557d",
+          "bytes": 69723,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        }
+      ]
+    },
+    {
+      "kind": "plaster",
+      "id": "concrete_wall_007",
+      "name": "Concrete Wall 007",
+      "source": "https://polyhaven.com/a/concrete_wall_007",
+      "authors": {
+        "Dario Barresi": "Processing",
+        "Rico Cilliers": "Tiling",
+        "Charlotte Baglioni": "Photography"
+      },
+      "metres": [
+        2.16,
+        2.16
+      ],
+      "files": [
+        {
+          "role": "color",
+          "file": "plaster-color.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_wall_007/concrete_wall_007_diff_1k.jpg",
+          "originalSha256": "1a5ff668a66e147d9fb795d8407ca67a144a1ca010779a5b8386137a4917a086",
+          "sha256": "a2048a3d5b3dc80e623b31c11dd94608faea45c76ffd99f4e044326ecbb2af9a",
+          "bytes": 52131,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "normal",
+          "file": "plaster-normal.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_wall_007/concrete_wall_007_nor_gl_1k.jpg",
+          "originalSha256": "cccb1841908ced8b89b65b5de97c1926f717dab63a14559264703a99639c291f",
+          "sha256": "075606fb3a4e1a9f9aa0e648224cb4333b354b6552b96c4166dd74854d68bf3e",
+          "bytes": 32896,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "arm",
+          "file": "plaster-arm.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_wall_007/concrete_wall_007_arm_1k.jpg",
+          "originalSha256": "b403affeb0eaac2386bd6d91d41acb99f7862e1b9101a14ab0af6da21fdf544f",
+          "sha256": "e2476228a9101bd8d2ee959ce2d468bc3980e0ff5ee8c9ef2ca1b7db1f8cb8f3",
+          "bytes": 57456,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        }
+      ]
+    },
+    {
+      "kind": "asphalt",
+      "id": "asphalt_02",
+      "name": "Asphalt 02",
+      "source": "https://polyhaven.com/a/asphalt_02",
+      "authors": {
+        "Rob Tuytel": "All"
+      },
+      "metres": [
+        3.0,
+        3.0
+      ],
+      "files": [
+        {
+          "role": "color",
+          "file": "asphalt-color.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_diff_1k.jpg",
+          "originalSha256": "1aa5ce99f58a625c71d48cfc3e68b65ca85ccb00f39e045c0a928608a0ea25ed",
+          "sha256": "eeaeb2966bb2852bdf71cd8a8009399ac0bfb9cf0d5c301daa4c2b131e8506e0",
+          "bytes": 116909,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "normal",
+          "file": "asphalt-normal.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_nor_gl_1k.jpg",
+          "originalSha256": "42a1c381b53204e83a982db2864479a30bc127bbdeebb1006f8ee51bff099df3",
+          "sha256": "15a2f50d4a2f726b127fc4332fc729ee3d995761bb8df2f8399fe032414962c7",
+          "bytes": 145534,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "arm",
+          "file": "asphalt-arm.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_arm_1k.jpg",
+          "originalSha256": "56bd8e591a3db579846fcb5185f60b0651e0bd4ea85c3529c339e6746243c9cf",
+          "sha256": "67ac13ebaefeae539622a8d76a8fa67240b4cf45eea3c3180fc0fd83be1588f0",
+          "bytes": 131628,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        }
+      ]
+    },
+    {
+      "kind": "paving",
+      "id": "concrete_pavement",
+      "name": "Concrete Pavement",
+      "source": "https://polyhaven.com/a/concrete_pavement",
+      "authors": {
+        "Charlotte Baglioni": "All"
+      },
+      "metres": [
+        1.8,
+        1.8
+      ],
+      "files": [
+        {
+          "role": "color",
+          "file": "paving-color.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_pavement/concrete_pavement_diff_1k.jpg",
+          "originalSha256": "70d3ff969a7421c7ae057b5d16386d11f5e59c6740db643352e1039413f419c4",
+          "sha256": "2d958ec92f8c9d3cc5aa0553fb33666e955e9267db17126b3c036276475957ae",
+          "bytes": 88567,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "normal",
+          "file": "paving-normal.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_pavement/concrete_pavement_nor_gl_1k.jpg",
+          "originalSha256": "a5009e409ff0f7b2d19e1316fe5e2b2b4f28e4a6b79990a664be69d4e8a0e690",
+          "sha256": "ca4e5a57a8ad43e4e8d0b7b66173a4d90ee2a9096f2f74798de995a0ec75e833",
+          "bytes": 98325,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "arm",
+          "file": "paving-arm.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_pavement/concrete_pavement_arm_1k.jpg",
+          "originalSha256": "2895506708adad25d64c3d7c3d0f922a6df0468af4a9afe3d5d3a0fb35bb3afd",
+          "sha256": "211709230f7e88af50a6bafab50fc6bb346bc47bc07630a5201a99b2005ded9f",
+          "bytes": 64479,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        }
+      ]
+    },
+    {
+      "kind": "wood",
+      "id": "wood_planks_dirt",
+      "name": "Wood Planks Dirt",
+      "source": "https://polyhaven.com/a/wood_planks_dirt",
+      "authors": {
+        "Rob Tuytel": "All"
+      },
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "files": [
+        {
+          "role": "color",
+          "file": "wood-color.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/wood_planks_dirt/wood_planks_dirt_diff_1k.jpg",
+          "originalSha256": "230bb4aabaebde24ead3ae593a48f8f45e93705aaf3cfdc438589bb49c2a7af3",
+          "sha256": "c07ecf828852b52f943069d4c3a45eed7791aed59744e697a515ce3d6fd2c281",
+          "bytes": 101651,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "normal",
+          "file": "wood-normal.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/wood_planks_dirt/wood_planks_dirt_nor_gl_1k.jpg",
+          "originalSha256": "877bf561c0bc83a583238c5133c221026ff25052f8f567174c6b285af4b74f0e",
+          "sha256": "c4f15283e43a4a1049e52a277ce91702ce7a6e0f67a347e213ea6f293469ae19",
+          "bytes": 24795,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "arm",
+          "file": "wood-arm.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/wood_planks_dirt/wood_planks_dirt_arm_1k.jpg",
+          "originalSha256": "a07318d2e53dfd574dd2751a9ea9367ab6a9e891e2f7f55aa4d7aea9f5e2fc27",
+          "sha256": "b0cbcff0923f460e53b63ad5495c70758b674be9eb4aff47281265f54cc9c587",
+          "bytes": 46161,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        }
+      ]
+    },
+    {
+      "kind": "grass",
+      "id": "grass_ground",
+      "name": "Grass Ground",
+      "source": "https://polyhaven.com/a/grass_ground",
+      "authors": {
+        "Charlotte Baglioni": "All"
+      },
+      "metres": [
+        2.51,
+        2.51
+      ],
+      "files": [
+        {
+          "role": "color",
+          "file": "grass-color.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grass_ground/grass_ground_diff_1k.jpg",
+          "originalSha256": "a79cc5ed65af0f80261b39a383b64a8c5272c5144d724deb43dbc29f0e4cd19b",
+          "sha256": "d61eba2cb436798fc6cc99e3fe22e300964ebb13866a85a9b4be26dfcfc2c445",
+          "bytes": 83265,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "normal",
+          "file": "grass-normal.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grass_ground/grass_ground_nor_gl_1k.jpg",
+          "originalSha256": "7000e2ccd479bb7b66dcdf4faef7b47554324566886314ca620cbf03e274e826",
+          "sha256": "d2b2de65f0eefce14ec4218177f5a4cdbb5413918e9a96f81f1373179f6690fa",
+          "bytes": 136598,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        },
+        {
+          "role": "arm",
+          "file": "grass-arm.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grass_ground/grass_ground_arm_1k.jpg",
+          "originalSha256": "b8c13e5972827dda6465fc98bbb8b3a0e67215bf8e864c729072fc9c1cc502ef",
+          "sha256": "0168a7e6c8546cbbc08a53cac29be371c39fa47ebac9e7189c2b32b64cdd5334",
+          "bytes": 84218,
+          "modifications": "Resampled original 1K JPEG to 512 square with Lanczos; JPEG quality90, no chroma subsampling."
+        }
+      ]
+    }
+  ],
+  "environment": {
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "name": "Kloofendal 48d Partly Cloudy (Pure Sky)",
+    "source": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky",
+    "authors": {
+      "Greg Zaal": "Original",
+      "Jarod Guest": "Sky edits"
+    },
+    "file": "daylight-1k.hdr",
+    "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/kloofendal_48d_partly_cloudy_puresky_1k.hdr",
+    "sha256": "fd94c84997b8a3c353b62c2125a9b44e19509956986a126e472684432a02d798",
+    "bytes": 1435119,
+    "modifications": "None: original 1K RGBE HDR."
+  }
+}

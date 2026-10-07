@@ -1,0 +1,28 @@
+{
+  "status": "ROOT_RETAINED_ALLOCATION_DIAGNOSTIC_ARCHIVE_AND_EXACT_IN_MEMORY_APPLY_PASS",
+  "sourceReportSha256": "2ab4387b32cda596d977aadf54ae0cb842bd9742e2d054012a434b28dee2ef69",
+  "manifestSha256": "ecde842a9428495f5efe8676863e9f588fd56634fe822b7eb703b7771a88f14b",
+  "archiveFiles": 32,
+  "archiveBytes": 1218406,
+  "patchSha256": "6d7509d1a5635a84a6981d3aab01417425066d24e16ab4fb6b84967e5dcca0ab",
+  "checkedCurrentPreimagesAndPostimages": [
+    "crates/rumoca-phase-solve/src/artifacts.rs",
+    "crates/rumoca-phase-solve/src/ad.rs",
+    "crates/rumoca-phase-solve/src/model_values.rs",
+    "crates/rumoca-eval-solve/src/compute_block_scalarize.rs",
+    "crates/rumoca-eval-solve/src/compute_block_scalarize/affine.rs",
+    "crates/rumoca-ir-solve/src/model.rs",
+    "crates/rumoca-eval-solve/src/sparsity.rs"
+  ],
+  "scope": "Read-only compiler source verification and exact copied-patch application in memory; only this durable report is written to the app workspace.",
+  "compilerModified": false,
+  "compiled": false,
+  "actualAllocationCounters": "UNRUN",
+  "fullFrameAttribution": "UNPROVED",
+  "proposalScope": "Private opt-in allocation counters; production suitability and actual counters unrun.",
+  "limitations": [
+    "Neither private patch is qualified for production.",
+    "The conditional dense-Jacobian storage estimate is not a measured allocation.",
+    "Source integrity does not prove Rust type correctness, numerical parity or full-frame admission."
+  ]
+}

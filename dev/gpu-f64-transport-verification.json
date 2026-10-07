@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "status": "READ_ONLY_AUDIT_AND_NATIVE_V8_MICROBENCHMARK_PASS_GPU_PROPOSAL_UNEXECUTED",
+  "applicationChanges": false,
+  "compilerChanges": false,
+  "installsOrBuilds": false,
+  "scope": "Native V8 I/O microbenchmark only; no GPU, browser, worker transport, Modelica module or end-to-end frame measurement.",
+  "benchmark": {
+    "schemaVersion": 1,
+    "node": "v24.21.0",
+    "v8": "13.6.233.17-node.53",
+    "width": 160,
+    "height": 90,
+    "channels": 4,
+    "rgbaCount": 57600,
+    "depthCount": 14400,
+    "bytes": {
+      "raw": 115200,
+      "f64": 576000
+    },
+    "callsPerBlock": 1000,
+    "blocks": 12,
+    "warmupCalls": 300,
+    "methods": {
+      "bulkTypedArraySet": {
+        "medianMs": 0.011196445499999996,
+        "minMs": 0.011174395000000004,
+        "maxMs": 0.01156485799999996,
+        "blockMeansMs": [
+          0.011313355999999984,
+          0.011174395000000004,
+          0.011194094999999975,
+          0.011199215000000038,
+          0.011178574999999967,
+          0.011198796000000016,
+          0.011186665000000005,
+          0.01119987500000002,
+          0.011193814999999972,
+          0.01119393500000001,
+          0.01156485799999996,
+          0.011205166000000077
+        ]
+      },
+      "equivalentScalarJsLoops": {
+        "medianMs": 0.02977675399999998,
+        "minMs": 0.029738624000000016,
+        "maxMs": 0.029825364000000035,
+        "blockMeansMs": [
+          0.029738624000000016,
+          0.029765753999999988,
+          0.029789314000000018,
+          0.02977629400000001,
+          0.029758864000000017,
+          0.029773964000000035,
+          0.029777213999999958,
+          0.029777864000000022,
+          0.029813654999999925,
+          0.02975303400000007,
+          0.029825364000000035,
+          0.02979783400000008
+        ]
+      },
+      "alreadyPackedF64ByteCopy": {
+        "medianMs": 0.013998182500000012,
+        "minMs": 0.01381478100000004,
+        "maxMs": 0.014370314000000007,
+        "blockMeansMs": [
+          0.01422068299999998,
+          0.013897892000000012,
+          0.014098473000000012,
+          0.013831681000000004,
+          0.014150882999999965,
+          0.013889971000000003,
+          0.014181933000000015,
+          0.013841960999999969,
+          0.014145712000000003,
+          0.01381478100000004,
+          0.014370314000000007,
+          0.013858120999999984
+        ]
+      }
+    },
+    "exactConversionChecks": {
+      "allRgba": true,
+      "allDepth": true,
+      "ieeeFloat32Cases": 12,
+      "NaNPolicy": "classification only, payload not promised"
+    },
+    "scope": "Warm native V8 I/O microbenchmark, no GPU/render/worker/Modelica execution; shared host load is not isolated"
+  },
+  "resources": {
+    "command": [
+      "taskset",
+      "-c",
+      "14",
+      "nice",
+      "-n",
+      "15",
+      "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+      "--max-old-space-size=128",
+      "$HOME/scratch/slam_web/tmp/gpu-f64-transport-audit/bulk-set-benchmark.mjs",
+      "$HOME/scratch/slam_web/tmp/gpu-f64-transport-audit/benchmark.json"
+    ],
+    "log": "$HOME/scratch/slam_web/tmp/gpu-f64-transport-audit/benchmark.log",
+    "elapsedMs": 823.453642,
+    "peakRssKiB": 63536,
+    "minimumAvailableKiB": 59914248,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 256,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 10,
+    "signal": null,
+    "exitCode": 0
+  },
+  "environment": {
+    "affinity": [
+      14
+    ],
+    "nice": 15,
+    "oldSpaceLimitMiB": 128,
+    "limits": {
+      "seconds": 10,
+      "rssMiB": 256,
+      "availableReserveMiB": 16384
+    },
+    "hostLoadIsolated": false
+  },
+  "executedSource": {
+    "path": "dev/artifacts/gpu-f64-transport/bulk-set-benchmark.mjs",
+    "sha256": "c8697ca4619146c7b5fcc08acae262a685c033a0c2202dbab06e1d2f68541184"
+  },
+  "rawEvidence": {
+    "report": {
+      "path": "dev/artifacts/gpu-f64-transport/benchmark.json",
+      "sha256": "68ca551a1ffedd9375a18b1a085d694ad0c718302ab112fa6331990a8069f0e0"
+    },
+    "resource": {
+      "path": "dev/artifacts/gpu-f64-transport/benchmark-resource.json",
+      "sha256": "0473d0edea936bdac289b6b2c6515121360fe1d8dbd7bccbce64a65450b138e8",
+      "machinePaths": "Preserved verbatim execution record; normalized paths are in resources above."
+    },
+    "log": {
+      "path": "dev/artifacts/gpu-f64-transport/benchmark.log",
+      "sha256": "f5d634f538129f23a6ad11eee585a8d04a88d0dd969152bb2485192c8bb9f019"
+    }
+  },
+  "audit": {
+    "path": "dev/artifacts/gpu-f64-transport/design.md",
+    "sha256": "7be81a33cb20da569744029fb734fc39c9a8cbb2ad7bd9c5fd959a517defbdc3",
+    "gpuF64PackingImplemented": false,
+    "gpuF64PackingTested": false,
+    "proposal": "Explicit integer f64 word packing with exact RGB-byte source contract and binary32 word promotion.",
+    "recommendation": "Start with raw RGBA4/raw axial Float32 and bulk typed-array set into the issued f64 input fields.",
+    "limitations": [
+      "Raw axial Float32 changes the existing 24-bit sensor quantization; parity is not established.",
+      "sRGB texture sampling changes encoded RGB values; an exact raw-byte route must avoid gamma round-trip assumptions.",
+      "Packed f64 increases raw readback bytes fivefold before added GPU passes/worker copies.",
+      "No zero-copy GPU-to-WASM mapping exists in this proposed WebGL2 path.",
+      "Existing disparity noise algorithm remains a separate Modelica migration responsibility."
+    ]
+  },
+  "observedSourceFootprint": {
+    "path": "dev/artifacts/gpu-f64-transport/observed-source-footprint.json",
+    "sha256": "6a57bafad0c6b312500637d75a4fe58c6dbc8470bf800a0ba4d3520fe7cad65c",
+    "scope": "Read-only observations, not a frozen application build closure or a claim about edits by other agents."
+  },
+  "evidenceManifest": {
+    "path": "dev/artifacts/gpu-f64-transport/manifest.json",
+    "sha256": "873e73a24ee82ee0ee3106c7e1fbb347efdf284ef191039269ed6678996a0eaa"
+  },
+  "documentation": {
+    "path": "docs/gpu-modelica-transport.md",
+    "sha256": "1f8afb1e40a3d1acfc76f02f0dbbe68ad635be72f2d6b967ed913d97ee4604f7"
+  },
+  "durableHashesVerified": true
+}

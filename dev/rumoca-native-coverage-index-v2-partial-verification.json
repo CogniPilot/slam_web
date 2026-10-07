@@ -1,0 +1,218 @@
+{
+  "status": "FOCUSED_PASS_BROAD_STATE_UNOBSERVABLE_AFTER_ENVIRONMENT_CHANGE",
+  "observedAt": "2026-10-05T18:57:56.415Z",
+  "scope": "Reviewed generic bounding-span native assignment candidate index and deterministic exact-edge scheduler; no source model changes. Partial qualification, not native fullframe or capability completion.",
+  "permissions": {
+    "fileSystem": "workspace-write",
+    "writableRoots": [
+      "slam_web",
+      "temporary storage"
+    ],
+    "approval": "never",
+    "network": "restricted",
+    "action": "Read-only external source/cache observations; durable small evidence only in app repository; no restart or external mutation."
+  },
+  "handle": {
+    "session": "56953",
+    "lastWaitCell": "2902",
+    "ownerPoll": "write_stdin: Unknown process id 56953; wait: cell2902 not found",
+    "interpretation": "Tool observation unavailable; missing handle and sandbox PID namespace are not terminal process evidence."
+  },
+  "observationFailure": {
+    "firstArchiveAttempt": "Node child_process spawnSync rg returned EPERM after namespace/policy change; no external write attempted.",
+    "followup": "Read-only hashing of the exact recorded manifest files with Node filesystem APIs; no child process spawn."
+  },
+  "patch": {
+    "sha256": "81cb3fa9e2ac3e1171d51cb3d0004fc08071c25819a45440057a821c82ec4537",
+    "scope": [
+      "crates/rumoca-ir-solve/src/refresh/native_assignment.rs",
+      "crates/rumoca-ir-solve/src/refresh/native_assignment/coverage.rs",
+      "crates/rumoca-ir-solve/src/refresh/native_assignment/dependencies.rs",
+      "crates/rumoca-ir-solve/src/refresh/native_assignment/span_index.rs",
+      "crates/rumoca-ir-solve/src/refresh/native_assignment/span_index/tests.rs"
+    ]
+  },
+  "focused": {
+    "passed": 68,
+    "failed": 0,
+    "testSeconds": 0.16,
+    "resource": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "cargo",
+        "test",
+        "--manifest-path",
+        "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+        "-j4",
+        "--config",
+        "profile.dev.package.rumoca-eval-dae.opt-level=3",
+        "-p",
+        "rumoca-ir-solve",
+        "--lib",
+        "refresh::native_assignment",
+        "--",
+        "--nocapture"
+      ],
+      "log": "/mnt/scratch/jgoppert/slam_web/tmp/native-coverage-index-v2-gate/focused.log",
+      "elapsedMs": 76726.684843,
+      "peakRssKiB": 1645648,
+      "minimumAvailableKiB": 57730320,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    }
+  },
+  "broad": {
+    "logBytes": 433395,
+    "testResultSummaries": 0,
+    "terminalResourcePresent": false,
+    "strictResourcePresent": false,
+    "fmtResourcePresent": false,
+    "linkResourcePresent": false,
+    "status": "UNMEASURED_NO_TERMINAL_RECORD_NO_TEST_SUMMARIES"
+  },
+  "source": {
+    "matchesGateBefore": true,
+    "recordedFiles": 2794,
+    "manifestSha256": "5634c2d27d535195a8461d0aa0f330f9a42f7e3285b0f9446d3d21b9d38603ba",
+    "bookendScope": "Read-only exact recorded-file hash observation against gate-before; no fresh file inventory and driver source-after absent, so not terminal driver bookend."
+  },
+  "observedProducer": {
+    "artifact": {
+      "reason": "compiler-artifact",
+      "package_id": "path+file:///home/jgoppert/git/rumoca-native-functions/crates/rumoca-bind-wasm#0.10.2",
+      "manifest_path": "/home/jgoppert/git/rumoca-native-functions/crates/rumoca-bind-wasm/Cargo.toml",
+      "target": {
+        "kind": [
+          "cdylib",
+          "rlib"
+        ],
+        "crate_types": [
+          "cdylib",
+          "rlib"
+        ],
+        "name": "rumoca_bind_wasm",
+        "src_path": "/home/jgoppert/git/rumoca-native-functions/crates/rumoca-bind-wasm/src/lib.rs",
+        "edition": "2024",
+        "doc": true,
+        "doctest": true,
+        "test": true
+      },
+      "profile": {
+        "opt_level": "1",
+        "debuginfo": "line-tables-only",
+        "debug_assertions": true,
+        "overflow_checks": true,
+        "test": true
+      },
+      "features": [
+        "console_error_panic_hook",
+        "default",
+        "full-web",
+        "native-assignments",
+        "sim-rk45"
+      ],
+      "filenames": [
+        "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_bind_wasm-0a606b19cf79e0fe"
+      ],
+      "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_bind_wasm-0a606b19cf79e0fe",
+      "fresh": false
+    },
+    "binarySha256": "6035472dcae0e2c7c51719f264ebc26230fe0eb1b5b490bd331b41d742ee481d",
+    "bytes": 174767208,
+    "readHashStable": true,
+    "immutableCopyCreated": false,
+    "qualification": "CargoJSON-linked compilation artifact observed; broader execution/strict/formatter/link finalization unqualified. No selected frozen producer issued."
+  },
+  "originalFullFrame": {
+    "sourceSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+    "newAttempt": false,
+    "numericalCases": 0
+  },
+  "nextAction": "Recover authoritative original driver termination if available. After external compiler/cache writes become authorized, complete outstanding broad/strict/fmt/source freeze and immutable producer qualification; do not rerun fullFAST before that.",
+  "archive": [
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/broad-command.json",
+      "sha256": "8aed5ca3a78471d8d445440169f90ea31c9f5ed360ec805de6cdbf916a10d7df",
+      "bytes": 928
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/broad.log",
+      "sha256": "cbfe546dbdca85a6696e96906fd452a48c8a775dc20dfe11ae8563925b478106",
+      "bytes": 433395
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/focused-command.json",
+      "sha256": "6de7b4b91f0b15d439b54280c2d6bd59b88fa342fa97bc45533ca1b7ba7e3da8",
+      "bytes": 598
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/focused-resource.json",
+      "sha256": "f52579c7de398b681f6f2465c3b793b7acff0c207a61b82614e7274e745bca50",
+      "bytes": 697
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/focused.log",
+      "sha256": "56355a00650d8acb8db5c099e50c2ce7528cd76b23f75673f0705e49c83f9e5b",
+      "bytes": 8918
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/gate.mjs",
+      "sha256": "3213acee23ce4e55c9afe846072d37d56961ddf9af91a0241b087d5d19433798",
+      "bytes": 3102
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/observed-cargo-artifacts.json",
+      "sha256": "34754e9b8f2416645ea0861ec03d141cfe6538dcaf6954b432ecf4d4913e426d",
+      "bytes": 44773
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/observed-source.sha256",
+      "sha256": "5634c2d27d535195a8461d0aa0f330f9a42f7e3285b0f9446d3d21b9d38603ba",
+      "bytes": 345966
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/source-before.sha256",
+      "sha256": "5634c2d27d535195a8461d0aa0f330f9a42f7e3285b0f9446d3d21b9d38603ba",
+      "bytes": 345966
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/source/crates/rumoca-ir-solve/src/refresh/native_assignment.rs",
+      "sha256": "926377182896d759094b89108f9a19fe55becc389d130e28be63dd65fd8406d3",
+      "bytes": 16670
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/source/crates/rumoca-ir-solve/src/refresh/native_assignment/coverage.rs",
+      "sha256": "97c27b43670a900d6f94bd21ee9378d72f12aa290022c055f59312a18f52f77d",
+      "bytes": 7253
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/source/crates/rumoca-ir-solve/src/refresh/native_assignment/dependencies.rs",
+      "sha256": "f612d17fe921e535e19df2a1d580429f3db1e918823732c0747f985504d19be5",
+      "bytes": 3516
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/source/crates/rumoca-ir-solve/src/refresh/native_assignment/span_index.rs",
+      "sha256": "b715a5562f773c3d0e13a6511423940eb2a38b9d22a5891b8cdde31de530d9cd",
+      "bytes": 2168
+    },
+    {
+      "path": "dev/artifacts/native-coverage-index-v2-partial/source/crates/rumoca-ir-solve/src/refresh/native_assignment/span_index/tests.rs",
+      "sha256": "27f59886fa0d44018d4e17ada8d454f5b79ed2e37cf045fd7748259bf23f5a91",
+      "bytes": 11778
+    }
+  ]
+}

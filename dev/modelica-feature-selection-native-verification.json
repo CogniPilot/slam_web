@@ -1,0 +1,410 @@
+{
+  "status": "FULL14400_ORIGINAL_AND_COMPACT_SOURCE_REFUSED_NO_NATIVE_ARTIFACT_NO_INTEGRATION",
+  "recordedAt": "2026-10-04T22:35:01.216Z",
+  "fullGeometry": {
+    "width": 160,
+    "height": 90,
+    "scores": 14400,
+    "outputCapacity": 14400,
+    "outputElements": 43200
+  },
+  "producer": {
+    "path": "$HOME/scratch/slam_web/tmp/guard-replay/saturation-producer",
+    "sha256": "27df64656c5c504de5dc181f6ec89664ad597f582105865b9bb65e8cdbe6fd63",
+    "sourceClosureSha256": "1f889e86d65dcd69909dec3dfbedb433f17009370ddd6eb6972d49d29f213c8b",
+    "frozenOwnerSourcesMatch": true,
+    "ownerSha256": {
+      "construction/analysis/loop_compaction/mod.rs": "64a1ab29bb7d88f67d80642e7fa405f44fa7b1e0ec0d69345ffce483277b641d",
+      "construction/analysis/loop_compaction/dependent_domains.rs": "6ce0a314b76ad0bd7de1685932f803482e95c5f686ca95f44ace19d7a6c101e5",
+      "construction/analysis/loop_compaction/loop_local_substitution.rs": "de5f0f63606d8f242a888b07d87fb94b6eeed6b5a6b6bb0c0ebe79dc47848753",
+      "construction/function_shapes/integer_bounds.rs": "94d907a9c57f1d0fc5774f7c400df47bcd324b9841c30f15c6a05d56227e7259",
+      "construction/function_shapes/integer_bounds/flow.rs": "d90c923181a4d45f1cddbc140d4e555287101a55ccb05606e5d9e2a61119c195",
+      "construction/analysis/function_conditionals.rs": "39007865608def06acb483e82cf9b6cdb7b689754856608b2a283fc3dc30e1eb"
+    },
+    "newCargoBuilds": 0,
+    "productionCompilerPinChanged": false
+  },
+  "originalSourceSha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23",
+  "modelChanged": false,
+  "adaptersChanged": false,
+  "attempts": [
+    {
+      "name": "original",
+      "model": "FeatureSelection",
+      "status": "TO_DAE_DEPENDENT_DOMAIN_REFUSAL",
+      "source": "FeatureSelection-original.mo",
+      "sourceSha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23",
+      "error": "Compilation error: FeatureSelection failed in ToDae: unsupported Flat semantic owner `function loop domain`: `SelectRasterFeatures` requires a compact dependent-domain transition; scalar statement expansion is prohibited",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "8,9",
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/FeatureSelection-original.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=FeatureSelection",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/original-v3.json",
+          "/home/jgoppert/scratch/slam_web/tmp/guard-replay/saturation-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/original.log",
+        "elapsedMs": 42.50593599999999,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 30,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "name": "compact",
+      "model": "FeatureSelection",
+      "status": "TO_DAE_CONDITIONAL_FOLD_REFUSAL",
+      "source": "FeatureSelection-compact.mo",
+      "sourceSha256": "956985cc664a04e5f80644dac66282d32581915f08c7ecde9ea43540819f8af8",
+      "error": "Compilation error: FeatureSelection failed in ToDae: unsupported Flat semantic owner `function conditional`: `SelectRasterFeatures` requires assignments or nested conditionals in every checked branch",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "8,9",
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/FeatureSelection-compact.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=FeatureSelection",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/compact-v3.json",
+          "/home/jgoppert/scratch/slam_web/tmp/guard-replay/saturation-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/compact.log",
+        "elapsedMs": 55.113529,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 30,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "name": "runtime-count",
+      "model": "RuntimeCandidateCount",
+      "status": "TO_DAE_DEPENDENT_DOMAIN_REFUSAL",
+      "source": "RuntimeCandidateCount.mo",
+      "sourceSha256": "66454f901ec3911d4dd8878bf92b815f0a1ac194bc061f18bf884a2c1ff18844",
+      "error": "Compilation error: RuntimeCandidateCount failed in ToDae: unsupported Flat semantic owner `function loop domain`: `RuntimeCandidateCountFold` requires a compact dependent-domain transition; scalar statement expansion is prohibited",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "8,9",
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/RuntimeCandidateCount.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=RuntimeCandidateCount",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/runtime-count-v3.json",
+          "/home/jgoppert/scratch/slam_web/tmp/guard-replay/saturation-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/runtime-count.log",
+        "elapsedMs": 15.428603000000003,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 30,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "name": "conditional-fold",
+      "model": "ConditionalRasterFold",
+      "status": "TIMEOUT_WITHOUT_PHASE_EVIDENCE",
+      "source": "ConditionalRasterMap-control.mo",
+      "sourceSha256": "7f9ae4f08d1ea737025c4cee479285f6f557bd65dec4037a10eefcc78c34526f",
+      "error": null,
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "8,9",
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/ConditionalRasterFold.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=ConditionalRasterFold",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/conditional-fold-v3.json",
+          "/home/jgoppert/scratch/slam_web/tmp/guard-replay/saturation-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/conditional-fold.log",
+        "elapsedMs": 30071.024022999998,
+        "peakRssKiB": 35364,
+        "minimumAvailableKiB": 56586340,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 30,
+        "stopped": "timeout",
+        "signal": "SIGKILL",
+        "exitCode": 124
+      }
+    },
+    {
+      "name": "conditional-carried-fold",
+      "model": "ConditionalRasterFold",
+      "status": "TIMEOUT_WITHOUT_PHASE_EVIDENCE",
+      "source": "ConditionalRasterFold.mo",
+      "sourceSha256": "0c3740fcfb8ac52c7afa13e22310bd522c2ef926b4199b2c5de92acbccf22c02",
+      "error": null,
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "8,9",
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/ConditionalRasterFold.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=ConditionalRasterFold",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/conditional-carried-fold-v3.json",
+          "/home/jgoppert/scratch/slam_web/tmp/guard-replay/saturation-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/conditional-carried-fold.log",
+        "elapsedMs": 30060.792435,
+        "peakRssKiB": 33692,
+        "minimumAvailableKiB": 56210648,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 30,
+        "stopped": "timeout",
+        "signal": "SIGKILL",
+        "exitCode": 124
+      }
+    },
+    {
+      "name": "entry-guard",
+      "model": "EntryGuardRasterFold",
+      "status": "TIMEOUT_WITHOUT_PHASE_EVIDENCE",
+      "source": "EntryGuardRasterFold.mo",
+      "sourceSha256": "d12d68f7f6b59ac285bc9546ed1c2e7a4e115e408e7e003b2ffa040022e4f22a",
+      "error": null,
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "8,9",
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/EntryGuardRasterFold.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=EntryGuardRasterFold",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/entry-guard-v3.json",
+          "/home/jgoppert/scratch/slam_web/tmp/guard-replay/saturation-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/feature-selection-native/entry-guard.log",
+        "elapsedMs": 30064.874129,
+        "peakRssKiB": 40664,
+        "minimumAvailableKiB": 56933996,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 30,
+        "stopped": "timeout",
+        "signal": "SIGKILL",
+        "exitCode": 124
+      }
+    }
+  ],
+  "independentExistingOracle": {
+    "status": "PASS_1_ORACLE_3_ACTUAL_WASM_GATES_SKIPPED",
+    "fixtures": 8,
+    "gridAndDomainChecks": true,
+    "fullGridTraversal350": true,
+    "command": "nix develop path:.#ci --command node dev/rumoca-bounded-run.mjs --seconds 30 --rss-mib 4096 --log <scratch>/oracle.log -- nice -n 10 taskset -c 8,9 env -u RUMOCA_BRANCH_PKG node node_modules/vitest/vitest.mjs run --config tests/compiler-probes/vitest.config.ts tests/compiler-probes/modelica-feature-selection.test.ts",
+    "numericalWasmParity": "NOT_RUN_NO_ARTIFACT"
+  },
+  "firstBoundary": {
+    "phase": "ToDae",
+    "owner": "compact_function_loops -> infer_function_integer_bounds / invalidated_integer_targets -> rectangularize_dependent_loops -> first_dependent_loop_range",
+    "mechanism": "candidateCount is a loop-carried conditional recurrence. Existing one-pass interval inference correctly invalidates it rather than guessing a finite bound. No checked fixed-point/induction certificate proves0<=candidateCount<=size(scores,1), so the runtime range1:candidateCount has no compact dependent-domain envelope and is rejected. Full selector also has clipped occupancy ranges and bounded while state transitions.",
+    "minimalReproducer": "RuntimeCandidateCount.mo",
+    "expected": "MLS algorithm for-ranges may depend on runtime values; every loop iteration must retain ordered state updates. The candidate count is bounded by the full raster, requiring a real checked proof.",
+    "genericFix": "Add source-owned checked finite loop-carried recurrence/domain certificates or a compact runtime-domain transition with preserved entry snapshots and exact memberships; do not relax existing invalidation or scalar-expand the raster."
+  },
+  "secondBoundary": {
+    "phase": "ToDae",
+    "owner": "function_conditionals.rs::validate_conditional_branch_shape",
+    "mechanism": "Fixed/gated raster domains remove the first refusal, but a remaining runtime conditional contains a FunctionStatementPlan::For; the checked-branch owner accepts assignments/calls/nested conditional plans and rejects this ordered fold plan.",
+    "genericFix": "Give runtime conditional branches explicit ordered compact fold ownership with branch-entry predicate snapshots, carried definitions and exact output joins. Do not require user-authored SSA temporaries."
+  },
+  "scratchCompactExperiment": {
+    "productionCandidate": false,
+    "fullCapacityRetained": true,
+    "scalarExpansion": false,
+    "algorithmNotes": "Scratch only: full raster loops guarded by actual candidateCount, log2(N)+1 bounded heap-sift iterations guarded by the original while predicate, and fixed maximum-radius16 occupancy offsets clipped by original radius/border bounds. No runnable artifact, hence no equivalence or parity acceptance; unsupported/edited minimumBorder domains are not certified by this experiment."
+  },
+  "limits": [
+    "No native WASM artifact, no actual ranking/NMS numerical acceptance, no adapter integration and no JS/WAT algorithm fallback.",
+    "Three small conditional controls timed out at30s without phase observation. Their cause is unknown; they do not establish ToDae rejection or advance/admission. No retries performed.",
+    "Fast refusal resources have null measured peak RSS because execution ended before resource sampling; the8GiB bound remains recorded, not a measured peak.",
+    "Existing oracle passing is independent reference evidence only, not Modelica execution."
+  ],
+  "specs": [
+    "SPEC_0033 sections2–4,6: first concrete divergence, strict validation, earliest owner fix",
+    "SPEC_0032 section1: compact authoritative domains and stable binders",
+    "SPEC_0007 accepted stage contracts; SPEC_0036 DRAFT construction-design context, not governing acceptance",
+    "MLS3.7 sections11.2.1,11.2.2,11.2.3,11.2.6: ordered assignments, runtime algorithm ranges, while and if semantics"
+  ],
+  "reproduce": "nix develop path:.#ci --command node dev/rumoca-bounded-run.mjs --seconds 30 --rss-mib 8192 --log <scratch>/original.log -- nice -n 10 taskset -c 8,9 env RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=<exact source.mo> RUMOCA_NATIVE_SOURCE_MODEL=FeatureSelection RUMOCA_NATIVE_PROGRAM_ARTIFACT=<scratch>/artifact.json $HOME/scratch/slam_web/tmp/guard-replay/saturation-producer native_registration_whole_program_source_inventory --nocapture",
+  "artifacts": {
+    "FeatureSelection-original.mo": {
+      "bytes": 9389,
+      "sha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23"
+    },
+    "original.log": {
+      "bytes": 902,
+      "sha256": "4c93e95236dea34e87d5ddb8a54474d592334f8382ab5c5cfea0e45585af7d5d"
+    },
+    "original-resource.json": {
+      "bytes": 889,
+      "sha256": "8e7488359de37acc52f04e6f4bb9aa9324070da031d2a55eeffc712e486e340d"
+    },
+    "FeatureSelection-compact.mo": {
+      "bytes": 10460,
+      "sha256": "956985cc664a04e5f80644dac66282d32581915f08c7ecde9ea43540819f8af8"
+    },
+    "compact.log": {
+      "bytes": 881,
+      "sha256": "570d0bd16abe1fac8120bbdd7a45db29fef7adb87bd808218036d496dd4acba8"
+    },
+    "compact-resource.json": {
+      "bytes": 878,
+      "sha256": "7bfdc42f9e22ed5f9112cbf5ecb7ffe9ac43c331b118650f262ed7d483006093"
+    },
+    "RuntimeCandidateCount.mo": {
+      "bytes": 795,
+      "sha256": "66454f901ec3911d4dd8878bf92b815f0a1ac194bc061f18bf884a2c1ff18844"
+    },
+    "runtime-count.log": {
+      "bytes": 912,
+      "sha256": "c2e30dc77e254168034679e3620bf4384e9553df5b5ccaf43a399436f1bb3be7"
+    },
+    "runtime-count-resource.json": {
+      "bytes": 901,
+      "sha256": "0570d42dedc870e29432c4eca045cddf6288863481f05ad242e44a586708c090"
+    },
+    "ConditionalRasterMap-control.mo": {
+      "bytes": 776,
+      "sha256": "7f9ae4f08d1ea737025c4cee479285f6f557bd65dec4037a10eefcc78c34526f"
+    },
+    "conditional-fold.log": {
+      "bytes": 16,
+      "sha256": "daf071121a9ffe32bbce44190e37a068c96d08bff63fd7b660dd95b77d786dca"
+    },
+    "conditional-fold-resource.json": {
+      "bytes": 937,
+      "sha256": "cedafd624e2b4d5603bce42028c23ddc8cd68c44b068c9e7cf4baafd8670cc04"
+    },
+    "ConditionalRasterFold.mo": {
+      "bytes": 804,
+      "sha256": "0c3740fcfb8ac52c7afa13e22310bd522c2ef926b4199b2c5de92acbccf22c02"
+    },
+    "conditional-carried-fold.log": {
+      "bytes": 16,
+      "sha256": "daf071121a9ffe32bbce44190e37a068c96d08bff63fd7b660dd95b77d786dca"
+    },
+    "conditional-carried-fold-resource.json": {
+      "bytes": 947,
+      "sha256": "cf0b1e8ba1506cd2be5eb2075f2dfa6df52028f2bb28f232002e47647f4ee738"
+    },
+    "EntryGuardRasterFold.mo": {
+      "bytes": 931,
+      "sha256": "d12d68f7f6b59ac285bc9546ed1c2e7a4e115e408e7e003b2ffa040022e4f22a"
+    },
+    "entry-guard.log": {
+      "bytes": 16,
+      "sha256": "daf071121a9ffe32bbce44190e37a068c96d08bff63fd7b660dd95b77d786dca"
+    },
+    "entry-guard-resource.json": {
+      "bytes": 919,
+      "sha256": "082f864081c6b5cd075ca19a76e896cd3ab2204cdb9b103e56d2ddd1e82a1bb2"
+    },
+    "oracle.log": {
+      "bytes": 220,
+      "sha256": "88686a8d6c8929a15b23f48a3bb9b4f93f64e812c70867a5ac1103422716eb48"
+    },
+    "oracle-resource.json": {
+      "bytes": 601,
+      "sha256": "e334f43c37255d568c4a4d849ae9aae9899b9b39cdaa160f55f58c86b8b681be"
+    }
+  },
+  "ownerAudit": {
+    "status": "CHECKED_INDUCTION_BOUNDED_WHILE_CONDITIONAL_FOLD_DESIGN_ONLY",
+    "originalSourceUnchanged": true,
+    "compilerEdits": 0,
+    "cargoRuns": 0,
+    "sourceNumericAcceptance": false,
+    "proposal": "dev/artifacts/feature-selection-owner-proposal/proposal.md",
+    "sha256": "c34d27f23288faf8e4ca54703e9e1d70ffd43974721f39505937d53a94b03410",
+    "boundaries": [
+      {
+        "name": "candidateCount after conditional repeated raster updates",
+        "kind": "Current owner invalidates unproved recurrence; dependent For1:count has no checked finite envelope."
+      },
+      {
+        "name": "ordinary bounded While transition",
+        "kind": "FunctionStatementPlan has no While owner; existing integer-series specialization does not cover heap/raster loops."
+      },
+      {
+        "name": "ordered For inside a runtime If branch",
+        "kind": "Expression-value conditional join rejects ordered branch transitions."
+      }
+    ],
+    "scope": "Current-source read-only trace, historically executed full14400 minimal count reproducer, two explicitly unexecuted isolators and independent fixture-boundary assertions. No admission or performance claim."
+  }
+}

@@ -1,0 +1,674 @@
+{
+  "schemaVersion": 1,
+  "status": "ACTUAL_FULL350_NATIVE_AND_CHROMIUM_NUMERIC_PASS",
+  "scope": "Unchanged full350 estimated-pose optical RDF to world ENU candidate projection; isolated review compiler, no production activation",
+  "sourceSha256": "98fe255ff54004d5bc76f7c68cf4c93da2d0a8be45fac9cac52beec3fbe5e412",
+  "editedSourceSha256": "90d5c7e452104642690d6f1e7ae6a9e0e44f859c79864f812f60d3e74108af10",
+  "dimensions": {
+    "capacity": 350,
+    "opticalPoint": [
+      350,
+      3
+    ],
+    "worldPoint": [
+      350,
+      3
+    ],
+    "publicOutputsPerCase": 1404
+  },
+  "productionPinChanged": false,
+  "runtimeIntegrated": false,
+  "persistentMap": false,
+  "fullSlamAccepted": false,
+  "tenTimesTargetAccepted": false,
+  "historicalOrdinaryWasmEvidence": "dev/modelica-rgbd-landmark-projection-verification.json",
+  "nativeHistory": [
+    {
+      "status": "ACTUAL_FULL350_NATIVE_PREPARATION_REFUSED",
+      "refusal": "native scalar program requires one terminal scalar output",
+      "artifactIssued": false,
+      "actualNumericCases": 0,
+      "binarySha256": "e8ea555b92e4449dbe7e00d5a68290fdcdfb9d43ffcd332b4862fd74ca4cf107",
+      "compilerSourceClosureSha256": "f2ccedcd85585c4f05eada967a0db21e11a674b2cdad8048ac045f60ab75f1a5",
+      "fullLogSha256": "5c4b02670b3ff07d3cce44d0cb7cf74336a0a5298a4dd5ba746cf509dd313b59",
+      "refusalExcerpt": "dev/artifacts/rgbd-landmark-projection/native-v3/baseline-prepare-refusal-excerpt.log",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10",
+          "$HOME/scratch/slam_web/tmp/landmark-native-v3/producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/baseline-prepare.log",
+        "elapsedMs": 1928.19641,
+        "peakRssKiB": 154936,
+        "minimumAvailableKiB": 58370444,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "status": "ACTUAL_FULL350_NATIVE_PREPARATION_REFUSED",
+      "refusal": "native tensor residual couples its owned target range",
+      "artifactIssued": false,
+      "actualNumericCases": 0,
+      "binarySha256": "c7be651df79642bb09ab84311b8630e95305588b611615d889e64c291e13029f",
+      "compilerSourceClosureSha256": "9105430b2b94ec664671f1368d7be18d9e26949b90fcd556f82d5637bc1356ac",
+      "fullLogSha256": "38d4e05c16b7a1ae3831bbb6f4ca52fc4bf5125b16162f5ad56629b5f6af1d73",
+      "refusalExcerpt": "dev/artifacts/rgbd-landmark-projection/native-v3/after-fix-prepare-refusal-excerpt.log",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10",
+          "$HOME/scratch/slam_web/tmp/landmark-native-v3/fixed-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/after-fix-prepare.log",
+        "elapsedMs": 2197.339755,
+        "peakRssKiB": 156348,
+        "minimumAvailableKiB": 53482864,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "status": "ACTUAL_FULL350_NATIVE_PREPARATION_REFUSED",
+      "refusal": "native assignment varying constants require an unsupported coefficient proof",
+      "artifactIssued": false,
+      "actualNumericCases": 0,
+      "binarySha256": "f60f92790844ae6fc4eb6dbdf5e23f7161329131db9f0767edccfb0d54516bf2",
+      "compilerSourceClosureSha256": "8fed7bc76ca6811744f6e012065f0609bd84f2ccfacfe4618aff7b53b038df19",
+      "fullLogSha256": "dbff2a27e18cca08a1a4e87b72f14eb871326656c793166b473ccc2da478c700",
+      "refusalExcerpt": "dev/artifacts/rgbd-landmark-projection/native-v3/final-prepare-refusal-excerpt.log",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10",
+          "$HOME/scratch/slam_web/tmp/landmark-native-v3/final-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/final-prepare.log",
+        "elapsedMs": 1850.257202,
+        "peakRssKiB": 162548,
+        "minimumAvailableKiB": 56935188,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 101
+      }
+    }
+  ],
+  "sourceInventory": {
+    "rawSolveSha256": "df96f6cd5eda0ab88d7da66e671a00cf74255a2c636adf3a960b82ee799d4c2f",
+    "rawSolveRetained": "$HOME/scratch/slam_web/tmp/landmark-native-v3/solve.json",
+    "canonicalSchemaVersion": 70,
+    "firstMultiOutputProgram": 34,
+    "multiOutputPrograms": 700,
+    "terminalStoresPerProgram": 3,
+    "firstTargets": [
+      2919,
+      2920,
+      2921
+    ],
+    "originalStoreRegisters": [
+      24,
+      25,
+      26
+    ],
+    "firstResidualTargetProducers": "Original separate LoadY registers0/1/2; no synthesized TensorLoad",
+    "varyingConstantNodes": [
+      1414,
+      1416
+    ],
+    "varyingConstantMeaning": "Original binder i=1..350 used only for RHS count-eligibility guards; direct residual has structurally fixed target coefficient"
+  },
+  "verifiedCompilerPatch": {
+    "compilerSourceClosureSha256": "8fed7bc76ca6811744f6e012065f0609bd84f2ccfacfe4618aff7b53b038df19",
+    "manifestFiles": 2380,
+    "sourceClosureManifest": "dev/artifacts/rgbd-landmark-projection/native-v3/source-closure.sha256",
+    "producerBinarySha256": "f60f92790844ae6fc4eb6dbdf5e23f7161329131db9f0767edccfb0d54516bf2",
+    "scope": "Exact terminal scalar-store sequence and original scalar LoadY target recognition. Complete original prefix/store identity, full target taint, independent call-input obligations and SSA uniqueness retained.",
+    "focused": {
+      "status": "PASS",
+      "tests": 8,
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "6,7",
+          "cargo",
+          "test",
+          "--manifest-path",
+          "../rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "--features",
+          "rumoca-bind-wasm/native-assignments",
+          "--lib",
+          "scalar_stores"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/checks/load-patch/focused.log",
+        "elapsedMs": 249158.612166,
+        "peakRssKiB": 3102004,
+        "minimumAvailableKiB": 52494816,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "fullIrLibrary": {
+      "status": "PASS",
+      "tests": 391,
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "6,7",
+          "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_ir_solve-4b38cdeaad3fe96a"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/checks/load-patch/full-ir.log",
+        "elapsedMs": 107.27319399999999,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 60,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "strictClippy": {
+      "status": "PASS",
+      "packages": [
+        "rumoca-ir-solve",
+        "rumoca-core",
+        "rumoca-phase-dae"
+      ],
+      "allTargets": true,
+      "allFeatures": true,
+      "warningsDenied": true,
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "6,7",
+          "cargo",
+          "clippy",
+          "--manifest-path",
+          "../rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-phase-dae",
+          "--all-targets",
+          "--all-features",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/checks/load-patch/clippy.log",
+        "elapsedMs": 11384.367264,
+        "peakRssKiB": 1445428,
+        "minimumAvailableKiB": 55398116,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "formatter": {
+      "status": "PASS",
+      "scope": "Five edited multi-output/source-load owner files, before later coefficient edits"
+    },
+    "cache": {
+      "policy": "Existing task-owned scratch target reused with parent authorization; no cache cap claimed",
+      "sampledSizeGiB": 21
+    },
+    "pendingBroadValidation": [
+      "Tier1 fixed20 MSL canary delta",
+      "Proper final-source upstream architecture gate",
+      "Full MSL cohort"
+    ]
+  },
+  "evidenceDirectory": "dev/artifacts/rgbd-landmark-projection/native-v3",
+  "temporaryEvidenceStorage": "$HOME/scratch/slam_web/tmp/landmark-native-v3",
+  "typecheck": {
+    "status": "PASS",
+    "resource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10",
+        "/nix/store/gxq2cd70i077rah1d4hkzc1lpq8q4pv8-nodejs-24.21.0/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/checks/typecheck.log",
+      "elapsedMs": 7321.235584999999,
+      "peakRssKiB": 561244,
+      "minimumAvailableKiB": 48786700,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 4096,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "signal": null,
+      "exitCode": 0
+    }
+  },
+  "sourceFiles": {
+    "models/RGBDLandmarkProjection.mo": "98fe255ff54004d5bc76f7c68cf4c93da2d0a8be45fac9cac52beec3fbe5e412",
+    "tests/compiler-probes/modelica-rgbd-landmark-projection.test.ts": "75dffcb3c2f056b8482e62eb63d6342fd55f937328d79fdf4e97479778fcf2d5",
+    "dev/vitest-landmark-projection.config.ts": "8d2b5351343535fff8ee86added39fc57f1e055a5003f79c4f10a7e275424dd4"
+  },
+  "nativeAdmission": {
+    "status": "ACTUAL_UNCHANGED_FULL350_NATIVE_ARTIFACT_ISSUED",
+    "producerBinarySha256": "745f8942e586d94a697e81aca41f2044b52781c608d3059f9f4a549fa1c58bf2",
+    "compilerSourceClosureSha256": "53db01b95ff69ab59122c068b5697c162a199c2f3937bfc3dca4a57e1d2eacd8",
+    "compilerSourceClosureManifest": "dev/artifacts/rgbd-landmark-projection/native-v3/coefficient-source-closure.sha256",
+    "compilerRevisionHint": "03e6b59a47f1; dirty isolated tree, exact binary/source hashes authoritative",
+    "sourceUnchanged": true,
+    "artifacts": [
+      {
+        "name": "baseline",
+        "artifactSha256": "098d1b40df08a070a211d4f4324d2d9af905f608ee17117c256fcf87c94c1379",
+        "source_sha256": "98fe255ff54004d5bc76f7c68cf4c93da2d0a8be45fac9cac52beec3fbe5e412",
+        "module_sha256": "33d81dbdf0d8f39db3e93fafddc4f153d3d8b9c07af6e70e086217cd4ab0a559",
+        "module_bytes": 845720,
+        "stages": 2150,
+        "compiler": {
+          "version": "0.10.1",
+          "git_commit": "03e6b59a47f1"
+        },
+        "profile": "native-direct-program-f64-v2",
+        "abi": {
+          "export": "eval_assignments",
+          "arguments": [
+            "yPtr:i32",
+            "pPtr:i32",
+            "time:f64",
+            "reservedSeedPtr:i32",
+            "reservedOutputPtr:i32"
+          ],
+          "memory_import": "env.memory",
+          "memory_shared": false,
+          "memory_pages": 2,
+          "y_offset": 0,
+          "p_offset": 59800,
+          "y_count": 7475,
+          "p_count": 1433,
+          "reserved_pointer_value": 0
+        },
+        "publicOutputShapes": {
+          "worldPoint": [
+            350,
+            3
+          ],
+          "landmarkEnabled": [
+            350
+          ]
+        }
+      },
+      {
+        "name": "edited",
+        "artifactSha256": "b5414036c20ee8aa2bc49a55178e9c82d23d578ef3ba61b2ba442addaa365799",
+        "source_sha256": "90d5c7e452104642690d6f1e7ae6a9e0e44f859c79864f812f60d3e74108af10",
+        "module_sha256": "33d81dbdf0d8f39db3e93fafddc4f153d3d8b9c07af6e70e086217cd4ab0a559",
+        "module_bytes": 845720,
+        "stages": 2150,
+        "compiler": {
+          "version": "0.10.1",
+          "git_commit": "03e6b59a47f1"
+        },
+        "profile": "native-direct-program-f64-v2",
+        "abi": {
+          "export": "eval_assignments",
+          "arguments": [
+            "yPtr:i32",
+            "pPtr:i32",
+            "time:f64",
+            "reservedSeedPtr:i32",
+            "reservedOutputPtr:i32"
+          ],
+          "memory_import": "env.memory",
+          "memory_shared": false,
+          "memory_pages": 2,
+          "y_offset": 0,
+          "p_offset": 59800,
+          "y_count": 7475,
+          "p_count": 1433,
+          "reserved_pointer_value": 0
+        },
+        "publicOutputShapes": {
+          "worldPoint": [
+            350,
+            3
+          ],
+          "landmarkEnabled": [
+            350
+          ]
+        }
+      }
+    ],
+    "baselineResource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10",
+        "$HOME/scratch/slam_web/tmp/landmark-native-v3/coefficient-producer",
+        "native_registration_whole_program_source_inventory",
+        "--nocapture"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/coefficient-prepare.log",
+      "elapsedMs": 2911.47039,
+      "peakRssKiB": 288168,
+      "minimumAvailableKiB": 57000896,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    },
+    "editedResource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10",
+        "$HOME/scratch/slam_web/tmp/landmark-native-v3/coefficient-producer",
+        "native_registration_whole_program_source_inventory",
+        "--nocapture"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/coefficient-edited-prepare.log",
+      "elapsedMs": 3100.0369739999996,
+      "peakRssKiB": 295500,
+      "minimumAvailableKiB": 58231332,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    },
+    "artifactDirectory": "$HOME/scratch/slam_web/tmp/landmark-native-v3"
+  },
+  "coefficientProof": {
+    "status": "FOCUSED_FULL_IR_AND_STRICT_CLIPPY_PASS",
+    "scope": "Original terminal bare scalar LoadY target subtraction/zero-load gives fixed target coefficient in every tuple, checked against existing Direct/Zero shape. Original varying constants/full prefix retained; varying coefficients/wrappers/cross-target affine reads still refuse.",
+    "controls": 5,
+    "focusedResource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "8,9",
+        "$HOME/scratch/slam_web/tmp/landmark-native-v3/checks/coefficient/ir-tests",
+        "refresh::native_assignment::tests::varying_constants"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/checks/coefficient/focused.log",
+      "elapsedMs": 10.706599,
+      "peakRssKiB": null,
+      "minimumAvailableKiB": null,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "signal": null,
+      "exitCode": 0
+    },
+    "fullIrTests": 396,
+    "fullIrResource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "8,9",
+        "$HOME/scratch/slam_web/tmp/landmark-native-v3/checks/coefficient/ir-tests"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/checks/coefficient/full-ir.log",
+      "elapsedMs": 51.684674,
+      "peakRssKiB": null,
+      "minimumAvailableKiB": null,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "signal": null,
+      "exitCode": 0
+    },
+    "testBinarySha256": "5d090a1c57e50cdb607c1561df50f5571c0b6c8562a12cdd6ecf250577de73a1",
+    "strictClippy": {
+      "status": "PASS",
+      "packages": [
+        "rumoca-exec-wasm",
+        "rumoca-ir-solve",
+        "rumoca-bind-wasm",
+        "rumoca-eval-dae",
+        "rumoca-phase-dae",
+        "rumoca-core",
+        "rumoca-ir-dae"
+      ],
+      "allTargets": true,
+      "allFeatures": true,
+      "warningsDenied": true,
+      "compilerSourceClosureSha256": "4e19f69ae53c60c0cddf407a122a257f83a400aa27733d55c239ee30d7622f71",
+      "compilerSourceClosureManifest": "dev/artifacts/rgbd-landmark-projection/native-v3/coefficient-strict-source-closure.sha256",
+      "coefficientOwnerFilesUnchanged": true,
+      "log": "dev/artifacts/rgbd-landmark-projection/native-v3/coefficient-strict-clippy.log",
+      "resourceRecord": "dev/rumoca-function-quotient-strict-resource.json",
+      "resource": {
+        "command": [
+          "env",
+          "CARGO_TARGET_DIR=$HOME/scratch/slam_web/build/rumoca-native-target",
+          "TMPDIR=$HOME/scratch/slam_web/tmp",
+          "CARGO_INCREMENTAL=0",
+          "CARGO_BUILD_JOBS=4",
+          "RUST_TEST_THREADS=4",
+          "RAYON_NUM_THREADS=4",
+          "taskset",
+          "-c",
+          "4,5,10,11",
+          "nice",
+          "-n",
+          "10",
+          "cargo",
+          "clippy",
+          "--manifest-path",
+          "../rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "--all-targets",
+          "--all-features",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/quotient-owner/strict-clippy-verified.log",
+        "elapsedMs": 2081.543186,
+        "peakRssKiB": 1127072,
+        "minimumAvailableKiB": 58744268,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    }
+  },
+  "nativeNumericalGate": {
+    "status": "ACTUAL_FULL350_NUMERIC_PASS",
+    "actualCompletedGroups": 4,
+    "actualCompletedCases": 40,
+    "publicOutputsPerCase": 1404,
+    "actualOutputComparisons": 56160,
+    "independentOracle": "Test-only Rodrigues rotation, explicit optical RDF→body FLU→world ENU transform and full domain/pose validity checks",
+    "absoluteTolerance": 2e-11,
+    "checks": [
+      "All350 general6DOF positions/nonidentity camera extrinsics/leverarm/near-half-turn",
+      "Sparse first/last slots, maskedNaN and full slot preservation",
+      "NaN/Infinity/malformed counts and eligibility/axial-depth/coordinates",
+      "Rejected poses, reflection/singular/scaled/nonfinite rotations",
+      "Output-domain refusal, complete input-P byte immutability, recovery/reset",
+      "CoordinateLimit source edit, source/module-bound JSON reload and digest rejection"
+    ],
+    "sourceEdit": {
+      "edit": "coordinateLimit default1e6→1.0",
+      "capacityUnchanged": true,
+      "moduleUnchanged": true,
+      "boundParameterPayloadChanged": true,
+      "observedEditedInvalidCount": 350
+    },
+    "rawRecord": "dev/artifacts/rgbd-landmark-projection/native-v3/native-numeric.json",
+    "resource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10",
+        "/nix/store/gxq2cd70i077rah1d4hkzc1lpq8q4pv8-nodejs-24.21.0/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "dev/vitest-landmark-projection.config.ts"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/landmark-native-v3/native-numeric.log",
+      "elapsedMs": 2991.349352,
+      "peakRssKiB": 509536,
+      "minimumAvailableKiB": 58551160,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    },
+    "browserExecuted": true,
+    "productionPinChanged": false
+  },
+  "standaloneExecutionCaseTimings": {
+    "scope": "NativeProgram.evaluate only; input copy/output ownership/oracle excluded; case timings include initial JIT; no browser or whole-pipeline claim",
+    "meanMs": 1.3155305499999954,
+    "minMs": 0.1984019999999873,
+    "maxMs": 18.471563000000003
+  },
+  "compilerOwnedFiles": [
+    "crates/rumoca-ir-solve/src/refresh/native_assignment.rs",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/scalar.rs",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/range.rs",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/varying_constants.rs",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/tests.rs",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/tests/scalar_stores.rs",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/tests/varying_constants.rs"
+  ],
+  "compilerOwnedFileSha256": {
+    "crates/rumoca-ir-solve/src/refresh/native_assignment.rs": "7bfde3400630c8d104a3245492fcf7e771181b07af180dd4d47ae5c69e35aa37",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/scalar.rs": "e29396a5f95fcecfb74029c799ad0d0dff082ec52222d21990a9366db85965aa",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/range.rs": "85b9bb12403cd08a36385380d58553ab98d34f7b6e446669b267eb488f13b7d8",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/varying_constants.rs": "2c90441c73a34b8f031db70b3b485b8cdfc1c364b0854cb8354d6716c87bff0a",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/tests.rs": "12e2868245bf719cf8960921c1b81637278cd49bd2672068ad065436eba9b61a",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/tests/scalar_stores.rs": "09e54a06f9a524603b27e3c4dec2fffd3d1675b9bc914760a2c60d82e4bdd660",
+    "crates/rumoca-ir-solve/src/refresh/native_assignment/tests/varying_constants.rs": "0eb572e2ab5ab5b4c4a395e8cc0de0cf82fdb00707244c5041792adeeb04eaef"
+  },
+  "browserVerification": "dev/modelica-rgbd-landmark-projection-browser-verification.json"
+}

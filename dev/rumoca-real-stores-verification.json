@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "status": "SOURCE_ISSUED_FULL14400_COMPARISON_AND_CHROMIUM_PROOF_PASS_BROADER_GATES_PENDING",
+  "recordedAt": "2026-10-04T23:22:23.521Z",
+  "compilerBranch": "slam-native-functions",
+  "files": [
+    {
+      "path": "../rumoca-native-functions/crates/rumoca-exec-wasm/src/typed_call/numbers.rs",
+      "sha256": "bf590c985dac5691739a85613d0a540b3dafcae30ba4131a7516197175005bfb"
+    },
+    {
+      "path": "../rumoca-native-functions/crates/rumoca-exec-wasm/tests/suite_typed_calls/real_stores.rs",
+      "sha256": "e09dfb7866de87af2ca113a17f29af13d19814c1eea4a744df6bd45787a87827"
+    }
+  ],
+  "implementation": "Typed numeric Real destinations use F64Store directly; Real unary/binary/IntegerToReal paths retain F64 stack values. Integer and Boolean paths retain I64Store. Cell addresses,widths,FramePlan,ABI,operationorder,faultinventory and success-only output publication unchanged.",
+  "gate": {
+    "testsPassed": 63,
+    "testsFailed": 0,
+    "elapsedMs": 22241.670078,
+    "peakRssKiB": 618404,
+    "exitCode": 0,
+    "cpuAffinity": "4,5",
+    "buildJobs": 2,
+    "testThreads": 2,
+    "log": {
+      "path": "dev/artifacts/real-stores/typed-calls.log",
+      "sha256": "ddafef43b998aed664245d392d3999defd1c16663bf5331e30a31719cc4aa7f0"
+    }
+  },
+  "addedControls": {
+    "rawNumericTuples": 84,
+    "outputScalarsPerTuple": 5,
+    "types": [
+      "Real Negate",
+      "Real Abs",
+      "IntegerToReal",
+      "Real comparison Boolean",
+      "Integer Add"
+    ],
+    "realInputCases": [
+      "bothsignedzeros",
+      "bothsubnormals",
+      "finitevalues",
+      "finiteextremes",
+      "infinities",
+      "bothquietNaNpayloads",
+      "bothsignalingNaNpayloads"
+    ],
+    "integerCases": [
+      "MIN",
+      "MAX-1",
+      "-1",
+      "0",
+      "2^53+1",
+      "7"
+    ],
+    "laterIntegerOverflow": {
+      "publicOutputUnchanged": true,
+      "readOnlyInputUnchanged": true,
+      "faultSourcePreserved": true,
+      "nextCallRecovery": true
+    }
+  },
+  "diagnostic": "dev/registration-f64-store-diagnostic-verification.json",
+  "sourceIssuedCandidate": {
+    "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "producerSha256": "f07fb9c7dbf3fc8647b534b28c1c3624a97ab3789107af83958c2dc3660c4f52",
+    "producerSourceClosure": "$HOME/scratch/slam_web/tmp/guard-replay/size-retry-source-closure.sha256",
+    "moduleSha256": "217e17e55469425c2c6e0f685749accb5b26d64f66043029d36dddc9d0c4443e",
+    "artifactSha256": "2e1fe3aee51261defdca097caeba34c317c3026010415e9a8df7c563c40e4ca2",
+    "moduleBytes": 71577,
+    "sourceCapacity": 14400,
+    "resource": "dev/artifacts/real-stores/prepare-resource.json",
+    "provenanceNote": "Production compiled and 80 of 82 projection controls passed in producer gate; two test fixture declaration-order failures retained and later repaired. Subsequent producer gate passes all 82 controls; this artifact remains bound to its original producer."
+  },
+  "sourceIssuedPerformanceComparison": "dev/artifacts/real-stores/comparison.json",
+  "limits": [
+    "Isolated unchanged full14400 registration kernel; no sensor, matching, filter or whole-pipeline throughput claim.",
+    "New compiler branch is not selected by the production preview.",
+    "Combined fresh strict Clippy and fixed20 MSL canary pending; focused and browser proof do not replace these broader gates."
+  ],
+  "productionPinChanged": false,
+  "runtimeIntegrated": false,
+  "fullSlam": false,
+  "browserProof": "dev/artifacts/real-stores/browser.json",
+  "evidence": [
+    {
+      "path": "dev/artifacts/real-stores/comparison.json",
+      "sha256": "36dbbf83675d827c46ac5a20725479ab1022c4896f83b1983786fd1071e5c952"
+    },
+    {
+      "path": "dev/artifacts/real-stores/browser.json",
+      "sha256": "206611cd00f131701055723dd41964aefc92a75b19e5a204a94adea2b64ac3fa"
+    },
+    {
+      "path": "dev/artifacts/real-stores/prepare-resource.json",
+      "sha256": "cc178d4dd693d885d858e865de85ab9a41d07952effce881a1828944fa23c6a3"
+    },
+    {
+      "path": "dev/artifacts/real-stores/comparison-resource.json",
+      "sha256": "8f05bd2246a7293b1ae5df4ddae47173516941b4145883364d553bb7a900cf2e"
+    },
+    {
+      "path": "dev/artifacts/real-stores/browser-resource.json",
+      "sha256": "7cb756fed881cb2b4b2e4cf61adc67a2aec96fc04666920f899846126cb50f13"
+    }
+  ],
+  "freshBrowserSourceIssuance": {
+    "report": "dev/artifacts/fresh-browser-components/registration-issuance.json",
+    "resource": "dev/artifacts/fresh-browser-components/registration-issuance-resource.json",
+    "sourceClosure": "dev/artifacts/fresh-browser-components/compiler-source-closure.sha256",
+    "sourceClosureSha256": "1198b1d5ad45968dc73268140b201fbf52de3c94693c0de75017ac96ce2e1616",
+    "compileMs": 30339.299999952316,
+    "compilerModuleSha256": "ab869fb0dadc54d75badf3c6e39a492d4d408a207829732e20ce64a72aa831d2",
+    "byteIdenticalToActualNumericalProof": true,
+    "numericalProof": "dev/artifacts/native-field-handoff/browser.json",
+    "limitation": "This frozen package predates new indexed-write and Floor-memo changes; fresh combined compiler gates remain required."
+  }
+}

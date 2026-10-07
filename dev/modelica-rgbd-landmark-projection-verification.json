@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "status": "ACTUAL_FULL350_ORDINARY_WASM_PASS_NATIVE_EXPORT_REFUSED",
+  "scope": "Estimated-pose world-ENU candidate projection; no persistent map or app activation",
+  "sourceSha256": "98fe255ff54004d5bc76f7c68cf4c93da2d0a8be45fac9cac52beec3fbe5e412",
+  "editedSourceSha256": "90d5c7e452104642690d6f1e7ae6a9e0e44f859c79864f812f60d3e74108af10",
+  "sourceFiles": {
+    "models/RGBDLandmarkProjection.mo": "98fe255ff54004d5bc76f7c68cf4c93da2d0a8be45fac9cac52beec3fbe5e412",
+    "tests/compiler-probes/modelica-rgbd-landmark-projection.test.ts": "5d2338bdf01d9edc4039c941daf544b46b8408e75b4379d553e9762c8d147f69",
+    "dev/vitest-landmark-projection.config.ts": "8d2b5351343535fff8ee86added39fc57f1e055a5003f79c4f10a7e275424dd4"
+  },
+  "compiler": {
+    "package": "review full-web package",
+    "wasmSha256": "1c8384cdbca344e66641a5d76eaee8ee2012bc106be052d8f3ce8472cb5f9cba",
+    "javascriptSha256": "ed6485d29e1307084b1ca5d9aefe0d3e4834c3ae780913fac54aae935eb02b8f",
+    "productionPinChanged": false
+  },
+  "dimensions": {
+    "capacity": 350,
+    "point": [
+      350,
+      3
+    ],
+    "rotations": [
+      3,
+      3
+    ],
+    "publicOutputsCheckedPerCase": 1404
+  },
+  "numericalGate": {
+    "execution": "ordinary WasmSimulationSession; native schedule remains refused",
+    "status": "ACTUAL_FULL350_ORDINARY_SESSION_NUMERIC_PASS",
+    "actualCompletedCases": 22,
+    "actualOutputComparisons": 30888,
+    "independentOracle": "Test-only Rodrigues proper rotation and explicit source→body→world multiplication",
+    "absoluteTolerance": 2e-11,
+    "caseNames": [
+      "full350 RDF axes",
+      "general6DOF+leverarm+extrinsics",
+      "near half-turn proper rotation",
+      "sparse first+late slot",
+      "invalid/empty count -1",
+      "invalid/empty count 0.5",
+      "invalid/empty count 351",
+      "invalid/empty count 0",
+      "finite candidate/domain refusals",
+      "improper bodyRotation/-1",
+      "improper bodyRotation/0",
+      "improper bodyRotation/2",
+      "improper opticalToBody/-1",
+      "improper opticalToBody/0",
+      "improper opticalToBody/2",
+      "rejected estimated pose",
+      "malformed pose flag",
+      "transformed domain refusal",
+      "full350 recovery",
+      "reset/replay",
+      "coordinateLimit source edit",
+      "edited source JSON reload"
+    ],
+    "preparations": [
+      {
+        "sourceSha256": "98fe255ff54004d5bc76f7c68cf4c93da2d0a8be45fac9cac52beec3fbe5e412",
+        "elapsedMs": 5234.973062
+      },
+      {
+        "sourceSha256": "90d5c7e452104642690d6f1e7ae6a9e0e44f859c79864f812f60d3e74108af10",
+        "elapsedMs": 3882.456391999999
+      },
+      {
+        "sourceSha256": "90d5c7e452104642690d6f1e7ae6a9e0e44f859c79864f812f60d3e74108af10",
+        "elapsedMs": 3800.568030999999
+      }
+    ],
+    "nonfiniteSourceCasesExecuted": 0,
+    "nonfiniteTransportRefusals": [
+      {
+        "name": "active nonfinite depth NaN",
+        "field": "opticalPoint[1,3]",
+        "value": "NaN",
+        "error": "Float64 value reference InputParameter(9) with value NaN is not a writable input for 1433 parameters"
+      },
+      {
+        "name": "active nonfinite depth Infinity",
+        "field": "opticalPoint[1,3]",
+        "value": "Infinity",
+        "error": "Float64 value reference InputParameter(9) with value inf is not a writable input for 1433 parameters"
+      },
+      {
+        "name": "active nonfinite depth -Infinity",
+        "field": "opticalPoint[1,3]",
+        "value": "-Infinity",
+        "error": "Float64 value reference InputParameter(9) with value -inf is not a writable input for 1433 parameters"
+      },
+      {
+        "name": "masked late NaN",
+        "field": "opticalPoint[350,3]",
+        "value": "NaN",
+        "error": "Float64 value reference InputParameter(1056) with value NaN is not a writable input for 1433 parameters"
+      },
+      {
+        "name": "NaN pose rotation",
+        "field": "bodyRotation[1,1]",
+        "value": "NaN",
+        "error": "Float64 value reference InputParameter(1409) with value NaN is not a writable input for 1433 parameters"
+      },
+      {
+        "name": "NaN activeCount",
+        "field": "activeCount",
+        "value": "NaN",
+        "error": "Float64 value reference InputParameter(1407) with value NaN is not a writable input for 1433 parameters"
+      }
+    ]
+  },
+  "standaloneTimings": {
+    "includes": "JSON input batch/scalar API where needed, advance_to, state_json parse and all1404 test-oracle comparisons; one CPU10 nice10",
+    "calls": 22,
+    "meanMs": 21.833502409090794,
+    "minMs": 17.22298899999987,
+    "maxMs": 35.82517300000018,
+    "wholePipelineSpeedClaim": false
+  },
+  "nativeAdmission": {
+    "status": "ACTUAL_FULL_SOURCE_NATIVE_PREPARATION_REFUSED",
+    "refusal": "compiler did not issue a complete native direct-assignment schedule: native scalar program requires one terminal scalar output",
+    "refusalMs": 2810.328658,
+    "artifactIssued": false,
+    "actualNativeNumericGroups": 0,
+    "stagedGroups": 4,
+    "pending": [
+      "Full350 native artifact admission",
+      "Native source/module-bound JSON reload",
+      "Complete native input-byte immutability",
+      "NaN/Infinity source guard numerical execution"
+    ]
+  },
+  "resourceGuard": {
+    "command": [
+      "nice",
+      "-n",
+      "10",
+      "taskset",
+      "-c",
+      "10",
+      "/nix/store/gxq2cd70i077rah1d4hkzc1lpq8q4pv8-nodejs-24.21.0/bin/node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "dev/vitest-landmark-projection.config.ts"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/landmark-projection/session.log",
+    "elapsedMs": 14681.48221,
+    "peakRssKiB": 702772,
+    "minimumAvailableKiB": 52227380,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 180,
+    "signal": null,
+    "exitCode": 0
+  },
+  "typecheck": {
+    "status": "PASS",
+    "resource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10",
+        "/nix/store/gxq2cd70i077rah1d4hkzc1lpq8q4pv8-nodejs-24.21.0/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/tmp/landmark-projection/typecheck.log",
+      "elapsedMs": 7135.316820999999,
+      "peakRssKiB": 568160,
+      "minimumAvailableKiB": 52270676,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 4096,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "signal": null,
+      "exitCode": 0
+    }
+  },
+  "historicalSourceRefusal": {
+    "sourceSha256": "1658041976f20761d53388799cc6516359fd286f97b1b8f7b06b0907fe80bbfb",
+    "reason": "MLS Real equality outside functions; replaced exact equality with the equivalent pair of inequalities",
+    "log": "dev/artifacts/rgbd-landmark-projection/real-equality-refusal.log"
+  },
+  "evidenceDirectory": "dev/artifacts/rgbd-landmark-projection",
+  "temporaryEvidenceStorage": "$HOME/scratch/slam_web/tmp/landmark-projection",
+  "runtimeIntegrated": false,
+  "persistentMap": false,
+  "fullSlamAccepted": false,
+  "tenTimesTargetAccepted": false
+}

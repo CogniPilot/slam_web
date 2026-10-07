@@ -1,0 +1,127 @@
+{
+  "status": "PRIVATE_BORROWED_SUBSCRIPT_COMPONENT_PATCH_EXTRACTED_PARITY_PASS_COMPILER_UNRUN",
+  "artifact": "dev/artifacts/rgb-constant-copy-audit",
+  "manifestSha256": "94fd8c0be9850cd35e643353f5d88d2b0795ddc365783364fae5b5b18fb58fb9",
+  "patchSha256": "ca91042faa6581616d77b0607a1243e25abaaad9e25c9e92a36022db990d7a07",
+  "compiler": {
+    "relativePath": "../rumoca-native-functions",
+    "mainModified": false,
+    "sourcePreimagesStable": true,
+    "sampledProducerSourceClosureMatchEstablished": false
+  },
+  "observedBaseline": {
+    "parentProduced": true,
+    "immutableProducerSha256": "262ee681e0cdb87b499ee8907508d8ea77c9640caa2b480bb3eda782886d1457",
+    "realFull": {
+      "sourceSha256": "1115e869f85cc19c37bb279e4f0a20af51b1f4b166fd20fbf3d0dc287d49c659",
+      "elapsedMs": 120163,
+      "peakRssKiB": 87980
+    },
+    "integerFull": {
+      "sourceSha256": "34d7d36a1c236d90758dc9e7eae514a3d16a44b27a67d9d4dc3c44f9fc79fc98",
+      "elapsedMs": 120172,
+      "peakRssKiB": 44676
+    },
+    "beforeSolve": true,
+    "perf": {
+      "seconds": 8,
+      "samples": 785,
+      "lost": 0,
+      "callerFramesPartlyUnresolved": true,
+      "selfPercent": {
+        "ValueDrop": 13.51,
+        "VecClone": 8.6,
+        "ValueClone": 6.89
+      }
+    },
+    "actualPhaseAndGrayRasterCallerProven": false
+  },
+  "component": {
+    "sourceIndependent": true,
+    "exactOriginalAndPatchedSelectorIncluded": true,
+    "minimalTypeAdapters": true,
+    "actualProductionCratesLinked": false,
+    "result": {
+      "status": "EXTRACTED_SELECTOR_COMPONENT_PASS",
+      "enumeratedCases": 563,
+      "fullShapeScalarRead": {
+        "originalCloneVisits": 72092,
+        "borrowedCloneVisits": 1
+      },
+      "unsubscriptedCloneVisits": 72091,
+      "compilerRun": false,
+      "fullSourcePerformanceClaim": false
+    },
+    "resource": {
+      "elapsedMs": 21.81502,
+      "peakRssKiB": null,
+      "minimumAvailableKiB": null,
+      "secondsLimit": 10,
+      "rssLimitMiB": 256,
+      "availableFloorMiB": 16384,
+      "nice": 10,
+      "cpu": 31,
+      "exitCode": 0,
+      "note": "Observed bounded-run terminal output. Component finished before first resource sampling tick; no measured RSS claim."
+    },
+    "standaloneBinarySha256": "48b6a9d5270b0a94e5e78914342d93e539b7dc8e933ec9c41f201a71fef3f7ae",
+    "stagedProductionUnitControls": 3,
+    "productionUnitControlsRun": false
+  },
+  "scope": {
+    "sharedSelectorBorrowedRoot": true,
+    "selectedOwnedValueAndBitsPreserved": true,
+    "indexEvaluationAndErrorOrderPreservedByControls": true,
+    "unsubscriptedOwnedBasesMoved": true,
+    "unsubscriptedBorrowedValuesCloned": true,
+    "writePathsModified": false,
+    "constantBindingEligibilityModified": false,
+    "sourceFunctionOrNameSpecialCases": false,
+    "newIRorBackend": false,
+    "precisionChanged": false
+  },
+  "checks": {
+    "standaloneRustc": "PASS",
+    "extractedParityAndIndependentControls": "PASS",
+    "rustfmt": "PASS Rust2024 copied sources",
+    "gitApplyCheck": "PASS final frozen patch",
+    "cargo": "NOT_RUN",
+    "productionCrateTypecheck": "NOT_RUN",
+    "fullSourceRetry": "NOT_RUN"
+  },
+  "requirementsBeforeSourcePerformanceClaim": [
+    "Cov integrates against exact source preimages",
+    "production eval-flat tests and scopedClippy",
+    "original fullReal and corrected fullInteger producer retries under unchanged limits"
+  ],
+  "claimsExcluded": [
+    "actual120second source speedup",
+    "fullsource admission",
+    "resolved invoking phase",
+    "fullnativegraph",
+    "rawU8binding",
+    "Binary32execution"
+  ],
+  "preimages": [
+    {
+      "path": "crates/rumoca-eval-flat/src/constant/subscripts.rs",
+      "beforeSha256": "b29dee2acd9255a829294300454d2d5243cdc6fe5c99de12c7b38b235c29522b",
+      "afterSha256": "e0818b0d45ce63fbfe613c7099a37b830e80e0ff07adb3c9e8f4975a2c71eb61"
+    },
+    {
+      "path": "crates/rumoca-eval-flat/src/constant/expr_eval.rs",
+      "beforeSha256": "db3acdeda9804852d716cd7ab96bd375dc1e15bb30687a628c751ca9d5e4cc94",
+      "afterSha256": "a4fcc5868a6d1f58f6310365539e4a332b4cf2b0f09e35cb0d0e0d976eb26873"
+    },
+    {
+      "path": "crates/rumoca-eval-flat/src/constant/function_eval.rs",
+      "beforeSha256": "1dd249e2726ccceb09133bd0fe0974832126ebe4b30ce73c8dba789f6599dd71",
+      "afterSha256": "784bc4d99b29d45df758016854ab3f742c24e9d96ff02be66b4f58f0cc562790"
+    },
+    {
+      "path": "crates/rumoca-eval-flat/src/constant/subscripts/tests.rs",
+      "beforeSha256": "d529c9ed5740a17b52811f988fad2439c1c27fe18e0205cca3d45c6816007124",
+      "afterSha256": "82a84457f2f7b60b52dc84fb59815388218146f246ad8ba1fad87e901356298b"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "status": "PERSISTENT_MODELICA_FILTER_CHROMIUM_WORKER_RELOAD_PASS",
+  "recordedAt": "2026-10-04T17:30:40.253Z",
+  "browser": "154.0.8037.92",
+  "sourceSha256": "99ce45b42482b79211913840a57b63b91471ab3ef00d27fb85d289e153886d48",
+  "editedSourceSha256": "4c288a4aed7d52d71e3098c037b4695f3f31057b6b8c4cc830accbd04ae8c22c",
+  "moduleSha256": "22e531d16b674aa780049a1a44b83515fc06a28301d5082e02baf3f53a539d7f",
+  "editedModuleSha256": "06f1d6a8ce82eedf9467e94ae41cd093a4a9cfdd9bc111c76d4df69716eafe65",
+  "compiler": {
+    "version": "0.10.1",
+    "git_commit": "03e6b59a47f1"
+  },
+  "adapterSha256": "c85464bc16dde65664514ef98719c5c4dea208022233a0fa98b8c2c4d2f289fc",
+  "bundleSha256": "3e31d05e0d5749d7e8ef09924507ff2767953012c5109fc01c4ab01d375cff7e",
+  "batchedContinuity": true,
+  "fullCovarianceRetained": true,
+  "rollback": true,
+  "reset": true,
+  "acceptedCorrection": true,
+  "staleSourceRefused": true,
+  "sourceEditExecuted": true,
+  "indexedDbReload": true,
+  "reloadSteps": 3,
+  "reloadAcceptedCount": 3,
+  "runtimeIntegrated": false,
+  "productionPinChanged": false,
+  "fullSlam": false,
+  "scope": "Actual Chromium dedicated worker, precompiled source-issued baseline/edit modules, retained filter state, IndexedDB page/worker reload. Compiler source preparation and independent numerical oracles are separate gates.",
+  "probeSha256": "07408092e686d1b22fed97cfaa21dfe095063548feab3f8cf29e5b0602129fa8",
+  "consumerSha256": "4a7c91686f588fae29e49698209064391818914eba696971b08ccaefbd294c50",
+  "guard": {
+    "secondsLimit": 60,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "affinity": [
+      4,
+      5
+    ],
+    "nice": 10,
+    "elapsedMs": 12818.737369999999,
+    "peakRssKiB": 1765616,
+    "minimumAvailableKiB": 51953072,
+    "exitCode": 0,
+    "rssScope": "owned process group and identified descendants, including detached browser groups"
+  },
+  "reproduce": "nix develop path:.#ci --command node dev/rumoca-bounded-run.mjs --seconds 60 --rss-mib 4096 --log /tmp/slam-modelica-filter-session-browser.log -- nice -n 10 taskset -c 4,5 node dev/probe-modelica-filter-session-browser.mjs /tmp/slam-modelica-filter-session-artifacts /tmp/slam-modelica-filter-session-browser.json"
+}

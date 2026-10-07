@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "reviewOnly": true,
+  "date": "2026-10-04",
+  "compiler": {
+    "version": "0.10.1",
+    "revision": "943aa7d7b745eccc63ceb0f6a8f678f1542b60c7",
+    "wasmSha256": "a2310458a4723af3c43d1934b50d8ad7509e247f58465b2c1beb7e3b0eb5f135"
+  },
+  "nativeProgram": {
+    "status": "PASS",
+    "profile": "native-direct-program-f64-v1",
+    "image": [
+      160,
+      90
+    ],
+    "rgbInputs": 43200,
+    "outputs": 28803,
+    "issuedStageTargetCounts": [
+      1,
+      1,
+      1,
+      14400,
+      14400
+    ],
+    "changedFrames": 8,
+    "fullOutputBitComparison": true,
+    "independentGrayAndScoreChecks": 230400,
+    "compilerIssuedExecutable": true,
+    "hostStageSchedule": false,
+    "sourceSha256": "20ab5b24ec9f0321d0d3b24cab40196cb794ccca1cc532a0e1787242b559138b",
+    "probeSha256": "2435f42662f08d108de7608f9e6e829ab9f5751a7ae6a53afe182dfe12bfaf37",
+    "consumerSha256": "3a78a401923ad0fd5f5d306af29a219e53a0c6efbd630b3f6fcb4bba1bde3a61",
+    "elapsedMs": 20680.692321,
+    "peakRssKiB": 1323456,
+    "rssLimitMiB": 8192,
+    "secondsLimit": 180,
+    "sourceEditResetPersistenceMetadataIsolationRefusalChecks": true,
+    "firstAttempt": {
+      "exitCode": 1,
+      "reason": "Overlap-refusal test changed only the start of a different-sized span, causing the valid earlier out-of-bounds refusal. Full numerical/source-edit/reset checks preceding this fixture passed.",
+      "correction": "Duplicate a whole in-bounds stage span to test overlap specifically; expected refusal assertion unchanged.",
+      "log": "/tmp/slam-native-program-943aa7d7b.log"
+    },
+    "log": "/tmp/slam-native-program-943aa7d7b-final.log"
+  },
+  "eigen6": {
+    "status": "PASS",
+    "sourceSha256": "1c68c6fa5b9e9c65136b13b4b9838e49a7ecb5ebb0457d93ac3b674e31d32edd",
+    "probeSha256": "353a06cbaeb8906995fb26332a5668ac0549316804177a87e738da2d9abceb71",
+    "dimension": 6,
+    "sweeps": 32,
+    "allOutputs": 42,
+    "spectra": 7,
+    "checks": [
+      "finite outputs",
+      "ordered known spectrum",
+      "orthonormal eigenvectors",
+      "eigenpair residual",
+      "full matrix reconstruction",
+      "planar nullspace"
+    ],
+    "elapsedMs": 56700.665719,
+    "peakRssKiB": 501152,
+    "rssLimitMiB": 8192,
+    "secondsLimit": 120,
+    "log": "/tmp/slam-eigen6-943aa7d7b.log"
+  },
+  "runtimeIntegrated": false,
+  "productionPinChanged": false,
+  "limitations": [
+    "These are source probes executing actual WASM under Node; complete browser graph acceptance remains pending",
+    "Full SLAM frontend, landmark mapping/pruning and verified loops are not implemented",
+    "Native function folds and persistent connected state profile remain pending",
+    "Eigen gate elapsed includes preparation and all calls; it is not a standalone kernel speed measurement",
+    "Broad combined architecture/workspace/MSL gates remain pending"
+  ]
+}

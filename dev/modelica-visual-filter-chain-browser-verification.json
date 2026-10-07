@@ -1,0 +1,102 @@
+{
+  "status": "SOURCE_ISSUED_VISUAL_FILTER_CHAIN_CHROMIUM_PASS",
+  "recordedAt": "2026-10-04T18:37:26.456Z",
+  "browser": "154.0.8037.92",
+  "fixtureSha256": "198eed047645de02b4e50439e014ede03b7076951d21ece008d5862773458e5a",
+  "probeSha256": "234ebaee4c05450911672a809825261b7b470a432e6f486354830207660e4561",
+  "bundleSha256": "24c12fce8eb3b8226b4a2cf793330a3dcffc50df75ef20a6357238a8112c6c82",
+  "artifacts": {
+    "registration": {
+      "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+      "moduleSha256": "70b84c03bd56a2d5682b5c0459465323be9fb323e1f59d07502b58bf2ee3edd6",
+      "artifactSha256": "da97330d2b26e25707d3c9aaa9fdef2e5f9e6234ea277a735e64ca252c3927b7",
+      "compiler": {
+        "version": "0.10.1",
+        "git_commit": "03e6b59a47f1"
+      }
+    },
+    "relativePose": {
+      "sourceSha256": "adad8fb9fab1057293da6bb76e988853fceed9deef0809a902bd2a3680491045",
+      "moduleSha256": "e0822b5915634d93087793d409acdec61bc35adfe76b8a8c6b9386257461dc86",
+      "artifactSha256": "4dcd214f082afe47edee0a1a7498e13b36676507ef5cb5443b00479349186e6e",
+      "compiler": {
+        "version": "0.10.1",
+        "git_commit": "03e6b59a47f1"
+      }
+    },
+    "filter": {
+      "sourceSha256": "99ce45b42482b79211913840a57b63b91471ab3ef00d27fb85d289e153886d48",
+      "moduleSha256": "22e531d16b674aa780049a1a44b83515fc06a28301d5082e02baf3f53a539d7f",
+      "artifactSha256": "c32b2daedbd93e672e6b4a4709f89234f4094ef820742fe19b610e724d11346b",
+      "compiler": {
+        "version": "0.10.1",
+        "git_commit": "03e6b59a47f1"
+      }
+    }
+  },
+  "cases": [
+    {
+      "time": 0.011111111111111112,
+      "accepted": 1,
+      "rejected": 0,
+      "registrationMs": 38.89999997615814
+    },
+    {
+      "time": 0.022222222222222223,
+      "accepted": 2,
+      "rejected": 0,
+      "registrationMs": 9.100000023841858
+    },
+    {
+      "time": 0.03333333333333333,
+      "accepted": 3,
+      "rejected": 0,
+      "registrationMs": 9.100000023841858
+    },
+    {
+      "time": 0.044444444444444446,
+      "accepted": 3,
+      "rejected": 0,
+      "registrationMs": 5.599999904632568
+    },
+    {
+      "time": 0.05555555555555556,
+      "accepted": 4,
+      "rejected": 0,
+      "registrationMs": 9.100000023841858
+    },
+    {
+      "time": 0.06666666666666667,
+      "accepted": 5,
+      "rejected": 0,
+      "registrationMs": 76.19999992847443
+    },
+    {
+      "time": 0.07777777777777778,
+      "accepted": 6,
+      "rejected": 0,
+      "registrationMs": 18.5
+    },
+    {
+      "time": 0.08888888888888889,
+      "accepted": 7,
+      "rejected": 0,
+      "registrationMs": 18.299999952316284
+    },
+    {
+      "time": 0.1,
+      "accepted": 8,
+      "rejected": 0,
+      "registrationMs": 18.399999976158142
+    }
+  ],
+  "maximumError": 9.067052664235575e-14,
+  "indexedDbReload": true,
+  "resetReplay": true,
+  "staleSourceRefused": true,
+  "retainedCovarianceCells": 225,
+  "runtimeIntegrated": false,
+  "productionPinChanged": false,
+  "fullSlam": false,
+  "scope": "Three precompiled source-issued modules, full14400 measured pairs, relative body observations, retained Modelica filter state and225covariance cells in Chromium worker. Page/worker reload through IndexedDB. Correspondences and measurement covariance are fixtures; excludes feature matching, a single compiled graph, mapping and loop closure."
+}

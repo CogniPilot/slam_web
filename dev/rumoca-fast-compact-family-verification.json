@@ -1,0 +1,670 @@
+{
+  "sourceSha256": "a625243a70e07afc2cfdd543c64c453698fd6bf5c4572a6204e08c38adc907b5",
+  "modelPath": "models/FastRasterStages.mo",
+  "engines": [
+    {
+      "name": "current",
+      "jsSha256": "a42e7a8012425835b3a6a4087bf2d5a4d581d1a4a902e3b090a1b68e58b26eb4",
+      "wasmSha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4",
+      "models": [
+        {
+          "model": "FastGrayKernel",
+          "rawSha256": "1c0e6c6fe11524c11586cf51faf1d8a3abfdb7799df51f0b7be2264e976424c7",
+          "elapsedMs": 0.5461789999999951,
+          "schema_version": 1,
+          "problemSchema": 70,
+          "stateScalarCount": 0,
+          "causalSolutionCertified": true,
+          "valueProjectionBlocks": 0,
+          "ownerKeys": [
+            "simultaneous_plan",
+            "simultaneous_block_indices",
+            "value_projection_plan",
+            "rows",
+            "causal_seed_rows",
+            "static_causal_seed_rows",
+            "dynamic_causal_seed_rows",
+            "value_stages",
+            "causal_solution_certified"
+          ],
+          "projectionPlanBlockCount": 0
+        },
+        {
+          "model": "FastScoreKernel",
+          "rawSha256": "26dd252b7e522eac663ecce02ffe2d6823cff28327f092047e08bac134cb4504",
+          "elapsedMs": 1209.31331,
+          "schema_version": 1,
+          "problemSchema": 70,
+          "stateScalarCount": 0,
+          "causalSolutionCertified": true,
+          "valueProjectionBlocks": 0,
+          "ownerKeys": [
+            "simultaneous_plan",
+            "simultaneous_block_indices",
+            "value_projection_plan",
+            "rows",
+            "causal_seed_rows",
+            "static_causal_seed_rows",
+            "dynamic_causal_seed_rows",
+            "value_stages",
+            "causal_solution_certified"
+          ],
+          "projectionPlanBlockCount": 0
+        }
+      ]
+    },
+    {
+      "name": "candidate",
+      "jsSha256": "2a4e048d42ef5d1b67567369bab2e35a632ac3aa85ac15cb7c889e8fd5fa2124",
+      "wasmSha256": "239b5e4362d10b1a6a247a0a2b661b9d89fe039a89eccb970d63c21e44f66088",
+      "models": [
+        {
+          "model": "FastGrayKernel",
+          "rawSha256": "1c0e6c6fe11524c11586cf51faf1d8a3abfdb7799df51f0b7be2264e976424c7",
+          "elapsedMs": 573.8828009999997,
+          "schema_version": 1,
+          "problemSchema": 70,
+          "stateScalarCount": 0,
+          "causalSolutionCertified": true,
+          "valueProjectionBlocks": 0,
+          "ownerKeys": [
+            "simultaneous_plan",
+            "simultaneous_block_indices",
+            "value_projection_plan",
+            "rows",
+            "causal_seed_rows",
+            "static_causal_seed_rows",
+            "dynamic_causal_seed_rows",
+            "value_stages",
+            "causal_solution_certified"
+          ],
+          "projectionPlanBlockCount": 0
+        },
+        {
+          "model": "FastScoreKernel",
+          "rawSha256": "c4ee5b90419f6e46296b90b321877fc19f7260883c801fdb31bcc44e16e138ec",
+          "elapsedMs": 327.5545539999998,
+          "schema_version": 1,
+          "problemSchema": 70,
+          "stateScalarCount": 0,
+          "causalSolutionCertified": false,
+          "valueProjectionBlocks": 230,
+          "ownerKeys": [
+            "simultaneous_plan",
+            "simultaneous_block_indices",
+            "value_projection_plan",
+            "rows",
+            "causal_seed_rows",
+            "static_causal_seed_rows",
+            "dynamic_causal_seed_rows",
+            "value_stages",
+            "causal_solution_certified"
+          ],
+          "projectionPlanBlockCount": 230
+        }
+      ]
+    }
+  ],
+  "scope": "Read-only two-kernel actual Node/WASM lower_model_to_solve_json; raw strings retained without JSON roundtrip",
+  "status": "EXACT_SOLVE_BOUNDARY_AND_NATIVE_FAMILY_REFUSAL",
+  "cause": {
+    "model": "FastScoreKernel",
+    "schemaChanged": false,
+    "stateScalarCount": 0,
+    "layoutBitStructureEqual": true,
+    "current": {
+      "scalarProgramCount": 230,
+      "compactMapCount": 0,
+      "certifiedRows": 230,
+      "causalSolutionCertified": true,
+      "valueProjectionBlocks": 0
+    },
+    "candidate": {
+      "scalarProgramCount": 26,
+      "compactMapCount": 12,
+      "compactMapEquationCount": 204,
+      "certifiedRows": 26,
+      "causalSolutionCertified": false,
+      "valueProjectionBlocks": 230
+    },
+    "maps": [
+      {
+        "node": 1,
+        "count": 16,
+        "equationStart": 26,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 16,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 26,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 2,
+        "constantStrideCount": 0,
+        "spanStart": 1585,
+        "spanEnd": 1586
+      },
+      {
+        "node": 2,
+        "count": 8,
+        "equationStart": 42,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 8,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 42,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 2,
+        "constantStrideCount": 0,
+        "spanStart": 1651,
+        "spanEnd": 1652
+      },
+      {
+        "node": 3,
+        "count": 22,
+        "equationStart": 50,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 22,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 50,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 1719,
+        "spanEnd": 1720
+      },
+      {
+        "node": 4,
+        "count": 22,
+        "equationStart": 72,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 22,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 72,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 1719,
+        "spanEnd": 1720
+      },
+      {
+        "node": 5,
+        "count": 20,
+        "equationStart": 94,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 20,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 94,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 1934,
+        "spanEnd": 1935
+      },
+      {
+        "node": 6,
+        "count": 20,
+        "equationStart": 114,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 20,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 114,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 1934,
+        "spanEnd": 1935
+      },
+      {
+        "node": 7,
+        "count": 16,
+        "equationStart": 134,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 16,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 134,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 2121,
+        "spanEnd": 2122
+      },
+      {
+        "node": 8,
+        "count": 16,
+        "equationStart": 150,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 16,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 150,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 2121,
+        "spanEnd": 2122
+      },
+      {
+        "node": 9,
+        "count": 16,
+        "equationStart": 166,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 16,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 166,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 2121,
+        "spanEnd": 2122
+      },
+      {
+        "node": 10,
+        "count": 16,
+        "equationStart": 182,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "i",
+              "lower": 1,
+              "upper": 16,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 182,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 2121,
+        "spanEnd": 2122
+      },
+      {
+        "node": 11,
+        "count": 16,
+        "equationStart": 198,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "arc",
+              "lower": 1,
+              "upper": 16,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 198,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 2656,
+        "spanEnd": 2659
+      },
+      {
+        "node": 12,
+        "count": 16,
+        "equationStart": 214,
+        "domain": {
+          "binders": [
+            {
+              "id": 0,
+              "display_name": "arc",
+              "lower": 1,
+              "upper": 16,
+              "step": 1
+            }
+          ]
+        },
+        "outputMap": {
+          "start": 214,
+          "strides": [
+            {
+              "dimension": 0,
+              "stride": 1
+            }
+          ]
+        },
+        "loadStrideCount": 5,
+        "constantStrideCount": 0,
+        "spanStart": 2656,
+        "spanEnd": 2659
+      }
+    ],
+    "remainingCertifiedTargets": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      204,
+      229,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228
+    ],
+    "firstCompactBaseMatchesOldScalarProgram": true,
+    "constructorBoundary": [
+      {
+        "file": "crates/rumoca-eval-solve/src/refresh_plan/source_catalog.rs",
+        "owner": "append_compute_node",
+        "behavior": "ScalarPrograms publishes source positions; Map/AffineStencil only checked output ranges"
+      },
+      {
+        "file": "crates/rumoca-eval-solve/src/refresh_plan.rs",
+        "owner": "build_canonical_algebraic_refresh_plan",
+        "behavior": "Missing scalar catalog positions deliberately remain compact ComputeBlock/BLT owners, skipped as scalar assignments"
+      },
+      {
+        "file": "crates/rumoca-eval-solve/src/refresh_plan.rs",
+        "owner": "complete_causal_projection_is_certified",
+        "behavior": "26 scalar owner rows !=230 projection scalars: complete causal certificate false"
+      },
+      {
+        "file": "crates/rumoca-eval-solve/src/refresh_plan.rs",
+        "owner": "configure_causal_seed_rows",
+        "behavior": "Uncertified full schedule retains all230 value projection blocks"
+      }
+    ],
+    "consumerBoundary": {
+      "file": "src/modelica-staged-raster-export.ts",
+      "owner": "emitStage",
+      "guard": "!owners.causal_solution_certified || owners.value_projection_plan.blocks.length",
+      "nextProfileRestriction": "issued() reads only certified Direct ScalarPrograms; compact Map assignments have no consumed certificate"
+    },
+    "limits": [
+      "No schema/serialization/SourceId discrepancy claimed",
+      "Raw Solve strings preserved exactly; summary omits SourceId fields",
+      "Exact numerical equivalence of every compact family not executed here",
+      "No compiler commit introducing compaction isolated; frozen candidate capability boundary proven",
+      "No weakened guard, model rewrite, manual certificate/ artifact patch or host algorithm changes"
+    ],
+    "proposedOwner": "Generic compiler-issued compact causal assignment/family certificate and target emission; consumer needs that checked owner. Disabling guard or trusting raw Map metadata is insufficient"
+  },
+  "resource": {
+    "command": [
+      "taskset",
+      "-c",
+      "12",
+      "nice",
+      "-n",
+      "15",
+      "/nix/store/324pab2sykfjpbxsnxbcxmni42xxwxc0-nodejs-24.18.0/bin/node",
+      "/home/jgoppert/scratch/slam_web/tmp/fast-preset-regression/probe.mjs"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/fast-preset-regression/run.log",
+    "elapsedMs": 3376.41252,
+    "peakRssKiB": 587240,
+    "minimumAvailableKiB": 59480796,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 2048,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 60,
+    "signal": null,
+    "exitCode": 0
+  },
+  "rawArtifacts": [
+    {
+      "path": "dev/artifacts/fast-compact-family/current-FastGrayKernel-solve.json",
+      "sha256": "1c0e6c6fe11524c11586cf51faf1d8a3abfdb7799df51f0b7be2264e976424c7"
+    },
+    {
+      "path": "dev/artifacts/fast-compact-family/current-FastScoreKernel-solve.json",
+      "sha256": "26dd252b7e522eac663ecce02ffe2d6823cff28327f092047e08bac134cb4504"
+    },
+    {
+      "path": "dev/artifacts/fast-compact-family/candidate-FastGrayKernel-solve.json",
+      "sha256": "1c0e6c6fe11524c11586cf51faf1d8a3abfdb7799df51f0b7be2264e976424c7"
+    },
+    {
+      "path": "dev/artifacts/fast-compact-family/candidate-FastScoreKernel-solve.json",
+      "sha256": "c4ee5b90419f6e46296b90b321877fc19f7260883c801fdb31bcc44e16e138ec"
+    }
+  ],
+  "artifacts": "dev/artifacts/fast-compact-family",
+  "ownerSourceSnapshots": [
+    {
+      "path": "crates/rumoca-eval-solve/src/refresh_plan.rs",
+      "sha256": "ce45b2dd9bc655bc2f5504b9a404af8fc769c5207355c5a1fec6ec05a9f3d1fd",
+      "producerManifestLine": "ce45b2dd9bc655bc2f5504b9a404af8fc769c5207355c5a1fec6ec05a9f3d1fd  crates/rumoca-eval-solve/src/refresh_plan.rs",
+      "exactFrozenSourceMatch": true
+    },
+    {
+      "path": "crates/rumoca-eval-solve/src/refresh_plan/source_catalog.rs",
+      "sha256": "20a07f4e7c42cc4b9e3045d1ae02071b19aea43e65087553e3f8c706e75dabf6",
+      "producerManifestLine": "20a07f4e7c42cc4b9e3045d1ae02071b19aea43e65087553e3f8c706e75dabf6  crates/rumoca-eval-solve/src/refresh_plan/source_catalog.rs",
+      "exactFrozenSourceMatch": true
+    }
+  ],
+  "appSourceSnapshots": [
+    {
+      "path": "models/FastRasterStages.mo",
+      "sha256": "a625243a70e07afc2cfdd543c64c453698fd6bf5c4572a6204e08c38adc907b5"
+    },
+    {
+      "path": "src/modelica-staged-raster-export.ts",
+      "sha256": "05c2c51760b588c6134544732d32b0b084a6f9be406103b2c50050d45924404a"
+    }
+  ],
+  "productionPinChanged": false,
+  "numericFamilyEquivalence": false,
+  "nativePreparation": {
+    "sourceSha256": "a625243a70e07afc2cfdd543c64c453698fd6bf5c4572a6204e08c38adc907b5",
+    "wasmSha256": "239b5e4362d10b1a6a247a0a2b661b9d89fe039a89eccb970d63c21e44f66088",
+    "jsSha256": "2a4e048d42ef5d1b67567369bab2e35a632ac3aa85ac15cb7c889e8fd5fa2124",
+    "model": "FastScoreKernel",
+    "status": "REFUSED",
+    "failure": "compiler did not issue a complete native direct-assignment schedule: native family reads coupled targets in its own assignment range",
+    "attempts": 1,
+    "api": "prepare_native_program(source, FastScoreKernel)",
+    "engine": "Node actual immutable compiler WASM",
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "nice",
+        "-n",
+        "15",
+        "/nix/store/324pab2sykfjpbxsnxbcxmni42xxwxc0-nodejs-24.18.0/bin/node",
+        "/home/jgoppert/scratch/slam_web/tmp/fast-preset-regression/prepare-native.mjs"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/tmp/fast-preset-regression/native-preparation.log",
+      "elapsedMs": 763.317504,
+      "peakRssKiB": 170100,
+      "minimumAvailableKiB": 58642732,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 2048,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "signal": null,
+      "exitCode": 1
+    },
+    "artifacts": [
+      {
+        "path": "dev/artifacts/fast-compact-family/prepare-native.mjs",
+        "sha256": "604d373e657530a366a6a6dec03f93fdf61d87befb57f161deb8d6557cff6b51"
+      },
+      {
+        "path": "dev/artifacts/fast-compact-family/native-preparation.log",
+        "sha256": "f9a5bd6687528b7289b654f0e7eef0308d17129a02e28d242631fcfd538df55b"
+      },
+      {
+        "path": "dev/artifacts/fast-compact-family/native-preparation-resource.json",
+        "sha256": "4f523b47157c91a336b1485dedc34a45f00c69557561763fca5c6b1a9e95465b"
+      },
+      {
+        "path": "dev/artifacts/fast-compact-family/native-preparation-report.json",
+        "sha256": "ab9d3b23634763bf048ba22573f5582a4c37d189a64cf8b7404c9ac81460eb36"
+      }
+    ],
+    "nativeArtifactIssued": false,
+    "numericFixturesExecuted": false,
+    "scope": "Small existing-source complete schedule admission only; no full-frame preparation, Cargo, compiler edits, numeric equivalence or performance claim"
+  },
+  "rawDigestChecks": "PASS: all four exact raw Solve payload digests rechecked after native attempt"
+}

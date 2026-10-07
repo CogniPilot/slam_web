@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "status": "NATIVE_PREPARATION_PENDING",
+  "recordedAt": "2026-10-04T19:57:18.874Z",
+  "scope": "Full160×90 editable Modelica owns the LCG and per-pixel conditional draw consumption; no executable returned by these native preparations.",
+  "source": {
+    "path": "models/SeededDepthFrame.mo",
+    "sha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+    "dimensions": {
+      "width": 160,
+      "height": 90,
+      "pixels": 14400
+    },
+    "genericFunction": "axialDepth[:]; outputs[size(axialDepth,1)]"
+  },
+  "nativeAdmitted": false,
+  "numericallyVerified": false,
+  "runtimeIntegrated": false,
+  "productionPinChanged": false,
+  "compiler": {
+    "binary": "/home/jgoppert/scratch/slam_web/tmp/seeded-depth-native-producer",
+    "binarySha256": "e8ea555b92e4449dbe7e00d5a68290fdcdfb9d43ffcd332b4862fd74ca4cf107",
+    "sourceClosurePath": "dev/artifacts/seeded-depth-frame/compiler-source-closure.sha256",
+    "sourceClosureSha256": "f2ccedcd85585c4f05eada967a0db21e11a674b2cdad8048ac045f60ab75f1a5",
+    "buildResourcePath": "dev/artifacts/seeded-depth-frame/compiler-build-resource.json"
+  },
+  "attempts": [
+    {
+      "sourcePath": "dev/artifacts/seeded-depth-frame/initial-hardcoded-source.mo",
+      "sourceSha256": "6135e34eb9477a8b5345360681607809b73dd773773ff0dffa49062b4c8dca34",
+      "resourcePath": "dev/artifacts/seeded-depth-frame/native-preparation-resource.json",
+      "resource": {
+        "command": [
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "env",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/git/slam_web/models/SeededDepthFrame.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=SeededDepthFrame",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/git/slam_web/dev/artifacts/seeded-depth-frame/native.artifact.json",
+          "RUMOCA_NATIVE_SOURCE_SOLVE_ARTIFACT=/home/jgoppert/git/slam_web/dev/artifacts/seeded-depth-frame/native.solve.json",
+          "/home/jgoppert/scratch/slam_web/tmp/seeded-depth-native-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/git/slam_web/dev/artifacts/seeded-depth-frame/native-preparation.log",
+        "elapsedMs": 180223.91154499998,
+        "peakRssKiB": 38396,
+        "minimumAvailableKiB": 53667320,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "stopped": "timeout",
+        "signal": "SIGKILL",
+        "exitCode": 124
+      }
+    },
+    {
+      "sourcePath": "dev/artifacts/seeded-depth-frame/generic-array-branches-source.mo",
+      "sourceSha256": "0eb82cde9052277c7e9686304eabc195c45b3fa0c9837ae44f8866bb2d5ca5c6",
+      "resourcePath": "dev/artifacts/seeded-depth-frame/final-native-preparation-resource.json",
+      "resource": {
+        "command": [
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "env",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/git/slam_web/models/SeededDepthFrame.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=SeededDepthFrame",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/native.artifact.json",
+          "RUMOCA_NATIVE_SOURCE_SOLVE_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/native.solve.json",
+          "/home/jgoppert/scratch/slam_web/tmp/seeded-depth-native-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/git/slam_web/dev/artifacts/seeded-depth-frame/final-native-preparation.log",
+        "elapsedMs": 180252.209884,
+        "peakRssKiB": 38460,
+        "minimumAvailableKiB": 54516796,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "stopped": "timeout",
+        "signal": "SIGKILL",
+        "exitCode": 124
+      }
+    },
+    {
+      "sourcePath": "dev/artifacts/seeded-depth-frame/scalar-helper-uninitialized-source.mo",
+      "sourceSha256": "7cd958e868d9d55a8b1a8c356a9d79b697a92c501e2837aea1c0142e2ed8809e",
+      "resourcePath": "dev/artifacts/seeded-depth-frame/scalar-helper-native-preparation-resource.json",
+      "resource": {
+        "command": [
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "env",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/git/slam_web/models/SeededDepthFrame.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=SeededDepthFrame",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/scalar-helper.artifact.json",
+          "RUMOCA_NATIVE_SOURCE_SOLVE_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/scalar-helper.solve.json",
+          "/home/jgoppert/scratch/slam_web/tmp/seeded-depth-native-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/git/slam_web/dev/artifacts/seeded-depth-frame/scalar-helper-native-preparation.log",
+        "elapsedMs": 49.793231999999996,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "sourcePath": "dev/artifacts/seeded-depth-frame/initialized-alias-source.mo",
+      "sourceSha256": "4e3c1936173118a6ece3d1a707740494366bbd8fa27e5fdea2a9fcd62621bf6b",
+      "resourcePath": "dev/artifacts/seeded-depth-frame/initialized-helper-native-preparation-resource.json",
+      "resource": {
+        "command": [
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "env",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/git/slam_web/models/SeededDepthFrame.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=SeededDepthFrame",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/initialized-helper.artifact.json",
+          "RUMOCA_NATIVE_SOURCE_SOLVE_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/initialized-helper.solve.json",
+          "/home/jgoppert/scratch/slam_web/tmp/seeded-depth-native-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/git/slam_web/dev/artifacts/seeded-depth-frame/initialized-helper-native-preparation.log",
+        "elapsedMs": 42.052163,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "sourcePath": "dev/artifacts/seeded-depth-frame/explicit-state-stages-source.mo",
+      "sourceSha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+      "resourcePath": "dev/artifacts/seeded-depth-frame/explicit-state-native-preparation-resource.json",
+      "resource": {
+        "command": [
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "env",
+          "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/git/slam_web/models/SeededDepthFrame.mo",
+          "RUMOCA_NATIVE_SOURCE_MODEL=SeededDepthFrame",
+          "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/explicit-state.artifact.json",
+          "RUMOCA_NATIVE_SOURCE_SOLVE_ARTIFACT=/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/explicit-state.solve.json",
+          "/home/jgoppert/scratch/slam_web/tmp/seeded-depth-native-producer",
+          "native_registration_whole_program_source_inventory",
+          "--nocapture"
+        ],
+        "log": "/home/jgoppert/git/slam_web/dev/artifacts/seeded-depth-frame/explicit-state-native-preparation.log",
+        "elapsedMs": 180243.13219499998,
+        "peakRssKiB": 36368,
+        "minimumAvailableKiB": 51268096,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "stopped": "timeout",
+        "signal": "SIGKILL",
+        "exitCode": 124
+      }
+    }
+  ],
+  "drawSemantics": {
+    "invalid": "z>0 is false for zero, negative and NaN; pass through depth and consume0draws",
+    "dropout": "one draw",
+    "accepted": "three draws",
+    "rng": "Original unsigned32 LCG using exact Real integer multiplication/floor remainder in Modelica; host oracle uses Math.imul/>>>0"
+  },
+  "frontier": {
+    "final": "Full generic explicit-state source timed out180.243s before returning Solve/artifact.",
+    "loopInitial": "Tiny3-element tuple-output loop refuses missing function loop initial value definition for identity1.",
+    "tupleLoop": "Tiny initialized3-element tuple-output loop refuses function value1 reads definition3, expected Some(6). Standalone tuple alias control passes, so not a general self-alias claim."
+  },
+  "profile": {
+    "sourcePath": "dev/artifacts/seeded-depth-frame/generic-array-branches-source.mo",
+    "scope": "Samples of ongoing generic-array-branch full14400 preparation only, not final refactored source.",
+    "samples": [
+      250,
+      255
+    ],
+    "lostSamples": 0,
+    "rawPaths": [
+      "/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/native-preparation.perf.data",
+      "/home/jgoppert/scratch/slam_web/tmp/seeded-depth-frame/native-preparation-dwarf.perf.data"
+    ],
+    "reports": [
+      "dev/artifacts/seeded-depth-frame/native-preparation-perf.txt",
+      "dev/artifacts/seeded-depth-frame/native-preparation-perf-dwarf.txt"
+    ],
+    "limitations": [
+      "addr2line reported could not read first record; aggregate symbol samples establish hashing/allocation work and include join_branches, but exact caller attribution is incomplete.",
+      "No speedup or performance acceptance claim."
+    ]
+  },
+  "numericProbe": {
+    "testPath": "tests/compiler-probes/modelica-seeded-depth-frame.test.ts",
+    "configPath": "dev/run-seeded-depth-frame.config.ts",
+    "execution": "Not run: no native artifact.",
+    "planned": [
+      "full14400 invalid/NaN/dropout counts",
+      "exact LCG retained states over8frames with12interleaved shared IMU draws",
+      "Float32 depth equality and independent JS original oracle",
+      "reset/module-source-bound reload",
+      "default disparity source edit"
+    ],
+    "typecheck": {
+      "command": [
+        "taskset",
+        "-c",
+        "8,9",
+        "nice",
+        "-n",
+        "10",
+        "npx",
+        "tsc",
+        "--noEmit"
+      ],
+      "log": "/home/jgoppert/git/slam_web/dev/artifacts/seeded-depth-frame/typecheck.log",
+      "elapsedMs": 5524.277376999999,
+      "peakRssKiB": 673504,
+      "minimumAvailableKiB": 54678140,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 2048,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "signal": null,
+      "exitCode": 0
+    }
+  },
+  "integrationPlan": {
+    "host": "Runtime keeps one numeric unsigned RNG state; existing small IMU draw adapter advances it; depth worker accepts state and returns nextState. GPS retains its existing independent stream.",
+    "worker": "Source/module-bound NativeProgram artifact, cached transport; copy input/output arrays and retain state only.",
+    "replay": "Recorded frames bypass depth sampling as today.",
+    "gate": "Integrate only after native admission and independent numeric/source-edit/reset/browser gates."
+  },
+  "latestNativeProfile": {
+    "path": "dev/seeded-depth-native-profile-verification.json",
+    "sourceSha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+    "producerSha256": "27df64656c5c504de5dc181f6ec89664ad597f582105865b9bb65e8cdbe6fd63",
+    "elapsedMs": 30066.899725000003,
+    "nativeAdmitted": false,
+    "currentFollowup": "dev/artifacts/seeded-depth-indexed-write-profile/profile.json",
+    "currentFollowupProducerSha256": "23e1866b4c1a3a117756350060c06c7d9a18f275d2dbc4066bdcabafe78d10a4",
+    "currentFollowupStatus": "FULL14400_POSITIVE_INDEXED_WRITE_PROOF_REACHES_SOLVE_LOWERING_TIMEOUT"
+  }
+}

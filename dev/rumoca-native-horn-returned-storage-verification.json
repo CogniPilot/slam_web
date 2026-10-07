@@ -1,0 +1,432 @@
+{
+  "status": "UNCHANGED_FULL14400_HORN_COMPLETED_RETURN_STORAGE_NATIVE_AND_CHROMIUM_PASS_COMPONENT_ONLY",
+  "date": "2026-10-04",
+  "worktree": "../rumoca-native-functions",
+  "committed": false,
+  "productionCompilerPinChanged": false,
+  "previousEvidence": "dev/rumoca-native-horn-carried-lifetimes-verification.json",
+  "source": {
+    "path": "models/RigidPointRegistration.mo",
+    "sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "capacity": 14400,
+    "changed": false,
+    "sourceEditGate": false,
+    "runtimeParameterGate": true
+  },
+  "artifact": {
+    "directory": "/tmp/slam-native-horn-returned-storage-final-wasm",
+    "module_file": "horn-full14400.wasm",
+    "module_sha256": "ddbc07532694de1e20da33c945304597a3744f8226e23f1f6739178a18e90782",
+    "source_sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "producer_source_sha256": "25bc9ef0dceb2ad229c7d4efb5a6b290e13e5a23baf776c03608be42c660b940",
+    "producer_revision": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf-dirty",
+    "layout": {
+      "input_bytes": 806432,
+      "output_bytes": 208,
+      "scratch_bytes": 1051952
+    },
+    "variant": {
+      "registration": true,
+      "capacity": 14400
+    },
+    "cell_format": "declared tuple order; 8-byte Binary64/i64/Boolean cells; row-major tensor",
+    "abi": {
+      "export": "eval_typed_call",
+      "memory_import": "env.memory",
+      "arguments": [
+        "inputPtr:i32",
+        "outputPtr:i32",
+        "scratchPtr:i32"
+      ],
+      "result": "status:i32"
+    },
+    "scope": "standalone source-issued owner; does not execute model schedule or alter app compiler pin",
+    "math_imports": [
+      {
+        "module": "env",
+        "name": "pow",
+        "parameters": [
+          "f64",
+          "f64"
+        ],
+        "results": [
+          "f64"
+        ],
+        "qualification": "target exponentiation intrinsic; browser Math.pow has no portable host powf bit-parity guarantee"
+      }
+    ],
+    "moduleBytes": 60579,
+    "manifestSha256": "14bd3d239c79aaa27a28b84c1c799faab554b374a344966d4cb46790fd257030",
+    "issuedTableSha256": "659dbbc03eb1b44ead5e1f9363619e0f8f091b41224d1c5a357c63260e96d9a3",
+    "testBinarySha256": "bb441f57a8606f2d9ac49b340d9dd9b78d6030fd95d4ebd663dbfded1a33c6a0",
+    "frozen": true
+  },
+  "ownership": {
+    "files": {
+      "crates/rumoca-exec-wasm/src/typed_call/calls.rs": "a581fc36284f5ff7bd10b4d8304404e56419e57871332b932a8487e78f767708",
+      "crates/rumoca-exec-wasm/src/typed_call/control.rs": "eef095ad3359648286418fcbed456f4191cef52827a70f2b66e75b6509d694e7",
+      "crates/rumoca-exec-wasm/src/typed_call/emit.rs": "2fe47ce48db5276987665b99910d99085af00c5d9a73ce282d1c24ece9edd346",
+      "crates/rumoca-exec-wasm/src/typed_call/layout.rs": "693a5a2368ffb62f7e65113c88931b70698c6f4b707a2e7ccb3a1baee6421b20",
+      "crates/rumoca-exec-wasm/src/typed_call/link.rs": "f2226b50f89b81b1b37b5bde1d97b632eda3b2f66e5dd1306c74e0b1a52b14df",
+      "crates/rumoca-exec-wasm/src/typed_call/numbers.rs": "2acc661080dc98fd24553916030e8deed2d6c44cd64c38ecef52fb44175f7b0a",
+      "crates/rumoca-exec-wasm/src/typed_call/tensor.rs": "cd33fd640633f902ab894b590de179507a98a31d523745f6d1f425b30b408d27",
+      "crates/rumoca-exec-wasm/src/typed_call/control/domain.rs": "8a4f9a2a14cfa5b7ed1c6980ebf9e085fbacd8236a26b47e3fc295589afb84ae",
+      "crates/rumoca-exec-wasm/src/typed_call/layout/lifetimes.rs": "bdeb8d3ecfb4b4571ab1a00b17fe999a1d783350daea732683772a0d8dfdf3b7",
+      "crates/rumoca-exec-wasm/src/typed_call/layout/outputs.rs": "4e64ec77eddf8264236e827a59776f3521b19d4f2edc758ccf15f7dae7a983d0",
+      "crates/rumoca-exec-wasm/src/typed_call/numbers/extrema.rs": "b00bdfd3461baccbe0926d2f292e87ab0907dc522c4836f2c8429092961dab4d",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/IntegerSeedFold.mo": "e3ab571f7ae72a329c9bb3ff22407e83a37dedf9b09f7950cda5733d91f62fe9",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/OrderedFrameFold.mo": "5c5229eef37d575247528f6645aff6ee219b00e990236c0a5c96b2424266bc31",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/OrderedTensorFrameFold.mo": "116d996193ec3260fd43e3cd5f28c05adb12d09b4d40e5bfadd2df77bddda771",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/aggregate_folds.rs": "8b8ede349e12a6a41b519de6545255e4a1cd613b79d2a51cd80e068e572012da",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/assertion_outputs.rs": "dc0eaa896927925dbb3faea03c242359e9a99d9ab3ff6dd6e929f5520cd3b1e3",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/calls.rs": "4ba61650fa0f310e61c88872e8b94745f302268ecdf6d56734e66f07065762da",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/capture_borrows.rs": "2f4646344968d27f59c6eee4930baed05c77e1936e36143c9b79eb5e2d9fd97c",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/carried_lifetimes.rs": "6932274f5759dea1250252343f6c794207bc1b45032e4c3c7f5f05b1134b8d1f",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/extrema_tensor.rs": "b023b6bb3fdaa32d6019962628da03e77f240024775db9c2ed9f25fbe68b5cd8",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/finite_domains.rs": "f869a391e2f4577af4c8c7f6c67648a3c7a8e57559de667acd35f66e901dd415",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/mod.rs": "62455b833113ad5ff01a68dedebf5ee1a0fb0ca5cb3ad6dc1e3f74d4ea3df6f3",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/registration_source.rs": "30a90dfcfde563dd8c0b53ba333db687c632a77aa039d769f6b0fa4132a05d7e",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/returned_storage.rs": "e6078d91c6a7bd0f81f91bc03f643c00f79b99b3e23dd5cdb5c312d788948bb8",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/source_tables.rs": "ae252b9b0799e0869c30c70ac9b23e8263f39b06bac39c63d3a5e4cd129bd3dc",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/square.rs": "2eb85bb47ad1121a859968dcb53621fe072d5882182294fdacd0bf344cd18a36",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/tensor_source.rs": "b63f77a3fb0a26b8c29f47012f937361820c0eaf1641167154b24ec8f55b97e4",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/fixed_integer_tables/baseline.json": "f22d430e3618593892f6dde4cd5ae94d3815c04908496136b003c8169c557493",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/fixed_tables/baseline.json": "cd2bec17f43a2c63bca084475ff46b447f334257d519e60253d53da60edc1cb2",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/fixed_tables/gain-two.json": "5d44d8ded1306b95f15354a19d1355366c72b3307ab794339a4e799d5de7a97d",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/fixed_tables/subtract.json": "93abdd60267f3473e6c0a648f336d123ea2db2622f30da1cd24f4500f6735ed4",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/integer_tables/baseline.json": "967e3cb03dd62a13805afd1c4222db26f0d801bf0644a4c100799b17bce2c688",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/registration_source/eigen.rs": "a7b446c8f4076563f8baf84223e90687d0ade4c5d3beaa4d59ebf307a17eb98a",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/registration_source/fit.rs": "eb2654c093fadfd186c34ab446074a5a1d912c085547e82a08803e0026271caa",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/source_tables/baseline.json": "6152fb2486159ef9399e9cfa006e03a8490be748b4d91f9b4e2f5326da75546b",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/source_tables/gain-two.json": "f8e513f3a3fd0fb65fcf0f5d4317b8e2a7cfb0324a3fbfafabf391d221d64308",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/source_tables/subtract.json": "1d7a1581e163e2d6dc7c81ad39f5e13a2e21699fa6bdc6bfd3c9ba93fe795ff8",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/tensor_tables/baseline.json": "2075975e2ac14ba75c75f9e07bd758935177b232025a48b65307b55d0dd404aa",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/tensor_tables/gain-two.json": "0bae11123b36585ac7c35bec42beb9c4c8f7463a9b1ec7cb45fe7a10a7c15f2d",
+      "crates/rumoca-exec-wasm/tests/suite_typed_calls/registration_source/fit/fixtures.rs": "120f47919621a301f8cdbfcd9fcba21d2ef4e2cbf116e213060e53fbad19c75f",
+      "crates/rumoca-exec-wasm/src/typed_call.rs": "4675a1446e0a4fee13440f1fe557605391d461799aa6fe79fd1848b0dd0f35b4",
+      "crates/rumoca-exec-wasm/src/lib.rs": "673fdf0e679d13eea4afefe5d5bbb503398e01522aacc95db9ecdcb1c677abc7",
+      "crates/rumoca-exec-wasm/Cargo.toml": "d0964f1d05064a2e496bdc79ce1943ea5cc7a3066a1004f1d2d2263fe9f467e2",
+      "Cargo.lock": "0684a175d044e44846d1de269f6ce85e4e09eff8ae6feee63dc2d1320aec0df8"
+    },
+    "changedDuringFinalNativeGate": [],
+    "sourceSnapshot": "/tmp/slam-native-horn-returned-storage-final-before.json",
+    "changes": [
+      "Plan each exact source operation register and nested region in order, so later register plans retain the completed returned allocation.",
+      "A region Output can borrow only its single Store source with no Load of that Output slot and with only Output Stores remaining after it. No later nested computation or fault can mutate the source.",
+      "Every borrowed tail Store is an exact same-range no-op; all non-borrowed Output destinations remain fresh disjoint allocations.",
+      "Conditional result borrows only when both selected arms return the same exact allocator-issued whole range. Mutation permission requires both branches to retain permission.",
+      "Fold return borrows only its same-ordinal private carried Input allocation. Cross-ordinal results keep complete snapshots before the ordered backedge commit.",
+      "Root public outputs remain private until complete successful owner return; caller Input and invariant captures remain immutable under the prior lifetime proof."
+    ],
+    "authority": "Whole range identity indexes checked target storage only. It is not source owner equality, algorithm detection, a default, or an inferred bound."
+  },
+  "gates": {
+    "focused": {
+      "passed": 3,
+      "log": "/tmp/slam-native-horn-returned-storage-controls3.log",
+      "elapsedMs": 11965.548136,
+      "peakRssKiB": 509896,
+      "checks": [
+        "full14400 private mask over14400 iterations with NaN-payload and negative-zero bits preserved",
+        "zero full-mask MemoryCopy instructions inside the full-domain positive fixture loop",
+        "cross-ordinal full14400 tensor simultaneous tuple swap",
+        "old full tensor output snapshot followed by a later nested private write",
+        "independent expected byte arrays and canonical typed evaluator"
+      ]
+    },
+    "fullTypedCalls": {
+      "passed": 52,
+      "log": "/tmp/slam-native-horn-returned-storage-final-full.log",
+      "testSeconds": 77.92,
+      "elapsedMs": 93052.97086,
+      "peakRssKiB": 509824,
+      "sourceGate": "Every actual unchanged source-issued owner compiles; complete208-byte canonical equality and independent full-domain geometry/refusal controls are mandatory."
+    },
+    "strictClippy": {
+      "result": "PASS",
+      "scope": "rumoca-exec-wasm all-targets all-features -D warnings",
+      "log": "/tmp/slam-native-horn-returned-storage-clippy2.log",
+      "elapsedMs": 2085.688134,
+      "peakRssKiB": 503000
+    },
+    "formatter": "PASS",
+    "browser": {
+      "result": "PASS1",
+      "log": "/tmp/slam-native-horn-browser-returned-storage.log",
+      "elapsedMs": 4400.558978,
+      "peakRssKiB": 1569796,
+      "rssScope": "Owned process group and identified descendants including detached browser groups",
+      "cpuAffinity": [
+        6,
+        7
+      ],
+      "browser": "154.0.8037.92",
+      "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+      "moduleSha256": "ddbc07532694de1e20da33c945304597a3744f8226e23f1f6739178a18e90782",
+      "layout": {
+        "input_bytes": 806432,
+        "output_bytes": 208,
+        "scratch_bytes": 1051952
+      },
+      "outcomes": [
+        {
+          "name": "full non-axis transform",
+          "reason": 0,
+          "elapsedMs": 56,
+          "immutableInputs": true
+        },
+        {
+          "name": "planar non-collinear",
+          "reason": 0,
+          "elapsedMs": 8.899999976158142,
+          "immutableInputs": true
+        },
+        {
+          "name": "near half turn",
+          "reason": 0,
+          "elapsedMs": 15.300000071525574,
+          "immutableInputs": true
+        },
+        {
+          "name": "known orthogonal residual",
+          "reason": 0,
+          "elapsedMs": 8.799999952316284,
+          "immutableInputs": true
+        },
+        {
+          "name": "finite RMS refusal",
+          "reason": 6,
+          "elapsedMs": 8.5,
+          "immutableInputs": true
+        },
+        {
+          "name": "collinear refusal",
+          "reason": 4,
+          "elapsedMs": 8.700000047683716,
+          "immutableInputs": true
+        },
+        {
+          "name": "near-collinear refusal",
+          "reason": 4,
+          "elapsedMs": 11.699999928474426,
+          "immutableInputs": true
+        },
+        {
+          "name": "coincident refusal",
+          "reason": 4,
+          "elapsedMs": 8.600000023841858,
+          "immutableInputs": true
+        },
+        {
+          "name": "collapsed target refusal",
+          "reason": 4,
+          "elapsedMs": 8.799999952316284,
+          "immutableInputs": true
+        },
+        {
+          "name": "empty observation",
+          "reason": 3,
+          "elapsedMs": 1.7999999523162842,
+          "immutableInputs": true
+        },
+        {
+          "name": "fractional count",
+          "reason": 1,
+          "elapsedMs": 1.8000000715255737,
+          "immutableInputs": true
+        },
+        {
+          "name": "oversized count",
+          "reason": 1,
+          "elapsedMs": 1.899999976158142,
+          "immutableInputs": true
+        },
+        {
+          "name": "negative count",
+          "reason": 1,
+          "elapsedMs": 1.7999999523162842,
+          "immutableInputs": true
+        },
+        {
+          "name": "insufficient pairs",
+          "reason": 3,
+          "elapsedMs": 1.8000000715255737,
+          "immutableInputs": true
+        },
+        {
+          "name": "finite huge coordinate",
+          "reason": 2,
+          "elapsedMs": 8.399999976158142,
+          "immutableInputs": true
+        },
+        {
+          "name": "masked NaN",
+          "reason": 0,
+          "elapsedMs": 8.799999952316284,
+          "immutableInputs": true
+        },
+        {
+          "name": "active NaN",
+          "reason": 2,
+          "elapsedMs": 8.5,
+          "immutableInputs": true
+        },
+        {
+          "name": "invalid pair flag",
+          "reason": 2,
+          "elapsedMs": 8.799999952316284,
+          "immutableInputs": true
+        },
+        {
+          "name": "reflection refusal",
+          "reason": 6,
+          "elapsedMs": 16.899999976158142,
+          "immutableInputs": true
+        },
+        {
+          "name": "runtime residual parameter",
+          "reason": 0,
+          "elapsedMs": 8.899999976158142,
+          "immutableInputs": true
+        },
+        {
+          "name": "recovery and repeat",
+          "reason": 0,
+          "elapsedMs": 8.399999976158142,
+          "immutableInputs": true
+        }
+      ],
+      "invalidStatus": 209,
+      "atomicAbiFailure": true,
+      "calls": 10,
+      "checksum": 0,
+      "meanInputMs": 0.1100000023841858,
+      "meanExecuteMs": 8.560000002384186,
+      "meanOwnedOutputMs": 0.020000004768371583,
+      "meanInputExecuteOutputMs": 8.690000009536742,
+      "benchmarkPowCalls": 60,
+      "powCallsPerCall": 6,
+      "instrumentedPowMsPerCall": 0,
+      "powQualification": "Math.pow target intrinsic; no portable bit parity with host Rust powf; timing is coarse and instrumentation overhead excluded from benchmark",
+      "scope": "full14400 source-issued standalone registration owner in Chromium worker; not model schedule, RGB-D correspondence production, visual odometry or SLAM"
+    }
+  },
+  "generatedCopyEvidence": {
+    "fullMaskBytes": 115200,
+    "sourceIterations": 14400,
+    "previousUnconditionalBackedgeBytes": 1658880000,
+    "afterFullMaskLoopCopyInstructions": 0,
+    "log": "/tmp/slam-native-horn-returned-storage-final-full.log",
+    "qualification": "Checked source module operator inventory sees no constant115200-byte MemoryCopy inside any loop. Other scalar/small-tensor copies and initial/final complete-array copies remain. This proves removal of this full-mask loop copy; sampled profile does not identify each instruction."
+  },
+  "profile": {
+    "profile": "/tmp/slam-native-horn-returned-storage-profile/horn-worker.cpuprofile",
+    "samples": 1022,
+    "profileDurationMs": 1296.644,
+    "sampledDurationMs": 1296.496,
+    "exclusive": [
+      {
+        "functionName": "(idle)",
+        "milliseconds": 429.48,
+        "percent": 33.126210956300675
+      },
+      {
+        "functionName": "wasm-function[3]",
+        "milliseconds": 317.6,
+        "percent": 24.49679752193605
+      },
+      {
+        "functionName": "same",
+        "milliseconds": 241.421,
+        "percent": 18.621037010526834
+      },
+      {
+        "functionName": "inputFor",
+        "milliseconds": 124.027,
+        "percent": 9.566323382409202
+      },
+      {
+        "functionName": "(anonymous)",
+        "milliseconds": 71.472,
+        "percent": 5.512705014130394
+      },
+      {
+        "functionName": "(garbage collector)",
+        "milliseconds": 48.027,
+        "percent": 3.7043693154471744
+      },
+      {
+        "functionName": "self.onmessage",
+        "milliseconds": 42.072,
+        "percent": 3.245054361910874
+      },
+      {
+        "functionName": "check",
+        "milliseconds": 10.467,
+        "percent": 0.8073299107748886
+      },
+      {
+        "functionName": "wasm-function[1]",
+        "milliseconds": 8.034,
+        "percent": 0.6196702496575385
+      },
+      {
+        "functionName": "postMessage",
+        "milliseconds": 1.768,
+        "percent": 0.1363675630314324
+      },
+      {
+        "functionName": "(program)",
+        "milliseconds": 1.068,
+        "percent": 0.08237588083572954
+      },
+      {
+        "functionName": "wasm-function[2]",
+        "milliseconds": 1.06,
+        "percent": 0.08175883303920722
+      }
+    ],
+    "sha256": "b77de2e8092ecfca0b215f82d7990652fd42a759484c35c204cf0d954464497a",
+    "qualification": "Dedicated worker sampling includes input/oracle/benchmark phases. It cannot attribute individual WASM instructions; 10 warmed complete calls are a component measurement, not full-pipeline throughput."
+  },
+  "componentMeasurements": {
+    "previousCompleteCallMs": 236.37000000476837,
+    "afterCompleteCallMs": 8.690000009536742,
+    "afterExecuteMs": 8.560000002384186,
+    "previousScratchBytes": 1051952,
+    "afterScratchBytes": 1051952,
+    "previousModuleBytes": 63243,
+    "afterModuleBytes": 60579,
+    "qualification": "Sequential shared-machine standalone measurements with finalized worker sampling. No full-SLAM or end-to-end10x claim. Ten warmed calls; first full proper case56ms includes cold/JIT effects."
+  },
+  "history": [
+    {
+      "result": "new focused fixture failed to compile",
+      "log": "/tmp/slam-native-horn-returned-storage-controls.log",
+      "reason": "Used arithmetic Binary operator for LessEqual; corrected fixture to canonical Compare operator. Production proof unchanged."
+    },
+    {
+      "result": "initial52 native testsPASS",
+      "log": "/tmp/slam-native-horn-returned-storage-full.log",
+      "testSeconds": 76.82,
+      "elapsedMs": 77017.912152,
+      "peakRssKiB": 133588,
+      "reason": "Incorrect optional export environment name did not produce artifacts; final full suite reran with exact export variable after lint repair."
+    },
+    {
+      "result": "strict Clippy three mechanical diagnostics",
+      "log": "/tmp/slam-native-horn-returned-storage-clippy.log",
+      "reason": "Collapsed nested Carried guard into let-chain and replaced bool filter_map with filter/map; predicates retained. Final52 suite, artifact export, and strict Clippy reran."
+    }
+  ],
+  "limits": [
+    "Standalone registration owner only; matched correspondence producer, temporal pose composition, shared model schedule and fullSLAM integration remain separate.",
+    "8.69ms component execution does not establish90Hz full pipeline or the10x target.",
+    "Ten warmed complete calls on shared machine; browser Math.pow has no portable host Rust powf bit-parity claim.",
+    "No native source-edit gate yet; runtime residual parameter variation is covered.",
+    "No production app compiler pin changed; original user compiler checkout remains untouched.",
+    "No sibling schema patch applied; source assertion predicate outputs still conservatively refuse.",
+    "Full upstream architecture/MSL gates were not run for this storage stage.",
+    "Scratch includes unused private buffers retained conservatively; code removes copying without claiming complete allocation compaction."
+  ]
+}

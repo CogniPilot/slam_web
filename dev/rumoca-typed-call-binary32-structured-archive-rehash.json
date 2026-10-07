@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-05T15:53:16.493Z",
+  "status": "ROOT_INDEPENDENT_STRUCTURED_BINARY32_ARCHIVE_REHASH_PASS",
+  "manifestSha256": "f6610871dfc793fa955739b52a20f4ff37a9bf7d5c8df7923f7cca122b70ac1a",
+  "files": 56,
+  "bytes": 311148,
+  "scope": "Archived bytes only; does not run source compiler, accept merged-main backend or prove full CV/SLAM. Component execution evidence remains in the archived independent harness."
+}

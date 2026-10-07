@@ -1,0 +1,30 @@
+{
+  "command": [
+    "perf",
+    "record",
+    "-e",
+    "cpu-clock:u",
+    "-F",
+    "99",
+    "--call-graph",
+    "dwarf,8192",
+    "-o",
+    "/home/jgoppert/scratch/slam_web/profiles/descriptor-event-index/perf.data",
+    "-p",
+    "1676261",
+    "--",
+    "sleep",
+    "20"
+  ],
+  "log": "/home/jgoppert/scratch/slam_web/profiles/descriptor-event-index/perf.log",
+  "elapsedMs": 20204.369715,
+  "peakRssKiB": 20488,
+  "minimumAvailableKiB": 54713972,
+  "peakCacheBytes": null,
+  "rssLimitMiB": 512,
+  "availableFloorMiB": 16384,
+  "rssScope": "owned process group and identified descendants, including detached browser groups",
+  "secondsLimit": 30,
+  "signal": null,
+  "exitCode": 0
+}

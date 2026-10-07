@@ -1,0 +1,960 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-05T13:30:37.380Z",
+  "status": "SCOPED_GATES_PASS_FULL_SOLVE_NATIVE_ADMISSION_PENDING",
+  "compiler": {
+    "worktree": "../rumoca-native-functions",
+    "revision": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "dirty": true,
+    "producer": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/final-producer",
+    "sha256": "360d15b3d17f484fe1cd5e9ba724fddc1653d63d82fb09f7ec515f562b17bad3",
+    "bytes": 130508008,
+    "sourceClosureSha256": "ec1d418fde4bfe32c9838a410a1bf54e5005481d401a1d7e314d8a46d4798645",
+    "sourceFiles": 2447,
+    "fixtureSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+    "artifact": {
+      "reason": "compiler-artifact",
+      "package_id": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-bind-wasm#0.10.1",
+      "manifest_path": "$HOME/git/rumoca-native-functions/crates/rumoca-bind-wasm/Cargo.toml",
+      "target": {
+        "kind": [
+          "cdylib",
+          "rlib"
+        ],
+        "crate_types": [
+          "cdylib",
+          "rlib"
+        ],
+        "name": "rumoca_bind_wasm",
+        "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-bind-wasm/src/lib.rs",
+        "edition": "2024",
+        "doc": true,
+        "doctest": true,
+        "test": true
+      },
+      "profile": {
+        "opt_level": "1",
+        "debuginfo": "line-tables-only",
+        "debug_assertions": true,
+        "overflow_checks": true,
+        "test": true
+      },
+      "features": [
+        "console_error_panic_hook",
+        "default",
+        "native-assignments"
+      ],
+      "filenames": [
+        "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_bind_wasm-8f249060a38fed66"
+      ],
+      "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_bind_wasm-8f249060a38fed66",
+      "fresh": false
+    },
+    "allFinalSourceBookendsPassed": true
+  },
+  "source": {
+    "path": "models/FastNativeFrame.mo",
+    "sha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+    "unchanged": true,
+    "height": 90,
+    "width": 160,
+    "channels": 4,
+    "scoreSlots": 14400
+  },
+  "diagnosis": {
+    "phase": "Optional conditional template call-shape selection during Flat→DAE; ToDAE itself completed via the materialized route.",
+    "exactFirstDecline": "dependent extent is not an exact Integer expression over proven shape axes",
+    "expression": "column-radius",
+    "span": {
+      "start": 3656,
+      "end": 3669
+    },
+    "radius": {
+      "declaration": 116,
+      "instance": 4,
+      "variability": "Constant",
+      "scalarBinding": 3
+    },
+    "cause": "The lexical-Class binder guard ran before consulting the settled variable constant fact.",
+    "before": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "$HOME/scratch/slam_web/tmp/fast-template-selection-diagnostic/binding-diagnostic-executable",
+        "conditional_template_original_source_inventory",
+        "--nocapture"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/fast-template-selection-diagnostic/binding-model.log",
+      "elapsedMs": 5305.619390999999,
+      "peakRssKiB": 202296,
+      "minimumAvailableKiB": 57882912,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    },
+    "after": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/selected-shape-diagnostic-executable",
+        "conditional_template_original_source_inventory",
+        "--nocapture"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/selected-shape-model.log",
+      "elapsedMs": 5106.368125,
+      "peakRssKiB": 187672,
+      "minimumAvailableKiB": 57612028,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    },
+    "afterCallShapesOk": 90,
+    "afterCallShapesRejected": 0,
+    "temporaryProductionTracesRemoved": true,
+    "diagnosticSourceBookendScope": "Matched at diagnostic build/copy. A later live-tree check followed four intentional trace/test edits and is not claimed as a matched after-bookend; execution used the frozen copied binary."
+  },
+  "change": {
+    "privateFacts": "Exact original Reference plus instance-owned settled Integer value, canonical effective Integer type, scalar Constant/evaluable Parameter declaration; exact reference comparison ignores occurrence spans only.",
+    "binderAuthority": "Original lexical Class/name-binding domain proof remains unchanged after the exact declaration-value lookup.",
+    "shadowing": "All scalar/shape/interval rebinding clears declaration facts.",
+    "noNameOrInputDefaultFallback": true,
+    "noRealCoercion": true,
+    "noNewSchema": true,
+    "noModelSourceRewrite": true
+  },
+  "controls": {
+    "affineUnitTests": 13,
+    "newOwnershipTests": 3,
+    "fullOriginalSourceDae": {
+      "actualExecuted": true,
+      "equationRows": 28801,
+      "families": 181,
+      "imageFamilies": 180,
+      "rowsPerImageFamily": 160,
+      "bodiesPerImageFamily": 1,
+      "scalarView": "BinderSubstitution"
+    },
+    "nativeNamedRadius": {
+      "actualExecuted": true,
+      "declarations": [
+        "Constant Integer",
+        "Parameter Integer"
+      ],
+      "variants": 2,
+      "sourceEdits": 2,
+      "issuedOwnersPerVariant": 1,
+      "outputRawBitChecks": 720,
+      "lazyInvalidBorderSlices": true
+    },
+    "previousLiteralAndAll49WeightedNativeControlsReexecuted": true,
+    "semanticLibraryPassed": 2450,
+    "integrationPassed": 129,
+    "combinedPassed": 2579,
+    "ignored": 1
+  },
+  "gates": {
+    "focused": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "cargo",
+        "test",
+        "--manifest-path",
+        "../rumoca-native-functions/Cargo.toml",
+        "-j4",
+        "--config",
+        "profile.dev.package.rumoca-eval-dae.opt-level=3",
+        "-p",
+        "rumoca-phase-flatten",
+        "-p",
+        "rumoca-exec-wasm",
+        "-p",
+        "rumoca-ir-solve",
+        "-p",
+        "rumoca-bind-wasm",
+        "-p",
+        "rumoca-eval-dae",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-ir-dae",
+        "-p",
+        "rumoca-eval-solve",
+        "-p",
+        "rumoca-phase-solve",
+        "--features",
+        "rumoca-bind-wasm/native-assignments",
+        "--lib",
+        "construction::affine_slices",
+        "--",
+        "--nocapture"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/focused-retry.log",
+      "elapsedMs": 113844.264884,
+      "peakRssKiB": 2554944,
+      "minimumAvailableKiB": 51709980,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "sourceControls": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "cargo",
+        "test",
+        "--manifest-path",
+        "../rumoca-native-functions/Cargo.toml",
+        "-j4",
+        "--config",
+        "profile.dev.package.rumoca-eval-dae.opt-level=3",
+        "-p",
+        "rumoca-phase-flatten",
+        "-p",
+        "rumoca-exec-wasm",
+        "-p",
+        "rumoca-ir-solve",
+        "-p",
+        "rumoca-bind-wasm",
+        "-p",
+        "rumoca-eval-dae",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-ir-dae",
+        "-p",
+        "rumoca-eval-solve",
+        "-p",
+        "rumoca-phase-solve",
+        "--features",
+        "rumoca-bind-wasm/native-assignments",
+        "--lib",
+        "radius",
+        "--",
+        "--nocapture"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/source-controls-retry.log",
+      "elapsedMs": 39591.891084999996,
+      "peakRssKiB": 1159688,
+      "minimumAvailableKiB": 55949948,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "affected": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "cargo",
+        "test",
+        "--manifest-path",
+        "../rumoca-native-functions/Cargo.toml",
+        "-j4",
+        "--config",
+        "profile.dev.package.rumoca-eval-dae.opt-level=3",
+        "-p",
+        "rumoca-phase-flatten",
+        "-p",
+        "rumoca-exec-wasm",
+        "-p",
+        "rumoca-ir-solve",
+        "-p",
+        "rumoca-bind-wasm",
+        "-p",
+        "rumoca-eval-dae",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-ir-dae",
+        "-p",
+        "rumoca-eval-solve",
+        "-p",
+        "rumoca-phase-solve",
+        "--features",
+        "rumoca-bind-wasm/native-assignments",
+        "--lib"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/affected.log",
+      "elapsedMs": 96660.983009,
+      "peakRssKiB": 2421860,
+      "minimumAvailableKiB": 51925160,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "integration": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "cargo",
+        "test",
+        "--manifest-path",
+        "../rumoca-native-functions/Cargo.toml",
+        "-j4",
+        "--config",
+        "profile.dev.package.rumoca-eval-dae.opt-level=3",
+        "-p",
+        "rumoca-phase-flatten",
+        "-p",
+        "rumoca-exec-wasm",
+        "-p",
+        "rumoca-ir-solve",
+        "-p",
+        "rumoca-bind-wasm",
+        "-p",
+        "rumoca-eval-dae",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-ir-dae",
+        "-p",
+        "rumoca-eval-solve",
+        "-p",
+        "rumoca-phase-solve",
+        "--features",
+        "rumoca-bind-wasm/native-assignments",
+        "--message-format",
+        "json",
+        "--test",
+        "exact_assignments",
+        "--test",
+        "native_array_assignments",
+        "--test",
+        "native_program",
+        "--test",
+        "typed_calls"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/integration.log",
+      "elapsedMs": 7418.3549410000005,
+      "peakRssKiB": 360716,
+      "minimumAvailableKiB": 55147496,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "strict": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:.#ci",
+        "--command",
+        "cargo",
+        "clippy",
+        "--manifest-path",
+        "../rumoca-native-functions/Cargo.toml",
+        "-j4",
+        "--config",
+        "profile.dev.package.rumoca-eval-dae.opt-level=3",
+        "-p",
+        "rumoca-phase-flatten",
+        "-p",
+        "rumoca-exec-wasm",
+        "-p",
+        "rumoca-ir-solve",
+        "-p",
+        "rumoca-bind-wasm",
+        "-p",
+        "rumoca-eval-dae",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-ir-dae",
+        "-p",
+        "rumoca-eval-solve",
+        "-p",
+        "rumoca-phase-solve",
+        "--all-targets",
+        "--all-features",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/strict.log",
+      "elapsedMs": 23893.297806000002,
+      "peakRssKiB": 1583916,
+      "minimumAvailableKiB": 56661600,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "format": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:../slam_web#ci",
+        "--command",
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "Cargo.toml",
+        "--all",
+        "--check"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/format.log",
+      "elapsedMs": 14398.524845,
+      "peakRssKiB": 360584,
+      "minimumAvailableKiB": 57100824,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    },
+    "producerBuild": {
+      "command": [
+        "nice",
+        "-n",
+        "15",
+        "taskset",
+        "-c",
+        "6,7",
+        "nix",
+        "develop",
+        "path:../slam_web#ci",
+        "--command",
+        "cargo",
+        "test",
+        "--manifest-path",
+        "Cargo.toml",
+        "-j4",
+        "--config",
+        "profile.dev.package.rumoca-eval-dae.opt-level=3",
+        "-p",
+        "rumoca-phase-flatten",
+        "-p",
+        "rumoca-exec-wasm",
+        "-p",
+        "rumoca-ir-solve",
+        "-p",
+        "rumoca-bind-wasm",
+        "-p",
+        "rumoca-eval-dae",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-ir-dae",
+        "-p",
+        "rumoca-eval-solve",
+        "-p",
+        "rumoca-phase-solve",
+        "--features",
+        "rumoca-bind-wasm/native-assignments",
+        "--message-format",
+        "json",
+        "--lib",
+        "--no-run"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/producer-build.log",
+      "elapsedMs": 33017.945241,
+      "peakRssKiB": 1096152,
+      "minimumAvailableKiB": 55445136,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    }
+  },
+  "preservedFailedAttempts": [
+    {
+      "kind": "diagnostic build-only 180-second timeout before any model phase",
+      "resource": "dev/artifacts/settled-affine-radius/diagnosis/resource.json"
+    },
+    {
+      "kind": "fixture Token/type-shadow/fixed-vector API mistakes; no semantic test ran",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "15",
+          "taskset",
+          "-c",
+          "6,7",
+          "nix",
+          "develop",
+          "path:.#ci",
+          "--command",
+          "cargo",
+          "test",
+          "--manifest-path",
+          "../rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-phase-flatten",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "-p",
+          "rumoca-eval-solve",
+          "-p",
+          "rumoca-phase-solve",
+          "--features",
+          "rumoca-bind-wasm/native-assignments",
+          "--lib",
+          "construction::affine_slices",
+          "--",
+          "--nocapture"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/focused.log",
+        "elapsedMs": 76166.74491899999,
+        "peakRssKiB": 1624724,
+        "minimumAvailableKiB": 55689588,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "kind": "fixture table accessor mistake; no semantic test ran",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "15",
+          "taskset",
+          "-c",
+          "6,7",
+          "nix",
+          "develop",
+          "path:.#ci",
+          "--command",
+          "cargo",
+          "test",
+          "--manifest-path",
+          "../rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-phase-flatten",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "-p",
+          "rumoca-eval-solve",
+          "-p",
+          "rumoca-phase-solve",
+          "--features",
+          "rumoca-bind-wasm/native-assignments",
+          "--lib",
+          "radius",
+          "--",
+          "--nocapture"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/settled-affine-radius-gate/source-controls.log",
+        "elapsedMs": 178153.82369299998,
+        "peakRssKiB": 2954764,
+        "minimumAvailableKiB": 54151900,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 101
+      }
+    }
+  ],
+  "scope": {
+    "fullFastSolveAttemptForThisFreeze": false,
+    "fullFastNativeNumericalCases": 0,
+    "publicCompilerPinChanged": false,
+    "productionRuntimeChanged": false,
+    "fullSlam": false,
+    "tenTimesTargetMet": false,
+    "mslFixed20Delta": "pending",
+    "parameterProfile": "Source-owned translation-time shape facts; dynamic structural parameter changes require recompilation, not inferred runtime/default values."
+  },
+  "relatedEvidence": [
+    "dev/rumoca-fast-native-frame-selected-template-verification.json",
+    "dev/conditional-template-parity-replay-verification.json",
+    "dev/rumoca-conditional-affine-template-verification.json",
+    "dev/modelica-fast-patch-verification.json"
+  ],
+  "archives": [
+    {
+      "path": "dev/artifacts/settled-affine-radius/final-source/crates/rumoca-phase-dae/src/construction/affine_slices.rs",
+      "bytes": 6299,
+      "sha256": "9305952fc63c32b5b92c8ee2b3beef21b6ac1b9338b0e077ac4d07f611b21168"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/previous-source/crates/rumoca-phase-dae/src/construction/affine_slices.rs",
+      "bytes": 6239,
+      "sha256": "768a52a3ad2da23a7f41182362fc63e05842450e45092928658c5d4f229d5958"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/final-source/crates/rumoca-phase-dae/src/construction/affine_slices/arithmetic.rs",
+      "bytes": 6033,
+      "sha256": "bcd24204e9c00e1ee075accf74dfb72b4a15a3e2f61602222b036b48f36f4ad0"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/previous-source/crates/rumoca-phase-dae/src/construction/affine_slices/arithmetic.rs",
+      "bytes": 5951,
+      "sha256": "7fc0f5ed5a4cddeb73944feb45323bf27dcf8a5b67e432c5d6be4eb0496e6465"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/final-source/crates/rumoca-phase-dae/src/construction/affine_slices/tests.rs",
+      "bytes": 11466,
+      "sha256": "85a503ced47f23af2849d40b51a09ee2828379e97f137801251a09d8c40508a0"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/previous-source/crates/rumoca-phase-dae/src/construction/affine_slices/tests.rs",
+      "bytes": 11450,
+      "sha256": "dafc361105e2e33f3b91c7c93f03402db937769c182bad88ea3fcb63442e1ce9"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/final-source/crates/rumoca-phase-dae/src/construction/affine_slices/tests/constants.rs",
+      "bytes": 5136,
+      "sha256": "f464b748e15d7c03f04bee7ae3a7aaee894b88429ef30be94095bd40e7da3bcc"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/final-source/crates/rumoca-phase-dae/src/construction/function_shapes/mod.rs",
+      "bytes": 96770,
+      "sha256": "e537532687ccc43cea22f1af91ad1e0f964b880e4694a63338245d586db8f353"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/previous-source/crates/rumoca-phase-dae/src/construction/function_shapes/mod.rs",
+      "bytes": 95416,
+      "sha256": "71a970e4b6c5977a44600f49c688160ebdb66b75ffdeb357608bbff4e56e588e"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/final-source/crates/rumoca-phase-flatten/src/equations/template_conditionals/tests.rs",
+      "bytes": 14683,
+      "sha256": "69add43d87f8991bd9ad1d97e7684b3fa4ea1ac24a4b602141ea2c3502a7a716"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/previous-source/crates/rumoca-phase-flatten/src/equations/template_conditionals/tests.rs",
+      "bytes": 13670,
+      "sha256": "e894a64ccc45e939525134cc7c023e681a5400b42413cf127eddcc84980f0319"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/final-source/crates/rumoca-phase-flatten/src/equations/template_conditionals/fixtures/fast_native_frame.mo",
+      "bytes": 3904,
+      "sha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/final-source/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/calls/lazy_windows.rs",
+      "bytes": 6068,
+      "sha256": "8d49c100c631a3f2e487f9bf005bf8bd6a278caebe869563cdb354c9259dcfb1"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/previous-source/crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/calls/lazy_windows.rs",
+      "bytes": 5098,
+      "sha256": "cc8a606ad27c741e12c20d38de3ee17c6f9225f49d2bd77f9d19cc1eb1986219"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/focused-resource.json",
+      "bytes": 952,
+      "sha256": "c4caed305fa886099cddc3a5bb60ee2eb70f64ce584b181d76c4eabd045d6cac"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/focused.log",
+      "bytes": 5574,
+      "sha256": "8b5b24a5524621ef8df3ddc443c2e23c37ab3d3226cfe97cf76db0b8d91696a7"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/focused-retry-resource.json",
+      "bytes": 952,
+      "sha256": "c2fa1547a2e3fe48a135144ab0e516c42d244e26bda59f9ea2303222da99edfd"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/focused-retry.log",
+      "bytes": 4831,
+      "sha256": "26fc33bbac23735f87d8fe10a87985b7716279982fb8cb3e42ff096d657e4b44"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/focused-retry-source-check.log",
+      "bytes": 149899,
+      "sha256": "72b110a72b912bde46bad6b660c42fe6450c11d18d2fdd195e030ed37fbc8df7"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/source-controls-resource.json",
+      "bytes": 940,
+      "sha256": "bdfc8f2f6f3ec901d56acbdf5d2f9b067f219ce5d34253e80d5c5ddecb137c25"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/source-controls.log",
+      "bytes": 1388,
+      "sha256": "c7eeb11d8d09dabf503a2aa0706f970e0f007baffd3ca7d38c38e7ac5e30dee9"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/source-controls-retry-resource.json",
+      "bytes": 944,
+      "sha256": "e4b2064f9bdd24b379bbbdb3c3f81af970d0df3d0703cfb84ba27e76144ea719"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/source-controls-retry.log",
+      "bytes": 2992,
+      "sha256": "a05cf848e618353cd86dac4fb419e741d8bbbe2e1987d717716080c01361f540"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/source-controls-retry-source-check.log",
+      "bytes": 149899,
+      "sha256": "72b110a72b912bde46bad6b660c42fe6450c11d18d2fdd195e030ed37fbc8df7"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/affected-resource.json",
+      "bytes": 897,
+      "sha256": "2495c11c36e6b05a42d7c4b6494a8a6857fac75b0de889e8babda758536edbbc"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/affected.log",
+      "bytes": 253563,
+      "sha256": "908c3a627bb152a176dccf96655038ae312202847f534da34c2eec0679e98344"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/affected-source-check.log",
+      "bytes": 149899,
+      "sha256": "72b110a72b912bde46bad6b660c42fe6450c11d18d2fdd195e030ed37fbc8df7"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/integration-resource.json",
+      "bytes": 1037,
+      "sha256": "0b2e7403e3bd25a3726a451ff72254197c261248e5b8e1434189b2cb4bee2ac7"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/integration.log",
+      "bytes": 111801,
+      "sha256": "0eaec1963e6d6d438001c4c749d1b95d5b64421e4dff92480e4b7a17c34f5c0a"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/integration-source-check.log",
+      "bytes": 149899,
+      "sha256": "72b110a72b912bde46bad6b660c42fe6450c11d18d2fdd195e030ed37fbc8df7"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/strict-resource.json",
+      "bytes": 898,
+      "sha256": "3c56e90f61efbd02bd1bd65c508367ce991c3315d9849bcf05b44540392e6efc"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/strict.log",
+      "bytes": 820,
+      "sha256": "3aadf209679b055acdb5c1b51c0b5f248b87a42e252fa9a64a74bc337a16983a"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/strict-source-check.log",
+      "bytes": 149899,
+      "sha256": "72b110a72b912bde46bad6b660c42fe6450c11d18d2fdd195e030ed37fbc8df7"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/format-resource.json",
+      "bytes": 531,
+      "sha256": "1c39b892962b99beb7c4fd1160aa06c9d97909055c673211cf7748a108430ee8"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/format.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/format-source-check.log",
+      "bytes": 149899,
+      "sha256": "72b110a72b912bde46bad6b660c42fe6450c11d18d2fdd195e030ed37fbc8df7"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/producer-build-resource.json",
+      "bytes": 923,
+      "sha256": "d108e0f12fa8c162b93e0412d283824d97c998f0022b91d0f703797318823e6f"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/producer-source-check.log",
+      "bytes": 149899,
+      "sha256": "72b110a72b912bde46bad6b660c42fe6450c11d18d2fdd195e030ed37fbc8df7"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/final-producer.json",
+      "bytes": 1578,
+      "sha256": "d8cc1f3dbce74022171c59074fdbfe2d0b5307eb8f1d9232605384f1e3f1216c"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/selected-cargo-artifact.json",
+      "bytes": 1095,
+      "sha256": "c68e892b0c5d41c0a5abbaacda725af0c616b07d8014f33677737f75b1ba2f5b"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/final-source-closure.sha256",
+      "bytes": 301613,
+      "sha256": "ec1d418fde4bfe32c9838a410a1bf54e5005481d401a1d7e314d8a46d4798645"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/selected-shape-model-resource.json",
+      "bytes": 596,
+      "sha256": "6aa8f37bd0572b8e9809684a08217d2f949288cbe13a7444f685926e3280a307"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/selected-shape-model.log",
+      "bytes": 103075,
+      "sha256": "bd4bd575a1ff981cd986d398ab1b02a97a807acad8f7f6dba16389878fa1fe9f"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/gates/selected-shape-executable.json",
+      "bytes": 373,
+      "sha256": "91870784eacf31ff488d007fb4a1d5dc862c32180dcaac8670a29a24e411876a"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/diagnosis/resource.json",
+      "bytes": 735,
+      "sha256": "9198a591d324286e91e985eb70af45e365f6e2da5a5c960841996c9db3f440fc"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/diagnosis/model-resource.json",
+      "bytes": 582,
+      "sha256": "c0052b4659f907683f0af3ba13b88c76ffd95b78fd642c72841803a4c2639556"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/diagnosis/model.log",
+      "bytes": 87315,
+      "sha256": "b3a0a61a722aaae65e35abb0f4fa2bd911ed1ed71ce478e014c888b16afe4977"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/diagnosis/binding-build-resource.json",
+      "bytes": 947,
+      "sha256": "7492a694e715c6aab66f9f81f64727e71d328f7d9e4abdc23bbe67aeb1089e77"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/diagnosis/binding-model-resource.json",
+      "bytes": 604,
+      "sha256": "cebf99db2ee438866a02d51cc095758acca6bb052791ceac18a49f5238ae142b"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/diagnosis/binding-model.log",
+      "bytes": 124855,
+      "sha256": "0ff79a82bb8d782351e4924f2115ff3dc7a6026649cc99ea858380b84c7fa235"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/diagnosis/binding-executable.json",
+      "bytes": 1191,
+      "sha256": "da8a32ade02fa1afd046452214642cab0a4af4a2084c53463ca403bb0b6de9a3"
+    },
+    {
+      "path": "dev/artifacts/settled-affine-radius/diagnosis/binding-source-check.log",
+      "bytes": 149821,
+      "sha256": "ef6a746b5f269eaea5c0adb91f2230a993a54cff45aa86c85f182e89c728f2a5"
+    }
+  ]
+}

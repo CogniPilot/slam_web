@@ -1,0 +1,614 @@
+{
+  "status": "OMC_FULL_RAW_FUNCTION_AND_ORIGINAL_POSE_MODEL_REFERENCE_PASS",
+  "sourceManifest": [
+    {
+      "path": "models/RGBDVisualRelativeObservation.mo",
+      "bytes": 8523,
+      "sha256": "fa77395dfd2e191a435306abf43e390a44c52da617f429306ec3284110c15e1b"
+    },
+    {
+      "path": "models/RGBDRelativePose.mo",
+      "bytes": 6611,
+      "sha256": "90b1fbb79f52f398389ee8fb6d5e21ab126263a4b2d5f660c688e8d0f58affb8"
+    },
+    {
+      "path": "models/RGBDVisualObservation.mo",
+      "bytes": 4213,
+      "sha256": "e99d269415136df02ac6a36491ca43879d4cec21c821cefa7e26054976807a25"
+    },
+    {
+      "path": "tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo",
+      "bytes": 21252,
+      "sha256": "fff2c964aefdf6c42c2c9df268b2941902e41d9d8be1e400cb162bedcc65455a"
+    },
+    {
+      "path": "tests/modelica/RGBDRelativeBodyPoseFunctionAcceptance.mo",
+      "bytes": 3731,
+      "sha256": "9888ed31082f4bc0a002b6ac824c13a2465a9e4858f9b58b16d809f2e9361840"
+    },
+    {
+      "path": "dev/check-modelica-visual-relative-function.mjs",
+      "bytes": 8563,
+      "sha256": "89e5ba4b7bc75dc07e1a7c98fc19d06e777736b636c208e363e55ab2f4231646"
+    },
+    {
+      "path": "dev/check-modelica-relative-pose-function.mjs",
+      "bytes": 5383,
+      "sha256": "1fa8631bc76350f69b616defab4683f8aebf855e1d0e2defba9b19603a6d23aa"
+    },
+    {
+      "path": "dev/rumoca-bounded-run.mjs",
+      "bytes": 6735,
+      "sha256": "14f81f1cb7543aa246ea99cba940b2566e093d494cbeee589f7f04044c116532"
+    },
+    {
+      "path": "dev/rgbd-relative-function-verification.md",
+      "bytes": 5653,
+      "sha256": "ce662b7f25f3953fe62fe332b063b95bf19c9ebe23028ffc721e13d670cc04c8"
+    }
+  ],
+  "receipts": [
+    {
+      "name": "rgbd-relative-function-u1SzT9",
+      "report": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/report.json",
+      "reportSha256": "ee52a1ed6b4cde05c8b45377541307c2961a025ecd37411ee29a7ebfcb02e92a",
+      "status": "FAILED_OR_INCOMPLETE",
+      "sourceBookendsEqual": true,
+      "resources": {
+        "elapsedMs": 12920.965436999999,
+        "peakRssKiB": 1178580,
+        "minimumAvailableKiB": 55601716,
+        "exitCode": 0,
+        "secondsLimit": 120,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384
+      },
+      "checks": [
+        {
+          "scenario": 1,
+          "pass": true
+        },
+        {
+          "scenario": 2,
+          "pass": false
+        },
+        {
+          "scenario": 3,
+          "pass": true
+        },
+        {
+          "scenario": 4,
+          "pass": true
+        },
+        {
+          "scenario": 5,
+          "pass": true
+        },
+        {
+          "scenario": 6,
+          "pass": true
+        },
+        {
+          "scenario": 7,
+          "pass": true
+        },
+        {
+          "scenario": 8,
+          "pass": true
+        },
+        {
+          "scenario": 9,
+          "pass": true
+        },
+        {
+          "scenario": 10,
+          "pass": true
+        },
+        {
+          "scenario": 11,
+          "pass": true
+        },
+        {
+          "scenario": 12,
+          "pass": true
+        },
+        {
+          "scenario": 13,
+          "pass": true
+        },
+        {
+          "scenario": 14,
+          "pass": true
+        },
+        {
+          "scenario": 15,
+          "pass": true
+        },
+        {
+          "scenario": 16,
+          "pass": true
+        },
+        {
+          "scenario": 17,
+          "pass": true
+        },
+        {
+          "scenario": 18,
+          "pass": true
+        },
+        {
+          "scenario": 19,
+          "pass": true
+        },
+        {
+          "scenario": 20,
+          "pass": true
+        },
+        {
+          "scenario": 21,
+          "pass": true
+        },
+        {
+          "scenario": 22,
+          "pass": true
+        },
+        {
+          "scenario": 23,
+          "pass": true
+        },
+        {
+          "scenario": 24,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "rgbd-relative-function-fjADtO",
+      "report": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/report.json",
+      "reportSha256": "333d3d42aa124448336a9dcc434d7b2648d998984f5fb65e28f7c2757656d345",
+      "status": "OMC_FULL_RAW_VISUAL_RELATIVE_FUNCTION_PASS",
+      "sourceBookendsEqual": true,
+      "resources": {
+        "elapsedMs": 12775.243479,
+        "peakRssKiB": 1285276,
+        "minimumAvailableKiB": 56247140,
+        "exitCode": 0,
+        "secondsLimit": 120,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384
+      },
+      "checks": [
+        {
+          "scenario": 1,
+          "pass": true
+        },
+        {
+          "scenario": 2,
+          "pass": true
+        },
+        {
+          "scenario": 3,
+          "pass": true
+        },
+        {
+          "scenario": 4,
+          "pass": true
+        },
+        {
+          "scenario": 5,
+          "pass": true
+        },
+        {
+          "scenario": 6,
+          "pass": true
+        },
+        {
+          "scenario": 7,
+          "pass": true
+        },
+        {
+          "scenario": 8,
+          "pass": true
+        },
+        {
+          "scenario": 9,
+          "pass": true
+        },
+        {
+          "scenario": 10,
+          "pass": true
+        },
+        {
+          "scenario": 11,
+          "pass": true
+        },
+        {
+          "scenario": 12,
+          "pass": true
+        },
+        {
+          "scenario": 13,
+          "pass": true
+        },
+        {
+          "scenario": 14,
+          "pass": true
+        },
+        {
+          "scenario": 15,
+          "pass": true
+        },
+        {
+          "scenario": 16,
+          "pass": true
+        },
+        {
+          "scenario": 17,
+          "pass": true
+        },
+        {
+          "scenario": 18,
+          "pass": true
+        },
+        {
+          "scenario": 19,
+          "pass": true
+        },
+        {
+          "scenario": 20,
+          "pass": true
+        },
+        {
+          "scenario": 21,
+          "pass": true
+        },
+        {
+          "scenario": 22,
+          "pass": true
+        },
+        {
+          "scenario": 23,
+          "pass": true
+        },
+        {
+          "scenario": 24,
+          "pass": true
+        },
+        {
+          "scenario": 25,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "rgbd-relative-pose-function-blouuy",
+      "report": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/report.json",
+      "reportSha256": "5d31845a1c55b37208e4af68ee8d228a35ba2cb4b187eeadc3bc047b1a04560b",
+      "status": "OMC_RELATIVE_BODY_POSE_FUNCTION_MODEL_PARITY_PASS",
+      "sourceBookendsEqual": true,
+      "resources": {
+        "elapsedMs": 1545.3776540000001,
+        "peakRssKiB": 144600,
+        "minimumAvailableKiB": 57555108,
+        "exitCode": 0,
+        "secondsLimit": 120,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384
+      },
+      "checks": [
+        {
+          "scenario": 1,
+          "pass": true
+        },
+        {
+          "scenario": 2,
+          "pass": true
+        },
+        {
+          "scenario": 3,
+          "pass": true
+        },
+        {
+          "scenario": 4,
+          "pass": true
+        },
+        {
+          "scenario": 5,
+          "pass": true
+        },
+        {
+          "scenario": 6,
+          "pass": true
+        },
+        {
+          "scenario": 7,
+          "pass": true
+        },
+        {
+          "scenario": 8,
+          "pass": true
+        },
+        {
+          "scenario": 9,
+          "pass": true
+        },
+        {
+          "scenario": 10,
+          "pass": true
+        },
+        {
+          "scenario": 11,
+          "pass": true
+        },
+        {
+          "scenario": 12,
+          "pass": true
+        },
+        {
+          "scenario": 13,
+          "pass": true
+        },
+        {
+          "scenario": 14,
+          "pass": true
+        },
+        {
+          "scenario": 15,
+          "pass": true
+        },
+        {
+          "scenario": 16,
+          "pass": true
+        },
+        {
+          "scenario": 17,
+          "pass": true
+        },
+        {
+          "scenario": 18,
+          "pass": true
+        }
+      ]
+    }
+  ],
+  "evidenceManifest": [
+    {
+      "path": "dev/artifacts/rgbd-relative-function/preimages.json",
+      "bytes": 474,
+      "sha256": "f499405eec5203e108c29fbad7cc85b2a8e1c1c1b4a495ed217941925d15866b"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/RGBDVisualRelativeFunctionAcceptance_res.csv",
+      "bytes": 215349,
+      "sha256": "46796d99e9575d6981bdf4a53db9a52b2462f26e126e0f1ddd6b083305a20d91"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/command.json",
+      "bytes": 645,
+      "sha256": "7f7ccea0d4db0b3213f47c6e0b8ac449da9c8b2850bfd716f740b0cb4ca6676d"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/relative-function.mos",
+      "bytes": 920,
+      "sha256": "9c6ec23873c8cf8dbc50d67b0884792d0e6337e55f17d6e5f9b406550c5b3ea2"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/report.json",
+      "bytes": 30229,
+      "sha256": "333d3d42aa124448336a9dcc434d7b2648d998984f5fb65e28f7c2757656d345"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/resources.json",
+      "bytes": 745,
+      "sha256": "9a60cc0a5c40bdc5fdea570c5fd9f795867d10b46ed933cb3c6ecfc6c80cd3c7"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/semantics.log",
+      "bytes": 15318,
+      "sha256": "0dcd2d8c423a244514a99da8bcfec621a9b3c59dfcea08842f2638ea550236e8"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/source-preimages/dev/check-modelica-visual-relative-function.mjs",
+      "bytes": 8241,
+      "sha256": "3e510dd06a2fece47200b535a05be1115b57f3e6b175454f7d5ad90ada40534c"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/source-preimages/dev/rumoca-bounded-run.mjs",
+      "bytes": 6735,
+      "sha256": "14f81f1cb7543aa246ea99cba940b2566e093d494cbeee589f7f04044c116532"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/source-preimages/models/RGBDFeatureMatching.mo",
+      "bytes": 21968,
+      "sha256": "632ed2821f06e0782fae55e1e7ed8fa3900adde38c34ec1567d037c1a9824ddc"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/source-preimages/models/RGBDRegistrationUncertainty.mo",
+      "bytes": 11540,
+      "sha256": "8074f170f8316c4874f4517e1f4875924434fa1f58d27611a1ff93d719441ecd"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/source-preimages/models/RGBDRelativePose.mo",
+      "bytes": 6611,
+      "sha256": "90b1fbb79f52f398389ee8fb6d5e21ab126263a4b2d5f660c688e8d0f58affb8"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/source-preimages/models/RGBDVisualObservation.mo",
+      "bytes": 4213,
+      "sha256": "e99d269415136df02ac6a36491ca43879d4cec21c821cefa7e26054976807a25"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/source-preimages/models/RGBDVisualRelativeObservation.mo",
+      "bytes": 8523,
+      "sha256": "fa77395dfd2e191a435306abf43e390a44c52da617f429306ec3284110c15e1b"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/source-preimages/models/RigidPointRegistration.mo",
+      "bytes": 10102,
+      "sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-fjADtO/source-preimages/tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo",
+      "bytes": 21252,
+      "sha256": "fff2c964aefdf6c42c2c9df268b2941902e41d9d8be1e400cb162bedcc65455a"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/RGBDVisualRelativeFunctionAcceptance_res.csv",
+      "bytes": 202809,
+      "sha256": "3ce17b192b8c38d06f7053ac81fea688b9465b0bdbb84633d5eb85da8db086c6"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/command.json",
+      "bytes": 645,
+      "sha256": "2f879af136260efadec74dc1ec361a6772bbf43a872c585547b1d2e2504093b3"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/relative-function.mos",
+      "bytes": 920,
+      "sha256": "9c6ec23873c8cf8dbc50d67b0884792d0e6337e55f17d6e5f9b406550c5b3ea2"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/report.json",
+      "bytes": 29338,
+      "sha256": "ee52a1ed6b4cde05c8b45377541307c2961a025ecd37411ee29a7ebfcb02e92a"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/resources.json",
+      "bytes": 751,
+      "sha256": "5e401e336e4c251084d4943f3ade5cf2c9aebefd5d01f58c4d613c9afcb71505"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/semantics.log",
+      "bytes": 15216,
+      "sha256": "6fe26f2187fb1b83bb2891586d0bf7b4c7c2fcac9c611c50fec9375afcf6bd53"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/source-preimages/dev/check-modelica-visual-relative-function.mjs",
+      "bytes": 8241,
+      "sha256": "90d6c3c652262718ed41ca9e386e5bd51857862db908381eb38e7cf7aa84b17c"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/source-preimages/dev/rumoca-bounded-run.mjs",
+      "bytes": 6735,
+      "sha256": "14f81f1cb7543aa246ea99cba940b2566e093d494cbeee589f7f04044c116532"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/source-preimages/models/RGBDFeatureMatching.mo",
+      "bytes": 21968,
+      "sha256": "632ed2821f06e0782fae55e1e7ed8fa3900adde38c34ec1567d037c1a9824ddc"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/source-preimages/models/RGBDRegistrationUncertainty.mo",
+      "bytes": 11540,
+      "sha256": "8074f170f8316c4874f4517e1f4875924434fa1f58d27611a1ff93d719441ecd"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/source-preimages/models/RGBDRelativePose.mo",
+      "bytes": 6611,
+      "sha256": "90b1fbb79f52f398389ee8fb6d5e21ab126263a4b2d5f660c688e8d0f58affb8"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/source-preimages/models/RGBDVisualObservation.mo",
+      "bytes": 4213,
+      "sha256": "e99d269415136df02ac6a36491ca43879d4cec21c821cefa7e26054976807a25"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/source-preimages/models/RGBDVisualRelativeObservation.mo",
+      "bytes": 8523,
+      "sha256": "fa77395dfd2e191a435306abf43e390a44c52da617f429306ec3284110c15e1b"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/source-preimages/models/RigidPointRegistration.mo",
+      "bytes": 10102,
+      "sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-function-u1SzT9/source-preimages/tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo",
+      "bytes": 21080,
+      "sha256": "a77b9a49002692265b52965c43305d379d14d725e5e61cd36027f1a635e034a0"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/RGBDRelativeBodyPoseFunctionAcceptance_res.csv",
+      "bytes": 9092,
+      "sha256": "89ded05885678b53c6e508d1e7d41f68ee9cafdcdbd94e44ab122045f040f5b9"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/command.json",
+      "bytes": 656,
+      "sha256": "65f95e9045a867ba4e8e20faede2611af65abdc27015361d8a0c6a5e470f3bff"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/relative-pose.mos",
+      "bytes": 521,
+      "sha256": "02bcafb445895608b50c4e29ece0fd51cc8b1e5ece7594f8dfc7f157e5f12295"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/report.json",
+      "bytes": 4080,
+      "sha256": "5d31845a1c55b37208e4af68ee8d228a35ba2cb4b187eeadc3bc047b1a04560b"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/resources.json",
+      "bytes": 761,
+      "sha256": "588388d93657b3ab70c1e90cb5153779b0bd4f879c0b54aafe434ac52da6d536"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/semantics.log",
+      "bytes": 1358,
+      "sha256": "506399fc96493dfd0e5cf283b559ec4b133484f0654916edb9d108c3d5e9873f"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/source-preimages/dev/check-modelica-relative-pose-function.mjs",
+      "bytes": 5383,
+      "sha256": "1fa8631bc76350f69b616defab4683f8aebf855e1d0e2defba9b19603a6d23aa"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/source-preimages/dev/rumoca-bounded-run.mjs",
+      "bytes": 6735,
+      "sha256": "14f81f1cb7543aa246ea99cba940b2566e093d494cbeee589f7f04044c116532"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/source-preimages/models/RGBDRelativePose.mo",
+      "bytes": 6611,
+      "sha256": "90b1fbb79f52f398389ee8fb6d5e21ab126263a4b2d5f660c688e8d0f58affb8"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/rgbd-relative-pose-function-blouuy/source-preimages/tests/modelica/RGBDRelativeBodyPoseFunctionAcceptance.mo",
+      "bytes": 3731,
+      "sha256": "9888ed31082f4bc0a002b6ac824c13a2465a9e4858f9b58b16d809f2e9361840"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/source-preimages/RGBDRelativePose.mo",
+      "bytes": 4305,
+      "sha256": "801e75cbaf53f65af6ed3015f88720196dc81f5822be1a039e908085684a008c"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/source-preimages/RGBDVisualObservation.mo",
+      "bytes": 4213,
+      "sha256": "e99d269415136df02ac6a36491ca43879d4cec21c821cefa7e26054976807a25"
+    },
+    {
+      "path": "dev/artifacts/rgbd-relative-function/source-preimages/RGBDVisualRelativeObservation.mo",
+      "bytes": 2726,
+      "sha256": "2c3c2bcee7437fc9e471ab6f4fe68b846b329ac3b0a4db413a98521249ca6aa5"
+    }
+  ],
+  "sourcePrefixesUnchanged": true,
+  "fullRawCases": 25,
+  "fullRawGroupsPerCase": 12,
+  "originalPoseModelCases": 18,
+  "runnerOwnershipFollowup": {
+    "syntaxChecked": true,
+    "numericallyRerun": false,
+    "change": "Freeze and verify every reported input, load Modelica and watchdog from frozen copies; passed historical reports unchanged."
+  },
+  "qualifications": {
+    "omcPureFullRawRelativeFunction": true,
+    "omcOriginalRelativePoseDifferential": true,
+    "wholeOriginalVisualRelativeEquationDifferential": false,
+    "connectedFilter": false,
+    "rumocaWasm": false,
+    "browser": false,
+    "fullSlam": false
+  }
+}

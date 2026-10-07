@@ -1,0 +1,43 @@
+{
+  "status": "PRIVATE_COPIED_PROPOSAL_UNINTEGRATED",
+  "sourceIdentity": "Exact before/model.rs preimage; no original compiler writes.",
+  "owner": "rumoca-ir-solve::JacobianStructure",
+  "change": "Demand-initialize existing exact column_rows coordinate view with OnceLock<Vec<Vec<usize>>>.",
+  "publicAccessor": "column_rows(&self) -> &[Vec<usize>] (unchanged)",
+  "wireSchema": "Unchanged: derived JacobianStructure has no serialized canonical fields.",
+  "clones": {
+    "cold": "Cache remains empty",
+    "warm": "Initialized owned nested vectors are cloned as before",
+    "crossPatternReuse": false
+  },
+  "refusalsValidationAndPatternTruth": "Unchanged",
+  "tests": {
+    "copiedSourcefmt": "PASS",
+    "sourceBookendMatches": true,
+    "plannedUnitControls": 5,
+    "unitTests": "UNRUN",
+    "compilerTypecheck": "UNRUN",
+    "fullFastCounters": "UNRUN",
+    "fullFastMemoryImprovement": "UNPROVED",
+    "mainWrites": false,
+    "cacheWrites": false,
+    "builds": false
+  },
+  "limitations": [
+    "First legitimate Full coordinate-view consumer still allocates rows×columns.",
+    "CSR/Affine coloring can independently materialize temporary rows.",
+    "Cold/warm clone and complete-IR concurrency controls have not executed.",
+    "Diagnostics and cache proposal share model.rs preimage; reconcile before integration."
+  ],
+  "review": "dev/artifacts/lazy-jacobian-column-cache-proposal/REVIEW.md",
+  "patch": "dev/artifacts/lazy-jacobian-column-cache-proposal/lazy-column-cache.patch",
+  "patchSha256": "d03dacd6d9641f85d5fbf743a4153af66d68ab427eab20e2b8ef434413aeb6a8",
+  "preimages": "dev/artifacts/lazy-jacobian-column-cache-proposal/preimages.json",
+  "archive": {
+    "manifest": "dev/artifacts/lazy-jacobian-column-cache-proposal/manifest.json",
+    "manifestSha256": "d572e114c0da24773d68b8657e9e631b1ffb0517cf41e01f4ec50062d4c7d08c",
+    "files": 6,
+    "bytes": 155364
+  },
+  "allocationAudit": "dev/rumoca-fast-retained-artifacts-audit.json"
+}

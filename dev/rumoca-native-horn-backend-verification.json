@@ -1,0 +1,333 @@
+{
+  "status": "UNCHANGED_FULL14400_SOURCE_ISSUED_HORN_OWNER_WASMI_AND_CHROMIUM_PASS_NOT_REALTIME",
+  "date": "2026-10-04",
+  "worktree": "../rumoca-native-functions",
+  "base": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+  "committed": false,
+  "productionCompilerPinChanged": false,
+  "scope": "Standalone compiler-issued FitRigidPointPairs owner; no model schedule, correspondence production, temporal pose composition, VO or SLAM admission.",
+  "source": {
+    "path": "models/RigidPointRegistration.mo",
+    "sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "capacity": 14400,
+    "changed": false,
+    "sourceEditGate": false,
+    "runtimeParameterGate": true
+  },
+  "artifact": {
+    "directory": "/tmp/slam-native-horn-source-wasm",
+    "module": "horn-full14400.wasm",
+    "manifest": "horn-full14400.json",
+    "moduleSha256": "74b09a10216e3876e51aed093c18000588c6eb4ba47d8a46583759100613e901",
+    "moduleBytes": 72877,
+    "layout": {
+      "input_bytes": 806432,
+      "output_bytes": 208,
+      "scratch_bytes": 16037760
+    },
+    "abi": {
+      "export": "eval_typed_call",
+      "memory_import": "env.memory",
+      "arguments": [
+        "inputPtr:i32",
+        "outputPtr:i32",
+        "scratchPtr:i32"
+      ],
+      "result": "status:i32"
+    },
+    "mathImports": [
+      {
+        "module": "env",
+        "name": "pow",
+        "parameters": [
+          "f64",
+          "f64"
+        ],
+        "results": [
+          "f64"
+        ],
+        "qualification": "target exponentiation intrinsic; browser Math.pow has no portable host powf bit-parity guarantee"
+      }
+    ],
+    "producerRevision": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf-dirty",
+    "producerSourceSha256": "25bc9ef0dceb2ad229c7d4efb5a6b290e13e5a23baf776c03608be42c660b940",
+    "issuedTable": "/tmp/slam-native-horn-final-issued/baseline.json",
+    "issuedTableSha256": "659dbbc03eb1b44ead5e1f9363619e0f8f091b41224d1c5a357c63260e96d9a3",
+    "rawTableSha256": "ed12ceab625179ad56e5a55afd2040f5f29620d8aa5fb604fa13a301d4cc7da3",
+    "exportTestBinarySha256": "4f08d610957d02baa4cf803150fd406686812ddfede263a2a3d356f7f3ebbd99",
+    "frozen": true
+  },
+  "backendBaseline": {
+    "files": {
+      "crates/rumoca-eval-solve/src/typed_program/mod.rs": "831aaa947a8197855dd80518fa486a33e5fac493d330712e4c4ebd1462ff66a5",
+      "crates/rumoca-exec-wasm/src/typed_call.rs": "4675a1446e0a4fee13440f1fe557605391d461799aa6fe79fd1848b0dd0f35b4",
+      "crates/rumoca-exec-wasm/src/typed_call/calls.rs": "a581fc36284f5ff7bd10b4d8304404e56419e57871332b932a8487e78f767708",
+      "crates/rumoca-exec-wasm/src/typed_call/control.rs": "eef095ad3359648286418fcbed456f4191cef52827a70f2b66e75b6509d694e7",
+      "crates/rumoca-exec-wasm/src/typed_call/control/domain.rs": "8a4f9a2a14cfa5b7ed1c6980ebf9e085fbacd8236a26b47e3fc295589afb84ae",
+      "crates/rumoca-exec-wasm/src/typed_call/emit.rs": "2fe47ce48db5276987665b99910d99085af00c5d9a73ce282d1c24ece9edd346",
+      "crates/rumoca-exec-wasm/src/typed_call/layout.rs": "5670e6d61b63634b9f61c1f55ce60f4c066b8cfe7994cab4e7dd70a9356e0d82",
+      "crates/rumoca-exec-wasm/src/typed_call/link.rs": "f2226b50f89b81b1b37b5bde1d97b632eda3b2f66e5dd1306c74e0b1a52b14df",
+      "crates/rumoca-exec-wasm/src/typed_call/numbers.rs": "2acc661080dc98fd24553916030e8deed2d6c44cd64c38ecef52fb44175f7b0a",
+      "crates/rumoca-exec-wasm/src/typed_call/numbers/extrema.rs": "b00bdfd3461baccbe0926d2f292e87ab0907dc522c4836f2c8429092961dab4d",
+      "crates/rumoca-exec-wasm/src/typed_call/tensor.rs": "cd33fd640633f902ab894b590de179507a98a31d523745f6d1f425b30b408d27"
+    },
+    "digest": "f5b0402258339d417212388c0b57042b1e5bca89c31eeb64770b5669770f3675",
+    "operations": [
+      "checked finite-rank ordered Fold with simultaneous carried tuples",
+      "canonical Real Min/Max classification and signed-zero controls",
+      "source-issued Real Scale and Identity",
+      "exact reachable nested Call owners with private tuple frames and propagated faults",
+      "existing env.pow source Power intrinsic"
+    ],
+    "assertionPredicateInterfaces": "refused at all reachable owners before frame planning",
+    "copying": "Fold invariant captures copied once before each Fold. Conditional activation copies complete captured tuples. Each transition snapshots the whole carried tuple; whole-raster carry remains O(N^2) copied bytes. No speculative carried reuse."
+  },
+  "defect": {
+    "beforeLog": "/tmp/slam-native-full-horn-first-numerical.log",
+    "beforeBinarySha256": "ece033a6da7417f9bb442537d6187a1513ae53dd3a6f4d6b5b4c56275bfa51b5",
+    "cause": "ConstructAggregate copied one8-byte cell for each aggregate-valued row rather than the full row; nested matrix literals were corrupted.",
+    "fix": "Copy exact checked bytes of every ordered aggregate element and advance by its complete byte width.",
+    "independentControl": "2x3 nested row matrix complete bit-copy including negative zero and NaN payload; immutable inputs.",
+    "afterLog": "/tmp/slam-native-full-horn-proper-transform-after-row-fix.log",
+    "afterBinarySha256": "9192ce358276ee8d726bddb3380571141893e982cdf1392c2030c37e2c5ca77f"
+  },
+  "canonicalOptimization": {
+    "owner": "crates/rumoca-eval-solve/src/typed_program/mod.rs",
+    "change": "immutable TypedValue payloads share Arc<[SolveValueKind]>; functional updates create distinct complete payloads",
+    "controls": "full14400 exact-bit shared clones, preserved old SSA/input aliases after updates",
+    "beforeCanonicalProperMs": 83891.797,
+    "afterCanonicalProperMs": 3368.854,
+    "qualification": "Shared-machine scoped observations, not a whole-pipeline speedup or portable timing guarantee."
+  },
+  "gates": {
+    "fullTypedCalls": {
+      "passed": 46,
+      "log": "/tmp/slam-native-full-horn-all-cases.log",
+      "elapsedMs": 243543.758481,
+      "peakRssKiB": 536092,
+      "testBinarySha256": "cff0b377402521a6efb5dfb5e829735cee26f6f90701906e9807b9e2a683b2a7",
+      "oracle": "complete208-byte canonical equality plus independent analytic geometry, det+1/orthonormality, centroids/rank/cost/refusal/recovery"
+    },
+    "fullEvalSolve": {
+      "passed": 224,
+      "log": "/tmp/slam-canonical-immutable-payload-full-lib.log"
+    },
+    "strictClippy": {
+      "result": "PASS",
+      "scope": "rumoca-exec-wasm and rumoca-eval-solve all-targets all-features -D warnings",
+      "log": "/tmp/slam-native-horn-eval-exec-strict-clippy2.log"
+    },
+    "formatter": "PASS",
+    "browserTypes": {
+      "result": "PASS",
+      "log": "/tmp/slam-native-horn-browser-tsc.log",
+      "elapsedMs": 4134.393176
+    },
+    "browser": {
+      "result": "PASS1",
+      "log": "/tmp/slam-native-horn-browser-worker2.log",
+      "elapsedMs": 247999.304016,
+      "peakRssKiB": 1544732,
+      "rssScope": "owned process group and identified descendants including detached browser groups",
+      "cpuAffinity": [
+        6,
+        7
+      ],
+      "nice": 10,
+      "deadlineSeconds": 540,
+      "rssLimitMiB": 8192,
+      "browser": "154.0.8037.92",
+      "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+      "moduleSha256": "74b09a10216e3876e51aed093c18000588c6eb4ba47d8a46583759100613e901",
+      "layout": {
+        "input_bytes": 806432,
+        "output_bytes": 208,
+        "scratch_bytes": 16037760
+      },
+      "outcomes": [
+        {
+          "name": "full non-axis transform",
+          "reason": 0,
+          "elapsedMs": 7351.200000047684,
+          "immutableInputs": true
+        },
+        {
+          "name": "planar non-collinear",
+          "reason": 0,
+          "elapsedMs": 7214.800000071526,
+          "immutableInputs": true
+        },
+        {
+          "name": "near half turn",
+          "reason": 0,
+          "elapsedMs": 7214.100000023842,
+          "immutableInputs": true
+        },
+        {
+          "name": "known orthogonal residual",
+          "reason": 0,
+          "elapsedMs": 7186,
+          "immutableInputs": true
+        },
+        {
+          "name": "finite RMS refusal",
+          "reason": 6,
+          "elapsedMs": 7187.600000023842,
+          "immutableInputs": true
+        },
+        {
+          "name": "collinear refusal",
+          "reason": 4,
+          "elapsedMs": 7189.699999928474,
+          "immutableInputs": true
+        },
+        {
+          "name": "near-collinear refusal",
+          "reason": 4,
+          "elapsedMs": 7190.300000071526,
+          "immutableInputs": true
+        },
+        {
+          "name": "coincident refusal",
+          "reason": 4,
+          "elapsedMs": 7193.899999976158,
+          "immutableInputs": true
+        },
+        {
+          "name": "collapsed target refusal",
+          "reason": 4,
+          "elapsedMs": 7216.5,
+          "immutableInputs": true
+        },
+        {
+          "name": "empty observation",
+          "reason": 3,
+          "elapsedMs": 6369.799999952316,
+          "immutableInputs": true
+        },
+        {
+          "name": "fractional count",
+          "reason": 1,
+          "elapsedMs": 6365.199999928474,
+          "immutableInputs": true
+        },
+        {
+          "name": "oversized count",
+          "reason": 1,
+          "elapsedMs": 6400.899999976158,
+          "immutableInputs": true
+        },
+        {
+          "name": "negative count",
+          "reason": 1,
+          "elapsedMs": 6349.299999952316,
+          "immutableInputs": true
+        },
+        {
+          "name": "insufficient pairs",
+          "reason": 3,
+          "elapsedMs": 6463.5,
+          "immutableInputs": true
+        },
+        {
+          "name": "finite huge coordinate",
+          "reason": 2,
+          "elapsedMs": 7276.299999952316,
+          "immutableInputs": true
+        },
+        {
+          "name": "masked NaN",
+          "reason": 0,
+          "elapsedMs": 7277.399999976158,
+          "immutableInputs": true
+        },
+        {
+          "name": "active NaN",
+          "reason": 2,
+          "elapsedMs": 7314.700000047684,
+          "immutableInputs": true
+        },
+        {
+          "name": "invalid pair flag",
+          "reason": 2,
+          "elapsedMs": 7199.399999976158,
+          "immutableInputs": true
+        },
+        {
+          "name": "reflection refusal",
+          "reason": 6,
+          "elapsedMs": 7202.700000047684,
+          "immutableInputs": true
+        },
+        {
+          "name": "runtime residual parameter",
+          "reason": 0,
+          "elapsedMs": 7416.700000047684,
+          "immutableInputs": true
+        },
+        {
+          "name": "recovery and repeat",
+          "reason": 0,
+          "elapsedMs": 7298.700000047684,
+          "immutableInputs": true
+        }
+      ],
+      "invalidStatus": 209,
+      "atomicAbiFailure": true,
+      "calls": 10,
+      "checksum": 0,
+      "meanInputMs": 0.1,
+      "meanExecuteMs": 7429.989999997616,
+      "meanOwnedOutputMs": 0.010000002384185792,
+      "meanInputExecuteOutputMs": 7430.1,
+      "benchmarkPowCalls": 60,
+      "powCallsPerCall": 6,
+      "instrumentedPowMsPerCall": 0,
+      "powQualification": "Math.pow target intrinsic; no portable bit parity with host Rust powf; timing is coarse and instrumentation overhead excluded from benchmark",
+      "scope": "full14400 source-issued standalone registration owner in Chromium worker; not model schedule, RGB-D correspondence production, visual odometry or SLAM"
+    }
+  },
+  "history": [
+    {
+      "result": "literal-square replacement FAILED independent canonical oracle and was removed",
+      "log": "/tmp/slam-native-literal-square-controls2.log",
+      "base": 3.8836460454820846e-137,
+      "multiplyBytes": [
+        201,
+        8,
+        156,
+        229,
+        34,
+        28,
+        74,
+        7
+      ],
+      "powfBytes": [
+        202,
+        8,
+        156,
+        229,
+        34,
+        28,
+        74,
+        7
+      ],
+      "retainedContract": "source Power via env.pow; Wasmi Rust powf exact same-host oracle, Chromium Math.pow independently geometry-qualified with no portable host bit parity"
+    },
+    {
+      "result": "first browser benchmark TIMEOUT; not numerical or performance acceptance",
+      "log": "/tmp/slam-native-horn-browser-worker.log",
+      "elapsedMs": 182316.458,
+      "peakRssKiB": 1542924,
+      "reason": "21 full-size cases plus100 benchmark calls exceeded180s; final10-call benchmark preserves21 cases and unchanged algorithm/capacity."
+    }
+  ],
+  "limitations": [
+    "Current Chromium mean7429.99ms execution/call is far from90Hz and10x target.",
+    "Source edit/native model schedule/production compiler pin integration remain pending.",
+    "No worktree-wide architecture or fixed MSL canary claim from these scoped suites.",
+    "Power import uses browser Math.pow; portable host powf bit parity is not claimed.",
+    "Sibling constrained-input metadata schema patch is not applied; no new constrained interface admission."
+  ],
+  "nextOwner": "Checked immutable region-capture borrowing followed by separate witnessed carried-update storage lifetime proof; freeze this baseline before any optimization."
+}

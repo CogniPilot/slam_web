@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "status": "AFFINE_CAMERA_CALL_SOURCE_EDIT_NODE_CHROMIUM_PASS",
+  "recordedAt": "2026-10-05T11:08:02.535Z",
+  "artifacts": [
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/report.json",
+      "sha256": "360f08e8f877ff8dfea02772ac8a4fe4bc9acf919c98267f127c542d110df548"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/run.log",
+      "sha256": "ca2fac23aa8460a29ac07fa5d5129706daf5d00789538406763d60b5802743af"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/resource.json",
+      "sha256": "bbd8f9628ed827204c06cdf5ba3594b522f822b0c7a0a9dee28316c06a143111"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/probe-affine-camera-call-browser.mjs",
+      "sha256": "66f36d55d077f5485068e43cf1d3095f134eacc259b34f96df9111415659dfac"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/consumer.mjs",
+      "sha256": "c623a897a15910fc1e1897c139907d03d71e242adac7c1423bf87cd5ff335c3c"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/baseline.mo",
+      "sha256": "5d450487e3a9d4aef5085281dea30743b8153ece2f04efb6e430eecdd3ecea68"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/baseline.json",
+      "sha256": "b0cc71551ddf0829147bdfab2df5e5725d9a052ca59e1f2a2b21ba5dbfb5ba14"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/baseline-frames.json",
+      "sha256": "39dd79d94a6473ee83f862f4616ff6b3402aa37a0715bb0a35d1c7470a79d5c0"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/edited.mo",
+      "sha256": "0395ea95b308a4840bd8adf5259c36ea16e405f34ddcfcd8b31a64227560f9f6"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/edited.json",
+      "sha256": "b9db3d02929d0bf976f7854e6a9159f49bf332d6af8f9fac473fde3562a1b300"
+    },
+    {
+      "path": "dev/artifacts/affine-camera-call-browser/edited-frames.json",
+      "sha256": "56c4b35bddb8fdf6e359bc716df066c370aac6e4eddf2f2a10d23cac52c91347"
+    }
+  ],
+  "elapsedMs": 1824.562668,
+  "peakRssKiB": 1085616,
+  "variantBindings": [
+    {
+      "name": "baseline",
+      "sourceSha256": "5d450487e3a9d4aef5085281dea30743b8153ece2f04efb6e430eecdd3ecea68",
+      "artifactSha256": "b0cc71551ddf0829147bdfab2df5e5725d9a052ca59e1f2a2b21ba5dbfb5ba14",
+      "moduleSha256": "3d4120f8f9b8728d8db787eb30dfccdabd6b402387706b2c559aea710a933aa5",
+      "framesSha256": "39dd79d94a6473ee83f862f4616ff6b3402aa37a0715bb0a35d1c7470a79d5c0"
+    },
+    {
+      "name": "edited",
+      "sourceSha256": "0395ea95b308a4840bd8adf5259c36ea16e405f34ddcfcd8b31a64227560f9f6",
+      "artifactSha256": "b9db3d02929d0bf976f7854e6a9159f49bf332d6af8f9fac473fde3562a1b300",
+      "moduleSha256": "4e523bb7090f3b9214614f0750582d088d7538e4bfad1e7d2cdc8909e525197e",
+      "framesSha256": "56c4b35bddb8fdf6e359bc716df066c370aac6e4eddf2f2a10d23cac52c91347"
+    }
+  ],
+  "compilerArtifactScope": "Exported during affected Cargo suite 86069, before subsequent style-helper extraction/final source freeze.",
+  "outputRawBitChecks": 168,
+  "browser": "154.0.8037.92",
+  "productionCompilerPinChanged": false,
+  "scope": "Actual compiler-issued original guarded two-element slices and source edit, raw-bit outputs including signed zero/Infinity, readonly P, reset, InvalidBuffer atomicity/recovery, dedicated Chromium workers and IndexedDB source/artifact reload. No full7x7 or full160x90 detector, browser compilation/editor, sensor, performance or full-SLAM claim.",
+  "performanceGainProven": false,
+  "fullSlam": false
+}

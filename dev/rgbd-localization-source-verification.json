@@ -1,0 +1,643 @@
+{
+  "schemaVersion": 1,
+  "status": "CONCRETE_MODEL_SOURCE_STAGED_ORACLE_ONLY_PASS",
+  "recordedAt": "2026-10-05T20:23:51.862Z",
+  "sourceSha256": "97f44b0e4650a83da5c7812b271460e7e2fef9a06a4bc46080ed81a1585dba02",
+  "sourceBytes": 152135,
+  "files": [
+    {
+      "path": "models/FastNativeFrame.mo",
+      "sha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+      "bytes": 3904
+    },
+    {
+      "path": "models/FeatureSelection.mo",
+      "sha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23",
+      "bytes": 9389
+    },
+    {
+      "path": "models/RGBDFeatureMatching.mo",
+      "sha256": "1adc065bee50fcf583165daa015f3f0170b42a3c73ff2bd3260fafb40e71b59b",
+      "bytes": 19681
+    },
+    {
+      "path": "models/RigidPointRegistration.mo",
+      "sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+      "bytes": 10102
+    },
+    {
+      "path": "models/RGBDRelativePose.mo",
+      "sha256": "adad8fb9fab1057293da6bb76e988853fceed9deef0809a902bd2a3680491045",
+      "bytes": 4078
+    },
+    {
+      "path": "models/RGBDRegistrationUncertainty.mo",
+      "sha256": "8074f170f8316c4874f4517e1f4875924434fa1f58d27611a1ff93d719441ecd",
+      "bytes": 11540
+    },
+    {
+      "path": "models/RGBDVisualObservation.mo",
+      "sha256": "b8b3747516c815ddc2f4c514e4eb9641f3b5cafac858f47cdeb6feecc641b137",
+      "bytes": 4150
+    },
+    {
+      "path": "models/RGBDVisualRelativeObservation.mo",
+      "sha256": "2c3c2bcee7437fc9e471ab6f4fe68b846b329ac3b0a4db413a98521249ca6aa5",
+      "bytes": 2726
+    },
+    {
+      "path": "models/RGBDLandmarkProjection.mo",
+      "sha256": "98fe255ff54004d5bc76f7c68cf4c93da2d0a8be45fac9cac52beec3fbe5e412",
+      "bytes": 5276
+    },
+    {
+      "path": "models/SPD6Solve.mo",
+      "sha256": "f255441c951bbaa6cbc8e7a471cd2583715b70d5cb0f49621b45963a0a853b8f",
+      "bytes": 4577
+    },
+    {
+      "path": "models/ES15PoseCorrection.mo",
+      "sha256": "7a2e6f86e8d932fa178ab6d4b71550e768fb1c84921d73fee4d94c72b2645f4b",
+      "bytes": 11554
+    },
+    {
+      "path": "models/SchmidtRelativePoseCorrection.mo",
+      "sha256": "d00b7576b247688212085dd0b7fd30ac44c212bc0f4f00049c972b92bb9b6c9a",
+      "bytes": 16001
+    },
+    {
+      "path": "models/ES15NominalPrediction.mo",
+      "sha256": "b9da62bb98f63e1251f070456ed22dfe9fc9871b9f3b48f0370f4754b308cd77",
+      "bytes": 2484
+    },
+    {
+      "path": "models/ES15Dynamics.mo",
+      "sha256": "50c29cf0059d9316010e676a37aac2bc94937eb0b9f97140865460bf9cbbcdbf",
+      "bytes": 2368
+    },
+    {
+      "path": "models/ES15CovariancePrediction.mo",
+      "sha256": "4e9770b313b6a602c0e71eb32d9f64f0c4498f40900e20aeffd3b1cb9a93a901",
+      "bytes": 2797
+    },
+    {
+      "path": "models/SchmidtReferenceState.mo",
+      "sha256": "7c60e7f7acc36eaf06b99316e0aac73018da669c51c11ef0de8ed62e9695b2aa",
+      "bytes": 19010
+    },
+    {
+      "path": "models/RGBDInertialLocalizationStep.mo",
+      "sha256": "5dc8fb1cad43bd9f782d0f3de17f810841aeaa897ba76e4d323021c40ded7d7b",
+      "bytes": 16463
+    },
+    {
+      "path": "models/RGBDFastInertialLocalizationStep.mo",
+      "sha256": "0f93cb037eb40a191b2356f8145b50a12db6c0b7653a0baef26c45f8420e48d6",
+      "bytes": 6018
+    },
+    {
+      "path": "tests/compiler-probes/rgbd-localization-fixtures.ts",
+      "sha256": "e132cc1fb5e444c4f2d639cab4820fd1c3d24f7482e0d4038abdccaa568c0c26",
+      "bytes": 5211
+    },
+    {
+      "path": "tests/compiler-probes/modelica-rgbd-localization.test.ts",
+      "sha256": "7a63cb0d5a87374955d789d653cab8f816d82176bf68fbe1841fb730f7769dc0",
+      "bytes": 15444
+    },
+    {
+      "path": "dev/vitest-rgbd-localization.config.ts",
+      "sha256": "72dc0f2cade97bc5c1411da1e2c82bffca8081d136f0af40044122b7883ad338",
+      "bytes": 165
+    },
+    {
+      "path": "dev/export-rgbd-localization-source.mjs",
+      "sha256": "7487d49ab4b339121fccad669128efab4970343ce551731c28407d41a416e3a0",
+      "bytes": 1804
+    },
+    {
+      "path": "dev/rgbd-localization-source-gate.md",
+      "sha256": "54cfbae89bc5ab2f2aa99c7a64aff1447972be93e4b4ce8d1205c47917ff0a21",
+      "bytes": 6112
+    }
+  ],
+  "modelNames": [
+    "RGBDInertialLocalizationStep",
+    "RGBDFastInertialLocalizationStep"
+  ],
+  "sourceOrder": [
+    "models/FastNativeFrame.mo",
+    "models/FeatureSelection.mo",
+    "models/RGBDFeatureMatching.mo",
+    "models/RigidPointRegistration.mo",
+    "models/RGBDRelativePose.mo",
+    "models/RGBDRegistrationUncertainty.mo",
+    "models/RGBDVisualObservation.mo",
+    "models/RGBDVisualRelativeObservation.mo",
+    "models/RGBDLandmarkProjection.mo",
+    "models/SPD6Solve.mo",
+    "models/ES15PoseCorrection.mo",
+    "models/SchmidtRelativePoseCorrection.mo",
+    "models/ES15NominalPrediction.mo",
+    "models/ES15Dynamics.mo",
+    "models/ES15CovariancePrediction.mo",
+    "models/SchmidtReferenceState.mo",
+    "models/RGBDInertialLocalizationStep.mo",
+    "models/RGBDFastInertialLocalizationStep.mo"
+  ],
+  "sourceJoin": "one newline",
+  "commonInputFields": [
+    {
+      "name": "rgb",
+      "shape": "[imageHeight,imageWidth,4]"
+    },
+    {
+      "name": "depth",
+      "shape": "[imageHeight,imageWidth]"
+    },
+    {
+      "name": "rgbCalibration",
+      "shape": "[4]"
+    },
+    {
+      "name": "depthCalibration",
+      "shape": "[4]"
+    },
+    {
+      "name": "disparityNoise",
+      "shape": "scalar"
+    },
+    {
+      "name": "noiseReferenceFx",
+      "shape": "scalar"
+    },
+    {
+      "name": "baseline",
+      "shape": "scalar"
+    },
+    {
+      "name": "opticalToBody",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "cameraOriginBody",
+      "shape": "[3]"
+    },
+    {
+      "name": "frameEnabled",
+      "shape": "scalar"
+    },
+    {
+      "name": "imageCaptureRequested",
+      "shape": "scalar"
+    },
+    {
+      "name": "position",
+      "shape": "[3]"
+    },
+    {
+      "name": "velocity",
+      "shape": "[3]"
+    },
+    {
+      "name": "rotation",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "accelBias",
+      "shape": "[3]"
+    },
+    {
+      "name": "gyroBias",
+      "shape": "[3]"
+    },
+    {
+      "name": "covariance",
+      "shape": "[15,15]"
+    },
+    {
+      "name": "crossCovariance",
+      "shape": "[15,6]"
+    },
+    {
+      "name": "referenceCovariance",
+      "shape": "[6,6]"
+    },
+    {
+      "name": "referencePosition",
+      "shape": "[3]"
+    },
+    {
+      "name": "referenceRotation",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "referenceAvailable",
+      "shape": "scalar"
+    },
+    {
+      "name": "referenceEpoch",
+      "shape": "scalar"
+    },
+    {
+      "name": "currentEpoch",
+      "shape": "scalar"
+    },
+    {
+      "name": "referenceUsed",
+      "shape": "scalar"
+    },
+    {
+      "name": "lastUsedEpoch",
+      "shape": "scalar"
+    },
+    {
+      "name": "referenceDescriptor",
+      "shape": "[featureCapacity,descriptorSize]"
+    },
+    {
+      "name": "referencePoint",
+      "shape": "[featureCapacity,3]"
+    },
+    {
+      "name": "referenceEnabled",
+      "shape": "[featureCapacity]"
+    },
+    {
+      "name": "referencePixels",
+      "shape": "[featureCapacity,2]"
+    },
+    {
+      "name": "referenceCount",
+      "shape": "scalar"
+    },
+    {
+      "name": "referenceRgbCalibration",
+      "shape": "[4]"
+    },
+    {
+      "name": "referenceDepthCalibration",
+      "shape": "[4]"
+    },
+    {
+      "name": "referenceNoiseReferenceFx",
+      "shape": "scalar"
+    },
+    {
+      "name": "referenceDisparityNoise",
+      "shape": "scalar"
+    },
+    {
+      "name": "referenceBaseline",
+      "shape": "scalar"
+    },
+    {
+      "name": "referenceOpticalToBody",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "referenceCameraOriginBody",
+      "shape": "[3]"
+    },
+    {
+      "name": "accel",
+      "shape": "[3]"
+    },
+    {
+      "name": "gyro",
+      "shape": "[3]"
+    },
+    {
+      "name": "gravity",
+      "shape": "[3]"
+    },
+    {
+      "name": "h",
+      "shape": "scalar"
+    },
+    {
+      "name": "density",
+      "shape": "[12]"
+    }
+  ],
+  "commonOutputFields": [
+    {
+      "name": "nextPosition",
+      "shape": "[3]"
+    },
+    {
+      "name": "nextVelocity",
+      "shape": "[3]"
+    },
+    {
+      "name": "nextRotation",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "nextAccelBias",
+      "shape": "[3]"
+    },
+    {
+      "name": "nextGyroBias",
+      "shape": "[3]"
+    },
+    {
+      "name": "nextCovariance",
+      "shape": "[15,15]"
+    },
+    {
+      "name": "nextCrossCovariance",
+      "shape": "[15,6]"
+    },
+    {
+      "name": "nextReferenceCovariance",
+      "shape": "[6,6]"
+    },
+    {
+      "name": "nextReferencePosition",
+      "shape": "[3]"
+    },
+    {
+      "name": "nextReferenceRotation",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "nextReferenceAvailable",
+      "shape": "scalar"
+    },
+    {
+      "name": "nextReferenceEpoch",
+      "shape": "scalar"
+    },
+    {
+      "name": "nextReferenceUsed",
+      "shape": "scalar"
+    },
+    {
+      "name": "nextLastUsedEpoch",
+      "shape": "scalar"
+    },
+    {
+      "name": "nextReferenceDescriptor",
+      "shape": "[featureCapacity,descriptorSize]"
+    },
+    {
+      "name": "nextReferencePoint",
+      "shape": "[featureCapacity,3]"
+    },
+    {
+      "name": "nextReferenceEnabled",
+      "shape": "[featureCapacity]"
+    },
+    {
+      "name": "nextReferencePixels",
+      "shape": "[featureCapacity,2]"
+    },
+    {
+      "name": "nextReferenceCount",
+      "shape": "scalar"
+    },
+    {
+      "name": "nextReferenceRgbCalibration",
+      "shape": "[4]"
+    },
+    {
+      "name": "nextReferenceDepthCalibration",
+      "shape": "[4]"
+    },
+    {
+      "name": "nextReferenceNoiseReferenceFx",
+      "shape": "scalar"
+    },
+    {
+      "name": "nextReferenceDisparityNoise",
+      "shape": "scalar"
+    },
+    {
+      "name": "nextReferenceBaseline",
+      "shape": "scalar"
+    },
+    {
+      "name": "nextReferenceOpticalToBody",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "nextReferenceCameraOriginBody",
+      "shape": "[3]"
+    },
+    {
+      "name": "predictionAccepted",
+      "shape": "scalar"
+    },
+    {
+      "name": "observationAccepted",
+      "shape": "scalar"
+    },
+    {
+      "name": "observationRejected",
+      "shape": "scalar"
+    },
+    {
+      "name": "captureAccepted",
+      "shape": "scalar"
+    },
+    {
+      "name": "captureRejected",
+      "shape": "scalar"
+    },
+    {
+      "name": "imageReuseRejected",
+      "shape": "scalar"
+    },
+    {
+      "name": "imagePairEligible",
+      "shape": "scalar"
+    },
+    {
+      "name": "frameValid",
+      "shape": "scalar"
+    },
+    {
+      "name": "referenceGeometryCompatible",
+      "shape": "scalar"
+    },
+    {
+      "name": "visualValid",
+      "shape": "scalar"
+    },
+    {
+      "name": "matchCount",
+      "shape": "scalar"
+    },
+    {
+      "name": "uncertaintyRejectionReason",
+      "shape": "scalar"
+    },
+    {
+      "name": "currentDescriptor",
+      "shape": "[featureCapacity,descriptorSize]"
+    },
+    {
+      "name": "currentPoint",
+      "shape": "[featureCapacity,3]"
+    },
+    {
+      "name": "currentEnabled",
+      "shape": "[featureCapacity]"
+    },
+    {
+      "name": "currentFromReference",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "currentFromReferenceTranslation",
+      "shape": "[3]"
+    },
+    {
+      "name": "relativeCovariance",
+      "shape": "[6,6]"
+    },
+    {
+      "name": "mapCandidatePoint",
+      "shape": "[featureCapacity,3]"
+    },
+    {
+      "name": "mapCandidateEnabled",
+      "shape": "[featureCapacity]"
+    },
+    {
+      "name": "mapCandidateCount",
+      "shape": "scalar"
+    },
+    {
+      "name": "nextQuaternion",
+      "shape": "[4]"
+    },
+    {
+      "name": "positionCovariance",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "attitudeCovariance",
+      "shape": "[3,3]"
+    },
+    {
+      "name": "confidence",
+      "shape": "scalar"
+    },
+    {
+      "name": "features",
+      "shape": "[featureCapacity,3]"
+    },
+    {
+      "name": "featureEnabled",
+      "shape": "[featureCapacity]"
+    },
+    {
+      "name": "trackingCurrentPixel",
+      "shape": "[featureCapacity,2]"
+    },
+    {
+      "name": "trackingReferencePixel",
+      "shape": "[featureCapacity,2]"
+    },
+    {
+      "name": "trackingEnabled",
+      "shape": "[featureCapacity]"
+    }
+  ],
+  "coreAdditionalInputs": [
+    {
+      "name": "pixels",
+      "shape": [
+        350,
+        2
+      ]
+    },
+    {
+      "name": "activeCount",
+      "shape": []
+    },
+    {
+      "name": "featureScore",
+      "shape": [
+        350
+      ]
+    }
+  ],
+  "fullAdditionalOutputs": [
+    {
+      "name": "selectionValid",
+      "shape": []
+    }
+  ],
+  "invariants": {
+    "imageShape": [
+      90,
+      160,
+      4
+    ],
+    "depthShape": [
+      90,
+      160
+    ],
+    "sparseFeatureSlots": 350,
+    "rasterSelectionSlots": 14400,
+    "descriptorCells": 49,
+    "covarianceCells": 225,
+    "crossCovarianceCells": 90,
+    "referenceCovarianceCells": 36,
+    "referenceCommit": "all image/point/mask/pixel/count/calibration/noise/extrinsic fields iff step.captureAccepted",
+    "visualCorrectionNoise": "existing Modelica sandwich relativeCovariance, no fixture covariance",
+    "interval": "held IMU, final interval only frameEnabled=1, 0<h<=.02; no host subdivision",
+    "pose": "estimated body FLU to world ENU, quaternion wxyz normalized by existing Modelica helper",
+    "map": "350 source-projected world candidates only, no persistent map/loop optimization",
+    "initialization": "source diagonal tunable prior, estimated level origin/zero biases/velocity, cold reference",
+    "captureGeometry": "camera lever arm<=10m, baseline[1e-6,1]m, noise reference fx[1e-6,1e6], disparity sigma(0,1]; intersection of existing component contracts"
+  },
+  "verification": {
+    "oracle": {
+      "command": "nice -n15 taskset -c30 node node_modules/vitest/vitest.mjs run --config dev/vitest-rgbd-localization.config.ts --pool=threads",
+      "exitCode": 0,
+      "passed": 1,
+      "actualTestsSkipped": 4,
+      "durationSeconds": 0.909,
+      "testSeconds": 0.394,
+      "actualModelicaExecuted": false
+    },
+    "typecheck": {
+      "command": "nice -n15 taskset -c30 node node_modules/typescript/bin/tsc --noEmit",
+      "exitCode": 0
+    },
+    "exporterSyntax": {
+      "command": "node --check dev/export-rgbd-localization-source.mjs",
+      "exitCode": 0
+    },
+    "whitespace": {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    "sourceCompileAttempted": false,
+    "nativeArtifactIssued": false,
+    "actualNumericalCases": 0,
+    "stagedActualSparseCase": "344 disabled slots plus six final slots, activeCount350, matching/count/correction and last-slot tracking/map masks",
+    "stagedFullRasterCase": "Separate actual full-wrapper artifact: four unchanged14400score fixtures, independent stable selection/NMS, full350 calibrated descriptor+reference snapshot checks; absent artifact skipped"
+  },
+  "productionPinChanged": false,
+  "runtimeWired": false,
+  "compilerEdited": false,
+  "fullSlamAccepted": false,
+  "pending": [
+    "actual source-issued core artifact and three actual numerical groups",
+    "original full14400 FAST/selection connected artifact and pixel/score source edit controls",
+    "moving6DOF trajectory and browser session acceptance",
+    "persistent map/retrieval/loop graph ownership and complete composition",
+    "source-owned substep for held intervals>20ms",
+    "Float32 CV/packed U8 canonical input receipt"
+  ],
+  "independentSourceReview": {
+    "reviewer": "pure_call_body_reuse",
+    "scope": "read-only DAG/optical signs/sparse domains/reference and covariance commit; no compiler run",
+    "outcome": "No causal cycle, optical sign or covariance commit issue found; camera-origin bound refined from1e6 to existing correction10m limit after review"
+  }
+}

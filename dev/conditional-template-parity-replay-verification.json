@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "status": "SIX_ORIGINAL_REGRESSION_SOURCES_FINAL_PRODUCER_NATIVE_PREPARATION_PASS",
+  "recordedAt": "2026-10-05T12:17:49.974Z",
+  "producerSha256": "a00be4e020def67a143e39d742f8ba736fc7b5df3b6c5f45d9d7c0a09831cdd8",
+  "sourceClosureSha256": "598969227b7ca2695c4330caac0c96ff52996f9350e084f458d5c320b1d20d78",
+  "rows": [
+    {
+      "name": "valid-fixed-scalar",
+      "sourceSha256": "3cf34cbe7583d03cfdb9509aa799079500e0f720b202fbb22cde5e6b56516fd0",
+      "exitCode": 0,
+      "nativeScheduleAdmitted": true
+    },
+    {
+      "name": "vectorized-actual",
+      "sourceSha256": "150e51de2ebc81ca6f5ae46ca122d36abc3eaec9661e43489bae20d3a473d707",
+      "exitCode": 0,
+      "nativeScheduleAdmitted": true
+    },
+    {
+      "name": "wrong-fixed-array-shape",
+      "sourceSha256": "1a58166805241692adc8be78323daa0a6f9f04172c409e3483ef5494cf8d9954",
+      "exitCode": 0,
+      "nativeScheduleAdmitted": true
+    },
+    {
+      "name": "same-owner-other-input-profile",
+      "sourceSha256": "394d5fe5c5905f405e54b30d01e03d02911f2cfbb70ac3fa81679943a80cb3fa",
+      "exitCode": 0,
+      "nativeScheduleAdmitted": true
+    },
+    {
+      "name": "inactive-edge",
+      "sourceSha256": "13ac4b0d1f2eedbad24bf5eebd6f4c7c63b9153860561284fbcd9f4d13d67ff6",
+      "exitCode": 0,
+      "nativeScheduleAdmitted": true
+    },
+    {
+      "name": "inactive-der",
+      "sourceSha256": "7376602f4a636c3e71e4e7c23c3cbc0a94d0ddc3b014166799fc63d0ad5f92f2",
+      "exitCode": 0,
+      "nativeScheduleAdmitted": true
+    }
+  ],
+  "scope": "Six exact archived regression sources, final frozen producer, native preparation/schedule inventory only. No numerical execution or full detector proof.",
+  "compilerGates": "dev/rumoca-conditional-affine-template-verification.json",
+  "originalRegressionRecord": "dev/inactive-call-template-parity-verification.json",
+  "fullFastAdmitted": false,
+  "fullSlam": false,
+  "publicCompilerPinChanged": false,
+  "artifacts": [
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/report.json",
+      "bytes": 1706,
+      "sha256": "a4fbd50b2b0ff7a2aee59402813c6f9a24cb76cfab6e551aded37bb48ca370e3"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/valid-fixed-scalar/replay.log",
+      "bytes": 831,
+      "sha256": "bb4dd7ce622814c0906c8726edd47a187e7df272f4c41ce3a23a6ea334c48519"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/valid-fixed-scalar/resource.json",
+      "bytes": 825,
+      "sha256": "88d1326754c54866a6adf7c15c039fa952127ca6e0b4e554a51ef9005e9211b1"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/vectorized-actual/replay.log",
+      "bytes": 831,
+      "sha256": "bb4dd7ce622814c0906c8726edd47a187e7df272f4c41ce3a23a6ea334c48519"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/vectorized-actual/resource.json",
+      "bytes": 823,
+      "sha256": "9012ffb6766c885c0a30df337f151a519e96a3c4dfb2e823bcf92dd0e25c7318"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/wrong-fixed-array-shape/replay.log",
+      "bytes": 831,
+      "sha256": "63802266acb71273edf6270b21e55b394079034e5214b40d177d480d0970803c"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/wrong-fixed-array-shape/resource.json",
+      "bytes": 826,
+      "sha256": "6f480010413bfe12dba49d484ea458d2bbdf33f9d498939ebf8a77b269d22271"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/same-owner-other-input-profile/replay.log",
+      "bytes": 2238,
+      "sha256": "0acba5838ed1f16cbe66266bac833dc5b48b870a36f5de6cfc823ce6afc6ed73"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/same-owner-other-input-profile/resource.json",
+      "bytes": 849,
+      "sha256": "34b66bd2b2e1cf7f963f137d79e674a04111b881c4b38418dfb08ec2c6616da1"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/inactive-edge/replay.log",
+      "bytes": 829,
+      "sha256": "56d60b6d8c22ce8fcc2dd40bf47030c7ab29203cb15ac1c686cbb501c27fe639"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/inactive-edge/resource.json",
+      "bytes": 815,
+      "sha256": "e30b84cac9c36753d14cfa0212e042b5bd58dda69563f1742a85ffa94015ae9b"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/inactive-der/replay.log",
+      "bytes": 829,
+      "sha256": "347a9fcfcc40140c524d51e343b8f37e5d0fdd4d51a27692c30e02f14b7a094a"
+    },
+    {
+      "path": "dev/artifacts/conditional-template-parity-replay/inactive-der/resource.json",
+      "bytes": 813,
+      "sha256": "57e26350b33504ff42d7f01eb1d21e5c2130bca3db9ae650131a0da1f93ea84f"
+    }
+  ]
+}

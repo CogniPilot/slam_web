@@ -1,0 +1,36 @@
+Poly Pizza City Pack selected architectural assets
+Collection: https://poly.pizza/bundle/City-Pack-kJqRAIGsw0
+
+The author of each selected asset is J-Toastie. Collection authorship alone is not used as an asset attribution.
+All five assets are licensed CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
+Legal code included in LICENSE-CC-BY-3.0.txt.
+
+Building Green by J-Toastie
+https://poly.pizza/m/FmjsfA1eHY
+File: building-green.glb
+SHA-256: 7a823bc7f106e52fa36526910d7bcbd5beb456b35f29f2b302e5b1b3e33e016a
+
+Pizza Corner by J-Toastie
+https://poly.pizza/m/78W2Ab2Uvt
+File: pizza-corner.glb
+SHA-256: dbe28d57a7981f752be2834aae6eb341af5d6c046410f62afec38a77e532aa73
+
+Brown Building by J-Toastie
+https://poly.pizza/m/fGKIlWGDNH
+File: brown-building.glb
+SHA-256: 983bd8d5b61908cce244d73480e07aeafc9ed5aa13e25a6d136b48fb516dc6a1
+
+Building Red by J-Toastie
+https://poly.pizza/m/lbNz2dClar
+File: building-red.glb
+SHA-256: 0c6734d818b89af863f581960a35356b31b8ff726c2f30541427bebaefbbcd8b
+
+Building Red Corner by J-Toastie
+https://poly.pizza/m/9JuFwnivP0
+File: building-red-corner.glb
+SHA-256: aec6e49c3ec3ed7261be791805d027bf362293642b6a12d0193cea3d4a22b9b4
+
+Modifications
+Original downloaded GLB bytes retained. Runtime bakes node transforms and corrects mirrored triangle winding, uniformly scales models to 4.6 m frontage, places feet at ground level, instances architectural primitives, adjusts exported metalness/roughness, and adds procedural metric surface maps to masonry and wood.
+
+Creators have not endorsed SLAM Lab.

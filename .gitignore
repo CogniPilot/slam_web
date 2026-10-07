@@ -1,0 +1,19 @@
+node_modules/
+dist
+public/vendor/
+test-results/
+playwright-report/
+target/
+**/target/
+.DS_Store
+isolate-*-v8.log
+*.cpuprofile
+perf.data*
+# Disposable compiler output, recordings and diagnostic snapshots stay local.
+dev/artifacts/**
+!dev/artifacts/README.md
+.env
+.env.*
+!.env.example
+
+/dev/*.log

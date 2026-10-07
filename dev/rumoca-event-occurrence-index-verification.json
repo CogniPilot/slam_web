@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "status": "EVENT_OCCURRENCE_LOOKUP_AND_SIGNED_ZERO_HASH_REGRESSIONS_PASS_DESCRIPTOR_ADMISSION_PENDING",
+  "recordedAt": "2026-10-04T19:56:12.267Z",
+  "compilerBranch": "slam-native-functions",
+  "compilerHead": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+  "producerSha256": "201b1d01b55753b7ff171776889150ccbc599cdd2b3d651c24ea41c875299000",
+  "sourceClosure": {
+    "path": "dev/artifacts/rumoca-event-index/compiler-source-closure.sha256",
+    "sha256": "7f894839b9443a9fcf499a2dfab8ad9faf3d3552d91ee67d34e3d582b22f0575",
+    "files": 2380
+  },
+  "patch": {
+    "path": "dev/artifacts/rumoca-event-index/event-index.patch",
+    "sha256": "f8c0be0b19432a1477f7e90f4c463d4a838fa158a6433f77a2eb4797b1067c17"
+  },
+  "sourceSha256": "1adc065bee50fcf583165daa015f3f0170b42a3c73ff2bd3260fafb40e71b59b",
+  "modelName": "RGBDDescriptorFrame",
+  "dimensions": {
+    "rgba": [
+      90,
+      160,
+      4
+    ],
+    "features": 350,
+    "descriptor": 49
+  },
+  "fixes": [
+    "Index event-owner occurrences by ordered operand fingerprint vectors within source spans; exact operand equality still confirms each match",
+    "Preserve insertion-ordered event emission, exact source/reference identity, conflicting-owner refusal, and all-member structured state-relation classification",
+    "Normalize signed zero only while hashing so equal Modelica expression literals cannot occupy different fingerprint buckets; stored literal bits remain unchanged"
+  ],
+  "gates": {
+    "focused": {
+      "tests": 22,
+      "resource": "dev/event-occurrence-controls-resource.json"
+    },
+    "existingEvents": {
+      "tests": 17,
+      "resource": "dev/event-occurrence-existing-events-resource.json",
+      "note": "Includes four focused lookup controls already counted in focused suite"
+    },
+    "core": {
+      "tests": 196,
+      "failed": 0,
+      "ignored": 0,
+      "resource": "dev/event-occurrence-full-core-resource.json"
+    },
+    "phaseDae": {
+      "tests": 321,
+      "failed": 0,
+      "ignored": 0,
+      "resource": "dev/event-occurrence-full-dae-resource.json"
+    },
+    "strictScopedClippy": {
+      "status": "PASS",
+      "packages": ["rumoca-core", "rumoca-phase-dae", "rumoca-ir-solve"],
+      "allTargets": true,
+      "allFeatures": true,
+      "warningsDenied": true,
+      "compilerSourceClosureSha256": "8fed7bc76ca6811744f6e012065f0609bd84f2ccfacfe4618aff7b53b038df19",
+      "evidence": "dev/modelica-rgbd-landmark-projection-native-verification.json",
+      "note": "Later combined source gate; all four event/hash patch files retain their original verification hashes. This does not establish whole-workspace or MSL compatibility."
+    }
+  },
+  "actualSourceAttempts": {
+    "baseline": {
+      "producerSha256": "e8ea555b92e4449dbe7e00d5a68290fdcdfb9d43ffcd332b4862fd74ca4cf107",
+      "sourceClosureSha256": "f2ccedcd85585c4f05eada967a0db21e11a674b2cdad8048ac045f60ab75f1a5",
+      "resource": "dev/descriptor-context-tiles-preparation-resource.json",
+      "status": "TIMEOUT",
+      "artifactIssued": false
+    },
+    "candidate": {
+      "resource": "dev/descriptor-event-index-preparation-resource.json",
+      "status": "TIMEOUT",
+      "artifactIssued": false
+    }
+  },
+  "profiles": [
+    {
+      "directory": "$HOME/scratch/slam_web/profiles/descriptor-context-tiles",
+      "rawTraceSha256": "40581d997ebcfda5b797753ce5c703d29b82039cbc808ccb37fec4dcd623db16",
+      "symbolsSha256": "35cfbf1c43baa47b29056733cbfa2f5a7f9964cbbcd45950c1547e2d1be4c5a2",
+      "samples": 1817,
+      "lostSamples": 0,
+      "event": "cpu-clock:u",
+      "frequencyHz": 99,
+      "callGraph": "dwarf,8192",
+      "sampleWindowSeconds": 20,
+      "scope": "Early native preparation: deep expression comparison and event-owner insertion"
+    },
+    {
+      "directory": "$HOME/scratch/slam_web/profiles/descriptor-event-index",
+      "rawTraceSha256": "afc8281030138545a1746398c2d7873da09081964c36689b7f6fcb4f3b205c25",
+      "symbolsSha256": "3e942345baf84093f74d6010ee0fbceea96e7a7b2d80944ea7967ebd1f91d7ea",
+      "samples": 1780,
+      "lostSamples": 0,
+      "event": "cpu-clock:u",
+      "frequencyHz": 99,
+      "callGraph": "dwarf,8192",
+      "sampleWindowSeconds": 20,
+      "scope": "Later native preparation: eval-dae dependency projection and structural incidence"
+    }
+  ],
+  "scope": "Compiler preparation improvement candidate and generic lookup correctness. The later patched profile reaches structural incidence, but neither attempt completes preparation; no descriptor execution or matched preparation speedup is claimed.",
+  "limitations": [
+    "Baseline and patched samples cover different preparation windows/stages; sample percentages are not matched latency benchmarks",
+    "Patched source closure also contains pending multioutput certification and diagnostic work; not a standalone PR build",
+    "Fixed MSL canary, whole-workspace checks and fresh browser compiler package remain pending",
+    "No descriptor native artifact, descriptor numerics, complete visual graph or full SLAM admission"
+  ],
+  "productionPinChanged": false,
+  "runtimeIntegrated": false,
+  "fullSlam": false
+}

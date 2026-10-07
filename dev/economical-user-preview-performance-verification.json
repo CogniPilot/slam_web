@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "status": "EXISTING_PREVIEW_LOWER_RATE_CHARACTERIZATION_PASS_10X_FULL_SLAM_PENDING",
+  "recordedAt": "2026-10-05T01:41:53.359Z",
+  "summary": {
+    "cpuProfiling": false,
+    "settings": {
+      "environment": "city",
+      "sceneDetail": "low",
+      "lidarEnabled": true,
+      "depthCloudEnabled": true,
+      "sensorRates": {
+        "cameraHz": 15,
+        "lidarHz": 5,
+        "imuHz": 90,
+        "gpsHz": 10
+      }
+    },
+    "workload": {
+      "profile": "Modelica inertial propagation with RGB-D feature detection; full SLAM is not measured",
+      "seed": 7,
+      "detectorPreset": "Modelica Harris · full resolution",
+      "detectorLanguage": "modelica",
+      "algorithmPreset": "Modelica inertial propagation",
+      "runtime": "modelica",
+      "carsEnabled": true,
+      "peopleEnabled": true,
+      "lightingMode": "day",
+      "depthCloudEnabled": true,
+      "sensorRates": {
+        "cameraHz": 15,
+        "lidarHz": 5,
+        "imuHz": 90,
+        "gpsHz": 10
+      },
+      "sourceSha256": {
+        "physics": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+        "sensor": "0e0b0654ebb293edd48968761eafac977b5f2b90955f012a4ea18ac078ac963a",
+        "evaluation": "f6dc00fb7971fcfacaf50364949d2469fe7d289e84f11640e989ad52f35bea3b",
+        "detector": "faa81a704d6d923720173e686c4d20102f47bb34b29ff591b9b76c12b5b853f7",
+        "algorithm": "04c4435fa1a6c5c929a245a8c76ac4bafcfde3eb54734677fb592f7ba2c2f1ce",
+        "graph": "34d6cd925f8e4dda44bdd23fdcdeed4dd3b586342f188b894785cfc8c2028074"
+      }
+    },
+    "bundleManifest": "bundle.json",
+    "readback": "sync",
+    "targetSimulationRate": 10,
+    "targetFrameMs": 6.666666666666667,
+    "simulationRate": 2.6392187912377936,
+    "startSimulationTime": 0.6666666666666666,
+    "flowCounts": {
+      "lab/sensors/imu/0": 900,
+      "lab/node/physics/truth": 150,
+      "lab/camera/info": 150,
+      "lab/node/sensor/frame": 150,
+      "lab/node/detector/features": 150,
+      "lab/node/slam/estimate": 150,
+      "lab/node/map/estimate": 150,
+      "lab/node/evaluation/metrics": 150,
+      "lab/slam/odometry": 150,
+      "lab/navigation/gps": 100,
+      "lab/sensors/lidar/0": 50
+    },
+    "browserCpu": {
+      "seconds": 6.9399999999999995,
+      "meanActiveCores": 1.8316178411190285,
+      "method": "CDP process CPU deltas after warmup; CPU sampling disabled"
+    },
+    "mainCpuThrottle": 1,
+    "graphics": {
+      "api": "WebGL 2",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+      "vendor": "Google Inc. (NVIDIA Corporation)",
+      "acceleration": "hardware-reported",
+      "powerPreference": "high-performance"
+    },
+    "frames": 150,
+    "elapsedMs": 3789,
+    "meanFrameMs": 25.222666664123537,
+    "meanNodeMs": {
+      "physics": 12.495333333810171,
+      "sensor": 7.781999998092651,
+      "detector": 2.7533333388964336,
+      "slam": 0.38733333031336464,
+      "map": 0.035999999046325684,
+      "evaluation": 0.35600000143051147
+    },
+    "final": {
+      "sequence": 159,
+      "time": 10.666666666666666,
+      "totalMs": 30,
+      "nodes": {
+        "physics": 13.100000023841858,
+        "sensor": 12.299999952316284,
+        "detector": 2.700000047683716,
+        "slam": 0.2999999523162842,
+        "map": 0.10000002384185791,
+        "evaluation": 0.2999999523162842
+      },
+      "workers": {
+        "physics": {
+          "roundTripMs": 4.599999904632568
+        },
+        "detector": {
+          "roundTripMs": 2.700000047683716,
+          "queueMs": 0,
+          "inputMs": 0,
+          "computeMs": 1.5999999046325684,
+          "outputMs": 0.7000000476837158,
+          "workerMs": 2.299999952316284
+        },
+        "slam": {
+          "roundTripMs": 0.2999999523162842
+        },
+        "evaluation": {
+          "roundTripMs": 0.2999999523162842,
+          "queueMs": 0,
+          "workerMs": 0.10000002384185791
+        }
+      },
+      "transport": {
+        "lab/node/physics/truth": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/sensor/frame": {
+          "totalMs": 0,
+          "bufferBytes": 115200
+        },
+        "lab/node/detector/features": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/slam/estimate": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/map/estimate": {
+          "totalMs": 0.10000002384185791,
+          "bufferBytes": null
+        },
+        "lab/node/evaluation/metrics": {
+          "totalMs": 0,
+          "bufferBytes": null
+        }
+      },
+      "camera": {
+        "readback": 9.399999976158142,
+        "renderSubmission": 1.100000023841858,
+        "total": 10.5,
+        "method": "synchronous WebGL readback in sensor worker"
+      },
+      "display": {
+        "timestamp": 6597.5,
+        "windowMs": 1016.6000000000004,
+        "targetFps": 30,
+        "fps": 30.493802872319485,
+        "captureHz": 0,
+        "visionHz": 0,
+        "lidarHz": 0,
+        "renderedFrames": 31,
+        "capturedFrames": 0,
+        "visionFrames": 0,
+        "lidarFrames": 0,
+        "meanFrameIntervalMs": 33.32903225575724,
+        "p95FrameIntervalMs": 33.60000002384186,
+        "meanRenderSubmitMs": 1.406451625208701,
+        "longTasks": null
+      },
+      "ate": 0.573,
+      "points": 0,
+      "diagnostics": {
+        "model": "Modelica nominal INS",
+        "stateCount": 16
+      }
+    },
+    "workers": [],
+    "errors": []
+  },
+  "viewerWindows": [
+    {
+      "timestamp": 2564.3,
+      "windowMs": 1016.6000000000001,
+      "targetFps": 30,
+      "fps": 29.51013181192209,
+      "captureHz": 0,
+      "visionHz": 0,
+      "lidarHz": 0,
+      "renderedFrames": 30,
+      "capturedFrames": 0,
+      "visionFrames": 0,
+      "lidarFrames": 0,
+      "meanFrameIntervalMs": 33.87666666507721,
+      "p95FrameIntervalMs": 50.300000071525574,
+      "meanRenderSubmitMs": 2.0766666650772097,
+      "longTasks": null
+    },
+    {
+      "timestamp": 3564.3,
+      "windowMs": 1000,
+      "targetFps": 30,
+      "fps": 22,
+      "captureHz": 0,
+      "visionHz": 0,
+      "lidarHz": 0,
+      "renderedFrames": 22,
+      "capturedFrames": 0,
+      "visionFrames": 0,
+      "lidarFrames": 0,
+      "meanFrameIntervalMs": 45.38181818073446,
+      "p95FrameIntervalMs": 65.20000004768372,
+      "meanRenderSubmitMs": 15.67272725430402,
+      "longTasks": null
+    },
+    {
+      "timestamp": 4580.9,
+      "windowMs": 1016.5999999999995,
+      "targetFps": 30,
+      "fps": 29.510131811922108,
+      "captureHz": 0,
+      "visionHz": 0,
+      "lidarHz": 0,
+      "renderedFrames": 30,
+      "capturedFrames": 0,
+      "visionFrames": 0,
+      "lidarFrames": 0,
+      "meanFrameIntervalMs": 33.34000000158946,
+      "p95FrameIntervalMs": 33.799999952316284,
+      "meanRenderSubmitMs": 1.3733333190282186,
+      "longTasks": null
+    },
+    {
+      "timestamp": 5580.9,
+      "windowMs": 1000,
+      "targetFps": 30,
+      "fps": 30,
+      "captureHz": 0,
+      "visionHz": 0,
+      "lidarHz": 0,
+      "renderedFrames": 30,
+      "capturedFrames": 0,
+      "visionFrames": 0,
+      "lidarFrames": 0,
+      "meanFrameIntervalMs": 33.336666667461394,
+      "p95FrameIntervalMs": 33.700000047683716,
+      "meanRenderSubmitMs": 1.3433333357175192,
+      "longTasks": null
+    },
+    {
+      "timestamp": 6597.5,
+      "windowMs": 1016.6000000000004,
+      "targetFps": 30,
+      "fps": 30.493802872319485,
+      "captureHz": 0,
+      "visionHz": 0,
+      "lidarHz": 0,
+      "renderedFrames": 31,
+      "capturedFrames": 0,
+      "visionFrames": 0,
+      "lidarFrames": 0,
+      "meanFrameIntervalMs": 33.32903225575724,
+      "p95FrameIntervalMs": 33.60000002384186,
+      "meanRenderSubmitMs": 1.406451625208701,
+      "longTasks": null
+    }
+  ],
+  "weightedViewerHz": 28.317953186264802,
+  "sameSelectedBundle": true,
+  "expectedCounts": {
+    "lab/node/sensor/frame": 150,
+    "lab/camera/info": 150,
+    "lab/sensors/lidar/0": 50,
+    "lab/sensors/imu/0": 900,
+    "lab/navigation/gps": 100
+  },
+  "scope": "Existing production preview on RTX3090, no CPU/GPU/perf sampling, unrestricted shared host.150captures over10simulatedseconds; original Modelica INS/Harris baseline, actors/cloud enabled. Lower graphics and15/5/90/10 sensor rates; different workload from high90/20/90/10, not a compiler or equal-work speedup.",
+  "rawDirectory": "$HOME/scratch/slam_web/tmp/sensor-render-profile/economical-user-preview",
+  "raw": [
+    {
+      "path": "bundle.json",
+      "bytes": 1481,
+      "sha256": "d53484aac0fa40678a595d24ef4df062227768076fa123b0ff090020c84e6d7c"
+    },
+    {
+      "path": "normal-process-metadata.json",
+      "bytes": 1951,
+      "sha256": "1181a53708d122783e827d5a623ba7b3484d71b174dc679a9f9d46822fa8a5c7"
+    },
+    {
+      "path": "run.log",
+      "bytes": 5009,
+      "sha256": "834e0bec966927976d747fbb06c4b51b8307d6f79728e0a9dd67b7d62c6ba82d"
+    },
+    {
+      "path": "timings.json",
+      "bytes": 383631,
+      "sha256": "f8dc214e14a19a6e583237b4161074e0c8f95e8188d04b2b55dfb3b34624cf72"
+    },
+    {
+      "path": "world.png",
+      "bytes": 710702,
+      "sha256": "e33007ecabda2296d5846d8d0f28fd417da0e5c58270111113a06325ef7b9bab"
+    }
+  ],
+  "limits": [
+    "One short warmed shared-host run; startup and10warm captures excluded.",
+    "Viewer window data does not prove steady intervals on other machines.",
+    "No new compiler fixes selected, no complete visual SLAM, no10x claim.",
+    "Five observed viewer windows include22Hz and p95interval65.2ms; no steady30FPS claim."
+  ],
+  "viewerScope": "Unique observed complete monitor windows, which can straddle compilation/warmup and measured boundaries. The weighted value is a monitor-window characterization, not an exact viewer rate confined to the3.789second throughput interval."
+}

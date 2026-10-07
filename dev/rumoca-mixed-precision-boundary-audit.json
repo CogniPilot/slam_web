@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "kind": "read-only-canonical-mixed-precision-boundary-audit",
+  "compilerRelativePath": "../rumoca-native-functions",
+  "headBefore": "14694fd7e4369b775b15cd2dafc86f0b06bd4608",
+  "headAfter": "14694fd7e4369b775b15cd2dafc86f0b06bd4608",
+  "headIsDirtyMergeIdentityOnly": true,
+  "preimagesStableDuringCopy": true,
+  "claims": {
+    "compilerModified": false,
+    "cargoRun": false,
+    "cacheModified": false,
+    "modelicaFixturesRun": false,
+    "mixedGraphAdmitted": false,
+    "productionProfileChanged": false,
+    "independentScalarWitnessOraclePassed": true
+  },
+  "sourcePolicy": {
+    "status": "required-unimplemented",
+    "defaultReal": "Binary64",
+    "visionReal": "Binary32",
+    "boundary": "selected observation tuple explicitly widened to Binary64; raster stays Binary32",
+    "selectionIdentity": "resolve exact source declarations/call occurrences against same branded DAE; display names and variable_meta ordinals are not authority",
+    "helperSpecialization": "include checked arithmetic context in nested call registration/cache and issued owner identity",
+    "constantPolicy": "first safe admission should diagnose finite source/frontend-folded constants becoming nonfinite in their selected representation; keep default frontend constant evaluation unchanged",
+    "runtimeOverflow": "IEEE overflow is not automatically a failure; source assertions and explicit status policy own failure"
+  },
+  "reusableOwners": [
+    "SolveSlot exact type/shape/storage/access",
+    "SolvePureCallTable exact interface/dependency/provenance",
+    "FramePlan read-only captures and lifetimes",
+    "checked ProjectView inside contiguous typed tensors",
+    "private tuple/Y atomic publication"
+  ],
+  "rawIngressMissing": [
+    "source-correlated external storage binding",
+    "typed scalar representation per model storage target",
+    "checked byte offset/strides/extent and orientation",
+    "exact U8 numeric-to-Real32 adapter rather than reinterpretation",
+    "full fault checks before visible Y writes"
+  ],
+  "fixtureGates": [
+    "same nested helper under F32 Vision and F64 Physics",
+    "changed input/source/profile identity",
+    "finite literal overflow vs F64 frontend fold vs runtime IEEE operations",
+    "late index and assertion failure leaves all visible Y and read-only inputs unchanged",
+    "recovery without recompilation",
+    "short/overflowing/overlapping/wrong-source/transposed ingress rejected before commit"
+  ],
+  "preimages": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 3817,
+      "sha256": "145d848e4883e1adb5117d94a3569f9dfe9ebe48b60f1bc90844c9a2201fffce"
+    },
+    {
+      "path": "crates/rumoca-ir-solve/src/typed_program/types.rs",
+      "bytes": 13288,
+      "sha256": "34b8f2c422f6cc8e54c9362211c47f5ba9d6ca923bc0d0cbff54f53ce9dd97c7"
+    },
+    {
+      "path": "crates/rumoca-ir-solve/src/typed_program/program.rs",
+      "bytes": 69149,
+      "sha256": "6fcd1a95e290d8d613d43baf6a8a4b3d526c2b7143de8819c4b3ca41be95e66e"
+    },
+    {
+      "path": "crates/rumoca-ir-solve/src/typed_program/call.rs",
+      "bytes": 45976,
+      "sha256": "1f176752319b4fba18951676163f8b5992e16ba2ac9ccc4539b6a393483509cd"
+    },
+    {
+      "path": "crates/rumoca-ir-solve/src/typed_program/program/wire.rs",
+      "bytes": 25989,
+      "sha256": "bf82e738746de725721886db086e7ab67b2d79204411f5b16c81b3a9dd1c7cc7"
+    },
+    {
+      "path": "crates/rumoca-ir-solve/src/layout.rs",
+      "bytes": 40355,
+      "sha256": "665f21c13093920c26b78779998905cb4beee3ee8a72d80cf55b98f9dfc8218c"
+    },
+    {
+      "path": "crates/rumoca-phase-solve/src/lower/typed_functions.rs",
+      "bytes": 75395,
+      "sha256": "dffcdd53cf38baa69b0bb3a8d3677f0c0ed3547b4979df7fd5fb24f860a72621"
+    },
+    {
+      "path": "crates/rumoca-phase-solve/src/lower/typed_functions/registration.rs",
+      "bytes": 15725,
+      "sha256": "4d03cfaefd77ce7d1096675fd62d3eb023868be54e0dc4a70b49806b4173a50a"
+    },
+    {
+      "path": "crates/rumoca-phase-solve/src/lower/typed_functions/model_calls.rs",
+      "bytes": 4694,
+      "sha256": "060bce86dbf8a6fabecf669e449c915b0fe24ffc2dc72d1206fef559b113d7bb"
+    },
+    {
+      "path": "crates/rumoca-exec-wasm/src/native_program.rs",
+      "bytes": 1911,
+      "sha256": "423950f76c2f39808d81435b62c13505fd6d2bbf270f05dbc82520c3646afe48"
+    },
+    {
+      "path": "crates/rumoca-exec-wasm/src/typed_call/program.rs",
+      "bytes": 4082,
+      "sha256": "036475c25fbae7619cd7bad9e47cbf31c8aad5562c6b5e96297c2ed44350e1aa"
+    },
+    {
+      "path": "crates/rumoca-exec-wasm/src/typed_call/layout.rs",
+      "bytes": 14189,
+      "sha256": "1a8d36c986b1167bf825cfbf4b45b3e46b07c92ff703d0e2eb72148058e4baed"
+    },
+    {
+      "path": "crates/rumoca-exec-wasm/src/typed_call/views.rs",
+      "bytes": 11393,
+      "sha256": "49dcac255e4d36d581c77a2a8863c79b456a91e5b1193bb764d46c8615cd2c5c"
+    },
+    {
+      "path": "crates/rumoca-exec-wasm/src/emit/compute/call_program.rs",
+      "bytes": 5177,
+      "sha256": "bf45de3af582d7aaf26ad50dbd762eede28ceb64ef651c5e485a646e3e623e44"
+    },
+    {
+      "path": "crates/rumoca-exec-wasm/src/emit/compute/call_program/layout.rs",
+      "bytes": 2719,
+      "sha256": "906098858c9f289c233e473961d3ded7f37d4ab9a842a5b1c6114153fa333439"
+    },
+    {
+      "path": "crates/rumoca-exec-wasm/src/emit/compute/call_program/transfer.rs",
+      "bytes": 8089,
+      "sha256": "ffc8c218bddb6adad5c51560271451547edec5936dab0a1fd54ea5619b08b6d2"
+    },
+    {
+      "path": "spec/SPEC_0043_CONSTRUCTION_CATALOG.md",
+      "bytes": 102095,
+      "sha256": "faa8b45b7f517ae61c0eaa50353b9465e89d9ef8e93fce3c21a54894241657f0"
+    },
+    {
+      "path": "spec/SPEC_0047_SOLVE_EXECUTABLE_VOCABULARY_CATALOG.md",
+      "bytes": 83187,
+      "sha256": "389c1031e70e81a21b0ab5f38aeb2d4f23be0e0149aff41cf5b484819aceef07"
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "fixtures/BoundaryFault.mo",
+      "sha256": "bbc31b3afaa40779f0758ce9874ee44edc0f4bb4e2a734e5af38096bba09f145",
+      "status": "UNRUN_MODELICA_SOURCE"
+    },
+    {
+      "path": "fixtures/FiniteLimitPolicy.mo",
+      "sha256": "77436eebfac5574c83293aa298af1229c940b6705d954d5608fcb6a240ef94ab",
+      "status": "UNRUN_MODELICA_SOURCE"
+    },
+    {
+      "path": "fixtures/PrecisionBoundary.mo",
+      "sha256": "7fc23e3b7bad785ac11afb64ea46b563a0249c41fdc734c1d08093b755f2737e",
+      "status": "UNRUN_MODELICA_SOURCE"
+    }
+  ],
+  "evidence": {
+    "oracle": "dev/artifacts/mixed-precision-boundary-audit/oracle-report.json",
+    "review": "dev/artifacts/mixed-precision-boundary-audit/REVIEW.md"
+  },
+  "remaining": "No checked mixed-profile root, source precision policy, typed model storage, raw ingress owner, Modelica fixture execution or single-module mixed graph proof exists in this audit."
+}

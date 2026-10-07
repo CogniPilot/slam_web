@@ -1,0 +1,121 @@
+{
+  "status": "REVIEWED_NATIVE72_V3_CONSUMER_ACTUAL_SOURCE_EXECUTION_PASS_LEGACY70_PASS",
+  "producer": {
+    "sha256": "fc24bf325b4f0b1e2374ec04bb0197d04588461e34ea2cfb62c626e0c68116d3",
+    "sourceManifestSha256": "dd57291deca0dc07bf2703434390bec486fd4c3c4f57537ba583b892ea89aca7",
+    "state": "INTERIM_KNOWN_FAILURE_DIAGNOSTIC_ONLY",
+    "sourceFiles": 2783
+  },
+  "compatibility": {
+    "70": [
+      "native-direct-program-f64-v1",
+      "native-direct-program-f64-v2",
+      "native-direct-program-f64-v3"
+    ],
+    "72": [
+      "native-direct-program-f64-v3"
+    ],
+    "unknownRejected": true,
+    "wireCompatibility": false,
+    "artifactRewritten": false,
+    "sourceModuleAbiLayoutFaultImportsChecksRetained": true
+  },
+  "current": {
+    "status": "ACTUAL_NATIVE72_V3_NODE_CHROMIUM_CONTRACT_PASS",
+    "sourceSha256": "83172d37887eb244c01facb6fdd2eab3c9b9b6760dd501111a9bb2a15bff0bb4",
+    "artifactSha256": "d193ecabe000754f7d69f29466bfcf579573c1b635ac949602cd14096f14247c",
+    "moduleSha256": "9a08580cb5c4456d49dbcd00927d188c6dd2db81ea0673b9e37070fc1e45965f",
+    "moduleBytes": 961,
+    "compiler": {
+      "version": "0.10.2",
+      "git_commit": "14694fd7e436"
+    },
+    "schema": 72,
+    "profile": "native-direct-program-f64-v3",
+    "consumerBundleSha256": "150af16c61725bf4b9393d0ac9b5deadd0f4a9948bcfdcc033ef2303fb05b878",
+    "probeSha256": "33dc25f811bde8e99a6fbd0bfc129e07f37dd4b1a6b8d08621ff21e6107b0472",
+    "node": {
+      "version": "v24.21.0",
+      "results": {
+        "numericChecks": 9,
+        "rawPayload": true,
+        "compilerFaults": 3,
+        "metadataRefusals": 17,
+        "staleSource": true,
+        "atomicity": true,
+        "reset": true
+      }
+    },
+    "browser": {
+      "version": "154.0.8037.92",
+      "results": {
+        "numericChecks": 9,
+        "rawPayload": true,
+        "compilerFaults": 3,
+        "metadataRefusals": 17,
+        "staleSource": true,
+        "atomicity": true,
+        "reset": true
+      }
+    },
+    "scope": "Actual compiler-issued source and unchanged native72/v3 ABI. Loader/math/fault checks; no Solve wire compatibility, compiler-WASM package, detector, fullSLAM or throughput claim.",
+    "productionPinChanged": false
+  },
+  "legacy": {
+    "status": "ORIGINAL_FAST_PATCH_NODE_CHROMIUM_RAW_BITS_SOURCE_EDIT_PERSISTENCE_PASS",
+    "rawBitScoreChecks": 276,
+    "browser": "154.0.8037.92",
+    "modules": [
+      {
+        "sourceSha256": "21214b37c88350edbcef1f82fe362258435e8f589c3d4ff82c2975992b5c4fb7",
+        "artifactSha256": "cacf031ba9d5bb70a244873e53e7f01abd25609179b8d26d4df2d41d2f9de3b1",
+        "moduleSha256": "6c54d557e2ed944783dd4dfdd53ebc8ae470f52d1c095c95a074a9ce68c56037",
+        "moduleBytes": 13178
+      },
+      {
+        "sourceSha256": "090aa25ec6d97eb69d1b16be08ea13e032019732eb7b7f61fdb7039ca0d73ddd",
+        "artifactSha256": "ffa6e6f4c24a1710951520f1923932a4d046187b84055de520f8f082c76c5042",
+        "moduleSha256": "2f4164dbf6921a8245c4a565e6720f754c7a97bceb1f80b0d4ebf741e1e176b9",
+        "moduleBytes": 13186
+      }
+    ],
+    "sourceEdit": true,
+    "indexedDbReload": true
+  },
+  "resources": {
+    "current": {
+      "exitCode": 0,
+      "elapsedMs": 2241.736558,
+      "peakRssKiB": 1033868
+    },
+    "legacy": {
+      "exitCode": 0,
+      "elapsedMs": 2461.959154,
+      "peakRssKiB": 1177540
+    },
+    "typecheck": {
+      "exitCode": 0,
+      "elapsedMs": 8045.118303,
+      "peakRssKiB": 590328
+    },
+    "limits": {
+      "seconds": 120,
+      "availableMiB": 16384,
+      "browserRssMiB": 2048,
+      "typecheckRssMiB": 1024,
+      "cpuBrowser": "30",
+      "cpuTypecheck": "31",
+      "nice": 15
+    }
+  },
+  "typecheck": "PASS",
+  "retainedFailures": [
+    "Initial test incorrectly expected an unused direct WASM NaN time to fault; loader finite timestamp precondition is now tested separately.",
+    "Chromium socket path exceeded Unix-domain length limit; rerun with short HOME/scratch-owned temporary directory."
+  ],
+  "artifactFiles": 19,
+  "productionPinChanged": false,
+  "fullDetector": "PENDING",
+  "fullSLAM": "PENDING",
+  "throughput": "NOT_MEASURED"
+}

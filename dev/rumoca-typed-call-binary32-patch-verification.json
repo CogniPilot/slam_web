@@ -1,0 +1,421 @@
+{
+  "status": "private copied production-backend focused controls PASS; integration and required upstream gates pending",
+  "dateUtc": "2026-10-05T14:40:05.360Z",
+  "mainCompilerEdited": false,
+  "cargoRun": false,
+  "sharedCacheWrites": false,
+  "backend": "existing canonical exec-wasm typed_call; no new ABI or parallel IR",
+  "ancestorHead": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+  "sourceIdentity": "Immutable preimage file manifests identify the dirty snapshot; ancestor HEAD alone is not the tested source closure",
+  "preimageClosureSha256": "786a0a9eb2dc6fe937c1008c384c27793254c766c46f3eb2e7ecc5c2ed69cf7f",
+  "patchSha256": "613dccda11d9c23bba4f789d3fd9874c7aac68fb373abdacb5551b464c7e6e8a",
+  "originalProfile": "Binary64 existing typed-call ABI; all whole-model native artifact profiles retain Binary32 rejection",
+  "optionalAdmission": "Only all-Real32 straight-line Load/Store/Constant, direct unary/binary arithmetic and Fill/Construct/Project",
+  "unchangedEntryPoint": "eval_typed_call(i32,i32,i32)->i32",
+  "realCellBytes": 4,
+  "admissionRefusalsActuallyChecked": [
+    "Integer/Boolean tables",
+    "Power/Sin/Sign",
+    "nested Call",
+    "mismatched site",
+    "Binary32 whole-model ProgramHelpers"
+  ],
+  "standaloneRustcWarningsDenied": true,
+  "sourceFormatCheckPassed": true,
+  "patchAppliesToExactPreimage": true,
+  "nativeCargoTests": {
+    "drafted": 3,
+    "run": false,
+    "reason": "Sole compiler owner retains Cargo/integration window"
+  },
+  "evidence": {
+    "status": "private actual typed_call backend focused controls PASS",
+    "backend": "copied canonical exec-wasm typed_call with proposed Binary32 patch",
+    "entrypoint": "eval_typed_call",
+    "newBackendOrIR": false,
+    "mainCompilerChanged": false,
+    "modelicaLowering": false,
+    "binary64FixtureBytesIdentical": true,
+    "binary64Sha256": "597a816080abcfb7fcf650a6f4bd4b610ccbedb1c62b8a674e270916ba621083",
+    "binary64OutputChecks": 256,
+    "binary64EightByteAlignmentRetained": true,
+    "independentNativeRustF32OracleChecks": 14400,
+    "constantLocalSnapshotCases": 6,
+    "aggregateFillConstructProjectionCases": 6,
+    "unaryChecks": 96,
+    "divideChecks": 14,
+    "checkedCanonicalCallTableConstructed": true,
+    "provenanceFixtureOnly": true,
+    "sourceLoweringOrPrecisionPartition": false,
+    "results": [
+      {
+        "name": "scalar",
+        "n": 1,
+        "checks": 16,
+        "moduleBytes": 414,
+        "moduleSha256": "cfa17a9f75044db40674514cab0e52006ebbd5fd9613975e0e418a21f0bb2f3a",
+        "runtimeFaults": 9,
+        "realCellBytes": 4
+      },
+      {
+        "name": "array",
+        "n": 14400,
+        "checks": 230400,
+        "moduleBytes": 494,
+        "moduleSha256": "79cd0545485181c1aaea3cbfcc5003afeb77a7fd525d727e4383f1b40124b7b7",
+        "runtimeFaults": 9,
+        "realCellBytes": 4
+      },
+      {
+        "name": "edited",
+        "n": 14400,
+        "checks": 230400,
+        "moduleBytes": 494,
+        "moduleSha256": "69d00ea38f9cbdbfbae675f6f9640c53745eb3dd7937648e93e5f598d6bc7632",
+        "runtimeFaults": 9,
+        "realCellBytes": 4
+      }
+    ],
+    "resources": {
+      "nodeVersion": "v24.21.0",
+      "rssBytes": 85065728,
+      "seconds": 0.295220787
+    }
+  },
+  "pending": [
+    "Modelica source precision partition/lowering",
+    "mixed scalar layout",
+    "Map/Fold/control/nested calls and imported math",
+    "packed external buffer source owner",
+    "selected F32-to-F64 graph boundaries",
+    "actual main compiler integration",
+    "scoped Clippy and full package suites",
+    "required Tier1 canary",
+    "full Modelica CV/GPU pipeline and10x throughput"
+  ],
+  "integrationNotes": "Compare exact preimages with the scalar-local patch and origin/main91eb8cb8 merge; preserve IntegerQuotient upstream rename. No existing public native-program Binary32 admission.",
+  "resources": {
+    "oneCpu": 31,
+    "nice": 10,
+    "nativeGeneratorAddressSpaceCapBytes": 2147483648,
+    "nativeGeneratorTimeoutSeconds": 25,
+    "largeOutputs": "$HOME/scratch/slam_web/tmp/typed-call-f32"
+  },
+  "cachedBinaryDependencies": [
+    {
+      "name": "librumoca_ir_solve-db6dbcdc768f8c9d.rlib",
+      "bytes": 35523704,
+      "sha256": "38dd15a68d5e915e65fa2fe9368a82585a4504f175302f539fb72281969c29e6",
+      "sourceClosureReconstructed": false
+    },
+    {
+      "name": "librumoca_core-7ebc54d44286089d.rlib",
+      "bytes": 7263262,
+      "sha256": "8fca633132d0be6cec6671a18094c5d78d8c2b71d952da62622d9888fb42f364",
+      "sourceClosureReconstructed": false
+    },
+    {
+      "name": "libwasm_encoder-c867cd505d8960f6.rlib",
+      "bytes": 3842294,
+      "sha256": "eb348be44bc4d7686fc1abc3ecd6b2e0bdde90f49e19d041455d440eeb88518a",
+      "sourceClosureReconstructed": false
+    }
+  ],
+  "files": [
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/aggregate.json",
+      "bytes": 125,
+      "sha256": "5a2237e4dbe32a9a3b313264eb112b4bd83324501ea40301c52169c5f7a7d57e"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/aggregate.wasm",
+      "bytes": 454,
+      "sha256": "386ac388d45305fe9ee02be815828941f6bd26d57e6d99b1ef83665662f4bb47"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/array.json",
+      "bytes": 138,
+      "sha256": "e406f0cad08594b69f7e8c3115c8626eeb12fb9185ea045ec535154d9ee916b1"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/array.wasm",
+      "bytes": 494,
+      "sha256": "79cd0545485181c1aaea3cbfcc5003afeb77a7fd525d727e4383f1b40124b7b7"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/divide.json",
+      "bytes": 125,
+      "sha256": "e3d14559a4d344f5fbf737d232930e25681d29c400921c72a149032729b5accb"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/divide.wasm",
+      "bytes": 414,
+      "sha256": "5106991133f3d14a98efeff04ea918e6731a973532df4cf13c8241722b564706"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/edited.json",
+      "bytes": 138,
+      "sha256": "e406f0cad08594b69f7e8c3115c8626eeb12fb9185ea045ec535154d9ee916b1"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/edited.wasm",
+      "bytes": 494,
+      "sha256": "69d00ea38f9cbdbfbae675f6f9640c53745eb3dd7937648e93e5f598d6bc7632"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/f64.json",
+      "bytes": 129,
+      "sha256": "d679d1d188e9cc84278d02e82005f536e54db0af951440b1e7c948dafccc7d39"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/f64.wasm",
+      "bytes": 470,
+      "sha256": "597a816080abcfb7fcf650a6f4bd4b610ccbedb1c62b8a674e270916ba621083"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/rust-f32-oracle.bin",
+      "bytes": 57600,
+      "sha256": "3400e81faeead5fdea9ee36ddd7ac7c9267715654457b984bf9b292f51c4c8af"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/scalar.json",
+      "bytes": 125,
+      "sha256": "e3d14559a4d344f5fbf737d232930e25681d29c400921c72a149032729b5accb"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/scalar.wasm",
+      "bytes": 414,
+      "sha256": "cfa17a9f75044db40674514cab0e52006ebbd5fd9613975e0e418a21f0bb2f3a"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/snapshot.json",
+      "bytes": 124,
+      "sha256": "8897c07e3c9ceb41d7ba32b9c4513c4566634fc811320812850eee4ad9dac48d"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/snapshot.wasm",
+      "bytes": 390,
+      "sha256": "2595e689bef9409f86519cda7f779b0bcc47589c8adc8ddcbd15a461d043190b"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/unary.json",
+      "bytes": 128,
+      "sha256": "ef5dde3ef9a17a122a63452c46c6fa973c313a588f70d6566028516d744bdb37"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/after/unary.wasm",
+      "bytes": 739,
+      "sha256": "a0b1ed0b222d6b200e4f9f47d5705cbe6ecf0b81b882dd59f08ddcd151924a02"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/before/f64.json",
+      "bytes": 129,
+      "sha256": "d679d1d188e9cc84278d02e82005f536e54db0af951440b1e7c948dafccc7d39"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/emitted/before/f64.wasm",
+      "bytes": 470,
+      "sha256": "597a816080abcfb7fcf650a6f4bd4b610ccbedb1c62b8a674e270916ba621083"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/harness/REVIEW.md",
+      "bytes": 5808,
+      "sha256": "4e699e3d80b7b4653e9c1826f9a8a1389469fee06b8bf76bdbe3bf06422283d0"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/harness/archive.mjs",
+      "bytes": 5725,
+      "sha256": "9166cc9e25c6d3c8beb747b3e5b14630adcfc6621dd10589b5d00458492a4dde"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/harness/check.mjs",
+      "bytes": 7725,
+      "sha256": "b4002e87995554cbb470a0a44959fbd5f97b1a80b182b97cec5efb41b21f63b0"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/harness/driver.rs",
+      "bytes": 8800,
+      "sha256": "246540c2d086e894fb0f44534c700db462583c0ef3ed01cc99fd8efcc6f70ef5"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/harness/math-import-preimage.rs",
+      "bytes": 945,
+      "sha256": "c9ef44f2d83763f708788963232ec8d02ef59de5ffea8f447b016e640f47ab80"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/harness/prepare.mjs",
+      "bytes": 796,
+      "sha256": "92b8f769709ab1618a80e86f15a76e1e1f6ee0a7426767c7f65296fc32708920"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/calls.rs",
+      "bytes": 2076,
+      "sha256": "a581fc36284f5ff7bd10b4d8304404e56419e57871332b932a8487e78f767708"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/control/domain.rs",
+      "bytes": 1082,
+      "sha256": "8a4f9a2a14cfa5b7ed1c6980ebf9e085fbacd8236a26b47e3fc295589afb84ae"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/control/map.rs",
+      "bytes": 3784,
+      "sha256": "7e394a4c3a2d6aa94fcf81cfe8390d54784860d5a4b9a98f58f94956e2c4a45a"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/control.rs",
+      "bytes": 6915,
+      "sha256": "bbfba82d44fa93ba2ed9ad5eac3244d207afe32121f6c6795dc65734076b8707"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/emit/tests.rs",
+      "bytes": 6668,
+      "sha256": "a047203d5dcd57fbbc9fb644c9fb6688ab4920f27f87110eb458f3ed6f52e441"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/emit.rs",
+      "bytes": 20305,
+      "sha256": "e09107a01383dcac135b466e06c51f068d0af751c446dbb680e539d8d666ffea"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/layout/lifetimes.rs",
+      "bytes": 3130,
+      "sha256": "bdeb8d3ecfb4b4571ab1a00b17fe999a1d783350daea732683772a0d8dfdf3b7"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/layout/outputs.rs",
+      "bytes": 3904,
+      "sha256": "4e64ec77eddf8264236e827a59776f3521b19d4f2edc758ccf15f7dae7a983d0"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/layout.rs",
+      "bytes": 14189,
+      "sha256": "1a8d36c986b1167bf825cfbf4b45b3e46b07c92ff703d0e2eb72148058e4baed"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/link.rs",
+      "bytes": 4097,
+      "sha256": "c721c702098c40321d504a1c7af7e06828574b064a992afba69bb3e58fb04f8b"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/math.rs",
+      "bytes": 1871,
+      "sha256": "dc4b5af900896d36a0473b3212c3c2ff010c96211bcf5f80a8195c2fc89cfbcc"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/matrix.rs",
+      "bytes": 3490,
+      "sha256": "9ef0dc04286376a84c1863385c5581268ee5f20fe9c7de014aea173fa88c779d"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/numbers/extrema.rs",
+      "bytes": 1435,
+      "sha256": "b00bdfd3461baccbe0926d2f292e87ab0907dc522c4836f2c8429092961dab4d"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/numbers/quotients.rs",
+      "bytes": 1765,
+      "sha256": "04face67e52cc6ea35661f0877aecb5f617111b2d4272a0d36614b3dc2279265"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/numbers/tests.rs",
+      "bytes": 910,
+      "sha256": "f960d562a1d48215fa4ba136e8a22b52806873caa340325f0722d83bbd53e256"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/numbers.rs",
+      "bytes": 15560,
+      "sha256": "d66b439da30de2ea792a24014b992df0e4cac076dc29483abb4789298d78de4e"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/program/tests.rs",
+      "bytes": 3445,
+      "sha256": "4075706f5b37597172eb70855251f7efbcd6e790870406d9d066e7954d6f408f"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/program.rs",
+      "bytes": 4082,
+      "sha256": "036475c25fbae7619cd7bad9e47cbf31c8aad5562c6b5e96297c2ed44350e1aa"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/tensor.rs",
+      "bytes": 2627,
+      "sha256": "cd33fd640633f902ab894b590de179507a98a31d523745f6d1f425b30b408d27"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call/views.rs",
+      "bytes": 11393,
+      "sha256": "49dcac255e4d36d581c77a2a8863c79b456a91e5b1193bb764d46c8615cd2c5c"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/src/typed_call.rs",
+      "bytes": 4819,
+      "sha256": "f42aba26462d36b4f412f86d11ba790bd55a882549490d7ebee81711db78095d"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/preimages/crates/rumoca-exec-wasm/tests/suite_typed_calls/mod.rs",
+      "bytes": 25135,
+      "sha256": "50ef336fab9f1dc3d6579c2eaff37c662ddbf0c0dfdc30a47747a8991f713e43"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/proposed/crates/rumoca-exec-wasm/src/typed_call/binary32.rs",
+      "bytes": 4552,
+      "sha256": "3d4b9ecdc679b016a82ee2b9f1bf12ad14761a28ca124e080d60bdf00187af58"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/proposed/crates/rumoca-exec-wasm/src/typed_call/emit.rs",
+      "bytes": 20954,
+      "sha256": "a64091268f774c20caaf3bda5c9f51d4c38ed166843db9309fa0d4ed45cca363"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/proposed/crates/rumoca-exec-wasm/src/typed_call/layout.rs",
+      "bytes": 14372,
+      "sha256": "4522594c4653c4d1bcb423cd9e319a2a11612d019eabcecec234c73a163624d3"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/proposed/crates/rumoca-exec-wasm/src/typed_call/numbers.rs",
+      "bytes": 15719,
+      "sha256": "97ab7253e56ec9a6504365a69793438cc481a5a8922b11f4d65ade1aa1f5f541"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/proposed/crates/rumoca-exec-wasm/src/typed_call.rs",
+      "bytes": 4938,
+      "sha256": "c7482625e7e36bf0f73e3b3d399df5bfaff903707110526f0f9a1fef95842d44"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/proposed/crates/rumoca-exec-wasm/tests/suite_typed_calls/binary32.rs",
+      "bytes": 6714,
+      "sha256": "8049145d7ce4567ed2b0a4c7a466f9fc7175a53460359d32beb9ed2906c84d5a"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/proposed/crates/rumoca-exec-wasm/tests/suite_typed_calls/mod.rs",
+      "bytes": 25149,
+      "sha256": "62df3d452229833fe2273db21bd48f0cac9691524d4aed51da1af1c0750d16d3"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/reports/after.log",
+      "bytes": 643,
+      "sha256": "0290442ec8ac157e3661514ca6fb654665d3797911f5b121a19d36095e094725"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/reports/before.log",
+      "bytes": 84,
+      "sha256": "d1b39071726c1e07b6f8aac8d487fa36612dd639213edd8cae466d7106066998"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/reports/proof.json",
+      "bytes": 1641,
+      "sha256": "dea32e7c2090602159d87168a6cbef5251fe48383b82a65a21f3e176f65ffa2b"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/reports/proof.log",
+      "bytes": 1641,
+      "sha256": "dea32e7c2090602159d87168a6cbef5251fe48383b82a65a21f3e176f65ffa2b"
+    },
+    {
+      "path": "dev/artifacts/typed-call-binary32-patch/typed-call-binary32.patch",
+      "bytes": 19007,
+      "sha256": "613dccda11d9c23bba4f789d3fd9874c7aac68fb373abdacb5551b464c7e6e8a"
+    }
+  ]
+}

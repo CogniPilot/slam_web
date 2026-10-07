@@ -1,0 +1,110 @@
+{
+  "status": "OMC_SCHMIDT_FUNCTION_ORACLE_PASS_REFERENCE_UNMEASURED",
+  "scope": "Function-only full15+6, original equation preparation timed out and its parity remains unmeasured; 20 dynamic raw-input scenarios, full225/90/36 blocks, independent quaternion/finite-difference/pivoted-solve/Joseph/reset oracle, full96solve/model parity, closed-form zero-innovation and6 invalid tuning controls",
+  "referenceParityMeasured": false,
+  "compilerVersion": "a96aa1a-cmake",
+  "sources": [
+    {
+      "path": "models/RGBDRelativePose.mo",
+      "sha256": "90b1fbb79f52f398389ee8fb6d5e21ab126263a4b2d5f660c688e8d0f58affb8"
+    },
+    {
+      "path": "models/SPD6Solve.mo",
+      "sha256": "f255441c951bbaa6cbc8e7a471cd2583715b70d5cb0f49621b45963a0a853b8f"
+    },
+    {
+      "path": "models/ES15PoseCorrection.mo",
+      "sha256": "7a2e6f86e8d932fa178ab6d4b71550e768fb1c84921d73fee4d94c72b2645f4b"
+    },
+    {
+      "path": "models/SchmidtRelativePoseCorrection.mo",
+      "sha256": "d6b98c2960e74cd743faff8e32fbe7e1574e7d0c1182bf7cb684cf817a9cb2cf"
+    },
+    {
+      "path": "tests/modelica/SchmidtCorrectionFunctionParity.mo",
+      "sha256": "4e75516f819a81967057d89921d95a5240a26c1a23938790dd02f90080e18bcc"
+    },
+    {
+      "path": "tests/compiler-probes/schmidt-relative-fixtures.ts",
+      "sha256": "2248e8cafb7d0243fb03253a834351b5a848920a33c06101e0bcc54fe8849cef"
+    },
+    {
+      "path": "dev/check-modelica-schmidt-correction-function.mjs",
+      "sha256": "4d089e7648fc45835c58ba9d365e540f58ba6db1e2273e22f5727ebe12030968"
+    },
+    {
+      "path": "dev/rumoca-bounded-run.mjs",
+      "sha256": "14f81f1cb7543aa246ea99cba940b2566e093d494cbeee589f7f04044c116532"
+    }
+  ],
+  "prefixSha256": "e7d680f1b2647abe6ebfd0173fb81067a60300e059424f8d7014822cc95fd35b",
+  "prefixUnchanged": true,
+  "bookendsEqual": true,
+  "rows": 82,
+  "functionOutputCells": 44444,
+  "solveCells": 7954,
+  "solveBitDifferences": 0,
+  "solveWithheldCells": 1152,
+  "rollbackCells": 22320,
+  "referenceHeldCells": 2952,
+  "policyChecks": 492,
+  "oracleCells": 11902,
+  "maxOracleError": 3.0800407779807415e-09,
+  "analyticCells": 1260,
+  "biasCorrectionObserved": true,
+  "attitudeCrossResetObserved": true,
+  "scenarios": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "failureCounts": {},
+  "failures": [],
+  "rumocaCompilerInvoked": false,
+  "browserIntegrated": false,
+  "fullSlamAccepted": false,
+  "resources": {
+    "elapsedMs": 6231.181486,
+    "peakRssKiB": 385392,
+    "minimumAvailableKiB": 56463124,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "arithmeticPolicy": "Original source expressions and thresholds unchanged; OMC --noSimplify prevents equation-side reassociation in strict solver comparison.",
+  "evidence": {
+    "manifest": "dev/artifacts/modelica-schmidt-correction-function/manifest.json",
+    "manifestSha256": "b3b4a2b779ebc1c03d2071286071b33d1018784a72430aa5474727737ed41d32",
+    "passingReport": "dev/artifacts/modelica-schmidt-correction-function/schmidt-correction-function-7Q7Yis/report.json",
+    "originalReferenceTimeout": "dev/artifacts/modelica-schmidt-correction-function/schmidt-correction-function-Mi5Pxw/report.json",
+    "defaultSimplifierStrictSolveFailure": "dev/artifacts/modelica-schmidt-correction-function/schmidt-correction-function-SsrOPP/report.json",
+    "reservedTimeFixtureRefusal": "dev/artifacts/modelica-schmidt-correction-function/schmidt-correction-function-guiCHo/report.json",
+    "rawCsv": {
+      "path": "dev/artifacts/modelica-schmidt-correction-function/schmidt-correction-function-7Q7Yis/SchmidtCorrectionFunctionOnly_res.csv",
+      "sha256": "b687cc556c1a80ee71b2d8267e1319c48f1fd920f12731a754852494e233b05a"
+    },
+    "compilerPreparationProfile": "dev/artifacts/modelica-schmidt-correction-function/compiler-preparation-profile/profile-binding.json"
+  },
+  "reproduce": "SCHMIDT_FUNCTION_ONLY=1 OMC_BIN=/path/to/omc node dev/check-modelica-schmidt-correction-function.mjs"
+}

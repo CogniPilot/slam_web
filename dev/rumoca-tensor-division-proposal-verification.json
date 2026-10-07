@@ -1,0 +1,55 @@
+{
+   "actualOriginalSourceRepro" : {
+      "channels" : [
+         128,
+         201,
+         18
+      ],
+      "checks" : 75,
+      "directBits" : "4637839735013419691",
+      "failures" : 11,
+      "oldReciprocalBits" : "4637839735013419690",
+      "verification" : "dev/rumoca-rgb-source-preparation-verification.json"
+   },
+   "existingCopiedProductionBackend" : {
+      "broadcastGroups" : 7,
+      "buildPeakRssKiB" : 492680,
+      "buildSeconds" : 8.28,
+      "controlPeakRssKiB" : 6748,
+      "controlSeconds" : 0.01,
+      "exactCargoJSONDependencyFilesVerified" : 178,
+      "oldBinaryByteIdentityCases" : 18,
+      "productionFilesVerified" : 40,
+      "status" : "PASS"
+   },
+   "existingNumericFixture" : {
+      "compilerExecution" : false,
+      "directVsReciprocalDifferences" : 18,
+      "groups" : 144,
+      "nanChecks" : 123,
+      "scalarChecks" : 468
+   },
+   "packages" : [
+      {
+         "copiedPreimageAndFormatChecks" : "PASS",
+         "manifestSha256" : "1a9238c4262f9d8015adcae17fb95d886b904bb9067e37a26b87c0f7fdf2cecb",
+         "name" : "typed-tensor-division-review",
+         "patchSha256" : "782e2407d56756bd8e8502eefc870f9856143a64e6f80d2c40b386f4d4fcbbf0",
+         "path" : "dev/artifacts/typed-tensor-division-review",
+         "phaseSourceGate" : "UNRUN",
+         "readmeSha256" : "4d6427d3e007f2f6b624ab5665bdf1ea43aaecd913dbb03f609ef3a206125b20"
+      },
+      {
+         "copiedPreimageAndFormatChecks" : "PASS",
+         "manifestSha256" : "a1b219f5e520b65ba17d5972fc7e9d48a05d21b304a19f9516d08023cf670703",
+         "name" : "typed-broadcast-native-review",
+         "patchSha256" : "25075454248d5f71d4a79dab8014f9f57f5e88ec3c10d9598445fe8b081d0f22",
+         "path" : "dev/artifacts/typed-broadcast-native-review",
+         "phaseSourceGate" : "UNRUN",
+         "readmeSha256" : "26dc664919ab3ca2e550e8fe2ab43137c085958942ec5b479d1c58b4def59836"
+      }
+   ],
+   "permissions" : "After workspace-write restriction, only existing bytes were archived/checked in app workspace; no external scratch/compiler/cache mutation or new build/producer.",
+   "requiredAcceptance" : "Cov-owned source integration, phase tests, typed-call gates, actual unchanged RealRGB source-to-module strict replay including347/3,394/3 and tiny divisor cases; all UNRUN here",
+   "status" : "REVIEW_PROPOSALS_FROZEN"
+}

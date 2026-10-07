@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "status": "DEFAULT_BALANCED_PROPAGATION_AUTO_START_PASS",
+  "recordedAt": "2026-10-05T05:01:53.731Z",
+  "sources": [
+    {
+      "path": "src/project.ts",
+      "sha256": "4847f19e9921de45b5cabbb338a83299d81b9aaadb59402631800d85bac82793"
+    },
+    {
+      "path": "src/main.ts",
+      "sha256": "26f59af71e6ffdbfa7bd81bc661ee4b8a2a425c05ed498a95621658784f460ca"
+    },
+    {
+      "path": "README.md",
+      "sha256": "dc24dc1d9c8af5c0e0a2442e5ca15ec38509107a2d5093ecaad95ed9456b4b07"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "dev/artifacts/default-startup/browser-check.mjs",
+      "sha256": "35bbd075684c029bd7d671dcb30ba75a6c84d93694775e2e053503470e184a2d",
+      "bytes": 2276
+    },
+    {
+      "path": "dev/artifacts/default-startup/browser-report.json",
+      "sha256": "1658b2ecbb2e2bd870690ba2c3cc535312c01d9429d0e5b7c88efd8a8d4e8417",
+      "bytes": 731
+    },
+    {
+      "path": "dev/artifacts/default-startup/browser-resource.json",
+      "sha256": "e2bbb7eeb402f35c840a4c2d101b9991903ad5c2a540b1e6842b60ac40611913",
+      "bytes": 555
+    },
+    {
+      "path": "dev/artifacts/default-startup/browser.log",
+      "sha256": "9010e5de65faf522b488f6fd55302d6f09eb0d8912361a7905407c588c484ab4",
+      "bytes": 431
+    },
+    {
+      "path": "dev/artifacts/default-startup/build-resource.json",
+      "sha256": "e83c46fa0502cb3c32f5b9b7707265dde8cb38f259e309f7a7b8f884b4d3cc7b",
+      "bytes": 686
+    },
+    {
+      "path": "dev/artifacts/default-startup/build.log",
+      "sha256": "4b7f3c63cd568c3cae9a7ce478afe40047270c2eccee0f1b2694f7206981090d",
+      "bytes": 2820
+    },
+    {
+      "path": "dev/artifacts/default-startup/default-startup.png",
+      "sha256": "ed1c24bfc84f2b620fedaaf8f31b063969d46f530a38961732584cf4d7c508ab",
+      "bytes": 761449
+    }
+  ],
+  "productionCompilerPinChanged": false,
+  "newProjectDefaults": {
+    "sceneDetail": "medium",
+    "algorithmPreset": "Modelica inertial propagation",
+    "cameraHz": 30,
+    "lidarHz": 10,
+    "imuHz": 90,
+    "gpsHz": 5
+  },
+  "savedProjects": "Explicit saved choices and custom source remain preserved.",
+  "browser": {
+    "status": "DEFAULT_BALANCED_PROPAGATION_AUTO_START_PASS",
+    "browser": "154.0.8037.92",
+    "snapshot": {
+      "sceneDetail": "medium",
+      "algorithmPreset": "Modelica inertial propagation",
+      "running": true,
+      "ready": true,
+      "sequence": 2,
+      "time": 0.1,
+      "rgbPixels": 57600,
+      "depthPixels": 14400,
+      "features": 201,
+      "stateCount": 16,
+      "graphics": {
+        "api": "WebGL 2",
+        "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+        "vendor": "Google Inc. (NVIDIA Corporation)",
+        "acceleration": "hardware-reported",
+        "powerPreference": "high-performance"
+      }
+    },
+    "errors": [],
+    "fullSlam": false,
+    "productionCompilerPinChanged": false
+  },
+  "build": {
+    "command": [
+      "taskset",
+      "-c",
+      "6,7",
+      "nice",
+      "-n",
+      "15",
+      "bash",
+      "-c",
+      "node node_modules/vitest/vitest.mjs run tests/project-migration.test.ts tests/sensor-clock.test.ts --maxWorkers 1 && node node_modules/typescript/bin/tsc --noEmit && node node_modules/vite/bin/vite.js build --outDir \"$HOME/scratch/slam_web/build/default-preview\""
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/default-startup/build.log",
+    "elapsedMs": 21590.953163,
+    "peakRssKiB": 1424356,
+    "minimumAvailableKiB": 53426004,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "resource": {
+    "command": [
+      "taskset",
+      "-c",
+      "10",
+      "nice",
+      "-n",
+      "15",
+      "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+      "/home/jgoppert/scratch/slam_web/tmp/default-startup/browser-check.mjs"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/default-startup/browser.log",
+    "elapsedMs": 32187.724516,
+    "peakRssKiB": 2019296,
+    "minimumAvailableKiB": 53276660,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "scope": "Fresh-context production-preview auto-start, actual RGB/depth/features and inertial state, no page errors. Build/typecheck plus five existing project/clock tests. Not full SLAM or a throughput benchmark.",
+  "preview": "http://localhost:4173",
+  "buildStorage": "$HOME/scratch/slam_web/build/default-preview",
+  "fullSlam": false
+}

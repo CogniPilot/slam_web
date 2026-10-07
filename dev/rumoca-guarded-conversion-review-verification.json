@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-05T12:12:30.395Z",
+  "status": "GUARDED_CONVERSION_THREE_PATCH_ROOT_SEQUENTIAL_APPLY_PASS_TESTS_UNRUN",
+  "sourceSha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23",
+  "patches": [
+    {
+      "name": "base",
+      "sha256": "ca385b0d9cea8e339bf27f2e9ec360734fa24d043d84e7706608b2d7ea5341ae"
+    },
+    {
+      "name": "addendum",
+      "sha256": "46a35aa09509ec98206345a4bed775bcdf42dd2fd1abd5de8cf723399e14ab78"
+    },
+    {
+      "name": "single-definition",
+      "sha256": "0399b2e6a76d35dc1c3f8bedfabfc223cf5bdfff2fcae58588f140826ee1b6dc"
+    }
+  ],
+  "currentPreimages": [
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/integer_bounds.rs",
+      "sha256": "f4b0fb85b35a077d5959fb1ab21b2490dcba7c516e33913321fe438c52df2e3a"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/mod.rs",
+      "sha256": "3b58b1828bd3f3454668f0eebf46a6725156b9092899f06a1a8c8931a6120291"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/mod.rs",
+      "sha256": "71a970e4b6c5977a44600f49c688160ebdb66b75ffdeb357608bbff4e56e588e"
+    }
+  ],
+  "appliedCopies": [
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/integer_bounds.rs",
+      "sha256": "76677c08aa14fdc5eb890d7f25a7ac2e83e218f6c8f8010df8d0115c1b468c38"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/integer_bounds/guarded_conversions/mod.rs",
+      "sha256": "f516527c7ed2750573562181461abb4deed4c768488ae6480091390aa9731b68"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/integer_bounds/guarded_conversions/identity.rs",
+      "sha256": "5dc49dc6f3f04c4ed7853ec66465ac46b948e8e045626f04d286ad207e34b63d"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/integer_bounds/guarded_conversions/facts.rs",
+      "sha256": "8f39c32c4964b9b5db2567568c4577be5b872a408651aadb0605e5ad9e61e2c4"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/integer_bounds/guarded_conversions/tests.rs",
+      "sha256": "6c271c2981b2b16e2e1f98c716892d3fdddfd12fd18ab00dd0db1daeadaedd51"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/mod.rs",
+      "sha256": "e7355260b88595a4a88c44910702ba6fc2b3afc7991fce5f64fdfec7042b0a40"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/integer_bounds/guarded_conversions/lexical.rs",
+      "sha256": "b2179df6ccbd66c41d8dc9fef08152fbfacb3699fe31ea76b62399e516febd26"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/mod.rs",
+      "sha256": "9609339cbf7763b2535da8e5741c41afb1aab75123dc8b00cfa84c3a55614a2f"
+    },
+    {
+      "path": "crates/rumoca-phase-dae/src/construction/function_shapes/integer_bounds/guarded_conversions/single_definition.rs",
+      "sha256": "acc31e94f76be974c6f470e4506435af887c5d4ee6cf765613322a565e6376c1"
+    }
+  ],
+  "checks": [
+    {
+      "package": "base",
+      "action": "check",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "package": "base",
+      "action": "apply",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "package": "addendum",
+      "action": "check",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "package": "addendum",
+      "action": "apply",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "package": "single-definition",
+      "action": "check",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "package": "single-definition",
+      "action": "apply",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "controlsStaged": 20,
+  "controlsExecuted": 0,
+  "compilerSourcesUnchanged": true,
+  "cargoRuns": 0,
+  "sourcePreparationRuns": 0,
+  "featureSelectionAdmitted": false,
+  "whileOwnershipProven": false,
+  "counterBoundsProven": false,
+  "fullSlam": false,
+  "scope": "Exact copied-source sequential application only: private reaching guard facts, actual lexical FunctionParam endpoint handoff, and single top-level local-definition invalidation release. No Rust type checking, executed constructor/control tests, full original selector admission, native numerics or performance gain.",
+  "artifacts": [
+    {
+      "path": "dev/artifacts/guarded-conversion-review/base/guarded-conversion-with-tests.patch",
+      "bytes": 17222,
+      "sha256": "ca385b0d9cea8e339bf27f2e9ec360734fa24d043d84e7706608b2d7ea5341ae"
+    },
+    {
+      "path": "dev/artifacts/guarded-conversion-review/base/manifest.json",
+      "bytes": 1531,
+      "sha256": "c7a71bd523d5b4295fe08922e51fda5f53dba2ecc716d52f3f9c8865f8acc9a1"
+    },
+    {
+      "path": "dev/artifacts/guarded-conversion-review/base/README.md",
+      "bytes": 5371,
+      "sha256": "f201624ce3f794c9f4a0747e8e88cd1c043a76c934a624755fa4f206430f70ad"
+    },
+    {
+      "path": "dev/artifacts/guarded-conversion-review/base/source-controls.mo",
+      "bytes": 1239,
+      "sha256": "15bbc05b3c2d01717d90f64cdc40c0fe9f8e5b4870b86562c551f61b1d516059"
+    },
+    {
+      "path": "dev/artifacts/guarded-conversion-review/addendum/lexical-endpoint-addendum.patch",
+      "bytes": 16377,
+      "sha256": "46a35aa09509ec98206345a4bed775bcdf42dd2fd1abd5de8cf723399e14ab78"
+    },
+    {
+      "path": "dev/artifacts/guarded-conversion-review/addendum/manifest.json",
+      "bytes": 1956,
+      "sha256": "1e810454744ee270ffcb9a56636a1c400f6e47a3a827dd5d2df19fe77ec77117"
+    },
+    {
+      "path": "dev/artifacts/guarded-conversion-review/addendum/README.md",
+      "bytes": 4473,
+      "sha256": "916dd03d1a164e97a8cb1abd8cbe449d20dad7f820dd15d3f1e5aafc8e346811"
+    },
+    {
+      "path": "dev/artifacts/guarded-conversion-review/single-definition/single-definition-followup.patch",
+      "bytes": 17967,
+      "sha256": "0399b2e6a76d35dc1c3f8bedfabfc223cf5bdfff2fcae58588f140826ee1b6dc"
+    },
+    {
+      "path": "dev/artifacts/guarded-conversion-review/single-definition/manifest.json",
+      "bytes": 1502,
+      "sha256": "cd9d55cb9e3c3e46593dcfc8c2dd77b4616c352aaee5c9f36f0e87fd23bb2b6f"
+    },
+    {
+      "path": "dev/artifacts/guarded-conversion-review/single-definition/README.md",
+      "bytes": 4190,
+      "sha256": "b46d30ecbb454b6dc41cd3bffbc7aba2d6a6622eefeb7c9d7894adef7ee839cf"
+    }
+  ]
+}

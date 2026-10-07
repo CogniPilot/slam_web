@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "status": "STATIC_COMPILER_PACKAGE_SELECTION_AND_FAILURE_PRESERVATION_PASS",
+  "recordedAt": "2026-10-05T10:02:24.835Z",
+  "scriptSha256": "2b5698d4dfb35db5abcdc9b6db969f1cd4982c119a97e3661a6201a17211d81f",
+  "probeSha256": "55c5f0130d46b069fe5f9bc317fd8fb5b718543404328bb8c034093e6efd9f2b",
+  "engine": "v24.21.0",
+  "outputs": [
+    {
+      "label": "default",
+      "manifest": {
+        "schemaVersion": 1,
+        "source": "npm-lockfile-package",
+        "files": [
+          {
+            "file": "rumoca_bind_wasm.js",
+            "bytes": 73732,
+            "sha256": "a42e7a8012425835b3a6a4087bf2d5a4d581d1a4a902e3b090a1b68e58b26eb4"
+          },
+          {
+            "file": "rumoca_bind_wasm_bg.wasm",
+            "bytes": 22633492,
+            "sha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4"
+          }
+        ]
+      }
+    },
+    {
+      "label": "cli",
+      "manifest": {
+        "schemaVersion": 1,
+        "source": "explicit-local-package",
+        "files": [
+          {
+            "file": "rumoca_bind_wasm.js",
+            "bytes": 73732,
+            "sha256": "a42e7a8012425835b3a6a4087bf2d5a4d581d1a4a902e3b090a1b68e58b26eb4"
+          },
+          {
+            "file": "rumoca_bind_wasm_bg.wasm",
+            "bytes": 22633492,
+            "sha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4"
+          }
+        ]
+      }
+    },
+    {
+      "label": "env",
+      "manifest": {
+        "schemaVersion": 1,
+        "source": "explicit-local-package",
+        "files": [
+          {
+            "file": "rumoca_bind_wasm.js",
+            "bytes": 73732,
+            "sha256": "a42e7a8012425835b3a6a4087bf2d5a4d581d1a4a902e3b090a1b68e58b26eb4"
+          },
+          {
+            "file": "rumoca_bind_wasm_bg.wasm",
+            "bytes": 22633492,
+            "sha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4"
+          }
+        ]
+      }
+    }
+  ],
+  "failures": [
+    {
+      "label": "missing",
+      "status": 1,
+      "allPriorFilesPreserved": true
+    },
+    {
+      "label": "invalid",
+      "status": 1,
+      "allPriorFilesPreserved": true
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "dev/artifacts/rumoca-assets-review/default.log",
+      "sha256": "0cfdb114402b8e697d807d3d03c7fc929914420e7702907dd91a8405910d5aea"
+    },
+    {
+      "path": "dev/artifacts/rumoca-assets-review/cli.log",
+      "sha256": "9f38bac5a9adb91c5f0618eaf7a8abad74eaacd1ef56953b74f2166c933c2dad"
+    },
+    {
+      "path": "dev/artifacts/rumoca-assets-review/env.log",
+      "sha256": "ad3adf73135be7aadca8d390a4fed6796d1a6e261b91f2f0c5ab8c38e6a209fc"
+    },
+    {
+      "path": "dev/artifacts/rumoca-assets-review/missing.log",
+      "sha256": "4a8fdb52252b6fc80b18d2edfa6837cd33a2803ef625fbb607b8c008e99cee0d"
+    },
+    {
+      "path": "dev/artifacts/rumoca-assets-review/invalid.log",
+      "sha256": "8853ac5e867bad77952304e4922a31969218f484cc694e38411d7941cc2c2cf9"
+    },
+    {
+      "path": "dev/artifacts/rumoca-assets-review/assets.mjs",
+      "sha256": "2b5698d4dfb35db5abcdc9b6db969f1cd4982c119a97e3661a6201a17211d81f"
+    },
+    {
+      "path": "dev/artifacts/rumoca-assets-review/probe-rumoca-assets.mjs",
+      "sha256": "55c5f0130d46b069fe5f9bc317fd8fb5b718543404328bb8c034093e6efd9f2b"
+    },
+    {
+      "path": "dev/artifacts/rumoca-assets-review/initial-empty-env-failure.log",
+      "sha256": "52ab5fbf09f2232db25b3cacdc4711b6ed02f4349ca1b5e533f6e1a3394a2bf4"
+    }
+  ],
+  "scope": "Actual complete npm0.10 compiler pair staged in scratch via default, explicit CLI and environment override. Missing second file and invalid WASM reject before altering three prior output files. No compiler branch build, browser compatibility, production assets change or fullSLAM claim.",
+  "productionAssetsChanged": false,
+  "fullSlam": false
+}

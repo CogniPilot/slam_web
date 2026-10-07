@@ -1,0 +1,779 @@
+{
+  "scope": "Owned Chromium Node-orchestrated production GPU sensor worker diagnostic, full RGB/depth/64-beam LiDAR plus Modelica INS and detector; not full SLAM or matched throughput",
+  "instrumentation": "CDP 1ms CPU profiles, EXT_disjoint_timer_query_webgl2, Chromium trace, V8 perf maps, native perf 99Hz DWARF; overhead excluded from matched ABBA conclusions",
+  "summary": {
+    "settings": {
+      "environment": "city",
+      "sceneDetail": "high",
+      "lidarEnabled": true,
+      "depthCloudEnabled": true,
+      "sensorRates": {
+        "cameraHz": 90,
+        "lidarHz": 20,
+        "imuHz": 90,
+        "gpsHz": 10
+      }
+    },
+    "workload": {
+      "profile": "Modelica inertial propagation with RGB-D feature detection; full SLAM is not measured",
+      "seed": 7,
+      "detectorPreset": "Modelica Harris · full resolution",
+      "detectorLanguage": "modelica",
+      "algorithmPreset": "Modelica inertial propagation",
+      "runtime": "modelica",
+      "carsEnabled": true,
+      "peopleEnabled": true,
+      "lightingMode": "day",
+      "depthCloudEnabled": true,
+      "sensorRates": {
+        "cameraHz": 90,
+        "lidarHz": 20,
+        "imuHz": 90,
+        "gpsHz": 10
+      },
+      "sourceSha256": {
+        "physics": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+        "sensor": "0e0b0654ebb293edd48968761eafac977b5f2b90955f012a4ea18ac078ac963a",
+        "evaluation": "f6dc00fb7971fcfacaf50364949d2469fe7d289e84f11640e989ad52f35bea3b",
+        "detector": "faa81a704d6d923720173e686c4d20102f47bb34b29ff591b9b76c12b5b853f7",
+        "algorithm": "04c4435fa1a6c5c929a245a8c76ac4bafcfde3eb54734677fb592f7ba2c2f1ce",
+        "graph": "34d6cd925f8e4dda44bdd23fdcdeed4dd3b586342f188b894785cfc8c2028074"
+      }
+    },
+    "bundleManifest": "bundle.json",
+    "readback": "sync",
+    "targetSimulationRate": 10,
+    "targetFrameMs": 1.1111111111111112,
+    "simulationRate": 0.33878494778545404,
+    "startSimulationTime": 0.1111111111111111,
+    "flowCounts": {
+      "lab/sensors/imu/0": 360,
+      "lab/node/physics/truth": 360,
+      "lab/camera/info": 360,
+      "lab/node/sensor/frame": 360,
+      "lab/node/detector/features": 360,
+      "lab/node/slam/estimate": 360,
+      "lab/node/map/estimate": 360,
+      "lab/node/evaluation/metrics": 360,
+      "lab/slam/odometry": 360,
+      "lab/sensors/lidar/0": 80,
+      "lab/navigation/gps": 40
+    },
+    "browserCpu": {
+      "seconds": 19.380000000000003,
+      "meanActiveCores": 1.6414130720205249,
+      "method": "CDP process CPU deltas after warmup; includes profiler overhead"
+    },
+    "mainCpuThrottle": 1,
+    "graphics": {
+      "api": "WebGL 2",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+      "vendor": "Google Inc. (NVIDIA Corporation)",
+      "acceleration": "hardware-reported",
+      "powerPreference": "high-performance"
+    },
+    "frames": 360,
+    "elapsedMs": 11806.899999976158,
+    "meanFrameMs": 32.751666668719714,
+    "meanNodeMs": {
+      "physics": 8.51416666938199,
+      "sensor": 17.043333330750464,
+      "detector": 3.6622222228182686,
+      "slam": 0.6894444442457623,
+      "map": 0.05722222328186035,
+      "evaluation": 0.7269444386164348
+    },
+    "final": {
+      "sequence": 369,
+      "time": 4.111111111111111,
+      "totalMs": 25.399999976158142,
+      "nodes": {
+        "physics": 3.899999976158142,
+        "sensor": 13.800000071525574,
+        "detector": 2.899999976158142,
+        "slam": 1.899999976158142,
+        "map": 0.10000002384185791,
+        "evaluation": 1.100000023841858
+      },
+      "workers": {
+        "physics": {
+          "roundTripMs": 2.899999976158142
+        },
+        "detector": {
+          "roundTripMs": 2.899999976158142,
+          "queueMs": 0,
+          "inputMs": 0,
+          "computeMs": 1.600000023841858,
+          "outputMs": 0.8999999761581421,
+          "workerMs": 2.5
+        },
+        "slam": {
+          "roundTripMs": 1.899999976158142
+        },
+        "evaluation": {
+          "roundTripMs": 1,
+          "queueMs": 0,
+          "workerMs": 0.20000004768371582
+        }
+      },
+      "transport": {
+        "lab/node/physics/truth": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/sensor/frame": {
+          "totalMs": 0,
+          "bufferBytes": 115200
+        },
+        "lab/node/detector/features": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/slam/estimate": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/map/estimate": {
+          "totalMs": 0,
+          "bufferBytes": null
+        },
+        "lab/node/evaluation/metrics": {
+          "totalMs": 0,
+          "bufferBytes": null
+        }
+      },
+      "camera": {
+        "readback": 8.899999976158142,
+        "renderSubmission": 1.5,
+        "total": 10.5,
+        "method": "synchronous WebGL readback in sensor worker"
+      },
+      "sensorGpu": {
+        "timerSupported": true,
+        "disjoint": false,
+        "elapsedMs": 11.800000071525574,
+        "events": [
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0.09999990463256836,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "rgb",
+            "apiWallMs": 0.8999999761581421,
+            "gpuMs": 0.5888,
+            "drawCalls": 63,
+            "triangles": 44899
+          },
+          {
+            "kind": "pbo-write",
+            "apiWallMs": 0,
+            "gpuMs": 0.050176,
+            "bytes": 57600
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0.10000002384185791,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "skeleton-update",
+            "apiWallMs": 0,
+            "gpuMs": null
+          },
+          {
+            "kind": "axial-depth",
+            "apiWallMs": 0.5,
+            "gpuMs": 0.30208,
+            "drawCalls": 35,
+            "triangles": 44635
+          },
+          {
+            "kind": "pbo-write",
+            "apiWallMs": 0,
+            "gpuMs": 0.023552,
+            "bytes": 57600
+          },
+          {
+            "kind": "fullscreen",
+            "apiWallMs": 0,
+            "gpuMs": 0.012288,
+            "drawCalls": 1,
+            "triangles": 2
+          },
+          {
+            "kind": "pbo-write",
+            "apiWallMs": 0,
+            "gpuMs": 0.14336,
+            "bytes": 230400
+          },
+          {
+            "kind": "host-copy",
+            "apiWallMs": 7.5,
+            "gpuMs": null,
+            "bytes": 230400
+          },
+          {
+            "kind": "host-copy",
+            "apiWallMs": 1,
+            "gpuMs": null,
+            "bytes": 57600
+          },
+          {
+            "kind": "host-copy",
+            "apiWallMs": 0.2999999523162842,
+            "gpuMs": null,
+            "bytes": 57600
+          }
+        ]
+      },
+      "display": {
+        "timestamp": 18297.9,
+        "windowMs": 1000,
+        "targetFps": 30,
+        "fps": 30,
+        "captureHz": 0,
+        "visionHz": 0,
+        "lidarHz": 0,
+        "renderedFrames": 30,
+        "capturedFrames": 0,
+        "visionFrames": 0,
+        "lidarFrames": 0,
+        "meanFrameIntervalMs": 33.22666666507721,
+        "p95FrameIntervalMs": 37.699999928474426,
+        "meanRenderSubmitMs": 2.356666668256124,
+        "longTasks": null
+      },
+      "ate": 0.09,
+      "points": 0,
+      "diagnostics": {
+        "model": "Modelica nominal INS",
+        "stateCount": 16
+      }
+    },
+    "workers": [
+      {
+        "url": "http://127.0.0.1:4173/assets/modelica-vision.worker-DuXKo6E9.js",
+        "file": "worker-0.cpuprofile"
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/modelica-runtime-math.worker-CCizLMX1.js",
+        "file": "worker-1.cpuprofile"
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/viewer.worker-GXyNycWm.js",
+        "file": "worker-2.cpuprofile"
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/physics.worker-CNbjWayI.js",
+        "file": "worker-3.cpuprofile"
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/modelica-lsp.worker-B-3Ki2Sb.js",
+        "file": "worker-4.cpuprofile"
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/sensor-render.worker-ChFld44W.js",
+        "file": "worker-5.cpuprofile"
+      },
+      {
+        "url": "http://127.0.0.1:4173/assets/modelica-state.worker-D8Xf8AWk.js",
+        "file": "worker-6.cpuprofile"
+      }
+    ],
+    "errors": [],
+    "geometryBatching": true
+  },
+  "sensorThread": {
+    "pid": 1829788,
+    "tid": 1829886,
+    "proof": "TracingSessionIdForWorker exact sensor-render.worker URL in thread-metadata.json",
+    "activeCpuMs": 1510,
+    "scheduledRunMs": 1498.449,
+    "runnableWaitMs": 1404.578
+  },
+  "samples": {
+    "total": 1511,
+    "sensorThread": 115,
+    "lost": 0,
+    "finalization": "Owned perf children received SIGINT and exited normally"
+  },
+  "capturedGpuEvents": {
+    "skeleton-update": {
+      "count": 26400,
+      "apiWallMs": 110.09999930858612,
+      "gpuMs": 0,
+      "bytes": 0
+    },
+    "rgb": {
+      "count": 360,
+      "apiWallMs": 606.7000008821487,
+      "gpuMs": 255.52281599999984,
+      "bytes": 0
+    },
+    "pbo-write": {
+      "count": 1120,
+      "apiWallMs": 19.50000035762787,
+      "gpuMs": 225.45715200000026,
+      "bytes": 166359040
+    },
+    "axial-depth": {
+      "count": 360,
+      "apiWallMs": 232.70000088214874,
+      "gpuMs": 164.40217600000003,
+      "bytes": 0
+    },
+    "fullscreen": {
+      "count": 400,
+      "apiWallMs": 13.4000004529953,
+      "gpuMs": 6.833151999999972,
+      "bytes": 0
+    },
+    "host-copy": {
+      "count": 1120,
+      "apiWallMs": 3373.199999332428,
+      "gpuMs": 0,
+      "bytes": 166359040
+    },
+    "lidar-face": {
+      "count": 160,
+      "apiWallMs": 147.6000007390976,
+      "gpuMs": 94.03596799999993,
+      "bytes": 0
+    }
+  },
+  "limits": [
+    "GPU event inventory retains 360 camera captures and40 paired scans;40 lidar-only profiles overwritten by later camera metadata. Native/Chrome traces cover all captures.",
+    "API walltime includes blocked transport/driver/scheduler time; native busy samples cannot apportion idle waits. Runnable wait is CPU scheduling, not proof of GPU wait.",
+    "Sensor targets have samples=0; canvas antialias does not imply sensor multisample resolve.",
+    "GPU native stack proves GetBufferSubDataCHROMIUM -> GL_MapBufferRange -> rx::BufferGL::mapRange; no allocation of all walltime to raster work."
+  ],
+  "resource": {
+    "command": [
+      "nice",
+      "-n",
+      "10",
+      "taskset",
+      "-c",
+      "8,9",
+      "env",
+      "SLAM_PROFILE_OUT=/home/jgoppert/scratch/slam_web/tmp/sensor-render-profile/native-diagnostic",
+      "SLAM_PROFILE_FRAMES=360",
+      "SLAM_PROFILE_DETAIL=high",
+      "SLAM_PROFILE_SCENE=city",
+      "SLAM_PROFILE_LIDAR=1",
+      "SLAM_PROFILE_DEPTH_CLOUD=1",
+      "SLAM_PROFILE_READBACK=sync",
+      "SLAM_PROFILE_GEOMETRY_BATCHING=1",
+      "SLAM_PROFILE_GPU_TIMERS=1",
+      "SLAM_PROFILE_JIT=1",
+      "SLAM_PROFILE_NATIVE_TRACE=1",
+      "SLAM_PROFILE_PERF=/nix/store/5ssr5shq1apj2inlpfycfp5lbjjlxhml-perf-linux-7.1.4/bin/perf",
+      "SLAM_PROFILE_SENSOR_RATES={\"cameraHz\":90,\"lidarHz\":20,\"imuHz\":90,\"gpsHz\":10}",
+      "node",
+      "scripts/profile-browser.mjs"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/sensor-render-profile/native-diagnostic/run.log",
+    "elapsedMs": 30930.759331,
+    "peakRssKiB": 2849036,
+    "minimumAvailableKiB": 55634800,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 180,
+    "signal": null,
+    "exitCode": 0
+  },
+  "raw": {
+    "bundle.json": {
+      "bytes": 1481,
+      "sha256": "23ff8969a6836ef795f7577227eab9e1e1c56da975b2aea5ea1986d297b2c8d8"
+    },
+    "chromium-trace.json": {
+      "bytes": 69020139,
+      "sha256": "09649451cb0e667bb1e66cbfc13b5aec612d308a47e2638b6990c1377993d18f"
+    },
+    "main.cpuprofile": {
+      "bytes": 201514,
+      "sha256": "f9d65b05f244a2daf43a49c5e2b9b1b672d7b1dd2150d10490ffa08ff06fd43c"
+    },
+    "owned-browser-processes.json": {
+      "bytes": 537,
+      "sha256": "9326069a0e3c840f527fa2fad2fff7dd9394393e5e0b33117ad11ccba8dfe9e3"
+    },
+    "perf-1829779.map": {
+      "bytes": 386539,
+      "sha256": "9696aa769eba27a2b648f853fb278db1530b736b8920c623516c68238cdd7fee"
+    },
+    "perf-1829786.map": {
+      "bytes": 129439,
+      "sha256": "77b32ecf514670118f32bcdff8bf9d944ed8b47250a2c04cb85a8da459e4927a"
+    },
+    "perf-1829788.map": {
+      "bytes": 7155222,
+      "sha256": "49697e07c93bbc18c6597e829ac3c71b7686c773a588d2a98591cc11136c4ece"
+    },
+    "perf-report.txt": {
+      "bytes": 8353,
+      "sha256": "1ca490cc91d651d4f15f591df44c78b9a75c27e7d04b3dcecca173fbfc4909b0"
+    },
+    "perf-script.txt": {
+      "bytes": 2077764,
+      "sha256": "e04f7e59fbff9de8df673b13cdd1d86b5213ff3196ad50c2a8ff68418e848774"
+    },
+    "perf-stat.txt": {
+      "bytes": 374,
+      "sha256": "7af239a40cbb7a0846ec9f74b843fb7c530414e22f521a78776270daebe2d621"
+    },
+    "perf.data": {
+      "bytes": 14930112,
+      "sha256": "a16191b7afa0d1942fc3175506e01cda65b58b5b9d08215b5679e50d4867fda8"
+    },
+    "resource.json": {
+      "bytes": 1018,
+      "sha256": "48af5b9774d5e29bb86e83d1b722aeb8a43c3525229892776967763bad1a0783"
+    },
+    "run.log": {
+      "bytes": 13795,
+      "sha256": "41cd8eebe9f987fcf1dfb361c0376d0a6e9445b83eb98dfd4431b136dca61607"
+    },
+    "sensor-thread-perf-report.txt": {
+      "bytes": 13140,
+      "sha256": "45decca54230e3026397f7b790e48873c7e387be916397a7d28e878e321a40ab"
+    },
+    "thread-accounting.json": {
+      "bytes": 107369,
+      "sha256": "f5cf79eda103f9bf853768708f8895d12ce5e5923cc8457b84fd860b3db39043"
+    },
+    "thread-metadata.json": {
+      "bytes": 245775,
+      "sha256": "84f2161144ed3cb3fc3b466647bfc8df0714578596bb44ea138b58eb92fc617a"
+    },
+    "timings.json": {
+      "bytes": 4645439,
+      "sha256": "3410e39cbd6759122e439c01b8636a0c2b55cd2bafa5abbb338d6fdeafe78538"
+    },
+    "v8-perf-maps.json": {
+      "bytes": 182,
+      "sha256": "b3f655ee0b0475aeeef674911c585f133c2bc617a254c1333594beed0134700a"
+    },
+    "worker-0.cpuprofile": {
+      "bytes": 123831,
+      "sha256": "95b902d6567d3e50bc2bbb7a890fbfacc3e014ee25061aac044a0ee89e610b7d"
+    },
+    "worker-1.cpuprofile": {
+      "bytes": 179886,
+      "sha256": "ed75211701f69016729a830eddcd7c47a9fdeb80e408d906fb668764b7f711e1"
+    },
+    "worker-2.cpuprofile": {
+      "bytes": 247020,
+      "sha256": "5bd222ca014385f71a01be31d60f83f53464beba93e136680b5e2a9c8cce756a"
+    },
+    "worker-3.cpuprofile": {
+      "bytes": 183911,
+      "sha256": "9e64ddf77d7156a9bfc6240dac85db6de6af694a04f7549ce2709a952a1c9626"
+    },
+    "worker-4.cpuprofile": {
+      "bytes": 118113,
+      "sha256": "5ab48e3d6c16b7a51ce7a3f8d5c88ed188ecd981156a4d309ccb545399be127c"
+    },
+    "worker-5.cpuprofile": {
+      "bytes": 327354,
+      "sha256": "88a4a4ec4e922289d9308b9ffc4ec22bab52bd1a3a4f04d44267997ac6df80f6"
+    },
+    "worker-6.cpuprofile": {
+      "bytes": 120933,
+      "sha256": "631dba5843b6879def4f2f160f775e422d21defe1082843f48b1ed5628470fc3"
+    },
+    "world.png": {
+      "bytes": 780971,
+      "sha256": "d3ee5b6258713c4ef36e5913f236ec0b253aad07b6ddf4277ac2ffbf359901a2"
+    }
+  }
+}

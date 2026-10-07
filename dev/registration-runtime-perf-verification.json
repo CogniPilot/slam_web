@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "status": "NATIVE_PERF_JIT_ANNOTATED_FULL14400_COMPONENT_PROFILE_COMPLETE",
+  "recordedAt": "2026-10-04T21:58:40.892Z",
+  "runtime": {
+    "status": "ACTUAL_SOURCE_ISSUED_REGISTRATION_RUNTIME_PROFILE_COMPLETE",
+    "recordedAt": "2026-10-04T21:32:41.937Z",
+    "engine": "v24.21.0",
+    "pid": 1827209,
+    "calls": 1630,
+    "elapsedMs": 15006.592985999998,
+    "meanExecutionMs": 9.205873320245393,
+    "p50ExecutionMs": 9.199188000000504,
+    "p95ExecutionMs": 9.266820000000735,
+    "inputBytesImmutable": true,
+    "capacity": 14400,
+    "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "artifactSha256": "c6db3eea4d6845363f0239c76980e999f4e69a1c1c378a3a1c0b93013e140512",
+    "moduleSha256": "dc0ec01cc8de4536af0ff513614abfb579758df11b2f98facf1a0d846bd36a17",
+    "compiler": {
+      "version": "0.10.1",
+      "git_commit": "03e6b59a47f1"
+    },
+    "moduleBytes": 71810,
+    "consumerSha256": "4a7c91686f588fae29e49698209064391818914eba696971b08ccaefbd294c50",
+    "bundleSha256": "28571bdc83453abe9e4c1d7b3bce4ab9a247b6b6fea720a2eba228c56474feb2",
+    "mathImports": [
+      "pow"
+    ],
+    "abi": {
+      "export": "eval_assignments",
+      "arguments": [
+        "yPtr:i32",
+        "pPtr:i32",
+        "time:f64",
+        "scratchPtr:i32",
+        "reservedZero:i32"
+      ],
+      "memory_import": "env.memory",
+      "memory_shared": false,
+      "memory_pages": 41,
+      "y_offset": 0,
+      "p_offset": 208,
+      "y_count": 26,
+      "p_count": 100805,
+      "reserved_pointer_value": 0,
+      "result": "status:i32",
+      "success_status": 0,
+      "scratch_bytes": 1859016,
+      "transactional_y": true,
+      "p_readonly": true,
+      "scratch_offset": 806648
+    },
+    "runtimeIntegrated": false,
+    "fullSlam": false,
+    "scope": "Complete unchanged full14400 registration module, fixed measured inputs,100warmcalls. Timed window excludes compilation, input copies, sensors, descriptors, filter and rendering. Node perf instrumentation can affect latency."
+  },
+  "resource": {
+    "command": [
+      "taskset",
+      "-c",
+      "4,5",
+      "nice",
+      "-n",
+      "10",
+      "perf",
+      "record",
+      "-k",
+      "1",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "99",
+      "--call-graph",
+      "dwarf,8192",
+      "-o",
+      "$HOME/scratch/slam_web/profiles/registration-runtime-followup/perf.data",
+      "--",
+      "node",
+      "--perf-prof",
+      "--perf-prof-unwinding-info",
+      "--perf-prof-path=$HOME/scratch/slam_web/profiles/registration-runtime-followup",
+      "--logfile=$HOME/scratch/slam_web/profiles/registration-runtime-followup/v8.log",
+      "dev/profile-modelica-native-runtime.mjs",
+      "dev/artifacts/registration-relative-pose-filter-chain/independent-fixtures.json",
+      "$HOME/scratch/slam_web/profiles/registration-runtime-followup",
+      "15"
+    ],
+    "log": "$HOME/scratch/slam_web/profiles/registration-runtime-followup/run.log",
+    "elapsedMs": 16976.783371,
+    "peakRssKiB": 256952,
+    "minimumAvailableKiB": 58800076,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 60,
+    "signal": null,
+    "exitCode": 0
+  },
+  "perf": {
+    "event": "cpu-clock:u",
+    "frequencyHz": 99,
+    "callGraph": "dwarf,8192",
+    "samples": 1498,
+    "lostSamples": 0,
+    "generatedFunction3SelfPercent": 86.85,
+    "generatedFunction4SelfPercent": 6.41,
+    "memoryCopyWrapperSelfPercent": 1.67,
+    "topInstructions": [
+      {
+        "percent": 3.31,
+        "instruction": "34b9:   mov    %rcx,(%r12,%rsi,1)"
+      },
+      {
+        "percent": 3,
+        "instruction": "3466:   vmovq  %xmm2,%rsi"
+      },
+      {
+        "percent": 3,
+        "instruction": "367a:   vmovq  %xmm2,%rsi"
+      },
+      {
+        "percent": 2,
+        "instruction": "36c7:   mov    %rcx,(%r12,%rsi,1)"
+      },
+      {
+        "percent": 1.92,
+        "instruction": "5ff8:   mov    %rdx,(%r12,%rsi,1)"
+      },
+      {
+        "percent": 1.46,
+        "instruction": "5fc5:   mov    %rdx,(%r12,%rax,1)"
+      },
+      {
+        "percent": 1.46,
+        "instruction": "5ff0:   mov    %r9,(%r12,%rdx,1)"
+      },
+      {
+        "percent": 1.38,
+        "instruction": "346f:   mov    (%r12,%r15,1),%rsi"
+      },
+      {
+        "percent": 1.31,
+        "instruction": "1774:   cmpq   $0x0,(%r12,%rdi,1)"
+      },
+      {
+        "percent": 1.31,
+        "instruction": "3683:   mov    (%r12,%r15,1),%rsi"
+      },
+      {
+        "percent": 1.23,
+        "instruction": "1cd1:   cmpq   $0x0,(%r12,%rdx,1)"
+      },
+      {
+        "percent": 1.15,
+        "instruction": "60b4:   vmovq  %xmm2,%rdx"
+      },
+      {
+        "percent": 1.08,
+        "instruction": "60fc:   mov    %rdi,(%r12,%rsi,1)"
+      },
+      {
+        "percent": 1,
+        "instruction": "5fbb:   lea    0x1008f0(%rbx),%eax"
+      },
+      {
+        "percent": 1,
+        "instruction": "6099:   vmovq  %xmm2,%rdi"
+      },
+      {
+        "percent": 0.92,
+        "instruction": "6093:   vmulsd (%r12,%rsi,1),%xmm2,%xmm2"
+      },
+      {
+        "percent": 0.92,
+        "instruction": "60c7:   mov    %rdi,(%r12,%rdx,1)"
+      },
+      {
+        "percent": 0.85,
+        "instruction": "1a83:   mov    (%r12,%r8,1),%r9"
+      },
+      {
+        "percent": 0.85,
+        "instruction": "5fb2:   vmovq  %xmm2,%rax"
+      },
+      {
+        "percent": 0.77,
+        "instruction": "1910:   and    (%r12,%r8,1),%rdx"
+      },
+      {
+        "percent": 0.77,
+        "instruction": "350f:   cmp    $0x1,%rcx"
+      },
+      {
+        "percent": 0.69,
+        "instruction": "993:    cmpq   $0x0,(%r12,%r8,1)"
+      },
+      {
+        "percent": 0.69,
+        "instruction": "18ec:   vmovsd (%r12,%rsi,1),%xmm3"
+      },
+      {
+        "percent": 0.69,
+        "instruction": "364c:   lea    0xfe1d8(%rbx),%r8d"
+      },
+      {
+        "percent": 0.61,
+        "instruction": "1b46:   and    (%r12,%r8,1),%rdi"
+      },
+      {
+        "percent": 0.61,
+        "instruction": "1bf2:   mov    %edi,%edi"
+      },
+      {
+        "percent": 0.61,
+        "instruction": "3454:   lea    0xfe198(%rbx),%ecx"
+      },
+      {
+        "percent": 0.61,
+        "instruction": "346b:   mov    %rsi,(%r12,%rcx,1)"
+      },
+      {
+        "percent": 0.54,
+        "instruction": "f2a:    cmpq   $0x0,(%r12,%r11,1)"
+      },
+      {
+        "percent": 0.54,
+        "instruction": "147b:   and    (%r12,%rax,1),%r11"
+      }
+    ],
+    "artifacts": {
+      "perf.data": {
+        "path": "$HOME/scratch/slam_web/profiles/registration-runtime-followup/perf.data",
+        "sha256": "9e8a2e57568d50fc1ecddbd65cb2c74a9479f483899b26270fbe6a158086cc65"
+      },
+      "perf-jit.data": {
+        "path": "$HOME/scratch/slam_web/profiles/registration-runtime-followup/perf-jit.data",
+        "sha256": "e11e69827d5750d677d5c0c3a5db4d706aca8ee5ee70eb656444245eef8c93b2"
+      },
+      "perf-symbols.txt": {
+        "path": "$HOME/scratch/slam_web/profiles/registration-runtime-followup/perf-symbols.txt",
+        "sha256": "20549060157d0bee0ed03c1e6b143f47dc8222095697013413ec3860643f3494"
+      },
+      "annotated-registration.txt": {
+        "path": "$HOME/scratch/slam_web/profiles/registration-runtime-followup/annotated-registration.txt",
+        "sha256": "498225948b9612b18efda1c0be09b04c115eae1ec04b0415c79fba35f2bde9d6"
+      },
+      "hot-instructions.json": {
+        "path": "$HOME/scratch/slam_web/profiles/registration-runtime-followup/hot-instructions.json",
+        "sha256": "13730f6e372022d458f0643c718b812cb9fa7a82d422bb2193ddaccf37447880"
+      },
+      "runtime.json": {
+        "path": "$HOME/scratch/slam_web/profiles/registration-runtime-followup/runtime.json",
+        "sha256": "08fc1582ba7590f6eead4f67ce54e374c1bc7f5b1393ec272f4a2784bfbc4dc4"
+      }
+    }
+  },
+  "scope": "Isolated source-issued full14400 registration, fixed measured inputs. Not whole-pipeline timing or fullSLAM. Sampling PCs alone do not establish a memory-bandwidth bottleneck.",
+  "productionPinChanged": false,
+  "activeCountDiagnostic": {
+    "status": "FULL_CAPACITY_MODULE_ACTIVE_COUNT_SCALING_DIAGNOSTIC_PASS",
+    "recordedAt": "2026-10-04T22:04:01.199Z",
+    "engine": "v24.21.0",
+    "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "artifactSha256": "c6db3eea4d6845363f0239c76980e999f4e69a1c1c378a3a1c0b93013e140512",
+    "moduleSha256": "dc0ec01cc8de4536af0ff513614abfb579758df11b2f98facf1a0d846bd36a17",
+    "capacity": 14400,
+    "sourceUnchanged": true,
+    "runs": [
+      {
+        "activeCount": 350,
+        "calls": 100,
+        "meanMs": 2.9739449300000036,
+        "p50Ms": 2.936947000000032,
+        "p95Ms": 3.2072839999999587,
+        "accepted": true,
+        "parameterBytesImmutable": true
+      },
+      {
+        "activeCount": 14400,
+        "calls": 100,
+        "meanMs": 9.155230729999992,
+        "p50Ms": 9.159476999999697,
+        "p95Ms": 9.251115000000027,
+        "accepted": true,
+        "parameterBytesImmutable": true
+      },
+      {
+        "activeCount": 14400,
+        "calls": 100,
+        "meanMs": 9.18919888999999,
+        "p50Ms": 9.176236999999674,
+        "p95Ms": 9.245234999999866,
+        "accepted": true,
+        "parameterBytesImmutable": true
+      },
+      {
+        "activeCount": 350,
+        "calls": 100,
+        "meanMs": 2.9902745499999765,
+        "p50Ms": 2.953146999999717,
+        "p95Ms": 3.2151929999999993,
+        "accepted": true,
+        "parameterBytesImmutable": true
+      }
+    ],
+    "scope": "Different active counts in the same unchanged full14400 module. Input setup/warmup excluded. Both fixtures accepted; ABBA order, shared machine. Not an optimization, capacity reduction, whole-pipeline benchmark or 10x claim."
+  }
+}

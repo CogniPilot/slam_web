@@ -1,0 +1,23 @@
+{
+  "command": [
+    "nice",
+    "-n",
+    "10",
+    "taskset",
+    "-c",
+    "11",
+    "/home/jgoppert/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_phase_dae-2ee2bbb1e78abc89",
+    "--test-threads=4"
+  ],
+  "log": "/home/jgoppert/scratch/slam_web/tmp/slam-event-occurrence-phase-dae-full.log",
+  "elapsedMs": 14817.952267,
+  "peakRssKiB": 64392,
+  "minimumAvailableKiB": 55909332,
+  "peakCacheBytes": null,
+  "rssLimitMiB": 2048,
+  "availableFloorMiB": 16384,
+  "rssScope": "owned process group and identified descendants, including detached browser groups",
+  "secondsLimit": 60,
+  "signal": null,
+  "exitCode": 0
+}

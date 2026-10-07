@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "scope": "Generic source-owned indexed-write fold dependency projection; actual unchanged full14400 SeededDepthFrame compiler preparation diagnostic. No native artifact or numeric admission.",
+  "status": "focused-controls-pass-full-source-preparation-timeout",
+  "producer": {
+    "path": "/home/jgoppert/scratch/slam_web/tmp/indexed-write-fold-gate/final-producer",
+    "sha256": "23e1866b4c1a3a117756350060c06c7d9a18f275d2dbc4066bdcabafe78d10a4",
+    "sourceClosureSha256": "d4deeb780ee2cd2fdd59d79e5593142c16705b6dcb57141a3c8f2cc29e197977",
+    "sourceFiles": 2359,
+    "toolchain": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.95.0\nLLVM version: 22.1.2\n"
+  },
+  "gates": {
+    "finalControls": {
+      "passed": 98,
+      "resource": {
+        "command": [
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "CARGO_TARGET_DIR=/home/jgoppert/scratch/slam_web/build/rumoca-native-target",
+          "TMPDIR=/home/jgoppert/scratch/slam_web/tmp",
+          "CARGO_BUILD_JOBS=4",
+          "RUST_TEST_THREADS=4",
+          "RAYON_NUM_THREADS=4",
+          "CARGO_INCREMENTAL=0",
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "cargo",
+          "test",
+          "--manifest-path",
+          "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "-p",
+          "rumoca-eval-solve",
+          "-p",
+          "rumoca-phase-solve",
+          "--features",
+          "rumoca-bind-wasm/native-assignments",
+          "--lib",
+          "projection::"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/indexed-write-fold-gate/final-controls.log",
+        "elapsedMs": 43850.241661,
+        "peakRssKiB": 1389860,
+        "minimumAvailableKiB": 53652920,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "strict": {
+      "passed": true,
+      "resource": {
+        "command": [
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "CARGO_TARGET_DIR=/home/jgoppert/scratch/slam_web/build/rumoca-native-target",
+          "TMPDIR=/home/jgoppert/scratch/slam_web/tmp",
+          "CARGO_BUILD_JOBS=4",
+          "RUST_TEST_THREADS=4",
+          "RAYON_NUM_THREADS=4",
+          "CARGO_INCREMENTAL=0",
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "cargo",
+          "clippy",
+          "--manifest-path",
+          "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "-p",
+          "rumoca-eval-solve",
+          "-p",
+          "rumoca-phase-solve",
+          "--all-targets",
+          "--all-features",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/indexed-write-fold-gate/final-strict-clippy.log",
+        "elapsedMs": 13816.050582,
+        "peakRssKiB": 1849748,
+        "minimumAvailableKiB": 55752840,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "history": [
+      {
+        "log": "/home/jgoppert/scratch/slam_web/tmp/indexed-write-fold-gate/controls.log",
+        "result": "95 pass, 2 failed fixture controls; corrected fixtures without acceptance broadening"
+      },
+      {
+        "log": "/home/jgoppert/scratch/slam_web/tmp/indexed-write-fold-gate/strict-clippy.log",
+        "result": "3 excessive_nesting test failures; extracted equivalent helpers, no suppressions"
+      }
+    ],
+    "affinity": "8,9",
+    "workers": 4,
+    "features": "rumoca-bind-wasm/native-assignments",
+    "evalDaeDevOptLevel": 3
+  },
+  "actualSource": {
+    "path": "models/SeededDepthFrame.mo",
+    "sha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+    "capacity": 14400,
+    "dimensions": [
+      160,
+      90
+    ],
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "8,9",
+        "nice",
+        "-n",
+        "10",
+        "/mnt/scratch/jgoppert/slam_web/tmp/indexed-write-fold-gate/final-producer",
+        "native_registration_whole_program_source_inventory",
+        "--nocapture"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-indexed-write-final/prepare.log",
+      "elapsedMs": 30066.552383000002,
+      "peakRssKiB": 89708,
+      "minimumAvailableKiB": 55647876,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 30,
+      "stopped": "timeout",
+      "signal": "SIGKILL",
+      "exitCode": 124
+    },
+    "artifactsIssued": false,
+    "positiveCertificate": {
+      "function": 2,
+      "fold": 0,
+      "carried": 4,
+      "update": 162,
+      "value": 159,
+      "domainPoints": 14400,
+      "extent": 14400,
+      "proof": "owned_constant_binder"
+    },
+    "evidenceLimit": "First32 certificate events exhausted on measuredDepth; drawsConsumed traversal through scalar14399 observed but separate carried5 positive event not printed."
+  },
+  "profile": {
+    "path": "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-indexed-write-final/perf.data",
+    "sha256": "2cb82b5034e21bb9f11d5725522c7890e0f20cc11dc0da51878bbdb87a14135c",
+    "samples": 904,
+    "lostSamples": 0,
+    "window": "Initial approximately10 seconds of30.066552-second preparation; busy CPU samples do not allocate whole wall time or certify terminal frontier.",
+    "selfPercent": {
+      "variable_scalar_slot": 61.62,
+      "pack_coordinate": 19.03,
+      "register": 7.96
+    },
+    "frontier": "ToSolve scalar lowering during sampled window",
+    "dependencyCheckpoint": {
+      "current": 400000,
+      "previous": 79100000,
+      "comparison": "Different producers/windows, not a matched whole-prepare speed claim"
+    }
+  },
+  "durableEvidence": "dev/artifacts/seeded-depth-indexed-write-profile (parent-owned copied final controls, strict, closure, profile and selected checkpoints)",
+  "nextProposal": {
+    "path": "/home/jgoppert/scratch/slam_web/tmp/tensor-coordinate-range-proposal/range-validation.patch",
+    "sha256": "7a33ed896f22886992be26c1d4780a4a9b13d1cab54772db46b03a433cfccd81",
+    "status": "Scratch-only unexecuted range-validation proposal",
+    "requirements": "Preserve earliest error/span, sampled count exemption, pre-history ownership, byte-offset saturation, register metadata; differential malformed/overflow/full-shape controls and actual source-issued numeric gate required."
+  },
+  "limitations": [
+    "No production compiler pin change",
+    "No actual WASM numeric proof from this preparation timeout",
+    "Sequential RNG state graph preserved; no reduced capacity or independent-pixel substitution",
+    "Compiler source and Cargo currently owned by covariance; no live mutations for next proposal"
+  ]
+}

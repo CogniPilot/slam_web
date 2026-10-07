@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "scope": "Modelica actor motion integrated with the inertial propagation baseline; full SLAM is not measured",
+  "settings": {
+    "environment": "city",
+    "sceneDetail": "high",
+    "lidarEnabled": false
+  },
+  "workload": {
+    "profile": "Modelica inertial propagation with RGB-D feature detection; full SLAM is not measured",
+    "seed": 7,
+    "detectorPreset": "Modelica Harris · full resolution",
+    "detectorLanguage": "modelica",
+    "algorithmPreset": "Modelica inertial propagation",
+    "runtime": "modelica",
+    "carsEnabled": true,
+    "peopleEnabled": true,
+    "lightingMode": "day",
+    "sourceSha256": {
+      "physics": "18c84c6121c989313407ef4cd5ead1213257748139dacedd7674782d8581844e",
+      "sensor": "96771b20205592b24dec982165305d69f5613e6c5dce2eef134ba7caf0590059",
+      "evaluation": "f6dc00fb7971fcfacaf50364949d2469fe7d289e84f11640e989ad52f35bea3b",
+      "detector": "faa81a704d6d923720173e686c4d20102f47bb34b29ff591b9b76c12b5b853f7",
+      "algorithm": "04c4435fa1a6c5c929a245a8c76ac4bafcfde3eb54734677fb592f7ba2c2f1ce",
+      "graph": "34d6cd925f8e4dda44bdd23fdcdeed4dd3b586342f188b894785cfc8c2028074"
+    }
+  },
+  "readback": "sync",
+  "simulationRate": 0.509216824528519,
+  "browserCpu": {
+    "seconds": 4.369999999999998,
+    "meanActiveCores": 1.6689581423922202,
+    "method": "CDP process CPU deltas after warmup; includes profiler overhead"
+  },
+  "mainCpuThrottle": 1,
+  "graphics": {
+    "api": "WebGL 2",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+    "vendor": "Google Inc. (NVIDIA Corporation)",
+    "acceleration": "hardware-reported",
+    "powerPreference": "high-performance"
+  },
+  "frames": 120,
+  "elapsedMs": 2618.399999976158,
+  "meanFrameMs": 21.774166668454807,
+  "meanNodeMs": {
+    "physics": 1.2424999972184498,
+    "sensor": 13.89833333492279,
+    "detector": 3.2816666682561237,
+    "slam": 0.6566666732231776,
+    "map": 0.04333333174387614,
+    "evaluation": 0.5766666571299235
+  },
+  "final": {
+    "sequence": 129,
+    "time": 1.444444444,
+    "totalMs": 12.399999976158142,
+    "nodes": {
+      "physics": 0.7999999523162842,
+      "sensor": 7,
+      "detector": 2.399999976158142,
+      "slam": 0.40000009536743164,
+      "map": 0.09999990463256836,
+      "evaluation": 0.30000007152557373
+    },
+    "workers": {
+      "physics": {
+        "roundTripMs": 0.6000000238418579
+      },
+      "detector": {
+        "roundTripMs": 2.399999976158142,
+        "queueMs": 0,
+        "inputMs": 0,
+        "computeMs": 1.600000023841858,
+        "outputMs": 0.5,
+        "workerMs": 2.100000023841858
+      },
+      "slam": {
+        "roundTripMs": 0.30000007152557373
+      },
+      "evaluation": {
+        "roundTripMs": 0.30000007152557373,
+        "queueMs": 0,
+        "workerMs": 0.10000002384185791
+      }
+    },
+    "transport": {
+      "lab/node/physics/truth": {
+        "totalMs": 0,
+        "bufferBytes": null
+      },
+      "lab/node/sensor/frame": {
+        "totalMs": 0,
+        "bufferBytes": 115200
+      },
+      "lab/node/detector/features": {
+        "totalMs": 0,
+        "bufferBytes": null
+      },
+      "lab/node/slam/estimate": {
+        "totalMs": 0,
+        "bufferBytes": null
+      },
+      "lab/node/map/estimate": {
+        "totalMs": 0,
+        "bufferBytes": null
+      },
+      "lab/node/evaluation/metrics": {
+        "totalMs": 0,
+        "bufferBytes": null
+      }
+    },
+    "camera": {
+      "readback": 2.399999976158142,
+      "renderSubmission": 1.600000023841858,
+      "total": 4.200000047683716,
+      "method": "synchronous WebGL readback in sensor worker"
+    },
+    "display": {
+      "timestamp": 8267.7,
+      "windowMs": 1016.6000000000004,
+      "targetFps": 30,
+      "fps": 30.493802872319485,
+      "captureHz": 0,
+      "visionHz": 0,
+      "lidarHz": 0,
+      "renderedFrames": 31,
+      "capturedFrames": 0,
+      "visionFrames": 0,
+      "lidarFrames": 0,
+      "meanFrameIntervalMs": 33.232258066054314,
+      "p95FrameIntervalMs": 37.5,
+      "meanRenderSubmitMs": 3.435483847894976,
+      "longTasks": null
+    },
+    "ate": 0.011,
+    "points": 0,
+    "diagnostics": {
+      "model": "Modelica nominal INS",
+      "stateCount": 16
+    }
+  },
+  "workers": [
+    {
+      "url": "http://127.0.0.1:4173/assets/sensor-render.worker-pYOGCuIm.js",
+      "file": "worker-0.cpuprofile"
+    },
+    {
+      "url": "http://127.0.0.1:4173/assets/viewer.worker-B_zuO4cy.js",
+      "file": "worker-1.cpuprofile"
+    },
+    {
+      "url": "http://127.0.0.1:4173/assets/physics.worker-3Q86LX5A.js",
+      "file": "worker-2.cpuprofile"
+    },
+    {
+      "url": "http://127.0.0.1:4173/assets/modelica-lsp.worker-B-3Ki2Sb.js",
+      "file": "worker-3.cpuprofile"
+    },
+    {
+      "url": "http://127.0.0.1:4173/assets/modelica-vision.worker-DuXKo6E9.js",
+      "file": "worker-4.cpuprofile"
+    },
+    {
+      "url": "http://127.0.0.1:4173/assets/modelica-runtime-math.worker-tCXfcF5J.js",
+      "file": "worker-5.cpuprofile"
+    },
+    {
+      "url": "http://127.0.0.1:4173/assets/modelica-state.worker-Cz7HPJyc.js",
+      "file": "worker-6.cpuprofile"
+    }
+  ],
+  "errors": [],
+  "measuredAt": "2026-10-04",
+  "resourceContext": {
+    "browserCpus": [
+      4,
+      5
+    ],
+    "concurrentCompilerCpus": [
+      6,
+      7
+    ],
+    "processGroupWatchdogRssMiB": 8192,
+    "secondsLimit": 120,
+    "detachedBrowserRssIncludedInThisHistoricalWatchdog": false
+  },
+  "perf": {
+    "samples": 323,
+    "lostSamples": 0,
+    "event": "cpu-clock:u",
+    "readPixelsWorkerExclusiveSampleMicroseconds": 882489,
+    "sensorWorkerProfile": "worker-0.cpuprofile",
+    "mathWorkerProfile": "worker-5.cpuprofile"
+  },
+  "conclusions": [
+    "Camera rendering/readback remains the largest frame phase",
+    "This sequential shared-machine profile is not an isolated causal speed comparison",
+    "10x realtime requires 1.111 ms per complete frame; measured mean exceeds that budget",
+    "Three.js worker presentation remains near 30 FPS"
+  ],
+  "rawArtifactsDirectory": "/tmp/slam-actor-motion-pipeline-profile"
+}

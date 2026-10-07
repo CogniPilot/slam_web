@@ -1,0 +1,379 @@
+{
+  "status": "IDENTICAL_FULL21_SESSION_DIRECT_ABBA_PASS",
+  "sourceSha256": "f8fe0faaed21654ce80f440434bf1685a6572dfd74f9e9199507262b9e2f96b1",
+  "moduleSha256": "b57eed180b9e04613f3d22d043a31e9ecea04f99aefaec534c356ac831e14751",
+  "artifactSha256": "a6d5832b60aab84880e5e0d593f49ba3ebeb996cd7c3af59ec04f38ca7f79c13",
+  "fixtureSha256": "9afd018eb2d6842b8201541901ba82b8b45ec2f5be254baa094a88fbfa42a67c",
+  "scriptSha256": "4c739b770494d85faceae30770e8796eaab6a9c6412e4866840ae4ad4bc1d591",
+  "sessionSha256": "066ee55c53f07f7007d05f332956ddb60398cd727e65e6d61c4bb6ffccab259e",
+  "executedBundleSha256": "51bea0bb3726f64bfef1d307e35598cbfce8c87a500dd69fee0ae174730c2590",
+  "engine": "Node/V8 actual WASM",
+  "workload": "Identical measured90HzIMU, initialreferencecapture once thenprediction-only; no reused visual observations",
+  "parity": {
+    "steps": 32,
+    "cells": 12416,
+    "maximumError": 0,
+    "bitwise": true,
+    "flags": true
+  },
+  "stateCells": 388,
+  "covarianceCells": 351,
+  "memoryBytes": 327680,
+  "warmPerWindow": 32,
+  "timedPerWindow": 100,
+  "order": "ABBA BAAB (A=session B=direct)",
+  "windows": [
+    {
+      "ordinal": 0,
+      "kind": "session",
+      "count": 100,
+      "meanMs": 1.9552152800000044,
+      "p50Ms": 1.2769620000001396,
+      "p95Ms": 4.989868000000001,
+      "maxMs": 9.673060999999961,
+      "wallMs": 195.9291330000001,
+      "cpu": {
+        "user": 177695,
+        "system": 14113
+      }
+    },
+    {
+      "ordinal": 1,
+      "kind": "direct",
+      "count": 100,
+      "meanMs": 1.1348720200000024,
+      "p50Ms": 1.1161239999998998,
+      "p95Ms": 1.1278230000000349,
+      "maxMs": 2.7027009999999336,
+      "wallMs": 113.66878799999995,
+      "cpu": {
+        "user": 112900,
+        "system": 0
+      }
+    },
+    {
+      "ordinal": 2,
+      "kind": "direct",
+      "count": 100,
+      "meanMs": 1.1470618300000024,
+      "p50Ms": 1.1464540000001762,
+      "p95Ms": 1.1559030000000803,
+      "maxMs": 1.1748539999998684,
+      "wallMs": 114.79316199999994,
+      "cpu": {
+        "user": 110090,
+        "system": 3944
+      }
+    },
+    {
+      "ordinal": 3,
+      "kind": "session",
+      "count": 100,
+      "meanMs": 1.861579579999991,
+      "p50Ms": 1.4739489999999478,
+      "p95Ms": 1.6434260000000904,
+      "maxMs": 20.137141000000156,
+      "wallMs": 186.278415,
+      "cpu": {
+        "user": 159153,
+        "system": 25877
+      }
+    },
+    {
+      "ordinal": 4,
+      "kind": "direct",
+      "count": 100,
+      "meanMs": 1.1154381299999978,
+      "p50Ms": 1.1088439999998627,
+      "p95Ms": 1.1228439999999864,
+      "maxMs": 1.2616920000000391,
+      "wallMs": 111.822768,
+      "cpu": {
+        "user": 110761,
+        "system": 0
+      }
+    },
+    {
+      "ordinal": 5,
+      "kind": "session",
+      "count": 100,
+      "meanMs": 1.4001178300000037,
+      "p50Ms": 1.3998499999997875,
+      "p95Ms": 1.4154100000000653,
+      "maxMs": 1.6588059999999132,
+      "wallMs": 140.1109620000002,
+      "cpu": {
+        "user": 123244,
+        "system": 15906
+      }
+    },
+    {
+      "ordinal": 6,
+      "kind": "session",
+      "count": 100,
+      "meanMs": 1.6986498800000254,
+      "p50Ms": 1.3566000000000713,
+      "p95Ms": 1.6289370000004055,
+      "maxMs": 19.667729000000236,
+      "wallMs": 169.9915649999998,
+      "cpu": {
+        "user": 159855,
+        "system": 8930
+      }
+    },
+    {
+      "ordinal": 7,
+      "kind": "direct",
+      "count": 100,
+      "meanMs": 1.1131575699999803,
+      "p50Ms": 1.110494000000017,
+      "p95Ms": 1.1231629999997494,
+      "maxMs": 1.26127200000019,
+      "wallMs": 111.39199399999961,
+      "cpu": {
+        "user": 110590,
+        "system": 42
+      }
+    }
+  ],
+  "grouped": {
+    "session": {
+      "meanMs": 1.7288906425000061,
+      "windowMeanRangeMs": [
+        1.4001178300000037,
+        1.9552152800000044
+      ]
+    },
+    "direct": {
+      "meanMs": 1.1276323874999958,
+      "windowMeanRangeMs": [
+        1.1131575699999803,
+        1.1470618300000024
+      ]
+    }
+  },
+  "driverOverheadMeanMs": 0.6012582550000103,
+  "driverRatio": 1.5332041378600545,
+  "diagnostic": {
+    "scope": "Separate instrumented diagnostic; timers/CPU profiler excluded from ABBA",
+    "sessionTotal": {
+      "count": 100,
+      "meanMs": 1.75998513,
+      "p50Ms": 1.3447110000001885,
+      "p95Ms": 1.4201390000002903,
+      "maxMs": 38.57087799999999
+    },
+    "sessionEvaluate": {
+      "count": 100,
+      "meanMs": 1.1225237799999968,
+      "p50Ms": 1.093213999999989,
+      "p95Ms": 1.1098139999999148,
+      "maxMs": 3.7016170000001694
+    },
+    "sessionNonEvaluateMeanMs": 0.6374613500000033,
+    "directInput": {
+      "count": 100,
+      "meanMs": 0.008068280000002233,
+      "p50Ms": 0.007950000000164437,
+      "p95Ms": 0.008429999999862048,
+      "maxMs": 0.015829999999823485
+    },
+    "directEvaluate": {
+      "count": 100,
+      "meanMs": 1.0819676499999968,
+      "p50Ms": 1.081115000000409,
+      "p95Ms": 1.0908540000000357,
+      "maxMs": 1.1106240000003709
+    },
+    "directOutput": {
+      "count": 100,
+      "meanMs": 0.03268951000002289,
+      "p50Ms": 0.03211900000042078,
+      "p95Ms": 0.034649000000172236,
+      "maxMs": 0.04128899999977875
+    },
+    "cpuProfile": "session.cpuprofile"
+  },
+  "limits": [
+    "Isolated complete filter driver and direct transport, not sensors/rendering/fullSLAM/10x",
+    "Direct baseline copies all388state cells but excludes persistent snapshot validation/rollback protection",
+    "Session requires fullmemory rollback checkpoint, config/state validation and defensive copies",
+    "CPU14nice15 sharedhost; not cleanmachine or wallthroughput evidence",
+    "No compiler source/Cargo/model edits; no session optimization applied"
+  ],
+  "artifacts": [
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/cpu-attribution.json",
+      "sha256": "97a2dca546a2f195a89c021eb064fb2bf496409decd1f7c23cc737f7cd857aa9"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/executed-bundle.mjs",
+      "sha256": "51bea0bb3726f64bfef1d307e35598cbfce8c87a500dd69fee0ae174730c2590"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/report.json",
+      "sha256": "afdc6226b5653a2408af6205684c499c57614d35aca0e7a0844fd38fb9a45e06"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/samples-0-session.json",
+      "sha256": "f8cfca85ad21c816f58755686d76dc9c69ef25e0f445615ee99cd883ffb475d1"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/samples-1-direct.json",
+      "sha256": "2f064a016d1c1e875b904312758718e187c852e775bdb40a23766403cb842018"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/samples-2-direct.json",
+      "sha256": "d3b04110acdbe4cc6a8628bf6fc26474f78ceb7e83c698aceaf48277be6e09d7"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/samples-3-session.json",
+      "sha256": "cc4c979be36f256220c0276ab6e9a2f302df5e4695e3ad6b2f7083c32ecab770"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/samples-4-direct.json",
+      "sha256": "85dbe99da9a3905dbfe403a38b5023a542d6eabf206fcb9c5fd40c6a1ac14aaa"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/samples-5-session.json",
+      "sha256": "ba1e174736c693b9e8eb0ba2a1d75330d403e4c2af60a7b8ee81bf9a28d98cef"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/samples-6-session.json",
+      "sha256": "29c4432584f5560ad989e66833a8dbf4697efe912b92ccd96529dc64d0102c2a"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/samples-7-direct.json",
+      "sha256": "94ad8aea3bcd410291148b1f54cbed5b3e73997f54bd4ce2259f3536ebc88c2d"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/session.cpuprofile",
+      "sha256": "d0829ae0b68649d5612d73dfa3761013c5c635010bf1708c9b4f8e87557c211f"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/executed-profile.mjs",
+      "sha256": "4c739b770494d85faceae30770e8796eaab6a9c6412e4866840ae4ad4bc1d591"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/executed-session.ts",
+      "sha256": "066ee55c53f07f7007d05f332956ddb60398cd727e65e6d61c4bb6ffccab259e"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/execution.log",
+      "sha256": "029b0402878027d92948f296bc1e25c3e713d2eb3a0b91392b815614eab76b1e"
+    },
+    {
+      "path": "dev/artifacts/modelica-schmidt-session/profile/resource.json",
+      "sha256": "cce8a6925b0c3436e660aae8489242d099dc2ef476a4951ff674d9dfaa28e366"
+    }
+  ],
+  "resource": {
+    "command": [
+      "taskset",
+      "-c",
+      "14",
+      "nice",
+      "-n",
+      "15",
+      "/nix/store/324pab2sykfjpbxsnxbcxmni42xxwxc0-nodejs-24.18.0/bin/node",
+      "dev/profile-modelica-schmidt-session.mjs",
+      "/mnt/scratch/jgoppert/slam_web/profiles/schmidt-session-driver"
+    ],
+    "log": "/mnt/scratch/jgoppert/slam_web/tmp/schmidt-session-profile.log",
+    "elapsedMs": 4814.300488,
+    "peakRssKiB": 391940,
+    "minimumAvailableKiB": 59494612,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "cpuAttribution": {
+    "scope": "Separate Node CPU profile: only samples descending from advance counted for driver attribution; owner construction outside advance excluded. GC samples lack advance ancestry and are reported globally, not assigned to a specific phase.",
+    "totalSampledUs": 913512,
+    "advanceDescendantUs": 244341,
+    "globalGcUs": 0,
+    "advanceSelfTop": [
+      {
+        "frame": "wasm-function[44] @wasm://wasm/0030201a:0",
+        "selfUs": 41153,
+        "percentOfAdvance": 16.842445598569213
+      },
+      {
+        "frame": "wasm-function[29] @wasm://wasm/0030201a:0",
+        "selfUs": 29101,
+        "percentOfAdvance": 11.909994638640262
+      },
+      {
+        "frame": "wasm-function[31] @wasm://wasm/0030201a:0",
+        "selfUs": 24696,
+        "percentOfAdvance": 10.107186268370842
+      },
+      {
+        "frame": "wasm-function[32] @wasm://wasm/0030201a:0",
+        "selfUs": 24474,
+        "percentOfAdvance": 10.01632963767849
+      },
+      {
+        "frame": "wasm-function[23] @wasm://wasm/0030201a:0",
+        "selfUs": 24434,
+        "percentOfAdvance": 9.999959073589778
+      },
+      {
+        "frame": "wasm-function[24] @wasm://wasm/0030201a:0",
+        "selfUs": 22345,
+        "percentOfAdvance": 9.145006364056789
+      },
+      {
+        "frame": "advance @file:///mnt/scratch/jgoppert/slam_web/profiles/schmidt-session-driver/executed-bundle.mjs:267",
+        "selfUs": 18272,
+        "percentOfAdvance": 7.478073675723682
+      },
+      {
+        "frame": "wasm-function[30] @wasm://wasm/0030201a:0",
+        "selfUs": 10641,
+        "percentOfAdvance": 4.3549793116996325
+      },
+      {
+        "frame": "cells @file:///mnt/scratch/jgoppert/slam_web/profiles/schmidt-session-driver/executed-bundle.mjs:205",
+        "selfUs": 10588,
+        "percentOfAdvance": 4.33328831428209
+      },
+      {
+        "frame": "wasm-function[22] @wasm://wasm/0030201a:0",
+        "selfUs": 9535,
+        "percentOfAdvance": 3.9023332146467435
+      },
+      {
+        "frame": "checked @file:///mnt/scratch/jgoppert/slam_web/profiles/schmidt-session-driver/executed-bundle.mjs:211",
+        "selfUs": 9144,
+        "percentOfAdvance": 3.742310950679583
+      },
+      {
+        "frame": "wasm-function[20] @wasm://wasm/0030201a:0",
+        "selfUs": 8519,
+        "percentOfAdvance": 3.4865208867934565
+      },
+      {
+        "frame": "wasm-function[21] @wasm://wasm/0030201a:0",
+        "selfUs": 8507,
+        "percentOfAdvance": 3.481609717566843
+      },
+      {
+        "frame": "wasm-to-js @:0",
+        "selfUs": 1063,
+        "percentOfAdvance": 0.4350477406575237
+      },
+      {
+        "frame": "wasm-function[25] @wasm://wasm/0030201a:0",
+        "selfUs": 1062,
+        "percentOfAdvance": 0.4346384765553059
+      }
+    ]
+  },
+  "driverOptimizationApplied": false,
+  "proposalPath": "dev/rumoca-schmidt-session-driver-performance-proposal.md"
+}

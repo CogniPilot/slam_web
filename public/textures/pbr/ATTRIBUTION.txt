@@ -1,0 +1,21 @@
+Photographic PBR textures and outdoor HDR environment from Poly Haven.
+All source assets CC0 1.0 Universal: https://polyhaven.com/license
+License: https://creativecommons.org/publicdomain/zero/1.0/
+
+Brick Wall 001 — Rob Tuytel, Dimitrios Savva
+https://polyhaven.com/a/brick_wall_001
+Concrete Wall 007 — Dario Barresi, Rico Cilliers, Charlotte Baglioni
+https://polyhaven.com/a/concrete_wall_007
+Asphalt 02 — Rob Tuytel
+https://polyhaven.com/a/asphalt_02
+Concrete Pavement — Charlotte Baglioni
+https://polyhaven.com/a/concrete_pavement
+Wood Planks Dirt — Rob Tuytel
+https://polyhaven.com/a/wood_planks_dirt
+Grass Ground — Charlotte Baglioni
+https://polyhaven.com/a/grass_ground
+
+Kloofendal 48d Partly Cloudy (Pure Sky) — Greg Zaal, Jarod Guest
+https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky
+
+Texture derivatives use 512 square Lanczos resizing of original 1K sources; no chroma subsampling. Full source URLs, original and derived SHA-256 digests, physical tile dimensions and transformations are recorded in manifest.json. Normal maps are OpenGL (+Y) tangent-space; ARM maps store AO/Roughness/Metallic in R/G/B.

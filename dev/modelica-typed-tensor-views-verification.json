@@ -1,0 +1,88 @@
+{
+  "scope": "Actual Wasmi generic tensor-view controls and source-issued full350 native admission probes; not browser or complete uncertainty acceptance",
+  "sourceClosure": {
+    "base": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "files": 2407,
+    "sha256": "f972108b8723786e9d2b0e924e97de32d8b643e38f9832d3816c23936b94b8af",
+    "sourceFrozen": true,
+    "scope": "generic typed ProjectView and Transpose emitter and six actual-Wasmi controls",
+    "workers": 4,
+    "affinity": "6-9",
+    "incremental": false
+  },
+  "producer": {
+    "sourceClosureSha256": "f972108b8723786e9d2b0e924e97de32d8b643e38f9832d3816c23936b94b8af",
+    "producerPath": "/mnt/scratch/jgoppert/slam_web/tmp/typed-tensor-view-gate/final-producer",
+    "producerSha256": "409e7723833de9355a36616d4b0cdac5d333e42b508dec9c0feb094ef74821a8",
+    "cargoArtifact": {
+      "reason": "compiler-artifact",
+      "package_id": "path+file:///home/jgoppert/git/rumoca-native-functions/crates/rumoca-bind-wasm#0.10.1",
+      "manifest_path": "/home/jgoppert/git/rumoca-native-functions/crates/rumoca-bind-wasm/Cargo.toml",
+      "target": {
+        "kind": [
+          "cdylib",
+          "rlib"
+        ],
+        "crate_types": [
+          "cdylib",
+          "rlib"
+        ],
+        "name": "rumoca_bind_wasm",
+        "src_path": "/home/jgoppert/git/rumoca-native-functions/crates/rumoca-bind-wasm/src/lib.rs",
+        "edition": "2024",
+        "doc": true,
+        "doctest": true,
+        "test": true
+      },
+      "profile": {
+        "opt_level": "1",
+        "debuginfo": "line-tables-only",
+        "debug_assertions": true,
+        "overflow_checks": true,
+        "test": true
+      },
+      "features": [
+        "console_error_panic_hook",
+        "default",
+        "native-assignments"
+      ],
+      "filenames": [
+        "/home/jgoppert/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_bind_wasm-880f25c85fbec082"
+      ],
+      "executable": "/home/jgoppert/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_bind_wasm-880f25c85fbec082",
+      "fresh": false
+    },
+    "sourcePreparationDuringLinkGate": "fixture env absent, test returned before preparation; this command proves linkage only"
+  },
+  "controls": {
+    "focused": 6,
+    "typed": 73,
+    "exact": 10,
+    "strict": "11-package all-target -D warnings PASS",
+    "format": "PASS",
+    "diff": "PASS"
+  },
+  "retainedFailure": "Initial focused E0618 test-local helper shadow; corrected only test local name, production unchanged",
+  "sources": [
+    {
+      "path": "dev/artifacts/registration-uncertainty/initial-builtin-source.mo",
+      "sha256": "8074f170f8316c4874f4517e1f4875924434fa1f58d27611a1ff93d719441ecd",
+      "capacity": 350,
+      "result": "Native refused after transpose: owner1 op3 MatrixMultiply span775..789",
+      "elapsedMs": 5800.819513,
+      "peakRssKiB": 307276
+    },
+    {
+      "path": "models/RGBDRegistrationUncertainty.mo",
+      "sha256": "0922e0257f720598e11676d9ff321f4ade8847d1989380c3b362fbc56ed4ab86",
+      "capacity": 350,
+      "result": "See helper350 raw terminal log/resource"
+    }
+  ],
+  "limits": [
+    "No full350 numerical/native acceptance claim",
+    "No matched throughput gain claim",
+    "Current fixed20 canary covers previous a5a1 producer, not this change"
+  ],
+  "artifacts": "dev/artifacts/modelica-typed-tensor-views"
+}

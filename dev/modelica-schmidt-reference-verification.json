@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 1,
+  "status": "SOURCE_ORACLE_PASS_NATIVE_FAMILY_CERTIFICATION_REFUSED",
+  "components": [
+    "RGBDRelativePose",
+    "SPD6Solve",
+    "ES15PoseCorrection",
+    "SchmidtRelativePoseCorrection",
+    "ES15NominalPrediction",
+    "ES15Dynamics",
+    "ES15CovariancePrediction",
+    "SchmidtReferenceState"
+  ],
+  "sourceSha256": "f8fe0faaed21654ce80f440434bf1685a6572dfd74f9e9199507262b9e2f96b1",
+  "sourceFiles": [
+    {
+      "path": "models/SchmidtReferenceState.mo",
+      "sha256": "7c60e7f7acc36eaf06b99316e0aac73018da669c51c11ef0de8ed62e9695b2aa"
+    },
+    {
+      "path": "tests/compiler-probes/schmidt-reference-fixtures.ts",
+      "sha256": "fa337a9fe6f66526636e3af3e7cd62aace65f7a528a74ed872493e7b48f745f2"
+    },
+    {
+      "path": "tests/compiler-probes/modelica-schmidt-reference.test.ts",
+      "sha256": "51f924474ae41b1326d5be40aa68b65990660f3ecccb60b970ad8d9b36d9673f"
+    },
+    {
+      "path": "docs/modelica-schmidt-reference.md",
+      "sha256": "be8788aad033d75c320c428c2c35add0b9ba6e25fb675381d2d764655ba403da"
+    }
+  ],
+  "errorConvention": {
+    "current": "world-additive p/v, right-local theta, body accel/gyro biases",
+    "reference": "world-additive p, right-local theta"
+  },
+  "dimensions": {
+    "current": 15,
+    "reference": 6,
+    "joint": 21,
+    "currentCovariance": 225,
+    "crossCovariance": 90,
+    "referenceCovariance": 36
+  },
+  "fixtureGroups": {
+    "SchmidtReferencePrediction": 19,
+    "SchmidtReferenceCapture": 9,
+    "ES15SchmidtPrediction": 3,
+    "ES15SchmidtReferenceStep": 20,
+    "SchmidtImagePairGate": 12
+  },
+  "fixtureSha256": "9afd018eb2d6842b8201541901ba82b8b45ec2f5be254baa094a88fbfa42a67c",
+  "derivation": {
+    "prediction": "Pcc=Phi Pcc Phi^T+Q; Pcr=Phi Pcr; Prr unchanged",
+    "capture": "Pcr=Pcc J^T; Prr=J Pcc J^T; J selects current dp and right-local dtheta"
+  },
+  "imageNoisePolicy": {
+    "owner": "SchmidtImagePairGate and ES15SchmidtReferenceStep",
+    "epochs": "integer-valued Real IDs in [0,2^53-1], lastUsed=-1 initially",
+    "disjointPairs": true,
+    "consumeEligibleAttemptIncludingRejectedInnovation": true,
+    "correctedCurrentCannotBecomeSameFrameReference": true,
+    "temporalNoiseIndependenceClaim": false
+  },
+  "oracle": {
+    "type": "test-only shared latent Gram factors, independent four-node process-noise factors, independent quaternion/finite-difference Joseph reset",
+    "passed": 3,
+    "actualWasmSkipped": 5,
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "14",
+        "nice",
+        "-n",
+        "15",
+        "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "tests/compiler-probes/vitest.config.ts",
+        "tests/compiler-probes/modelica-schmidt-reference.test.ts"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/tmp/schmidt-reference-lifecycle/exact-helper-oracle.log",
+      "elapsedMs": 1066.4519329999998,
+      "peakRssKiB": 263372,
+      "minimumAvailableKiB": 59974944,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 1024,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 30,
+      "signal": null,
+      "exitCode": 0
+    },
+    "sourceMathExecuted": false
+  },
+  "failuresPreserved": [
+    {
+      "path": "dev/artifacts/schmidt-reference-lifecycle/oracle.log",
+      "kind": "independent LDL fixture checker treated a tiny positive process-noise pivot as zero",
+      "repair": "divide every positive pivot; retain original negative/zero checks; no source PSD threshold change"
+    },
+    {
+      "path": "dev/artifacts/schmidt-reference-lifecycle/tsc-final.log",
+      "kind": "unowned TypeScript number | undefined argument in modelica-original350-uncertainty-native.test.ts:37:634",
+      "ownedSourceDiagnostics": 0
+    }
+  ],
+  "native": {
+    "admitted": false,
+    "moduleIssued": false,
+    "numericallyVerified": false,
+    "attempted": true,
+    "attempts": [
+      {
+        "model": "ES15SchmidtReferenceStep",
+        "beforeSourceSha256": "fbcb27dfa71f221fabfb5b13ae5c99d39d6874d19847277d3cc23153981d7c92",
+        "afterSourceSha256": "fbcb27dfa71f221fabfb5b13ae5c99d39d6874d19847277d3cc23153981d7c92",
+        "fixtureSha256": "da4d406e87b3596ffb0c52f4ef0240d47ca4df01654dec7b22f3c34e5af8d2bb",
+        "producer": {
+          "path": "$HOME/scratch/slam_web/tmp/typed-update-slice-gate/final-producer",
+          "sha256": "b8427b0ab6cee4a252b640dfacbacbf0be974c4e5cfebd0d7126c1f30e7c6d36",
+          "sourceClosureSha256": "65f280d30b4f3702d8ce3bba017ab668ba4e79243ee4d6ea22cda0031ee703d1"
+        },
+        "resource": {
+          "command": [
+            "taskset",
+            "-c",
+            "14,15",
+            "nice",
+            "-n",
+            "15",
+            "/home/jgoppert/scratch/slam_web/tmp/typed-update-slice-gate/final-producer",
+            "native_registration_whole_program_source_inventory",
+            "--nocapture"
+          ],
+          "log": "/home/jgoppert/scratch/slam_web/tmp/schmidt-reference-lifecycle/ordered21-first-native/prepare.log",
+          "elapsedMs": 70.83460500000001,
+          "peakRssKiB": null,
+          "minimumAvailableKiB": null,
+          "peakCacheBytes": null,
+          "rssLimitMiB": 8192,
+          "availableFloorMiB": 16384,
+          "rssScope": "owned process group and identified descendants, including detached browser groups",
+          "secondsLimit": 600,
+          "signal": null,
+          "exitCode": 101
+        },
+        "artifactIssued": false,
+        "solveIssued": false,
+        "stage": "resolve",
+        "refusal": "equality comparison on Real values is not allowed outside functions (MLS §3.5)",
+        "numericalCasesExecuted": 0
+      },
+      {
+        "model": "ES15SchmidtReferenceStep",
+        "beforeSourceSha256": "f8fe0faaed21654ce80f440434bf1685a6572dfd74f9e9199507262b9e2f96b1",
+        "afterSourceSha256": "f8fe0faaed21654ce80f440434bf1685a6572dfd74f9e9199507262b9e2f96b1",
+        "fixtureSha256": "9afd018eb2d6842b8201541901ba82b8b45ec2f5be254baa094a88fbfa42a67c",
+        "independentExpectedGroupsSha256": "74d7f42558cc5cbc255ac0d58e73abc936bbf68e3720f971ceab61098e750605",
+        "producer": {
+          "path": "$HOME/scratch/slam_web/tmp/typed-update-slice-gate/final-producer",
+          "sha256": "b8427b0ab6cee4a252b640dfacbacbf0be974c4e5cfebd0d7126c1f30e7c6d36",
+          "sourceClosureSha256": "65f280d30b4f3702d8ce3bba017ab668ba4e79243ee4d6ea22cda0031ee703d1"
+        },
+        "resource": {
+          "command": [
+            "taskset",
+            "-c",
+            "14,15",
+            "nice",
+            "-n",
+            "15",
+            "/home/jgoppert/scratch/slam_web/tmp/typed-update-slice-gate/final-producer",
+            "native_registration_whole_program_source_inventory",
+            "--nocapture"
+          ],
+          "log": "/home/jgoppert/scratch/slam_web/tmp/schmidt-reference-lifecycle/ordered21-exact-helper-native/prepare.log",
+          "elapsedMs": 178767.60091200002,
+          "peakRssKiB": 4938824,
+          "minimumAvailableKiB": 54249660,
+          "peakCacheBytes": null,
+          "rssLimitMiB": 8192,
+          "availableFloorMiB": 16384,
+          "rssScope": "owned process group and identified descendants, including detached browser groups",
+          "secondsLimit": 600,
+          "signal": null,
+          "exitCode": 101
+        },
+        "artifactIssued": false,
+        "solveIssued": false,
+        "stage": "construction-issued native refresh assignment family certification",
+        "refusal": "native family contains unsupported or effectful scalar operations",
+        "owner": "crates/rumoca-ir-solve/src/refresh/native_assignment.rs:325",
+        "refusedFamilyOperation": {
+          "identified": false,
+          "reason": "frozen harness prints only ScalarPrograms; Map/AffineStencil family and source provenance not printed; attempted module issuance failed before Solve inventory serialization"
+        },
+        "numericalCasesExecuted": 0
+      },
+      {
+        "model": "ES15SchmidtReferenceStep",
+        "beforeSourceSha256": "f8fe0faaed21654ce80f440434bf1685a6572dfd74f9e9199507262b9e2f96b1",
+        "afterSourceSha256": "f8fe0faaed21654ce80f440434bf1685a6572dfd74f9e9199507262b9e2f96b1",
+        "fixtureSha256": "9afd018eb2d6842b8201541901ba82b8b45ec2f5be254baa094a88fbfa42a67c",
+        "producer": {
+          "path": "$HOME/scratch/slam_web/tmp/schmidt-reference-lifecycle/family-inventory-gate/final-producer",
+          "sha256": "c6051e8188c5fc9449135f3f21530858f53955e759ffb7bded6de64f97d5b398",
+          "sourceClosureSha256": "3d613abdbbe442d7e956178264894e83c0e09c969246be9b1ca42599bff20d6d"
+        },
+        "resource": {
+          "command": [
+            "taskset",
+            "-c",
+            "14,15",
+            "nice",
+            "-n",
+            "15",
+            "/home/jgoppert/scratch/slam_web/tmp/schmidt-reference-lifecycle/family-inventory-gate/final-producer",
+            "native_registration_whole_program_source_inventory",
+            "--nocapture"
+          ],
+          "log": "/home/jgoppert/scratch/slam_web/tmp/schmidt-reference-lifecycle/ordered21-complete-family-native/prepare.log",
+          "elapsedMs": 175301.70215199998,
+          "peakRssKiB": 4938764,
+          "minimumAvailableKiB": 55060464,
+          "peakCacheBytes": null,
+          "rssLimitMiB": 8192,
+          "availableFloorMiB": 16384,
+          "rssScope": "owned process group and identified descendants, including detached browser groups",
+          "secondsLimit": 600,
+          "signal": null,
+          "exitCode": 101
+        },
+        "artifactIssued": false,
+        "solveIssued": true,
+        "solveSha256": "b734642dd18e4f515e451b8c36e0230ab3e1d611873c87a7a413bebfcf6be025",
+        "stage": "construction-issued native refresh assignment family certification",
+        "refusal": "native family contains unsupported or effectful scalar operations",
+        "owner": "crates/rumoca-ir-solve/src/refresh/native_assignment.rs:325",
+        "refusedFamilyOperation": {
+          "identified": true,
+          "sourceNode": 133,
+          "kind": "Map",
+          "operation": 27,
+          "opcode": "PureCall",
+          "owner": 38,
+          "domain": {
+            "lower": 1,
+            "upper": 3,
+            "step": 1
+          },
+          "outputs": [
+            9944,
+            9947
+          ],
+          "targetYRange": [
+            6741,
+            6744
+          ],
+          "provenance": {
+            "source": "11643697360139376299",
+            "start": 53930,
+            "end": 53972
+          },
+          "source": "SLAMExactRealEqual(referenceAvailable,0.0)",
+          "reason": "derive processes nodes and prefix operations in source order; only Map133 contains an operation outside the compact family whitelist"
+        },
+        "numericalCasesExecuted": 0,
+        "evidence": "dev/artifacts/schmidt-reference-family-inventory/provenance.json"
+      }
+    ],
+    "diagnosticCapture": {
+      "testOnly": true,
+      "admissionUnchanged": true,
+      "focusedControls": 2,
+      "strictPassed": true,
+      "earlierFailedBuildPreserved": true,
+      "manifest": {
+        "path": "dev/artifacts/schmidt-reference-family-inventory/manifest.json",
+        "sha256": "dc3644e51e9b68ad43a41bd964465eae7fcdcb263975d0fe9e85f578d56f389d"
+      }
+    }
+  },
+  "productionIntegrated": false,
+  "groundTruthInputs": false,
+  "hostNumericalFallback": false,
+  "artifactEnvs": {
+    "SchmidtReferencePrediction": "RUMOCA_SCHMIDT_REFERENCE_PREDICTION_ARTIFACT",
+    "SchmidtReferenceCapture": "RUMOCA_SCHMIDT_REFERENCE_CAPTURE_ARTIFACT",
+    "ES15SchmidtPrediction": "RUMOCA_ES15_SCHMIDT_PREDICTION_ARTIFACT",
+    "ES15SchmidtReferenceStep": "RUMOCA_ES15_SCHMIDT_STEP_ARTIFACT",
+    "SchmidtImagePairGate": "RUMOCA_IMAGE_PAIR_GATE_ARTIFACT"
+  },
+  "evidenceManifest": {
+    "path": "dev/artifacts/schmidt-reference-lifecycle/manifest.json",
+    "sha256": "daeb7c6c91e0507060d3986e3f92ef58ca9ca9e03e2161e48a67f36e495ace4f"
+  },
+  "typecheck": {
+    "passed": true,
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "14",
+        "nice",
+        "-n",
+        "15",
+        "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/tmp/schmidt-reference-lifecycle/exact-helper-tsc.log",
+      "elapsedMs": 7484.021320000001,
+      "peakRssKiB": 586612,
+      "minimumAvailableKiB": 59558760,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 1024,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 30,
+      "signal": null,
+      "exitCode": 0
+    },
+    "historicalUnownedFailurePreserved": true
+  },
+  "originalSourceSha256": "fbcb27dfa71f221fabfb5b13ae5c99d39d6874d19847277d3cc23153981d7c92",
+  "originalFixtureSha256": "da4d406e87b3596ffb0c52f4ef0240d47ca4df01654dec7b22f3c34e5af8d2bb",
+  "independentExpectedGroupsSha256": "74d7f42558cc5cbc255ac0d58e73abc936bbf68e3720f971ceab61098e750605",
+  "sourceRepair": {
+    "scope": "30 illegal model-level Real equalities replaced by function SLAMExactRealEqual with equal := left == right; unchanged numerical expressions/policies/dimensions",
+    "compilerMutation": false,
+    "originalRefusalPreserved": true,
+    "numericalExpectedGroupsUnchanged": true
+  }
+}

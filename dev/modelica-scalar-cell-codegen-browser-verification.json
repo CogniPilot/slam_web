@@ -1,0 +1,147 @@
+{
+  "status": "SOURCE_ISSUED_WHOLE_REGISTRATION_BROWSER_PASS",
+  "recordedAt": "2026-10-04T19:04:53.846Z",
+  "browser": "154.0.8037.92",
+  "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+  "moduleSha256": "dc0ec01cc8de4536af0ff513614abfb579758df11b2f98facf1a0d846bd36a17",
+  "artifactSha256": "c6db3eea4d6845363f0239c76980e999f4e69a1c1c378a3a1c0b93013e140512",
+  "consumerBundleSha256": "28571bdc83453abe9e4c1d7b3bce4ab9a247b6b6fea720a2eba228c56474feb2",
+  "abi": {
+    "export": "eval_assignments",
+    "arguments": [
+      "yPtr:i32",
+      "pPtr:i32",
+      "time:f64",
+      "scratchPtr:i32",
+      "reservedZero:i32"
+    ],
+    "memory_import": "env.memory",
+    "memory_shared": false,
+    "memory_pages": 41,
+    "y_offset": 0,
+    "p_offset": 208,
+    "y_count": 26,
+    "p_count": 100805,
+    "reserved_pointer_value": 0,
+    "result": "status:i32",
+    "success_status": 0,
+    "scratch_bytes": 1859016,
+    "transactional_y": true,
+    "p_readonly": true,
+    "scratch_offset": 806648
+  },
+  "compiler": {
+    "version": "0.10.1",
+    "git_commit": "03e6b59a47f1"
+  },
+  "cases": [
+    {
+      "name": "full14400 non-axis rigid transform",
+      "reason": 0,
+      "accepted": true,
+      "validCount": 14400
+    },
+    {
+      "name": "sparse matches across full slot domain",
+      "reason": 0,
+      "accepted": true,
+      "validCount": 4800
+    },
+    {
+      "name": "empty observation",
+      "reason": 3,
+      "accepted": false,
+      "validCount": 0
+    },
+    {
+      "name": "invalid active count",
+      "reason": 1,
+      "accepted": false,
+      "validCount": 0
+    },
+    {
+      "name": "invalid pair flag",
+      "reason": 2,
+      "accepted": false,
+      "validCount": 14399
+    },
+    {
+      "name": "active nonfinite coordinate",
+      "reason": 2,
+      "accepted": false,
+      "validCount": 14399
+    },
+    {
+      "name": "disabled nonfinite coordinate",
+      "reason": 0,
+      "accepted": true,
+      "validCount": 14399
+    },
+    {
+      "name": "recovery",
+      "reason": 0,
+      "accepted": true,
+      "validCount": 14400
+    },
+    {
+      "name": "reset replay",
+      "reason": 0,
+      "accepted": true,
+      "validCount": 14400
+    }
+  ],
+  "abiFaults": [
+    {
+      "name": "scratch overlaps Y",
+      "status": 1
+    },
+    {
+      "name": "P overlaps Y",
+      "status": 1
+    },
+    {
+      "name": "out of bounds Y",
+      "status": 1
+    },
+    {
+      "name": "reserved argument",
+      "status": 1
+    }
+  ],
+  "metadataRefused": [
+    "overlapping scratch",
+    "nontransactional Y",
+    "mutable P",
+    "undeclared math import",
+    "duplicate fault status",
+    "rounded provenance source identity"
+  ],
+  "staleSourceRefused": true,
+  "jsonReload": true,
+  "warmExecutionMs": [
+    8.100000023841858,
+    8.300000071525574,
+    8.299999952316284,
+    8.399999976158142,
+    8.200000047683716,
+    8.199999928474426,
+    8.300000071525574,
+    8.299999952316284,
+    8.300000071525574,
+    8.299999952316284,
+    8.200000047683716,
+    8.299999952316284,
+    8.299999952316284,
+    8.400000095367432,
+    8.199999928474426,
+    8.200000047683716,
+    8.299999952316284,
+    8.200000047683716,
+    8.199999928474426,
+    8.300000071525574
+  ],
+  "meanWarmExecutionMs": 8.26500000357628,
+  "scope": "Actual compiler-issued unchanged full14400 model schedule, one typed-call executable. Excludes sensors, frontend, rendering, compilation and complete SLAM.",
+  "runtimeIntegrated": false,
+  "productionPinChanged": false
+}

@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-04",
+  "scope": "Configuration pane and sensor-rate UI; actual runtime cadence is separately owned by sensor-clock/runtime",
+  "sourceSnapshots": {
+    "src/configuration-panel.ts": "d5a9baf39ba9981de0cda964ab865b90bbf812cb63b7a727f80a1ae4bc3e40c1",
+    "tests/browser/configuration-panel.spec.ts": "19270db1225666cdc5d57e9c9abe55659101869cdf9960db2ae57c03ebfe4366",
+    "tests/browser/graphics-quality-control.spec.ts": "c51dffd7420ab106b0d74b81678923861dc682e1d9280dae8c9cafcce01927a9",
+    "tests/browser/big-city.spec.ts": "62f2c22b0aab4e243bbddb9e823e86aa3b42f5fd25145ee36dc2f5ff52d0e9ee"
+  },
+  "checks": {
+    "chromiumPanel": {
+      "result": "PASS",
+      "tests": 2,
+      "elapsedMs": 3349.011776,
+      "peakOwnedDescendantRssKiB": 1290184,
+      "log": "/tmp/slam-configuration-panel-browser-final.log",
+      "coverage": [
+        "Editor/Configuration keyboard switching and source preservation",
+        "Existing scene-control handler preservation",
+        "Custom rates retained on quality changes",
+        "Explicit quality-default reset",
+        "Pending rate-edit disablement"
+      ]
+    },
+    "typescript": {
+      "result": "PASS",
+      "elapsedMs": 5122.262958,
+      "peakOwnedDescendantRssKiB": 559148,
+      "log": "/tmp/slam-configuration-tsc-source-ready.log"
+    }
+  },
+  "actualAppRuntimeGates": {
+    "result": "PASS",
+    "owner": "root",
+    "tests": 6,
+    "elapsedMs": 83540,
+    "peakOwnedDescendantRssKiB": 2538488,
+    "log": "/tmp/slam-configuration-camera-final.log",
+    "coverage": [
+      "Configuration custom rates, preserved worker/state and project persistence",
+      "Live graphics-quality defaults",
+      "Independent GPU sensor cadence and barrier timestamps",
+      "Viewer keys and paused camera behavior"
+    ],
+    "bundleSnapshots": {
+      "dist/index.html": "c1d93e67f7f41d45bfb4f41a8d24161a2d715dc30f43b520e925a61633d8deee",
+      "dist/assets/index-Klj-4h8I.js": "0715c20e15b7b5b2127d843e339c31e0958b681be9ff7682ab80b0aed62be54b",
+      "dist/assets/index-TiB0wFhL.css": "83ecea3c381e76e94bd1ebef12c1334858da6d41fe6d6c6fbe18f3c986ceed04"
+    }
+  },
+  "behavior": {
+    "cameraHz": [
+      15,
+      30,
+      60,
+      90
+    ],
+    "lidarHz": [
+      5,
+      10,
+      20
+    ],
+    "imuHz": [
+      30,
+      60,
+      90,
+      180
+    ],
+    "gpsHz": [
+      1,
+      5,
+      10
+    ],
+    "cameraPair": "RGB and depth share capture",
+    "customRates": "Project-persisted; graphics changes preserve explicit custom settings",
+    "qualityDefaults": {
+      "low": [
+        15,
+        10,
+        90,
+        5
+      ],
+      "medium": [
+        30,
+        10,
+        90,
+        5
+      ],
+      "high": [
+        90,
+        20,
+        90,
+        10
+      ]
+    },
+    "rateChange": "Pause and await current processing; reanchor sensor cadence at current time; preserve state and workers",
+    "environment": "Paused live scene rebuild even when algorithm integration is unavailable; requires compilation before running"
+  },
+  "limitations": [
+    "Full visual SLAM and 10x throughput target remain pending"
+  ]
+}

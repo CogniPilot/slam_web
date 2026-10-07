@@ -1,0 +1,1175 @@
+{
+  "recordedAt": "2026-10-04T11:17:45.345Z",
+  "status": "QUALITY_TEXTURE_RESOURCE_GATES_PASS_THROUGHPUT_TARGET_UNMET",
+  "sources": {
+    "src/graphics-quality.ts": "b449a9fd9ae2ef3acc64e2efeba4c3ece3cf7e3fda17417ad729a3555777d882",
+    "src/world-materials.ts": "3a3bf5a1b1950db99d006b1bc1e65a24d14159f671b2ef0dc2b849152b742ff0",
+    "src/world-lighting.ts": "adae0ad5eff6b4b65f7423521b7dfb717a80cfdc1246fe64a7f935431e327502",
+    "tests/browser/graphics-quality-control.spec.ts": "16f8cc2af9e50a450e969b50fbe6c44faa763c3b2bfc045d0fe3a5c89bfc6899",
+    "scripts/profile-browser.mjs": "f6b7ac7667995ed17d21ff5f7d5f0e3f968c8b0c79f8a341504da426545d1b87"
+  },
+  "gates": {
+    "build": {
+      "status": "PASS",
+      "log": "/tmp/slam-quality-texture-build2.log",
+      "elapsedMs": 14640.592649999999,
+      "peakRssKiB": 1540016,
+      "logSha256": "3a863dca320aec3c015a3bac55290a57fa4a14ae37368509927fe504ee3d6cfa"
+    },
+    "graphicsRoomsControl": {
+      "status": "PASS",
+      "tests": 3,
+      "log": "/tmp/slam-quality-texture-browser.log",
+      "elapsedMs": 32260.049282,
+      "peakRssKiB": 2410988,
+      "logSha256": "d1273967eb8e20d7e9d921e4db44e819d6218b833fce0397eb67cadc53beafe0"
+    },
+    "clockReadback": {
+      "status": "PASS",
+      "tests": 6,
+      "log": "/tmp/slam-quality-texture-clock-readback.log",
+      "elapsedMs": 61682.328997000004,
+      "peakRssKiB": 2525116,
+      "logSha256": "8926d0095dcb0e90c17ed880e96567dba03f3216844bde36ecf15ca6547bcad5"
+    },
+    "materialsGeometry": {
+      "status": "PASS",
+      "tests": 5,
+      "log": "/tmp/slam-quality-material-unit.log",
+      "elapsedMs": 1154.864578,
+      "peakRssKiB": 375300,
+      "logSha256": "dcea573ccf19cb652bd954897378e05311e4f30112fe0c6b9a7a3d198affeb8e"
+    }
+  },
+  "textureBudget": {
+    "medium": {
+      "detail": "medium",
+      "dimensions": [
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ]
+      ],
+      "normals": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "boundTexels": 4718592,
+      "shadowAllocated": true
+    },
+    "low": {
+      "detail": "low",
+      "dimensions": [
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ]
+      ],
+      "normals": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "boundTexels": 786432,
+      "shadowAllocated": false
+    },
+    "high": {
+      "detail": "high",
+      "dimensions": [
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          512,
+          512
+        ]
+      ],
+      "normals": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "boundTexels": 4718592,
+      "shadowAllocated": true
+    },
+    "lowReleased": {
+      "normalDisposals": 12,
+      "shadowDisposals": 1
+    },
+    "restored": true,
+    "shadowWasAllocated": true
+  },
+  "profiles": {
+    "low": {
+      "summary": {
+        "settings": {
+          "environment": "big-city",
+          "sceneDetail": "low",
+          "lidarEnabled": true,
+          "depthCloudEnabled": true
+        },
+        "workload": {
+          "profile": "Modelica inertial propagation with RGB-D feature detection; full SLAM is not measured",
+          "seed": 7,
+          "detectorPreset": "Modelica Harris · full resolution",
+          "detectorLanguage": "modelica",
+          "algorithmPreset": "Modelica inertial propagation",
+          "runtime": "modelica",
+          "carsEnabled": true,
+          "peopleEnabled": true,
+          "lightingMode": "day",
+          "depthCloudEnabled": true,
+          "sourceSha256": {
+            "physics": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+            "sensor": "7159a21ff81c954eca21ba7e077ccccb3274d71427651e1757436325f70ec7a2",
+            "evaluation": "f6dc00fb7971fcfacaf50364949d2469fe7d289e84f11640e989ad52f35bea3b",
+            "detector": "faa81a704d6d923720173e686c4d20102f47bb34b29ff591b9b76c12b5b853f7",
+            "algorithm": "04c4435fa1a6c5c929a245a8c76ac4bafcfde3eb54734677fb592f7ba2c2f1ce",
+            "graph": "34d6cd925f8e4dda44bdd23fdcdeed4dd3b586342f188b894785cfc8c2028074"
+          }
+        },
+        "bundleManifest": "bundle.json",
+        "readback": "sync",
+        "targetSimulationRate": 10,
+        "targetFrameMs": 1.1111111111111112,
+        "simulationRate": 0.38984075005269725,
+        "browserCpu": {
+          "seconds": 16.580000000000002,
+          "meanActiveCores": 1.6158899089684302,
+          "method": "CDP process CPU deltas after warmup; includes profiler overhead"
+        },
+        "mainCpuThrottle": 1,
+        "graphics": {
+          "api": "WebGL 2",
+          "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+          "vendor": "Google Inc. (NVIDIA Corporation)",
+          "acceleration": "hardware-reported",
+          "powerPreference": "high-performance"
+        },
+        "frames": 360,
+        "elapsedMs": 10260.600000023842,
+        "meanFrameMs": 28.460000001059637,
+        "meanNodeMs": {
+          "physics": 3.84638888835907,
+          "sensor": 18.645555555489327,
+          "detector": 3.030555550919639,
+          "slam": 0.47833333412806195,
+          "map": 0.03611111177338494,
+          "evaluation": 0.6222222245401806
+        },
+        "final": {
+          "sequence": 369,
+          "time": 4.111111111,
+          "totalMs": 30.899999976158142,
+          "nodes": {
+            "physics": 3.6999999284744263,
+            "sensor": 19.5,
+            "detector": 3,
+            "slam": 0.3999999761581421,
+            "map": 0.10000002384185791,
+            "evaluation": 2.3000000715255737
+          },
+          "workers": {
+            "physics": {
+              "roundTripMs": 3.6999999284744263
+            },
+            "detector": {
+              "roundTripMs": 3,
+              "queueMs": 0,
+              "inputMs": 0,
+              "computeMs": 1.5,
+              "outputMs": 0.6999999284744263,
+              "workerMs": 2.1999999284744263
+            },
+            "slam": {
+              "roundTripMs": 0.2999999523162842
+            },
+            "evaluation": {
+              "roundTripMs": 2.3000000715255737,
+              "queueMs": 0,
+              "workerMs": 0.10000002384185791
+            }
+          },
+          "transport": {
+            "lab/node/physics/truth": {
+              "totalMs": 0,
+              "bufferBytes": null
+            },
+            "lab/node/sensor/frame": {
+              "totalMs": 0,
+              "bufferBytes": 115200
+            },
+            "lab/node/detector/features": {
+              "totalMs": 0,
+              "bufferBytes": null
+            },
+            "lab/node/slam/estimate": {
+              "totalMs": 0,
+              "bufferBytes": null
+            },
+            "lab/node/map/estimate": {
+              "totalMs": 0,
+              "bufferBytes": null
+            },
+            "lab/node/evaluation/metrics": {
+              "totalMs": 0,
+              "bufferBytes": null
+            }
+          },
+          "camera": {
+            "readback": 12.399999976158142,
+            "renderSubmission": 1.100000023841858,
+            "total": 14.600000023841858,
+            "method": "shared capture batch + synchronous WebGL readback in sensor worker"
+          },
+          "lidar": {
+            "submitMs": 1.7999999523162842,
+            "waitMs": 11.600000023841858,
+            "decodeMs": 1.2000000476837158,
+            "totalMs": 14.600000023841858,
+            "method": "GPU cube (4 faces) + GPU XYZ + shared capture batch + synchronous readback",
+            "returns": 56676,
+            "faces": 4,
+            "drawCalls": 215,
+            "triangles": 90984,
+            "readbackBytes": 1048576
+          },
+          "display": {
+            "timestamp": 16180.9,
+            "windowMs": 1016.6000000000004,
+            "targetFps": 30,
+            "fps": 30.493802872319485,
+            "captureHz": 0,
+            "visionHz": 0,
+            "lidarHz": 0,
+            "renderedFrames": 31,
+            "capturedFrames": 0,
+            "visionFrames": 0,
+            "lidarFrames": 0,
+            "meanFrameIntervalMs": 33.23870967665026,
+            "p95FrameIntervalMs": 37.39999997615814,
+            "meanRenderSubmitMs": 1.8903225660324097,
+            "longTasks": null
+          },
+          "ate": 0.215,
+          "points": 0,
+          "diagnostics": {
+            "model": "Modelica nominal INS",
+            "stateCount": 16
+          }
+        },
+        "workers": [
+          {
+            "url": "http://127.0.0.1:4173/assets/sensor-render.worker-BYFMHdrv.js",
+            "file": "worker-0.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/modelica-lsp.worker-B-3Ki2Sb.js",
+            "file": "worker-1.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/modelica-state.worker-Cz7HPJyc.js",
+            "file": "worker-2.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/physics.worker-CNbjWayI.js",
+            "file": "worker-3.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/viewer.worker-BeJgIeeV.js",
+            "file": "worker-4.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/modelica-runtime-math.worker-D2FfJcIh.js",
+            "file": "worker-5.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/modelica-vision.worker-DuXKo6E9.js",
+            "file": "worker-6.cpuprofile"
+          }
+        ],
+        "errors": []
+      },
+      "sourceLog": "/tmp/slam-quality-low-profile.log",
+      "logSha256": "48663b68235f6df224ee0ea1ea3821ce1b5a710dc45a481722d0859d03c18951",
+      "timingsSha256": "9f073a7b7744782fae709ec7d2d98581f77a4cf96054b8cc3b3e1c04f2b3c54f",
+      "bundle": {
+        "index.html": {
+          "bytes": 451,
+          "sha256": "cf71a6d007057fca993dc8aa4f967f05c5a66e8d779693ec6e3da342fd889646"
+        },
+        "assets/editor.worker-h19R126F.js": {
+          "bytes": 251659,
+          "sha256": "a6f05ad5eeccc4470c76395a26ccb3bbba0bca46946d28f8d44cfdfccbaaa225"
+        },
+        "assets/index-BORywbqH.js": {
+          "bytes": 3402044,
+          "sha256": "92569e7c817f30d49e784e3d73403aa2aabfbd546cd86010fb6208360b9f0fb2"
+        },
+        "assets/modelica-lsp.worker-B-3Ki2Sb.js": {
+          "bytes": 6806,
+          "sha256": "c65d5e2342790c4e734f65afd6188941fb0cec43bc18be7ad1a960c8f0483de3"
+        },
+        "assets/modelica-runtime-math.worker-D2FfJcIh.js": {
+          "bytes": 8556,
+          "sha256": "6fffcd3e423acfbfc137996e8b85c501ae3671ce041e55b136a595df4acd5e46"
+        },
+        "assets/modelica-state.worker-Cz7HPJyc.js": {
+          "bytes": 818653,
+          "sha256": "d8323ba01ca30b2818dfdc3d0a1f2f77c586244f3f74812fa4b25e187f739d3e"
+        },
+        "assets/modelica-vision.worker-DuXKo6E9.js": {
+          "bytes": 852011,
+          "sha256": "119225fad29c443824fc94dfe157523f0b6ee2feeaa30a6a2a4144f135ba1d9e"
+        },
+        "assets/physics.worker-CNbjWayI.js": {
+          "bytes": 1653,
+          "sha256": "ddd52673d51e2d2d887e0f3b4fc7402df7a4b0caa7db3f9dd730e06d2cec8945"
+        },
+        "assets/sensor-render.worker-BYFMHdrv.js": {
+          "bytes": 715216,
+          "sha256": "de1ee3b01c6c82208ee7277d779d37c2d983fa17ef7f78b784aace986b2ad6b3"
+        },
+        "assets/viewer.worker-BeJgIeeV.js": {
+          "bytes": 716095,
+          "sha256": "16bc8d459d22ed069b72fa172428aab615ebd33778a0d6cda86de21546791939"
+        }
+      },
+      "viewerWindows": [
+        {
+          "timestamp": 6064.7,
+          "windowMs": 1016.5999999999995,
+          "targetFps": 30,
+          "fps": 8.853039543576632,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 9,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 111.57777778307597,
+          "p95FrameIntervalMs": 779.4000000953674,
+          "meanRenderSubmitMs": 79.35555556085374,
+          "longTasks": null
+        },
+        {
+          "timestamp": 7081.3,
+          "windowMs": 1016.6000000000004,
+          "targetFps": 30,
+          "fps": 29.510131811922083,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 34.293333331743874,
+          "p95FrameIntervalMs": 44.39999997615814,
+          "meanRenderSubmitMs": 2.54333332379659,
+          "longTasks": null
+        },
+        {
+          "timestamp": 8081.3,
+          "windowMs": 1000,
+          "targetFps": 30,
+          "fps": 30,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.39666666587194,
+          "p95FrameIntervalMs": 36.60000002384186,
+          "meanRenderSubmitMs": 2.596666669845581,
+          "longTasks": null
+        },
+        {
+          "timestamp": 9097.9,
+          "windowMs": 1016.5999999999995,
+          "targetFps": 30,
+          "fps": 29.510131811922108,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.3,
+          "p95FrameIntervalMs": 35.60000002384186,
+          "meanRenderSubmitMs": 1.7799999952316283,
+          "longTasks": null
+        },
+        {
+          "timestamp": 10114.5,
+          "windowMs": 1016.6000000000004,
+          "targetFps": 30,
+          "fps": 30.493802872319485,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 31,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.306451612903224,
+          "p95FrameIntervalMs": 36.90000009536743,
+          "meanRenderSubmitMs": 2.7612903118133545,
+          "longTasks": null
+        },
+        {
+          "timestamp": 11131.2,
+          "windowMs": 1016.7000000000007,
+          "targetFps": 30,
+          "fps": 29.507229271171415,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.560000002384186,
+          "p95FrameIntervalMs": 40.10000002384186,
+          "meanRenderSubmitMs": 2.5733333428700766,
+          "longTasks": null
+        },
+        {
+          "timestamp": 12147.7,
+          "windowMs": 1016.5,
+          "targetFps": 30,
+          "fps": 30.49680275454993,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 31,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.216129029950785,
+          "p95FrameIntervalMs": 36.800000071525574,
+          "meanRenderSubmitMs": 2.2354838809659405,
+          "longTasks": null
+        },
+        {
+          "timestamp": 13147.7,
+          "windowMs": 1000,
+          "targetFps": 30,
+          "fps": 30,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.22000000079473,
+          "p95FrameIntervalMs": 37.5,
+          "meanRenderSubmitMs": 2.143333347638448,
+          "longTasks": null
+        },
+        {
+          "timestamp": 14147.7,
+          "windowMs": 1000,
+          "targetFps": 30,
+          "fps": 30,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.34000000158946,
+          "p95FrameIntervalMs": 36.5,
+          "meanRenderSubmitMs": 1.85,
+          "longTasks": null
+        },
+        {
+          "timestamp": 15164.3,
+          "windowMs": 1016.5999999999985,
+          "targetFps": 30,
+          "fps": 29.510131811922133,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.496666665871935,
+          "p95FrameIntervalMs": 38.799999952316284,
+          "meanRenderSubmitMs": 2.4533333500226338,
+          "longTasks": null
+        },
+        {
+          "timestamp": 16180.9,
+          "windowMs": 1016.6000000000004,
+          "targetFps": 30,
+          "fps": 30.493802872319485,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 31,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.23870967665026,
+          "p95FrameIntervalMs": 37.39999997615814,
+          "meanRenderSubmitMs": 1.8903225660324097,
+          "longTasks": null
+        }
+      ],
+      "exclusiveCpuSampleSeconds": [
+        {
+          "name": "(idle)",
+          "seconds": 74.302679
+        },
+        {
+          "name": "getBufferSubData",
+          "seconds": 3.468508
+        },
+        {
+          "name": "(program)",
+          "seconds": 2.171246
+        },
+        {
+          "name": "postMessage",
+          "seconds": 1.481795
+        },
+        {
+          "name": "(garbage collector)",
+          "seconds": 0.659977
+        },
+        {
+          "name": "capture",
+          "seconds": 0.542919
+        },
+        {
+          "name": "(anonymous)",
+          "seconds": 0.530918
+        },
+        {
+          "name": "wasm-function[0]",
+          "seconds": 0.513057
+        },
+        {
+          "name": "wasm-function[23]",
+          "seconds": 0.212708
+        },
+        {
+          "name": "w6",
+          "seconds": 0.178278
+        },
+        {
+          "name": "texSubImage2D",
+          "seconds": 0.141614
+        },
+        {
+          "name": "noise",
+          "seconds": 0.123933
+        }
+      ],
+      "perf": {
+        "data": "/tmp/slam-quality-low-profile/perf.data",
+        "dataSha256": "037f41706314fe0fb0bdf71305dc9bf80b78a4334adaa20f7663223ae2337a7c",
+        "stat": "# started on Sun Oct  4 07:13:06 2026\n\n\n Performance counter stats for process id '3003874,3003948,3003949,3003940,3003912,3003915,3003924':\n\n          16491.87 msec task-clock:u                                                          \n            435261      page-faults:u                                                         \n\n      10.548505645 seconds time elapsed\n\n"
+      },
+      "resources": {
+        "peakRssKiB": 2059568,
+        "elapsedMs": 20354.993948
+      }
+    },
+    "high": {
+      "summary": {
+        "settings": {
+          "environment": "big-city",
+          "sceneDetail": "high",
+          "lidarEnabled": true,
+          "depthCloudEnabled": true
+        },
+        "workload": {
+          "profile": "Modelica inertial propagation with RGB-D feature detection; full SLAM is not measured",
+          "seed": 7,
+          "detectorPreset": "Modelica Harris · full resolution",
+          "detectorLanguage": "modelica",
+          "algorithmPreset": "Modelica inertial propagation",
+          "runtime": "modelica",
+          "carsEnabled": true,
+          "peopleEnabled": true,
+          "lightingMode": "day",
+          "depthCloudEnabled": true,
+          "sourceSha256": {
+            "physics": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+            "sensor": "7159a21ff81c954eca21ba7e077ccccb3274d71427651e1757436325f70ec7a2",
+            "evaluation": "f6dc00fb7971fcfacaf50364949d2469fe7d289e84f11640e989ad52f35bea3b",
+            "detector": "faa81a704d6d923720173e686c4d20102f47bb34b29ff591b9b76c12b5b853f7",
+            "algorithm": "04c4435fa1a6c5c929a245a8c76ac4bafcfde3eb54734677fb592f7ba2c2f1ce",
+            "graph": "34d6cd925f8e4dda44bdd23fdcdeed4dd3b586342f188b894785cfc8c2028074"
+          }
+        },
+        "bundleManifest": "bundle.json",
+        "readback": "sync",
+        "targetSimulationRate": 10,
+        "targetFrameMs": 1.1111111111111112,
+        "simulationRate": 0.36500679825002924,
+        "browserCpu": {
+          "seconds": 17.82,
+          "meanActiveCores": 1.6261052862038803,
+          "method": "CDP process CPU deltas after warmup; includes profiler overhead"
+        },
+        "mainCpuThrottle": 1,
+        "graphics": {
+          "api": "WebGL 2",
+          "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+          "vendor": "Google Inc. (NVIDIA Corporation)",
+          "acceleration": "hardware-reported",
+          "powerPreference": "high-performance"
+        },
+        "frames": 360,
+        "elapsedMs": 10958.700000047684,
+        "meanFrameMs": 30.39249999821186,
+        "meanNodeMs": {
+          "physics": 3.7344444397423002,
+          "sensor": 20.672777778572506,
+          "detector": 3.1302777767181396,
+          "slam": 0.5208333343267441,
+          "map": 0.0358333322736952,
+          "evaluation": 0.5033333394262526
+        },
+        "final": {
+          "sequence": 369,
+          "time": 4.111111111,
+          "totalMs": 40.10000002384186,
+          "nodes": {
+            "physics": 8.299999952316284,
+            "sensor": 25.200000047683716,
+            "detector": 3.100000023841858,
+            "slam": 0.3999999761581421,
+            "map": 0,
+            "evaluation": 0.3999999761581421
+          },
+          "workers": {
+            "physics": {
+              "roundTripMs": 8.100000023841858
+            },
+            "detector": {
+              "roundTripMs": 3,
+              "queueMs": 0,
+              "inputMs": 0.09999990463256836,
+              "computeMs": 1.5,
+              "outputMs": 1.100000023841858,
+              "workerMs": 2.6999999284744263
+            },
+            "slam": {
+              "roundTripMs": 0.3999999761581421
+            },
+            "evaluation": {
+              "roundTripMs": 0.3999999761581421,
+              "queueMs": 0,
+              "workerMs": 0.10000002384185791
+            }
+          },
+          "transport": {
+            "lab/node/physics/truth": {
+              "totalMs": 0,
+              "bufferBytes": null
+            },
+            "lab/node/sensor/frame": {
+              "totalMs": 0,
+              "bufferBytes": 115200
+            },
+            "lab/node/detector/features": {
+              "totalMs": 0,
+              "bufferBytes": null
+            },
+            "lab/node/slam/estimate": {
+              "totalMs": 0,
+              "bufferBytes": null
+            },
+            "lab/node/map/estimate": {
+              "totalMs": 0,
+              "bufferBytes": null
+            },
+            "lab/node/evaluation/metrics": {
+              "totalMs": 0,
+              "bufferBytes": null
+            }
+          },
+          "camera": {
+            "readback": 10.600000023841858,
+            "renderSubmission": 3.1999999284744263,
+            "total": 13.899999976158142,
+            "method": "shared capture batch + synchronous WebGL readback in sensor worker"
+          },
+          "lidar": {
+            "submitMs": 2.200000047683716,
+            "waitMs": 8.600000023841858,
+            "decodeMs": 1,
+            "totalMs": 11.800000071525574,
+            "method": "GPU cube (4 faces) + GPU XYZ + shared capture batch + synchronous readback",
+            "returns": 57074,
+            "faces": 4,
+            "drawCalls": 292,
+            "triangles": 204422,
+            "readbackBytes": 1048576
+          },
+          "display": {
+            "timestamp": 17142.6,
+            "windowMs": 1016.5999999999985,
+            "targetFps": 30,
+            "fps": 29.510131811922133,
+            "captureHz": 0,
+            "visionHz": 0,
+            "lidarHz": 0,
+            "renderedFrames": 30,
+            "capturedFrames": 0,
+            "visionFrames": 0,
+            "lidarFrames": 0,
+            "meanFrameIntervalMs": 33.43666666348775,
+            "p95FrameIntervalMs": 37.09999990463257,
+            "meanRenderSubmitMs": 2.9699999849001566,
+            "longTasks": null
+          },
+          "ate": 0.212,
+          "points": 0,
+          "diagnostics": {
+            "model": "Modelica nominal INS",
+            "stateCount": 16
+          }
+        },
+        "workers": [
+          {
+            "url": "http://127.0.0.1:4173/assets/viewer.worker-BeJgIeeV.js",
+            "file": "worker-0.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/modelica-lsp.worker-B-3Ki2Sb.js",
+            "file": "worker-1.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/physics.worker-CNbjWayI.js",
+            "file": "worker-2.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/sensor-render.worker-BYFMHdrv.js",
+            "file": "worker-3.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/modelica-state.worker-Cz7HPJyc.js",
+            "file": "worker-4.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/modelica-vision.worker-DuXKo6E9.js",
+            "file": "worker-5.cpuprofile"
+          },
+          {
+            "url": "http://127.0.0.1:4173/assets/modelica-runtime-math.worker-D2FfJcIh.js",
+            "file": "worker-6.cpuprofile"
+          }
+        ],
+        "errors": []
+      },
+      "sourceLog": "/tmp/slam-quality-high-profile.log",
+      "logSha256": "eb331313b89ba4d480a2c900f350d4c789ff4d9a05c6b5e7ee6ff5e57ba381bf",
+      "timingsSha256": "0aeb9e004465944657acf62d535595086592d7ca5806a399dad96899266f136a",
+      "bundle": {
+        "index.html": {
+          "bytes": 451,
+          "sha256": "cf71a6d007057fca993dc8aa4f967f05c5a66e8d779693ec6e3da342fd889646"
+        },
+        "assets/editor.worker-h19R126F.js": {
+          "bytes": 251659,
+          "sha256": "a6f05ad5eeccc4470c76395a26ccb3bbba0bca46946d28f8d44cfdfccbaaa225"
+        },
+        "assets/index-BORywbqH.js": {
+          "bytes": 3402044,
+          "sha256": "92569e7c817f30d49e784e3d73403aa2aabfbd546cd86010fb6208360b9f0fb2"
+        },
+        "assets/modelica-lsp.worker-B-3Ki2Sb.js": {
+          "bytes": 6806,
+          "sha256": "c65d5e2342790c4e734f65afd6188941fb0cec43bc18be7ad1a960c8f0483de3"
+        },
+        "assets/modelica-runtime-math.worker-D2FfJcIh.js": {
+          "bytes": 8556,
+          "sha256": "6fffcd3e423acfbfc137996e8b85c501ae3671ce041e55b136a595df4acd5e46"
+        },
+        "assets/modelica-state.worker-Cz7HPJyc.js": {
+          "bytes": 818653,
+          "sha256": "d8323ba01ca30b2818dfdc3d0a1f2f77c586244f3f74812fa4b25e187f739d3e"
+        },
+        "assets/modelica-vision.worker-DuXKo6E9.js": {
+          "bytes": 852011,
+          "sha256": "119225fad29c443824fc94dfe157523f0b6ee2feeaa30a6a2a4144f135ba1d9e"
+        },
+        "assets/physics.worker-CNbjWayI.js": {
+          "bytes": 1653,
+          "sha256": "ddd52673d51e2d2d887e0f3b4fc7402df7a4b0caa7db3f9dd730e06d2cec8945"
+        },
+        "assets/sensor-render.worker-BYFMHdrv.js": {
+          "bytes": 715216,
+          "sha256": "de1ee3b01c6c82208ee7277d779d37c2d983fa17ef7f78b784aace986b2ad6b3"
+        },
+        "assets/viewer.worker-BeJgIeeV.js": {
+          "bytes": 716095,
+          "sha256": "16bc8d459d22ed069b72fa172428aab615ebd33778a0d6cda86de21546791939"
+        }
+      },
+      "viewerWindows": [
+        {
+          "timestamp": 6059.7,
+          "windowMs": 1016.5999999999995,
+          "targetFps": 30,
+          "fps": 21.640763328742878,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 22,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 47.163636364720084,
+          "p95FrameIntervalMs": 78.89999997615814,
+          "meanRenderSubmitMs": 17.60909090800719,
+          "longTasks": null
+        },
+        {
+          "timestamp": 7059.7,
+          "windowMs": 1000,
+          "targetFps": 30,
+          "fps": 30,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.32333333094915,
+          "p95FrameIntervalMs": 38.299999952316284,
+          "meanRenderSubmitMs": 2.55,
+          "longTasks": null
+        },
+        {
+          "timestamp": 8076.2,
+          "windowMs": 1016.5,
+          "targetFps": 30,
+          "fps": 29.513034923757996,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.290000001589455,
+          "p95FrameIntervalMs": 39.5,
+          "meanRenderSubmitMs": 3.5233333428700764,
+          "longTasks": null
+        },
+        {
+          "timestamp": 9076.2,
+          "windowMs": 1000.0000000000009,
+          "targetFps": 30,
+          "fps": 29.999999999999975,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.61666666666667,
+          "p95FrameIntervalMs": 41.700000047683716,
+          "meanRenderSubmitMs": 3.5266666531562807,
+          "longTasks": null
+        },
+        {
+          "timestamp": 10092.8,
+          "windowMs": 1016.5999999999985,
+          "targetFps": 30,
+          "fps": 30.493802872319538,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 31,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 32.98064516052123,
+          "p95FrameIntervalMs": 39,
+          "meanRenderSubmitMs": 3.4290322642172537,
+          "longTasks": null
+        },
+        {
+          "timestamp": 11092.8,
+          "windowMs": 1000,
+          "targetFps": 30,
+          "fps": 30,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.34333333174388,
+          "p95FrameIntervalMs": 38.799999952316284,
+          "meanRenderSubmitMs": 3.0866666595141092,
+          "longTasks": null
+        },
+        {
+          "timestamp": 12092.8,
+          "windowMs": 1000,
+          "targetFps": 30,
+          "fps": 30,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.32666666905085,
+          "p95FrameIntervalMs": 38.60000002384186,
+          "meanRenderSubmitMs": 2.706666656335195,
+          "longTasks": null
+        },
+        {
+          "timestamp": 13092.8,
+          "windowMs": 1000,
+          "targetFps": 30,
+          "fps": 30,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.32666666507721,
+          "p95FrameIntervalMs": 39,
+          "meanRenderSubmitMs": 3.5233333388964336,
+          "longTasks": null
+        },
+        {
+          "timestamp": 14109.3,
+          "windowMs": 1016.5,
+          "targetFps": 30,
+          "fps": 29.513034923757996,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.42333333492279,
+          "p95FrameIntervalMs": 42.200000047683716,
+          "meanRenderSubmitMs": 3.503333342075348,
+          "longTasks": null
+        },
+        {
+          "timestamp": 15109.3,
+          "windowMs": 1000,
+          "targetFps": 30,
+          "fps": 30,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.23999999761581,
+          "p95FrameIntervalMs": 38.59999990463257,
+          "meanRenderSubmitMs": 2.546666673819224,
+          "longTasks": null
+        },
+        {
+          "timestamp": 16126,
+          "windowMs": 1016.7000000000007,
+          "targetFps": 30,
+          "fps": 30.49080358021046,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 31,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.33548387404411,
+          "p95FrameIntervalMs": 37.60000002384186,
+          "meanRenderSubmitMs": 2.9258064569965487,
+          "longTasks": null
+        },
+        {
+          "timestamp": 17142.6,
+          "windowMs": 1016.5999999999985,
+          "targetFps": 30,
+          "fps": 29.510131811922133,
+          "captureHz": 0,
+          "visionHz": 0,
+          "lidarHz": 0,
+          "renderedFrames": 30,
+          "capturedFrames": 0,
+          "visionFrames": 0,
+          "lidarFrames": 0,
+          "meanFrameIntervalMs": 33.43666666348775,
+          "p95FrameIntervalMs": 37.09999990463257,
+          "meanRenderSubmitMs": 2.9699999849001566,
+          "longTasks": null
+        }
+      ],
+      "exclusiveCpuSampleSeconds": [
+        {
+          "name": "(idle)",
+          "seconds": 78.223373
+        },
+        {
+          "name": "getBufferSubData",
+          "seconds": 3.266895
+        },
+        {
+          "name": "(program)",
+          "seconds": 2.292745
+        },
+        {
+          "name": "postMessage",
+          "seconds": 1.451165
+        },
+        {
+          "name": "(garbage collector)",
+          "seconds": 0.720233
+        },
+        {
+          "name": "capture",
+          "seconds": 0.595834
+        },
+        {
+          "name": "(anonymous)",
+          "seconds": 0.548921
+        },
+        {
+          "name": "wasm-function[0]",
+          "seconds": 0.488622
+        },
+        {
+          "name": "multiplyMatrices",
+          "seconds": 0.302252
+        },
+        {
+          "name": "wasm-function[23]",
+          "seconds": 0.238203
+        },
+        {
+          "name": "w6",
+          "seconds": 0.187717
+        },
+        {
+          "name": "Ir",
+          "seconds": 0.182814
+        }
+      ],
+      "perf": {
+        "data": "/tmp/slam-quality-high-profile/perf.data",
+        "dataSha256": "9060a2cb22a9fd796245352fe340959d2a92d554a6dcaf603d7dd9d26392f41b",
+        "stat": "# started on Sun Oct  4 07:14:07 2026\n\n\n Performance counter stats for process id '3004232,3004315,3004316,3004301,3004269,3004272,3004281':\n\n          17826.31 msec task-clock:u                                                          \n            437850      page-faults:u                                                         \n\n      11.273146274 seconds time elapsed\n\n"
+      },
+      "resources": {
+        "peakRssKiB": 2101132,
+        "elapsedMs": 21152.647039
+      }
+    }
+  },
+  "scope": "Graphics-quality budgets; synchronized 90Hz simulation RGB-D and all-sensor lockstep, 30FPS independent viewer, explicitly available Modelica inertial propagation baseline. No full visual SLAM.",
+  "invariants": [
+    "Low/Medium/High preserve calibrated sensor dimensions/rate.",
+    "No recompilation or state/camera/trajectory reset on quality changes.",
+    "All three furnished interiors retained.",
+    "GPU readback exact direct/worker sync/async parity and recovery.",
+    "High restores exact original source images, texture identities and metric UV scales."
+  ],
+  "limits": [
+    "Single matched 360-frame low/high observation on a shared RTX3090 machine, both with CPU affinity 4,5 and nice 10; not a universal gain or before/after attribution.",
+    "First reported viewer window may include scene/shader startup; full raw windows retained rather than claiming steady 30FPS from their unqualified mean.",
+    "Bound texels are material-image counts, not measured hardware GPU allocation bytes.",
+    "perf and CDP record CPU stacks, including driver waits, not GPU occupancy/timestamp duration.",
+    "Downloads and original source bitmaps are retained; Low additionally uses resized canvases. Other model textures, HDR reflection map and default antialiasing are unchanged.",
+    "No archaic-laptop measurements; no full SLAM, deployment or 10x realtime acceptance."
+  ],
+  "failureHistory": [
+    "Initial TypeScript build rejected two unannotated test callback arguments. Added explicit types; final build and gates passed."
+  ]
+}

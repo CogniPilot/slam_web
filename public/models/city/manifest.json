@@ -1,0 +1,67 @@
+{
+  "collection": "https://poly.pizza/bundle/City-Pack-kJqRAIGsw0",
+  "downloaded": "2026-10-03",
+  "assets": [
+    {
+      "title": "Building Green",
+      "file": "building-green.glb",
+      "creator": "J-Toastie",
+      "creatorUrl": "https://poly.pizza/u/J-Toastie",
+      "source": "https://poly.pizza/m/FmjsfA1eHY",
+      "download": "https://static.poly.pizza/cab33665-2f19-40f2-825a-38aef38bff48.glb",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "bytes": 130308,
+      "sha256": "7a823bc7f106e52fa36526910d7bcbd5beb456b35f29f2b302e5b1b3e33e016a"
+    },
+    {
+      "title": "Pizza Corner",
+      "file": "pizza-corner.glb",
+      "creator": "J-Toastie",
+      "creatorUrl": "https://poly.pizza/u/J-Toastie",
+      "source": "https://poly.pizza/m/78W2Ab2Uvt",
+      "download": "https://static.poly.pizza/de37dda7-14c2-4d8c-9cb8-1e6a43b9b664.glb",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "bytes": 169160,
+      "sha256": "dbe28d57a7981f752be2834aae6eb341af5d6c046410f62afec38a77e532aa73"
+    },
+    {
+      "title": "Brown Building",
+      "file": "brown-building.glb",
+      "creator": "J-Toastie",
+      "creatorUrl": "https://poly.pizza/u/J-Toastie",
+      "source": "https://poly.pizza/m/fGKIlWGDNH",
+      "download": "https://static.poly.pizza/1adeec54-6cef-46b3-aa0c-d6c7a0037885.glb",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "bytes": 63100,
+      "sha256": "983bd8d5b61908cce244d73480e07aeafc9ed5aa13e25a6d136b48fb516dc6a1"
+    },
+    {
+      "title": "Building Red",
+      "file": "building-red.glb",
+      "creator": "J-Toastie",
+      "creatorUrl": "https://poly.pizza/u/J-Toastie",
+      "source": "https://poly.pizza/m/lbNz2dClar",
+      "download": "https://static.poly.pizza/34393cda-7434-4292-a4e1-304e8e9deef5.glb",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "bytes": 150868,
+      "sha256": "0c6734d818b89af863f581960a35356b31b8ff726c2f30541427bebaefbbcd8b"
+    },
+    {
+      "title": "Building Red Corner",
+      "file": "building-red-corner.glb",
+      "creator": "J-Toastie",
+      "creatorUrl": "https://poly.pizza/u/J-Toastie",
+      "source": "https://poly.pizza/m/9JuFwnivP0",
+      "download": "https://static.poly.pizza/8fbb7c59-601a-4578-bf2f-bf193122e6eb.glb",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "bytes": 145076,
+      "sha256": "aec6e49c3ec3ed7261be791805d027bf362293642b6a12d0193cea3d4a22b9b4"
+    }
+  ],
+  "modifications": "Original downloaded GLB bytes retained. Runtime bakes node transforms and corrects mirrored triangle winding, uniformly scales models to 4.6 m frontage, places feet at ground level, instances architectural primitives, adjusts exported metalness/roughness, and adds procedural metric surface maps to masonry and wood."
+}

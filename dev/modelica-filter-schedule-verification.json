@@ -1,0 +1,98 @@
+{
+  "recordedAt": "2026-10-04T11:10:24.481Z",
+  "status": "UNCHANGED_MODELICA_STRUCTURAL_LOWERING_PASS_NATIVE_PROGRAM_REFUSED",
+  "model": "ES15FilterStep",
+  "combinedSourceSha256": "99ce45b42482b79211913840a57b63b91471ab3ef00d27fb85d289e153886d48",
+  "producerSourceSha256": "80509ed0293a9ddb478209e51dfcc971af101dba55793d6010bb3e878dc1f9f4",
+  "compiler": {
+    "revision": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "sourceSnapshotSha256": "e4f1af0d590fdc13e4383f175e1c7742548a0458c6d05fb4c8bf859cbb939dfc",
+    "binarySha256": "fd130279090d00c9e18e198d563446906c77e176ed914bdacdfc6c87f6ec316f",
+    "sourceFiles": 2184,
+    "note": "Current working-tree snapshot after build; agent changes may postdate individual dependency compilation. Diagnostic evidence is bound to the actual producer binary digest, not an immutable source release."
+  },
+  "structuralGate": {
+    "compileModelMs": 1391.446,
+    "lowerSolveMs": 36072.493,
+    "totalElapsedMs": 36256.599955,
+    "peakRssKiB": 715708,
+    "minimumAvailableKiB": 57302672,
+    "log": "/tmp/slam-filter-schedule-probe.log",
+    "logSha256": "d4e38cc4f5559e9d10f5f4de44dacd83b1f725b2f14f07829161d8e29a71a7fa",
+    "canonicalProblem": "/tmp/slam-filter-schedule-native/problem.json",
+    "canonicalProblemSha256": "cd0094d97efa6760f320dd5b76277efa06957d4079df297f34cc669afab540e8",
+    "reportSha256": "308b05e347cafc93c65c13dbc2c7fa853ee9b023988426536a5caa8185f41011",
+    "implicitNodes": 188
+  },
+  "nativeRefusal": "native scalar program requires one terminal scalar output",
+  "nonSingleTerminalProgramCount": 72,
+  "outputCountHistogram": {
+    "3": 24,
+    "4": 4,
+    "9": 19,
+    "12": 1,
+    "36": 4,
+    "90": 2,
+    "96": 3,
+    "180": 1,
+    "225": 14
+  },
+  "firstRefusedProgram": {
+    "node": 0,
+    "program": 0,
+    "operationCount": 4,
+    "outputCount": 9,
+    "operationsInSourceOrder": [
+      {
+        "TensorLoad": {
+          "dst_start": 0,
+          "input": "Y",
+          "input_start": 253,
+          "count": 9,
+          "seed_start": null,
+          "lanes": 1
+        }
+      },
+      {
+        "TensorLoad": {
+          "dst_start": 9,
+          "input": "P",
+          "input_start": 17,
+          "count": 9,
+          "seed_start": null,
+          "lanes": 1
+        }
+      },
+      {
+        "TensorBinary": {
+          "dst_start": 18,
+          "op": "Sub",
+          "lhs_start": 0,
+          "rhs_start": 9,
+          "count": 9,
+          "lhs_stride": 1,
+          "rhs_stride": 1,
+          "lanes": 1
+        }
+      },
+      {
+        "StoreOutputRange": {
+          "start": 18,
+          "count": 9,
+          "stride": 1
+        }
+      }
+    ],
+    "sourceBytes": {
+      "start": 26571,
+      "end": 26579
+    }
+  },
+  "limits": [
+    "Structural compiler diagnostic only; no native executable was issued or executed.",
+    "Canonical wire was saved directly by Rust; diagnostic JS summaries are not compiler-owner evidence.",
+    "Working tree changed during build; actual producer binary digest is authoritative, post-build source snapshot is not an immutable release.",
+    "Native support must certify compact array ranges, preserve complete source prefixes and effects, and rerun independent numerical oracles.",
+    "No full RGB-D visual SLAM or 10x realtime claim."
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "status": "BOUNDS_IMPLEMENTED_AND_SCOPED_VERIFIED; FULL14400_NATIVE_ADMISSION_PENDING",
+  "scope": "generic finiteFor unit-counter whole-sequence interval; no general While or conditional-fold owner",
+  "patchSha256": "30246103191e772936b3db276a90ba37602ddc7a9cd41d48a4b2cc25d72efd27",
+  "sourceClosureSha256": "13a5721c19427834f340b4c32b825694b07033e2e4212bca25d732812876c5f5",
+  "producerSha256": "3f6b4c339b05851d6efadf22d930f3574b15b0a95437926e03f48cec9086a2a2",
+  "modelSourceSha256": "66454f901ec3911d4dd8878bf92b815f0a1ac194bc061f18bf884a2c1ff18844",
+  "controls": {
+    "newOwner": 12,
+    "newReference": 4,
+    "unchangedRepeated": 1,
+    "existingDependent": 7,
+    "strictNinePackages": true,
+    "originalFailure": {
+      "passed": 3,
+      "failed": 1,
+      "reason": "FuelExhausted: interpreter counts expressions, not only statements",
+      "correction": "test-only fuel400000; exact14400 domain; production limits unchanged"
+    }
+  },
+  "actualNativeGate": {
+    "exitCode": 124,
+    "elapsedMs": 180253.241423,
+    "peakRssKiB": 43148,
+    "preparedCallback": false,
+    "nativeArtifact": false,
+    "solveArtifact": false,
+    "numericalCases": 0,
+    "profileDuringGate": "root attachment missed deadline; zero samples; no phase inferred"
+  },
+  "diagnostic": {
+    "purpose": "separately authorized60s unchanged-source profiling, not retry admission",
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "6,7",
+        "nice",
+        "-n",
+        "10",
+        "$HOME/scratch/slam_web/tmp/finite-for-counter-gate-retry/final-producer",
+        "native_registration_whole_program_source_inventory",
+        "--nocapture"
+      ],
+      "log": "$HOME/scratch/slam_web/profiles/runtime-count-finite-for-3f6b4c3/prepare.log",
+      "elapsedMs": 60102.206164,
+      "peakRssKiB": 36884,
+      "minimumAvailableKiB": 52013604,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "stopped": "timeout",
+      "signal": "SIGKILL",
+      "exitCode": 124
+    },
+    "samples": 2711,
+    "lostSamples": 0,
+    "normalPerfFinalization": true,
+    "traceSha256": "3089f9fc234552b67b01d11460762f96dc1f253b08d8f8403b7c15943589dd4a",
+    "rawTrace": "$HOME/scratch/slam_web/profiles/runtime-count-finite-for-3f6b4c3/perf.data",
+    "earliestRecordedPhase": {
+      "caller": "crates/rumoca-phase-structural/src/incidence.rs:370:9",
+      "expression": 43,
+      "scalar": 0
+    },
+    "liveCheckpoints": {
+      "membershipTotal": 86200000,
+      "denseMembership": 86197517,
+      "gapMembership": 2484,
+      "foldPointAtLeast": 17000000,
+      "lastRecordedFoldGraphOrdinal": 1100,
+      "lastRecordedSelectedScalar": 1099,
+      "domainPoints": 14400,
+      "guardPayloadChargedBytes": 0
+    },
+    "perfSelfPercent": {
+      "validationMemoExpression": 21.62,
+      "defaultHasherWritePrimary": 11.73,
+      "defaultHasherWriteSecondary": 3.98,
+      "buildHasherPrimary": 4.72
+    },
+    "limitation": "source/profile flags and shared host; no throughput comparison, no compiled-model artifact; some DWARF frames fail address-to-line resolution"
+  },
+  "files": [
+    {
+      "file": "dev/artifacts/finite-for-counter/applied-counter.patch",
+      "rawSha256": "30246103191e772936b3db276a90ba37602ddc7a9cd41d48a4b2cc25d72efd27",
+      "savedSha256": "30246103191e772936b3db276a90ba37602ddc7a9cd41d48a4b2cc25d72efd27"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/applied-context-manifest.sha256",
+      "rawSha256": "66ec2e20409d8800861b309a0c3384f3be63cd04adc770e109491dbb5cdd2ffd",
+      "savedSha256": "66ec2e20409d8800861b309a0c3384f3be63cd04adc770e109491dbb5cdd2ffd"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/applied.json",
+      "rawSha256": "d6b90825b81da58428541ed2373fe0726046513a4803270d31a9ebf683a16f6e",
+      "savedSha256": "d6b90825b81da58428541ed2373fe0726046513a4803270d31a9ebf683a16f6e"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/design.md",
+      "rawSha256": "098c9380d4a9370dd3b159e38e515756944f5ef02dc575794bcfc5666fe5a0c0",
+      "savedSha256": "298de10cece9c87b8e3575ee8e083ce5244c611e3dd8e28f6282a7c496bf5546"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/application-plan.md",
+      "rawSha256": "0875684b4e8eecd28c737a261e6f7ec0d804a70c4bc048b4eaaa055cf022ab93",
+      "savedSha256": "0875684b4e8eecd28c737a261e6f7ec0d804a70c4bc048b4eaaa055cf022ab93"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/initial-reference-failure.log",
+      "rawSha256": "5f5ed67848ffcd834d6973cf117cf0208eb058265b3a6f5648443d4182a4ef04",
+      "savedSha256": "0c94ea7cd74443b9e9c68f1b9dce203b6d71edb62ca0c7fe6832b533f286fc74"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/initial-reference-failure-resource.json",
+      "rawSha256": "5e7942759fdfc8459532bda11db30ed393f14b1a26a7d46bdf207fa57f3b1624",
+      "savedSha256": "ba477a493e9d9b284144723beb8f3d86a2c2182f1f365bcc403180f669a4e396"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/failed-phase-dae-binary.json",
+      "rawSha256": "5f67ee523e530a5b7768ad14e5193d9fcfc9a4871251d5ef68ad5132f5fab2c2",
+      "savedSha256": "5f67ee523e530a5b7768ad14e5193d9fcfc9a4871251d5ef68ad5132f5fab2c2"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/initial-source-closure.sha256",
+      "rawSha256": "6a79f44cf9093688b9b03391adbeaca6d99d65e2f2c1f5b1232ff18b7ae39afb",
+      "savedSha256": "6a79f44cf9093688b9b03391adbeaca6d99d65e2f2c1f5b1232ff18b7ae39afb"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/final-source-closure.sha256",
+      "rawSha256": "13a5721c19427834f340b4c32b825694b07033e2e4212bca25d732812876c5f5",
+      "savedSha256": "13a5721c19427834f340b4c32b825694b07033e2e4212bca25d732812876c5f5"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/producer.json",
+      "rawSha256": "da00d1c421b28b6b234e56e1482b9d8f8e5171d45a58761ef55abd44dc1e29a5",
+      "savedSha256": "da00d1c421b28b6b234e56e1482b9d8f8e5171d45a58761ef55abd44dc1e29a5"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/RuntimeCandidateCount.mo",
+      "rawSha256": "66454f901ec3911d4dd8878bf92b815f0a1ac194bc061f18bf884a2c1ff18844",
+      "savedSha256": "66454f901ec3911d4dd8878bf92b815f0a1ac194bc061f18bf884a2c1ff18844"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/original-runtime-count.log",
+      "rawSha256": "435d336c303b0c22100daba21978619c1134092ea82a28b764b09ff5afd7ec4d",
+      "savedSha256": "435d336c303b0c22100daba21978619c1134092ea82a28b764b09ff5afd7ec4d"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/original-runtime-count-resource.json",
+      "rawSha256": "296ccf0c9ac9862ed5cac4cb3668349dfcb16ca413d0443fce53db05db20ee29",
+      "savedSha256": "76ee07da559482ab8403bd12c8859dcc4819802036049ea437fd12cd97dfb4f4"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/diagnostic-profile.json",
+      "rawSha256": "971eb98f67b6cb8fac81a8fecd03a1998bfdab91b0e2696b87c28c9b372b5b31",
+      "savedSha256": "e6eedd806c137712b0f6f45d00940c9b98fb67020700a1514104c42e71e8fb56"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/diagnostic-prepare.log",
+      "rawSha256": "69ac6682c8045390e24ae603f1b14156b3c3aba8919f1bb19df720801433d806",
+      "savedSha256": "69ac6682c8045390e24ae603f1b14156b3c3aba8919f1bb19df720801433d806"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/diagnostic-perf.log",
+      "rawSha256": "2e09eeeebc4a51a55d63c4aeefd9ac1f4a289bef8024571570231a84c6334581",
+      "savedSha256": "4a2c6baf067d0184f1260f2dffc985c46bf81902c5b2bfef63b4a46a51ff06e1"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/diagnostic-perf-report.txt",
+      "rawSha256": "44b6dce1192a381ccf07c8b6fc7c1365abc47bf36f0922b778b4c6f117a9a482",
+      "savedSha256": "44b6dce1192a381ccf07c8b6fc7c1365abc47bf36f0922b778b4c6f117a9a482"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/owner-controls.log",
+      "rawSha256": "66b09847f54c254d44fa229fc352ac30eac715af864c8089a26f40b41c0bc62e",
+      "savedSha256": "6588346a249ac04cb77f6d9d0acb17598dd03c9ff440a73e930976425842e90e"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/owner-controls-resource.json",
+      "rawSha256": "b9f456924cca4601f46526765b7af35d5688f196493941ae8908bfeb99c38cbd",
+      "savedSha256": "4f9e263f0a61a231bad0d91f2aad0a0a0e564c04629a0a1ce972c6dea32f1cbd"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/reference-controls.log",
+      "rawSha256": "3fa774a2821990c21025eeffbd7d7663e85ac8c74f657ebca75fb559c6751c82",
+      "savedSha256": "9609fbb4c1b854aeabf31a1567b2689165b0cee2abe55f717500edef0430448c"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/reference-controls-resource.json",
+      "rawSha256": "5c79738f1945285f8399350545fe7263725db5b4a31a9f6347c98e214111e9df",
+      "savedSha256": "26506bf30ca4acd4be3effb3957e259583565863b415e885808ff44169a661eb"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/old-repeated-control.log",
+      "rawSha256": "7ea4f1e39cec3b94d7de3f88800e62f9768d7d895f1fc6fd2f88c7206626bcbf",
+      "savedSha256": "2998ef12bf3d6833ee57b579db4a2d5198ed68e66b81618b923e527b1c8e9587"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/old-repeated-control-resource.json",
+      "rawSha256": "f777c4c620c395aa7af94f46cea5b41c1279c6354b38a7b298c159fee8ebca0c",
+      "savedSha256": "12d6bb686e8f5d30b91678756c86ab47ee653bf9953b6b55b00d7a4a9ad242c8"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/dependent-controls.log",
+      "rawSha256": "fcd4f56c6b4a1586c1d4212f88852a4de688c1a59b0bf3bff37162e9ea8b7594",
+      "savedSha256": "255b0503749b457bd923adfd033d5f02179ad7204450d6c53635ad465ab3c4fc"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/dependent-controls-resource.json",
+      "rawSha256": "de2caf6dfc4dfeb6c48cc75cfc69418806ccb8421ed50a7f06c0fc58e8d12b54",
+      "savedSha256": "25ac36e1c45bad121627d8daa3d76df7f0cbc5c2b930966e7ea30dc5c1b438fc"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/strict.log",
+      "rawSha256": "408f612fa4ea410ea64ea4bc67293c11f586cb9a130a37a0ed88990fec460389",
+      "savedSha256": "5d3122d8a0a6be84f4a013c273c5d9a8ffae6fb495e022f9763a93b3fb99bba7"
+    },
+    {
+      "file": "dev/artifacts/finite-for-counter/strict-resource.json",
+      "rawSha256": "a25601ace53b17e11bf8f836873cd3a090b787b9fd3efbc92079a36109770b8f",
+      "savedSha256": "a9cbc6b1f6d36927fcd853371f085f2f101d689a20eaf5d3becebb89c7311be8"
+    }
+  ]
+}

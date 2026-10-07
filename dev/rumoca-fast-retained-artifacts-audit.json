@@ -1,0 +1,77 @@
+{
+  "status": "READ_ONLY_AUDIT_DIAGNOSTIC_UNRUN",
+  "sourceHead": "14694fd7e4369b775b15cd2dafc86f0b06bd4608",
+  "sourceIdentity": "Dirty merged source: exact file preimages are authoritative, not HEAD alone.",
+  "scope": "Retained scalar/JVP/structural products and optional copied allocation counters; no compiler/cache/build changes.",
+  "actualEvidence": {
+    "report": "dev/rumoca-fast-native-preparation-counts-verification.json",
+    "sourcePasses": 3,
+    "completeDependencyPasses": 2,
+    "finalFrontier": "third before_coverage; no third dependency_progress/complete marker",
+    "counts": {
+      "families": 13537,
+      "reads": 633864,
+      "producerReadPairsPerOldDerive": 8580616968,
+      "edgesPerCompletePass": 90552,
+      "edgeCapacityPerCompletePass": 103488,
+      "edgeCapacityBytes": 827904,
+      "valueOpCapacityBytesPerPass": 140298496,
+      "readCapacityBytesPerPass": 25354560
+    },
+    "sourceNodes": 97,
+    "scalarPrograms": 13441,
+    "maps": 96,
+    "sourceOperationLength": 687539,
+    "sourceOperationCapacity": 830848
+  },
+  "concreteQuadraticSite": {
+    "owner": "rumoca-ir-solve::JacobianStructure::derived -> StructuralPattern::column_rows",
+    "representation": "Mixed Map/ScalarPrograms can yield ConservativeFull; Full entries expand rows per column.",
+    "actualDimensions": "UNMEASURED",
+    "conditionalRows": 28800,
+    "conditionalColumns": 28800,
+    "hostWordBytes": 8,
+    "conditionalEntryBytes": 6635520000,
+    "actualFullFastAttribution": "UNPROVED"
+  },
+  "cloneOwnership": {
+    "scalarBlockClone": "Arc-shared",
+    "mixedScalarView": "Owned clones per original scalar row and per affine domain point",
+    "pureCallSiteClone": "Shared Arc metadata; input-start and optional directional interface boxes copied; no body.",
+    "pureCallTableClone": "Owns boxed TypedProgram bodies; no table clone in audited complete-model artifact path.",
+    "foldAdCache": "Shared across row block",
+    "conditionalAdCache": "Fresh per top-level row, shared by nested derivations"
+  },
+  "checks": {
+    "copiedSourcefmt": "PASS",
+    "allSevenSourceBookendsUnchanged": true,
+    "compilerTypecheck": "UNRUN",
+    "nativeParity": "UNRUN",
+    "producerRun": "UNRUN",
+    "actualCounterValues": "UNRUN",
+    "mainSourceWrites": false,
+    "cacheWrites": false
+  },
+  "wrapperCorrection": "Public one-argument lower_solve_artifacts delegates private implementation with MassMatrix::Identity.",
+  "review": "dev/artifacts/fast-retained-artifacts-audit/REVIEW.md",
+  "overlay": {
+    "patch": "dev/artifacts/fast-retained-artifacts-audit/retained-allocation-counters.patch",
+    "sha256": "6d7509d1a5635a84a6981d3aab01417425066d24e16ab4fb6b84967e5dcca0ab",
+    "preimages": "dev/artifacts/fast-retained-artifacts-audit/preimages.json",
+    "optIn": "RUMOCA_PRIVATE_RETAINED_ALLOCATION_DIAGNOSTIC=1",
+    "status": "NOT_FOR_PRODUCTION_UNCOMPILED",
+    "changedFiles": 7
+  },
+  "archive": {
+    "manifest": "dev/artifacts/fast-retained-artifacts-audit/manifest.json",
+    "manifestSha256": "ecde842a9428495f5efe8676863e9f588fd56634fe822b7eb703b7771a88f14b",
+    "files": 32,
+    "bytes": 1218406
+  },
+  "limitations": [
+    "Sparse edge payload does not explain the measured RSS stop.",
+    "No claim that Full column rows or AD is the actual allocation cause without boundary counters.",
+    "Capacity bytes are shallow; shared storage and transient products must not be added across log checkpoints.",
+    "No validation/proof/admission/cache/math bypass and no production tracing feature."
+  ]
+}

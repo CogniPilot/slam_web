@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "status": "RAW_GPU_WASM_MEMORY_DIRECT_COPY_PARITY_AND_TRANSPORT_PROFILE_PASS",
+  "recordedAt": "2026-10-05T13:38:19.268Z",
+  "rows": [
+    {
+      "lidarEnabled": false,
+      "bytes": 115200,
+      "rawBytesMatch": true,
+      "guardsPreserved": true,
+      "windows": [
+        {
+          "repetition": 0,
+          "intoWasm": false,
+          "captures": 1000,
+          "wallMs": 547.8000000715256
+        },
+        {
+          "repetition": 0,
+          "intoWasm": true,
+          "captures": 1000,
+          "wallMs": 308
+        },
+        {
+          "repetition": 0,
+          "intoWasm": true,
+          "captures": 1000,
+          "wallMs": 308.5
+        },
+        {
+          "repetition": 0,
+          "intoWasm": false,
+          "captures": 1000,
+          "wallMs": 288.10000002384186
+        },
+        {
+          "repetition": 1,
+          "intoWasm": true,
+          "captures": 1000,
+          "wallMs": 246.09999990463257
+        },
+        {
+          "repetition": 1,
+          "intoWasm": false,
+          "captures": 1000,
+          "wallMs": 250.60000002384186
+        },
+        {
+          "repetition": 1,
+          "intoWasm": false,
+          "captures": 1000,
+          "wallMs": 327
+        },
+        {
+          "repetition": 1,
+          "intoWasm": true,
+          "captures": 1000,
+          "wallMs": 270.90000009536743
+        }
+      ],
+      "meanBufferedMs": 0.3533750000298023,
+      "meanDirectMs": 0.283375,
+      "reductionPercent": 19.80898479629255
+    },
+    {
+      "lidarEnabled": true,
+      "bytes": 1163776,
+      "rawBytesMatch": true,
+      "guardsPreserved": true,
+      "windows": [
+        {
+          "repetition": 0,
+          "intoWasm": false,
+          "captures": 1000,
+          "wallMs": 733.2999999523163
+        },
+        {
+          "repetition": 0,
+          "intoWasm": true,
+          "captures": 1000,
+          "wallMs": 653.3999999761581
+        },
+        {
+          "repetition": 0,
+          "intoWasm": true,
+          "captures": 1000,
+          "wallMs": 656.6999999284744
+        },
+        {
+          "repetition": 0,
+          "intoWasm": false,
+          "captures": 1000,
+          "wallMs": 666.2999999523163
+        },
+        {
+          "repetition": 1,
+          "intoWasm": true,
+          "captures": 1000,
+          "wallMs": 609.3000000715256
+        },
+        {
+          "repetition": 1,
+          "intoWasm": false,
+          "captures": 1000,
+          "wallMs": 640.5
+        },
+        {
+          "repetition": 1,
+          "intoWasm": false,
+          "captures": 1000,
+          "wallMs": 678.3999999761581
+        },
+        {
+          "repetition": 1,
+          "intoWasm": true,
+          "captures": 1000,
+          "wallMs": 605.5
+        }
+      ],
+      "meanBufferedMs": 0.6796249999701977,
+      "meanDirectMs": 0.6312249999940396,
+      "reductionPercent": 7.121574394449947
+    }
+  ],
+  "observedDirectCopies": 8802,
+  "graphics": {
+    "api": "WebGL 2",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+    "vendor": "Google Inc. (NVIDIA Corporation)",
+    "acceleration": "hardware-reported",
+    "powerPreference": "high-performance"
+  },
+  "controlsPassed": 11,
+  "typescriptPassed": true,
+  "rumocaInputAbiCompatible": false,
+  "productionChanged": false,
+  "fullSlam": false,
+  "scope": "Actual RGB/depth/LiDAR GPU targets from the current scene at one committed pose. One packed PBO getBufferSubData writes directly into nonshared WASM-memory byte/F32 views. Full raw-byte and guard comparisons, observed GPU destination identity, ABBA/BAAB transport-only timings, 16000 reads. Rendering/physics/algorithm execution/worker RPC are excluded. Current Rumoca inputs use F64 storage; source-issued raw-buffer representation or a compiled ingestion stage is still required. No zero GPU→CPU copy, full pipeline or10x claim.",
+  "artifacts": [
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/report.json",
+      "bytes": 4255,
+      "sha256": "53dd77de992e85b19e676c70de8f95dea74e1537332bf607b01d3b0a5e3a2e3b"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/browser.log",
+      "bytes": 1656,
+      "sha256": "5c05f966520ff96a1fa13df44bf3118b15d7bbfcb8f023b05ca3c5840f71491a"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/browser-resource.json",
+      "bytes": 575,
+      "sha256": "7da5f67a4cdf1c24b33099317621e49b50d4ee6eb0f75de803ac6e37767a5344"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/unit.log",
+      "bytes": 1880,
+      "sha256": "6622e0cef798e356d73cfb0c49735d622aab28617cacc79da6d7a3f02fa8da04"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/unit-resource.json",
+      "bytes": 570,
+      "sha256": "f33e96d3b7a929a0388d436d46474372607660700149f360ba29ecc4cf8f6805"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/typescript.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/typescript-resource.json",
+      "bytes": 533,
+      "sha256": "638dc14bf80f0cf98ca2f7233ac367e6a65bd919477bd2a123be80b6daed2a3d"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/readback.mjs",
+      "bytes": 10246,
+      "sha256": "053b5e5deb497e146f3ffc17d8617da735c8978eb4a891cf982dd4a49667f9fb"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/source/src/gpu-readback.ts",
+      "bytes": 10731,
+      "sha256": "c773d63f3eaa855a3348c1d1e39b39fcda9dc2f6824a4330b766cd5b2ecbeb40"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/source/tests/gpu-readback.test.ts",
+      "bytes": 11528,
+      "sha256": "bf2e66a9e63c4f3849578ace49e3835157b87d3b0dc6cfc5dd164aa4ca8109e4"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/source/dev/probe-gpu-wasm-handoff.mjs",
+      "bytes": 6647,
+      "sha256": "091802461a65764d7dbd688d5552aa2676ccdd3f30f3ad3cf381ce59ff161bed"
+    },
+    {
+      "path": "dev/artifacts/gpu-wasm-handoff/source/dev/gpu-wasm-handoff-findings.md",
+      "bytes": 3767,
+      "sha256": "d6f30851fe7f4694b58faaaa50854b01e8e2e7919977c723c671092570efd95b"
+    }
+  ]
+}

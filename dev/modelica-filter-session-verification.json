@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-04",
+  "status": "ACTUAL_MODEL_SOURCE_PERSISTENT_NODE_COMPONENT_PASS",
+  "scope": "Isolated review persistent ES15 filter core; TypeScript copies state and validates transport, all numerical prediction/correction/covariance remains compiler-issued Modelica WASM.",
+  "sources": [
+    {
+      "path": "src/modelica-filter-session.ts",
+      "sha256": "c85464bc16dde65664514ef98719c5c4dea208022233a0fa98b8c2c4d2f289fc"
+    },
+    {
+      "path": "src/modelica-native-program.ts",
+      "sha256": "4a7c91686f588fae29e49698209064391818914eba696971b08ccaefbd294c50"
+    },
+    {
+      "path": "src/imu-intervals.ts",
+      "sha256": "e2672bb33db0730ee8dffc3ea5ee00a7f7a6446ebca2942e49e91cf06f381ebd"
+    },
+    {
+      "path": "tests/compiler-probes/modelica-filter-session.test.ts",
+      "sha256": "976bb8f721a72d9a77152ed15e1cb709a54427e1dc77740140783d0350b12cff"
+    },
+    {
+      "path": "dev/vitest-filter-session.config.ts",
+      "sha256": "4e06223c5edba179c6918c5b28b0e3ad7300d54e82f1361b984c54f0d5575026"
+    }
+  ],
+  "baseline": {
+    "path": "/tmp/slam-modelica-filter-session-artifacts/baseline.json",
+    "artifactFileSha256": "c32b2daedbd93e672e6b4a4709f89234f4094ef820742fe19b610e724d11346b",
+    "profile": "native-direct-program-f64-v2",
+    "sourceSha256": "99ce45b42482b79211913840a57b63b91471ab3ef00d27fb85d289e153886d48",
+    "moduleSha256": "22e531d16b674aa780049a1a44b83515fc06a28301d5082e02baf3f53a539d7f",
+    "moduleBytes": 636340,
+    "compiler": {
+      "version": "0.10.1",
+      "git_commit": "03e6b59a47f1"
+    },
+    "abi": {
+      "export": "eval_assignments",
+      "arguments": [
+        "yPtr:i32",
+        "pPtr:i32",
+        "time:f64",
+        "reservedSeedPtr:i32",
+        "reservedOutputPtr:i32"
+      ],
+      "memory_import": "env.memory",
+      "memory_shared": false,
+      "memory_pages": 2,
+      "y_offset": 0,
+      "p_offset": 70392,
+      "y_count": 8799,
+      "p_count": 337,
+      "reserved_pointer_value": 0
+    },
+    "issuedStages": 1212
+  },
+  "edited": {
+    "path": "/tmp/slam-modelica-filter-session-artifacts/edited.json",
+    "artifactFileSha256": "63902a241e8090db5aaf976243c66bfc3c852f2d767fa21209161fd2843a0c54",
+    "profile": "native-direct-program-f64-v2",
+    "sourceSha256": "4c288a4aed7d52d71e3098c037b4695f3f31057b6b8c4cc830accbd04ae8c22c",
+    "moduleSha256": "06f1d6a8ce82eedf9467e94ae41cd093a4a9cfdd9bc111c76d4df69716eafe65",
+    "moduleBytes": 636382,
+    "compiler": {
+      "version": "0.10.1",
+      "git_commit": "03e6b59a47f1"
+    },
+    "abi": {
+      "export": "eval_assignments",
+      "arguments": [
+        "yPtr:i32",
+        "pPtr:i32",
+        "time:f64",
+        "reservedSeedPtr:i32",
+        "reservedOutputPtr:i32"
+      ],
+      "memory_import": "env.memory",
+      "memory_shared": false,
+      "memory_pages": 2,
+      "y_offset": 0,
+      "p_offset": 70392,
+      "y_count": 8799,
+      "p_count": 337,
+      "reserved_pointer_value": 0
+    },
+    "issuedStages": 1212
+  },
+  "modelSources": [
+    {
+      "path": "dev/artifacts/modelica-filter-session/source.mo",
+      "sha256": "99ce45b42482b79211913840a57b63b91471ab3ef00d27fb85d289e153886d48"
+    },
+    {
+      "path": "dev/artifacts/modelica-filter-session/edited.mo",
+      "sha256": "4c288a4aed7d52d71e3098c037b4695f3f31057b6b8c4cc830accbd04ae8c22c"
+    }
+  ],
+  "sourceEdit": "next_accepted_count = accepted_count+observation_accepted+1.0; emitted by Modelica instead of host counter math",
+  "compilerPreparation": {
+    "compilerWasmSha256": "1c8384cdbca344e66641a5d76eaee8ee2012bc106be052d8f3ce8472cb5f9cba",
+    "baselineCompileMs": 59533.585489,
+    "editedCompileMs": 36765.302608,
+    "log": "dev/artifacts/modelica-filter-session/slam-modelica-filter-session.log",
+    "report": "dev/artifacts/modelica-filter-session/slam-modelica-filter-session-report.json",
+    "actualTestsPassed": 6,
+    "guardian": {
+      "deadlineSeconds": 180,
+      "rssLimitMiB": 8192,
+      "affinity": [
+        8
+      ],
+      "nice": 10,
+      "elapsedMs": 100171.323469,
+      "peakOwnedDescendantRssKiB": 850632,
+      "minimumAvailableKiB": 37825588,
+      "exitCode": 0
+    }
+  },
+  "finalSourceGate": {
+    "status": "PASS",
+    "testsPassed": 6,
+    "cases": [
+      "multi-step full-state continuity + independent225-cell Lyapunov oracle",
+      "final-interval accepted correction + independent Gaussian/Joseph oracle",
+      "source-owned NIS/non-SPD observation refusal + recovery",
+      "pre-mutation malformed refusal + later Modelica invalid-step atomic rollback/recovery",
+      "reset/reload/source binding, copied snapshots,1e6-second timestamp tolerance",
+      "actual Modelica counter source edit + persisted retained-state reload"
+    ],
+    "log": "dev/artifacts/modelica-filter-session/slam-modelica-filter-session-final.log",
+    "report": "dev/artifacts/modelica-filter-session/slam-modelica-filter-session-final-report.json",
+    "guardian": {
+      "deadlineSeconds": 45,
+      "rssLimitMiB": 8192,
+      "affinity": [
+        8
+      ],
+      "nice": 10,
+      "elapsedMs": 5941.715991,
+      "peakOwnedDescendantRssKiB": 441608,
+      "minimumAvailableKiB": 53577468,
+      "exitCode": 0
+    }
+  },
+  "typecheck": {
+    "status": "PASS",
+    "log": "dev/artifacts/modelica-filter-session/slam-modelica-filter-session-tsc.log",
+    "guardian": {
+      "deadlineSeconds": 45,
+      "rssLimitMiB": 8192,
+      "affinity": [
+        8
+      ],
+      "nice": 10,
+      "elapsedMs": 11220.491421,
+      "peakOwnedDescendantRssKiB": 564736,
+      "minimumAvailableKiB": 53178312,
+      "exitCode": 0
+    }
+  },
+  "contracts": {
+    "imuProtocol": "SensorFrame time/dt/imu/imuIntervals, maximum36 entries",
+    "timeContinuityToleranceSeconds": 0.000001,
+    "maximumHeldIntervalSeconds": 0.02,
+    "angularIncrement": "<=0.1rad checked by Modelica",
+    "observation": "rotation9/position3/covariance36; final interval only",
+    "retainedState": "rotation9/position3/velocity3/biases3+3/covariance225 plus source counters, timestamps and protocol steps",
+    "rollback": "entire batch restores exported NativeProgram memory and does not publish retained state",
+    "reload": "exact source digest/version, copied arrays, exact sizes/finite values, safe nonnegative integer counters",
+    "priorPreconditions": "SO(3) rotation and SPD covariance supplied by caller; host shape/finite validation does not certify these numerical conditions",
+    "initialization": "Current source level identity rotation and zero pose/velocity/biases; gravity and density from source artifact; explicit caller covariance, no ground truth"
+  },
+  "independentNumericalOracles": [
+    "Exact nilpotent Lyapunov225-cell covariance across repeated held intervals",
+    "Pivoted Gaussian innovation solve and Joseph posterior, independent of Modelica Cholesky",
+    "Batch versus separately retained interval execution for final observation timing"
+  ],
+  "browserGate": {
+    "status": "PASS",
+    "record": "dev/modelica-filter-session-browser-verification.json",
+    "recordSha256": "6d7cb180b04b37f27db5f8e0a779e380e544a438895e63b33c68548809490ef4",
+    "scope": "Actual Chromium worker/IndexedDB page+worker reload with precompiled source-issued baseline/edited modules; source compilation evidence is separate."
+  },
+  "claims": {
+    "runtimeIntegrated": false,
+    "productionPinChanged": false,
+    "rgbdFrontendAccepted": false,
+    "fullSlamAccepted": false,
+    "tenTimesWholePipelineGoalMet": false
+  },
+  "resourceScope": "Owned process group/identified descendants sampled by bounded runner. These Node component figures are not whole-pipeline browser memory or throughput."
+}

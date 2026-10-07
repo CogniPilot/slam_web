@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "status": "FULL_FRAME_ASSIGNMENT_CERTIFIED_NATIVE_ARTIFACT_RSS_LIMIT",
+  "model": "FastNativeFrame",
+  "sourcePath": "models/FastNativeFrame.mo",
+  "sourceSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+  "dimensions": {
+    "height": 90,
+    "width": 160,
+    "channels": 4,
+    "pixels": 14400
+  },
+  "attempts": 1,
+  "priorAttemptRecord": "dev/rumoca-fast-native-frame-move-packed-verification.json",
+  "fixRecord": "dev/rumoca-typed-map-emission-verification.json",
+  "compiler": {
+    "sourceClosureSha256": "698314b47a9aa02c52dd28d081d1090f63415e295da4f3c3ebc49bd21b37af09",
+    "sourceFiles": 2436,
+    "producerSha256": "f189cd3c6019065db1dab7c45cd4e9dcf7438960fe73b64553cf7581206c2072",
+    "producerPath": "$HOME/scratch/slam_web/tmp/typed-map-gate/final-producer",
+    "sourceBeforeAfterMatch": true
+  },
+  "resource": {
+    "command": [
+      "env",
+      "TMPDIR=$HOME/scratch/slam_web/tmp",
+      "CARGO_BUILD_JOBS=4",
+      "RUST_TEST_THREADS=4",
+      "RAYON_NUM_THREADS=4",
+      "CARGO_INCREMENTAL=0",
+      "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=$HOME/scratch/slam_web/tmp/fast-native-frame-typed-map/source.mo",
+      "RUMOCA_NATIVE_SOURCE_MODEL=FastNativeFrame",
+      "RUMOCA_NATIVE_SOURCE_SOLVE_ARTIFACT=$HOME/scratch/slam_web/tmp/fast-native-frame-typed-map/solve.json",
+      "RUMOCA_NATIVE_PROGRAM_ARTIFACT=$HOME/scratch/slam_web/tmp/fast-native-frame-typed-map/native-program.json",
+      "taskset",
+      "-c",
+      "6,7",
+      "nice",
+      "-n",
+      "15",
+      "$HOME/scratch/slam_web/tmp/typed-map-gate/final-producer",
+      "native_registration_whole_program_source_inventory",
+      "--nocapture"
+    ],
+    "log": "$HOME/scratch/slam_web/tmp/fast-native-frame-typed-map/prepare.log",
+    "elapsedMs": 258978.570103,
+    "peakRssKiB": 8462916,
+    "minimumAvailableKiB": 51479628,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 600,
+    "stopped": "rss-limit",
+    "signal": "SIGKILL",
+    "exitCode": 137
+  },
+  "results": {
+    "assignmentCertification": "PASS: NATIVE_CALL_REFUSAL None",
+    "nativeProgramEmission": "RESOURCE_LIMIT_BEFORE_ARTIFACT",
+    "stopped": "rss-limit",
+    "typedOpcodeRefusalObserved": false,
+    "artifactIssued": false,
+    "numericCasesExecuted": 0,
+    "fullSolveCaptured": true,
+    "rawSolveBytes": 1822514705,
+    "rawSolveSha256": "f9e02852e6d5abd0890e39a2f0801f45951318f95066e4aa073762c015863c84",
+    "rawSolveByteIdenticalToPrior": true
+  },
+  "representation": {
+    "retainedPriorDiagnosis": "dev/rumoca-fast-native-frame-preparation-verification.json",
+    "pureCallSites": 12936,
+    "distinctOwners": 12936,
+    "scalarPrograms": 85,
+    "scalarOperationCount": 687719,
+    "compactFamilies": 96,
+    "bodyDeduplicationChanged": false,
+    "scope": "Exact full wire equality binds prior streamed counts/owner slices; no new body equality/semantic merge inferred."
+  },
+  "complementaryFunctionEvidence": {
+    "scope": "Parent-owned original FastPatchScore baseline/edit independent Node+Chromium score/component controls, not fullframe substitution",
+    "artifactDirectory": "$HOME/scratch/slam_web/tmp/fast-patch-native-review",
+    "compilerProducerSha256": "f189cd3c6019065db1dab7c45cd4e9dcf7438960fe73b64553cf7581206c2072",
+    "reportedComparedScores": 276,
+    "parentReported": true
+  },
+  "rawFiles": [
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-typed-map/source.mo",
+      "bytes": 3904,
+      "sha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-typed-map/compiler-source.sha256",
+      "bytes": 300124,
+      "sha256": "698314b47a9aa02c52dd28d081d1090f63415e295da4f3c3ebc49bd21b37af09"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-typed-map/resource.json",
+      "bytes": 1117,
+      "sha256": "ff3a8f181658fec8a70cca2941bfcbcc2c808fde70b98786d7b5e7d2c8e7c816"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-typed-map/prepare.log",
+      "bytes": 37094721,
+      "sha256": "9620717495d13fe5cfc062ae7b711dbe28d6ae4f5beb9c7b1570b6e0f377c07e"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-typed-map/solve.json",
+      "bytes": 1822514705,
+      "sha256": "f9e02852e6d5abd0890e39a2f0801f45951318f95066e4aa073762c015863c84"
+    }
+  ],
+  "limits": [
+    "Exactly one unchanged full160x90 attempt after generic Map gates; no model narrowing/rewriting, weaker guards or body sharing.",
+    "Guardian stopped owned process group at sampledRSS8,462,916KiB, slightly above8192MiB due sampling; minimum host reserve remained51,479,628KiB.",
+    "Complete checked Solve and original assignment certification precede native artifact generation; no native artifact issued and no numerical fixture executed.",
+    "No exact failing opcode can be assigned from the resource stop; fullNativeProgram admission unmeasured.",
+    "Full1.8GB Solve and36MiB log remain Scratch; no whole-wire JSON parsing/repo copy.",
+    "No private phase profiler or complete backend allocation trace: do not assign RSS causally to one compiler function.",
+    "Scoped Map controls/complementary patch function proof remain separate from fullframe native acceptance.",
+    "No production pin, fullSLAM, throughput or10x claim."
+  ],
+  "compilerCpuWindowReleased": true
+}

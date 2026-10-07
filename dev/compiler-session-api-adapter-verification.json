@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-05T15:37:52.989Z",
+  "status": "APP_COMPILER_API_PLUMBING_PASS_NEW_COMPILER_API_EXECUTION_PENDING",
+  "behavior": [
+    "one compiler values_for observation for all16 outputs when available",
+    "batch observation faults propagate without scalar retry",
+    "compiler reset_at owns absolute replay initialization",
+    "old pin retains scalar get and explicitly refuses nonzero reset"
+  ],
+  "checks": {
+    "focusedTests": {
+      "passed": 13,
+      "failed": 0,
+      "actualPinnedCompiler": 3,
+      "transportBoundary": 9,
+      "imuIntervals": 1,
+      "elapsedMs": 4083.40828,
+      "peakRssKiB": 693928
+    },
+    "typecheck": {
+      "exitCode": 0,
+      "elapsedMs": 7706.322734,
+      "peakRssKiB": 594688
+    },
+    "productionBuild": {
+      "exitCode": 0,
+      "elapsedMs": 19632.750598,
+      "peakRssKiB": 1594596
+    }
+  },
+  "compiler": {
+    "version": "0.10.0",
+    "commit": "e1e7783f1fb4",
+    "wasmSha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4",
+    "newBatchApiExecuted": false,
+    "newResetApiExecuted": false
+  },
+  "publicPreviewUpdated": false,
+  "newCompilerPinned": false,
+  "performanceMeasured": false,
+  "fullSlamVerified": false,
+  "limitations": [
+    "Boundary test doubles validate app delegation and faults, not Rumoca execution.",
+    "Actual new API source/WASM/browser gates must pass before acceptance.",
+    "Existing vision emitters and separate sessions still need migration."
+  ],
+  "files": [
+    {
+      "path": "dev/artifacts/compiler-session-api-adapter/src/modelica-inertial-session.ts",
+      "bytes": 5008,
+      "sha256": "81a09e8ff1dae55ac63b139b3608e581c75a6406ab7b127f668c15b2e9214727"
+    },
+    {
+      "path": "dev/artifacts/compiler-session-api-adapter/src/imu-intervals.ts",
+      "bytes": 1160,
+      "sha256": "e2672bb33db0730ee8dffc3ea5ee00a7f7a6446ebca2942e49e91cf06f381ebd"
+    },
+    {
+      "path": "dev/artifacts/compiler-session-api-adapter/tests/modelica-inertial-session.test.ts",
+      "bytes": 3895,
+      "sha256": "178eab5932167ec619dd187253bf4b406dd8431c412b789d0b37bb1aa8d157e4"
+    },
+    {
+      "path": "dev/artifacts/compiler-session-api-adapter/tests/modelica-inertial-api.test.ts",
+      "bytes": 3812,
+      "sha256": "2bef101b7f49dafe1a7ac09fe4bf4bd3e0aac7669c4d16ad4c3e3c565bd4da9a"
+    },
+    {
+      "path": "dev/artifacts/compiler-session-api-adapter/tests/imu-intervals.test.ts",
+      "bytes": 927,
+      "sha256": "f0deeec6811e1a87db2d3b4c581f6cc7b78e0d053f8fe667046009da40a05084"
+    },
+    {
+      "path": "dev/artifacts/compiler-session-api-adapter/models/ModelicaInertial.mo",
+      "bytes": 3049,
+      "sha256": "04c4435fa1a6c5c929a245a8c76ac4bafcfde3eb54734677fb592f7ba2c2f1ce"
+    },
+    {
+      "path": "dev/artifacts/compiler-session-api-adapter/tests.log",
+      "bytes": 214,
+      "sha256": "ea6d4084b94e7c4648f428c8ba2c032ec48fb81bbe390b1c088f26c2b2001409"
+    },
+    {
+      "path": "dev/artifacts/compiler-session-api-adapter/typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dev/artifacts/compiler-session-api-adapter/build.log",
+      "bytes": 2248,
+      "sha256": "384b1eb18961723b8e00924c5211d438dffe575bcd1b5a682c408cbd41622382"
+    }
+  ]
+}

@@ -1,0 +1,301 @@
+{
+  "status": "ACTUAL_ORIGINAL_FULL350_NATIVE_NUMERICS_PASS",
+  "engine": "Node/V8 WebAssembly",
+  "sourceSha256": "8074f170f8316c4874f4517e1f4875924434fa1f58d27611a1ff93d719441ecd",
+  "moduleSha256": "58de05687b5fa28c50d54b102d80c1b5cfb7ae131faf2a412fcad346057ccad5",
+  "capacity": 350,
+  "cases": [
+    {
+      "name": "general6DOF full350",
+      "expectedValid": 1,
+      "rejectionReason": 0,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "nonidentity extrinsics",
+      "expectedValid": 1,
+      "rejectionReason": 0,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "planar rank2",
+      "expectedValid": 1,
+      "rejectionReason": 0,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "sparse late maskedNaNs",
+      "expectedValid": 1,
+      "rejectionReason": 0,
+      "validCount": 4,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid or insufficient count 0",
+      "expectedValid": 0,
+      "rejectionReason": 4,
+      "validCount": 0,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid or insufficient count 2",
+      "expectedValid": 0,
+      "rejectionReason": 4,
+      "validCount": 2,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid or insufficient count -1",
+      "expectedValid": 0,
+      "rejectionReason": 1,
+      "validCount": 0,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid or insufficient count 0.5",
+      "expectedValid": 0,
+      "rejectionReason": 1,
+      "validCount": 0,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid or insufficient count 351",
+      "expectedValid": 0,
+      "rejectionReason": 1,
+      "validCount": 0,
+      "invalidCount": 350,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid or insufficient count NaN",
+      "expectedValid": 0,
+      "rejectionReason": 1,
+      "validCount": 0,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid or insufficient count Infinity",
+      "expectedValid": 0,
+      "rejectionReason": 1,
+      "validCount": 0,
+      "invalidCount": 350,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid late mask 0.5",
+      "expectedValid": 0,
+      "rejectionReason": 3,
+      "validCount": 349,
+      "invalidCount": 1,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid late mask NaN",
+      "expectedValid": 0,
+      "rejectionReason": 3,
+      "validCount": 349,
+      "invalidCount": 1,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid late mask 2",
+      "expectedValid": 0,
+      "rejectionReason": 3,
+      "validCount": 349,
+      "invalidCount": 1,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid baseline",
+      "expectedValid": 0,
+      "rejectionReason": 1,
+      "validCount": 0,
+      "invalidCount": 350,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid referenceNoiseFx",
+      "expectedValid": 0,
+      "rejectionReason": 1,
+      "validCount": 0,
+      "invalidCount": 350,
+      "cellsChecked": 180
+    },
+    {
+      "name": "invalid currentNoiseFx",
+      "expectedValid": 0,
+      "rejectionReason": 1,
+      "validCount": 0,
+      "invalidCount": 350,
+      "cellsChecked": 180
+    },
+    {
+      "name": "late active NaN",
+      "expectedValid": 0,
+      "rejectionReason": 3,
+      "validCount": 349,
+      "invalidCount": 1,
+      "cellsChecked": 180
+    },
+    {
+      "name": "improper pose",
+      "expectedValid": 0,
+      "rejectionReason": 2,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "registration declined",
+      "expectedValid": 0,
+      "rejectionReason": 2,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "collinear degeneracy",
+      "expectedValid": 0,
+      "rejectionReason": 5,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "recovery",
+      "expectedValid": 1,
+      "rejectionReason": 0,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "reset replay",
+      "expectedValid": 1,
+      "rejectionReason": 0,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "saved JSON reload",
+      "expectedValid": 1,
+      "rejectionReason": 0,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    },
+    {
+      "name": "ABI fault recovery",
+      "expectedValid": 1,
+      "rejectionReason": 0,
+      "validCount": 350,
+      "invalidCount": 0,
+      "cellsChecked": 180
+    }
+  ],
+  "fullSlam": false,
+  "throughputClaim": false,
+  "compilerBuild": false,
+  "maxAbsoluteError": 1.6438754654388155e-14,
+  "matrixCellsChecked": 4500,
+  "controls": {
+    "immutableP": true,
+    "atomicABI": true,
+    "recovery": true,
+    "reset": true,
+    "savedJSONReload": true,
+    "staleSourceRefusal": true
+  },
+  "resource": {
+    "command": [
+      "taskset",
+      "-c",
+      "6",
+      "nice",
+      "-n",
+      "15",
+      "/nix/store/324pab2sykfjpbxsnxbcxmni42xxwxc0-nodejs-24.18.0/bin/node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "dev/vitest-original350-native.config.ts"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/original350-native-numerics/run.log",
+    "elapsedMs": 2673.148353,
+    "peakRssKiB": 418128,
+    "minimumAvailableKiB": 55426088,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "testSourceSha256": "0af6201ef4e5c3779d8b3a2d8e8303e3061e55232e3af2f4c0ab0813a7b2ab59",
+  "fixturesSha256": "0a999f261ad30aaa85e9ebf0c0fa77723b7beec9ca1a6ee20be49d73123cb027",
+  "typecheck": {
+    "command": [
+      "taskset",
+      "-c",
+      "6",
+      "nice",
+      "-n",
+      "15",
+      "/nix/store/324pab2sykfjpbxsnxbcxmni42xxwxc0-nodejs-24.18.0/bin/node",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--pretty",
+      "false",
+      "--target",
+      "ES2022",
+      "--module",
+      "ESNext",
+      "--moduleResolution",
+      "Bundler",
+      "--skipLibCheck",
+      "tests/compiler-probes/modelica-original350-uncertainty-native.test.ts"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/original350-native-numerics/typecheck.log",
+    "elapsedMs": 2572.632329,
+    "peakRssKiB": 321112,
+    "minimumAvailableKiB": 59186448,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "originalSourcePath": "dev/artifacts/registration-uncertainty/initial-builtin-source.mo",
+  "helperSourceSha256": "0922e0257f720598e11676d9ff321f4ade8847d1989380c3b362fbc56ed4ab86",
+  "sourceEquivalence": {
+    "kind": "finite-valued formula equivalence, not bitwise identity",
+    "changes": "Readable helper transpose/product/vector-product and explicit identity replace original builtins only; canonical product initializes first term, helper initializes +0",
+    "executedSource": "original8074 only",
+    "oracleCovarianceInverse": "pivoted Gauss-Jordan",
+    "oracleNormalPivot": "normalized Gaussian elimination",
+    "capacity": 350
+  },
+  "retainedInitialFailure": "Test oracle used zero-based i<count for fractional count0.5; corrected to source one-based i+1<=count. Model/artifact untouched; initial logs/report/resources preserved",
+  "artifacts": "dev/artifacts/original350-uncertainty-native",
+  "browserValidation": "PENDING parent gate",
+  "actualSourceEdit": {
+    "status": "ACTUAL_EDITED_ORIGINAL_FULL350_NATIVE_NUMERICS_PASS",
+    "verification": "dev/modelica-original350-uncertainty-edit-verification.json"
+  }
+}

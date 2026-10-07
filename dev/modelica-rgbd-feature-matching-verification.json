@@ -1,0 +1,442 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-04",
+  "component": "editable Modelica RGB-D descriptor and reciprocal feature matching",
+  "status": "REVIEW_ONLY",
+  "source": [
+    {
+      "path": "models/RGBDFeatureMatching.mo",
+      "sha256": "1adc065bee50fcf583165daa015f3f0170b42a3c73ff2bd3260fafb40e71b59b"
+    },
+    {
+      "path": "tests/compiler-probes/modelica-rgbd-feature-matching.test.ts",
+      "sha256": "efc105c1aa78958ad9b8df070b276d4bcb7d3ce2f33b9d4da70df32973d72b89"
+    },
+    {
+      "path": "tests/compiler-probes/rgbd-feature-matching-fixtures.ts",
+      "sha256": "e95dd71391f7af482280086a7d02e219f3405553a6c7f5616a449cc7b769da81"
+    },
+    {
+      "path": "dev/probe-rgbd-feature-matching.mjs",
+      "sha256": "1608389c227250d14ac8e92fbb7c3efdbe6340fda425752095e3ee4616d4d2a6"
+    }
+  ],
+  "dimensions": {
+    "imageHeight": 90,
+    "imageWidth": 160,
+    "channelCount": 4,
+    "colorChannelCount": 3,
+    "featureCapacity": 350,
+    "descriptorWidth": 7,
+    "descriptorSize": 49
+  },
+  "coordinates": {
+    "pixel": "zero-based integer x,y",
+    "point": "optical RDF right/down/forward",
+    "prediction": "reference optical point to current optical point",
+    "registrationSparseInput": "350 slots with pairEnabled; activeCount=350, not count"
+  },
+  "compiler": {
+    "packagePath": "/tmp/slam-native-web-review",
+    "version": "0.10.1",
+    "revision": "03e6b59a47f1",
+    "wasmSha256": "1c8384cdbca344e66641a5d76eaee8ee2012bc106be052d8f3ce8472cb5f9cba",
+    "wasmBytes": 35433822,
+    "loaderSha256": "ed6485d29e1307084b1ca5d9aefe0d3e4834c3ae780913fac54aae935eb02b8f"
+  },
+  "currentSourceGate": {
+    "status": "COMPILED",
+    "model": "RGBDDescriptorFrame",
+    "report": "dev/artifacts/rgbd-feature-matching/full-rgba-descriptor-compile.json",
+    "reportSha256": "5bdf88ad03cee642e86ba34e0c1da7150428a1b1434cd1f821322a358574179e",
+    "log": "dev/artifacts/rgbd-feature-matching/full-rgba-descriptor-compile.log",
+    "sourceSha256": "1adc065bee50fcf583165daa015f3f0170b42a3c73ff2bd3260fafb40e71b59b",
+    "archivedSource": "dev/artifacts/rgbd-feature-matching/final-rgba-raw-depth.mo",
+    "phaseElapsedMs": 151150.67941100002,
+    "balance": {
+      "is_balanced": true,
+      "num_equations": 32951,
+      "num_unknowns": 32951,
+      "status": "Balanced"
+    },
+    "resultSha256": "882d50b61d3698a4e17f9739f85929cd2db73d2e8dc63f608e24c211fd2c3942",
+    "nativeAdmitted": false,
+    "numericallyVerified": false,
+    "guardian": {
+      "deadlineSeconds": 180,
+      "rssLimitMiB": 8192,
+      "affinity": [
+        6,
+        7
+      ],
+      "nice": 10,
+      "elapsedMs": 151539.61349400002,
+      "peakOwnedDescendantRssKiB": 361208,
+      "minimumAvailableKiB": 49898544,
+      "exitCode": 0,
+      "rssScope": "owned process group and identified descendants, including detached browser groups"
+    }
+  },
+  "history": [
+    {
+      "name": "first-full-matching-compile",
+      "report": "dev/artifacts/rgbd-feature-matching/first-full-matching-compile.json",
+      "reportSha256": "01d069a41a3e8c5a893605dc3974163592aa86d799ba08b6ea3be7b93b21b176",
+      "rawReportStatus": "REFUSED",
+      "status": "REFUSED",
+      "sourceSha256": "7dc2a60d418050e72ac577c8aed243d653d7eb4ba9107a75a333f2e1c78f89a6",
+      "phaseElapsedMs": 491.49044799999996,
+      "refusal": "Compilation error: RGBDFeatureMatching failed in ToDae: unsupported Flat semantic owner `function conditional`: `MatchRGBDDescriptors` requires assignments or nested conditionals in every checked branch",
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/first-refused.mo"
+    },
+    {
+      "name": "first-full-matching-native",
+      "report": "dev/artifacts/rgbd-feature-matching/first-full-matching-native.json",
+      "reportSha256": "298384be03d4a59a9ba79f3bae9104286e71cdf91bed5306225f8d24954f825b",
+      "rawReportStatus": "REFUSED",
+      "status": "REFUSED",
+      "sourceSha256": "7dc2a60d418050e72ac577c8aed243d653d7eb4ba9107a75a333f2e1c78f89a6",
+      "phaseElapsedMs": 277.164723,
+      "refusal": "Compilation error: RGBDFeatureMatching failed in ToDae: unsupported Flat semantic owner `function conditional`: `MatchRGBDDescriptors` requires assignments or nested conditionals in every checked branch",
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/first-refused.mo"
+    },
+    {
+      "name": "helper-full-matching-compile",
+      "report": "dev/artifacts/rgbd-feature-matching/helper-full-matching-compile.json",
+      "reportSha256": "b5e65df80bce42a7080f5470034a6778fcb4058d51975c644ddc2eb51ded485c",
+      "rawReportStatus": "COMPILED",
+      "status": "COMPILED",
+      "sourceSha256": "a095308c82988ddf5ad4df4fdefca2c9b8a79d48c2585c8b396fdf28b8c8087d",
+      "phaseElapsedMs": 4020.613953,
+      "balance": {
+        "is_balanced": true,
+        "num_equations": 3504,
+        "num_unknowns": 3504,
+        "status": "Balanced"
+      },
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/compiled-registered-depth-prototype.mo"
+    },
+    {
+      "name": "helper-full-matching-native-timeout",
+      "report": "dev/artifacts/rgbd-feature-matching/helper-full-matching-native-timeout.json",
+      "reportSha256": "6b7cfd84875878c0f5c1fbafca1c5f6ff63f870d19ecb20936f8a4bd49999ffd",
+      "rawReportStatus": "RUNNING",
+      "status": "TIMEOUT",
+      "sourceSha256": "a095308c82988ddf5ad4df4fdefca2c9b8a79d48c2585c8b396fdf28b8c8087d",
+      "watchdog": {
+        "deadlineSeconds": 180,
+        "exitCode": 124,
+        "elapsedMs": 180757.516,
+        "peakOwnedDescendantRssKiB": 2720484
+      },
+      "numericalCasesCompleted": 0,
+      "phaseBoundary": "prepare_native_program did not return",
+      "exactInternalSubphase": "not yet measured",
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/compiled-registered-depth-prototype.mo"
+    },
+    {
+      "name": "raw-descriptor-uninitialized-loop-refusal",
+      "report": "dev/artifacts/rgbd-feature-matching/raw-descriptor-uninitialized-loop-refusal.json",
+      "reportSha256": "1bf0598c80e1ba06815c31b44556b7dd0224b11b1f876ce5880a7395dd14e3b3",
+      "rawReportStatus": "REFUSED",
+      "status": "REFUSED",
+      "sourceSha256": "f899315e2bb341402849002db252dbbf6b340dc11288bc57c2c865dc39b33b65",
+      "phaseElapsedMs": 79843.54795800001,
+      "refusal": "Compilation error: RGBDDescriptorFrame failed in ToDae: canonical DAE construction rejected an invalid operation: missing function loop initial value definition for identity 6",
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/raw-uninitialized-loop-refused.mo"
+    },
+    {
+      "name": "raw-descriptor-quotient-refusal",
+      "report": "dev/artifacts/rgbd-feature-matching/raw-descriptor-quotient-refusal.json",
+      "reportSha256": "7109e9bca1f23d06e31b0633f5a4776a640f3522300011525901d0a9c0b5a9b1",
+      "rawReportStatus": "REFUSED",
+      "status": "REFUSED",
+      "sourceSha256": "5470629c733426aa933cda8a8532950e74036a53bb0fd9b9642a09cfafb0172f",
+      "phaseElapsedMs": 176675.31634699999,
+      "refusal": "JSON error: function owner quotient is outside its recorded body",
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/raw-quotient-refused.mo"
+    },
+    {
+      "name": "ordinary-full-matching-session-timeout",
+      "report": "dev/artifacts/rgbd-feature-matching/ordinary-full-matching-session-timeout.json",
+      "reportSha256": "cf2a6a99cb7d623f4810ea9b9377e6bca452f770580efbe15b486c07787f55d1",
+      "rawReportStatus": "RUNNING",
+      "status": "TIMEOUT",
+      "sourceSha256": "5470629c733426aa933cda8a8532950e74036a53bb0fd9b9642a09cfafb0172f",
+      "watchdog": {
+        "deadlineSeconds": 180,
+        "exitCode": 124,
+        "elapsedMs": 180249.635,
+        "peakOwnedDescendantRssKiB": 2883784
+      },
+      "numericalCasesCompleted": 0,
+      "phaseBoundary": "WasmSimulationSession constructor did not return",
+      "exactInternalSubphase": "not yet measured",
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/raw-quotient-refused.mo"
+    },
+    {
+      "name": "full-rgb3-descriptor-compile",
+      "report": "dev/artifacts/rgbd-feature-matching/full-rgb3-descriptor-compile.json",
+      "reportSha256": "3b6374cd0e20d1ec88e686ded487c67f39aa1b802bf083538e493a220a4efa98",
+      "rawReportStatus": "COMPILED",
+      "status": "COMPILED",
+      "sourceSha256": "00c43a2d580bff3eb5f235d2788c734230412f1a7608011fd62a81326890fb1a",
+      "phaseElapsedMs": 122409.10697400001,
+      "balance": {
+        "is_balanced": true,
+        "num_equations": 32951,
+        "num_unknowns": 32951,
+        "status": "Balanced"
+      },
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/compiled-rgb3-raw-depth.mo"
+    },
+    {
+      "name": "full-matching-rgb3-source-compile",
+      "report": "dev/artifacts/rgbd-feature-matching/full-matching-rgb3-source-compile.json",
+      "reportSha256": "c39c4945e0730e145d98557720ce542f816e53c5730d881f5fb926da79058734",
+      "rawReportStatus": "COMPILED",
+      "status": "COMPILED",
+      "sourceSha256": "00c43a2d580bff3eb5f235d2788c734230412f1a7608011fd62a81326890fb1a",
+      "phaseElapsedMs": 3201.297666,
+      "balance": {
+        "is_balanced": true,
+        "num_equations": 3504,
+        "num_unknowns": 3504,
+        "status": "Balanced"
+      },
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/compiled-rgb3-raw-depth.mo"
+    },
+    {
+      "name": "quotient-helper-control",
+      "report": "dev/artifacts/rgbd-feature-matching/quotient-helper-control.json",
+      "reportSha256": "ade5761a4ce65df725f53b5d784702e5230ba05f5810f72978562786b270d8e1",
+      "rawReportStatus": "COMPILED",
+      "status": "COMPILED",
+      "sourceSha256": "399437bd1825ccebdd4fa24ea8a7320e64c7ef38b9bd5ac3e60c26e881650d6f",
+      "phaseElapsedMs": 236.180185,
+      "balance": {
+        "is_balanced": true,
+        "num_equations": 1,
+        "num_unknowns": 1,
+        "status": "Balanced"
+      },
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/quotient-owner-control.mo"
+    },
+    {
+      "name": "quotient-loop-refusal-control",
+      "report": "dev/artifacts/rgbd-feature-matching/quotient-loop-refusal-control.json",
+      "reportSha256": "e2b1bf5ab2f062ff28ea3007466e323301e7eef8e02d7a1cbb7abd3a8dd1e910",
+      "rawReportStatus": "REFUSED",
+      "status": "REFUSED",
+      "sourceSha256": "c2e6be17424daa69582eaf904a6c9e3b0ae0200b46c5f1da91fa5c972fb936b5",
+      "phaseElapsedMs": 220.779525,
+      "refusal": "JSON error: function owner quotient is outside its recorded body",
+      "archivedSource": "dev/artifacts/rgbd-feature-matching/quotient-loop-control.mo"
+    }
+  ],
+  "independentOracleTests": {
+    "status": "PASS",
+    "count": 4,
+    "actualModelicaTestSkipped": 1,
+    "actualModelicaNumericalCasesCompleted": 0,
+    "scope": "Independent JavaScript oracle/fixture checks only; does not establish admitted Modelica execution",
+    "vitestDurationMs": 757,
+    "testDurationMs": 527,
+    "log": "dev/artifacts/rgbd-feature-matching/slam-rgbd-matching-oracles.log",
+    "coverage": [
+      "full350 reciprocal permutation and all paired opticalXYZ slots",
+      "strict ratio, ties, one-to-one mutual ownership, lone-candidate refusal",
+      "invalid counts, masks/NaNs, malformed flags/descriptors/points, reflection and geometric gate",
+      "350×49 patch normalization, border/contrast/depth refusal, repeated oracle recovery",
+      "separate raw RGB/depth intrinsics, inverse-depth bilinear gather, zero-weight invalid neighbour, discontinuity",
+      "physical848pixel noise reference versus reduced-image focal length"
+    ],
+    "finalSourceCheck": {
+      "status": "PASS",
+      "count": 4,
+      "actualModelicaTestSkipped": 1,
+      "testSourceSha256": "efc105c1aa78958ad9b8df070b276d4bcb7d3ce2f33b9d4da70df32973d72b89",
+      "guardianElapsedMs": 3805.336087,
+      "peakOwnedDescendantRssKiB": 318424,
+      "affinity": [
+        8
+      ],
+      "log": "dev/artifacts/rgbd-feature-matching/slam-rgbd-matching-oracles-final.log"
+    }
+  },
+  "typecheck": {
+    "status": "PASS",
+    "log": "dev/artifacts/rgbd-feature-matching/slam-rgbd-matching-tsc.log",
+    "guardianElapsedMs": 5827.285,
+    "peakOwnedDescendantRssKiB": 555588,
+    "finalSourceCheck": {
+      "status": "PASS",
+      "guardianElapsedMs": 9059.939423,
+      "peakOwnedDescendantRssKiB": 557036,
+      "affinity": [
+        8
+      ],
+      "log": "dev/artifacts/rgbd-feature-matching/slam-rgbd-matching-tsc-final.log"
+    }
+  },
+  "quotientOwnerRegression": {
+    "refusalSource": "dev/artifacts/rgbd-feature-matching/quotient-loop-control.mo",
+    "refusalSourceSha256": "c2e6be17424daa69582eaf904a6c9e3b0ae0200b46c5f1da91fa5c972fb936b5",
+    "helperControlSource": "dev/artifacts/rgbd-feature-matching/quotient-owner-control.mo",
+    "helperControlSourceSha256": "399437bd1825ccebdd4fa24ea8a7320e64c7ef38b9bd5ac3e60c26e881650d6f",
+    "owner": "crates/rumoca-ir-dae/src/model/wire/quotient_projection.rs",
+    "check": "Function quotient scope must match recorded FunctionBody owner",
+    "scope": "Small generic serialization control, not reduced frontend admission"
+  },
+  "pending": [
+    "Final RGBA-source matching model compile/native preparation phase proof",
+    "Actual full350 matcher native/program admission and numeric/source-edit/reset/recovery cases",
+    "Internal matching preparation phase profile",
+    "Actual full350 raw RGBA descriptor numerical execution",
+    "Production whole-model schedule integration"
+  ],
+  "claims": {
+    "matchingNativeAdmitted": false,
+    "matchingNumericallyVerified": false,
+    "descriptorNumericallyVerified": false,
+    "runtimeIntegrated": false,
+    "productionPinChanged": false,
+    "fullSlamAccepted": false,
+    "tenTimesGoalMet": false
+  },
+  "resourceQualification": "RSS figures are owned descendant process samples from bounded Node probes, not whole-pipeline GPU/browser memory.",
+  "nativePreparationOwner": {
+    "binding": "crates/rumoca-bind-wasm/src/native_assignment_api.rs::with_prepared_native_model",
+    "lowering": "rumoca_sim::lower_dae_for_native_preparation",
+    "modelConstruction": "rumoca_phase_solve::lower_solve_model",
+    "orderedPhases": [
+      "compile_requested_model",
+      "state_selection::prepare",
+      "lower_selection (program and pure-call issuance)",
+      "lower_solve_artifacts (structural/prepared artifacts)",
+      "runtime_vectors",
+      "SolveModel::validate",
+      "artifact native schedule/backend construction"
+    ],
+    "phaseMeasurement": "Pending native source fixture profile; earlier watchdogs do not identify an exact internal subphase",
+    "reusableProbe": "crates/rumoca-bind-wasm/src/tests/native_mixed_assignment_tests/calls.rs::native_registration_whole_program_source_inventory",
+    "probeModelSelector": "RUMOCA_NATIVE_SOURCE_MODEL=RGBDFeatureMatching",
+    "latestMeasuredFrontier": "DAE projection guard effect memo payload saturation; native execution has not begun"
+  },
+  "stagedActualSourceTest": "Unpassed opt-in full350 test checks all sparse paired outputs and nearest/second distances; native mode requires source-bound module artifact rather than treating any returned JSON as success.",
+  "archivedSources": [
+    {
+      "path": "dev/artifacts/rgbd-feature-matching/compiled-registered-depth-prototype.mo",
+      "sha256": "a095308c82988ddf5ad4df4fdefca2c9b8a79d48c2585c8b396fdf28b8c8087d"
+    },
+    {
+      "path": "dev/artifacts/rgbd-feature-matching/compiled-rgb3-raw-depth.mo",
+      "sha256": "00c43a2d580bff3eb5f235d2788c734230412f1a7608011fd62a81326890fb1a"
+    },
+    {
+      "path": "dev/artifacts/rgbd-feature-matching/final-rgba-raw-depth.mo",
+      "sha256": "1adc065bee50fcf583165daa015f3f0170b42a3c73ff2bd3260fafb40e71b59b"
+    },
+    {
+      "path": "dev/artifacts/rgbd-feature-matching/first-refused.mo",
+      "sha256": "7dc2a60d418050e72ac577c8aed243d653d7eb4ba9107a75a333f2e1c78f89a6"
+    },
+    {
+      "path": "dev/artifacts/rgbd-feature-matching/quotient-loop-control.mo",
+      "sha256": "c2e6be17424daa69582eaf904a6c9e3b0ae0200b46c5f1da91fa5c972fb936b5"
+    },
+    {
+      "path": "dev/artifacts/rgbd-feature-matching/quotient-owner-control.mo",
+      "sha256": "399437bd1825ccebdd4fa24ea8a7320e64c7ef38b9bd5ac3e60c26e881650d6f"
+    },
+    {
+      "path": "dev/artifacts/rgbd-feature-matching/raw-quotient-refused.mo",
+      "sha256": "5470629c733426aa933cda8a8532950e74036a53bb0fd9b9642a09cfafb0172f"
+    },
+    {
+      "path": "dev/artifacts/rgbd-feature-matching/raw-uninitialized-loop-refused.mo",
+      "sha256": "f899315e2bb341402849002db252dbbf6b340dc11288bc57c2c865dc39b33b65"
+    }
+  ],
+  "historicalSourceRestoration": {
+    "sourceSha256": "f899315e2bb341402849002db252dbbf6b340dc11288bc57c2c865dc39b33b65",
+    "method": "Removed subsequently added loop scratch initializations from the preserved quotient-refusal source; exact SHA256 matched the original probe report before publication."
+  },
+  "absRangeNativeProfile": {
+    "status": "FULL350_PREPARATION_TIMEOUT_NO_ARTIFACT",
+    "recordedAt": "2026-10-05T00:50:50.537Z",
+    "sourceSha256": "1adc065bee50fcf583165daa015f3f0170b42a3c73ff2bd3260fafb40e71b59b",
+    "producerSha256": "11249d9eecc06d5f3bc3e623b476a4cb47cd0c3e90434e600a7d89aa6f4dc34f",
+    "sourceClosureSha256": "0ef0375505a289c8ac9f1836f169123d26125397f8adaf6ec8061759e7706a56",
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "12,13",
+        "nice",
+        "-n",
+        "10",
+        "/mnt/scratch/jgoppert/slam_web/tmp/tensor-coordinate-range-gate/final-producer",
+        "native_registration_whole_program_source_inventory",
+        "--nocapture"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/profiles/matcher-scalar-abs-range/prepare.log",
+      "elapsedMs": 30091.098434,
+      "peakRssKiB": 319776,
+      "minimumAvailableKiB": 55896456,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 30,
+      "stopped": "timeout",
+      "signal": "SIGKILL",
+      "exitCode": 124
+    },
+    "perf": {
+      "samples": 874,
+      "lostSamples": 0,
+      "traceSha256": "fb45ac77aca5fbc8d56fe71b67bb31621612cb423d1f78dc6155ab321dae5161",
+      "selfPercent": {
+        "defaultHasherWrite": 13.39,
+        "hashMapContainsKey": 9.38,
+        "validationExpression": 9.04
+      }
+    },
+    "memo": {
+      "eligibleBuiltins": 9,
+      "ineligibleCached": 0,
+      "payloadLimitBytes": 16777216,
+      "saturation": {
+        "events": 185440,
+        "keys": 8568,
+        "chargedBytes": 16775488
+      },
+      "mechanismScope": "Retained/in-flight guard effects reach payload capacity; source inspection shows Effect clones for active recordings. No causal matched gain or asymptotic bound established."
+    },
+    "nativeArtifactProduced": false,
+    "numericOracleExecuted": false,
+    "evidence": [
+      {
+        "path": "dev/artifacts/matcher-scalar-abs-range/profile.json",
+        "sha256": "214b5bd8cd0fbe4f6093eba8e10d49fe997f84aecd16c0f1a2f6ae106ebe3dee"
+      },
+      {
+        "path": "dev/artifacts/matcher-scalar-abs-range/prepare-resource.json",
+        "sha256": "b9f7372a7e8ea0354b872592e6a3d22f8a6c89c1fe9d61a20734eed6d6e88011"
+      },
+      {
+        "path": "dev/artifacts/matcher-scalar-abs-range/prepare.log",
+        "sha256": "1d02f6db788fc6ddb85995bd45dd97a729bf2b98d194f2facccb601c31392ac8"
+      },
+      {
+        "path": "dev/artifacts/matcher-scalar-abs-range/perf.log",
+        "sha256": "17fda811fc52342817732ca2f8bb7147b9db32ae62ac4eb7c7572ecc6a88d59a"
+      },
+      {
+        "path": "dev/artifacts/matcher-scalar-abs-range/perf-report.txt",
+        "sha256": "83a36be3673399e67a9c157d10a0b3e1f73639105bd7f1a10683feb329fb7b42"
+      }
+    ]
+  }
+}

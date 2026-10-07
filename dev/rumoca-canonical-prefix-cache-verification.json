@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "status": "CANONICAL_PREFIX_CACHE_FOCUSED_STRICT_PASS_NATIVE_ISSUANCE_AND_RUNTIME_PENDING",
+  "compiler": {
+    "base": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "sourceFiles": 2399,
+    "sourceClosureSha256": "67d8c74ed3ff61502766bec41eb4a8d8bbd5e65fdf694125baf2f38f2e7b03f8",
+    "patchSha256": "ea151046c3a664bcdb07c8a88544ca8b4d7f80a87c62c3fce8ad2bd8f167c99f"
+  },
+  "scope": "Construction-local reuse of the unchanged canonical assignment shape analysis. No numerical math, source dimensions, source certificate checks, fault ordering, public ABI or production package pin changed.",
+  "implementation": {
+    "sourceOwner": "One immutable ComputeBlock per validation pass; exact node/program identity",
+    "prefixOwner": "One immutable original scalar program and exact store position; at most one prefix analysis resident",
+    "outputMetadata": "One entry per original store instruction; overflowed optional ordinal index uses unchanged original per-query derivation",
+    "target": "Canonical shape recomputed for each exact output/target; no result-value cache",
+    "causality": "Same exhaustive full-original-program predicate"
+  },
+  "checks": {
+    "initialBuild": {
+      "exitCode": 124,
+      "seconds": 600.254567749,
+      "testsExecuted": 0,
+      "reason": "nine-package build reached limit on two CPUs; seven actual Cargo executables linked, but filter tests had not run"
+    },
+    "resumedBuild": {
+      "seconds": 60.932471125,
+      "cpus": "6-9",
+      "newControls": 6,
+      "failed": 0
+    },
+    "existingIRControls": {
+      "passed": 415,
+      "failed": 0
+    },
+    "firstStrict": {
+      "exitCode": 101,
+      "reason": "manual_checked_ops; equivalent checked_div preserves stride-zero and overflow cases"
+    },
+    "finalIRControls": {
+      "passed": 415,
+      "failed": 0,
+      "resource": {
+        "command": [
+          "taskset",
+          "-c",
+          "6-9",
+          "nice",
+          "-n",
+          "10",
+          "cargo",
+          "test",
+          "--manifest-path",
+          "../rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-ir-solve",
+          "--all-features",
+          "--lib",
+          "--message-format=json"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/canonical-prefix-cache-lint-fix/ir-controls.log",
+        "elapsedMs": 47042.810809,
+        "peakRssKiB": 1423820,
+        "minimumAvailableKiB": 52073716,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "finalStrict": {
+      "exitCode": 0,
+      "resource": {
+        "command": [
+          "taskset",
+          "-c",
+          "6-9",
+          "nice",
+          "-n",
+          "10",
+          "cargo",
+          "clippy",
+          "--manifest-path",
+          "../rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "-p",
+          "rumoca-eval-solve",
+          "-p",
+          "rumoca-phase-solve",
+          "--all-targets",
+          "--all-features",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/canonical-prefix-cache-lint-fix/strict.log",
+        "elapsedMs": 23802.292537999998,
+        "peakRssKiB": 1627712,
+        "minimumAvailableKiB": 52232436,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "fmt": "PASS",
+    "diffCheck": "PASS",
+    "workers": 4,
+    "limits": "Per-attempt 600s/8192MiB RSS/16384MiB free reserve unchanged"
+  },
+  "pending": [
+    "No full14400 depth native source issuance was attempted for this final producer state",
+    "A final source-matched bind producer has not been rebuilt/frozen after the equivalent checked_div fix",
+    "Joint cache/target-value/lineage source gate will measure unchanged full14400 depth",
+    "Matched fixed20 MSL delta remains pending",
+    "Browser deployment, full visual SLAM and10x remain pending"
+  ],
+  "evidence": [
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/initial-focused.log",
+      "bytes": 429786,
+      "sha256": "66113acd08b8d5c1321997cdd41f979dc79a10c8620ffcc91b1385d837268fbd"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/initial-focused-resource.json",
+      "bytes": 925,
+      "sha256": "a0bcd4e95ab2ccb7095243d9cac1e28cf1380592879d981e7de672939597beeb"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/initial-source-before.sha256",
+      "bytes": 295283,
+      "sha256": "5f56c08546b305c43264c3df272951f6b4fda4dbf9c06adc8c474b39d91f53a5"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/initial-source-before.json",
+      "bytes": 368,
+      "sha256": "2b57ad7b91721e0f9f873b84b5810d47e59ae12a1e34b9cf30b6f4c817596b14"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/resume-focused.log",
+      "bytes": 430634,
+      "sha256": "756ccedd3302645ed7679989ea5ff5e079bdc0de9b95d6bef646447b446c23b0"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/resume-focused-resource.json",
+      "bytes": 904,
+      "sha256": "4c6871e390ce331818824ee90c66e8bf63e3b435b033106edd6161df571afcd4"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/resume-ir-solve-controls.log",
+      "bytes": 41664,
+      "sha256": "2446b3fb57bc75a4f463b85c2c77aabdcdea0973eeea037f0116d1114d8e308f"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/resume-ir-solve-controls-resource.json",
+      "bytes": 547,
+      "sha256": "527ac3fb67178067ce7cc9471eab51dec3271ff8902b96366fc11ae1373fcafe"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/resume-strict.log",
+      "bytes": 1161,
+      "sha256": "70cac8b7bcfbf8584dd1668d39bb27af7ba56433e687c5edb0680cb34365dee3"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/resume-strict-resource.json",
+      "bytes": 850,
+      "sha256": "148b142d3605056df882a66233bb161c5c1ab50ce2f6512d716724a254a29bd3"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/final-ir-controls.log",
+      "bytes": 93014,
+      "sha256": "4d7a78ff333f1c3dba198ddce9584eaf95d0b309937d91aa3a85435b2bd435ce"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/final-ir-controls-resource.json",
+      "bytes": 641,
+      "sha256": "d4414d3b5d07155e6b57ef22c259725e785b78870c10ab838832855aa90fc905"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/final-strict.log",
+      "bytes": 1686,
+      "sha256": "db98759b186fc52290f9a2d54efb2b91aa47f6ab4502d798d2cf13dda0b516f4"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/final-strict-resource.json",
+      "bytes": 835,
+      "sha256": "ef6cca7a424afbbdefb2f7ff4aca3d68ddef34d728945eeb601278667bfd82b9"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/initial.patch",
+      "bytes": 18387,
+      "sha256": "66621927e02cc07c3e54d580fed93c63a976a569dd25119299d6317d5e54e143"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/final.patch",
+      "bytes": 18375,
+      "sha256": "ea151046c3a664bcdb07c8a88544ca8b4d7f80a87c62c3fce8ad2bd8f167c99f"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/final-patch.json",
+      "bytes": 1159,
+      "sha256": "aaf3955b951b0334469b799365fae25dc2fdc648104942edd3ec8ea05d14448a"
+    },
+    {
+      "path": "dev/artifacts/canonical-prefix-cache/source-final.sha256",
+      "bytes": 295283,
+      "sha256": "67d8c74ed3ff61502766bec41eb4a8d8bbd5e65fdf694125baf2f38f2e7b03f8"
+    }
+  ]
+}

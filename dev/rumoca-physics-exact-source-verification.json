@@ -1,0 +1,1596 @@
+{
+  "date": "2026-10-04",
+  "status": "actual-full-source-assignment-parity-pass",
+  "scope": "Review-only actual complete LabQuadrotor source issuance and every constructor-issued exact assignment sequence; static coverage and direct Wasmi execution.",
+  "compiler": {
+    "worktree": "../rumoca-native-functions",
+    "head": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "dirty": true,
+    "sourceManifest": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-source-gate-plan/source-final.sha256",
+    "sourceManifestSha256": "8f719cbb04e631199e01a30d8bf5c7e405ca8ed430c22bd53d01c7867da4c855",
+    "sourceFiles": 2389,
+    "verifiedMismatches": [],
+    "producer": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-source-gate-plan/final-producer",
+    "producerSha256": "4881367e2c25d9a0c7f88f09d09216c2a0201cdd6f9c1e3a9db4594c74fd5799",
+    "producerBytes": 130091264
+  },
+  "sourceEdit": {
+    "literal": "parameter Real mass = 2.0;",
+    "replacement": "parameter Real mass = 2.4;",
+    "nativeOutputChangeObserved": true,
+    "changedCaseOutputs": 17
+  },
+  "contract": {
+    "authority": "Existing continuous refresh owners and exact schedule identities; final_scalar_program from original implicit RHS. Every dispatch retained and each complete issued sequence compiled; membership deduplicates diagnostic execution only, preserving first-occurrence order.",
+    "reference": "Canonical eval_scalar_program_block_with_context with exact model pure-call and external tables, full Y/P/time; evaluate whole tuple before original ordered target commit. No filtered sequence, interpreter retry or synthesized source.",
+    "fixtures": [
+      "source-initial",
+      "six-dof",
+      "near-ground",
+      "tour-long-time"
+    ],
+    "comparison": "Bit-exact all 262 Y scalars including untouched cells; full 192 P scalars immutable; entry guards unchanged. Source-issued layout binds complete state/control fixtures.",
+    "abi": "eval_assignments(yPtr:i32,pPtr:i32,time:f64,scratchPtr:i32,reservedZero:i32):status:i32",
+    "engine": "Actual Wasmi executing generated modules. Direct browser engine and ME adapter are not exercised by this gate.",
+    "publication": "Whole issued tuples commit in original target order. Focused late-fault, guarded-entry and tuple atomicity controls remain in separate verification record."
+  },
+  "variants": [
+    {
+      "name": "baseline",
+      "sourceSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+      "yCount": 262,
+      "pCount": 192,
+      "stateCount": 21,
+      "pureCallOwners": 2,
+      "admittedSequences": 28,
+      "refusedSequences": 0,
+      "numericalFailures": 0,
+      "passedCases": 112,
+      "comparedYBytes": 234752,
+      "dispatches": [
+        {
+          "plan": "algebraic",
+          "dispatch": "Certified",
+          "steps": [
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(3)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4)"
+            },
+            {
+              "kind": "Project",
+              "sequence": "RefreshSequenceId(5)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(7)"
+            },
+            {
+              "kind": "Project",
+              "sequence": "RefreshSequenceId(8)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(10)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(13)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(16)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(19)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(22)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(28)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(34)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(40)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(46)"
+            }
+          ]
+        },
+        {
+          "plan": "algebraic",
+          "dispatch": "Uncertified",
+          "steps": [
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(1)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(2)"
+            },
+            {
+              "kind": "ProjectComplete",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "derivative",
+          "dispatch": "Certified",
+          "steps": [
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967299)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967300)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967303)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967306)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967309)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967312)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967317)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967322)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967327)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967332)"
+            }
+          ]
+        },
+        {
+          "plan": "derivative",
+          "dispatch": "Uncertified",
+          "steps": [
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967297)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967298)"
+            },
+            {
+              "kind": "ProjectComplete",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "root",
+          "dispatch": "Certified",
+          "steps": [
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "root",
+          "dispatch": "Uncertified",
+          "steps": [
+            {
+              "kind": "ProjectComplete",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "event",
+          "dispatch": "Certified",
+          "steps": [
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "event",
+          "dispatch": "Uncertified",
+          "steps": [
+            {
+              "kind": "ProjectComplete",
+              "sequence": null
+            }
+          ]
+        }
+      ],
+      "preparationAndExecutionMs": 183.70128499999998,
+      "modules": [
+        {
+          "identity": "RefreshSequenceId(3)",
+          "programs": 2,
+          "module": "final-actual/baseline/sequence-0.wasm",
+          "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+          "moduleBytes": 903,
+          "manifest": "final-actual/baseline/sequence-0.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4)",
+          "programs": 15,
+          "module": "final-actual/baseline/sequence-1.wasm",
+          "moduleSha256": "612eed3ebc25ca6f5753d069a73ebb00431211edf39571d56d8dec7d51227ba2",
+          "moduleBytes": 12834,
+          "manifest": "final-actual/baseline/sequence-1.json",
+          "scratchBytes": 2976,
+          "mathImports": [
+            "sin"
+          ],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(5)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-2.wasm",
+          "moduleSha256": "970386c02818f71571c563fb2c24747773dcb068f27fb63241deb36fe93febc0",
+          "moduleBytes": 615,
+          "manifest": "final-actual/baseline/sequence-2.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(7)",
+          "programs": 8,
+          "module": "final-actual/baseline/sequence-3.wasm",
+          "moduleSha256": "b71d2297e1c2c83366c121878f557401f9f5ec2e1eb22793d33fff3f23aae229",
+          "moduleBytes": 2400,
+          "manifest": "final-actual/baseline/sequence-3.json",
+          "scratchBytes": 2096,
+          "mathImports": [
+            "atan2"
+          ],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(8)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-4.wasm",
+          "moduleSha256": "7dd405668a79472579272f1df8cc6f58c19a68690f9f9dddbde83c0796c604f9",
+          "moduleBytes": 615,
+          "manifest": "final-actual/baseline/sequence-4.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(10)",
+          "programs": 12,
+          "module": "final-actual/baseline/sequence-5.wasm",
+          "moduleSha256": "4192d1698130e3a45093c3f750d79127ff6355574b210e3f99ae6a85fc73e84f",
+          "moduleBytes": 7084,
+          "manifest": "final-actual/baseline/sequence-5.json",
+          "scratchBytes": 2096,
+          "mathImports": [
+            "sin",
+            "cos",
+            "asin"
+          ],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(13)",
+          "programs": 9,
+          "module": "final-actual/baseline/sequence-6.wasm",
+          "moduleSha256": "72d2fa9ea017481bcaf88e26a3c0067d34966ef653bf87a43a08b9199d39a547",
+          "moduleBytes": 2242,
+          "manifest": "final-actual/baseline/sequence-6.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(16)",
+          "programs": 9,
+          "module": "final-actual/baseline/sequence-7.wasm",
+          "moduleSha256": "5e2333208ad10f50acf2a5d38b623ed5efb75e9bff61339d02ab10bda59de79b",
+          "moduleBytes": 2242,
+          "manifest": "final-actual/baseline/sequence-7.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(19)",
+          "programs": 9,
+          "module": "final-actual/baseline/sequence-8.wasm",
+          "moduleSha256": "1579959def54739507ebaf1c3471128891f9546a3b2cfe5ee8c6109032cc1573",
+          "moduleBytes": 2242,
+          "manifest": "final-actual/baseline/sequence-8.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(22)",
+          "programs": 37,
+          "module": "final-actual/baseline/sequence-9.wasm",
+          "moduleSha256": "0a7f06ecd4f5c5df9e96f397d713e6292a13ce3af71158ddecadac808350950d",
+          "moduleBytes": 7299,
+          "manifest": "final-actual/baseline/sequence-9.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(28)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-10.wasm",
+          "moduleSha256": "bf0bdf57fa2d1147bc82dfbfb21e7afde70a4b60f67f57c3cb849469a80b2a37",
+          "moduleBytes": 693,
+          "manifest": "final-actual/baseline/sequence-10.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(34)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-11.wasm",
+          "moduleSha256": "f4285a1dda03335bca03faf5e2c3c00ae507c7f32213deb178c223ea52acfe4f",
+          "moduleBytes": 693,
+          "manifest": "final-actual/baseline/sequence-11.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(40)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-12.wasm",
+          "moduleSha256": "b2031fd6cee9c3e26ccb83b9cdb1810b2be36db0a4d2741a5104d6b000fb2bf7",
+          "moduleBytes": 693,
+          "manifest": "final-actual/baseline/sequence-12.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(46)",
+          "programs": 48,
+          "module": "final-actual/baseline/sequence-13.wasm",
+          "moduleSha256": "a9eefac727b8849bad543edf0b57fa393734a005b279fe218072019d843c0eb2",
+          "moduleBytes": 15347,
+          "manifest": "final-actual/baseline/sequence-13.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(1)",
+          "programs": 2,
+          "module": "final-actual/baseline/sequence-14.wasm",
+          "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+          "moduleBytes": 903,
+          "manifest": "final-actual/baseline/sequence-14.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(2)",
+          "programs": 120,
+          "module": "final-actual/baseline/sequence-15.wasm",
+          "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+          "moduleBytes": 40240,
+          "manifest": "final-actual/baseline/sequence-15.json",
+          "scratchBytes": 2976,
+          "mathImports": [
+            "sin",
+            "cos",
+            "asin",
+            "atan2"
+          ],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967299)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-16.wasm",
+          "moduleSha256": "d91e8dca4e940b5e8e571ce2cbae6552f5fa169ffd4fd5315a871ee986d88718",
+          "moduleBytes": 552,
+          "manifest": "final-actual/baseline/sequence-16.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967300)",
+          "programs": 6,
+          "module": "final-actual/baseline/sequence-17.wasm",
+          "moduleSha256": "bd60f65f3eb0df34391e42e83586e3ad9f3e895b199a11a8e709e7355c2b6504",
+          "moduleBytes": 8632,
+          "manifest": "final-actual/baseline/sequence-17.json",
+          "scratchBytes": 2976,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967303)",
+          "programs": 8,
+          "module": "final-actual/baseline/sequence-18.wasm",
+          "moduleSha256": "76b44521781c645172e73d34cdb9fb7e323382b9a974f0c33de328b657c809ed",
+          "moduleBytes": 1762,
+          "manifest": "final-actual/baseline/sequence-18.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967306)",
+          "programs": 8,
+          "module": "final-actual/baseline/sequence-19.wasm",
+          "moduleSha256": "ef35bc5d06007bb82cddc66f57c289574f415574646ea0f0631f6ff9e78568cc",
+          "moduleBytes": 1762,
+          "manifest": "final-actual/baseline/sequence-19.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967309)",
+          "programs": 8,
+          "module": "final-actual/baseline/sequence-20.wasm",
+          "moduleSha256": "9042d08626a1f606b82fab6516d96188b164bf69eafad5520f6de6a509b249bf",
+          "moduleBytes": 1762,
+          "manifest": "final-actual/baseline/sequence-20.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967312)",
+          "programs": 13,
+          "module": "final-actual/baseline/sequence-21.wasm",
+          "moduleSha256": "82120df5a9e68a5ac9aa1653118255394219cee73639c826e408cb76e24804e6",
+          "moduleBytes": 3544,
+          "manifest": "final-actual/baseline/sequence-21.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967317)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-22.wasm",
+          "moduleSha256": "bf0bdf57fa2d1147bc82dfbfb21e7afde70a4b60f67f57c3cb849469a80b2a37",
+          "moduleBytes": 693,
+          "manifest": "final-actual/baseline/sequence-22.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967322)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-23.wasm",
+          "moduleSha256": "f4285a1dda03335bca03faf5e2c3c00ae507c7f32213deb178c223ea52acfe4f",
+          "moduleBytes": 693,
+          "manifest": "final-actual/baseline/sequence-23.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967327)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-24.wasm",
+          "moduleSha256": "b2031fd6cee9c3e26ccb83b9cdb1810b2be36db0a4d2741a5104d6b000fb2bf7",
+          "moduleBytes": 693,
+          "manifest": "final-actual/baseline/sequence-24.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967332)",
+          "programs": 40,
+          "module": "final-actual/baseline/sequence-25.wasm",
+          "moduleSha256": "75ec41d2931c8c004137a3675f1de2a125793424ab833788cee6043e5dcb7134",
+          "moduleBytes": 13476,
+          "manifest": "final-actual/baseline/sequence-25.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967297)",
+          "programs": 1,
+          "module": "final-actual/baseline/sequence-26.wasm",
+          "moduleSha256": "d91e8dca4e940b5e8e571ce2cbae6552f5fa169ffd4fd5315a871ee986d88718",
+          "moduleBytes": 552,
+          "manifest": "final-actual/baseline/sequence-26.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967298)",
+          "programs": 68,
+          "module": "final-actual/baseline/sequence-27.wasm",
+          "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+          "moduleBytes": 25022,
+          "manifest": "final-actual/baseline/sequence-27.json",
+          "scratchBytes": 2976,
+          "mathImports": [],
+          "passedCases": 4
+        }
+      ]
+    },
+    {
+      "name": "mass-2.4",
+      "sourceSha256": "79c0e2a8430d6e9b118f7bc5d4e1bbe9bb070dddc31b447dd4dbcb0e6ac5ea04",
+      "yCount": 262,
+      "pCount": 192,
+      "stateCount": 21,
+      "pureCallOwners": 2,
+      "admittedSequences": 28,
+      "refusedSequences": 0,
+      "numericalFailures": 0,
+      "passedCases": 112,
+      "comparedYBytes": 234752,
+      "dispatches": [
+        {
+          "plan": "algebraic",
+          "dispatch": "Certified",
+          "steps": [
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(3)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4)"
+            },
+            {
+              "kind": "Project",
+              "sequence": "RefreshSequenceId(5)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(7)"
+            },
+            {
+              "kind": "Project",
+              "sequence": "RefreshSequenceId(8)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(10)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(13)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(16)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(19)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(22)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(28)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(34)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(40)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(46)"
+            }
+          ]
+        },
+        {
+          "plan": "algebraic",
+          "dispatch": "Uncertified",
+          "steps": [
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(1)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(2)"
+            },
+            {
+              "kind": "ProjectComplete",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "derivative",
+          "dispatch": "Certified",
+          "steps": [
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967299)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967300)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967303)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967306)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967309)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967312)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967317)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967322)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967327)"
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967332)"
+            }
+          ]
+        },
+        {
+          "plan": "derivative",
+          "dispatch": "Uncertified",
+          "steps": [
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967297)"
+            },
+            {
+              "kind": "Assignments",
+              "sequence": "RefreshSequenceId(4294967298)"
+            },
+            {
+              "kind": "ProjectComplete",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "root",
+          "dispatch": "Certified",
+          "steps": [
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "root",
+          "dispatch": "Uncertified",
+          "steps": [
+            {
+              "kind": "ProjectComplete",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "event",
+          "dispatch": "Certified",
+          "steps": [
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            },
+            {
+              "kind": "Project",
+              "sequence": null
+            }
+          ]
+        },
+        {
+          "plan": "event",
+          "dispatch": "Uncertified",
+          "steps": [
+            {
+              "kind": "ProjectComplete",
+              "sequence": null
+            }
+          ]
+        }
+      ],
+      "preparationAndExecutionMs": 226.431599,
+      "modules": [
+        {
+          "identity": "RefreshSequenceId(3)",
+          "programs": 2,
+          "module": "final-actual/mass-2.4/sequence-0.wasm",
+          "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+          "moduleBytes": 903,
+          "manifest": "final-actual/mass-2.4/sequence-0.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4)",
+          "programs": 15,
+          "module": "final-actual/mass-2.4/sequence-1.wasm",
+          "moduleSha256": "612eed3ebc25ca6f5753d069a73ebb00431211edf39571d56d8dec7d51227ba2",
+          "moduleBytes": 12834,
+          "manifest": "final-actual/mass-2.4/sequence-1.json",
+          "scratchBytes": 2976,
+          "mathImports": [
+            "sin"
+          ],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(5)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-2.wasm",
+          "moduleSha256": "970386c02818f71571c563fb2c24747773dcb068f27fb63241deb36fe93febc0",
+          "moduleBytes": 615,
+          "manifest": "final-actual/mass-2.4/sequence-2.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(7)",
+          "programs": 8,
+          "module": "final-actual/mass-2.4/sequence-3.wasm",
+          "moduleSha256": "b71d2297e1c2c83366c121878f557401f9f5ec2e1eb22793d33fff3f23aae229",
+          "moduleBytes": 2400,
+          "manifest": "final-actual/mass-2.4/sequence-3.json",
+          "scratchBytes": 2096,
+          "mathImports": [
+            "atan2"
+          ],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(8)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-4.wasm",
+          "moduleSha256": "7dd405668a79472579272f1df8cc6f58c19a68690f9f9dddbde83c0796c604f9",
+          "moduleBytes": 615,
+          "manifest": "final-actual/mass-2.4/sequence-4.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(10)",
+          "programs": 12,
+          "module": "final-actual/mass-2.4/sequence-5.wasm",
+          "moduleSha256": "4192d1698130e3a45093c3f750d79127ff6355574b210e3f99ae6a85fc73e84f",
+          "moduleBytes": 7084,
+          "manifest": "final-actual/mass-2.4/sequence-5.json",
+          "scratchBytes": 2096,
+          "mathImports": [
+            "sin",
+            "cos",
+            "asin"
+          ],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(13)",
+          "programs": 9,
+          "module": "final-actual/mass-2.4/sequence-6.wasm",
+          "moduleSha256": "72d2fa9ea017481bcaf88e26a3c0067d34966ef653bf87a43a08b9199d39a547",
+          "moduleBytes": 2242,
+          "manifest": "final-actual/mass-2.4/sequence-6.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(16)",
+          "programs": 9,
+          "module": "final-actual/mass-2.4/sequence-7.wasm",
+          "moduleSha256": "5e2333208ad10f50acf2a5d38b623ed5efb75e9bff61339d02ab10bda59de79b",
+          "moduleBytes": 2242,
+          "manifest": "final-actual/mass-2.4/sequence-7.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(19)",
+          "programs": 9,
+          "module": "final-actual/mass-2.4/sequence-8.wasm",
+          "moduleSha256": "1579959def54739507ebaf1c3471128891f9546a3b2cfe5ee8c6109032cc1573",
+          "moduleBytes": 2242,
+          "manifest": "final-actual/mass-2.4/sequence-8.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(22)",
+          "programs": 37,
+          "module": "final-actual/mass-2.4/sequence-9.wasm",
+          "moduleSha256": "0a7f06ecd4f5c5df9e96f397d713e6292a13ce3af71158ddecadac808350950d",
+          "moduleBytes": 7299,
+          "manifest": "final-actual/mass-2.4/sequence-9.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(28)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-10.wasm",
+          "moduleSha256": "bf0bdf57fa2d1147bc82dfbfb21e7afde70a4b60f67f57c3cb849469a80b2a37",
+          "moduleBytes": 693,
+          "manifest": "final-actual/mass-2.4/sequence-10.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(34)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-11.wasm",
+          "moduleSha256": "f4285a1dda03335bca03faf5e2c3c00ae507c7f32213deb178c223ea52acfe4f",
+          "moduleBytes": 693,
+          "manifest": "final-actual/mass-2.4/sequence-11.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(40)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-12.wasm",
+          "moduleSha256": "b2031fd6cee9c3e26ccb83b9cdb1810b2be36db0a4d2741a5104d6b000fb2bf7",
+          "moduleBytes": 693,
+          "manifest": "final-actual/mass-2.4/sequence-12.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(46)",
+          "programs": 48,
+          "module": "final-actual/mass-2.4/sequence-13.wasm",
+          "moduleSha256": "a9eefac727b8849bad543edf0b57fa393734a005b279fe218072019d843c0eb2",
+          "moduleBytes": 15347,
+          "manifest": "final-actual/mass-2.4/sequence-13.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(1)",
+          "programs": 2,
+          "module": "final-actual/mass-2.4/sequence-14.wasm",
+          "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+          "moduleBytes": 903,
+          "manifest": "final-actual/mass-2.4/sequence-14.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(2)",
+          "programs": 120,
+          "module": "final-actual/mass-2.4/sequence-15.wasm",
+          "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+          "moduleBytes": 40240,
+          "manifest": "final-actual/mass-2.4/sequence-15.json",
+          "scratchBytes": 2976,
+          "mathImports": [
+            "sin",
+            "cos",
+            "asin",
+            "atan2"
+          ],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967299)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-16.wasm",
+          "moduleSha256": "d91e8dca4e940b5e8e571ce2cbae6552f5fa169ffd4fd5315a871ee986d88718",
+          "moduleBytes": 552,
+          "manifest": "final-actual/mass-2.4/sequence-16.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967300)",
+          "programs": 6,
+          "module": "final-actual/mass-2.4/sequence-17.wasm",
+          "moduleSha256": "bd60f65f3eb0df34391e42e83586e3ad9f3e895b199a11a8e709e7355c2b6504",
+          "moduleBytes": 8632,
+          "manifest": "final-actual/mass-2.4/sequence-17.json",
+          "scratchBytes": 2976,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967303)",
+          "programs": 8,
+          "module": "final-actual/mass-2.4/sequence-18.wasm",
+          "moduleSha256": "76b44521781c645172e73d34cdb9fb7e323382b9a974f0c33de328b657c809ed",
+          "moduleBytes": 1762,
+          "manifest": "final-actual/mass-2.4/sequence-18.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967306)",
+          "programs": 8,
+          "module": "final-actual/mass-2.4/sequence-19.wasm",
+          "moduleSha256": "ef35bc5d06007bb82cddc66f57c289574f415574646ea0f0631f6ff9e78568cc",
+          "moduleBytes": 1762,
+          "manifest": "final-actual/mass-2.4/sequence-19.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967309)",
+          "programs": 8,
+          "module": "final-actual/mass-2.4/sequence-20.wasm",
+          "moduleSha256": "9042d08626a1f606b82fab6516d96188b164bf69eafad5520f6de6a509b249bf",
+          "moduleBytes": 1762,
+          "manifest": "final-actual/mass-2.4/sequence-20.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967312)",
+          "programs": 13,
+          "module": "final-actual/mass-2.4/sequence-21.wasm",
+          "moduleSha256": "82120df5a9e68a5ac9aa1653118255394219cee73639c826e408cb76e24804e6",
+          "moduleBytes": 3544,
+          "manifest": "final-actual/mass-2.4/sequence-21.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967317)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-22.wasm",
+          "moduleSha256": "bf0bdf57fa2d1147bc82dfbfb21e7afde70a4b60f67f57c3cb849469a80b2a37",
+          "moduleBytes": 693,
+          "manifest": "final-actual/mass-2.4/sequence-22.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967322)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-23.wasm",
+          "moduleSha256": "f4285a1dda03335bca03faf5e2c3c00ae507c7f32213deb178c223ea52acfe4f",
+          "moduleBytes": 693,
+          "manifest": "final-actual/mass-2.4/sequence-23.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967327)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-24.wasm",
+          "moduleSha256": "b2031fd6cee9c3e26ccb83b9cdb1810b2be36db0a4d2741a5104d6b000fb2bf7",
+          "moduleBytes": 693,
+          "manifest": "final-actual/mass-2.4/sequence-24.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967332)",
+          "programs": 40,
+          "module": "final-actual/mass-2.4/sequence-25.wasm",
+          "moduleSha256": "75ec41d2931c8c004137a3675f1de2a125793424ab833788cee6043e5dcb7134",
+          "moduleBytes": 13476,
+          "manifest": "final-actual/mass-2.4/sequence-25.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967297)",
+          "programs": 1,
+          "module": "final-actual/mass-2.4/sequence-26.wasm",
+          "moduleSha256": "d91e8dca4e940b5e8e571ce2cbae6552f5fa169ffd4fd5315a871ee986d88718",
+          "moduleBytes": 552,
+          "manifest": "final-actual/mass-2.4/sequence-26.json",
+          "scratchBytes": 2096,
+          "mathImports": [],
+          "passedCases": 4
+        },
+        {
+          "identity": "RefreshSequenceId(4294967298)",
+          "programs": 68,
+          "module": "final-actual/mass-2.4/sequence-27.wasm",
+          "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+          "moduleBytes": 25022,
+          "manifest": "final-actual/mass-2.4/sequence-27.json",
+          "scratchBytes": 2976,
+          "mathImports": [],
+          "passedCases": 4
+        }
+      ]
+    }
+  ],
+  "artifacts": {
+    "directory": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-source-gate-plan/final-actual",
+    "report": "report.json",
+    "reportSha256": "6afd9cd3bec1e1a6e906e5257dc8a7ce2a644ef6fd1401e8b3d4a981c411353b",
+    "producerManifest": "producer.json",
+    "fixtures": "Per sequence/case input-y.bin,input-p.bin,expected-y.bin,actual-y.bin plus exact source/module digests and safe ABI/layout/math-import manifests."
+  },
+  "gates": {
+    "workers": {
+      "cargoJobs": 4,
+      "testThreads": 4,
+      "rayonThreads": 4,
+      "affinity": [
+        10,
+        11
+      ],
+      "nice": 10
+    },
+    "actualSource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10,11",
+        "cargo",
+        "test",
+        "-p",
+        "rumoca-exec-wasm",
+        "-p",
+        "rumoca-ir-solve",
+        "-p",
+        "rumoca-bind-wasm",
+        "-p",
+        "rumoca-eval-dae",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-ir-dae",
+        "-p",
+        "rumoca-eval-solve",
+        "-p",
+        "rumoca-phase-solve",
+        "--features",
+        "rumoca-bind-wasm/native-assignments",
+        "--lib",
+        "native_exact_physics_full_source_diagnostic",
+        "-j",
+        "4",
+        "--config",
+        "profile.dev.package.rumoca-eval-dae.opt-level=3",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-source-gate-plan/source-final-test.log",
+      "elapsedMs": 29584.800945,
+      "peakRssKiB": 1060296,
+      "minimumAvailableKiB": 54499656,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "strict": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10,11",
+        "cargo",
+        "clippy",
+        "-p",
+        "rumoca-exec-wasm",
+        "-p",
+        "rumoca-ir-solve",
+        "-p",
+        "rumoca-bind-wasm",
+        "-p",
+        "rumoca-eval-dae",
+        "-p",
+        "rumoca-phase-dae",
+        "-p",
+        "rumoca-core",
+        "-p",
+        "rumoca-ir-dae",
+        "-p",
+        "rumoca-eval-solve",
+        "-p",
+        "rumoca-phase-solve",
+        "--all-targets",
+        "--all-features",
+        "-j",
+        "4",
+        "--config",
+        "profile.dev.package.rumoca-eval-dae.opt-level=3",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-source-gate-plan/source-final-strict.log",
+      "elapsedMs": 3137.0621810000002,
+      "peakRssKiB": 849008,
+      "minimumAvailableKiB": 53471764,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "formatter": {
+      "exitCode": 0,
+      "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-source-gate-plan/source-final-format.log"
+    },
+    "closureVerification": {
+      "exitCode": 0,
+      "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-source-gate-plan/source-final-closure-check.log"
+    },
+    "resourceCapture": "Guardian JSON stdout retained verbatim in structured resource records; test elapsed includes Cargo compilation.",
+    "priorNativeSuite": "dev/rumoca-exact-assignment-schedule-verification.json",
+    "fullWorkspaceTests": false
+  },
+  "history": [
+    {
+      "attempt": "source-diagnostic",
+      "exitCode": 0,
+      "validProvenance": false,
+      "reason": "Launch supplied a placeholder source manifest value. First artifacts preserved as invalid provenance, not used for final proof.",
+      "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-source-gate-plan/source-diagnostic.log",
+      "artifacts": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-source-gate-plan/actual"
+    },
+    {
+      "attempt": "source-diagnostic-verified",
+      "exitCode": 0,
+      "validProvenance": true,
+      "sourceManifestSha256": "d441682ffc0a69e443c63c002174fcc12b4c7150ad07f3efe77ed906e2c2af3a",
+      "producerSha256": "c702eb2de225a6ec320177062a82f78ca350daafc8f551f0463374f25c292998",
+      "note": "Correct immutable rerun preserved; final reissue followed test-only style edits and SHA-format validation."
+    },
+    {
+      "attempt": "source-strict",
+      "exitCode": 101,
+      "findings": [
+        "Test-only unnecessary operand reference",
+        "Test-only unnecessary digest reference",
+        "Test-only collapsible membership condition"
+      ],
+      "resolution": "Mechanical test fixes without suppression; final strict retry passed."
+    }
+  ],
+  "limitations": [
+    "28 distinct admitted sequences include projection seed assignments; projection steps are not executed by this gate.",
+    "Certified algebraic/derivative dispatches retain 22/16 projection steps; roots/events are projection-only. SmallDense3 and other unsupported projection paths remain canonical.",
+    "Individual complete sequences start from valid full fixtures; no full refresh, RK45 trajectory or event execution is claimed. Whole-refresh rollback remains separately owned.",
+    "Static coverage and preparation/test elapsed times are not runtime hit share or browser throughput.",
+    "Wasmi math imports bind canonical Rust functions; browser numerical qualification remains required.",
+    "Fresh same-build browser compiler activation, full-plant policy parity, runtime assignment coverage and physics profiling remain pending.",
+    "Scoped fixed four-worker gates do not replace the full Tier1 suite or fixed 20-model canary."
+  ],
+  "runtimeIntegrated": false,
+  "productionPinChanged": false,
+  "nativeRhsComplete": false,
+  "browserPerformanceMeasured": false,
+  "fullSlam": false,
+  "tenTimesTargetAchieved": false
+}

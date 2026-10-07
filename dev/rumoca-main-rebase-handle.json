@@ -1,0 +1,29 @@
+{
+  "directory": "/home/jgoppert/scratch/slam_web/tmp/rumoca-main-rebase-VXLz8e",
+  "compiler": "/home/jgoppert/git/rumoca-native-functions",
+  "head": "14694fd7e4369b775b15cd2dafc86f0b06bd4608",
+  "pendingMergeParent": "91eb8cb883cadfa3dd4184f0ff4a85bc63b5452b",
+  "newMain": "5a65f88eebec9128c71f09c22ba4e02180e17d50",
+  "preservedSourceTree": "f6102232a6aa232963d09f21b0592451661b3de9",
+  "sourcePatchSha256": "aa3717233e381d6883597e9c1fbac45d63a5bfcfc3307af39fba9f45a69fcd65",
+  "excludedFromPullRequest": [
+    "docs/verification/native-matcher-profile (raw historical profiling logs retained in original checkout and preserved tree)"
+  ],
+  "originalIndexPreserved": true,
+  "originalCheckoutPreserved": true,
+  "worktree": "/home/jgoppert/scratch/slam_web/tmp/rumoca-main-rebase-VXLz8e/worktree",
+  "branch": "modelica-cv-solve-wasm",
+  "preRebaseCommit": "0b6a5ac32f24b3d64accfd58914189f5456277fc",
+  "rebaseStatus": 0,
+  "rebasedCommit": "c065fc58945aec5bc2dc1721c9603666ae97da96",
+  "metrics": {
+    "production_lines_added": 21722,
+    "production_lines_deleted": 1426,
+    "test_lines_added": 36168,
+    "test_lines_deleted": 110,
+    "public_items_added": 122,
+    "public_items_removed": 3,
+    "files_touched": 465,
+    "net_added_lines": 58534
+  }
+}

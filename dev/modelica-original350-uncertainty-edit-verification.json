@@ -1,0 +1,143 @@
+{
+  "status": "ACTUAL_EDITED_ORIGINAL_FULL350_NATIVE_NUMERICS_PASS",
+  "engine": "Node/V8 WebAssembly",
+  "sourceSha256": "1691feadc21ed3c00e7a7c2da91162c45bd0b4cf7515a4e77df1b2ea31e1d155",
+  "moduleSha256": "58de05687b5fa28c50d54b102d80c1b5cfb7ae131faf2a412fcad346057ccad5",
+  "capacity": 350,
+  "fullSlam": false,
+  "throughputClaim": false,
+  "cases": [
+    {
+      "name": "actual disparitySigma0.2 general full350",
+      "matrixCells": 180
+    },
+    {
+      "name": "edited reset",
+      "matrixCells": 180
+    },
+    {
+      "name": "edited source and artifact JSON reload",
+      "matrixCells": 180
+    }
+  ],
+  "maxAbsoluteError": 2.220446049250313e-16,
+  "fourfoldDepthContributionMaxError": 1.1102230246251565e-15,
+  "matrixCellsChecked": 540,
+  "controls": {
+    "sourceIssuedDefaultEdit": true,
+    "immutableP": true,
+    "reset": true,
+    "savedSourceArtifactJSONReload": true,
+    "wrongSourceRefusal": true
+  },
+  "resource": {
+    "command": [
+      "taskset",
+      "-c",
+      "12",
+      "nice",
+      "-n",
+      "15",
+      "/nix/store/324pab2sykfjpbxsnxbcxmni42xxwxc0-nodejs-24.18.0/bin/node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "dev/vitest-original350-edit.config.ts"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/original350-native-edit/run.log",
+    "elapsedMs": 1136.168946,
+    "peakRssKiB": 266640,
+    "minimumAvailableKiB": 55148248,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "preparationResource": {
+    "command": [
+      "taskset",
+      "-c",
+      "12",
+      "nice",
+      "-n",
+      "15",
+      "/home/jgoppert/scratch/slam_web/tmp/typed-update-slice-gate/final-producer",
+      "native_registration_whole_program_source_inventory",
+      "--nocapture"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/original350-native-edit/prepare.log",
+    "elapsedMs": 5808.208028999999,
+    "peakRssKiB": 309456,
+    "minimumAvailableKiB": 55993656,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 60,
+    "signal": null,
+    "exitCode": 0
+  },
+  "producer": {
+    "path": "scratch/slam_web/tmp/typed-update-slice-gate/final-producer",
+    "sha256": "b8427b0ab6cee4a252b640dfacbacbf0be974c4e5cfebd0d7126c1f30e7c6d36",
+    "sourceClosureSha256": "65f280d30b4f3702d8ce3bba017ab668ba4e79243ee4d6ea22cda0031ee703d1"
+  },
+  "artifactSha256": "e25b50efcc9ad69c5a218b436175138f56c81e98f7fa2d58524f1030701d99c7",
+  "fixtureSha256": "34e18d2a03a8fecfbeb9ea29d2ba44daffb7f5d6b060969d695b91127b8a9291",
+  "testSourceSha256": "2a9af3aee13be1e05b2b01cab2a629a114a22bc4fab0e53d2d717391ca86cad5",
+  "originalSourceSha256": "8074f170f8316c4874f4517e1f4875924434fa1f58d27611a1ff93d719441ecd",
+  "sourceEdit": "Exactly disparitySigma default0.1 to0.2 in original8074 full350 source; compiler issued artifact unchanged algorithm/capacity",
+  "browserValidation": "PENDING parent gate",
+  "varianceInterpretation": "Only disparity/depth contribution quadruples; pixel-localization contribution stays fixed",
+  "artifacts": "dev/artifacts/original350-uncertainty-native-edit",
+  "compilerIssuedParameterDifferences": [
+    {
+      "index": 4,
+      "original": 0.1,
+      "edited": 0.2
+    }
+  ],
+  "defaultBinding": {
+    "P": {
+      "index": 4,
+      "byte_offset": 32
+    }
+  },
+  "typecheck": {
+    "command": [
+      "taskset",
+      "-c",
+      "12",
+      "nice",
+      "-n",
+      "15",
+      "/nix/store/324pab2sykfjpbxsnxbcxmni42xxwxc0-nodejs-24.18.0/bin/node",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--pretty",
+      "false",
+      "--target",
+      "ES2022",
+      "--module",
+      "ESNext",
+      "--moduleResolution",
+      "Bundler",
+      "--skipLibCheck",
+      "tests/compiler-probes/modelica-original350-uncertainty-edit.test.ts"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/original350-native-edit/typecheck.log",
+    "elapsedMs": 2026.5233590000003,
+    "peakRssKiB": 321208,
+    "minimumAvailableKiB": 56795264,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 4096,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  }
+}

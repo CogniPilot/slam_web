@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "status": "UNCHANGED_FULL_FRAME_NATIVE_SCHEDULE_REFUSED",
+  "model": "FastNativeFrame",
+  "sourcePath": "models/FastNativeFrame.mo",
+  "sourceSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+  "dimensions": {
+    "height": 90,
+    "width": 160,
+    "rgbaChannels": 4,
+    "pixels": 14400,
+    "patch": [
+      7,
+      7
+    ]
+  },
+  "attempts": 1,
+  "sourceChanged": false,
+  "compiler": {
+    "head": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "dirty": true,
+    "sourceClosureSha256": "1f3a82c9c92139993740a7e7dfe497d920fba25c6f69e8b9769ef0c1eef2f75a",
+    "files": 2423,
+    "producerSha256": "662903fba5e22be694ae1103834a3d9048da11503015a14b197f93ac0bb32952",
+    "producerPath": "$HOME/scratch/slam_web/tmp/compact-family-calls-gate/final-producer",
+    "sourceBeforeAfterMatch": true
+  },
+  "resource": {
+    "command": [
+      "env",
+      "TMPDIR=$HOME/scratch/slam_web/tmp",
+      "CARGO_BUILD_JOBS=4",
+      "RUST_TEST_THREADS=4",
+      "RAYON_NUM_THREADS=4",
+      "CARGO_INCREMENTAL=0",
+      "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/source.mo",
+      "RUMOCA_NATIVE_SOURCE_MODEL=FastNativeFrame",
+      "RUMOCA_NATIVE_SOURCE_SOLVE_ARTIFACT=$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/solve.json",
+      "RUMOCA_NATIVE_PROGRAM_ARTIFACT=$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/native-program.json",
+      "taskset",
+      "-c",
+      "6,7",
+      "nice",
+      "-n",
+      "15",
+      "$HOME/scratch/slam_web/tmp/compact-family-calls-gate/final-producer",
+      "native_registration_whole_program_source_inventory",
+      "--nocapture"
+    ],
+    "log": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/prepare.log",
+    "elapsedMs": 247717.672072,
+    "peakRssKiB": 7444588,
+    "minimumAvailableKiB": 52386084,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 600,
+    "signal": null,
+    "exitCode": 101
+  },
+  "result": {
+    "exitCode": 101,
+    "nativeArtifactIssued": false,
+    "numericCasesExecuted": 0,
+    "completeCheckedSolveCaptured": true,
+    "failure": "compiler did not issue a complete native direct-assignment schedule: native tensor residual has no direct elementwise isolator"
+  },
+  "firstRefusal": {
+    "sourceNode": 0,
+    "sourceKind": "ScalarPrograms",
+    "program": 0,
+    "programSpan": {
+      "source": "11643697360139376299",
+      "start": 3336,
+      "end": 3339
+    },
+    "operations": 8187,
+    "pureCallSites": 154,
+    "originalStore": {
+      "op": {
+        "StoreOutputRange": {
+          "start": 8026,
+          "count": 160,
+          "stride": 1
+        }
+      },
+      "i": 8186
+    },
+    "originalFirstOutputProducer": {
+      "position": 8026,
+      "kind": "Move",
+      "operation": {
+        "dst": 8026,
+        "src": 2
+      }
+    },
+    "originalResidualAtSourceRegister2": {
+      "Binary": {
+        "dst": 2,
+        "op": "Sub",
+        "lhs": 0,
+        "rhs": 1
+      }
+    },
+    "ownerLocation": "crates/rumoca-ir-solve/src/refresh/native_assignment/range.rs::isolated_value",
+    "condition": "The original StoreOutputRange selects a Move-packed tuple of scalar residuals. Its first exact producer is Move, while this profile requires a directly selected TensorBinary(Sub) range.",
+    "callCapabilityRefusal": false,
+    "scope": "First source-order constructor refusal, located by literal original register/store inventory and the frozen constructor. No later family acceptance inferred."
+  },
+  "representation": {
+    "scalarPrograms": 85,
+    "scalarProgramNodes": [
+      0
+    ],
+    "scalarOperationCount": 687719,
+    "scalarOutputs": 13448,
+    "compactFamilies": 96,
+    "pureCallSites": 12936,
+    "distinctCallOwnerIds": 12936,
+    "table": {
+      "programSpanExactRaw": "{\"source\":11643697360139376299,\"start\":3336,\"end\":3339}",
+      "tableOffset": 96825014,
+      "totalSolveBytes": 1822514705,
+      "bytesFromTableToEnd": 1725689691,
+      "firstTwoOwners": [
+        {
+          "id": 0,
+          "identity": 1,
+          "bytes": 133377,
+          "keys": [
+            "id",
+            "identity",
+            "inputs",
+            "outputs",
+            "body",
+            "provenance"
+          ],
+          "bodyBytes": 133037,
+          "bodySha256": "d2d39e281a6e701c2c9d121b749c58b800cd74faac0bd095c52863ee5dc61895",
+          "sourceSpan": {
+            "source": "11643697360139376299",
+            "start": 3614,
+            "end": 3685
+          }
+        },
+        {
+          "id": 1,
+          "identity": 2,
+          "bytes": 133377,
+          "keys": [
+            "id",
+            "identity",
+            "inputs",
+            "outputs",
+            "body",
+            "provenance"
+          ],
+          "bodyBytes": 133037,
+          "bodySha256": "d2d39e281a6e701c2c9d121b749c58b800cd74faac0bd095c52863ee5dc61895",
+          "sourceSpan": {
+            "source": "11643697360139376299",
+            "start": 3614,
+            "end": 3685
+          }
+        }
+      ],
+      "exactBodiesEqual": true,
+      "scope": "Diagnostic exact-byte comparison only; immutable owner identities remain distinct and no tables are reissued."
+    },
+    "allBodiesCompared": false,
+    "estimate": "12936 × first observed133037-byte body =1720986552 bytes; only first two body byte identities were checked, so complete-table sharing equivalence remains unproved."
+  },
+  "diagnosticLimits": {
+    "fullJsonParsed": false,
+    "firstProgramExactBytes": 448283,
+    "selectedOwnerMaxBytes": 1048576,
+    "initialFirstNodeExtraction": "Refused its32MiB diagnostic cap before parse; no model retry.",
+    "firstProgramSummaryAttempt": "First summary incorrectly assumed scalar StoreOutput; corrected inspection to original StoreOutputRange without source changes.",
+    "noOwnerIdRoundtrip": "SourceId provenance copied as decimal strings from exact raw text; diagnostic JSON summaries never reissue Solve authorities."
+  },
+  "nextOwners": [
+    {
+      "owner": "Native assignment tuple certification",
+      "proposal": "Recognize immutable original Move/scalar residual tuple producers against complete original target inventory, retaining every prefix, original store/output identity, full argument fault dependence and exact ordered commit; no synthesized tensor authority or per-coordinate execution."
+    },
+    {
+      "owner": "Typed pure-call owner/body representation and backend helper reuse",
+      "proposal": "Measure exact repeated checked body sharing/compilation independently; preserve separate owner IDs, contexts, dependencies, original fault spans and per-site call ABI. Matching source names or source spans alone cannot authorize merging."
+    }
+  ],
+  "rawFiles": [
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/source.mo",
+      "bytes": 3904,
+      "sha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/compiler-source.sha256",
+      "bytes": 298382,
+      "sha256": "1f3a82c9c92139993740a7e7dfe497d920fba25c6f69e8b9769ef0c1eef2f75a"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/resource.json",
+      "bytes": 1117,
+      "sha256": "4a38b18e4c5083fe17384b05b674c75742c6919de4234ca9481034915cc889bb"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/prepare.log",
+      "bytes": 37095608,
+      "sha256": "7e2126a875a94405028b4a590f9b04212cfea3112594174ad7a59d33d1081cfa"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/solve.json",
+      "bytes": 1822514705,
+      "sha256": "f9e02852e6d5abd0890e39a2f0801f45951318f95066e4aa073762c015863c84"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/node-0-program-0-exact.json",
+      "bytes": 448283,
+      "sha256": "b6606f89243e7b1ab8937f0c8d5d1d40ed0d4d6a55178852fa8d18bf49aff1b7"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/owner-0-exact.json",
+      "bytes": 133377,
+      "sha256": "2bc7af55956b1a4d43c87f1ca75a3fbde94e709b8047ba21078b5c02332324b1"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/owner-1-exact.json",
+      "bytes": 133377,
+      "sha256": "4f6421d388f7829cb0e85bd723a436a4cd98eabbaa0a87f765ead63185292dd9"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/inventory-summary.json",
+      "bytes": 121390,
+      "sha256": "79ed4626dd41a5d387ba921cc75455bae4177297f10412bfe7683754bfb2c588"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/first-refusal-summary.json",
+      "bytes": 7548,
+      "sha256": "69d7b5d1aa3e68bd34c4c37750c2d28470872aae9e7eda8de7662e0e58fae39e"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/fast-native-frame-compact-calls/representation-summary.json",
+      "bytes": 1238,
+      "sha256": "1e94c4a8f2b6793575cd949efaccb1b32dfa37816afa1f3aee4400de968ea888"
+    }
+  ],
+  "artifacts": "dev/artifacts/fast-native-frame-compact-calls",
+  "limitations": [
+    "No native module was issued and zero numerical fixtures ran.",
+    "Preparation247.7s combines source/flatten/DAE/Solve/native derivation with no phase callback; no phase-specific timing attribution.",
+    "The complete1.7GiB wire and36MiB source inventory remain under Scratch; archived small exact slices and digests support diagnosis without parsing the full wire.",
+    "No reduced frame, model rewrite, guard weakening, Cargo rebuild, compiler or production pin change.",
+    "No fullSLAM, throughput improvement or10x claim."
+  ],
+  "cpuWindowReleased": true
+}

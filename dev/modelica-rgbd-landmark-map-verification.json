@@ -1,0 +1,207 @@
+{
+  "status": "FULL_CAPACITY_SOURCE_NATIVE_PREPARATION_TIMEOUT_ORACLE_ONLY_PASS",
+  "date": "2026-10-04",
+  "model": "RGBDLandmarkMap",
+  "dimensions": {
+    "imageHeight": 90,
+    "imageWidth": 160,
+    "mapCapacity": 14400,
+    "candidateCapacity": 350,
+    "pointDimension": 3
+  },
+  "sourceSha256": "110ecb3c5ddb053e498268c6cea722a3a9921c10c50b3c3f718df63ec4c7842a",
+  "editedSourceSha256": "a2e14a5ee292d8de11d29d355eddbc22fc75af9e0bc31df8bc9ddefd994f5040",
+  "defaults": {
+    "coordinateLimit": 1000000,
+    "voxelWidth": 0.25,
+    "mergeRadius": 0.15,
+    "maximumDistance": 80,
+    "tentativeLifetime": 0.5,
+    "confirmedLifetime": 5,
+    "confirmationObservations": 3,
+    "maximumConfidence": 8,
+    "maximumTentative": 700
+  },
+  "state": {
+    "coordinates": "world ENU, identical worldFrame required across retained state/candidates/estimated bodyPosition",
+    "source": "projected optical RDF candidates; estimated pose only; no ground truth",
+    "retainedScalarCount": 100800,
+    "retainedArrayBytes": 806400,
+    "publicOutputScalarCount": 115213,
+    "publication": "caller retains accepted outputs only; invalid transition returns original persistent state",
+    "reset": "explicit reset discards old state, starts frame1 and owns new worldFrame",
+    "sourceReload": "staged native gate requires exact source-bound baseline/edited JSON artifacts; not executed"
+  },
+  "files": {
+    "models/RGBDLandmarkMap.mo": "110ecb3c5ddb053e498268c6cea722a3a9921c10c50b3c3f718df63ec4c7842a",
+    "tests/compiler-probes/modelica-rgbd-landmark-map.test.ts": "4dc3589e6ebd08157600d0a6b97afa1d045abae8dbb5be579115556ed9080d86",
+    "tests/compiler-probes/modelica-rgbd-landmark-map-fixtures.ts": "5e0bf247a2cc6f5edc95c4effa150cb074285fef8d30334c505c32a18b40d1d7",
+    "dev/vitest-landmark-map.config.ts": "ab4034bfeeac49d266eec32749675e963d64443128862c28499aa11362c08f87"
+  },
+  "producer": {
+    "binarySha256": "745f8942e586d94a697e81aca41f2044b52781c608d3059f9f4a549fa1c58bf2",
+    "compilerSourceManifestSha256": "53db01b95ff69ab59122c068b5697c162a199c2f3937bfc3dca4a57e1d2eacd8",
+    "headHint": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "dirty": true,
+    "authority": "copied immutable binary and complete source manifest; HEAD alone is not provenance",
+    "scratchDirectory": "$HOME/scratch/slam_web/tmp/landmark-map",
+    "cargoBuilds": 0
+  },
+  "attempts": [
+    {
+      "sourceSha256": "ef728afd698a4de85c90f698707fdc4b973a81da338392234a686416c32f69fb",
+      "outcome": "TO_DAE_CONSTRUCTION_REFUSAL",
+      "elapsedMs": 246.99455,
+      "exitCode": 101,
+      "error": "canonical DAE construction rejected an invalid operation: missing function loop initial value definition for identity 2",
+      "actualNumericCases": 0,
+      "artifactIssued": false,
+      "log": "artifacts/rgbd-landmark-map/initial-prepare.log",
+      "source": "artifacts/rgbd-landmark-map/initial-source.mo",
+      "resourceNote": "sub-500ms run ended before resource sample; no peak-RSS claim"
+    },
+    {
+      "sourceSha256": "4d9e110ec1ef00a5d2e6cb1567b26ce44528fa0bff0853b0d3b69b9d9db64850",
+      "outcome": "TO_DAE_CONSTRUCTION_PANIC",
+      "elapsedMs": 236.990504,
+      "exitCode": 101,
+      "error": "internal error: entered unreachable code: a nested total definition is compacted before fold lowering",
+      "owner": "crates/rumoca-phase-dae/src/construction/function_body.rs:1492",
+      "actualNumericCases": 0,
+      "artifactIssued": false,
+      "log": "artifacts/rgbd-landmark-map/initialized-prepare.log",
+      "source": "artifacts/rgbd-landmark-map/initialized-source.mo",
+      "resourceNote": "sub-500ms run ended before resource sample; no peak-RSS claim"
+    },
+    {
+      "sourceSha256": "110ecb3c5ddb053e498268c6cea722a3a9921c10c50b3c3f718df63ec4c7842a",
+      "outcome": "PREPARATION_TIMEOUT",
+      "elapsedMs": 180257.571786,
+      "peakRssKiB": 236444,
+      "minimumAvailableKiB": 57351780,
+      "exitCode": 124,
+      "stopped": "timeout",
+      "signal": "SIGKILL",
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "secondsLimit": 180,
+      "cpuAffinity": [
+        10
+      ],
+      "nice": 10,
+      "artifactIssued": false,
+      "solveJsonIssued": false,
+      "actualNumericCases": 0,
+      "log": "artifacts/rgbd-landmark-map/final-prepare.log",
+      "change": "equivalent three-element vector/slice assignments replacing nested scratch loops; full capacities and mapping decisions retained"
+    }
+  ],
+  "profile": {
+    "raw": "$HOME/scratch/slam_web/tmp/landmark-map/prepare.perf.data",
+    "rawSha256": "c689a682fd74ea6d802b0cb9fb5464d8c7f82093b27fb8f92eac7b69f5070256",
+    "report": "artifacts/rgbd-landmark-map/prepare-perf-report.txt",
+    "recordDurationSeconds": 15,
+    "samples": 1462,
+    "lostSamples": 0,
+    "event": "cpu/cycles/Pu",
+    "exclusiveCycleWeightedPercent": {
+      "DefaultHasher_write": 22.47,
+      "Projection_expression_validation_memo": 14.95,
+      "FoldGraph_enqueue": 9.51,
+      "HashMap_insert": 5.79
+    },
+    "scope": "attached only owned frozen producer during preparation; symbol samples identify eval-dae projection owners; exact compile/Solve boundary not instrumented; call-stack unwinding incomplete, no inclusive phase attribution"
+  },
+  "verification": {
+    "oracleFixtures": {
+      "status": "PASS",
+      "tests": 6,
+      "fullCapacity": true,
+      "actualModelicaExecution": false,
+      "actualNumericalCases": 0,
+      "stagedNativeGroupsSkipped": 4,
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10",
+          "/nix/store/gxq2cd70i077rah1d4hkzc1lpq8q4pv8-nodejs-24.21.0/bin/node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "--config",
+          "dev/vitest-landmark-map.config.ts"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/landmark-map/oracle-final.log",
+        "elapsedMs": 2894.634518,
+        "peakRssKiB": 330168,
+        "minimumAvailableKiB": 58049688,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 4096,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 0
+      },
+      "log": "artifacts/rgbd-landmark-map/oracle.log",
+      "cases": [
+        "repeated same-frame candidates cannot confirm; retained frames can",
+        "negative voxel boundary/spatial dedup/first anchor/sparse final slots",
+        "all14400 occupied storage refusal and last slot recycling",
+        "tentative quota/age boundaries/malformed candidates",
+        "atomic rejected time/frame/world/state/pose, reset, edited confirmation",
+        "inclusive distance/tentative lifetime, masked invalid empty state canonicalization"
+      ]
+    },
+    "typecheck": {
+      "status": "PASS",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10",
+          "/nix/store/gxq2cd70i077rah1d4hkzc1lpq8q4pv8-nodejs-24.21.0/bin/node",
+          "node_modules/typescript/bin/tsc",
+          "--noEmit"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/landmark-map/typecheck.log",
+        "elapsedMs": 7022.580515,
+        "peakRssKiB": 568632,
+        "minimumAvailableKiB": 57721040,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 4096,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 60,
+        "signal": null,
+        "exitCode": 0
+      },
+      "log": "artifacts/rgbd-landmark-map/typecheck.log"
+    }
+  },
+  "algorithmCost": {
+    "maximumCandidateSlotVisitsPerCall": 5040000,
+    "profile": "bounded ordered full map scan; no hash alias or reduced-slot substitution",
+    "nativeCopyBytesPerCall": null,
+    "nativeExecutionTimeMs": null,
+    "performanceAccepted": false
+  },
+  "remaining": [
+    "actual source-issued native artifact admission",
+    "independent actual Modelica numerical/source-edit/reset/reload gate",
+    "copy/scratch/code-size and browser throughput evidence",
+    "runtime state ownership integration with functional visual frontend",
+    "free-space pruning and moving-object classification",
+    "descriptor/keyframe retrieval, loop closure and map frame correction"
+  ],
+  "runtimeIntegrated": false,
+  "compilerPinChanged": false,
+  "fullSlamAccepted": false,
+  "tenTimesRealtimeAccepted": false
+}

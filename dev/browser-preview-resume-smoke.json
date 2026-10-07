@@ -1,0 +1,19 @@
+{
+  "observedAt": "2026-10-05T19:41:30.950Z",
+  "url": "http://localhost:4173",
+  "server": "Vite development server, current source",
+  "browser": "Chromium fresh browser context, GPU launch flags",
+  "ready": true,
+  "algorithmPreset": "Modelica inertial propagation",
+  "sceneDetail": "medium",
+  "depthCloudEnabled": false,
+  "simulationTimeSeconds": 1.3,
+  "pageErrors": [],
+  "scope": "Startup and advancing baseline simulation only; no visual localization, loop closure, full SLAM, whole-pipeline throughput or renderer GPU identity claim.",
+  "compilerQualification": {
+    "session": 17957,
+    "directory": "$HOME/scratch/slam_web/tmp/native-coverage-index-v2-resume-VGLxG7",
+    "status": "RUNNING_UNQUALIFIED",
+    "changes": "Remaining broad/strict/fmt/link stages of original gate; focused68 already passed."
+  }
+}

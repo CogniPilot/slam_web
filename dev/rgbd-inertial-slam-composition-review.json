@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "status": "SOURCE_COMPOSITION_REVIEW_ONLY",
+  "recordedAt": "2026-10-05T19:51:26.989Z",
+  "sources": [
+    {
+      "path": "models/RGBDVisualRelativeObservation.mo",
+      "sha256": "2c3c2bcee7437fc9e471ab6f4fe68b846b329ac3b0a4db413a98521249ca6aa5"
+    },
+    {
+      "path": "models/RGBDVisualObservation.mo",
+      "sha256": "b8b3747516c815ddc2f4c514e4eb9641f3b5cafac858f47cdeb6feecc641b137"
+    },
+    {
+      "path": "models/RGBDFeatureMatching.mo",
+      "sha256": "1adc065bee50fcf583165daa015f3f0170b42a3c73ff2bd3260fafb40e71b59b"
+    },
+    {
+      "path": "models/RigidPointRegistration.mo",
+      "sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02"
+    },
+    {
+      "path": "models/RGBDRelativePose.mo",
+      "sha256": "adad8fb9fab1057293da6bb76e988853fceed9deef0809a902bd2a3680491045"
+    },
+    {
+      "path": "models/RGBDRegistrationUncertainty.mo",
+      "sha256": "8074f170f8316c4874f4517e1f4875924434fa1f58d27611a1ff93d719441ecd"
+    },
+    {
+      "path": "models/RGBDInertialSLAM.mo",
+      "sha256": "f53574a07f909ca57cd837fcdb96bd753afd445cb279ffd3ba50a0c113ca7854"
+    },
+    {
+      "path": "models/FastNativeFrame.mo",
+      "sha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11"
+    },
+    {
+      "path": "models/FeatureSelection.mo",
+      "sha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23"
+    },
+    {
+      "path": "models/SchmidtReferenceState.mo",
+      "sha256": "7c60e7f7acc36eaf06b99316e0aac73018da669c51c11ef0de8ed62e9695b2aa"
+    },
+    {
+      "path": "models/RGBDLandmarkProjection.mo",
+      "sha256": "98fe255ff54004d5bc76f7c68cf4c93da2d0a8be45fac9cac52beec3fbe5e412"
+    },
+    {
+      "path": "models/RGBDLandmarkMap.mo",
+      "sha256": "110ecb3c5ddb053e498268c6cea722a3a9921c10c50b3c3f718df63ec4c7842a"
+    },
+    {
+      "path": "models/RGBDBagOfWords.mo",
+      "sha256": "485f33e388a0aeb2c28a1a5f2f33e6a4e93e30aea2aff7e9b3905f81dbf01570"
+    },
+    {
+      "path": "models/ModelicaPoseGraph.mo",
+      "sha256": "2a035cd44537e440636284c40b1a4cabd9f3a0e402662852d9ec38d2afca3483"
+    },
+    {
+      "path": "docs/rgbd-inertial-slam-composition.md",
+      "sha256": "05c1e5d49ce87e4b25a75c7d195f07f4143ab79f1ac4203bc621d629f47b0339"
+    }
+  ],
+  "newComponent": {
+    "model": "RGBDVisualRelativeObservation",
+    "dependencies": [
+      "models/RGBDVisualObservation.mo",
+      "models/RGBDFeatureMatching.mo",
+      "models/RigidPointRegistration.mo",
+      "models/RGBDRelativePose.mo",
+      "models/RGBDRegistrationUncertainty.mo"
+    ],
+    "interface": "extends RGBDVisualObservation without changing inherited fields",
+    "mathOwner": "RGBDRegistrationSandwich existing Modelica function",
+    "registrationDomain": 350,
+    "uncertaintyDomain": 350,
+    "pointFrame": "optical RDF",
+    "transform": "currentPoint = currentFromReference * referencePoint + currentFromReferenceTranslation",
+    "relativeNoiseOrder": "optical additive translation, optical left-angle perturbation",
+    "conditionalNoiseOrder": "world additive position, body right-local angle, conditioned on estimated reference",
+    "referenceCalibrationRetained": true,
+    "commonPairNoiseAssumption": [
+      "stereo baseline",
+      "disparity sigma"
+    ],
+    "sourceCompileAttempted": false,
+    "nativeArtifactIssued": false,
+    "actualNumericalCases": 0
+  },
+  "fullComposition": {
+    "model": "RGBDInertialSLAM",
+    "partial": true,
+    "rawImageShape": [
+      90,
+      160,
+      4
+    ],
+    "rasterSlots": 14400,
+    "featureSlots": 350,
+    "descriptorCells": 49,
+    "mapSlots": 14400,
+    "retrievalWords": 256,
+    "keyframeSlots": 128,
+    "retrievalCandidates": 4,
+    "graphEdges": 256,
+    "correlatedFilterDimension": 21,
+    "blockingOwners": [
+      "full original detector/selector/descriptor/connected frontend source admission",
+      "checked 14400 selector storage to at-most350 descriptor handoff",
+      "same-slot persistent keyframe geometry/calibration and epoch catalog",
+      "geometric loop verification and correlated reuse policy",
+      "source-owned graph edges and residual-convention covariance transport",
+      "anchor-aware landmark and joint filter/reference/graph correction transaction",
+      "coherent reset and source-compatible persistent state reload",
+      "typed Solve Float32 CV and checked raw U8 input storage"
+    ]
+  },
+  "verification": {
+    "sourceReviewOnly": true,
+    "newNumericalAlgorithms": 0,
+    "compilerJobsStarted": 0,
+    "compilerSourceEdited": false,
+    "productionPinChanged": false,
+    "runtimeEdited": false,
+    "fullSlamAccepted": false,
+    "limits": "Current review source transports Real RGBA; no claimed U8 ABI, Float32 CV, connected numerical acceptance or throughput."
+  }
+}

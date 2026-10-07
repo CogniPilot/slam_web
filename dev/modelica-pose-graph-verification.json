@@ -1,0 +1,165 @@
+{
+  "schema": 1,
+  "component": "ModelicaPoseGraph",
+  "sourceSha256": "2a035cd44537e440636284c40b1a4cabd9f3a0e402662852d9ec38d2afca3483",
+  "capacities": {
+    "nodes": 128,
+    "edges": 256
+  },
+  "sourceImplemented": true,
+  "fullOptimizerNumericallyAccepted": false,
+  "fullOptimizerArtifactIssued": false,
+  "runtimeIntegrated": false,
+  "completeLoopClosure": false,
+  "productionPinChanged": false,
+  "compilerMutations": 0,
+  "cargoInvocations": 0,
+  "producer": {
+    "sha256": "3f6b4c339b05851d6efadf22d930f3574b15b0a95437926e03f48cec9086a2a2",
+    "path": "$HOME/scratch/slam_web/tmp/finite-for-counter-gate-retry/final-producer",
+    "sourceClosureSha256": "13a5721c19427834f340b4c32b825694b07033e2e4212bca25d732812876c5f5"
+  },
+  "nativeEdge": {
+    "sourceSha256": "2a035cd44537e440636284c40b1a4cabd9f3a0e402662852d9ec38d2afca3483",
+    "moduleSha256": "03cf14a3febbbe948518a41d11389923b7749f80beecc2b9afbf845776bd3010",
+    "moduleBytes": 52310,
+    "cases": [
+      {
+        "residualError": 5.551115123125783e-17,
+        "JiError": 1.0179734832860277e-10,
+        "JjError": 1.777036295891321e-10
+      },
+      {
+        "residualError": 1.1102230246251565e-16,
+        "JiError": 1.2672185523143753e-10,
+        "JjError": 1.4841372575347123e-10
+      },
+      {
+        "residualError": 5.551115123125783e-17,
+        "JiError": 9.882439311326152e-11,
+        "JjError": 1.3390522024536722e-10
+      },
+      {
+        "residualError": 1.6653345369377348e-16,
+        "JiError": 2.2370749697131487e-10,
+        "JjError": 1.1660411525227232e-10
+      },
+      {
+        "residualError": 1.3877787807814457e-16,
+        "JiError": 2.9764346543004194e-10,
+        "JjError": 1.547650341215956e-10
+      },
+      {
+        "residualError": 1.1102230246251565e-16,
+        "JiError": 2.6225377425248553e-10,
+        "JjError": 2.606852511632951e-10
+      },
+      {
+        "residualError": 2.220446049250313e-16,
+        "JiError": 4.945284182156229e-10,
+        "JjError": 2.5906299327971283e-10
+      },
+      {
+        "residualError": 1.8041124150158794e-16,
+        "JiError": 4.5766701539662336e-10,
+        "JjError": 2.0407120437937465e-10
+      },
+      {
+        "residualError": 1.1102230246251565e-16,
+        "JiError": 5.658175039613411e-10,
+        "JjError": 3.478543009194368e-10
+      },
+      {
+        "residualError": 1.6653345369377348e-16,
+        "JiError": 6.004626795785839e-10,
+        "JjError": 2.637255969162311e-10
+      },
+      {
+        "residualError": 1.1102230246251565e-16,
+        "JiError": 6.303597643864123e-10,
+        "JjError": 2.947163624256177e-10
+      },
+      {
+        "residualError": 2.1510571102112408e-16,
+        "JiError": 8.024514386306691e-10,
+        "JjError": 8.024514386306691e-10
+      },
+      {
+        "residualError": 2.220446049250313e-16,
+        "JiError": 7.857036132818962e-10,
+        "JjError": 3.4502378731815497e-10
+      },
+      {
+        "residualError": 2.1261204602440742e-16,
+        "JiError": 9.166524206349891e-10,
+        "JjError": 9.166524206349891e-10
+      },
+      {
+        "residualError": 2.255140518769849e-16,
+        "JiError": 6.416840392375889e-10,
+        "JjError": 6.416840392375889e-10
+      },
+      {
+        "residualError": 0,
+        "JiError": 2.6755486715046572e-11,
+        "JjError": 2.6755486715046572e-11
+      }
+    ],
+    "nearPiRejected": true,
+    "recovered": true,
+    "reset": true,
+    "jsonReload": true,
+    "PReadonly": true,
+    "fullOptimizerAccepted": false,
+    "status": "PASS",
+    "caseCount": 16,
+    "maxResidualError": 2.255140518769849e-16,
+    "maxJacobianError": 9.166524206349891e-10,
+    "artifact": "dev/artifacts/modelica-pose-graph/edge-native-artifact.json"
+  },
+  "tests": {
+    "passed": 5,
+    "skipped": 1,
+    "skippedReason": "Full graph artifact absent",
+    "typescript": "PASS"
+  },
+  "fullGraphPreparation": {
+    "status": "TIMEOUT_NO_ARTIFACT",
+    "seconds": 60.096992048,
+    "peakRssKiB": 66184,
+    "exitCode": 124,
+    "cpuAffinity": "14,15",
+    "membershipCheckpoint": 142400000,
+    "sourceSha256": "2a035cd44537e440636284c40b1a4cabd9f3a0e402662852d9ec38d2afca3483",
+    "preparedModelCallback": false,
+    "perf": {
+      "status": "NORMALLY_FINALIZED",
+      "lostSamples": 0,
+      "traceSha256": "4c1824f3b8b4c8e367b36581847f638daed042fbefaf488f51f326589f9cde46",
+      "path": "$HOME/scratch/slam_web/profiles/modelica-pose-graph-128-256-pinned-perf/perf.data",
+      "selfPercent": {
+        "DefaultHasherWrite": 23.11,
+        "ProjectionExpression": 21.49,
+        "BuildHasherHashOne": 7.65
+      },
+      "samples": 1359
+    }
+  },
+  "historicalFailures": {
+    "preserved": true,
+    "draftSourceHashesUnavailable": true,
+    "notes": [
+      "Reserved identifier draft parser failure corrected",
+      "Conditional containing loop and Boolean continuous tuple refusal corrected by phase organization and Real diagnostic",
+      "Typed concatenate/transpose/multiaxis projection refusal preserved; fixed3x3 Modelica edge math is explicit",
+      "First profile driver lacked perf on PATH; no sample claim from that failed attempt",
+      "One independent source-edit fixture asserted an unjustified10% improvement; measured positive cost difference is now the criterion, original failure retained"
+    ]
+  },
+  "limitations": [
+    "No source-issued full graph numerical result",
+    "No runtime optimization performance claim",
+    "Retrieval and geometric verification must supply trustworthy edges",
+    "Map reanchoring/integration remains separate"
+  ]
+}

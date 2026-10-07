@@ -1,0 +1,39 @@
+{
+  "observedAt": "2026-10-05T20:35:48.725Z",
+  "status": "ACTUAL_FOCUSED_WASMI_PASS",
+  "files": [
+    {
+      "file": "crates/rumoca-exec-wasm/src/emit/compute/call_program.rs",
+      "sha256": "f0d37a939bc8c9b75bf9dcd7bcb13e5d1ab8cdbb083731c24e3d2a0385316742"
+    },
+    {
+      "file": "crates/rumoca-exec-wasm/src/emit/compute/call_program/groups.rs",
+      "sha256": "a63dbf6985728aa4d07d860e0343ec279894b16329a06c2c6eb4c2eab30d90cc"
+    },
+    {
+      "file": "crates/rumoca-exec-wasm/src/emit/compute/call_program/groups/tests.rs",
+      "sha256": "e235fa2cc7b7d14735edbf7df90d256ea7b3041d79419fcad16d0ceff7c78526"
+    }
+  ],
+  "productionTests": {
+    "passed": 4,
+    "failed": 0,
+    "filtered": 21
+  },
+  "fullImageReplay": "UNRUN",
+  "browserIntegrated": false,
+  "firstBuild": {
+    "status": "ENCODER_API_COMPILE_REFUSAL",
+    "exitCode": 101,
+    "elapsedMs": 56790.792907
+  },
+  "followup": {
+    "file": "crates/rumoca-exec-wasm/src/emit/compute/call_program/groups.rs",
+    "change": "Use pinned wasm-encoder Function.into_raw_body()",
+    "sha256": "263b2086c255df80490f7e4fb80f8abe3c0f343f344419f9d54c6d461857d695"
+  },
+  "focusedResources": {
+    "elapsedMs": 18699.109644,
+    "peakRssKiB": 616960
+  }
+}

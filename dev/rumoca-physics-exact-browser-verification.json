@@ -1,0 +1,1074 @@
+{
+  "schemaVersion": 1,
+  "status": "ACTUAL_BROWSER_ASSIGNMENT_ACTIVATION_FULL_PLANT_PARITY_AND_ISOLATED_TIMING_PASS_CANARY_PIN_PENDING",
+  "recordedAt": "2026-10-05T02:09:35.175Z",
+  "compilerSourceManifestSha256": "8f719cbb04e631199e01a30d8bf5c7e405ca8ed430c22bd53d01c7867da4c855",
+  "compilerSourceFiles": 2389,
+  "beforeAfterSourceChecksumsPass": true,
+  "compiler": {
+    "branch": "slam-native-functions",
+    "head": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "dirty": true,
+    "toolchain": "nightly-2026-02-27 (Rust1.95.0-nightly6a979b3e3)",
+    "wasmPack": "0.15.0",
+    "concurrency": {
+      "cargo": 4,
+      "tests": 4,
+      "rayon": 4
+    },
+    "flags": "--mode no-install --target web --release --no-opt --locked --features full-web",
+    "packageFiles": [
+      {
+        "file": "rumoca_bind_wasm.js",
+        "bytes": 79031,
+        "sha256": "c87d8559fadf55302abf590de2aabe72d3f2fb8b8f8401879f2adab3d60974d1"
+      },
+      {
+        "file": "rumoca_bind_wasm_bg.wasm",
+        "bytes": 35803870,
+        "sha256": "084ebb6713ab2a693cea6b887f9da879736b7f6d98f829afcde11a540a18001e"
+      },
+      {
+        "file": "package.json",
+        "bytes": 559,
+        "sha256": "8b44bb415d78ceb0ed45e41f12af4bf5eaafd772207d982ccf30cceed2718252"
+      }
+    ]
+  },
+  "build": {
+    "command": [
+      "nice",
+      "-n",
+      "10",
+      "taskset",
+      "-c",
+      "10,11",
+      "bash",
+      "-c",
+      "\nexport PATH=\"/nix/store/sffq2m1v9g60ff8prg579dmmcyryrkam-rust-nightly-2026-02-27/bin:$HOME/.cargo/bin:$PATH\"\nexport RUSTC=/nix/store/sffq2m1v9g60ff8prg579dmmcyryrkam-rust-nightly-2026-02-27/bin/rustc CARGO=/nix/store/sffq2m1v9g60ff8prg579dmmcyryrkam-rust-nightly-2026-02-27/bin/cargo\nexec /nix/store/dmfar0ixi9f97dr03drbfrmiv30nck5i-wasm-pack-0.15.0/bin/wasm-pack build crates/rumoca-bind-wasm --mode no-install --target web --release --no-opt --out-dir \"$HOME/scratch/slam_web/tmp/physics-critical-path/exact-browser-build/compiler\" -- --locked --features full-web\n"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/physics-critical-path/exact-browser-build/build.log",
+    "elapsedMs": 172482.235675,
+    "peakRssKiB": 1788448,
+    "minimumAvailableKiB": 50204480,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 600,
+    "signal": null,
+    "exitCode": 0
+  },
+  "rawDirectory": "$HOME/scratch/slam_web/tmp/physics-critical-path/exact-browser-build",
+  "durableDirectory": "dev/artifacts/physics-exact-browser",
+  "records": [
+    {
+      "file": "source-before.sha256",
+      "bytes": 293822,
+      "sha256": "8f719cbb04e631199e01a30d8bf5c7e405ca8ed430c22bd53d01c7867da4c855"
+    },
+    {
+      "file": "source-before-check.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "source-after-check.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "build.log",
+      "bytes": 2519,
+      "sha256": "76f2a9df97342ff08b46f1add211e90fc501ca6677f785629ae9bd59c5759a57"
+    },
+    {
+      "file": "build-resource.json",
+      "bytes": 1026,
+      "sha256": "10a056492593fcb235173a9d119272a408730147d007f86d5b70b88d0c8cbcf9"
+    }
+  ],
+  "productionPinChanged": false,
+  "scope": "Fresh full-web compiler, actual Chromium generated assignment modules matched to native source-issued module SHA256, all269 visible values across1033 endpoints plus reset/rollback/repeated-time/mass edit, separate uninstrumented same-build policy timing. Canonical projections still execute outside the assignment kernels. Full SLAM,10x pipeline and upstream canary remain pending.",
+  "limits": [
+    "Current production preview remains @cognipilot/rumoca0.10.0/e1e7783f1fb4.",
+    "Canonical projection and linear solve operations remain outside the compiled assignment sequences.",
+    "Fixed20-model Tier1 canary delta remains pending.",
+    "Build logs retain an existing wasm32-only unused-variable warning; native strict nine-package gate passed.",
+    "Same-build execution-policy differential is not independent physical-model validation.",
+    "Only three assignment modules per Auto run were dynamically instantiated; static28-sequence admission remains a separate proof.",
+    "Browser metrics exclude rendering, RGB/depth/LiDAR capture, graph transport, detector, registration, covariance, map and loops."
+  ],
+  "activation": {
+    "report": "activation-module-provenance/report.json",
+    "browser": "154.0.8037.92",
+    "comparisons": 349162,
+    "maxScaledDifference": 3.410605131648481e-13,
+    "tolerance": 2e-9,
+    "cameraFrames": 930,
+    "physicsEndpoints": 1033,
+    "visibleValues": 269,
+    "rates": {
+      "cameraHz": 90,
+      "lidarHz": 20,
+      "imuHz": 90,
+      "gpsHz": 10
+    },
+    "controls": [
+      {
+        "policy": "interpreter",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "policy": "auto",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "policy": "auto",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "policy": "interpreter",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "sourceEdit": true,
+        "frames": 120,
+        "events": 133,
+        "allVisibleFieldsCompared": true
+      }
+    ],
+    "runs": [
+      {
+        "index": 0,
+        "policy": "interpreter",
+        "kernelCoverage": {
+          "preparation": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "advance": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "controls": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "total": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          }
+        }
+      },
+      {
+        "index": 1,
+        "policy": "auto",
+        "kernelCoverage": {
+          "preparation": {
+            "eval_residual": {
+              "modules": 120,
+              "calls": 171,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 2,
+              "calls": 3,
+              "nonzeroStatuses": 0
+            }
+          },
+          "advance": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 687863,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 1,
+              "calls": 15461,
+              "nonzeroStatuses": 0
+            }
+          },
+          "controls": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 27276,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 629,
+              "nonzeroStatuses": 0
+            }
+          },
+          "total": {
+            "eval_residual": {
+              "modules": 120,
+              "calls": 715310,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 3,
+              "calls": 16093,
+              "nonzeroStatuses": 0
+            }
+          }
+        }
+      },
+      {
+        "index": 2,
+        "policy": "auto",
+        "kernelCoverage": {
+          "preparation": {
+            "eval_residual": {
+              "modules": 120,
+              "calls": 171,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 2,
+              "calls": 3,
+              "nonzeroStatuses": 0
+            }
+          },
+          "advance": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 687863,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 1,
+              "calls": 15461,
+              "nonzeroStatuses": 0
+            }
+          },
+          "controls": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 27276,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 629,
+              "nonzeroStatuses": 0
+            }
+          },
+          "total": {
+            "eval_residual": {
+              "modules": 120,
+              "calls": 715310,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 3,
+              "calls": 16093,
+              "nonzeroStatuses": 0
+            }
+          }
+        }
+      },
+      {
+        "index": 3,
+        "policy": "interpreter",
+        "kernelCoverage": {
+          "preparation": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "advance": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "controls": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "total": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          }
+        }
+      }
+    ],
+    "observedAssignmentKernels": [
+      {
+        "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+        "bytes": 903,
+        "calls": 1,
+        "nonzeroStatuses": 0,
+        "matchingSourceModules": [
+          {
+            "variant": "baseline",
+            "ordinal": 0,
+            "identity": "RefreshSequenceId(3)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          },
+          {
+            "variant": "baseline",
+            "ordinal": 14,
+            "identity": "RefreshSequenceId(1)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 0,
+            "identity": "RefreshSequenceId(3)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 14,
+            "identity": "RefreshSequenceId(1)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          }
+        ]
+      },
+      {
+        "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+        "bytes": 40240,
+        "calls": 2038,
+        "nonzeroStatuses": 0,
+        "matchingSourceModules": [
+          {
+            "variant": "baseline",
+            "ordinal": 15,
+            "identity": "RefreshSequenceId(2)",
+            "programs": 120,
+            "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+            "bytes": 40240
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 15,
+            "identity": "RefreshSequenceId(2)",
+            "programs": 120,
+            "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+            "bytes": 40240
+          }
+        ]
+      },
+      {
+        "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+        "bytes": 25022,
+        "calls": 14054,
+        "nonzeroStatuses": 0,
+        "matchingSourceModules": [
+          {
+            "variant": "baseline",
+            "ordinal": 27,
+            "identity": "RefreshSequenceId(4294967298)",
+            "programs": 68,
+            "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+            "bytes": 25022
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 27,
+            "identity": "RefreshSequenceId(4294967298)",
+            "programs": 68,
+            "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+            "bytes": 25022
+          }
+        ]
+      },
+      {
+        "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+        "bytes": 903,
+        "calls": 1,
+        "nonzeroStatuses": 0,
+        "matchingSourceModules": [
+          {
+            "variant": "baseline",
+            "ordinal": 0,
+            "identity": "RefreshSequenceId(3)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          },
+          {
+            "variant": "baseline",
+            "ordinal": 14,
+            "identity": "RefreshSequenceId(1)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 0,
+            "identity": "RefreshSequenceId(3)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 14,
+            "identity": "RefreshSequenceId(1)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          }
+        ]
+      },
+      {
+        "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+        "bytes": 40240,
+        "calls": 2038,
+        "nonzeroStatuses": 0,
+        "matchingSourceModules": [
+          {
+            "variant": "baseline",
+            "ordinal": 15,
+            "identity": "RefreshSequenceId(2)",
+            "programs": 120,
+            "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+            "bytes": 40240
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 15,
+            "identity": "RefreshSequenceId(2)",
+            "programs": 120,
+            "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+            "bytes": 40240
+          }
+        ]
+      },
+      {
+        "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+        "bytes": 25022,
+        "calls": 14054,
+        "nonzeroStatuses": 0,
+        "matchingSourceModules": [
+          {
+            "variant": "baseline",
+            "ordinal": 27,
+            "identity": "RefreshSequenceId(4294967298)",
+            "programs": 68,
+            "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+            "bytes": 25022
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 27,
+            "identity": "RefreshSequenceId(4294967298)",
+            "programs": 68,
+            "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+            "bytes": 25022
+          }
+        ]
+      },
+      {
+        "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+        "bytes": 903,
+        "calls": 1,
+        "nonzeroStatuses": 0,
+        "matchingSourceModules": [
+          {
+            "variant": "baseline",
+            "ordinal": 0,
+            "identity": "RefreshSequenceId(3)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          },
+          {
+            "variant": "baseline",
+            "ordinal": 14,
+            "identity": "RefreshSequenceId(1)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 0,
+            "identity": "RefreshSequenceId(3)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 14,
+            "identity": "RefreshSequenceId(1)",
+            "programs": 2,
+            "moduleSha256": "aa5d2e32754b7059b529cee962b362268ba736101fccfa81783418c1c056fea0",
+            "bytes": 903
+          }
+        ]
+      },
+      {
+        "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+        "bytes": 40240,
+        "calls": 256,
+        "nonzeroStatuses": 0,
+        "matchingSourceModules": [
+          {
+            "variant": "baseline",
+            "ordinal": 15,
+            "identity": "RefreshSequenceId(2)",
+            "programs": 120,
+            "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+            "bytes": 40240
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 15,
+            "identity": "RefreshSequenceId(2)",
+            "programs": 120,
+            "moduleSha256": "159d4d49a3f64186503d07dba531e09032a238d47464d7455ac9bf175b514d74",
+            "bytes": 40240
+          }
+        ]
+      },
+      {
+        "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+        "bytes": 25022,
+        "calls": 1848,
+        "nonzeroStatuses": 0,
+        "matchingSourceModules": [
+          {
+            "variant": "baseline",
+            "ordinal": 27,
+            "identity": "RefreshSequenceId(4294967298)",
+            "programs": 68,
+            "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+            "bytes": 25022
+          },
+          {
+            "variant": "mass-2.4",
+            "ordinal": 27,
+            "identity": "RefreshSequenceId(4294967298)",
+            "programs": 68,
+            "moduleSha256": "058f702bdb55cf781e2431ff4f2103a5e5179272f57c9fac79f1104054162fed",
+            "bytes": 25022
+          }
+        ]
+      }
+    ],
+    "moduleProvenance": "Exact SHA256 match to emitted original-source native modules. Identical bytecode can match multiple schedule identities; no identity is inferred from an ambiguous digest."
+  },
+  "uninstrumented": {
+    "report": "uninstrumented/report.json",
+    "counterObservationEnabled": false,
+    "comparisons": 349162,
+    "maxScaledDifference": 3.410605131648481e-13,
+    "groups": [
+      {
+        "policy": "interpreter",
+        "perCameraFrameMs": [
+          4.528064516795578,
+          4.406129032693883
+        ],
+        "meanMs": 4.46709677474473
+      },
+      {
+        "policy": "auto",
+        "perCameraFrameMs": [
+          2.6048387066010505,
+          2.581720430748437
+        ],
+        "meanMs": 2.5932795686747436
+      }
+    ],
+    "speedup": 1.72256660203727,
+    "timeReductionFraction": 0.41947092273976194,
+    "scope": "Same fresh compiler/source ABBA execution policy comparison, two930camera-frame runs per policy. No generated kernel wrappers, perf or CPU sampling. Advance timing includes cold first30frames, shared-host contention and generic performance.now calls; preparation, JSON snapshot/readback, controls and scene/sensors are outside this metric. It is not a preview or whole-pipeline speedup."
+  },
+  "browserAttempts": [
+    {
+      "file": "activation/run.log",
+      "bytes": 4711,
+      "sha256": "ca08c96d58d6e303f3f695644e4caa55e5342d8c1c7e619eefdec8329619ba91"
+    },
+    {
+      "file": "activation/resource.json",
+      "bytes": 625,
+      "sha256": "07866fd22ea12eaad82a0240e34529d384a9924936cc7b2d9aeb588f1b5f5f0a"
+    },
+    {
+      "file": "activation-2/report.json",
+      "bytes": 12286,
+      "sha256": "92973b5434a7884bd12a38bf3c9556f7f14173ca1ba92f414d88b194e5873acc"
+    },
+    {
+      "file": "activation-2/run.log",
+      "bytes": 7555,
+      "sha256": "c2e63519ac132721c5627ee974befb8be6c7d7bdda6db74dfd8f46f4c6930b12"
+    },
+    {
+      "file": "activation-2/resource.json",
+      "bytes": 631,
+      "sha256": "8f94a69dcebe20cb5ee34455a6178a2667c1eb39ce74b85f68cd093397936b86"
+    },
+    {
+      "file": "uninstrumented/report.json",
+      "bytes": 12187,
+      "sha256": "9d0093ce34843e053e6f8e110f65639ab20aa19e920cf3d54ca4f4f2da584777"
+    },
+    {
+      "file": "uninstrumented/run.log",
+      "bytes": 7456,
+      "sha256": "6f22d0447b8a8cace1e7edb5279ca9835bcd67be1075d131187af74c92da6be5"
+    },
+    {
+      "file": "uninstrumented/resource.json",
+      "bytes": 641,
+      "sha256": "453bf4002d208b28011deb3fd503b11786b65b08ffea877c3ddb4cf4c314ceea"
+    },
+    {
+      "file": "activation-module-provenance/report.json",
+      "bytes": 13827,
+      "sha256": "c5559b5cd8437dd6f1a1180cd2a902af7fd5f567f5da2d574db7f9526b1b3606"
+    },
+    {
+      "file": "activation-module-provenance/run.log",
+      "bytes": 8711,
+      "sha256": "db23266245db2ac45b9a31696d0acc8929ee0f4acf87973098c4877b45383cfa"
+    },
+    {
+      "file": "activation-module-provenance/resource.json",
+      "bytes": 663,
+      "sha256": "750d46e3b08cc795a80a4c817a15ba1c2d469266cf6ed4d207262d1669da8bc1"
+    }
+  ],
+  "environmentFailure": {
+    "attempt": "activation",
+    "status": "LAUNCH_FAILED_BEFORE_MODEL_EXECUTION",
+    "cause": "Chromium Unix-domain SingletonSocket path exceeded length limit because Nix nested the long TMPDIR.",
+    "correction": "Override TMPDIR after entering Nix to $HOME/scratch/slam_web/tmp. Compiler/model unchanged; original failing log/resource preserved."
+  },
+  "cpuProfile": {
+    "recordedAt": "2026-10-05T02:20:02.333Z",
+    "correctedReport": "dev/artifacts/physics-exact-browser/cpu-profile/corrected-report.json",
+    "profileSamples": 3107,
+    "profileSha256": "e41d67940971b8377ab5ae2d617c3bfb14a5ceedb92ab5370de843208b69c03e",
+    "analyzerSha256": "791a6c045941fe1d00fa40392334dff2bd9ab56fc64d03cf43226d062065d013",
+    "attribution": {
+      "sampledUs": 3311006,
+      "advanceUs": 2158001,
+      "advanceGeneratedKernelInclusiveUs": 22264,
+      "generatedKernelLeafUs": 33950,
+      "compilerWasmLeafUs": 2966801,
+      "engineBridgeLeafUs": 9534,
+      "unclassifiedWasmLeafUs": 0,
+      "generatedModuleUrls": [
+        "wasm://wasm/c597ec92",
+        "wasm://wasm/000274c2",
+        "wasm://wasm/b020f796",
+        "wasm://wasm/a3de8752",
+        "wasm://wasm/4515d27e",
+        "wasm://wasm/000186fa",
+        "wasm://wasm/de236f5a",
+        "wasm://wasm/c690a37e",
+        "wasm://wasm/59b1b096",
+        "wasm://wasm/74c2057e",
+        "wasm://wasm/21f2577e",
+        "wasm://wasm/f08feaf6",
+        "wasm://wasm/d9b334a2",
+        "wasm://wasm/c54f2432",
+        "wasm://wasm/3ca7adfa",
+        "wasm://wasm/14473756",
+        "wasm://wasm/9f70682a",
+        "wasm://wasm/51f809be"
+      ],
+      "scope": "Weighted CDP samples. Only unnamed wasm-function[index] frames from the current generated emitter count as kernels; V8 js-to-wasm/wasm-to-js entry trampolines are separate. Compiler functions use served /compiler.wasm. Unclassified WASM frames remain explicit. Inclusive groups can overlap; sampled durations are not exact invocation counts or unprofiled timings."
+    },
+    "advanceGroups": {
+      "projectionSingletonAssignmentInclusiveUs": 1977931,
+      "typedPureCallInclusiveUs": 1434940,
+      "linearSolveInclusiveUs": 7416
+    },
+    "unclassifiedWasmFrames": [],
+    "topSelfFrames": [
+      {
+        "frame": {
+          "functionName": "<rumoca_eval_solve[55f7e97110e10c37]::typed_program::EvalFrame>::eval_operation",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 133059
+        },
+        "microseconds": 406742
+      },
+      {
+        "frame": {
+          "functionName": "<dlmalloc[f3ba459c11261b14]::dlmalloc::Dlmalloc<dlmalloc[f3ba459c11261b14]::sys::System>>::malloc",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 5106063
+        },
+        "microseconds": 275339
+      },
+      {
+        "frame": {
+          "functionName": "rumoca_eval_solve[55f7e97110e10c37]::eval_row_prepared_fast",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 583770
+        },
+        "microseconds": 229803
+      },
+      {
+        "frame": {
+          "functionName": "<core[76f2a14785d2d093]::iter::adapters::map::Map<core[76f2a14785d2d093]::iter::adapters::zip::Zip<core[76f2a14785d2d093]::iter::adapters::copied::Copied<core[76f2a14785d2d093]::slice::iter::Iter<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>>, core[76f2a14785d2d093]::iter::adapters::copied::Copied<core[76f2a14785d2d093]::slice::iter::Iter<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>>>, rumoca_eval_solve[55f7e97110e10c37]::typed_program::number::eval_binary_typed::{closure#0}> as core[76f2a14785d2d093]::iter::traits::iterator::Iterator>::try_fold::<(), <core[76f2a14785d2d093]::iter::adapters::GenericShunt<core[76f2a14785d2d093]::iter::adapters::map::Map<core[76f2a14785d2d093]::iter::adapters::zip::Zip<core[76f2a14785d2d093]::iter::adapters::copied::Copied<core[76f2a14785d2d093]::slice::iter::Iter<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>>, core[76f2a14785d2d093]::iter::adapters::copied::Copied<core[76f2a14785d2d093]::slice::iter::Iter<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>>>, rumoca_eval_solve[55f7e97110e10c37]::typed_program::number::eval_binary_typed::{closure#0}>, core[76f2a14785d2d093]::result::Result<core[76f2a14785d2d093]::convert::Infallible, rumoca_eval_solve[55f7e97110e10c37]::typed_program::TypedProgramEvalError>> as core[76f2a14785d2d093]::iter::traits::iterator::Iterator>::try_fold<(), core[76f2a14785d2d093]::iter::traits::iterator::Iterator::try_for_each::call<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind, core[76f2a14785d2d093]::ops::control_flow::ControlFlow<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>, core[76f2a14785d2d093]::ops::control_flow::ControlFlow<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>::Break>::{closure#0}, core[76f2a14785d2d093]::ops::control_flow::ControlFlow<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>>::{closure#0}, core[76f2a14785d2d093]::ops::control_flow::ControlFlow<core[76f2a14785d2d093]::ops::control_flow::ControlFlow<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>>>",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 18828924
+        },
+        "microseconds": 213963
+      },
+      {
+        "frame": {
+          "functionName": "<alloc[37a4a69b46a76fe7]::vec::Vec<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind> as alloc[37a4a69b46a76fe7]::vec::spec_from_iter::SpecFromIter<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind, core[76f2a14785d2d093]::iter::adapters::GenericShunt<core[76f2a14785d2d093]::iter::adapters::map::Map<core[76f2a14785d2d093]::iter::adapters::zip::Zip<core[76f2a14785d2d093]::iter::adapters::copied::Copied<core[76f2a14785d2d093]::slice::iter::Iter<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>>, core[76f2a14785d2d093]::iter::adapters::copied::Copied<core[76f2a14785d2d093]::slice::iter::Iter<rumoca_ir_solve[1043b3c9251e9cfa]::typed_program::types::SolveValueKind>>>, rumoca_eval_solve[55f7e97110e10c37]::typed_program::number::eval_binary_typed::{closure#0}>, core[76f2a14785d2d093]::result::Result<core[76f2a14785d2d093]::convert::Infallible, rumoca_eval_solve[55f7e97110e10c37]::typed_program::TypedProgramEvalError>>>>::from_iter",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 19865427
+        },
+        "microseconds": 133483
+      },
+      {
+        "frame": {
+          "functionName": "rumoca_eval_solve[55f7e97110e10c37]::typed_program::eval_owner_in_scope",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 9505749
+        },
+        "microseconds": 126104
+      },
+      {
+        "frame": {
+          "functionName": "<dlmalloc[f3ba459c11261b14]::dlmalloc::Dlmalloc<dlmalloc[f3ba459c11261b14]::sys::System>>::free",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 17238549
+        },
+        "microseconds": 122811
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_eval_solve[55f7e97110e10c37]::typed_program::EvalFrame>::write",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 18071026
+        },
+        "microseconds": 120789
+      },
+      {
+        "frame": {
+          "functionName": "rumoca_eval_solve[55f7e97110e10c37]::typed_program::number::eval_binary_typed",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 18218681
+        },
+        "microseconds": 104906
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_eval_solve[55f7e97110e10c37]::typed_program::TypedValue>::construct",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 18603486
+        },
+        "microseconds": 103839
+      },
+      {
+        "frame": {
+          "functionName": "frame",
+          "scriptId": "3",
+          "url": "blob:http://127.0.0.1:39907/535d2e79-fa45-4ea9-8fc1-0918285ec753",
+          "lineNumber": 13,
+          "columnNumber": 14
+        },
+        "microseconds": 82725
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_eval_solve[55f7e97110e10c37]::prepared::PreparedScalarProgramBlock>::certifies_exact_target_assignment_output",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 23644864
+        },
+        "microseconds": 70979
+      },
+      {
+        "frame": {
+          "functionName": "rumoca_eval_solve[55f7e97110e10c37]::typed_program::number::eval_binary_element",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 15264459
+        },
+        "microseconds": 68838
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_eval_solve[55f7e97110e10c37]::prepared::PreparedScalarProgramBlock>::eval_target_assignment_row_inner",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 8427829
+        },
+        "microseconds": 67792
+      },
+      {
+        "frame": {
+          "functionName": "<alloc[37a4a69b46a76fe7]::vec::Vec<core[76f2a14785d2d093]::option::Option<rumoca_eval_solve[55f7e97110e10c37]::typed_program::TypedValue>>>::extend_with",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 18656743
+        },
+        "microseconds": 65697
+      },
+      {
+        "frame": {
+          "functionName": "readPhysicsSnapshot",
+          "scriptId": "5",
+          "url": "http://127.0.0.1:39907/glue.js",
+          "lineNumber": 45,
+          "columnNumber": 28
+        },
+        "microseconds": 55112
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_eval_solve[55f7e97110e10c37]::prepared::PreparedScalarProgramBlock>::eval_target_assignment_row_with_scratch",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 8884807
+        },
+        "microseconds": 50757
+      },
+      {
+        "frame": {
+          "functionName": "rumoca_solver[ead49ac17faea6c1]::runtime::projection::project_algebraic_singleton_assignment::<rumoca_solver[ead49ac17faea6c1]::runtime::solve_runtime::refresh_projection::RefreshProjectionModel>",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 15722339
+        },
+        "microseconds": 48681
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_eval_solve[55f7e97110e10c37]::typed_program::TypedValue>::checked",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 23451986
+        },
+        "microseconds": 46624
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_solver[ead49ac17faea6c1]::runtime::solve_runtime::refresh_projection::RefreshProjectionModel as rumoca_solver[ead49ac17faea6c1]::runtime::projection::ImplicitProjectionModel>::eval_implicit_target_value",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 17431437
+        },
+        "microseconds": 42362
+      },
+      {
+        "frame": {
+          "functionName": "wasm-to-js",
+          "scriptId": "-1",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "microseconds": 41325
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_exec_wasm[db25a0a8eb375bac]::CompiledKernelWasm>::call",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 15815463
+        },
+        "microseconds": 38165
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_solver[ead49ac17faea6c1]::runtime::solve_runtime::SolveRuntime>::compiled_projection_assignment",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 13178502
+        },
+        "microseconds": 37103
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_exec_wasm[db25a0a8eb375bac]::wasm_runtime::WasmKernelRuntime>::call",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 21211425
+        },
+        "microseconds": 29644
+      },
+      {
+        "frame": {
+          "functionName": "<rumoca_eval_solve[55f7e97110e10c37]::prepared::PreparedScalarProgramBlock>::eval_target_assignment_output_unchecked_with_context",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 23532723
+        },
+        "microseconds": 27583
+      },
+      {
+        "frame": {
+          "functionName": "decode",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        "microseconds": 26543
+      },
+      {
+        "frame": {
+          "functionName": "(idle)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        "microseconds": 26159
+      },
+      {
+        "frame": {
+          "functionName": "__rustc[12c998373637a003]::__rdl_dealloc",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 23916357
+        },
+        "microseconds": 25436
+      },
+      {
+        "frame": {
+          "functionName": "rumoca_eval_solve[55f7e97110e10c37]::eval_matrix_multiply",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 16136142
+        },
+        "microseconds": 24359
+      },
+      {
+        "frame": {
+          "functionName": "rumoca_solver[ead49ac17faea6c1]::runtime::projection::plan::mark_projection_indices",
+          "scriptId": "6",
+          "url": "http://127.0.0.1:39907/compiler.wasm",
+          "lineNumber": 0,
+          "columnNumber": 20610821
+        },
+        "microseconds": 22228
+      }
+    ],
+    "generatedAdvanceFraction": 0.010316955367490561,
+    "projectionSingletonAdvanceFraction": 0.9165570358864523,
+    "typedPureCallAdvanceFraction": 0.6649394509085028,
+    "scope": "Reanalysis of one existing sampled trace, not a new performance run or source ownership change. Inclusive groups overlap and cannot be added."
+  }
+}

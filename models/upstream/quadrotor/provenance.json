@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "license": "Apache-2.0",
+  "rumoca": {
+    "repository": "https://github.com/CogniPilot/rumoca",
+    "revision": "f8efdf225048de9fa3a2992ca7b4f57dda18dafd",
+    "path": "examples/interactive/quadrotor/QuadrotorSIL.mo",
+    "originalFileSha256": "823fe3bfb69446133951abfc87cb32e4b3acc4ac6e3aa50f41e101b005affc55",
+    "vendoredPlantSha256": "341a179807eb9d0bff2f356f9219eeed5edcf5dda99da0a53fa4f8d703d1e0bc",
+    "selection": "Exact source prefix through end QuadrotorSIL; upstream AcroRatePID/QuadrotorAcro are unused"
+  },
+  "cmm": {
+    "repository": "https://github.com/CogniPilot/modelica_models",
+    "revision": "a642c381a551afd247e784648f0aedb16d0c027c",
+    "archiveSha256": "ca47391811532c89300e52bb8ce53ee4bfd6d6d8412d54e2f13f11387f44dcc3",
+    "sources": {
+      "RigidBody/package.mo": "e8b2bd080ef1d960d956160cadf0f7a4c55a3dddcb686351fc993a7616395796",
+      "LieGroups/SO3/Quat/kinematics.mo": "c0cd519bd9b3535a6b7afb08171a39678689a7eff8c2bf26eaeae1d629e04acb",
+      "LieGroups/SO3/Quat/to_DCM.mo": "5e32b559f0f1afa083da416cb9ff772b5f5874d8ad4ff25b72ddfdfecea9c8b7"
+    },
+    "packaging": "Only remove within headers and nest the two unchanged quaternion function definitions in the equivalent LieGroups.SO3.Quat package"
+  },
+  "vendored": {
+    "QuadrotorSIL.mo": "341a179807eb9d0bff2f356f9219eeed5edcf5dda99da0a53fa4f8d703d1e0bc",
+    "RigidBody.mo": "e8b2bd080ef1d960d956160cadf0f7a4c55a3dddcb686351fc993a7616395796",
+    "LieGroups.mo": "3dd412be0209171e1a7c118ab4b70aae50e0c2ea8527c8a04eac458d9b67a0d9",
+    "LICENSE": "e86c051bb4b1c95a328b865ccf4b1f0fdadec0284ec5e8cadf214c8bde529e41"
+  }
+}

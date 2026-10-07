@@ -1,0 +1,419 @@
+{
+  "status": "REVERTED_BROWSER_BENEFIT_UNCONFIRMED",
+  "recordedAt": "2026-10-05T02:31:36.028Z",
+  "decision": {
+    "browserBenefitConfirmed": false,
+    "selectedForProduction": false,
+    "reverted": true,
+    "reason": "Browser comparison directions disagree. Preserve correctness and both unfiltered reports; reject selection on Node gain alone.",
+    "sourceAndCargoReleased": true
+  },
+  "implementation": {
+    "patch": "$HOME/scratch/slam_web/tmp/small-copy-emitter-proposal/small-copy.patch",
+    "patchSha256": "8ada0ab285f35bf3d57c6400bd71c9b521b01a8720f8475c30faf7662593b054",
+    "description": "After emitted root guards prove inbounds ranges, exact equal16/24/32-byte CellRange copies load all cells into dedicated I64 locals10..13 before any stores. All unknown, unequal, large or unproven ranges retain memory.copy. No Modelica source, ABI or region-lifetime change.",
+    "files": [
+      {
+        "path": "../rumoca-native-functions/crates/rumoca-exec-wasm/src/typed_call/emit.rs",
+        "sha256": "237261370e48f45be5100a8d93acb51bc5a8f97ac3ef323a88aa1270aa770b94"
+      },
+      {
+        "path": "../rumoca-native-functions/crates/rumoca-exec-wasm/src/typed_call/emit/tests.rs",
+        "sha256": "e29a771cb749a5dbd8a10cc0632ce172969cb4320734a76a60e1be9bf4fcba0c"
+      },
+      {
+        "path": "../rumoca-native-functions/crates/rumoca-exec-wasm/src/typed_call/emit/small_copy.rs",
+        "sha256": "e541ae24e09c415ea1413d427a80627da9415341b1f0cb9493a83a87cbee6457"
+      },
+      {
+        "path": "../rumoca-native-functions/crates/rumoca-exec-wasm/src/typed_call/emit/tests/small_copy.rs",
+        "sha256": "dfb00366bff04e902eca92c8d6a37b3d66500d61fd8039ff69af3ca0dc38430f"
+      },
+      {
+        "path": "../rumoca-native-functions/crates/rumoca-exec-wasm/tests/suite_typed_calls/mod.rs",
+        "sha256": "37c44e1d6d01ef3bdb7bef3a27700d47c5d51113326e2ce681f6ff4e4f03e5ca"
+      },
+      {
+        "path": "../rumoca-native-functions/crates/rumoca-exec-wasm/tests/suite_typed_calls/small_copies.rs",
+        "sha256": "86dd638b6534fee112b5f55ad38e02ad95cc46f210bcf0c12cbd4da67155c880"
+      }
+    ],
+    "controls": {
+      "added": 8,
+      "library": 7,
+      "issuedTypedFold": 1,
+      "covers": [
+        "inbounds root guard evidence",
+        "all loads before overlapping stores",
+        "raw IEEE and integer bits",
+        "ABI refusal",
+        "unproved fallback bounds traps",
+        "bulk-copy fallback",
+        "local preservation",
+        "atomic output publication and fault recovery"
+      ]
+    },
+    "filesScope": "Historical candidate file hashes captured before reversal; these files are not all present in current source."
+  },
+  "producer": {
+    "branch": "slam-native-functions",
+    "head": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "dirty": true,
+    "path": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/final-producer",
+    "sha256": "eae1fdda043e56365d67ab2163f521c284288edf221d1529fb23c184920bdbc9",
+    "bytes": 130110640,
+    "sourceClosure": "dev/artifacts/small-copy-emitter/applied-source.sha256",
+    "sourceClosureSha256": "9b4ecaf39db8b6d25dce36bd69a25ba171d5400b73ae7690e0a082c8ca59b6fb",
+    "sourceFiles": 2392,
+    "closureVerifiedAfterIssuance": true,
+    "scope": "Archived short-copy candidate producer; current compiler source was restored afterward. Do not treat this executable as current selected production compiler."
+  },
+  "gates": {
+    "workers": {
+      "cargo": 4,
+      "tests": 4,
+      "rayon": 4
+    },
+    "affinity": "10,11",
+    "nice": 10,
+    "focused": {
+      "passed": 1804,
+      "ignored": 1,
+      "failed": 0,
+      "resource": "dev/artifacts/small-copy-emitter/focused-resource.json"
+    },
+    "strict": {
+      "packages": 9,
+      "allTargets": true,
+      "allFeatures": true,
+      "denyWarnings": true,
+      "exitCode": 0,
+      "resource": "dev/artifacts/small-copy-emitter/strict-resource.json"
+    },
+    "formatter": {
+      "exitCode": 0,
+      "log": "dev/artifacts/small-copy-emitter/format.log"
+    },
+    "fixed20Canary": "PENDING"
+  },
+  "source": {
+    "path": "models/RigidPointRegistration.mo",
+    "sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "capacity": 14400,
+    "editedSourcePath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/edited/source.mo",
+    "editedSourceSha256": "d1a9b5b42d056309ca439805c36a6e09a2c0b54c5b521215e2c64f3421b51e13",
+    "edit": "maximumRms=0.02 -> maximumRms=0.5; application source unchanged"
+  },
+  "original": {
+    "artifact": "$HOME/scratch/slam_web/tmp/fresh-browser-components/registration.json",
+    "artifactSha256": "2e1fe3aee51261defdca097caeba34c317c3026010415e9a8df7c563c40e4ca2",
+    "moduleSha256": "217e17e55469425c2c6e0f685749accb5b26d64f66043029d36dddc9d0c4443e",
+    "moduleBytes": 71577,
+    "provenance": "dev/artifacts/fresh-browser-components/registration-issuance.json"
+  },
+  "artifacts": [
+    {
+      "variant": "baseline",
+      "path": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/baseline/native-program.json",
+      "sha256": "de65a268f8826691d2d703aa5242785243db12fd94ac0f13415539102696831b",
+      "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+      "moduleSha256": "b13f795e46e7bbae8e8b83b59b3188e833ffd33f5d6842ad9c702aa75f9c30a3",
+      "moduleBytes": 73811
+    },
+    {
+      "variant": "edited",
+      "path": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/edited/native-program.json",
+      "sha256": "1178c3ab97c3d2ddce39303a4c57e1e2f1f6e12cb7273da988eb90611dea7415",
+      "sourceSha256": "d1a9b5b42d056309ca439805c36a6e09a2c0b54c5b521215e2c64f3421b51e13",
+      "moduleSha256": "b13f795e46e7bbae8e8b83b59b3188e833ffd33f5d6842ad9c702aa75f9c30a3",
+      "moduleBytes": 73811
+    }
+  ],
+  "actualNumerics": {
+    "sourceIssuance": {
+      "baseline": "PASS",
+      "edited": "PASS",
+      "completeSourceModelSchedule": true
+    },
+    "node": {
+      "completeYBitComparisonCases": 17,
+      "immutableInputs": true,
+      "independentFixtureAcceptance": true,
+      "jsonReload": true,
+      "staleSourceRefusal": true,
+      "report": "dev/artifacts/small-copy-emitter/node-parity.json"
+    },
+    "chromium": {
+      "browser": "154.0.8037.92",
+      "numericalCases": 10,
+      "rawAbiFaultControls": 4,
+      "metadataRefusals": 6,
+      "fieldRefusals": 3,
+      "detachedMemoryRefusals": 4,
+      "sourceEditControls": 3,
+      "independentFullDomainReflectionRms": 0.26,
+      "properTransform": true,
+      "reset": true,
+      "recovery": true,
+      "jsonReload": true,
+      "report": "dev/artifacts/small-copy-emitter/browser.json"
+    }
+  },
+  "performance": {
+    "scope": "NativeProgram.evaluate only; unchanged14400 full source and first fixture; excludes preparation/input copies/frontend/filter/sensors/rendering. Not whole SLAM or website throughput.",
+    "method": "100 warm calls/module, six alternating blocks/module of100 calls each. No outlier removal. The one approved serial browser repeat used untouched artifacts/probe/consumer.",
+    "node": {
+      "baselineMs": 8.940624033333334,
+      "candidateMs": 8.600804781666666,
+      "speedup": 1.0395101691403368,
+      "report": "dev/artifacts/small-copy-emitter/node-comparison.json"
+    },
+    "browserFirst": {
+      "baselineMs": 9.009500000079475,
+      "candidateMs": 9.49866666674614,
+      "speedup": 0.9485015440767928,
+      "report": "dev/artifacts/small-copy-emitter/browser-comparison.json"
+    },
+    "browserRepeat": {
+      "baselineMs": 8.068500000039736,
+      "candidateMs": 7.809333333373069,
+      "speedup": 1.0331867850433687,
+      "report": "dev/artifacts/small-copy-emitter/browser-comparison-repeat.json"
+    },
+    "interpretation": "Opposite observed directions across browser runs. Correctness succeeds, but Node gain does not establish a browser speedup. No pooled or filtered estimate is selected."
+  },
+  "codeInventory": {
+    "report": "dev/artifacts/small-copy-emitter/code-inventory.json",
+    "memoryCopySites": {
+      "before": 89,
+      "after": 53
+    },
+    "i64Loads": {
+      "before": 1000,
+      "after": 1124
+    },
+    "i64Stores": {
+      "before": 909,
+      "after": 1033
+    },
+    "scratchBytes": 1859016,
+    "note": "Static instruction sites, not executed copies or measured DRAM traffic;2234 more module bytes."
+  },
+  "history": [
+    "The approved compiler patch applied unchanged and all focused/strict/format controls passed.",
+    "First WABT inspection omitted multi_memory support and refused decoding the already valid module. Proper feature-enabled inspection succeeded; no module rewrite.",
+    "First browser comparison regressed; one approved untouched serial repeat improved. Both full reports retained; no additional run or filtering.",
+    "After the single serial repeat, the exact reviewed patch was reversed with a successful reverse context check. Compactstates2390source entries and removed-file absence verified byte-for-byte; no other work changed."
+  ],
+  "evidence": [
+    {
+      "path": "dev/artifacts/small-copy-emitter/applied-source.sha256",
+      "sha256": "9b4ecaf39db8b6d25dce36bd69a25ba171d5400b73ae7690e0a082c8ca59b6fb",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/applied-source.sha256",
+      "originalSha256": "9b4ecaf39db8b6d25dce36bd69a25ba171d5400b73ae7690e0a082c8ca59b6fb",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/before-source.sha256",
+      "sha256": "312be5db63db7b2b42bfd490fc87b7c325d7b20d91d075403f676aad3e526a62",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/before-source.sha256",
+      "originalSha256": "312be5db63db7b2b42bfd490fc87b7c325d7b20d91d075403f676aad3e526a62",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/focused.log",
+      "sha256": "b9054a15004a18be366ec4c1138e2c77bfb04597f7c79fe86a8ed6325c972078",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/focused.log",
+      "originalSha256": "2cfb8b4fdb3efbd42a07f80d0457a793f31634b082bc1039835ff8657c0819df",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/focused-resource.json",
+      "sha256": "87f81f6370e50c962f63f32b7898992265c962565e57d2aa12b867f970898193",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/focused-resource.json",
+      "originalSha256": "4ed3a4976fd952f4e2abd4c0ad86ee5343bae651b783d09269be3a60eaae733e",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/strict.log",
+      "sha256": "1ab2ebbeebf35615a0b774c79f0716186b6f684fefdffebc6077f82c8aa6d074",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/strict.log",
+      "originalSha256": "aa8aa608f06e580255c4e58e95d3adc010c1371e19bef768f2a37f77c9a1801f",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/strict-resource.json",
+      "sha256": "aa247ef0e238c2f4e3d7e33eaf0099b601dfc662dc281d757281daf968c75f93",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/strict-resource.json",
+      "originalSha256": "a3c335398f919a1cba0af949b54700258b051de56519db1bb0490b4d999e883e",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/format.log",
+      "sha256": "1c577652602f180c994ae512302ad47b53f86283dfe03f57ccb154072a74fea5",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/format.log",
+      "originalSha256": "6be48181c33d7d68724820ed392e4d39c55f986151129a1d4f0a4413ee26c6f9",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/baseline-issuance.log",
+      "sha256": "10198b49e95486beeb1476ef55477978182727f348c5215cb7e2412403793c4d",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/baseline/issuance.log",
+      "originalSha256": "10198b49e95486beeb1476ef55477978182727f348c5215cb7e2412403793c4d",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/baseline-issuance-resource.json",
+      "sha256": "2eccc3fe314bc815c787b2b6173e9b17971cf2747a30789a4f31c1d07ae8ea42",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/baseline/issuance-resource.json",
+      "originalSha256": "a8444cecca711a5bbce282f3748fa1c30d2a804d83881f9dc63ddaecf6cbd1e8",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/edited-issuance.log",
+      "sha256": "c900001dbb42afbefe40f6b1562c2e25d3cb021c6cbff91379c19f0f06103583",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/edited/issuance.log",
+      "originalSha256": "c900001dbb42afbefe40f6b1562c2e25d3cb021c6cbff91379c19f0f06103583",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/edited-issuance-resource.json",
+      "sha256": "c819ecb235c39ca2df82da65adc046a5eb89f6aa5e59ad6657b6308a9c29772e",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/edited/issuance-resource.json",
+      "originalSha256": "d61c69def9ac026c8f7b4cb5923a6edeb6623b53868f94cd9000304fc3e1bfdb",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/node-parity.json",
+      "sha256": "7eadb96f949534e34622430b3129c7fbd6850346724b3e458eacdafc932c21aa",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/node-parity.json",
+      "originalSha256": "7eadb96f949534e34622430b3129c7fbd6850346724b3e458eacdafc932c21aa",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/node-parity-resource.json",
+      "sha256": "8526f447520486474afea5391f48f1745fc5d2cc6959ecdf0a088b98644843c6",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/node-parity-resource.json",
+      "originalSha256": "23b56303adee2dbfc734262b6188985699645fc037b55d01d3c8a03b84e28c79",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/node-comparison.json",
+      "sha256": "e8d27d7a771fd9c6d5d1b6e1e447e7f2874c31a3939fc18955c80450700987b2",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/node-comparison.json",
+      "originalSha256": "e8d27d7a771fd9c6d5d1b6e1e447e7f2874c31a3939fc18955c80450700987b2",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/node-comparison-resource.json",
+      "sha256": "472c1d2aacd4e650807230bd2b546ad958443f5e23945b4e3465213d0300b0a8",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/node-comparison-resource.json",
+      "originalSha256": "2bca00ce5af999e8291ce63cd19fed2a4f41bec78ed8c4873912982491054e89",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/browser.json",
+      "sha256": "4b0018acaa5a056cc5346e37d078d59d5e7c4531b77c5a3aeafc8aa83f8faac8",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/browser.json",
+      "originalSha256": "4b0018acaa5a056cc5346e37d078d59d5e7c4531b77c5a3aeafc8aa83f8faac8",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/browser-resource.json",
+      "sha256": "7bc940adf9afa5803cbc0f2243bd4983e32135b8451d537edc4f7bcda8b25295",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/browser-resource.json",
+      "originalSha256": "4b717ef1a421fce18693c39f8368c5e4e099250b31c5032531afd08fa1b21f88",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/browser-comparison.json",
+      "sha256": "a7ae9108ab651e49f06331901f451fc4420b501d17085425859de4e31190ca4c",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/browser-comparison.json",
+      "originalSha256": "a7ae9108ab651e49f06331901f451fc4420b501d17085425859de4e31190ca4c",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/browser-comparison-resource.json",
+      "sha256": "59b442c5ca7df5f66ddf4fb95d8cd481142fe38d59f902136d22a026004b652a",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/browser-comparison-resource.json",
+      "originalSha256": "aeeb111498da6c37f1c4abf9985c777c5b72caf112b4c70b9554587ea5831301",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/browser-comparison-repeat.json",
+      "sha256": "b0cca38f964f7bbbf581007c3114c63320236ab99101daf2d5c57bc10205a740",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/browser-comparison-repeat.json",
+      "originalSha256": "b0cca38f964f7bbbf581007c3114c63320236ab99101daf2d5c57bc10205a740",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/browser-comparison-repeat-resource.json",
+      "sha256": "cb0e90f234281a19087191af29ab1736cd50a5c6dc9d91910430353636804112",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/browser-comparison-repeat-resource.json",
+      "originalSha256": "a35ed395667089b41459472317f2a5e17217eca709ccbf5431516dcd71ffdbd8",
+      "pathNormalizationOnly": true
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/code-inventory.json",
+      "sha256": "ecc599648999759ba8f5417c478b72167634b373df674b962e5885300bd4ab51",
+      "originalScratchPath": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/code-inventory.json",
+      "originalSha256": "ecc599648999759ba8f5417c478b72167634b373df674b962e5885300bd4ab51",
+      "pathNormalizationOnly": false
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/revert-verification.json",
+      "sha256": "5698068e94ca9d02ecc2483f08df60f00a7d931ee1219ba92c801086f8117956"
+    },
+    {
+      "path": "dev/artifacts/small-copy-emitter/reviewed-small-copy.patch",
+      "sha256": "8ada0ab285f35bf3d57c6400bd71c9b521b01a8720f8475c30faf7662593b054"
+    }
+  ],
+  "runtimeIntegrated": false,
+  "productionPinChanged": false,
+  "fullSlam": false,
+  "tenTimesTargetAchieved": false,
+  "reversion": {
+    "status": "REVERSE_PATCH_BYTE_RESTORATION_PASS",
+    "checks": [
+      {
+        "manifest": "$HOME/scratch/slam_web/tmp/small-copy-emitter-gate/before-source.sha256",
+        "manifestSha256": "312be5db63db7b2b42bfd490fc87b7c325d7b20d91d075403f676aad3e526a62",
+        "files": 2389,
+        "mismatches": []
+      },
+      {
+        "manifest": "$HOME/scratch/slam_web/tmp/small-dependency-state-gate/source-closure.sha256",
+        "manifestSha256": "ebbaa651a9e2bc1d51872106094c400f6bdce5f50ce1666870af1cd67287607f",
+        "files": 2390,
+        "mismatches": []
+      }
+    ],
+    "removed": [
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/emit/small_copy.rs",
+        "absent": true
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/src/typed_call/emit/tests/small_copy.rs",
+        "absent": true
+      },
+      {
+        "path": "crates/rumoca-exec-wasm/tests/suite_typed_calls/small_copies.rs",
+        "absent": true
+      }
+    ],
+    "sourceInventoryExtras": [],
+    "reversePatchContextCheck": 0,
+    "reversePatchExitCode": 0,
+    "diffCheckExitCode": 0,
+    "noCargoRerun": true,
+    "restoredGateEvidence": "dev/modelica-small-dependency-verification.json",
+    "qualification": "All2390compactstates manifest entries, all2389pre-smallcopy Rust/Cargo entries, and removed new files verified. Exact prior29controls/strict/formatter evidence applies to restored bytes; no unnecessary Cargo rerun.",
+    "restoredSourceClosureSha256": "ebbaa651a9e2bc1d51872106094c400f6bdce5f50ce1666870af1cd67287607f"
+  },
+  "separateDiagnostic": {
+    "record": "dev/registration-small-copy-diagnostic-verification.json",
+    "scope": "Earlier post-emission binary rewrite/Node diagnostic. Its~12% timing improvement is not production emission or Chromium benefit."
+  }
+}

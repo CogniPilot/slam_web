@@ -1,0 +1,353 @@
+{
+  "status": "EDITED_DIMENSION_FAST_FRAME_NODE_CHROMIUM_NUMERICAL_PASS",
+  "scope": "Actual 12x17 dimension-edit detector issued by Rumoca and executed in Node and Chromium workers. The original 160x90 detector remains uncompiled; this is a source-edit/shape diagnostic, not full-frame acceptance.",
+  "fullOriginalExecuted": false,
+  "dimensionSourceEditExecuted": true,
+  "producer": "fc24bf325b4f0b1e2374ec04bb0197d04588461e34ea2cfb62c626e0c68116d3",
+  "shape": {
+    "status": "ACTUAL_EDITED_12X17_CHECKED_SHAPE_DIAGNOSTIC_NOT_FULLFRAME",
+    "nodes": 19,
+    "scalarBlocks": 1,
+    "maps": 18,
+    "scalarPrograms": 103,
+    "totalScalarOps": 3581,
+    "loadYOccurrences": 3336,
+    "pureCallOccurrences": 66,
+    "maxProgramOps": 53,
+    "maxProgramLoadY": 50,
+    "nativeStages": 121,
+    "moduleBytes": 149827,
+    "scratchBytes": 9176,
+    "examples": [
+      {
+        "node": 0,
+        "index": 75,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 76,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 77,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 78,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 79,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 80,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 81,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 88,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 89,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 90,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 91,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 92,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 93,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 94,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 95,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 96,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 97,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      },
+      {
+        "node": 0,
+        "index": 98,
+        "ops": 53,
+        "loadY": 50,
+        "uniqueLoadY": 50,
+        "pureCalls": 1
+      }
+    ],
+    "scope": "Actual immutable merged compiler output for the already specified12x17 source edit. No current14400 shape/count inference."
+  },
+  "execution": {
+    "schemaVersion": 1,
+    "status": "EDITED_DIMENSION_FAST_FRAME_NODE_CHROMIUM_NUMERICAL_PASS",
+    "fullOriginalExecuted": false,
+    "dimensionSourceEditExecuted": true,
+    "originalSourceSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+    "fixtureSha256": "5364308e50b63448ea8bd5687830c452613689329c33b7d7873160fa3a8a118d",
+    "probeSha256": "0482cfa83c6168c9150c18c91803e64b0689820ceab150590973511ecef225d6",
+    "consumerBundleSha256": "150af16c61725bf4b9393d0ac9b5deadd0f4a9948bcfdcc033ef2303fb05b878",
+    "variants": [
+      {
+        "sourceSha256": "2da013772cac0093e294be846b0bb286f872559dbdfb0616e6fd4759a830b94b",
+        "artifactSha256": "50e2603fab933b2b6bc4883ce84891f49d10b9af393645ed1f41f793f9ccf20f",
+        "moduleSha256": "02c72b55b6ad355788c04429690b8450db62008464c939a8859ac21f972c4abc",
+        "moduleBytes": 149827
+      }
+    ],
+    "node": {
+      "engine": "v24.21.0 / V8 13.6.233.17-node.53",
+      "results": [
+        {
+          "variant": "dimension-edit12x17",
+          "evaluated": [
+            {
+              "round": 0,
+              "name": "dimension-edit",
+              "cells": 204,
+              "byteRgba": false,
+              "nonfiniteRgb": false
+            },
+            {
+              "round": 1,
+              "name": "dimension-edit",
+              "cells": 204,
+              "byteRgba": false,
+              "nonfiniteRgb": false
+            }
+          ],
+          "scoreChecks": 612,
+          "signChecks": 480,
+          "nanChecks": 0,
+          "infinityChecks": 0,
+          "readonlyCalls": 3,
+          "ignoredAlpha": false,
+          "reset": true,
+          "invalidBufferAtomic": true,
+          "invalidTimeAtomic": true,
+          "recovery": true,
+          "staleSource": true,
+          "persistedIdentity": true
+        }
+      ]
+    },
+    "browser": {
+      "version": "154.0.8037.92",
+      "first": {
+        "result": [
+          {
+            "variant": "dimension-edit12x17",
+            "evaluated": [
+              {
+                "round": 0,
+                "name": "dimension-edit",
+                "cells": 204,
+                "byteRgba": false,
+                "nonfiniteRgb": false
+              },
+              {
+                "round": 1,
+                "name": "dimension-edit",
+                "cells": 204,
+                "byteRgba": false,
+                "nonfiniteRgb": false
+              }
+            ],
+            "scoreChecks": 612,
+            "signChecks": 480,
+            "nanChecks": 0,
+            "infinityChecks": 0,
+            "readonlyCalls": 3,
+            "ignoredAlpha": false,
+            "reset": true,
+            "invalidBufferAtomic": true,
+            "invalidTimeAtomic": true,
+            "recovery": true,
+            "staleSource": true,
+            "persistedIdentity": true
+          }
+        ],
+        "reload": false,
+        "tamperedReplayRejected": false
+      },
+      "restored": {
+        "result": [
+          {
+            "variant": "dimension-edit12x17",
+            "evaluated": [
+              {
+                "round": 0,
+                "name": "dimension-edit",
+                "cells": 204,
+                "byteRgba": false,
+                "nonfiniteRgb": false
+              },
+              {
+                "round": 1,
+                "name": "dimension-edit",
+                "cells": 204,
+                "byteRgba": false,
+                "nonfiniteRgb": false
+              }
+            ],
+            "scoreChecks": 612,
+            "signChecks": 480,
+            "nanChecks": 0,
+            "infinityChecks": 0,
+            "readonlyCalls": 3,
+            "ignoredAlpha": false,
+            "reset": true,
+            "invalidBufferAtomic": true,
+            "invalidTimeAtomic": true,
+            "recovery": true,
+            "staleSource": true,
+            "persistedIdentity": true
+          }
+        ],
+        "reload": true,
+        "tamperedReplayRejected": true
+      }
+    },
+    "sourceEditsVerified": false,
+    "sourceScoringEditVerified": false,
+    "pinnedIssuedIdentities": [
+      {
+        "sourceSha256": "2da013772cac0093e294be846b0bb286f872559dbdfb0616e6fd4759a830b94b",
+        "moduleSha256": "02c72b55b6ad355788c04429690b8450db62008464c939a8859ac21f972c4abc",
+        "artifactPayloadSha256": "0ff83f9555552f0491abf12aacaec3b3cefc5946deba61957d4d6e2838187ea2"
+      }
+    ],
+    "indexedDbReloads": 1,
+    "tamperedPersistedArtifactRejected": true,
+    "scope": "Only the separately compiled12x17 dimension source edit: every204score compared to independent raw-bit expectations, borders, reset/recovery, readonly P, complete-memory faults and pinned Chromium/IndexedDB reload. Original160x90 detector remains unexecuted; this diagnostic cannot satisfy full-frame acceptance."
+  },
+  "preparationResource": {
+    "command": [
+      "nice",
+      "-n",
+      "15",
+      "taskset",
+      "-c",
+      "30",
+      "/home/jgoppert/scratch/slam_web/tmp/merged-guard-interim-producer/final-producer",
+      "tests::native_mixed_assignment_tests::calls::native_registration_whole_program_source_inventory",
+      "--exact",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "log": "/home/jgoppert/scratch/slam_web/tmp/fast-dimension-shape-diagnostic/prepare.log",
+    "elapsedMs": 536.100663,
+    "peakRssKiB": 61656,
+    "minimumAvailableKiB": 54972496,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 2048,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "executionResource": {
+    "exitCode": 0,
+    "elapsedMs": 11736.681953,
+    "peakRssKiB": 1929244,
+    "provenance": "Recorded bounded-run tool output for terminal session1669. No per-run resource file was emitted; this field transcribes that output."
+  },
+  "artifact": "dev/artifacts/fast-dimension-source-execution",
+  "manifestSha256": "1d447982db52c3a7c114406ad200cbabebd8fba67e354fcc36998117972ad0da",
+  "limitations": [
+    "No full160x90 artifact or numeric execution",
+    "No U8 or F32 native input binding",
+    "No fullSLAM or throughput improvement",
+    "Interim producer has known historical-wire failures; no public compiler package or pin promotion",
+    "Harness resource measurement includes expanded9MB fixtures and browser processes; not production memory"
+  ]
+}

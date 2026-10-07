@@ -1,0 +1,904 @@
+{
+  "schemaVersion": 1,
+  "status": "FIXED20_MATCHED_DELTA_RECORDED_NO_OUTCOME_OR_TRACE_REGRESSION",
+  "recordedAt": "2026-10-05T04:41:24.547Z",
+  "scope": "SPEC0033 Tier1 fixed20 matched delta only. Not full MSL parity, Tier2 capability completion, production pin activation or whole-pipeline speedup.",
+  "contracts": [
+    "SPEC0033section6a",
+    "SPEC0050traceevidence"
+  ],
+  "baseline": {
+    "verification": "dev/rumoca-compact-msl-canary-verification.json",
+    "sourceClosure": "ebbaa651a9e2bc1d51872106094c400f6bdce5f50ce1666870af1cd67287607f",
+    "sourceEntries": 2390,
+    "executables": [
+      {
+        "name": "msl_tests",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/deps/msl_tests-f8b687c07e96fee7",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/binaries/msl_tests",
+        "sha256": "f08d547032d334c486111144aab507d21ae767d9131de1050e5811dc3aa02a56",
+        "bytes": 29120608
+      },
+      {
+        "name": "rumoca-worker",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-worker",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/binaries/rumoca-worker",
+        "sha256": "2c0477ba01f660865da3b9253aa207d2e3d3237a14cc641ac03b4e8b6c5f4bd0",
+        "bytes": 50307872
+      },
+      {
+        "name": "rumoca-sim-worker",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-sim-worker",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/binaries/rumoca-sim-worker",
+        "sha256": "f8b83a5208740320cdb3011ad92579aa3dc45aa8aaf52df8b2d7ff7a9993161f",
+        "bytes": 27508104
+      },
+      {
+        "name": "rumoca-msl-tools",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-msl-tools",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/binaries/rumoca-msl-tools",
+        "sha256": "0ad9c92ee5f569aa3de1d8217039dc7ec76f4d93659421819bbf1cce8c29d978",
+        "bytes": 49480912
+      },
+      {
+        "name": "xtask",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/xtask",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/binaries/xtask",
+        "sha256": "a8f5a5abccf36e0447bd64039744964d84c9165284534588a2185d71d1d75d71",
+        "bytes": 33428440
+      }
+    ],
+    "originalQualityGate": "FAIL_OMC_PATH_MISSING_RETAINED",
+    "comparatorOnly": "9 original traces measured without Rumoca retry",
+    "originalResultsSha256": "38662e54820cb94f2b5d99109e68124f6c0cb34787eeab245b0b0d0c3a55a16e"
+  },
+  "candidate": {
+    "head": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "dirty": true,
+    "sourceClosure": "a5a1bf428e65ec5300503fedbe1aa786f5e2f9469ed0220334e82ce4966b56d9",
+    "sourceEntries": 2404,
+    "sourceBeforeAfterBuildIdentical": true,
+    "sourceManifest": "dev/artifacts/msl-canary-matched/source-before.sha256",
+    "executables": [
+      {
+        "name": "rumoca-msl-tools",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-msl-tools",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/binaries/rumoca-msl-tools",
+        "sha256": "37ee366ebd4ba3d39aea439ab7fb4577f87241c79d2787e980d8613ac85c3abd",
+        "bytes": 49496896
+      },
+      {
+        "name": "rumoca-worker",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-worker",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/binaries/rumoca-worker",
+        "sha256": "be65731322228783307edf1d0d4aee09f22e04635665d19bf36f9798a89d3f0e",
+        "bytes": 50323256
+      },
+      {
+        "name": "rumoca-sim-worker",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-sim-worker",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/binaries/rumoca-sim-worker",
+        "sha256": "bcc5c7d417bd7ca563a0cc17f84e4919152650139598329e5f9f154512ba1d5f",
+        "bytes": 27499872
+      },
+      {
+        "name": "msl_tests",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/deps/msl_tests-f8b687c07e96fee7",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/binaries/msl_tests",
+        "sha256": "10f840ee024c6c21623c8983aedd3fa729d30b9c5eac1e054dabcd08e89d2d5b",
+        "bytes": 29146888
+      },
+      {
+        "name": "xtask",
+        "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/xtask",
+        "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/binaries/xtask",
+        "sha256": "a8f5a5abccf36e0447bd64039744964d84c9165284534588a2185d71d1d75d71",
+        "bytes": 33428440
+      }
+    ],
+    "frozenAfterBuild": true,
+    "laterTensorViewPatchCovered": false,
+    "currentLiveCompilerSource": "Ownership released after binary copies; subsequent edits excluded from this evidence.",
+    "resultsSha256": "6b2560638dc3ef3bff78a5647468002f76ff220989fb4459d86ba315a2548154"
+  },
+  "builds": {
+    "mslFast": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10,11",
+        "cargo",
+        "build",
+        "--locked",
+        "--profile",
+        "msl-fast",
+        "-p",
+        "rumoca-worker",
+        "-p",
+        "rumoca-test-msl",
+        "--features",
+        "rumoca-test-msl/msl-full-test",
+        "--bin",
+        "rumoca-worker",
+        "--bin",
+        "rumoca-sim-worker",
+        "--bin",
+        "rumoca-msl-tools",
+        "--test",
+        "msl_tests",
+        "--message-format",
+        "json-render-diagnostics"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/build.log",
+      "elapsedMs": 245313.08604,
+      "peakRssKiB": 2493504,
+      "minimumAvailableKiB": 50812392,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "matchingXtask": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10,11",
+        "cargo",
+        "build",
+        "--locked",
+        "-p",
+        "xtask",
+        "-j4",
+        "--message-format",
+        "json-render-diagnostics"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/xtask-build.log",
+      "elapsedMs": 287.181503,
+      "peakRssKiB": 94500,
+      "minimumAvailableKiB": 53347568,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "cargoArtifactJsonPathsUsed": true,
+    "staleExecutableSuffixGuesses": false,
+    "cache": "$HOME/scratch/slam_web/build/rumoca-native-target",
+    "cacheScope": "Owned existing ~19–21GB target; no 7.5GB cache-cap claim or deletion of external caches"
+  },
+  "pins": {
+    "targets": {
+      "sha256": "536004933ce502f7a8a4317e5dd6de2b700a6b176e84d2d6e7bbe0dcdf61eafa",
+      "count": 20,
+      "unchanged": true
+    },
+    "corpus": {
+      "sha256": "f8d08dd72384678a8546c1368833d7d0028a75b63ef01bac0b211276e6a1ff46",
+      "entries": 2556,
+      "allContentsUnchanged": true
+    },
+    "omc": {
+      "sha256": "840e73b72019550d8ad43cfc50dcac3bb882c395a306cd8be5a3ab25659afca6",
+      "version": "a96aa1a-cmake",
+      "commonReplayBatchesRan": 0
+    },
+    "qualitySnapshot": {
+      "sha256": "90253d3dd70a98c9354823c6a1d93b83c80ac621d2fc756b0b45b5297f1c0cbd",
+      "scope": "566 ratchet input only, no matched delta"
+    },
+    "preflight": "dev/artifacts/msl-canary-matched/preflight-pins.json",
+    "postflight": "dev/artifacts/msl-canary-matched/postflight-audit.json"
+  },
+  "policy": {
+    "requestedAndEnvironmentWorkers": 4,
+    "effectiveSchedulerWorkers": 4,
+    "spawnedPinnedCompileWorkers": 2,
+    "maxActiveCompileWorkers": 2,
+    "affinity": "10,11",
+    "nice": 10,
+    "nonSimulationPhaseSeconds": 10,
+    "solveIrSeconds": 10,
+    "simulationSeconds": 12,
+    "simulationParentSeconds": 14,
+    "workerStartupSeconds": 60,
+    "perWorkerResidentAndSwapMiB": 6144,
+    "outerSeconds": 600,
+    "rssMiB": 8192,
+    "hostReserveMiB": 16384,
+    "sourceAttemptsPerModel": 1,
+    "retries": 0,
+    "modelFiltersBeyondCanonicalFixed20": 0,
+    "simLimits": 0,
+    "allowUnmeasuredSuccess": false
+  },
+  "run": {
+    "session": 27116,
+    "resource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10,11",
+        "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/binaries/xtask",
+        "verify",
+        "msl-parity",
+        "--sim-targets-file",
+        "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/canary-targets.json",
+        "--results-dir",
+        "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/results",
+        "--quality-baseline",
+        "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/quality-baseline.json",
+        "--stage-parallelism",
+        "4",
+        "--sim-parallelism",
+        "4",
+        "--model-attempt-timeout-secs",
+        "10",
+        "--ir-solve-timeout-secs",
+        "10",
+        "--sim-timeout-secs",
+        "12",
+        "--prebuilt-test-binary",
+        "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/binaries/msl_tests",
+        "--prebuilt-model-worker",
+        "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/binaries/rumoca-worker",
+        "--prebuilt-sim-worker",
+        "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/binaries/rumoca-sim-worker"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/canary.log",
+      "elapsedMs": 37546.153658,
+      "peakRssKiB": 3489308,
+      "minimumAvailableKiB": 52831708,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "workflowExit": "PASS_EXIT0",
+    "qualityRatchet": "SKIPPED_FOCUSED_PARTIAL_SCOPE_NOT_FULL_QUALITY_PASS",
+    "outputs": {
+      "selected": 20,
+      "compiled": 11,
+      "balanced": 11,
+      "todaeFailures": 9,
+      "simulationAttempts": 11,
+      "simulationOk": 9,
+      "solverFailures": 2,
+      "timeouts": 0,
+      "nonfinite": 0,
+      "high": 9,
+      "near": 0,
+      "deviation": 0,
+      "absent": 11
+    },
+    "outcomes": [
+      {
+        "model": "Modelica.Blocks.Examples.BooleanNetwork1",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED019",
+        "diagnostic": "Modelica.Blocks.Examples.BooleanNetwork1 failed in ToDae: unsupported Flat semantic owner `function return`: a non-guarded nested return requires a checked control-flow owner",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Blocks.Examples.Noise.AutomaticSeed",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED019",
+        "diagnostic": "Modelica.Blocks.Examples.Noise.AutomaticSeed failed in ToDae: unsupported Flat semantic owner `impure call context`: impure function `Modelica.Math.Random.Utilities.initializeImpureRandom.setInternalState` is called from a pure function body; MLS §12.3 permits an impure call only in an impure function, a `when` equation or statement, an initial equation or initial algorithm, or a `parameter` binding",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.BooleanSignals.BackSample",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED008",
+        "diagnostic": "Modelica.Clocked.Examples.Elementary.BooleanSignals.BackSample failed in ToDae: unresolved Flat reference `Modelica.Blocks.Types.Extrapolation.LastTwoPoints`",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.IntegerSignals.BackSample",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED008",
+        "diagnostic": "Modelica.Clocked.Examples.Elementary.IntegerSignals.BackSample failed in ToDae: unresolved Flat reference `Modelica.Blocks.Types.Extrapolation.LastTwoPoints`",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.RealSignals.Sample1",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.DemoPowerSupply",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.OpAmps.Comparator",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.OpAmps.OpAmpCircuits.Add",
+        "phase": "Success",
+        "simulation": "sim_solver_fail",
+        "errorCode": "EL005",
+        "diagnostic": "solve-IR evaluation failed: [EL005] DAE structural proof failed: structurally singular system: 57 matched out of 58 equations and 58 unknowns",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.ShowSaturatingInductor",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Electrical.Digital.Examples.Counter",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED010",
+        "diagnostic": "Modelica.Electrical.Digital.Examples.Counter failed in ToDae: invalid Appendix B discrete solved form: element assignments must cover a discrete coordinate exactly once",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Electrical.Digital.Examples.FullAdder",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED013",
+        "diagnostic": "Modelica.Electrical.Digital.Examples.FullAdder failed in ToDae: unsupported model algorithm in canonical DAE: sequential read of `Adder1.Adder2.AND.G2.y_auxiliary` after an earlier write requires an SSA event transition",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Electrical.Polyphase.Examples.TransformerYD",
+        "phase": "Success",
+        "simulation": "sim_solver_fail",
+        "errorCode": "EL005",
+        "diagnostic": "solve-IR evaluation failed: [EL005] DAE system is not computable: affine derivative coefficient is not compile-time numeric",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Math.Nonlinear.Examples.QuadratureLobatto3",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED019",
+        "diagnostic": "Modelica.Math.Nonlinear.Examples.QuadratureLobatto3 failed in ToDae: unsupported Flat semantic owner `function partial application`: MLS §12.4.2.1 partial application of `Modelica.Math.Nonlinear.Examples.UtilityFunctions.fun7` binds 2 of 3 formal parameters and denotes a function value, which the canonical DAE has no value shape for",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.StateGraph.Examples.ShowCompositeStep",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED010",
+        "diagnostic": "Modelica.StateGraph.Examples.ShowCompositeStep failed in ToDae: invalid Appendix B discrete solved form: a discrete-valued equation must have one unsubscripted resolved coordinate as its left-hand side",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Mechanics.Rotational.Examples.Friction",
+        "phase": "ToDae",
+        "simulation": "not_attempted",
+        "errorCode": "ED001",
+        "diagnostic": "Modelica.Mechanics.Rotational.Examples.Friction failed in ToDae: unbalanced model: 104 equations, 102 unknowns (balance = 2); unknowns[state=12 algebraic=71 output=9 discrete_real=0 discrete_value=10] equations[continuous=94 discrete_real=0 b1c_definition=10]",
+        "unchanged": true
+      },
+      {
+        "model": "Modelica.Mechanics.Rotational.Examples.FirstGrounded",
+        "phase": "Success",
+        "simulation": "sim_ok",
+        "errorCode": null,
+        "diagnostic": null,
+        "unchanged": true
+      }
+    ]
+  },
+  "commonComparator": {
+    "authority": {
+      "name": "rumoca-msl-tools",
+      "cargoExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/msl-fast/rumoca-msl-tools",
+      "frozenPath": "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/binaries/rumoca-msl-tools",
+      "sha256": "0ad9c92ee5f569aa3de1d8217039dc7ec76f4d93659421819bbf1cce8c29d978",
+      "bytes": 49480912
+    },
+    "resource": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10,11",
+        "$HOME/scratch/slam_web/tmp/msl-canary-prerequisites-compact/binaries/rumoca-msl-tools",
+        "omc-simulation-reference",
+        "--target-models-file",
+        "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/canary-targets.json",
+        "--results-dir",
+        "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/comparator-results",
+        "--use-experiment-stop-time",
+        "--model-timeout-seconds",
+        "144",
+        "--workers",
+        "4",
+        "--omc-threads",
+        "1",
+        "--rumoca-sim-ok-only"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/msl-canary-matched-candidate/common-comparator.log",
+      "elapsedMs": 1928.067808,
+      "peakRssKiB": 24312,
+      "minimumAvailableKiB": 55813668,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "noRumocaPhaseRerun": true,
+    "noOmCRepeat": true,
+    "reusedValidReferences": 9,
+    "batchesRan": 0,
+    "partialBandWrite": "PASS",
+    "partialBandCheck": "PASS",
+    "modelsCompared": 9,
+    "totalChannels": 175,
+    "badChannels": 0,
+    "severeChannels": 0,
+    "missingTraceModels": 0,
+    "skippedModels": 0,
+    "policyExcludedModels": 0,
+    "nonidentifiableModels": 0,
+    "initialHighChannels": 175,
+    "stateSelection": {
+      "models_compared": 9,
+      "exact_state_set_match_models": 8,
+      "state_count_match_models": 9,
+      "exact_state_set_match_percent": 88.88888888888889,
+      "state_count_match_percent": 100,
+      "total_rumoca_states": 8,
+      "total_omc_states": 8,
+      "total_matching_states": 6,
+      "total_rumoca_only_states": 2,
+      "total_omc_only_states": 2,
+      "max_model_state_set_difference": 4
+    }
+  },
+  "delta": {
+    "authority": "dev/artifacts/msl-canary-matched/transitions.json",
+    "counts": {
+      "before_models": 20,
+      "after_models": 20,
+      "common_models": 20,
+      "new_models": 0,
+      "removed_models": 0,
+      "phase_fail_to_phase_pass": 0,
+      "phase_pass_to_phase_fail": 0,
+      "sim_solver_fail_to_sim_ok": 0,
+      "sim_ok_to_sim_solver_fail": 0,
+      "non_sim_ok_to_sim_ok": 0,
+      "sim_ok_to_non_sim_ok": 0,
+      "near_to_high_agreement": 0,
+      "high_to_non_high_agreement": 0
+    },
+    "bandTransitions": {
+      "status": "comparable",
+      "counts": {
+        "before_cohort_models": 20,
+        "after_cohort_models": 20,
+        "before_compared": 9,
+        "after_compared": 9,
+        "common_compared": 9,
+        "entered": 0,
+        "left": 0,
+        "band_changed": 0,
+        "coverage_dropped": 0,
+        "compared_variables_lost": 0,
+        "left_by_reason": {}
+      },
+      "entered": [],
+      "left": [],
+      "band_changed": [],
+      "coverage_dropped": []
+    },
+    "traces": [
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.Elementary.BooleanSignals.TimeBasedPulse/sim-trace.json",
+        "beforeSha256": "add3dd96b0f2ba85c6811fd3aac46707804f658086d37e63e50066f0199012be",
+        "afterSha256": "add3dd96b0f2ba85c6811fd3aac46707804f658086d37e63e50066f0199012be",
+        "baselineBytesUnchanged": true,
+        "candidateReplayBytesUnchanged": true,
+        "numericalTraceFieldsIdentical": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.Elementary.IntegerSignals.TimeBasedStep/sim-trace.json",
+        "beforeSha256": "82899391256624d3d0fded7007040daef8d6345081a0e742fc76ccc2d86ae8ae",
+        "afterSha256": "82899391256624d3d0fded7007040daef8d6345081a0e742fc76ccc2d86ae8ae",
+        "baselineBytesUnchanged": true,
+        "candidateReplayBytesUnchanged": true,
+        "numericalTraceFieldsIdentical": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.RealSignals.Sample1",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.Elementary.RealSignals.Sample1/sim-trace.json",
+        "beforeSha256": "497ccd4621561d249cc5643770a065d06d49402a3dc8e295a92c91c7d5ec362d",
+        "afterSha256": "497ccd4621561d249cc5643770a065d06d49402a3dc8e295a92c91c7d5ec362d",
+        "baselineBytesUnchanged": true,
+        "candidateReplayBytesUnchanged": true,
+        "numericalTraceFieldsIdentical": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.Elementary.RealSignals.TickBasedRamp/sim-trace.json",
+        "beforeSha256": "37349c2432f0e05603266316f259def2d6d1ba1da7bfe6745dc139f448f563b5",
+        "afterSha256": "37349c2432f0e05603266316f259def2d6d1ba1da7bfe6745dc139f448f563b5",
+        "baselineBytesUnchanged": true,
+        "candidateReplayBytesUnchanged": true,
+        "numericalTraceFieldsIdentical": true
+      },
+      {
+        "model": "Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController",
+        "relativePath": "model_worker/Modelica.Clocked.Examples.SimpleControlledDrive.ClockedWithDiscreteController/sim-trace.json",
+        "beforeSha256": "2cad7f1aab20a395370d0122b4c2de389fdf37180ee6dcb3c83da565eb53071e",
+        "afterSha256": "2cad7f1aab20a395370d0122b4c2de389fdf37180ee6dcb3c83da565eb53071e",
+        "baselineBytesUnchanged": true,
+        "candidateReplayBytesUnchanged": true,
+        "numericalTraceFieldsIdentical": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.DemoPowerSupply",
+        "relativePath": "model_worker/Modelica.Electrical.Analog.Examples.DemoPowerSupply/sim-trace.json",
+        "beforeSha256": "efcd5ec6191bb5e1d05bd043f92dc29a072262ead26e762f8aa324d183bac22d",
+        "afterSha256": "efcd5ec6191bb5e1d05bd043f92dc29a072262ead26e762f8aa324d183bac22d",
+        "baselineBytesUnchanged": true,
+        "candidateReplayBytesUnchanged": true,
+        "numericalTraceFieldsIdentical": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.OpAmps.Comparator",
+        "relativePath": "model_worker/Modelica.Electrical.Analog.Examples.OpAmps.Comparator/sim-trace.json",
+        "beforeSha256": "96343278c2f2ff8da072fc9145fe600907608289cc9597bd40c960233b0f7ca5",
+        "afterSha256": "96343278c2f2ff8da072fc9145fe600907608289cc9597bd40c960233b0f7ca5",
+        "baselineBytesUnchanged": true,
+        "candidateReplayBytesUnchanged": true,
+        "numericalTraceFieldsIdentical": true
+      },
+      {
+        "model": "Modelica.Electrical.Analog.Examples.ShowSaturatingInductor",
+        "relativePath": "model_worker/Modelica.Electrical.Analog.Examples.ShowSaturatingInductor/sim-trace.json",
+        "beforeSha256": "6ef23f8f8f29394821b26c3786e262376cbef5bc3f8e8f09a1e069c0e92e74a4",
+        "afterSha256": "6ef23f8f8f29394821b26c3786e262376cbef5bc3f8e8f09a1e069c0e92e74a4",
+        "baselineBytesUnchanged": true,
+        "candidateReplayBytesUnchanged": true,
+        "numericalTraceFieldsIdentical": true
+      },
+      {
+        "model": "Modelica.Mechanics.Rotational.Examples.FirstGrounded",
+        "relativePath": "model_worker/Modelica.Mechanics.Rotational.Examples.FirstGrounded/sim-trace.json",
+        "beforeSha256": "92348020dbd934eda5976f4aa853a2c3cba6bdefaea9b3a627d01b5bb9c93341",
+        "afterSha256": "92348020dbd934eda5976f4aa853a2c3cba6bdefaea9b3a627d01b5bb9c93341",
+        "baselineBytesUnchanged": true,
+        "candidateReplayBytesUnchanged": true,
+        "numericalTraceFieldsIdentical": true
+      }
+    ],
+    "numericalTraceFieldsIdentical": 9,
+    "all20ExactDiagnosticsAndOutcomesUnchanged": true
+  },
+  "history": [
+    {
+      "status": "PRELAUNCH_MANIFEST_ENUMERATOR_ERROR_CORRECTED",
+      "detail": "After-build enumerator initially omitted rust-toolchain.toml, giving2403entries. Original byte checks passed; preserved incomplete manifest and corrected same2404scope matcheda5a1. No compiler source mutation."
+    },
+    {
+      "status": "COMMON_REPORT_COMMAND_RELATIVE_PATH_FAILURE_CORRECTED",
+      "detail": "Report tools resolve relative results paths against compiler root. Initial band/transition invocations failed missing input before any model/comparator attempt; preserved logs, reran reporting with absolute Scratch paths."
+    }
+  ],
+  "limitations": [
+    "The delta covers all compiler changes between EBBAA and A5A, not prefix-cache or any single optimization alone.",
+    "Nine ToDae and two EL005 Solve refusals remain actionable; no silent exclusion or capability completion.",
+    "Nine OMC-high comparisons cover175channels, not20 successful simulations or566 matched models.",
+    "Exact state set match is8/9 with state count match9/9; numeric trace agreement does not erase representation differences.",
+    "External heavy builds and applications were observed and untouched; workflow timing is not an attributed throughput gain.",
+    "Original baseline gate infrastructure failure remains preserved; later comparator evidence does not retroactively change its exit.",
+    "No compiler source/model/pin change or reference snapshot promotion during this task."
+  ],
+  "ownership": {
+    "compilerSourceCargoReleasedBeforeFrozenBinaryRun": true,
+    "cpuAndTargetMslChannelReleasedAfterComparator": true
+  },
+  "evidence": [
+    {
+      "path": "dev/artifacts/msl-canary-matched/band-check-relative-path-failure.log",
+      "sha256": "3f82947174f118597f62e708fd2a2c93b02bf8c0d60c1a7fe58c9684455ddae5",
+      "bytes": 242
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/band-check.log",
+      "sha256": "8f78966d20c4faaf1592aa869f42d3fcf1e5f5b5cbeb0c09d95b664d1d201e5e",
+      "bytes": 227
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/band-write-relative-path-failure.log",
+      "sha256": "3f82947174f118597f62e708fd2a2c93b02bf8c0d60c1a7fe58c9684455ddae5",
+      "bytes": 242
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/band-write.log",
+      "sha256": "e941e8dc97c94925a23d4ef0aeb5b9673b4be0ba9de64d79b7f2d52a21f6fd40",
+      "bytes": 319
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/build-resource.json",
+      "sha256": "822d9ac5795c9c5fefc07e7d114c797212b8973354f32b304a5a4c05b333d4d8",
+      "bytes": 706
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/build.log",
+      "sha256": "156cd94852a095ae96bdb39f4cf7434e0ada9e5a305a212b0cfb5c73193d1e19",
+      "bytes": 418564
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/canary-resource.json",
+      "sha256": "5f15c790b3c79e79e900a4c3bcaba585b5afbdbea6c9ca6a5fa24fd3cfec50ce",
+      "bytes": 1324
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/canary-targets.json",
+      "sha256": "536004933ce502f7a8a4317e5dd6de2b700a6b176e84d2d6e7bbe0dcdf61eafa",
+      "bytes": 1217
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/canary.log",
+      "sha256": "bf8d57901aa52badd5ca43209067d959f14466f5128258fb9080b7e7499b7c82",
+      "bytes": 24580
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/common-comparator-resource.json",
+      "sha256": "b61802b0231d557ebeac787a52bb5f44acef8c4ae869004192eb2abba36c8799",
+      "bytes": 887
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/common-comparator.log",
+      "sha256": "961d8e2d356d1cac7da1c1229c58c0eb3df6916f9f6645d174047e2fb6c42aaa",
+      "bytes": 2306
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/msl_band_table.json",
+      "sha256": "e7453360a0877afa4b803098671cecfc1fab5db2a93ca4640a5e021c0aa26e50",
+      "bytes": 11997
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/msl_cargo_setup_timing.json",
+      "sha256": "ad1d71a676144037ef1d0fbd4984cbedbe4aef29e2f91fff2f325664147145f1",
+      "bytes": 1313
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/msl_compile_targets.json",
+      "sha256": "93be08c17ec8491728614ce8c6cf3b3907be67d8896ec909d0acf00f13d0c84d",
+      "bytes": 5848
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/msl_package_pass_rates.json",
+      "sha256": "403ece5b6d0229a51f4409807258a2fe9e236357ca7cf617a108d329e92df697",
+      "bytes": 5842
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/msl_package_trace_accuracy.json",
+      "sha256": "ff53ea7e529e6bdddc5fc62284c649a5bac33687c80f6fc4dc1a96ea85daa20b",
+      "bytes": 4425
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/msl_parity_timing.json",
+      "sha256": "347d275fecffacdaa07a68a78199f70f6d6223b269fd6c6f9f74269694997b79",
+      "bytes": 3005
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/msl_quality_current.json",
+      "sha256": "3143cfc934626cc7e94287b70ce9a6f1a94cb3887b8a93a6e8ade29465d880d8",
+      "bytes": 14436
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/msl_results.json",
+      "sha256": "6b2560638dc3ef3bff78a5647468002f76ff220989fb4459d86ba315a2548154",
+      "bytes": 32920
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/msl_simulation_targets.json",
+      "sha256": "df506e16d5f77d0b129db84d4e41cae747238b441cffac2320fac145137bbb54",
+      "bytes": 5899
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/omc_simulation_reference.json",
+      "sha256": "ada2c13ca9f2486ad5c1d21d1a779069d3a67ed1db619b0c5b57864120ba3b59",
+      "bytes": 24853
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/comparator-results/sim_trace_comparison.json",
+      "sha256": "741a548fd525507fd9e395e442a93023cfd7417e5624da6d7e229a0ddb2b256e",
+      "bytes": 121283
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/frozen-artifacts.json",
+      "sha256": "ece15006d1b5cb916caabbbc280f936bf8051bc3dacc6a8ac03cc8e040f8864b",
+      "bytes": 2296
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/model-worker-evidence.json.gz",
+      "sha256": "0456d7acf9224046dc93cf5286d1957d5d971155ef1fc80ac516f688dabead23",
+      "bytes": 1784207
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/postflight-audit.json",
+      "sha256": "d7dfe7891022784c070e58cb7425d074609f4f49f461e074336097a136b3dca4",
+      "bytes": 12709
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/preflight-pins.json",
+      "sha256": "ac30e957d25688f5474a4562573cb0cb6d6f68b2bbc2433534ac615627e005b0",
+      "bytes": 1380
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/msl_band_table.json",
+      "sha256": "952a9e8bfd358adb2ae28ba7274edd74407d88a248eb31b912409d59617bcbe0",
+      "bytes": 11975
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/msl_cargo_setup_timing.json",
+      "sha256": "ad1d71a676144037ef1d0fbd4984cbedbe4aef29e2f91fff2f325664147145f1",
+      "bytes": 1313
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/msl_compile_targets.json",
+      "sha256": "93be08c17ec8491728614ce8c6cf3b3907be67d8896ec909d0acf00f13d0c84d",
+      "bytes": 5848
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/msl_package_pass_rates.json",
+      "sha256": "403ece5b6d0229a51f4409807258a2fe9e236357ca7cf617a108d329e92df697",
+      "bytes": 5842
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/msl_package_trace_accuracy.json",
+      "sha256": "ff53ea7e529e6bdddc5fc62284c649a5bac33687c80f6fc4dc1a96ea85daa20b",
+      "bytes": 4425
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/msl_parity_timing.json",
+      "sha256": "347d275fecffacdaa07a68a78199f70f6d6223b269fd6c6f9f74269694997b79",
+      "bytes": 3005
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/msl_quality_current.json",
+      "sha256": "3143cfc934626cc7e94287b70ce9a6f1a94cb3887b8a93a6e8ade29465d880d8",
+      "bytes": 14436
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/msl_results.json",
+      "sha256": "6b2560638dc3ef3bff78a5647468002f76ff220989fb4459d86ba315a2548154",
+      "bytes": 32920
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/msl_simulation_targets.json",
+      "sha256": "df506e16d5f77d0b129db84d4e41cae747238b441cffac2320fac145137bbb54",
+      "bytes": 5899
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/omc_simulation_reference.json",
+      "sha256": "5abdc4f7a3a8ea0a1e74e61d476bfc4e846d01719d8e17923399a3081a7eee6c",
+      "bytes": 26631
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/results/sim_trace_comparison.json",
+      "sha256": "23c72bed1aa810df1e2bc61b09697f34413ea1ea674bebec9d776423eb10f829",
+      "bytes": 121289
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/source-after-build.sha256",
+      "sha256": "a5a1bf428e65ec5300503fedbe1aa786f5e2f9469ed0220334e82ce4966b56d9",
+      "bytes": 295915
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/source-after-incomplete-enumeration.sha256",
+      "sha256": "47cf1bee6df458c9d2f7e92c23f5feacdf7ea94f72424a3a21cea08ed13258cd",
+      "bytes": 295829
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/source-before.sha256",
+      "sha256": "a5a1bf428e65ec5300503fedbe1aa786f5e2f9469ed0220334e82ce4966b56d9",
+      "bytes": 295915
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/transition-relative-path-failure.log",
+      "sha256": "666b6cf53456d1856eaa492ba2cf4768217ec9f23945292c43a1a459283d9a0e",
+      "bytes": 107
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/transition.log",
+      "sha256": "389e0ab4abbf952e83bdb596a7e11fb6adc4b4cfa5a29d026fb4793b194a049f",
+      "bytes": 379
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/transitions.json",
+      "sha256": "66fff47a876f2632dffad941394679252d8281dc5dd6fcb76d8d9b427b70d2f0",
+      "bytes": 2411
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/transitions.md",
+      "sha256": "3dbd89fb087e86e347f065a9314fa0e1441b261f87a04744a0139404ad0ed9c2",
+      "bytes": 539
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/xtask-build-resource.json",
+      "sha256": "19f5389aa0350217a42873b57750db075723c090e0b9da8acc9392ff9550f6c4",
+      "bytes": 515
+    },
+    {
+      "path": "dev/artifacts/msl-canary-matched/xtask-build.log",
+      "sha256": "89b2af3b4ed67f4768265d1c0b6137b3196aaa3fcf733c21809997019d0b3e2e",
+      "bytes": 133752
+    }
+  ]
+}

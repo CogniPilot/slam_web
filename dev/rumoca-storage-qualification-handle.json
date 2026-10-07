@@ -1,0 +1,14 @@
+{
+  "directory": "/home/jgoppert/scratch/slam_web/tmp/storage-qualification-RmYPxd",
+  "script": "/home/jgoppert/scratch/slam_web/tmp/storage-qualification-RmYPxd/qualify.mjs",
+  "status": "TERMINAL_INCOMPLETE",
+  "results": {
+    "ranges": "PASS",
+    "trajectories": "PASS",
+    "eachStart": "PASS",
+    "fourbarSplits": "FAIL",
+    "jacobianTrajectories": "TIMEOUT",
+    "strict": "NOT_RUN"
+  },
+  "scope": "preserved pre-rebase source; not published PR qualification"
+}

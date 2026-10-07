@@ -1,0 +1,62 @@
+{
+  "recordedAt": "2026-10-04T07:45:07.208Z",
+  "worktree": "../rumoca-native-functions",
+  "branch": "slam-native-functions",
+  "base": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+  "status": "SCOPED_NATIVE_EXECUTION_PASS_NOT_APPLICATION_INTEGRATED",
+  "sourceSha256": {
+    "crates/rumoca-exec-wasm/Cargo.toml": "438a72079d2b06cd65a350647775fff450c274e702d0a58fffea99e355bf1e8c",
+    "crates/rumoca-exec-wasm/src/lib.rs": "673fdf0e679d13eea4afefe5d5bbb503398e01522aacc95db9ecdcb1c677abc7",
+    "crates/rumoca-exec-wasm/src/typed_call.rs": "7ebc47941a9bfc83305ed0462ecfdaa5aecdaa690fd3da38302f944d38ef2edc",
+    "crates/rumoca-exec-wasm/src/typed_call/emit.rs": "4f1a862680ddc9b4c93b60d133c6b91a64de9f5ff951b72930d320bd992ccde4",
+    "crates/rumoca-exec-wasm/src/typed_call/layout.rs": "b3bf6b91703b920c6beacce1d9e724630d4ef4441d0f4cdd63739803d2ecd965",
+    "crates/rumoca-exec-wasm/src/typed_call/numbers.rs": "655d060cabba4777e4e1dc625b416e3a06904f6e538f854145127aa9629a7be1",
+    "crates/rumoca-exec-wasm/tests/typed_calls.rs": "9b5958c674136d16cbc7283229cc41d7873fd5f808b00a1ab031b6ae64820e7d"
+  },
+  "gates": {
+    "tests": {
+      "log": "/tmp/slam-native-typed-call-all-tests.log",
+      "sha256": "b15d329b4f980bdcc1b4297f44828a8cda4f10fedf496d5c8805b2b70cbcf709",
+      "passed": true,
+      "testSummaries": [
+        "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.25s",
+        "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.38s",
+        "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    "clippy": {
+      "log": "/tmp/slam-native-typed-call-clippy-pass.log",
+      "sha256": "fb2acbba84eef39fa43f02b4bdf678e3718f3577b972fa22ec5f84fe846a30db",
+      "passed": true
+    }
+  },
+  "resources": {
+    "cpus": [
+      6,
+      7
+    ],
+    "cargoJobs": 2,
+    "privateCache": "/dev/shm/slam-native-typed-call-root",
+    "rssLimitMiB": 8192,
+    "cacheLimitMiB": 7680,
+    "testElapsedMs": 19722.244,
+    "testPeakRssKiB": 552352,
+    "clippyElapsedMs": 488.792,
+    "clippyPeakRssKiB": 340348
+  },
+  "history": [
+    "Initial native compilation refused unreachable private public methods; narrowed visibility.",
+    "Strict Clippy refused excessive nesting; extracted helpers, preserving operation semantics and test assertions.",
+    "25 scoped native tests including nine typed call oracle/ABI fixtures pass; formatter and strict scoped Clippy pass."
+  ],
+  "limitations": [
+    "Standalone source-issued typed-call backend, not full function source admission.",
+    "Fold, lazy regions, nested Call and whole-model schedule unsupported.",
+    "No FeatureSelection, Horn, full SLAM, browser runtime or embedded deployment acceptance.",
+    "Application compiler pin unchanged; isolated branch uncommitted."
+  ]
+}

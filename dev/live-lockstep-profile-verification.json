@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "status": "CURRENT_BROWSER_90HZ_LOCKSTEP_AND_SENSOR_GPU_PROFILE_COMPLETE",
+  "recordedAt": "2026-10-05T12:58:06.242Z",
+  "build": {
+    "entry": "./assets/index-DIlyzz6C.js",
+    "sha256": "4254d2f436dc958216db2b5e0d0aa92b2817c6fe9b2f55c91cc7738095f7fc10",
+    "outDir": "$HOME/scratch/slam_web/build/raw-depth-preview"
+  },
+  "compiler": {
+    "productionPinChanged": false,
+    "files": [
+      {
+        "path": "vendor/rumoca/rumoca_bind_wasm_bg.wasm",
+        "sha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4"
+      },
+      {
+        "path": "vendor/rumoca/rumoca_bind_wasm.js",
+        "sha256": "a42e7a8012425835b3a6a4087bf2d5a4d581d1a4a902e3b090a1b68e58b26eb4"
+      }
+    ]
+  },
+  "cameraHz": 90,
+  "lidarHz": 10,
+  "timedFrames": 720,
+  "order": "ABBA, A=LiDAR off, B=10Hz LiDAR on",
+  "graphics": {
+    "api": "WebGL 2",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+    "vendor": "Google Inc. (NVIDIA Corporation)",
+    "acceleration": "hardware-reported",
+    "powerPreference": "high-performance"
+  },
+  "pipelineSummary": [
+    {
+      "ordinal": 0,
+      "lidarEnabled": false,
+      "rtf": 0.6462870807162772,
+      "meanFrameMs": 17.17277778055933,
+      "nodeMs": {
+        "physics": 3.8400000009271835,
+        "sensor": 7.761111118396124,
+        "detector": 3.0549999912579855,
+        "slam": 0.5277777830759685,
+        "map": 0.049444441662894356,
+        "evaluation": 0.5305555555555556
+      },
+      "meanViewerFps": 30.165600918183312,
+      "approximateCpuCores": 1.780520907373343
+    },
+    {
+      "ordinal": 1,
+      "lidarEnabled": true,
+      "rtf": 0.6136098668511474,
+      "meanFrameMs": 18.086111111111112,
+      "nodeMs": {
+        "physics": 3.913333331876331,
+        "sensor": 8.043333326445685,
+        "detector": 3.282222228580051,
+        "slam": 0.5716666678587595,
+        "map": 0.03722222248713176,
+        "evaluation": 0.6083333286974165
+      },
+      "meanViewerFps": 29.8380221653879,
+      "approximateCpuCores": 1.6659507885008649
+    },
+    {
+      "ordinal": 2,
+      "lidarEnabled": true,
+      "rtf": 0.6814774431077059,
+      "meanFrameMs": 16.278888889816074,
+      "nodeMs": {
+        "physics": 3.753333338101705,
+        "sensor": 6.478888885180155,
+        "detector": 3.223333333598243,
+        "slam": 0.6294444441795349,
+        "map": 0.03555555807219611,
+        "evaluation": 0.5616666701104905
+      },
+      "meanViewerFps": 29.837678307919333,
+      "approximateCpuCores": 1.6185089273808009
+    },
+    {
+      "ordinal": 3,
+      "lidarEnabled": false,
+      "rtf": 0.6712535660345696,
+      "meanFrameMs": 16.52944444351726,
+      "nodeMs": {
+        "physics": 3.9027777804268733,
+        "sensor": 6.586111107799742,
+        "detector": 3.257222223944134,
+        "slam": 0.518333324458864,
+        "map": 0.02722222407658895,
+        "evaluation": 0.6244444476233588
+      },
+      "meanViewerFps": 30.001311561413857,
+      "approximateCpuCores": 1.6009397549924478
+    }
+  ],
+  "meanLidarOffRtf": 0.6587703233754234,
+  "meanLidarOnRtf": 0.6475436549794267,
+  "sensorGpuSummary": [
+    {
+      "lidarEnabled": false,
+      "captures": 5,
+      "meanRpcWallMs": 16.639999985694885,
+      "meanCameraTotalMs": 8.420000004768372,
+      "gpuDisjoint": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "kinds": {
+        "skeleton-update": {
+          "cpu": 0.24000000953674316,
+          "gpu": 0,
+          "gpuCount": 0,
+          "events": 300,
+          "drawCalls": 0,
+          "triangles": 0
+        },
+        "rgb": {
+          "cpu": 3.3799999713897706,
+          "gpu": 1.0334207999999998,
+          "gpuCount": 5,
+          "events": 5,
+          "drawCalls": 66,
+          "triangles": 36339
+        },
+        "pbo-write": {
+          "cpu": 0,
+          "gpu": 0.3336192,
+          "gpuCount": 10,
+          "events": 10,
+          "drawCalls": 0,
+          "triangles": 0
+        },
+        "axial-depth": {
+          "cpu": 1.8400000095367433,
+          "gpu": 0.5996544,
+          "gpuCount": 5,
+          "events": 5,
+          "drawCalls": 33,
+          "triangles": 35545
+        },
+        "host-copy": {
+          "cpu": 2.5199999809265137,
+          "gpu": 0,
+          "gpuCount": 0,
+          "events": 5,
+          "drawCalls": 0,
+          "triangles": 0
+        }
+      }
+    },
+    {
+      "lidarEnabled": true,
+      "captures": 5,
+      "meanRpcWallMs": 45.7,
+      "meanCameraTotalMs": 15.260000014305115,
+      "gpuDisjoint": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "kinds": {
+        "skeleton-update": {
+          "cpu": 1.459999942779541,
+          "gpu": 0,
+          "gpuCount": 0,
+          "events": 900,
+          "drawCalls": 0,
+          "triangles": 0
+        },
+        "rgb": {
+          "cpu": 2.1800000190734865,
+          "gpu": 0.6385664,
+          "gpuCount": 5,
+          "events": 5,
+          "drawCalls": 66,
+          "triangles": 36339
+        },
+        "pbo-write": {
+          "cpu": 0.039999985694885255,
+          "gpu": 1.0762239999999998,
+          "gpuCount": 15,
+          "events": 15,
+          "drawCalls": 0,
+          "triangles": 0
+        },
+        "axial-depth": {
+          "cpu": 1.0199999809265137,
+          "gpu": 0.567296,
+          "gpuCount": 5,
+          "events": 5,
+          "drawCalls": 33,
+          "triangles": 35545
+        },
+        "lidar-face": {
+          "cpu": 5.259999966621399,
+          "gpu": 3.7789696,
+          "gpuCount": 20,
+          "events": 20,
+          "drawCalls": 184,
+          "triangles": 151312
+        },
+        "fullscreen": {
+          "cpu": 0.14000003337860106,
+          "gpu": 0.030105600000000003,
+          "gpuCount": 5,
+          "events": 5,
+          "drawCalls": 1,
+          "triangles": 2
+        },
+        "host-copy": {
+          "cpu": 4.999999952316284,
+          "gpu": 0,
+          "gpuCount": 0,
+          "events": 5,
+          "drawCalls": 0,
+          "triangles": 0
+        }
+      }
+    }
+  ],
+  "sensorPerf": {
+    "samples": 819,
+    "lostSamples": 0,
+    "recorderExitCode": 0,
+    "mappingWarning": "Three pre-existing thread maps not processed; many symbols/caller stacks unresolved.",
+    "trace": "$HOME/scratch/slam_web/profiles/current-sensor-worker/perf.data"
+  },
+  "firstAttempt": "Harness raced ready=true before automatic startup completed; terminal failure retained. Successful harness observes actual automatic frames before pausing.",
+  "fullSlam": false,
+  "productionChanged": false,
+  "scope": "Current inertial preset only, medium city, visible viewer and dedicated sensor worker on hardware-reported RTX3090. ABBA windows start from same seed/state and check720 camera sequences and180Hz-grid times at90Hz camera rate. Four-CPU affinity; other compiler work may overlap, short windows and no cross-machine/steady-frame guarantee. Instrumented held-pose GPU captures are separate from uninstrumented throughput. No10x or fullModelica/SLAM claim.",
+  "artifacts": [
+    {
+      "path": "dev/artifacts/live-lockstep-profile/pipeline/report.json",
+      "bytes": 2881,
+      "sha256": "2182cf084214dbffbfba385b2471b5d10af773b8eec8d67da34914a261a7c3ea"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/pipeline/resource.json",
+      "bytes": 598,
+      "sha256": "3bb930ced51c1e0bac05208d671bed1aef32b22bbc6305b12478e6e622cb4d45"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/pipeline/run.log",
+      "bytes": 669,
+      "sha256": "83c437aefc2101299b5e672cdd25c1ab7051b293d4901205415702699dba3bfc"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/pipeline/window-0.json",
+      "bytes": 198868,
+      "sha256": "be415b94e03d619e4121d95fcf62f8de55bb0977b985ef4b5ba318ada6bcd3e0"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/pipeline/window-1.json",
+      "bytes": 206364,
+      "sha256": "2fa71b1ea66f76b268c7f7bb0315880201779c5ea0c54d3b4da576ab6d17b3e5"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/pipeline/window-2.json",
+      "bytes": 205942,
+      "sha256": "b1f04848445a96ae77a84977c0a9d501b64f6528b586473f81b6e4299781eaa8"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/pipeline/window-3.json",
+      "bytes": 198466,
+      "sha256": "872a1bc5aa33639b0230cf3a7177fa57899df4aed4e918f13fb6f15dfa0965f8"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/sensor/report.json",
+      "bytes": 168680,
+      "sha256": "e2deaf38b7ffcfd60543c0a7a9566678678921bbb8099581e9358b7b2a32c3ce"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/sensor/resource.json",
+      "bytes": 592,
+      "sha256": "432d055c9a577a7e7665aec04d86063bd65db0789340630bd3b0b66057c81252"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/sensor/run.log",
+      "bytes": 130,
+      "sha256": "9a91856ff67496f34b5c3b4ddc44a42736e4c93e2d644888c301e12ae2266b53"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/sensor/summary.json",
+      "bytes": 2700,
+      "sha256": "c595f1a65d3547597f13540891f0dbd4618fef55e87df980d7eb7628de2e8ec2"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/sensor/self-report.txt",
+      "bytes": 20035,
+      "sha256": "427f47d071e5bbddda36d3d8d867c9eb1c24da3bd079d95a08c57cf8f0b43f03"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/sensor/perf-record.log",
+      "bytes": 829,
+      "sha256": "a84b7d3008998948d8faf5b499fa2aeac48d10ea8ec490e2b47c3793ed9b8c87"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/sensor/perf-targets.json",
+      "bytes": 287,
+      "sha256": "84e7150316d0e03c3a53ef2bd7c0cbdc3c52352114e9e3ec7f235ffd8fdc3c1c"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/first-harness-startup-race/failure.json",
+      "bytes": 289,
+      "sha256": "42079dcbbbd668c1075aabdfb1b8b9dcdd3c11b137909ef42113006f46157ac8"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/first-harness-startup-race/resource.json",
+      "bytes": 561,
+      "sha256": "b785360cdb7d441ec1e295e3d0077fdf653d1d5d5435bc92e95a4d0fa3ed110f"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/first-harness-startup-race/run.log",
+      "bytes": 344,
+      "sha256": "8d1c31398bec6fe6d31533b6ce9b45fbdb4a732f1aa3ac0b368a6895798437dc"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/sources/profile-live-lockstep.mjs",
+      "bytes": 6714,
+      "sha256": "df46102dc6a23b9cbe81dc840eeb5308424c934fca35dd34030547178bb872a2"
+    },
+    {
+      "path": "dev/artifacts/live-lockstep-profile/sources/profile-current-sensor-worker.mjs",
+      "bytes": 5400,
+      "sha256": "989c7c9080860235546708a15baac7ac8d018c2acd98c2fd0118e3200c18d67c"
+    }
+  ]
+}

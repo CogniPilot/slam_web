@@ -1,0 +1,437 @@
+{
+  "status": "RGB_SOURCE_PREPARATION_AND_NUMERICAL_FRONTIERS_REPRODUCED_NO_U8_F32_ADMISSION",
+  "producerSha256": "262ee681e0cdb87b499ee8907508d8ea77c9640caa2b480bb3eda782886d1457",
+  "cases": [
+    {
+      "name": "IntegerRGB-Small",
+      "sourceSha256": "de65428d23a2cbd772522f90675cb831e70f03d8eced9bfe518b81a5ac6d1446",
+      "producerSha256": "262ee681e0cdb87b499ee8907508d8ea77c9640caa2b480bb3eda782886d1457",
+      "model": "IntegerRGB.Small",
+      "scope": "Exact original source admission only. Default canonical numeric storage; no U8 receipt/F32 claim.",
+      "exitCode": 101,
+      "solveIssued": false,
+      "nativeIssued": false,
+      "label": "original/IntegerRGB-Small",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "15",
+          "taskset",
+          "-c",
+          "30",
+          "/home/jgoppert/scratch/slam_web/tmp/native-conditional-integration/final-producer",
+          "tests::native_mixed_assignment_tests::calls::native_registration_whole_program_source_inventory",
+          "--exact",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/rgb-source-admission-controls/IntegerRGB-Small/prepare.log",
+        "elapsedMs": 17.379628999999998,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 2048,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 120,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "name": "IntegerRGB-Full",
+      "sourceSha256": "de65428d23a2cbd772522f90675cb831e70f03d8eced9bfe518b81a5ac6d1446",
+      "producerSha256": "262ee681e0cdb87b499ee8907508d8ea77c9640caa2b480bb3eda782886d1457",
+      "model": "IntegerRGB.Full",
+      "scope": "Exact original source admission only. Default canonical numeric storage; no U8 receipt/F32 claim.",
+      "exitCode": 101,
+      "solveIssued": false,
+      "nativeIssued": false,
+      "label": "original/IntegerRGB-Full",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "15",
+          "taskset",
+          "-c",
+          "30",
+          "/home/jgoppert/scratch/slam_web/tmp/native-conditional-integration/final-producer",
+          "tests::native_mixed_assignment_tests::calls::native_registration_whole_program_source_inventory",
+          "--exact",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/rgb-source-admission-controls/IntegerRGB-Full/prepare.log",
+        "elapsedMs": 103.24930900000001,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 2048,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 120,
+        "signal": null,
+        "exitCode": 101
+      }
+    },
+    {
+      "name": "RealRGB-Small",
+      "sourceSha256": "1115e869f85cc19c37bb279e4f0a20af51b1f4b166fd20fbf3d0dc287d49c659",
+      "producerSha256": "262ee681e0cdb87b499ee8907508d8ea77c9640caa2b480bb3eda782886d1457",
+      "model": "RealRGB.Small",
+      "scope": "Exact original source admission only. Default canonical numeric storage; no U8 receipt/F32 claim.",
+      "exitCode": 0,
+      "solveIssued": true,
+      "nativeIssued": true,
+      "label": "original/RealRGB-Small",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "15",
+          "taskset",
+          "-c",
+          "30",
+          "/home/jgoppert/scratch/slam_web/tmp/native-conditional-integration/final-producer",
+          "tests::native_mixed_assignment_tests::calls::native_registration_whole_program_source_inventory",
+          "--exact",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/rgb-source-admission-controls/RealRGB-Small/prepare.log",
+        "elapsedMs": 18.725693,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 2048,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 120,
+        "signal": null,
+        "exitCode": 0
+      },
+      "canonicalWire": {
+        "sha256": "64e5540f3d3040e4230c15aeedafc792d69be7acb8626bb6989c9189520518f2",
+        "bytes": 29450,
+        "integerToRealOccurrences": 0
+      }
+    },
+    {
+      "name": "RealRGB-Full",
+      "sourceSha256": "1115e869f85cc19c37bb279e4f0a20af51b1f4b166fd20fbf3d0dc287d49c659",
+      "producerSha256": "262ee681e0cdb87b499ee8907508d8ea77c9640caa2b480bb3eda782886d1457",
+      "model": "RealRGB.Full",
+      "scope": "Exact original source admission only. Default canonical numeric storage; no U8 receipt/F32 claim.",
+      "exitCode": 124,
+      "solveIssued": false,
+      "nativeIssued": false,
+      "label": "original/RealRGB-Full",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "15",
+          "taskset",
+          "-c",
+          "30",
+          "/home/jgoppert/scratch/slam_web/tmp/native-conditional-integration/final-producer",
+          "tests::native_mixed_assignment_tests::calls::native_registration_whole_program_source_inventory",
+          "--exact",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/rgb-source-admission-controls/RealRGB-Full/prepare.log",
+        "elapsedMs": 120162.60268200001,
+        "peakRssKiB": 87980,
+        "minimumAvailableKiB": 55529364,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 2048,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 120,
+        "stopped": "timeout",
+        "signal": "SIGKILL",
+        "exitCode": 124
+      }
+    },
+    {
+      "name": "IntegerRGB-Small",
+      "sourceSha256": "34d7d36a1c236d90758dc9e7eae514a3d16a44b27a67d9d4dc3c44f9fc79fc98",
+      "producerSha256": "262ee681e0cdb87b499ee8907508d8ea77c9640caa2b480bb3eda782886d1457",
+      "model": "IntegerRGB.Small",
+      "scope": "Exact original source admission only. Default canonical numeric storage; no U8 receipt/F32 claim.",
+      "exitCode": 101,
+      "solveIssued": true,
+      "nativeIssued": false,
+      "label": "corrected/IntegerRGB-Small",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "15",
+          "taskset",
+          "-c",
+          "30",
+          "/home/jgoppert/scratch/slam_web/tmp/native-conditional-integration/final-producer",
+          "tests::native_mixed_assignment_tests::calls::native_registration_whole_program_source_inventory",
+          "--exact",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/rgb-integer-coercion-controls/IntegerRGB-Small/prepare.log",
+        "elapsedMs": 25.976284,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 2048,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 120,
+        "signal": null,
+        "exitCode": 101
+      },
+      "canonicalWire": {
+        "sha256": "0c513e8b92ab077b4e735b3f1cb5c976eddcce4b158a56c4ed60da9f2836e416",
+        "bytes": 87897,
+        "integerToRealOccurrences": 2
+      }
+    },
+    {
+      "name": "IntegerRGB-Full",
+      "sourceSha256": "34d7d36a1c236d90758dc9e7eae514a3d16a44b27a67d9d4dc3c44f9fc79fc98",
+      "producerSha256": "262ee681e0cdb87b499ee8907508d8ea77c9640caa2b480bb3eda782886d1457",
+      "model": "IntegerRGB.Full",
+      "scope": "Exact original source admission only. Default canonical numeric storage; no U8 receipt/F32 claim.",
+      "exitCode": 124,
+      "solveIssued": false,
+      "nativeIssued": false,
+      "label": "corrected/IntegerRGB-Full",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "15",
+          "taskset",
+          "-c",
+          "30",
+          "/home/jgoppert/scratch/slam_web/tmp/native-conditional-integration/final-producer",
+          "tests::native_mixed_assignment_tests::calls::native_registration_whole_program_source_inventory",
+          "--exact",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/rgb-integer-coercion-controls/IntegerRGB-Full/prepare.log",
+        "elapsedMs": 120172.028165,
+        "peakRssKiB": 44676,
+        "minimumAvailableKiB": 57489176,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 2048,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 120,
+        "stopped": "timeout",
+        "signal": "SIGKILL",
+        "exitCode": 124
+      }
+    }
+  ],
+  "smallRealNumerical": {
+    "status": "ACTUAL_REAL_RGB_SMALL_SOURCE_DIVISION_NUMERICAL_FAIL",
+    "checks": 75,
+    "readonly": 5,
+    "mismatches": [
+      {
+        "frame": "bytes",
+        "cell": 0,
+        "rgb": [
+          128,
+          201,
+          18
+        ],
+        "expected": 115.66666666666667,
+        "actual": 115.66666666666666,
+        "expectedBits": "4637839735013419691",
+        "actualBits": "4637839735013419690"
+      },
+      {
+        "frame": "bytes",
+        "cell": 4,
+        "rgb": [
+          236,
+          53,
+          126
+        ],
+        "expected": 138.33333333333334,
+        "actual": 138.33333333333331,
+        "expectedBits": "4639071188036528811",
+        "actualBits": "4639071188036528810"
+      },
+      {
+        "frame": "bytes",
+        "cell": 7,
+        "rgb": [
+          125,
+          198,
+          15
+        ],
+        "expected": 112.66666666666667,
+        "actual": 112.66666666666666,
+        "expectedBits": "4637628628780886699",
+        "actualBits": "4637628628780886698"
+      },
+      {
+        "frame": "bytes",
+        "cell": 11,
+        "rgb": [
+          233,
+          50,
+          123
+        ],
+        "expected": 135.33333333333334,
+        "actual": 135.33333333333331,
+        "expectedBits": "4638965634920262315",
+        "actualBits": "4638965634920262314"
+      },
+      {
+        "frame": "bytes",
+        "cell": 14,
+        "rgb": [
+          122,
+          195,
+          12
+        ],
+        "expected": 109.66666666666667,
+        "actual": 109.66666666666666,
+        "expectedBits": "4637417522548353707",
+        "actualBits": "4637417522548353706"
+      },
+      {
+        "frame": "fractional",
+        "cell": 1,
+        "rgb": [
+          0.6785714285714286,
+          0.8214285714285714,
+          0.9642857142857143
+        ],
+        "expected": 0.8214285714285715,
+        "actual": 0.8214285714285714,
+        "expectedBits": "4605573990361670803",
+        "actualBits": "4605573990361670802"
+      },
+      {
+        "frame": "fractional",
+        "cell": 3,
+        "rgb": [
+          1.5357142857142858,
+          1.6785714285714286,
+          1.8214285714285714
+        ],
+        "expected": 1.6785714285714286,
+        "actual": 1.6785714285714284,
+        "expectedBits": "4610238432832875959",
+        "actualBits": "4610238432832875958"
+      },
+      {
+        "frame": "fractional",
+        "cell": 4,
+        "rgb": [
+          1.9642857142857142,
+          2.107142857142857,
+          2.25
+        ],
+        "expected": 2.107142857142857,
+        "actual": 2.1071428571428568,
+        "expectedBits": "4611927282693139895",
+        "actualBits": "4611927282693139894"
+      },
+      {
+        "frame": "fractional",
+        "cell": 5,
+        "rgb": [
+          2.392857142857143,
+          2.5357142857142856,
+          2.6785714285714284
+        ],
+        "expected": 2.535714285714286,
+        "actual": 2.5357142857142856,
+        "expectedBits": "4612892339756147859",
+        "actualBits": "4612892339756147858"
+      },
+      {
+        "frame": "fractional",
+        "cell": 6,
+        "rgb": [
+          2.8214285714285716,
+          2.9642857142857144,
+          3.107142857142857
+        ],
+        "expected": 2.964285714285715,
+        "actual": 2.9642857142857144,
+        "expectedBits": "4613857396819155823",
+        "actualBits": "4613857396819155822"
+      },
+      {
+        "frame": "fractional",
+        "cell": 13,
+        "rgb": [
+          5.821428571428571,
+          5.964285714285714,
+          6.107142857142857
+        ],
+        "expected": 5.964285714285714,
+        "actual": 5.9642857142857135,
+        "expectedBits": "4618401207157484983",
+        "actualBits": "4618401207157484982"
+      }
+    ],
+    "frames": 5,
+    "sourceSha256": "1115e869f85cc19c37bb279e4f0a20af51b1f4b166fd20fbf3d0dc287d49c659",
+    "artifactSha256": "74fffc0c7bfbe6536e569f44f25444c27601e2e2f9506c3873fe63db1f323bb2",
+    "moduleSha256": "6ad1b359e884a15903f23375d9ce20dac05674d5d17b27ffdcf82faf6c65b00f",
+    "consumerBundleSha256": "150af16c61725bf4b9393d0ac9b5deadd0f4a9948bcfdcc033ef2303fb05b878",
+    "scope": "3x5 semantic Real RGB input, default F64 storage. Tests include fractional and negative inputs; no U8 binding, F32, fullframe or SLAM claim."
+  },
+  "roundingCause": {
+    "source": "crates/rumoca-phase-solve/src/lower/typed_functions/tensor.rs",
+    "line": 139,
+    "observed": "Plain tensor/scalar Divide lowers to reciprocal1.0/rhs followed by Scale. Actual checked typed body and WAT retain that change;11/75 source-ordered mean values differ by one ULP.",
+    "fix": "Use existing checked BroadcastBinary Divide; private generic patch pending compiler owner integration.",
+    "toleranceChanged": false
+  },
+  "correctedIntegerSmall": {
+    "source": "tests/compiler-probes/fixtures/IntegerRGB.mo",
+    "conversion": "Standard Real assignment; two IntegerToReal owners present in exact canonical wire",
+    "scheduleIssued": true,
+    "moduleIssued": false,
+    "refusal": "Native assignment export rejects event-bearing source. Its assertions are retained as root predicates, not stripped."
+  },
+  "profile": {
+    "targetPid": 55757,
+    "seconds": 8,
+    "frequencyHz": 99,
+    "samples": 785,
+    "lostSamples": 0,
+    "event": "cpu/cycles/Pu",
+    "rawTrace": {
+      "path": "$HOME/scratch/slam_web/tmp/rgb-integer-coercion-controls/IntegerRGB-Full/perf.data",
+      "bytes": 13192824,
+      "sha256": "7db53981d2fd4272914a61ffa52f069ec4c9140a0c9276bffb78b68044900c1f"
+    },
+    "selfPercent": {
+      "valueDrop": 13.51,
+      "vectorClone": 8.6,
+      "valueClone": 6.89
+    },
+    "scope": "Preparation of exact correctedIntegerRGB.Full, not frame execution; unresolved stack/kernel symbols limit caller attribution. Array clone/allocation opportunity remains an audit hypothesis."
+  },
+  "artifact": "dev/artifacts/rgb-source-preparation-controls",
+  "manifestSha256": "a5e32d055ce157d5fd61fd0b53ab1d2e25912fa02bbc1e3fb6a24aeaadfaeee2",
+  "limits": [
+    "Full sources time out beforeSolve; no full14400 source or numeric success",
+    "No native U8 storage receipt or Binary32/mixed precision admission",
+    "No assertion removal or host math implementation",
+    "No new production compiler package/pin, fullSLAM or speed claim"
+  ]
+}

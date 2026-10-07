@@ -1,0 +1,81 @@
+{
+  "status": "SOURCE_AND_INDEPENDENT_ORACLE_ONLY",
+  "recordedAt": "2026-10-05T01:15:00.805Z",
+  "files": {
+    "models/RGBDBagOfWords.mo": "485f33e388a0aeb2c28a1a5f2f33e6a4e93e30aea2aff7e9b3905f81dbf01570",
+    "tests/compiler-probes/rgbd-bag-of-words-fixtures.ts": "456db467a264e49910827487775c0f67213fdb13fe9efe1fc0c083cb14650296",
+    "tests/compiler-probes/modelica-rgbd-bag-of-words.test.ts": "651db0eece857012b4cd41207d092079414a7f6929879f95d11771489fdcbc58",
+    "docs/modelica-bag-of-words.md": "e8261ad9149238137eb78374f560aecd57fa5e6e57b788c56bcc0aea02e02b47"
+  },
+  "shape": {
+    "features": 350,
+    "descriptorCells": 49,
+    "vocabularyWords": 256,
+    "keyframeCapacity": 128,
+    "candidates": 4
+  },
+  "verification": {
+    "typescript": {
+      "command": "node node_modules/typescript/bin/tsc --noEmit",
+      "exitCode": 0
+    },
+    "independentFixtures": {
+      "command": "node node_modules/vitest/vitest.mjs run --config tests/compiler-probes/vitest.config.ts tests/compiler-probes/modelica-rgbd-bag-of-words.test.ts",
+      "cpuAffinity": "12,13",
+      "nice": 10,
+      "passed": 4,
+      "skipped": 2,
+      "durationSeconds": 14.51,
+      "testSeconds": 14.21,
+      "additionalBoundaries": [
+        "assign every visualword1..256 including finalslot",
+        "nativeartifactfixture fills128 histories and ranks/overwrites finalslot128"
+      ]
+    },
+    "retainedAttempts": [
+      {
+        "exitCode": 127,
+        "reason": "node shebang executable absent from default PATH; retried using pinned direct Node"
+      },
+      {
+        "exitCode": 1,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 2,
+        "reason": "90Hz upsert plus128-ring full-capacity oracle fixture took12.41s beyond framework default5s; added explicit30s timeout without changing workload/assertions"
+      }
+    ]
+  },
+  "compilerAdmission": false,
+  "nativeNumericalCases": 0,
+  "sourceEditNumericalProof": false,
+  "productionPinChanged": false,
+  "runtimeIntegrated": false,
+  "fullLoopClosure": false,
+  "nextGate": {
+    "selector": "RGBDBagOfWords",
+    "source": "models/RGBDBagOfWords.mo",
+    "baselineArtifact": "RUMOCA_BOW_ARTIFACT",
+    "editedArtifact": "RUMOCA_BOW_EDITED_ARTIFACT",
+    "edit": "minimumSimilarity = 0.35 -> minimumSimilarity = 0.99",
+    "report": "RUMOCA_BOW_NUMERICAL_REPORT"
+  },
+  "limits": "Retrieval-only proposals need full-descriptor matching and geometric registration. Explicit learned/configurable vocabulary input; no trainer, posterior loop probability, geometry, pose graph or live integration.",
+  "actualSourcePreparation": {
+    "status": "FULL_CAPACITY_NATIVE_PREPARATION_TIMEOUT_NO_ARTIFACT",
+    "source": "models/RGBDBagOfWords.mo",
+    "sourceSha256": "485f33e388a0aeb2c28a1a5f2f33e6a4e93e30aea2aff7e9b3905f81dbf01570",
+    "producerSha256": "3389e15ae8c7cf23f8f59a16f768de03d24cd4d6a2ac5f1871976768fd55ed13",
+    "sourceClosureSha256": "6a363d4cf9c82b811392a5401b7c1fa645863117ff836fa0e09c34703d4a8ade",
+    "elapsedMs": 30054.820887,
+    "peakRssKiB": 27600,
+    "minimumAvailableKiB": 54339668,
+    "secondsLimit": 30,
+    "exitCode": 124,
+    "logPath": "dev/artifacts/bag-of-words-native/original-prepare.log",
+    "nativeArtifactProduced": false,
+    "solveArtifactProduced": false,
+    "numericsExecuted": false,
+    "scope": "Original full350×49/256words/128keyframes. Bounded native source preparation only; oracle tests do not validate generated Modelica execution."
+  }
+}

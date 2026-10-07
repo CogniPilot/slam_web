@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "status": "DEFAULT_START_PASSED_FAST_PRESET_CERTIFICATION_REFUSED_PIN_UNCHANGED",
+  "recordedAt": "2026-10-05T06:28:29.869Z",
+  "candidateCompiler": {
+    "rumoca_bind_wasm.js": "2a4e048d42ef5d1b67567369bab2e35a632ac3aa85ac15cb7c889e8fd5fa2124",
+    "rumoca_bind_wasm_bg.wasm": "239b5e4362d10b1a6a247a0a2b661b9d89fe039a89eccb970d63c21e44f66088"
+  },
+  "currentPublicCompiler": {
+    "rumoca_bind_wasm.js": "a42e7a8012425835b3a6a4087bf2d5a4d581d1a4a902e3b090a1b68e58b26eb4",
+    "rumoca_bind_wasm_bg.wasm": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4"
+  },
+  "sourceClosure": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+  "physicsEvidence": "dev/rumoca-private-arena-browser-verification.json",
+  "canaryEvidence": "dev/rumoca-private-arena-msl-canary-verification.json",
+  "productionCompilerPinChanged": false,
+  "mainPreview": "http://localhost:4173",
+  "reviewPreview": "http://localhost:4180",
+  "buildStorage": "$HOME/scratch/slam_web/build/private-arena-preview",
+  "gates": {
+    "typescriptAndBuild": {
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "nice",
+        "-n",
+        "15",
+        "bash",
+        "-c",
+        "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node node_modules/typescript/bin/tsc --noEmit && /nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node node_modules/vite/bin/vite.js build --outDir \"$HOME/scratch/slam_web/build/private-arena-preview\""
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/private-arena-preview/build.log",
+      "elapsedMs": 23211.691813,
+      "peakRssKiB": 1469264,
+      "minimumAvailableKiB": 58591924,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 4096,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 120,
+      "signal": null,
+      "exitCode": 0
+    },
+    "browser": {
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "nice",
+        "-n",
+        "15",
+        "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+        "$HOME/scratch/slam_web/tmp/private-arena-preview/browser-check.mjs"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/private-arena-preview/browser.log",
+      "elapsedMs": 109002.357933,
+      "peakRssKiB": 2508500,
+      "minimumAvailableKiB": 58389300,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 4096,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 1
+    },
+    "partial": "Fresh default running/sequence>=2 and assertions for Balanced, inertial propagation, depth cloud off completed before the paused FAST selection. No complete three-scenario startup report exists.",
+    "refusal": "Raster stage requires certified stateless causal assignments",
+    "boundary": "src/modelica-staged-raster-export.ts:26",
+    "actualCause": "Not yet identified; exact original/new FAST Solve comparison pending.",
+    "savedStarterScenario": "NOT_REACHED"
+  },
+  "observerFailure": {
+    "type": "Playwright inspector response-body cache eviction",
+    "resource": {
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "nice",
+        "-n",
+        "15",
+        "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+        "$HOME/scratch/slam_web/tmp/private-arena-preview/browser-check.mjs"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/private-arena-preview/browser.log",
+      "elapsedMs": 6648.8558410000005,
+      "peakRssKiB": 1424456,
+      "minimumAvailableKiB": 59511540,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 4096,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 1
+    },
+    "correction": "Separate terminal retry obtains original HTTP response bytes via route.fetch, hashes them, and fulfills the same body and response. No compiler/module source edit or byte patch. The final all-response digest assertion was not reached after the later genuine FAST refusal."
+  },
+  "scope": "Review-only static application with new compiler. Default wait completed, FAST compilation refused; not full application acceptance, source persistence or throughput evidence. Main preview/public compiler remain unchanged. Earlier successful main-preview startup proof remains dev/automatic-startup-verification.json. Full SLAM remains unfinished.",
+  "artifacts": [
+    {
+      "path": "dev/artifacts/private-arena-preview/build.log",
+      "sha256": "986a4946ed0aab5d419453c7a11a85660c4fa6107735750f181964b40267efb4",
+      "rawSha256": "dc78b97149578bbe51464f2775af266ea3d97296f2878ac13f0ab574bcca4e0c",
+      "bytes": 2653
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/build-resource.json",
+      "sha256": "f065485b44c929a22bf9c54feb48d069154905cfeaf66bd945b5bd5b6da57df2",
+      "rawSha256": "12ec44cbca6dd026778e716a457b96ab6e2c679ef1ed22217ad073fe643e436a",
+      "bytes": 707
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/browser.log",
+      "sha256": "79cb0fb1c8a50b3befc430fcf619fac8f67dff38eca211e1be35759268df45a2",
+      "rawSha256": "79cb0fb1c8a50b3befc430fcf619fac8f67dff38eca211e1be35759268df45a2",
+      "bytes": 349
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/browser-resource.json",
+      "sha256": "75413179dcc98d7d6a84387aeb745993a38e3ff1317b9fbeeaf0f8cc68219803",
+      "rawSha256": "4118e9872f4ebb4fa1bd1ee6c487ede13e52e7def7a0aaed91785aeb6f8daf18",
+      "bytes": 550
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/browser-check.mjs",
+      "sha256": "f5e190985a8ce28e53a146029f2449bec64ca4ed04113fce97fae3afb91f3a17",
+      "rawSha256": "f5e190985a8ce28e53a146029f2449bec64ca4ed04113fce97fae3afb91f3a17",
+      "bytes": 4745
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/automatic-presets-browser-failure.json",
+      "sha256": "c623b38be67d50c8c25590a21b56a61d83d51c70616cd02bfa097b3e5900667f",
+      "rawSha256": "c623b38be67d50c8c25590a21b56a61d83d51c70616cd02bfa097b3e5900667f",
+      "bytes": 341
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/initial-cache-observer.log",
+      "sha256": "31b9a46dfdfee220aaf81b83d1ac29a6ddf765fbc5e3522ff5c0b98e43fa48fb",
+      "rawSha256": "31b9a46dfdfee220aaf81b83d1ac29a6ddf765fbc5e3522ff5c0b98e43fa48fb",
+      "bytes": 352
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/initial-cache-observer-resource.json",
+      "sha256": "f4a85880c358189418542cc4fed3c1f07a2cee37c76e0aaebe00f7c424c55fec",
+      "rawSha256": "6f23dfa492f48a0ed8cc082413c0a7e2a0a030175dc75fb559e6d3c7c78de8af",
+      "bytes": 555
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/initial-cache-observer-check.mjs",
+      "sha256": "0337216a9b0e85ddcd3074e358b9c56703223e20f32f652c22e82941df4a9f5e",
+      "rawSha256": "0337216a9b0e85ddcd3074e358b9c56703223e20f32f652c22e82941df4a9f5e",
+      "bytes": 4695
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/modelica-staged-raster-export.ts",
+      "sha256": "05c2c51760b588c6134544732d32b0b084a6f9be406103b2c50050d45924404a",
+      "bytes": 17395
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/modelica-feature-raster-export.ts",
+      "sha256": "bf4c70940c59c2407850a5dd1e5c4c99550be9a82cd9525e1103f249f52c4ecc",
+      "bytes": 13143
+    },
+    {
+      "path": "dev/artifacts/private-arena-preview/FastRasterStages.mo",
+      "sha256": "a625243a70e07afc2cfdd543c64c453698fd6bf5c4572a6204e08c38adc907b5",
+      "bytes": 3143
+    }
+  ]
+}

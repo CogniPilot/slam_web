@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "modelNames": [
+    "RGBDFastSLAMReset",
+    "RGBDFastSLAMInitialize",
+    "RGBDFastSLAMStep"
+  ],
+  "sourceSha256": "97c6ec3462afa7500956268fe0b8ef7fd2277b05188235f835b3af50ddcb406b",
+  "composition": "exact authored files joined with one newline, in this order",
+  "sources": [
+    {
+      "path": "models/FastNativeFrame.mo",
+      "sha256": "f4fab267220aa694fb0d7ffc918c15cfc7180f88cdb2735e26c4a40048cefda8",
+      "bytes": 4032
+    },
+    {
+      "path": "models/FeatureSelection.mo",
+      "sha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23",
+      "bytes": 9389
+    },
+    {
+      "path": "models/RGBDFeatureMatching.mo",
+      "sha256": "1adc065bee50fcf583165daa015f3f0170b42a3c73ff2bd3260fafb40e71b59b",
+      "bytes": 19681
+    },
+    {
+      "path": "models/RigidPointRegistration.mo",
+      "sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+      "bytes": 10102
+    },
+    {
+      "path": "models/RGBDRelativePose.mo",
+      "sha256": "adad8fb9fab1057293da6bb76e988853fceed9deef0809a902bd2a3680491045",
+      "bytes": 4078
+    },
+    {
+      "path": "models/RGBDRegistrationUncertainty.mo",
+      "sha256": "8074f170f8316c4874f4517e1f4875924434fa1f58d27611a1ff93d719441ecd",
+      "bytes": 11540
+    },
+    {
+      "path": "models/RGBDVisualObservation.mo",
+      "sha256": "b8b3747516c815ddc2f4c514e4eb9641f3b5cafac858f47cdeb6feecc641b137",
+      "bytes": 4150
+    },
+    {
+      "path": "models/RGBDVisualRelativeObservation.mo",
+      "sha256": "2c3c2bcee7437fc9e471ab6f4fe68b846b329ac3b0a4db413a98521249ca6aa5",
+      "bytes": 2726
+    },
+    {
+      "path": "models/RGBDLandmarkProjection.mo",
+      "sha256": "98fe255ff54004d5bc76f7c68cf4c93da2d0a8be45fac9cac52beec3fbe5e412",
+      "bytes": 5276
+    },
+    {
+      "path": "models/SPD6Solve.mo",
+      "sha256": "f255441c951bbaa6cbc8e7a471cd2583715b70d5cb0f49621b45963a0a853b8f",
+      "bytes": 4577
+    },
+    {
+      "path": "models/ES15PoseCorrection.mo",
+      "sha256": "7a2e6f86e8d932fa178ab6d4b71550e768fb1c84921d73fee4d94c72b2645f4b",
+      "bytes": 11554
+    },
+    {
+      "path": "models/SchmidtRelativePoseCorrection.mo",
+      "sha256": "d00b7576b247688212085dd0b7fd30ac44c212bc0f4f00049c972b92bb9b6c9a",
+      "bytes": 16001
+    },
+    {
+      "path": "models/ES15NominalPrediction.mo",
+      "sha256": "b9da62bb98f63e1251f070456ed22dfe9fc9871b9f3b48f0370f4754b308cd77",
+      "bytes": 2484
+    },
+    {
+      "path": "models/ES15Dynamics.mo",
+      "sha256": "50c29cf0059d9316010e676a37aac2bc94937eb0b9f97140865460bf9cbbcdbf",
+      "bytes": 2368
+    },
+    {
+      "path": "models/ES15CovariancePrediction.mo",
+      "sha256": "4e9770b313b6a602c0e71eb32d9f64f0c4498f40900e20aeffd3b1cb9a93a901",
+      "bytes": 2797
+    },
+    {
+      "path": "models/SchmidtReferenceState.mo",
+      "sha256": "7c60e7f7acc36eaf06b99316e0aac73018da669c51c11ef0de8ed62e9695b2aa",
+      "bytes": 19010
+    },
+    {
+      "path": "models/RGBDInertialLocalizationStep.mo",
+      "sha256": "abe9a992ce0616d2d826bd3fa00a7626f8165904540915b820766d50e9eaefb5",
+      "bytes": 16630
+    },
+    {
+      "path": "models/RGBDFastInertialLocalizationStep.mo",
+      "sha256": "13f8ef35ee7240175b2138dee378e38c5ba035bb7ac0f3870995fa435f65644e",
+      "bytes": 6112
+    },
+    {
+      "path": "models/RGBDInertialLocalizationInitialize.mo",
+      "sha256": "7355fb2b46e5ac4ed9ad4bf48bec1e9fd8d1e70fe542b56097f5480763dd6712",
+      "bytes": 9120
+    },
+    {
+      "path": "models/RGBDFastInertialLocalizationInitialize.mo",
+      "sha256": "04cd970da28a05fb515712a7f43cfd3a46a593398b869c68fa3a339eedc71713",
+      "bytes": 6490
+    },
+    {
+      "path": "models/RGBDKeyframes.mo",
+      "sha256": "f478504753d3ead17a870dff52c26d79f4251c250acda7ac5d4b722d698ca28a",
+      "bytes": 18133
+    },
+    {
+      "path": "models/RGBDBagOfWords.mo",
+      "sha256": "485f33e388a0aeb2c28a1a5f2f33e6a4e93e30aea2aff7e9b3905f81dbf01570",
+      "bytes": 13728
+    },
+    {
+      "path": "models/RGBDVisualVocabulary.mo",
+      "sha256": "fa28cd4dac6185db7addcd053918170851fd75e0f232dfa3e493ecbd5587fbd3",
+      "bytes": 7425
+    },
+    {
+      "path": "models/RGBDKeyframeRetrieval.mo",
+      "sha256": "6bbbee4b0355e22745f9b5981b46c9209aab8b9e6cbe7c2e518db779eccc7be3",
+      "bytes": 6067
+    },
+    {
+      "path": "models/RGBDBodyRelativeEdge.mo",
+      "sha256": "efe11d3002b4487e29ef36c111f4db7de1a743c0466cd48ba798925c6a54fa1b",
+      "bytes": 5576
+    },
+    {
+      "path": "models/RGBDLoopVerification.mo",
+      "sha256": "128d2bdc4742ed24095811bdf4bcae398a2471e8f5cd30fc25ef32d17120afa2",
+      "bytes": 17759
+    },
+    {
+      "path": "models/ModelicaPoseGraph.mo",
+      "sha256": "c93b6acbbe1f8f699fd6f79bb5bfbcf8f80dffb2830ee6666426a98751785932",
+      "bytes": 26457
+    },
+    {
+      "path": "models/RGBDCatalogLoopVerification.mo",
+      "sha256": "9335192c9cba1690aeb7c774b68b64b1ebf164eb676c64ef19e33f6f6ada0cf2",
+      "bytes": 5595
+    },
+    {
+      "path": "models/RGBDGraphMeasurements.mo",
+      "sha256": "ad2c44dab4da1e7d55d7e80eea02ed42bbe53c79e4d4f0fd1e6e3cff8b5c366e",
+      "bytes": 22149
+    },
+    {
+      "path": "models/RGBDCatalogGraphCapture.mo",
+      "sha256": "6fee540e54511573daf012b7bb5267943f5440276727754433e7a8ea864cbbe4",
+      "bytes": 4298
+    },
+    {
+      "path": "models/RGBDSpatialIndex.mo",
+      "sha256": "300b3cfa9cd830914464276a6295b42a8c79885590a1a34980ea43edd9979f00",
+      "bytes": 7393
+    },
+    {
+      "path": "models/RGBDLandmarkMap.mo",
+      "sha256": "b69b1ece487add6e8bdfdad49ce0cfc10acb0ab26874f29ba56b97aa38666368",
+      "bytes": 17448
+    },
+    {
+      "path": "models/RGBDMapAnchors.mo",
+      "sha256": "297dc4d6846745e031163a0a43fa76a140acd5d8058a1226a7d9882323345333",
+      "bytes": 9465
+    },
+    {
+      "path": "models/RGBDMapAnchorAssignment.mo",
+      "sha256": "392fac79d4d172fe7368d9abfcfac8010bd3c02e7ee825d59ea3331f04fc2a7a",
+      "bytes": 7072
+    },
+    {
+      "path": "models/RGBDAnchoredLandmarkMap.mo",
+      "sha256": "fa57e3af6c2e6bfbd4e4005139d268a5f2c9ba7c3ecb63002f306e034dd6b376",
+      "bytes": 9318
+    },
+    {
+      "path": "models/RGBDLandmarkCatalog.mo",
+      "sha256": "e56584b460ceb2ca9be3588dadb881f7b0169aa7b862d434d5755768e3e12ac5",
+      "bytes": 15535
+    },
+    {
+      "path": "models/RGBDCatalogMapping.mo",
+      "sha256": "a6c7e956ac5ed4de8a2f851682c1164034f679bd589d57c2432a5cafe52035a7",
+      "bytes": 10921
+    },
+    {
+      "path": "models/RGBDKeyframeLandmarks.mo",
+      "sha256": "772ffa66c4e0f3e8834f6bc24036e6ea91a93702e5c1e1f7b42419f2be9241ac",
+      "bytes": 11034
+    },
+    {
+      "path": "models/RGBDKeyframePolicy.mo",
+      "sha256": "d865eeb4e5c6d112d83ca63a6ab03d58850a3fc4bec1820606498312ffdba8b8",
+      "bytes": 5294
+    },
+    {
+      "path": "models/RGBDCatalogObservation.mo",
+      "sha256": "c327a8f047f8218e31412fa671b9026f08c20dae89e4e24ad4c8d6f7ca0597cf",
+      "bytes": 5492
+    },
+    {
+      "path": "models/RGBDCatalogFrame.mo",
+      "sha256": "a682044b84fbb9cc0a93e1483eaecaaa5c213197af616e7d5c0b9125d827a94e",
+      "bytes": 4342
+    },
+    {
+      "path": "models/RGBDLocalizationFrame.mo",
+      "sha256": "504a743585af3605d9ab7b371b007edfdcfcdcf53616e2b05c774389c130d257",
+      "bytes": 8699
+    },
+    {
+      "path": "models/RGBDLocalizationCatalog.mo",
+      "sha256": "21721df70c2699db7b98473bfd5443b77eacf6d852f9e70b7d2ca48a1a50314b",
+      "bytes": 27602
+    },
+    {
+      "path": "models/GraphGaugeUncertainty.mo",
+      "sha256": "9b346a47823c6cc5ed0bbaf3562d3f946a27ffd729ccc8a14ed063530dc13ba3",
+      "bytes": 8831
+    },
+    {
+      "path": "models/SchmidtGraphPoseCorrection.mo",
+      "sha256": "27788a60bae368a305974506d03b3ce002347224a53df45ae7de49797d721ed8",
+      "bytes": 20710
+    },
+    {
+      "path": "models/RGBDGraphEstimatorCommit.mo",
+      "sha256": "85a408671e610f4ddc0d8088dc97ec4097d7e9cb4b7f2efafd245d621fc8bf9b",
+      "bytes": 15992
+    },
+    {
+      "path": "models/ModelicaPoseGraphCovariance.mo",
+      "sha256": "87c5fc7def8604e9108322ce7a6f9348d659dad69e77eaa0cd44f9a174e61f81",
+      "bytes": 21602
+    },
+    {
+      "path": "models/RGBDGraphCaptureLedger.mo",
+      "sha256": "77fde2f25fe5e7d6ad6e764a668db149215da8eed6bff9522a3ef0867bd83dc0",
+      "bytes": 5249
+    },
+    {
+      "path": "models/RGBDGraphAnchorBound.mo",
+      "sha256": "a135420ce919436edd59bb4e9ab1bc5d7b9a234038db6d0f5bdc57c9de9bcdc8",
+      "bytes": 6012
+    },
+    {
+      "path": "models/RGBDGraphSelectedGauge.mo",
+      "sha256": "98b74ad75376c317cc36df81bf5162c9954fad9d61e31b4661a7a8d9bb2d8861",
+      "bytes": 12868
+    },
+    {
+      "path": "models/RGBDGraphProcessing.mo",
+      "sha256": "f91b1a809b6353e83186f4811c2a8fe7b91611fe3986e95f201de1cad8a7721a",
+      "bytes": 19288
+    },
+    {
+      "path": "models/RGBDLocalizationProcessing.mo",
+      "sha256": "5463a6ed1a8300ebb289c0df1fd50f5fa89760f21ec1e2edc611e551dcde2a84",
+      "bytes": 8878
+    },
+    {
+      "path": "models/RGBDFastSLAMInterface.mo",
+      "sha256": "ed396afb2d03edc90369dca0aec0b6dab016be34dd8bdff8dc6df6e1b4a2b51f",
+      "bytes": 3617
+    },
+    {
+      "path": "models/RGBDFastSLAMReset.mo",
+      "sha256": "423ecc5773b3b0d2df48a504ed9226d18b6e2b7afb6d964908c122fe8261069c",
+      "bytes": 1204
+    },
+    {
+      "path": "models/RGBDFastSLAMInitialize.mo",
+      "sha256": "34d65ba215e482f0ec1555dc9364b040cc4ef01cbe03bd5a09927c4c8329c32f",
+      "bytes": 8847
+    },
+    {
+      "path": "models/RGBDFastSLAMStep.mo",
+      "sha256": "ad145d78e82485bc6edc698ecda4798f5697ec937d5cbc48ac39bd00a06cb50f",
+      "bytes": 9111
+    }
+  ],
+  "scope": "Staged raw90x160 FAST/350 RGB-D + IMU acquisition; full128/256/14400 mapping and graph correction with one persistent source-owned State, actual optimizer and typed selected bound. Reference composition gates do not qualify the camera producer, full covariance convergence, actual public model execution, Rumoca WASM admission or browser throughput.",
+  "compilerInvoked": false,
+  "nativeArtifactIssued": false,
+  "browserIntegrated": false,
+  "fullSlamAccepted": false
+}

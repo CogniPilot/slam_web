@@ -1,0 +1,8 @@
+{
+  "recordedAt": "2026-10-05T16:26:10.556Z",
+  "status": "INDEPENDENT_ARCHIVE_BYTES_REHASHED",
+  "manifestSha256": "037f0ad8fb737da8d3b6c3e70a4e4b8b810fbdfeacdcc48ab7b5935a809d2da2",
+  "files": 24,
+  "bytes": 541740,
+  "scope": "Exact archived byte identity only. Does not validate unrun Modelica fixtures, mixed-precision compilation, raw buffer admission or performance."
+}

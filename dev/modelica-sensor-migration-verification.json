@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "reviewOnly": true,
+  "compiler": {
+    "revision": "94cff417cec61c256b5ea307d5d2a7f8213437ac",
+    "wasmSha256": "9e3e0c1070b4d4fecb155ffe0ca4315be8f0de655534535ea85ea99eddbd20db",
+    "features": "full-web",
+    "productionPinChanged": false
+  },
+  "sourceSha256": {
+    "models/SensorObservations.mo": "57f95868c18177bf868f2475be87ee47452404b87e60cb0afa74f48baf2fac3e",
+    "models/RuntimeTour.mo": "160b094a155ab13eb3290ce89921841e4f6e6ea81e65f376c48f7ca0580f3037",
+    "models/RuntimeEvaluation.mo": "f6dc00fb7971fcfacaf50364949d2469fe7d289e84f11640e989ad52f35bea3b",
+    "models/UniformRandomStep.mo": "c83ce3ec0d2c182c1164d5bc8aa5eed07d7f4f319c46a96213b789b242d2f209",
+    "tests/compiler-probes/modelica-sensor-observations.test.ts": "432e1fcc7d62ddea3512a9e4d45b57e8a6226ff934cb04c981f755b47baf3abd",
+    "models/SensorAvailability.mo": "dc3114cd56d97194cee4c2031eb087cd2202859b9faf0762caf24532b981a1e2",
+    "tests/compiler-probes/modelica-sensor-availability.test.ts": "f59daa09fbd53255b8953455db617c822d72c6e87cc6e99e4b986f115c06dff7"
+  },
+  "resources": {
+    "cpu": 31,
+    "niceness": 10,
+    "maxProcessSeconds": 60,
+    "newCargoBuilds": 0
+  },
+  "numericalGate": {
+    "status": "PASS",
+    "tests": 3,
+    "log": "slam-modelica-sensor-observations-tests.log",
+    "sensor": {
+      "event": "sensor_equations_pass",
+      "revision": "94cff417cec6",
+      "compilerSha256": "9e3e0c1070b4d4fecb155ffe0ca4315be8f0de655534535ea85ea99eddbd20db",
+      "sourceSha256": "57f95868c18177bf868f2475be87ee47452404b87e60cb0afa74f48baf2fac3e",
+      "ticks": 90,
+      "depthFixtures": 8,
+      "threeSessionPreparationMs": 211.23168599999997,
+      "sensorFrameMeanMs": 0.27167744444445313,
+      "sensorFrameMaxMs": 3.078862000000072,
+      "includes": "JSON input write, advance_to and state_json/read for three-axis IMU/GPS/roof only",
+      "excludes": "whole-frame depth, draw transport, rendering, worker/Zenoh and full SLAM",
+      "preparationContext": "Three-session preparation measured after the LCG probe in same test process; not a cold package/full runtime preparation"
+    },
+    "tour": "2/40/50/90-second boundary fixtures; independent indoor/circuit commands",
+    "evaluation": "90 cumulative ATE/reference fixtures, tilted initial pose, both quaternion hemispheres with nonzero relative angle",
+    "uniformRandomStep": "PASS:990 exact transitions,11 unsigned/signed/fractional/wrapped seeds, independent Math.imul integer32 oracle",
+    "standaloneAvailability": {
+      "status": "PASS",
+      "cases": 40,
+      "reviewCompiler": "94cff417cec6",
+      "reviewLog": "slam-modelica-sensor-availability-tests.log",
+      "shippedCompiler": {
+        "revision": "e1e7783f1fb4",
+        "version": "0.10.0",
+        "wasmSha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4"
+      },
+      "shippedLog": "slam-modelica-sensor-availability-pinned-tests.log",
+      "includes": "36inclusiveface/epsilon/disabledvolume cases,changedgeometry,recovery,twooppositecorners",
+      "drawsConsumedByGate": 0
+    }
+  },
+  "fullDepthFrame": {
+    "model": "SensorDepthFrame",
+    "pixels": 14400,
+    "compile": {
+      "status": "PASS",
+      "balance": {
+        "is_balanced": true,
+        "num_equations": 28800,
+        "num_unknowns": 28800,
+        "status": "Balanced"
+      },
+      "events": [
+        {
+          "event": "start",
+          "phase": "compile",
+          "model": "SensorDepthFrame",
+          "sourceSha256": "57f95868c18177bf868f2475be87ee47452404b87e60cb0afa74f48baf2fac3e",
+          "compilerSha256": "9e3e0c1070b4d4fecb155ffe0ca4315be8f0de655534535ea85ea99eddbd20db",
+          "compilerRevision": "94cff417cec6",
+          "rssBytes": 143667200,
+          "wasmMemoryBytes": 4194304
+        },
+        {
+          "event": "success",
+          "phase": "compile",
+          "model": "SensorDepthFrame",
+          "sourceSha256": "57f95868c18177bf868f2475be87ee47452404b87e60cb0afa74f48baf2fac3e",
+          "compilerSha256": "9e3e0c1070b4d4fecb155ffe0ca4315be8f0de655534535ea85ea99eddbd20db",
+          "compilerRevision": "94cff417cec6",
+          "rssBytes": 426672128,
+          "wasmMemoryBytes": 247201792,
+          "elapsedMs": 8766.867752,
+          "resultBytes": 118313
+        },
+        {
+          "timing": "wall=9.08 maxrssKiB=416928"
+        }
+      ]
+    },
+    "nativePreparation": {
+      "status": "TIMEOUT",
+      "timeoutSeconds": 45,
+      "exit": 124,
+      "log": "slam-modelica-sensor-depth-native.log",
+      "completedResult": false,
+      "finalRssBytes": null
+    }
+  },
+  "docsValidation": {
+    "markdownFiles": 9,
+    "retiredExecutableFences": 0,
+    "brokenLocalLinks": 0,
+    "trailingWhitespaceErrors": 0
+  },
+  "checks": {
+    "typescript": "PASS",
+    "runtimeIntegration": "PENDING",
+    "fullFrameNumericalOracle": "BLOCKED_BY_PREPARATION_TIMEOUT",
+    "sourceEditPersistence": "PENDING",
+    "browser90HzLockstep": "PENDING",
+    "fullSlam": "PENDING",
+    "linuxNxpRos2": "PENDING",
+    "wholeStep10x": "UNMET"
+  },
+  "reproduce": "RUMOCA_BRANCH_PKG=/path/to/review/package RUMOCA_SENSOR_REPORT=/path/to/report.json node node_modules/vitest/vitest.mjs run --config tests/compiler-probes/vitest.config.ts tests/compiler-probes/modelica-sensor-observations.test.ts"
+}

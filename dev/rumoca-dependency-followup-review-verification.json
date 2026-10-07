@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "status": "SCRATCH_ONLY_SEQUENTIAL_PATCH_APPLY_REVIEW_PASS_BEHAVIOR_UNRUN",
+  "recordedAt": "2026-10-05T10:47:25.689Z",
+  "artifacts": [
+    {
+      "path": "dev/artifacts/pure-call-dependency-coordinate-review/coordinate-tests.patch",
+      "sha256": "80dadac7455767b934b42afee56feb79d238ee9b82a24acad5840762a4a77a2b"
+    },
+    {
+      "path": "dev/artifacts/pure-call-dependency-coordinate-review/README.md",
+      "sha256": "b4521c40b5c7a5e4d6c0f52ca8b32c1c2166f14af63275418af99612b352b4b1"
+    },
+    {
+      "path": "dev/artifacts/pure-call-dependency-coordinate-review/source-before.sha256",
+      "sha256": "38c3fa5dcef705803d8135878cfece71e2dfbc129fcb263f1aa98470ae718b55"
+    },
+    {
+      "path": "dev/artifacts/pure-call-dependency-coordinate-review/modified.sha256",
+      "sha256": "cfb9747c98ac3c20517e8cc8c6a53c32310f79e7d3c73177bd7a440934083c19"
+    },
+    {
+      "path": "dev/artifacts/pure-call-dependency-coordinate-review/patch.sha256",
+      "sha256": "2e2b69ec5810cf471338c0943958b78e802052e7596db0dcdd22b871586598d0"
+    },
+    {
+      "path": "dev/artifacts/register-y-dependency-facts-review/register-y-facts.patch",
+      "sha256": "726c1d1b08deaaf3046571bff0f60b349df7f9fc7e74845e57f54909d226ba90"
+    },
+    {
+      "path": "dev/artifacts/register-y-dependency-facts-review/README.md",
+      "sha256": "78569a3f53fd857632d07f96a882f5b9b72fb0f768bcc0ea9d182b299d3d96e1"
+    },
+    {
+      "path": "dev/artifacts/register-y-dependency-facts-review/source-before.sha256",
+      "sha256": "bf0e0fe9b826b14caf67c9e779fb96456687210b3280220dbee238ef07c34693"
+    },
+    {
+      "path": "dev/artifacts/register-y-dependency-facts-review/modified.sha256",
+      "sha256": "0731ab3941472ba1926969831b5a879a8efc630bf63b9efeea39eec017a217c1"
+    },
+    {
+      "path": "dev/artifacts/register-y-dependency-facts-review/patch.sha256",
+      "sha256": "b987ba0913e84f9d8370f9d13f190edcec32c9fe5be2ee8f26beea17a6c5992d"
+    }
+  ],
+  "compilerPreimages": [
+    {
+      "file": "crates/rumoca-ir-solve/src/structural_pattern.rs",
+      "sha256": "34938e59e1e8935bae23e64c88bc3e5fe2cf4017d274b6293f369d1b48129be2"
+    },
+    {
+      "file": "crates/rumoca-ir-solve/src/structural_pattern/shared_dependency_tests/calls.rs",
+      "sha256": "fac93e8e5557440702ace8679d028c20435fb333fca708f853247499e6fc21af"
+    },
+    {
+      "file": "crates/rumoca-ir-solve/src/refresh/dependency.rs",
+      "sha256": "11a7c38ec7e678fdf4426489d58ec924f9aa42116c604280be7b4c62b72d6547"
+    },
+    {
+      "file": "crates/rumoca-ir-solve/src/structural_pattern/shared_dependency_tests.rs",
+      "sha256": "e128a228daf6ba2bfbbbcf2eee2d2ab7722662cb028563de82a478269b37fe06"
+    }
+  ],
+  "stagedAfter": [
+    {
+      "file": "crates/rumoca-ir-solve/src/structural_pattern.rs",
+      "sha256": "87c328708333cc1692f9aab39813f0e55ca21767ff2ad3fff821409cd0b189a6"
+    },
+    {
+      "file": "crates/rumoca-ir-solve/src/structural_pattern/shared_dependency_tests/calls.rs",
+      "sha256": "45ce2b71cd037bc25b8e6ab827af66dbf4324bc56f28ae3e7947acb30782e6bf"
+    },
+    {
+      "file": "crates/rumoca-ir-solve/src/refresh/dependency.rs",
+      "sha256": "b265375fbcae718bf40c972f5523926f81ec58e08ef0bb68815c6ea7bc5c8ec8"
+    },
+    {
+      "file": "crates/rumoca-ir-solve/src/structural_pattern/shared_dependency_tests.rs",
+      "sha256": "0bc04e5a6a1140d27b28f6810f3f0257db00aabb4fbff71f30f5d3718357665f"
+    },
+    {
+      "file": "crates/rumoca-ir-solve/src/structural_pattern/shared_dependency_tests/register_y.rs",
+      "sha256": "9a239dffe1e0be21dabe9b2fc20dca71589fdf85b6911002fccad9013a6d0e42"
+    }
+  ],
+  "sequential": [
+    {
+      "patchSha256": "7c5915578194f71b7686c851ba6c3485c00a34f0c3c9a478f2c2a6f6605b8a6d",
+      "applyCheck": true,
+      "appliedOnlyToScratchCopy": true
+    },
+    {
+      "patchSha256": "80dadac7455767b934b42afee56feb79d238ee9b82a24acad5840762a4a77a2b",
+      "applyCheck": true,
+      "appliedOnlyToScratchCopy": true
+    },
+    {
+      "patchSha256": "726c1d1b08deaaf3046571bff0f60b349df7f9fc7e74845e57f54909d226ba90",
+      "applyCheck": true,
+      "appliedOnlyToScratchCopy": true
+    }
+  ],
+  "review": {
+    "coordinateOnly": "Issued 14400 identity-only output, unused second input, all five sources and exact missing-tail error precedence; controls unrun.",
+    "registerY": "Opaque immutable exact Empty/Singleton/Known membership, unknown and whole-analysis failure still fail closed, existing program lifetime retained; original owned-set oracle and bounded sharing controls unrun.",
+    "mainCompilerFilesChanged": false
+  },
+  "testsExecuted": false,
+  "numericalAcceptance": false,
+  "performanceGainProven": false,
+  "fullSlam": false
+}

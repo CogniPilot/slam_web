@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-05T09:19:43.115Z",
+  "status": "ORIGINAL_FAST_PATCH_NODE_CHROMIUM_RAW_BITS_SOURCE_EDIT_PERSISTENCE_PASS",
+  "originalSourceSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+  "fixtureSha256": "0c2e93885a440ce2172f581d4a964df72bded1a28ed82b8c0a98adbd0bf83092",
+  "compiler": {
+    "record": "dev/rumoca-typed-map-emission-verification.json",
+    "sourceClosureSha256": "698314b47a9aa02c52dd28d081d1090f63415e295da4f3c3ebc49bd21b37af09",
+    "producerSha256": "f189cd3c6019065db1dab7c45cd4e9dcf7438960fe73b64553cf7581206c2072"
+  },
+  "variants": [
+    {
+      "sourceSha256": "21214b37c88350edbcef1f82fe362258435e8f589c3d4ff82c2975992b5c4fb7",
+      "artifactSha256": "cacf031ba9d5bb70a244873e53e7f01abd25609179b8d26d4df2d41d2f9de3b1",
+      "moduleSha256": "6c54d557e2ed944783dd4dfdd53ebc8ae470f52d1c095c95a074a9ce68c56037",
+      "moduleBytes": 13178,
+      "model": "FastPatchNativeProbe",
+      "profile": "native-direct-program-f64-v3",
+      "rootHelperFaults": 109,
+      "totalFaults": 111,
+      "scratchBytes": 5872,
+      "pCount": 49,
+      "yCount": 1,
+      "resource": {
+        "elapsedMs": 31.066082,
+        "peakRssKiB": null,
+        "exitCode": 0
+      },
+      "rawSolveSha256": "ff396e03b719d2310035d14166695d8aa5d6a978ac60b63f39bbb08c2f7d3b21"
+    },
+    {
+      "sourceSha256": "090aa25ec6d97eb69d1b16be08ea13e032019732eb7b7f61fdb7039ca0d73ddd",
+      "artifactSha256": "ffa6e6f4c24a1710951520f1923932a4d046187b84055de520f8f082c76c5042",
+      "moduleSha256": "2f4164dbf6921a8245c4a565e6720f754c7a97bceb1f80b0d4ebf741e1e176b9",
+      "moduleBytes": 13186,
+      "model": "FastPatchNativeProbe",
+      "profile": "native-direct-program-f64-v3",
+      "rootHelperFaults": 109,
+      "totalFaults": 111,
+      "scratchBytes": 5872,
+      "pCount": 49,
+      "yCount": 1,
+      "resource": {
+        "elapsedMs": 35.162040000000005,
+        "peakRssKiB": null,
+        "exitCode": 0
+      },
+      "rawSolveSha256": "03b06b05b483cdb2a936fb355961c9e7b27057565178129c8e46a9f9f0c3b2f8"
+    }
+  ],
+  "rawBitScoreChecks": 276,
+  "independentPatches": 23,
+  "browser": "154.0.8037.92",
+  "execution": {
+    "readonly": true,
+    "reset": true,
+    "sourceEdit": true,
+    "indexedDbReloads": 1,
+    "dedicatedWorkers": true,
+    "invalidBufferAtomic": true,
+    "recovery": true,
+    "elapsedMs": 2493.8857829999997,
+    "peakRssKiB": 1178336,
+    "cpuAffinity": "12",
+    "nice": 15
+  },
+  "edit": {
+    "replace": "responses[1] := 0.0;",
+    "with": "responses[1] := 1.0;",
+    "meaning": "Raise the initial ordered maximum floor to one; positive independent scores18 and255 stay unchanged, all zero scores become one."
+  },
+  "scope": "Actual unchanged original FastPatchScore7x7 function and a compiled Modelica score-floor edit.23 independent patches, signed-zero bits, repeated/reset execution, readonly input and InvalidBuffer scratch/input alias Y/P atomicity/recovery, dedicated Chromium workers and IDB reload. Complementary original-function proof only; full160x90 source compilation/numerics, sensor frontend, performance and SLAM remain separate requirements.",
+  "failures": [
+    "Initial diagnostic incorrectly required a Real NaN input to return InvalidInput; IEEE Real permits NaN. Retained failedlogs. Replaced invented restriction with actual scratch/P InvalidBuffer alias fault, without compiler edits."
+  ],
+  "limits": [
+    "Complementary original-function proof only; full160x90 detector compilation and57,600 independent fullframe scores remain required.",
+    "Browser executes source-issued precompiled original/edit modules; browser compiler/source editing UI is not exercised by this probe.",
+    "No production pin/preset change, fullSLAM, performance or10x claim.",
+    "Compile probes complete before250ms resource sampling; null peakRSS means unmeasured, not zero."
+  ],
+  "files": [
+    {
+      "path": "dev/artifacts/modelica-fast-patch/baseline-native.json",
+      "bytes": 61995,
+      "sha256": "cacf031ba9d5bb70a244873e53e7f01abd25609179b8d26d4df2d41d2f9de3b1"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/baseline-prepare.log",
+      "bytes": 936,
+      "sha256": "ac88d541ac6b5471c209e0725d6a31528f2dfdab6a32c8c1df31990ae914524e"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/baseline-resource.json",
+      "bytes": 1035,
+      "sha256": "40f7b9551191cd647e071138f864e632976033fa82049e3d08ff5014c427a313"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/baseline-solve.json.gz",
+      "bytes": 7303,
+      "sha256": "9a30f39cdd77c3a337cdf11c6e7c01e101159614a7b9c55aa7b4bd87e8c5389a"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/baseline.mo",
+      "bytes": 4060,
+      "sha256": "21214b37c88350edbcef1f82fe362258435e8f589c3d4ff82c2975992b5c4fb7"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/baseline.wasm",
+      "bytes": 13178,
+      "sha256": "6c54d557e2ed944783dd4dfdd53ebc8ae470f52d1c095c95a074a9ce68c56037"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/edited-native.json",
+      "bytes": 62028,
+      "sha256": "ffa6e6f4c24a1710951520f1923932a4d046187b84055de520f8f082c76c5042"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/edited-prepare.log",
+      "bytes": 936,
+      "sha256": "2b2bc5c1d7069b44b45ebd7562cff0fa5cd342d962d11ab2b9712329b4a7fb78"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/edited-resource.json",
+      "bytes": 1036,
+      "sha256": "9ff6281f05ffc6820f3472812863c0bc3750acb01d0acd72257771dd4a7d4854"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/edited-solve.json.gz",
+      "bytes": 7322,
+      "sha256": "53bc126cb2613662953df35024f9fd60873f36544b31a78260757da2ca8affb1"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/edited.mo",
+      "bytes": 4060,
+      "sha256": "090aa25ec6d97eb69d1b16be08ea13e032019732eb7b7f61fdb7039ca0d73ddd"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/edited.wasm",
+      "bytes": 13186,
+      "sha256": "2f4164dbf6921a8245c4a565e6720f754c7a97bceb1f80b0d4ebf741e1e176b9"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/execution/consumer.mjs",
+      "bytes": 12499,
+      "sha256": "c623a897a15910fc1e1897c139907d03d71e242adac7c1423bf87cd5ff335c3c"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/execution/report.json",
+      "bytes": 41582,
+      "sha256": "ffcaadaa78260c56ed01ca1ae91eb008ad0c23becfcfc30917b725671bba06b1"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/execution/resource.json",
+      "bytes": 1016,
+      "sha256": "022442ad59a646432e00c7f0cff66be54360c97e33adf2c76bc906e86837a60a"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/execution/run.log",
+      "bytes": 687,
+      "sha256": "be0b5bbcc2d64d62f2ed1c9537e3c24950c7ea4ad1a363b85773ad574e9a5212"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/execution-initial-nan-assumption/report.json",
+      "bytes": 356,
+      "sha256": "0385b37702dc0a545750ef5a9b0ea4def8c966bb8f76d3864faed4fa648d8d03"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/execution-initial-nan-assumption/resource.json",
+      "bytes": 1006,
+      "sha256": "a17cb0d3e37fbee04e38640c38e451afc62fcb7554fd819f74b25e6c5c99bc80"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/execution-initial-nan-assumption/run.log",
+      "bytes": 406,
+      "sha256": "128f23af570644e70ee86cf28767c2f5d2e94dc8f6946571df5cfe906643afda"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/patches.json",
+      "bytes": 50236,
+      "sha256": "18136b21ec84c6cce9f74933bc20ef2963c79f8a939777d3f8cb658e8646d4df"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/prepare-fast-patch-review.mjs",
+      "bytes": 1908,
+      "sha256": "21fe4893f8e1a6d9ae0370f69e15f53e7d94489ea332ff78f820c78cd8a57f37"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/probe-modelica-fast-patch.mjs",
+      "bytes": 9066,
+      "sha256": "3418dadec978836ff66268b3dec61baf6b90fed7e58c366a67365b2f90ab9b35"
+    },
+    {
+      "path": "dev/artifacts/modelica-fast-patch/source-identity.json",
+      "bytes": 942,
+      "sha256": "f606efaf8f94957f24341b970cc161b380728547dca86e80e580d51e545e39d3"
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "status": "OMC_ROTATION_COORDINATES_PASS",
+  "scope": "Actual full3D Modelica function versus unchanged equation model including protected quaternion;12 proper/dynamic cases and4 invalid cases",
+  "compilerVersion": "a96aa1a-cmake",
+  "sources": [
+    {
+      "path": "models/RGBDRelativePose.mo",
+      "sha256": "801e75cbaf53f65af6ed3015f88720196dc81f5822be1a039e908085684a008c"
+    },
+    {
+      "path": "models/SchmidtRelativePoseCorrection.mo",
+      "sha256": "e7d680f1b2647abe6ebfd0173fb81067a60300e059424f8d7014822cc95fd35b"
+    },
+    {
+      "path": "tests/modelica/SLAMRotationCoordinatesTests.mo",
+      "sha256": "611cec8fa13c58eea1e2d22550e566d86602a4241d054591c64b565190e4f8b0"
+    },
+    {
+      "path": "dev/check-modelica-rotation-coordinates.mjs",
+      "sha256": "768f55f1907a1a11bad992ba4b1d5cd20314db5da865534849d935f1b8011e3b"
+    },
+    {
+      "path": "dev/rumoca-bounded-run.mjs",
+      "sha256": "14f81f1cb7543aa246ea99cba940b2566e093d494cbeee589f7f04044c116532"
+    }
+  ],
+  "originalModelSha256": "272793bf94edef06ac167f62ed86d322112b6eb1221c66a0819c2d6a85b0a908",
+  "originalModelUnchanged": true,
+  "bookendsEqual": true,
+  "rows": 42,
+  "columns": 432,
+  "comparisons": 6048,
+  "bitDifferences": 0,
+  "maxError": 0,
+  "oracleChecks": 7518,
+  "maxOracleError": 1.3322676295501878e-15,
+  "failures": [],
+  "rumocaArtifactIssued": false,
+  "browserIntegrated": false,
+  "function": {
+    "name": "SLAMRotationCoordinates",
+    "inputs": {
+      "rotation": [
+        3,
+        3
+      ]
+    },
+    "orderedOutputs": [
+      {
+        "vector": [
+          3
+        ]
+      },
+      {
+        "angle": []
+      },
+      {
+        "valid": []
+      },
+      {
+        "quaternion": [
+          4
+        ]
+      }
+    ],
+    "quaternionOrder": [
+      "w",
+      "x",
+      "y",
+      "z"
+    ],
+    "invalidBehavior": "same raw-normalized quaternion and angle; vector zero; caller owns quaternion identity fallback"
+  },
+  "resources": {
+    "elapsedMs": 5222.387798,
+    "peakRssKiB": 279804,
+    "minimumAvailableKiB": 58344140,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "evidence": {
+    "manifest": "dev/artifacts/modelica-rotation-coordinates/manifest.json",
+    "manifestSha256": "e3d39aa6c40cafa26246a72f0d6281243190182b93daa0feb04d6e161da94013",
+    "report": "dev/artifacts/modelica-rotation-coordinates/report.json",
+    "reportSha256": "da9e67b92c7e0b6d65cb47777e85db59d531ed65cdf5c74fbf166146fd5a2fc0",
+    "rawCsv": {
+      "path": "dev/artifacts/modelica-rotation-coordinates/SLAMRotationCoordinatesTests_res.csv",
+      "sha256": "1574b978fbe7c29af6373b9a295154bc88726e9c9021bada3b5afbadcfdb1753",
+      "bytes": 183926
+    },
+    "generatedFunctionExecution": [
+      {
+        "path": "SLAMRotationCoordinatesTests.c",
+        "sha256": "73d1e9db130220e4d368a2ef5ac60dfe1a63a529a9dd866c9c7bc91e87ed8372",
+        "bytes": 836801,
+        "references": 16
+      },
+      {
+        "path": "SLAMRotationCoordinatesTests_06inz.c",
+        "sha256": "f5c268f10ce285caf76fb50f7ba43c523976a150b59501dcd01056d509cf722e",
+        "bytes": 267568,
+        "references": 16
+      },
+      {
+        "path": "SLAMRotationCoordinatesTests_functions.c",
+        "sha256": "bd3ab5739fb70e45d1af1ca809c47b7bd757e50bb68be6bb9bd9c05ba5ed7464",
+        "bytes": 22372,
+        "references": 2
+      }
+    ],
+    "failedHarnessAttempts": [
+      "dev/artifacts/modelica-rotation-coordinates/initial-omc-array-equation-failure/report.json",
+      "dev/artifacts/modelica-rotation-coordinates/indexed-tuple-codegen-failure/report.json"
+    ]
+  },
+  "reproduce": "OMC_BIN=/path/to/omc node dev/check-modelica-rotation-coordinates.mjs"
+}

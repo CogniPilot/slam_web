@@ -1,0 +1,164 @@
+{
+  "status": "OMC_FULL15_COVARIANCE_EXTRACTION_PASS",
+  "scope": "Actual pure Modelica function and unchanged-interface adapter versus frozen original equation model; dense runtime F/G/P, dt0..0.02, zero/varying noise, full15 F0 analytic case",
+  "function": {
+    "name": "ES15CovarianceStep",
+    "inputs": {
+      "F": [
+        15,
+        15
+      ],
+      "G": [
+        15,
+        12
+      ],
+      "P": [
+        15,
+        15
+      ],
+      "dt": [],
+      "density": [
+        12
+      ]
+    },
+    "outputs": {
+      "Phi": [
+        15,
+        15
+      ],
+      "Q": [
+        15,
+        15
+      ],
+      "predicted": [
+        15,
+        15
+      ]
+    },
+    "intervalAdmission": "unchanged; caller responsibility"
+  },
+  "originalModelSha256": "4e9770b313b6a602c0e71eb32d9f64f0c4498f40900e20aeffd3b1cb9a93a901",
+  "sources": [
+    {
+      "path": "models/ES15CovariancePrediction.mo",
+      "sha256": "810f2666c2f8093450ab04955057ffeb03723d18595d34592bab03dabc73b1ae"
+    },
+    {
+      "path": "tests/modelica/ES15CovariancePredictionOriginal.mo",
+      "sha256": "22dffd41fd14530040a6bf9ff1e7027190bab655c0b1e6e49f99a84958b7c160"
+    },
+    {
+      "path": "tests/modelica/ES15CovarianceStepTests.mo",
+      "sha256": "4540c580ba010e6547875e0012a301d5623c59b25463469ff1919eae175e7736"
+    },
+    {
+      "path": "dev/check-modelica-es15-covariance-step.mjs",
+      "sha256": "ac9e813033a2981f415590cd1c26d421d5a667b7b29783a1afe309b58123a31b"
+    },
+    {
+      "path": "dev/rumoca-bounded-run.mjs",
+      "sha256": "14f81f1cb7543aa246ea99cba940b2566e093d494cbeee589f7f04044c116532"
+    }
+  ],
+  "bookendsEqual": true,
+  "compilerVersion": "a96aa1a-cmake",
+  "rows": 36,
+  "matrixColumns": 3375,
+  "comparisons": [
+    {
+      "actual": "step",
+      "expected": "reference",
+      "cells": 24300,
+      "bitDifferences": 0,
+      "maxScaledError": 0,
+      "maxAbsoluteError": 0,
+      "failures": []
+    },
+    {
+      "actual": "adapter",
+      "expected": "step",
+      "cells": 24300,
+      "bitDifferences": 0,
+      "maxScaledError": 0,
+      "maxAbsoluteError": 0,
+      "failures": []
+    },
+    {
+      "actual": "zero",
+      "expected": "analytic",
+      "cells": 24300,
+      "bitDifferences": 2088,
+      "maxScaledError": 1.3877787807814457e-17,
+      "maxAbsoluteError": 1.3877787807814457e-17,
+      "failures": []
+    }
+  ],
+  "symmetryChecks": 32400,
+  "symmetryFailures": 0,
+  "zeroIntervalChecks": 7200,
+  "resources": {
+    "elapsedMs": 113045.503812,
+    "peakRssKiB": 2126288,
+    "minimumAvailableKiB": 51506656,
+    "peakCacheBytes": null,
+    "rssLimitMiB": 8192,
+    "availableFloorMiB": 16384,
+    "rssScope": "owned process group and identified descendants, including detached browser groups",
+    "secondsLimit": 120,
+    "signal": null,
+    "exitCode": 0
+  },
+  "evidence": {
+    "manifest": "dev/artifacts/modelica-es15-covariance-step/manifest.json",
+    "manifestSha256": "e4df8da5c5f56c55fd57714ca0f1d944b1a47de70fcddba34a8ddadb7efb61ec",
+    "report": "dev/artifacts/modelica-es15-covariance-step/report.json",
+    "initialFailure": "dev/artifacts/modelica-es15-covariance-step/initial-ordering-failure/report.json",
+    "rawCsv": [
+      {
+        "path": "$HOME/scratch/slam_web/tmp/es15-covariance-step-TcsZiZ/ES15CovarianceStepTests_res.csv",
+        "sha256": "e6a1fa4adbf683d61e4c8594c5ab247ada53286bac3e542f88538e6bcae716f9",
+        "bytes": 4112895
+      },
+      {
+        "path": "$HOME/scratch/slam_web/tmp/es15-covariance-step-Leedpn/ES15CovarianceStepTests_res.csv",
+        "sha256": "6c3d7a91ff10f586ed85bca4e1e6fde1e77bafe3c9322ade02d2cb7dca44b25d",
+        "bytes": 1890047
+      }
+    ],
+    "passingRawCsv": {
+      "path": "dev/artifacts/modelica-es15-covariance-step/raw/ES15CovarianceStepTests_res.csv",
+      "sha256": "6c3d7a91ff10f586ed85bca4e1e6fde1e77bafe3c9322ade02d2cb7dca44b25d",
+      "bytes": 1890047
+    },
+    "generatedFunctionExecution": [
+      {
+        "path": "dev/artifacts/modelica-es15-covariance-step/generated/ES15CovarianceStepTests.c",
+        "sha256": "663432e6e69abc4840a9c793435a041344ebe38bc277b234399e2aac1abe57bc",
+        "bytes": 25023585,
+        "stepReferences": 3
+      },
+      {
+        "path": "dev/artifacts/modelica-es15-covariance-step/generated/ES15CovarianceStepTests_06inz_part1.c",
+        "sha256": "a6f2a75e74a4d8942f6190b50e520954e67e4f37ac1970a8d2d7c9e1ef6e7230",
+        "bytes": 168834,
+        "stepReferences": 2
+      },
+      {
+        "path": "dev/artifacts/modelica-es15-covariance-step/generated/ES15CovarianceStepTests_06inz_part2.c",
+        "sha256": "8768a3d16be5f45574307dab2b85e9155922f1d5890a96679cf6e3ad809089ea",
+        "bytes": 68023,
+        "stepReferences": 1
+      },
+      {
+        "path": "dev/artifacts/modelica-es15-covariance-step/generated/ES15CovarianceStepTests_functions.c",
+        "sha256": "5b6ccda0270bb5715386f67e279037bef225af76c1ce647bf1a4ff352793f343",
+        "bytes": 53830,
+        "stepReferences": 2
+      }
+    ]
+  },
+  "reproduce": "OMC_BIN=/path/to/omc node dev/check-modelica-es15-covariance-step.mjs",
+  "rumocaArtifactIssued": false,
+  "browserIntegrated": false,
+  "fullSlamAccepted": false
+}

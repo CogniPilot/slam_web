@@ -1,0 +1,25 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "4,5",
+    "nice",
+    "-n",
+    "10",
+    "node",
+    "dev/probe-modelica-visual-filter-chain-browser.mjs",
+    "dev/artifacts/registration-relative-pose-filter-chain/independent-fixtures.json",
+    "/tmp/slam-modelica-visual-filter-chain-browser-final.json"
+  ],
+  "log": "/tmp/slam-modelica-visual-filter-chain-browser-final.log",
+  "elapsedMs": 25000.904716999998,
+  "peakRssKiB": 3291348,
+  "minimumAvailableKiB": 51346820,
+  "peakCacheBytes": null,
+  "rssLimitMiB": 4096,
+  "availableFloorMiB": 16384,
+  "rssScope": "owned process group and identified descendants, including detached browser groups",
+  "secondsLimit": 60,
+  "signal": null,
+  "exitCode": 0
+}

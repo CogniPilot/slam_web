@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "reviewOnly": true,
+  "compiler": {
+    "revision": "94cff417cec61c256b5ea307d5d2a7f8213437ac",
+    "wasmSha256": "9e3e0c1070b4d4fecb155ffe0ca4315be8f0de655534535ea85ea99eddbd20db",
+    "features": "full-web",
+    "productionPinChanged": false
+  },
+  "sourceSha256": {
+    "models/FeatureSelection.mo": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23",
+    "tests/compiler-probes/modelica-feature-selection.test.ts": "5ae4fa7f63c4581930d84b356e378d2c268d89c41e430d79a94abacdbe920458"
+  },
+  "fullGeometry": {
+    "width": 160,
+    "height": 90,
+    "scores": 14400,
+    "outputCapacity": 14400,
+    "defaultCap": 240
+  },
+  "algorithm": "Editable Modelica heap sort O(NlogN), round-even ranks, stable raster ties, raw threshold early stop, square occupancy, settings gates and grid traversal",
+  "resources": {
+    "cpu": 31,
+    "niceness": 10,
+    "maxProcessSeconds": 60,
+    "newCargoBuilds": 0
+  },
+  "independentFixtureOracle": {
+    "status": "PASS",
+    "fixtures": 8,
+    "additionalGridAndNonfiniteDomainChecks": true,
+    "log": "slam-modelica-feature-selection-tests.log",
+    "fullGridTraversalPoints": 350
+  },
+  "compile": {
+    "status": "REJECTED",
+    "phase": "ToDae",
+    "semanticOwner": "function loop domain",
+    "events": [
+      {
+        "event": "start",
+        "phase": "compile",
+        "model": "FeatureSelection",
+        "sourceSha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23",
+        "compilerSha256": "9e3e0c1070b4d4fecb155ffe0ca4315be8f0de655534535ea85ea99eddbd20db",
+        "compilerRevision": "94cff417cec6",
+        "rssBytes": 143917056,
+        "wasmMemoryBytes": 4194304
+      },
+      {
+        "event": "error",
+        "phase": "compile",
+        "model": "FeatureSelection",
+        "sourceSha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23",
+        "compilerSha256": "9e3e0c1070b4d4fecb155ffe0ca4315be8f0de655534535ea85ea99eddbd20db",
+        "compilerRevision": "94cff417cec6",
+        "rssBytes": 186404864,
+        "wasmMemoryBytes": 8585216,
+        "elapsedMs": 322.708589,
+        "error": "Compilation error: FeatureSelection failed in ToDae: unsupported Flat semantic owner `function loop domain`: `SelectRasterFeatures` requires a compact dependent-domain transition; scalar statement expansion is prohibited"
+      },
+      {
+        "timing": "Command exited with non-zero status 1"
+      },
+      {
+        "timing": "wall=0.60 maxrssKiB=182036"
+      }
+    ]
+  },
+  "actualWasmGates": {
+    "boundedControls": "BLOCKED_BEFORE_NUMERICAL_ASSERTIONS",
+    "full14400": "BLOCKED_BEFORE_NUMERICAL_ASSERTIONS",
+    "status": "1oraclePASS/3compilerGatesFAIL",
+    "log": "slam-modelica-feature-selection-tests.log",
+    "full14400Grid": "BLOCKED_BEFORE_NUMERICAL_ASSERTIONS"
+  },
+  "upstreamOwners": [
+    "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/mod.rs::compact_function_loops",
+    "crates/rumoca-phase-dae/src/construction/analysis/function_loops.rs::validate_function_loop_domain",
+    "crates/rumoca-phase-dae/src/construction/analysis/function_bodies.rs::plan_function_statement",
+    "crates/rumoca-phase-dae/src/construction/analysis/function_reductions.rs::validate_while_sum"
+  ],
+  "requiredCapabilities": [
+    "Source-owned compact dependent domains retaining enclosing binders and ordered loop-carried updates",
+    "Bounded while/sift transitions with multiple integer/real/Boolean local arrays and dynamic indexed loads/stores",
+    "PureCall/FunctionFold native emission and exact declared output/call argument ownership"
+  ],
+  "productionIntegration": "PENDING;noTSorWATnumericalfallback",
+  "reproduce": "RUMOCA_BRANCH_PKG=/path/to/review/package node node_modules/vitest/vitest.mjs run --config tests/compiler-probes/vitest.config.ts tests/compiler-probes/modelica-feature-selection.test.ts",
+  "latestNativeReview": {
+    "record": "modelica-feature-selection-native-verification.json",
+    "producerSha256": "27df64656c5c504de5dc181f6ec89664ad597f582105865b9bb65e8cdbe6fd63",
+    "originalSourceSha256": "be0d24d9b48176b6dad8dc44ce19f1355268a62e5f6ea2fb6c607efd298ecc23",
+    "status": "FULL14400_ORIGINAL_AND_COMPACT_SOURCE_REFUSED_NO_NATIVE_ARTIFACT_NO_INTEGRATION"
+  }
+}

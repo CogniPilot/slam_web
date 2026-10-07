@@ -1,0 +1,13 @@
+.source-editor-shell{position:relative;display:flex;flex-direction:column;flex:1;min-height:330px;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#0d151e}
+.source-editor-monaco{flex:1;min-height:260px;position:relative}
+.source-editor-status{padding:6px 12px;border-top:1px solid #20303d;font-size:10px;color:#8396a7;min-height:25px}
+.source-editor-problems{max-height:140px;overflow:auto}
+.source-editor-problems:empty{display:none}
+.source-editor-problems button{display:block;width:100%;border:0;border-radius:0;background:#14212b;font:10px/1.5 ui-monospace,monospace;text-align:left;padding:5px 12px;white-space:pre-wrap}
+.source-editor-problems .source-problem-error{color:#efb29d}.source-editor-problems .source-problem-warning{color:#dfc798}
+.editor textarea.source-editor-compat{position:absolute;left:0;top:0;opacity:0;width:1px;height:1px;min-height:1px;min-width:1px;padding:0;border:0;flex:none;pointer-events:none;resize:none}
+.source-editor-shell .monaco-editor textarea{min-height:0;min-width:0;padding:0;border:0;background:transparent;color:transparent;flex:none;resize:none}
+.slam-source-files{display:flex;align-items:center;gap:10px;padding:0 18px 12px;font-size:11px;color:#8396a7}
+.slam-source-files[hidden]{display:none}
+.slam-source-files select{min-width:0;flex:1}
+.slam-source-build{padding:0 18px 10px}.slam-source-build [hidden]{display:none}.slam-source-build pre{font:10px/1.5 ui-monospace,monospace;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere;max-height:130px;overflow:auto;margin:8px 0 0}.slam-source-build button{font-size:11px}

@@ -1,0 +1,182 @@
+{
+  "status": "RUMOCA_SESSION_API_BOTTLENECK_PROFILE_VERIFIED",
+  "recordedAt": "2026-10-05T14:35:40.320Z",
+  "compilerVersion": "0.10.0",
+  "compilerCommit": "e1e7783f1fb4",
+  "compilerWasmSha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4",
+  "sourceSha256": "04c4435fa1a6c5c929a245a8c76ac4bafcfde3eb54734677fb592f7ba2c2f1ce",
+  "grouped": {
+    "scalar": {
+      "frames": 16000,
+      "wallMsPerFrame": 0.20879655506249997,
+      "setInputsMsPerFrame": 0.007371109874998382,
+      "advanceMsPerFrame": 0.07354210031250033,
+      "readMsPerFrame": 0.12489028218750256
+    },
+    "snapshot": {
+      "frames": 16000,
+      "wallMsPerFrame": 0.08116972125000001,
+      "setInputsMsPerFrame": 0.004351677499996953,
+      "advanceMsPerFrame": 0.05437134849999862,
+      "readMsPerFrame": 0.02189706143750274
+    }
+  },
+  "order": "ABBA BAAB",
+  "parity": {
+    "frames": 128,
+    "cells": 2048,
+    "maximumError": 0
+  },
+  "perf": {
+    "samples": 615,
+    "lostSamples": 0,
+    "scope": "Whole process, including compilation and both read APIs; Rust source names absent"
+  },
+  "sampleAttribution": {
+    "sampleCount": 580,
+    "sampledUs": 653640,
+    "inclusiveApiUs": {
+      "get": 364373,
+      "state_json": 0,
+      "advance_to": 224995,
+      "set_inputs": 13815,
+      "other": 50457
+    },
+    "percent": {
+      "get": 55.74521143136895,
+      "state_json": 0,
+      "advance_to": 34.421853007771865,
+      "set_inputs": 2.113548742427024,
+      "other": 7.719386818432165
+    },
+    "scope": "Time-delta weighted V8 API ancestry in dedicated post-warmup scalar-read loop. Rust function names absent in pinned WASM; numbered functions are not source attribution. Linux perf covers whole process including startup, compilation and both APIs, so denominators differ."
+  },
+  "resources": {
+    "elapsedMs": 7772.627563,
+    "peakRssKiB": 488060,
+    "minimumAvailableKiB": 52828440
+  },
+  "compilerOptimizationApplied": false,
+  "appShortcutApplied": false,
+  "productionPinChanged": false,
+  "limitations": [
+    "Diagnostic phase timers/perf/V8 instrumentation on shared host",
+    "Old compiler, not merged latest-main validation",
+    "Read map/observation trace confirmed in development source; numbered native functions not Rust identities",
+    "No full sensors/GPU/SLAM or10x measurement"
+  ],
+  "files": [
+    {
+      "path": "dev/artifacts/rumoca-session-api/profile-rumoca-session-api.mjs",
+      "bytes": 6059,
+      "sha256": "af9e0b870fe078263b381e84d11bf5a15ed7e365c7928ec335c17cc00d8c1b60"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/rumoca-session-api-profile.md",
+      "bytes": 3423,
+      "sha256": "cdf9400cc34437eae6b4131c10fa3bac0c3760732ee1046618e3d428e46bd05d"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/aborted-resource.json",
+      "bytes": 906,
+      "sha256": "e20d0ac40231071145918cee927e84063eb6ff14213ed48195c3ede7fddde24b"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/aborted-run.log",
+      "bytes": 171,
+      "sha256": "dc4e7e426e3c58de5906243ea94c0b84d52a82f6a0b3479e0703b44f17101771"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/short-resource.json",
+      "bytes": 917,
+      "sha256": "681c002b0fbfaf1a3d00387a2264afd5f9ab91ef8c436ace8bde00faa186232a"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/short-run.log",
+      "bytes": 1248,
+      "sha256": "53be9435c8f4e26010c57aa66ff6ad87396c6c861d2fb489557d04823ec76861"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/short-report.json",
+      "bytes": 6951,
+      "sha256": "1939cf46abebbf83d218cb559c43421f1d1b3ce0ebcc27f9bf1b0cfecdb03897"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/short-inject.log",
+      "bytes": 139,
+      "sha256": "6044510f84a308897bc7c60454923cea2a762310035dafd8cc63efb993ef22fa"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-resource.json",
+      "bytes": 927,
+      "sha256": "c599472f6f272a64bce1f99896fa1ce04697b6cf8332b3bcf1cef016d840b811"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-run.log",
+      "bytes": 1266,
+      "sha256": "78fa4cfe156102bc5cab441b0b918681771fc617b71c342ff214dc3421da695f"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-report.json",
+      "bytes": 7354,
+      "sha256": "69e886f43e0beb1808010dfc78e9c179235aaf1642f68dfb950ece746946aac4"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-session-api.cpuprofile",
+      "bytes": 30669,
+      "sha256": "aa22f73af4470da8222899ef46562b5b32a05f0bf9c3beaf9e9e437e67f0dcb2"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-api-sample-attribution.json",
+      "bytes": 647,
+      "sha256": "d6f1035cb1d2c2f80c60cfc3e34aea6b9c1d96a1b12a61fa992a0e70556698fd"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-inject.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-perf-summary.txt",
+      "bytes": 2353,
+      "sha256": "6145b48f19c4d8114ef339283e76b3689faa6af8417f2a38a86b6ad4c604226c"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-perf-report-errors.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-perf-annotate-32.txt",
+      "bytes": 973260,
+      "sha256": "3802a058ece896f6680f2047c92aca7cb8b0699229b8560d30fc60ae9a9e67b2"
+    },
+    {
+      "path": "dev/artifacts/rumoca-session-api/final-perf-annotate-errors.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "largeScratchEvidence": [
+    {
+      "path": "$HOME/scratch/slam_web/profiles/session-api-run3/isolate-0x55ccb7cfb000-3558956-v8.log",
+      "bytes": 6213,
+      "sha256": "fd4c3582846abed9a86e4b07fad1a56cff33fa6355c2fbc8a19f3347fe5396da"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/profiles/session-api-run3/jit-3558956.dump",
+      "bytes": 40548782,
+      "sha256": "0cb9e835045eb8fd13d8728085b7d1be1c8d6abd1562bfc8b08e27e96ecea72c"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/profiles/session-api-run3/perf.data",
+      "bytes": 5794168,
+      "sha256": "8977c2620ae85b3fb3fee402166c9a2f64ac65c243e442fef19f4ab1fce8e739"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/profiles/session-api-run3/perf.jit.data",
+      "bytes": 6676724,
+      "sha256": "3e8fdc4b7a3c0827d92efa4b9d48652c88ab4acea69f18737c8d8ff5c7b1ebed"
+    }
+  ]
+}

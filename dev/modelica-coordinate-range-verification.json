@@ -1,0 +1,493 @@
+{
+  "schemaVersion": 1,
+  "status": "focused-gates-pass-full-depth-preparation-timeout",
+  "scope": "Generic phase-solve coordinate range validation; actual unchanged full14400 SeededDepthFrame compiler preparation diagnostic. No native artifact or numeric admission.",
+  "producer": {
+    "path": "/home/jgoppert/scratch/slam_web/tmp/tensor-coordinate-range-gate/final-producer",
+    "sha256": "11249d9eecc06d5f3bc3e623b476a4cb47cd0c3e90434e600a7d89aa6f4dc34f",
+    "sourceClosure": {
+      "base": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+      "files": 2365,
+      "sha256": "0ef0375505a289c8ac9f1836f169123d26125397f8adaf6ec8061759e7706a56",
+      "sourceFrozen": true,
+      "scope": "coordinate range validation and applied Abs owner patch",
+      "workers": 4,
+      "affinity": "8,9",
+      "incremental": false
+    },
+    "sourceManifest": "dev/artifacts/modelica-coordinate-range/source-closure.sha256",
+    "verifiedBeforeCopy": true
+  },
+  "change": {
+    "owner": "rumoca-phase-solve lower/scalar/coordinates.rs",
+    "sourceFiles": [
+      "crates/rumoca-phase-solve/src/lower/scalar/coordinates.rs",
+      "crates/rumoca-phase-solve/src/lower/scalar/coordinates/tests.rs",
+      "crates/rumoca-phase-solve/src/lower/scalar/coordinates/tests/packing.rs"
+    ],
+    "behavior": "Replace per-scalar contiguous-slot validation with checked first-slot, first count-error boundary and endpoint; retain original register loop and tensor/cache publication.",
+    "preserved": [
+      "Expected index overflow before ordinal-count error, exact error code/message/span",
+      "Ordinary and pre layout bounds/history ownership",
+      "Sampled-history count exemption",
+      "Existing saturated scalar-slot byte offsets",
+      "Register metadata allocation and failure publication",
+      "Full14400 dimensions and sequential RNG source"
+    ]
+  },
+  "gates": {
+    "rangeControls": {
+      "passed": 7,
+      "resource": {
+        "command": [
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "CARGO_TARGET_DIR=/home/jgoppert/scratch/slam_web/build/rumoca-native-target",
+          "TMPDIR=/home/jgoppert/scratch/slam_web/tmp",
+          "CARGO_BUILD_JOBS=4",
+          "RUST_TEST_THREADS=4",
+          "RAYON_NUM_THREADS=4",
+          "CARGO_INCREMENTAL=0",
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "cargo",
+          "test",
+          "--manifest-path",
+          "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "-p",
+          "rumoca-eval-solve",
+          "-p",
+          "rumoca-phase-solve",
+          "--features",
+          "rumoca-bind-wasm/native-assignments",
+          "--lib",
+          "lower::scalar::coordinates::tests"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/tensor-coordinate-range-gate/final-range-controls.log",
+        "elapsedMs": 82511.847603,
+        "peakRssKiB": 1782456,
+        "minimumAvailableKiB": 51571300,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      },
+      "reference": "Literal original per-scalar loop; full14400 TensorLoad ops/cache/register equality plus malformed Y/P/pre/sampled/extreme boundary and register overflow controls"
+    },
+    "projectionControls": {
+      "passed": 103,
+      "resource": {
+        "command": [
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "CARGO_TARGET_DIR=/home/jgoppert/scratch/slam_web/build/rumoca-native-target",
+          "TMPDIR=/home/jgoppert/scratch/slam_web/tmp",
+          "CARGO_BUILD_JOBS=4",
+          "RUST_TEST_THREADS=4",
+          "RAYON_NUM_THREADS=4",
+          "CARGO_INCREMENTAL=0",
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "cargo",
+          "test",
+          "--manifest-path",
+          "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "-p",
+          "rumoca-eval-solve",
+          "-p",
+          "rumoca-phase-solve",
+          "--features",
+          "rumoca-bind-wasm/native-assignments",
+          "--lib",
+          "projection::"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/tensor-coordinate-range-gate/final-projection-controls.log",
+        "elapsedMs": 28016.336632000002,
+        "peakRssKiB": 1012400,
+        "minimumAvailableKiB": 53613900,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      },
+      "includes": "Previously admitted projection controls and five Abs controls"
+    },
+    "strict": {
+      "passed": true,
+      "resource": {
+        "command": [
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "CARGO_TARGET_DIR=/home/jgoppert/scratch/slam_web/build/rumoca-native-target",
+          "TMPDIR=/home/jgoppert/scratch/slam_web/tmp",
+          "CARGO_BUILD_JOBS=4",
+          "RUST_TEST_THREADS=4",
+          "RAYON_NUM_THREADS=4",
+          "CARGO_INCREMENTAL=0",
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "cargo",
+          "clippy",
+          "--manifest-path",
+          "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "-p",
+          "rumoca-eval-solve",
+          "-p",
+          "rumoca-phase-solve",
+          "--all-targets",
+          "--all-features",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/tensor-coordinate-range-gate/final-strict-clippy.log",
+        "elapsedMs": 8094.811196000001,
+        "peakRssKiB": 1112004,
+        "minimumAvailableKiB": 57660252,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "history": {
+      "firstStrict": "Failed one production excessive_nesting. Extracted identical checked-add helper; no suppressions or acceptance broadening; repeated gates passed.",
+      "firstStrictResource": {
+        "command": [
+          "env",
+          "-u",
+          "RUMOCA_NATIVE_SOURCE_PROFILE",
+          "CARGO_TARGET_DIR=/home/jgoppert/scratch/slam_web/build/rumoca-native-target",
+          "TMPDIR=/home/jgoppert/scratch/slam_web/tmp",
+          "CARGO_BUILD_JOBS=4",
+          "RUST_TEST_THREADS=4",
+          "RAYON_NUM_THREADS=4",
+          "CARGO_INCREMENTAL=0",
+          "taskset",
+          "-c",
+          "8,9",
+          "nice",
+          "-n",
+          "10",
+          "cargo",
+          "clippy",
+          "--manifest-path",
+          "/home/jgoppert/git/rumoca-native-functions/Cargo.toml",
+          "-j4",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "-p",
+          "rumoca-exec-wasm",
+          "-p",
+          "rumoca-ir-solve",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-eval-dae",
+          "-p",
+          "rumoca-phase-dae",
+          "-p",
+          "rumoca-core",
+          "-p",
+          "rumoca-ir-dae",
+          "-p",
+          "rumoca-eval-solve",
+          "-p",
+          "rumoca-phase-solve",
+          "--all-targets",
+          "--all-features",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "log": "/home/jgoppert/scratch/slam_web/tmp/tensor-coordinate-range-gate/strict-clippy.log",
+        "elapsedMs": 14380.293886,
+        "peakRssKiB": 1454468,
+        "minimumAvailableKiB": 53400616,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 101
+      }
+    }
+  },
+  "actualSource": {
+    "path": "models/SeededDepthFrame.mo",
+    "sha256": "c161609d472a93d1417d97c1424c71fbee57009d3452c4cd18de2db9b5187a4d",
+    "dimensions": [
+      160,
+      90
+    ],
+    "pixels": 14400,
+    "unchanged": true,
+    "resource": {
+      "command": [
+        "env",
+        "RUMOCA_NATIVE_REGISTRATION_SOURCE_FIXTURE=/home/jgoppert/git/slam_web/models/SeededDepthFrame.mo",
+        "RUMOCA_NATIVE_SOURCE_MODEL=SeededDepthFrame",
+        "RUMOCA_NATIVE_PROGRAM_ARTIFACT=/home/jgoppert/scratch/slam_web/profiles/seeded-depth-coordinate-range-final/native.json",
+        "RUMOCA_NATIVE_SOURCE_PROFILE=1",
+        "RUST_TEST_THREADS=4",
+        "RAYON_NUM_THREADS=4",
+        "taskset",
+        "-c",
+        "8,9",
+        "nice",
+        "-n",
+        "10",
+        "/home/jgoppert/scratch/slam_web/tmp/tensor-coordinate-range-gate/final-producer",
+        "native_registration_whole_program_source_inventory",
+        "--nocapture"
+      ],
+      "log": "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-coordinate-range-final/prepare.log",
+      "elapsedMs": 60095.178399000004,
+      "peakRssKiB": 95424,
+      "minimumAvailableKiB": 50146696,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "stopped": "timeout",
+      "signal": "SIGKILL",
+      "exitCode": 124
+    },
+    "nativeArtifactProduced": false,
+    "numericOracleExecuted": false
+  },
+  "lateProfile": {
+    "pid": 2214485,
+    "birth": "69549947",
+    "executable": "/mnt/scratch/jgoppert/slam_web/tmp/tensor-coordinate-range-gate/final-producer",
+    "start": "2026-10-05T00:38:54.890Z",
+    "end": "2026-10-05T00:39:05.035Z",
+    "args": [
+      "record",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "99",
+      "--call-graph",
+      "dwarf,8192",
+      "-p",
+      "2214485",
+      "-o",
+      "/home/jgoppert/scratch/slam_web/profiles/seeded-depth-coordinate-range-final/perf.data"
+    ],
+    "terminal": {
+      "exitCode": null,
+      "signal": "SIGINT"
+    },
+    "sha256": "4b782993d55728ec1264f9ab76e57fee004b536770b4bf2019c536b758a1db4c",
+    "scope": "10-second late sampling attached to existing60-second preparation after dependency checkpoints completed; not a fresh preparation or whole-wall allocation",
+    "samples": 903,
+    "lostSamples": 0,
+    "selfPercent": {
+      "btreeIntoIterDyingNext": 19.16,
+      "dependencyStateUnion": 16.5,
+      "dependencyWalkPureCall": 15.73,
+      "setRegister": 10.3,
+      "btreeCloneSubtree": 3.1
+    },
+    "frontier": "IR-Solve structural dependency extraction during late sampled window",
+    "caveats": [
+      "Busy self samples do not allocate whole preparation wall time",
+      "Optimized DWARF has unresolved/invalid parent frames; exact DependencySource/pass cannot be identified from this calltree",
+      "No before/after matched whole-prepare performance claim",
+      "Perf attached to same bounded preparation; no fresh blind profile retry"
+    ]
+  },
+  "nextOwnerDiagnosis": {
+    "owner": "rumoca-ir-solve/src/structural_pattern.rs",
+    "mechanism": "Known(BTreeSet) register reads deep-clone; union consumes/extends RHS; pure_call eagerly derives whole-input ranges; whole-input summaries clone per output; set_register replaces/drops prior sets.",
+    "proposal": "Consider immutable shared exact sets with empty/identity/idempotent union paths, preserving membership, ordered traversal and all fault/effect/fold semantics. Requires counters/independent controls before exact repeated-work attribution.",
+    "status": "Read-only diagnosis only; no live patch or acceptance claim"
+  },
+  "evidence": [
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/source-closure.sha256",
+      "sha256": "0ef0375505a289c8ac9f1836f169123d26125397f8adaf6ec8061759e7706a56"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/source-closure.json",
+      "sha256": "656557d45b713dff1346bf871062db934f7a28e96436109744f147a1e466dc2e"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/initial-source-closure.sha256",
+      "sha256": "4a2a087798319c82c421f9b0c95193e2d79ecc976311da681be6cae738af9551"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/initial-source-closure.json",
+      "sha256": "9b8c6db5a12f9e9b9038da76477eb146adb5ac2a6c04f911a7c8c59f98a5f242"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/range-controls.log",
+      "sha256": "07e4342a5e7f6495a16a1c398b9069813de06704e4722786c7cdb87e01209a8e"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/range-controls-resource.json",
+      "sha256": "56056acd37856e7da02b2e14d5c5b9da57db0dd4d9a60639761cee4f361c556f"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/projection-controls.log",
+      "sha256": "93e5413221745a535cd07cf28b703e37253655c8d2a8541e08ae7ff38f489793"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/projection-controls-resource.json",
+      "sha256": "9f67b8780485c88eb11ef27c08d6aaf42e34fefe0b62ed282ab29c122601fe2f"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/strict-clippy.log",
+      "sha256": "665662f362d65e94f75c9dafb3ede8bd826b12ecdfb7bf0c2a8929d7e511e6d1"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/strict-clippy-resource.json",
+      "sha256": "009a56d9109a3ea5c0e2d9c133408004c84257b5a78a53298edc2f243b4cefc7"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/final-range-controls.log",
+      "sha256": "c13237f61c7c36549492e569ec4690736bcaec6b4ff0a1ee017dc07170f5ce66"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/final-range-controls-resource.json",
+      "sha256": "08b2e8b3eecc8d0749368dc195dfa55a6f681a7c2b2c71b667544afc5503d70b"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/final-projection-controls.log",
+      "sha256": "e0b3c1ba172a7fbdaa4f426dd150f541bac0c6e8adefcfacf44f778bedcc1102"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/final-projection-controls-resource.json",
+      "sha256": "135ccd54c377abb76fb2352d04e8415892e4e961b57100b0357971f5a94a2e4c"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/final-strict-clippy.log",
+      "sha256": "193ce8f7b638cde51f1e22d1dee1db7f7b6dcc585ef86178e753daf2585ced33"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/final-strict-clippy-resource.json",
+      "sha256": "8d01ecbb251c904efb419f9f825474c45b06245851fecc65babce8b2a0f4b834"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/prepare.log",
+      "sha256": "224991148f1ad0d8f609139191f899412476c9ce9cca6ccbded4f1f69a24449f"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/prepare-resource.json",
+      "sha256": "e76cb0c8df7ae556757813ca940323c3c86fbecbfad4543c3690157e2f6506d0"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/late-profile.json",
+      "sha256": "626b84d526c8719090b7a0ee4e7a034729c5533424b1daafb7627e40fac17269"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/perf.log",
+      "sha256": "80f728e9628fc6085cb7a6741a6cbcaeb6fe775e3f273836c806524cb29df617"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/perf-self.txt",
+      "sha256": "0e5a9dc98c4bd54bbb4dcb55e77133dabf2becfca6291fa00d7c5e1888165dc2"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/perf-children.txt",
+      "sha256": "6172b503de2978f7b0346f6da8b31f94e92085b2c62327e4697d3a8028f67c24"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/source/crates/rumoca-phase-solve/src/lower/scalar/coordinates.rs",
+      "sha256": "5b7b3d1992c2abcdebfe1a13210bcf08f65444ada0a763eaef2a0808aff9be4b"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/source/crates/rumoca-phase-solve/src/lower/scalar/coordinates/tests.rs",
+      "sha256": "770ae3ec2182a8ff65576de381f8419c8ed1011ee6ee1e4be48ac9c429d2bf20"
+    },
+    {
+      "path": "dev/artifacts/modelica-coordinate-range/source/crates/rumoca-phase-solve/src/lower/scalar/coordinates/tests/packing.rs",
+      "sha256": "eb161c6a1a6113876fe6228f49fb13981fc95154a8c0fc6b36f25479c06ebe24"
+    }
+  ],
+  "limitations": [
+    "No native-WASM artifact from actual fullDepth run",
+    "No numeric seeded-stream/reset/source-edit gate executed",
+    "No production pin change or runtime integration",
+    "MSL Tier1 canary remains separate pending gate",
+    "Shared compiler source/Cargo explicitly released after immutable copy"
+  ]
+}

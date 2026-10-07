@@ -1,0 +1,462 @@
+{
+  "status": "FINAL_UNCHANGED_FULL14400_HORN_SOURCE_TO_SOLVE_PASS_NATIVE_CAPABILITIES_REFUSED",
+  "worktree": "../rumoca-native-functions",
+  "base": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+  "committed": false,
+  "productionCompilerChanged": false,
+  "source": {
+    "path": "models/RigidPointRegistration.mo",
+    "sha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "capacity": 14400,
+    "changed": false,
+    "issuedArtifact": true,
+    "nativeRegistrationExecutionProven": false
+  },
+  "profile": {
+    "raw": "/tmp/slam-native-horn-after.perf.data",
+    "exclusiveReport": "/tmp/slam-native-horn-after-perf-exclusive.txt",
+    "samples": 2699,
+    "lostSamples": 0,
+    "approximateCpuSeconds": 27.26262599,
+    "compileModelMs": 4444.696,
+    "elapsedMs": 30228.828217,
+    "peakRssKiB": 545472,
+    "producerSourceSha256": "672873838987c707eab0eac4bc8796abbbf5a10551c1c2dd5af8154b59819c93",
+    "exclusivePercent": {
+      "Projection.expression": 22.42,
+      "HashMap.insert.primary": 15.04,
+      "DefaultHasher.write": 8.56,
+      "DomainContexts.for_domain": 4.63,
+      "HashMap.insert.secondary": 3.52,
+      "Projection.visit_expression_once": 3.33,
+      "FoldGraph.enqueue": 3.04
+    },
+    "qualification": "Valid perf finalization. Inclusive output did not establish useful deeper caller stacks; no inclusive attribution is inferred."
+  },
+  "history": [
+    {
+      "change": "ordered Vec plus membership-only HashSet",
+      "log": "/tmp/slam-native-full-registration-after-capture-producer.log",
+      "elapsedMs": 60248.296601,
+      "compileModelMs": 4490.447,
+      "peakRssKiB": 1242084,
+      "result": "LOWER_SOLVE_TIMEOUT"
+    },
+    {
+      "change": "shared completed direct inventories and exact completed closure sets",
+      "log": "/tmp/slam-native-horn-shared-closure-producer.log",
+      "elapsedMs": 60114.996972,
+      "compileModelMs": 4449.93,
+      "peakRssKiB": 198256,
+      "producerSourceSha256": "4f5b4a6d08a9407689ea5f0d7a03f3d03ab89f63fd4791593f21c1fb4435ea7d",
+      "firstFullDomainNode": {
+        "capturedOccurrences": 144017,
+        "directDependencies": 100804
+      },
+      "result": "LOWER_SOLVE_TIMEOUT"
+    },
+    {
+      "change": "successful parameter-only fragment cache, exact expression/field/scalar/lexical context",
+      "log": "/tmp/slam-native-horn-parameter-fragment-producer.log",
+      "elapsedMs": 60153.636144,
+      "peakRssKiB": 615384,
+      "producerSourceSha256": "7ad9b82908c153a06a4f9b13a8e3f43db92f340fe660674c4847e2a6c6a64b54",
+      "checkpoint": {
+        "nodes": 43238,
+        "checked": 257,
+        "edges": 403552,
+        "capturedOccurrences": 39902401,
+        "logicalDirectDependencies": 23256905,
+        "retainedDirectDependencies": 576005
+      },
+      "result": "LOWER_SOLVE_TIMEOUT"
+    },
+    {
+      "change": "completed fragment chunks, exact ordered unions, membership-only edge index",
+      "log": "/tmp/slam-native-horn-shared-fragment-producer.log",
+      "elapsedMs": 180085.606574,
+      "peakRssKiB": 643928,
+      "producerSourceSha256": "8230c0b5c7d686f50734069dd037006b8b4f0c9220314a94f5965b39d92ab811",
+      "checkpoint": {
+        "nodes": 43238,
+        "checked": 2304,
+        "edges": 405599,
+        "capturedOccurrences": 393624001,
+        "logicalDirectDependencies": 229602693,
+        "retainedDirectDependencies": 576005,
+        "retainedPieces": 835234,
+        "flattenedOccurrences": 979252,
+        "fragmentWalks": 3098440,
+        "fragmentHits": 104867659,
+        "logicalFragmentReplay": 393076779,
+        "parentFragmentReplay": 1943913,
+        "retainedFragmentDependencies": 4276889
+      },
+      "result": "LOWER_SOLVE_TIMEOUT"
+    },
+    {
+      "change": "checked literal-update guard sweep, exact parent context and completed inventory reuse",
+      "log": "/tmp/slam-native-horn-literal-sweep-producer.log",
+      "elapsedMs": 55129.127523,
+      "compileModelMs": 4487.075,
+      "peakRssKiB": 8622336,
+      "result": "RSS_LIMIT_137",
+      "producerSourceSha256": "fb5ada2f54aea558821c9fdfc2711648bd4caafe9b096fccc10d1a0b6d3d616f",
+      "producerBinarySha256": "e9577ce37b5c8469b774194c6e4530f38b6f8f523d610889fe174222b1c290ac",
+      "checkedProductionSnapshot": "3265f672202326a9feac36ec1a6ed718ae4b8f8721f13a517c5d6cc5e050953b",
+      "productionFilesUnchangedDuringBuild": 1359,
+      "checkpoint": {
+        "nodes": 144044,
+        "checked": 143872,
+        "edges": 1293770,
+        "sweepHits": 14399,
+        "completedSweeps": 1
+      },
+      "qualification": "All graph nodes drained, then closure completion exceeded sampled RSS threshold. Sampled peak overshot 8GiB before owned-process termination; no completed artifact."
+    },
+    {
+      "change": "exact SCC closure completion retaining original nodes/edges/order; only completed closure inventories interned",
+      "log": "/tmp/slam-native-horn-scc-closure-producer.log",
+      "elapsedMs": 54229.461499,
+      "compileModelMs": 4493.863,
+      "compilePlusSolveMs": 54140.086,
+      "artifactSerializationCompletedMs": 54147.7,
+      "peakRssKiB": 1121640,
+      "result": "SOURCE_TO_ISSUED_SOLVE_TABLE_PASS",
+      "issuedOwners": 3,
+      "issuedArtifact": {
+        "path": "/tmp/slam-native-horn-scc-closure-issued/baseline.json",
+        "bytes": 633208,
+        "sha256": "e0a894d7be2747a791e221d66fba7af0fb9ffc2c82214d7fa3b69ce2c06a64bc"
+      },
+      "producerSourceSha256": "58c1a4d9d579ac9ea16ea00171427a2b984244147bb0666e7c7b48cc1e4039f7",
+      "producerBinarySha256": "faba13b5149d33f25f42df40e4fc8a1c5b0fcd591c03796b13b73f844f17c979",
+      "productionFilesUnchangedDuringBuild": 1360,
+      "graph": {
+        "nodes": 144050,
+        "checked": 144050,
+        "edges": 1296194,
+        "logicalDirectDependencies": 1453377609,
+        "retainedDirectDependencies": 907205
+      },
+      "closure": {
+        "unions": 1036992,
+        "comparisons": 19828692,
+        "uniqueCompletedSets": 57618,
+        "retainedIds": 820805,
+        "logicalOutputOccurrences": 14520816200
+      },
+      "qualification": "Completed source preparation; no registration native module or numerical execution admitted."
+    },
+    {
+      "change": "final source after temporary diagnostic removal",
+      "log": "/tmp/slam-native-horn-final-producer.log",
+      "elapsedMs": 53347.035364,
+      "compileModelMs": 4419.846,
+      "compilePlusSolveMs": 53258.72,
+      "solveOnlyMs": 48838.874,
+      "artifactSerializationCompletedMs": 53266.332,
+      "peakRssKiB": 1126104,
+      "result": "SOURCE_TO_ISSUED_SOLVE_TABLE_PASS",
+      "issuedOwners": 3,
+      "issuedArtifact": {
+        "path": "/tmp/slam-native-horn-final-issued/baseline.json",
+        "bytes": 633202,
+        "sha256": "659dbbc03eb1b44ead5e1f9363619e0f8f091b41224d1c5a357c63260e96d9a3"
+      },
+      "rawTable": {
+        "bytes": 622622,
+        "sha256": "ed12ceab625179ad56e5a55afd2040f5f29620d8aa5fb604fa13a301d4cc7da3",
+        "exactBytesEqualToTracedArtifact": true,
+        "qualification": "Compared literal raw JSON table substring bytes, without parsing or reserializing ownership integers."
+      },
+      "producerSourceSha256": "25bc9ef0dceb2ad229c7d4efb5a6b290e13e5a23baf776c03608be42c660b940",
+      "producerBinarySha256": "1b6e836115e7e524cd5c1992688fa78a226de5020a1ca09ec25fac1f281fc271"
+    }
+  ],
+  "semantics": {
+    "preserved": [
+      "every reachable Fold node and lexical context",
+      "exact Scalar/RecordField dependency keys",
+      "first-occurrence order",
+      "cyclic closure fixed point",
+      "source faults and failed-query nonpublication",
+      "source-owned canonical domains"
+    ],
+    "fragmentExclusions": [
+      "Call",
+      "FunctionFoldParameter",
+      "FunctionFoldOutput",
+      "model coordinates",
+      "ClockTransfer",
+      "failed or incompletely visited fragments"
+    ],
+    "arcIdentity": "Only indexes a live checked immutable inventory. It does not establish equality or ownership between different fragments.",
+    "globalReplay": "Skipped only for a completed pure-parameter fragment constructed inside this same function-summary invocation; its successful construction already captured every key into that invocation's global ordered summary.",
+    "remainingBottleneck": "Full source preparation now completes. Native consumer first refuses finite two-binder Fold and scalar Real Max; full registration execution remains pending."
+  },
+  "scopedChecks": {
+    "fullEvalDaeLibrary": {
+      "passed": 66,
+      "log": "/tmp/slam-native-shared-fragment-full-eval-tests.log",
+      "elapsedMs": 8276.919206,
+      "peakRssKiB": 455260
+    },
+    "strictClippy": {
+      "result": "PASS",
+      "scope": "rumoca-eval-dae --all-targets --all-features -- -D warnings",
+      "log": "/tmp/slam-native-shared-fragment-clippy.log",
+      "elapsedMs": 1524.748318,
+      "peakRssKiB": 496128
+    },
+    "independentOracles": [
+      "original dense fixed-point algorithm",
+      "every three-node graph",
+      "literal ordered chunk union",
+      "uncached callback order, function summaries, per-node closures",
+      "full14400 captured inventory sharing"
+    ],
+    "notRun": [
+      "full workspace architecture gate",
+      "MSL canary/cohort",
+      "full Horn native numerical execution"
+    ],
+    "latest": {
+      "focused": {
+        "passed": 4,
+        "log": "/tmp/slam-native-literal-sweep-differential-tests2.log",
+        "elapsedMs": 8708.446869,
+        "peakRssKiB": 460920
+      },
+      "fullEvalDaeLibrary": {
+        "passed": 70,
+        "log": "/tmp/slam-native-literal-sweep-full-eval-tests.log",
+        "elapsedMs": 200.703953,
+        "peakRssKiB": null,
+        "qualification": "Completed before first RSS sampling interval."
+      },
+      "strictClippy": {
+        "result": "PASS",
+        "scope": "rumoca-eval-dae --all-targets --all-features -- -D warnings",
+        "log": "/tmp/slam-native-literal-sweep-clippy.log",
+        "elapsedMs": 1714.746396,
+        "peakRssKiB": 490396
+      },
+      "formatter": "PASS",
+      "independentComparison": [
+        "exact callback order",
+        "complete ordered function dependencies",
+        "every scalar and parent closure",
+        "every checked node and ordered edge",
+        "exact address fault spans and failed-query nonpublication",
+        "checked constructor model-coordinate refusal"
+      ]
+    }
+  },
+  "resources": {
+    "cpus": [
+      6,
+      7
+    ],
+    "nice": 10,
+    "cargoJobs": 2,
+    "rssLimitMiB": 8192,
+    "cacheLimitMiB": 7680,
+    "minimumAvailableMiB": 16384,
+    "deadlineSecondsMaximum": 600,
+    "nativeWindowReleased": true
+  },
+  "limits": [
+    "Timeouts are preparation failures, not throughput admission.",
+    "Partial-progress RSS measurements are not full-registration peak memory predictions.",
+    "Previous full14400 tensor/Real/Integer Wasmi and Chromium proofs remain separate frozen component evidence.",
+    "Full visual SLAM and the 10x target remain unproven."
+  ],
+  "sweepProfile": {
+    "sourceOwnerSnapshot": {
+      "digest": "fb5ada2f54aea558821c9fdfc2711648bd4caafe9b096fccc10d1a0b6d3d616f",
+      "files": {
+        "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/accumulator_reductions.rs": "b5ae2b1806ae0cb96dc205281cc179e07a7ab5b6ab4660ceffa0daa9b4fea26f",
+        "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/mod.rs": "64a1ab29bb7d88f67d80642e7fa405f44fa7b1e0ec0d69345ffce483277b641d",
+        "crates/rumoca-eval-dae/src/projection.rs": "e13b4fd941c31cda28f8035b46d5d1ab0ff324b45ed3844f6d8048c9199944ca",
+        "crates/rumoca-eval-dae/src/projection/fold_graph.rs": "f58b4b25d5cc9d8ac9bc8d1f44a8d8250a96a3108bfcff104fe6dffa0916761b",
+        "crates/rumoca-eval-dae/src/projection/dependencies.rs": "88604ec57db24d5f52ccf8dbca3cbc9f4218b0b82ae2caf0b5c2a6d804dac482",
+        "crates/rumoca-eval-dae/src/projection/fold_graph/closure.rs": "c7660650a2f801de598826e8026511a7f8649cebf59ebdad29cb95b8bba424bf",
+        "crates/rumoca-eval-dae/src/projection/parameter_fragments.rs": "1aba91c21427421e7414d2ea9fe8043c5f0d3b8a9fa3bf4cf243d93644abd880",
+        "crates/rumoca-eval-dae/src/projection/parameter_fragments/integration.rs": "07e87f4c9efd0045b2c5a08bed2c09aa267f57d79587e586f8bf55a2bcb8087b",
+        "crates/rumoca-eval-dae/src/projection/fold_graph/fragments.rs": "905bd90a401aca2bf8e3ef3c3682ddd2a88e9331e166d8a08bdf12d3915d5eaa",
+        "crates/rumoca-eval-dae/src/projection/literal_update_sweeps.rs": "e5c7fe1d1316b6bfbb7bb59cff27f74afb90b5c61cbc15cecd24d74ede83dded",
+        "crates/rumoca-eval-dae/src/projection/literal_update_sweeps/profile.rs": "a5ba80218fd1c6513c2760a340502fe0b73c1e058361374b693966db942fdcd6",
+        "crates/rumoca-eval-dae/src/projection/literal_update_sweeps/integration.rs": "ceaf3c4d292a204dad62da1cd707f3756f268041a65cf8f9742fcc1226d0f0cb"
+      }
+    },
+    "admitted": "Conditional trees of pure parameter guards, literal rank-one updates through the exact owned one-binder positive in-range domain, same-carried-slot passthrough. Reuse scoped to one completed successful sweep and exact Fold/carried/update/parent lexical context.",
+    "fallback": "Every unproved shape retains the full walker: calls/model coordinates, fields, other carries, nonliteral replacements, alias/offset indices, no passthrough, empty or negative-step domains.",
+    "semantics": "All scalar nodes retained; initial projection and exact self edge retained. Guard dependency order/source faults remain unchanged; completed immutable inventory is replayed to each exact node.",
+    "failedFixtureHistory": {
+      "log": "/tmp/slam-native-literal-sweep-differential-tests.log",
+      "result": "1 PASS, 2 FAIL",
+      "reason": "The original positive control queried separate output summaries and therefore could not exercise invocation-local reuse; a model-coordinate function was correctly rejected by the canonical constructor. Corrected fixture sums all mask scalars within one invocation and explicitly verifies the constructor rejection."
+    }
+  },
+  "sccClosure": {
+    "evaluation": "Construction-local strongly connected components; successors completed first. Original node and ordered edge arrays retained. Exact original parameter first-occurrence IDs retained. Only authoritative direct sets and completed component sets interned; temporary partial unions are released.",
+    "oracle": "Original independent dense fixed point; all512three-node graphs, cyclic/disconnected/repeated/self edges, exact per-node ordered outputs. Full14400deep graph control retains14400dependency IDs total and shares one completed capture among all14400nodes.",
+    "scopedChecks": {
+      "fullEvalDaeLibrary": {
+        "passed": 72,
+        "log": "/tmp/slam-native-scc-closure-full-eval-tests2.log",
+        "elapsedMs": 9529.368573,
+        "peakRssKiB": 462972
+      },
+      "strictClippy": {
+        "result": "PASS",
+        "scope": "rumoca-eval-dae --all-targets --all-features -- -D warnings",
+        "log": "/tmp/slam-native-scc-closure-clippy2.log",
+        "elapsedMs": 1581.395462,
+        "peakRssKiB": 503420
+      },
+      "formatter": "PASS"
+    },
+    "compilerOwner": {
+      "digest": "58c1a4d9d579ac9ea16ea00171427a2b984244147bb0666e7c7b48cc1e4039f7",
+      "files": {
+        "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/accumulator_reductions.rs": "b5ae2b1806ae0cb96dc205281cc179e07a7ab5b6ab4660ceffa0daa9b4fea26f",
+        "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/mod.rs": "64a1ab29bb7d88f67d80642e7fa405f44fa7b1e0ec0d69345ffce483277b641d",
+        "crates/rumoca-eval-dae/src/projection.rs": "e13b4fd941c31cda28f8035b46d5d1ab0ff324b45ed3844f6d8048c9199944ca",
+        "crates/rumoca-eval-dae/src/projection/fold_graph.rs": "f58b4b25d5cc9d8ac9bc8d1f44a8d8250a96a3108bfcff104fe6dffa0916761b",
+        "crates/rumoca-eval-dae/src/projection/dependencies.rs": "88604ec57db24d5f52ccf8dbca3cbc9f4218b0b82ae2caf0b5c2a6d804dac482",
+        "crates/rumoca-eval-dae/src/projection/fold_graph/closure.rs": "7e5c657a34d772c7f1095b7c54370d6b6c7d1bccd2fb21e09ed7ebfc44b9a5f9",
+        "crates/rumoca-eval-dae/src/projection/parameter_fragments.rs": "1aba91c21427421e7414d2ea9fe8043c5f0d3b8a9fa3bf4cf243d93644abd880",
+        "crates/rumoca-eval-dae/src/projection/parameter_fragments/integration.rs": "07e87f4c9efd0045b2c5a08bed2c09aa267f57d79587e586f8bf55a2bcb8087b",
+        "crates/rumoca-eval-dae/src/projection/fold_graph/fragments.rs": "905bd90a401aca2bf8e3ef3c3682ddd2a88e9331e166d8a08bdf12d3915d5eaa",
+        "crates/rumoca-eval-dae/src/projection/literal_update_sweeps.rs": "e5c7fe1d1316b6bfbb7bb59cff27f74afb90b5c61cbc15cecd24d74ede83dded",
+        "crates/rumoca-eval-dae/src/projection/literal_update_sweeps/profile.rs": "a5ba80218fd1c6513c2760a340502fe0b73c1e058361374b693966db942fdcd6",
+        "crates/rumoca-eval-dae/src/projection/literal_update_sweeps/integration.rs": "ceaf3c4d292a204dad62da1cd707f3756f268041a65cf8f9742fcc1226d0f0cb",
+        "crates/rumoca-eval-dae/src/projection/fold_graph/closure/components.rs": "c850255b3790dfde845dc46a58e70c87996b0ccedfd8b8bb03a0c063cf635c3a"
+      }
+    },
+    "failedGateHistory": {
+      "log": "/tmp/slam-native-scc-closure-clippy.log",
+      "result": "two strict lint failures",
+      "reason": "nested successor block and needless borrow; helper extracted and borrow corrected, full tests rerun after fix."
+    }
+  },
+  "nativeAdmission": {
+    "log": "/tmp/slam-native-horn-issued-native-admission.log",
+    "passed": 1,
+    "elapsedMs": 39341.635348,
+    "peakRssKiB": 1251552,
+    "sourceTableDeserialization": "Rust serde_json preserves exact integer ownership metadata; no JavaScript serialization of issued wire.",
+    "siteAndFaultIdentity": "Canonical table matches each issued site; every refusal is checked against exact owner, region and original operation provenance.",
+    "refusals": [
+      {
+        "ownerIndex": 0,
+        "operation": 14,
+        "regionPath": [],
+        "opcode": "fold requires one binder",
+        "sourceSpan": {
+          "start": 606,
+          "end": 609
+        },
+        "sourceLiteral": "1:4"
+      },
+      {
+        "ownerIndex": 1,
+        "operation": 14,
+        "regionPath": [],
+        "opcode": "fold requires one binder",
+        "sourceSpan": {
+          "start": 606,
+          "end": 609
+        },
+        "sourceLiteral": "1:4"
+      },
+      {
+        "ownerIndex": 2,
+        "operation": 65,
+        "regionPath": [],
+        "opcode": "binary",
+        "operator": "Real Max",
+        "sourceSpan": {
+          "start": 5176,
+          "end": 5195
+        },
+        "sourceLiteral": "max(validCount,1.0)"
+      }
+    ],
+    "strictClippy": {
+      "result": "PASS",
+      "scope": "rumoca-exec-wasm --all-targets --all-features -- -D warnings",
+      "log": "/tmp/slam-native-horn-issued-native-clippy.log",
+      "elapsedMs": 10605.292881,
+      "peakRssKiB": 703132
+    },
+    "limitations": "These are first capability refusals; removing them alone does not prove complete native admission. Native Real Min/Max must preserve canonical NaN/signed-zero semantics. Multibinder Fold must retain canonical domain traversal, simultaneous carried SSA snapshots and fault order."
+  },
+  "finalSource": {
+    "compilerOwner": {
+      "digest": "25bc9ef0dceb2ad229c7d4efb5a6b290e13e5a23baf776c03608be42c660b940",
+      "files": {
+        "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/accumulator_reductions.rs": "b5ae2b1806ae0cb96dc205281cc179e07a7ab5b6ab4660ceffa0daa9b4fea26f",
+        "crates/rumoca-phase-dae/src/construction/analysis/loop_compaction/mod.rs": "64a1ab29bb7d88f67d80642e7fa405f44fa7b1e0ec0d69345ffce483277b641d",
+        "crates/rumoca-eval-dae/src/projection.rs": "6b896ef6758e529bbc1ebb221c402efe8e72171ef7e636abc11b789a95bfc3eb",
+        "crates/rumoca-eval-dae/src/projection/fold_graph.rs": "d5cbae4a5751e247695bebbdf89f12b54ce76c0ca55b6f68df52f1590272dae9",
+        "crates/rumoca-eval-dae/src/projection/dependencies.rs": "3b27c7a421f6a6442189d20cd75bdf7ebe292d27d3c0212dcb8bd55bf9a67700",
+        "crates/rumoca-eval-dae/src/projection/fold_graph/closure.rs": "7e5c657a34d772c7f1095b7c54370d6b6c7d1bccd2fb21e09ed7ebfc44b9a5f9",
+        "crates/rumoca-eval-dae/src/projection/parameter_fragments.rs": "7ad16d3d71b3eba39b3ef0bfabe2fff1a72073f4fbcfa0c2e6ec979b00a7e191",
+        "crates/rumoca-eval-dae/src/projection/parameter_fragments/integration.rs": "07e87f4c9efd0045b2c5a08bed2c09aa267f57d79587e586f8bf55a2bcb8087b",
+        "crates/rumoca-eval-dae/src/projection/fold_graph/fragments.rs": "51281e8593352c67998745aab1def06ff8ea3f45cc345a6231b4fb210535fdf1",
+        "crates/rumoca-eval-dae/src/projection/literal_update_sweeps.rs": "8226c4d9636ca36c742b5d170322428c93c84972549d943e282f5308f6e613db",
+        "crates/rumoca-eval-dae/src/projection/literal_update_sweeps/profile.rs": "a5ba80218fd1c6513c2760a340502fe0b73c1e058361374b693966db942fdcd6",
+        "crates/rumoca-eval-dae/src/projection/literal_update_sweeps/integration.rs": "309da227ef3b2485ee6c118407be03ef3ed36b6fa4e314cfd89b9b97fb41a2ad",
+        "crates/rumoca-eval-dae/src/projection/fold_graph/closure/components.rs": "c850255b3790dfde845dc46a58e70c87996b0ccedfd8b8bb03a0c063cf635c3a"
+      }
+    },
+    "producerBinary": {
+      "binarySha256": "1b6e836115e7e524cd5c1992688fa78a226de5020a1ca09ec25fac1f281fc271",
+      "changedOwnerFilesDuringBuild": []
+    },
+    "temporaryTracingRemoved": true,
+    "sourceSha256": "3f6e29a83d5fffab183bb5a3179eb972da96aef97578a7528d5106fba106fd02",
+    "productionCompilerPinChanged": false
+  },
+  "finalScopedChecks": {
+    "fullEvalDaeLibrary": {
+      "passed": 72,
+      "log": "/tmp/slam-native-projection-final-eval-tests.log",
+      "elapsedMs": 9440.568866,
+      "peakRssKiB": 463468
+    },
+    "strictClippy": {
+      "result": "PASS",
+      "scope": "rumoca-eval-dae --all-targets --all-features -- -D warnings",
+      "log": "/tmp/slam-native-projection-final-clippy.log",
+      "elapsedMs": 1598.40674,
+      "peakRssKiB": 498340
+    },
+    "formatter": "PASS",
+    "finalIssuedTableNativeRefusal": {
+      "passed": 1,
+      "log": "/tmp/slam-native-horn-final-native-admission.log",
+      "elapsedMs": 33.23662,
+      "peakRssKiB": null,
+      "qualification": "Terminal before first RSS sampling interval. Reused unchanged compiled typed-call test consumer; producer was rebuilt from final source.",
+      "consumerTestBinarySha256": "118e44343020b35ad4d3cfb74425e84d5e518637d84116ce0eba00dbe9df1d5f"
+    }
+  },
+  "nextOwners": [
+    "Native finite multibinder Fold traversal retaining exact domain order and simultaneous carried tuples",
+    "Native Real Min/Max with canonical NaN and signed-zero behavior",
+    "Actual full14400 registration numerical/refusal/recovery gate after complete source admission",
+    "Coordinated constrained-interface metadata integration with pre-body native refusal/enforcement"
+  ],
+  "laterBackendEvidence": [
+    {
+      "path": "dev/rumoca-native-horn-backend-verification.json",
+      "qualification": "This historical producer/refusal record is unchanged; later native backend admission and actual browser results are recorded separately."
+    },
+    "dev/rumoca-native-horn-carried-lifetimes-verification.json",
+    "dev/rumoca-native-horn-returned-storage-verification.json"
+  ]
+}

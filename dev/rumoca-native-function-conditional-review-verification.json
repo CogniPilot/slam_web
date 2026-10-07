@@ -1,0 +1,356 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-10-05T16:59:09.246Z",
+  "status": "PRIVATE_COPIED_PRODUCTION_CONDITIONAL_COMPONENT_PASS_MODEL_SOURCE_INTEGRATION_PENDING",
+  "patchSha256": "a8dc992e0dcbd8a3f61405f9774c87b1fe0a3c50585979145e0ab1753145fe9f",
+  "checks": {
+    "sameMainPreimages": "PASS",
+    "copiedPatchApply": "PASS",
+    "postimageIdentity": "PASS",
+    "copiedFullBackendRustcWarningsDenied": "PASS",
+    "canonicalIrSourceConstruction": "PASS",
+    "actualV8Runtime": "PASS",
+    "hiddenBranchBoundsRefusal": "PASS",
+    "legacyControlModuleIdentity": "PASS",
+    "mergedCargoTests": "UNRUN",
+    "nativeCertificate": "PENDING",
+    "modelicaSource": "UNRUN",
+    "browser": "UNRUN",
+    "performance": "UNMEASURED"
+  },
+  "runtime": {
+    "status": "COPIED_PRODUCTION_CONDITIONAL_COMPONENT_PASS",
+    "moduleSha256": "39d2b8cb606963f3b89c19dab50d96e150b153d86de6d6f60766de2fe5697dcf",
+    "moduleBytes": 1887,
+    "meta": {
+      "scratchBytes": 72,
+      "moduleBytes": 1887,
+      "integerConversionStatus": 5,
+      "outputCount": 2
+    },
+    "imports": [
+      {
+        "module": "env",
+        "name": "memory",
+        "kind": "memory"
+      },
+      {
+        "module": "env",
+        "name": "abs",
+        "kind": "function"
+      },
+      {
+        "module": "env",
+        "name": "sin",
+        "kind": "function"
+      }
+    ],
+    "success": 279,
+    "faults": 121,
+    "readonly": 399,
+    "ordered": 399,
+    "rawBits": 135,
+    "scope": "Canonical checked Solve IR -> copied production Rumoca WASM backend -> actual V8 execution. Nested/captured ordered lazy branches, relocated helper/math imports, late conversion faults before outer tuple publication, IEEE raw bits, input immutability, buffer refusal and recovery. Modelica lowering/native schedule integration/Cargo/browser/fullSLAM/performance remain unverified."
+  },
+  "dependencies": [
+    {
+      "crate": "rumoca_core",
+      "fileName": "librumoca_core-34674d5faccee229.rlib",
+      "bytes": 7597658,
+      "sha256": "3074bde3b506285f35a8f6571112c497b760086b13e9f1797c64712952140f97"
+    },
+    {
+      "crate": "rumoca_ir_solve",
+      "fileName": "librumoca_ir_solve-eeb2420ff05a7c04.rlib",
+      "bytes": 45481688,
+      "sha256": "fdb7cf6cadd0d7a445346a27544e7eccf89b82ebb68de68dfd52d2c310a8837a"
+    },
+    {
+      "crate": "wasm_encoder",
+      "fileName": "libwasm_encoder-29777057020f913e.rlib",
+      "bytes": 3842134,
+      "sha256": "2be9a2c5e8cf9bbc6fc0c23acd32bcfa321380ad784a7cd01fd6529606f77fa8"
+    }
+  ],
+  "sourceFiles": 10,
+  "claims": {
+    "compilerMainChanged": false,
+    "sharedCacheMutated": false,
+    "productionPackageChanged": false,
+    "fullSlam": false,
+    "tenTimesRealtime": false
+  },
+  "scope": "Extends existing final SolveIR WASM emission only; native scoped call-input/dependency/target-isolation certificate remains required before public source integration.",
+  "files": [
+    {
+      "path": "dev/artifacts/native-function-conditional-review/build/changed/control.wasm",
+      "bytes": 1045,
+      "sha256": "bb9832eacefd7b643bc859e9b7d1b2e09efababdb6eeb3f6ef510395aefaa06a"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/build/conditional.json",
+      "bytes": 83,
+      "sha256": "27f584c3ca340d6ae9e4150aa43640c2b964393e0d1a9b51ac0d95e02b5ef08b"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/build/conditional.wasm",
+      "bytes": 1887,
+      "sha256": "39d2b8cb606963f3b89c19dab50d96e150b153d86de6d6f60766de2fe5697dcf"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile-command.json",
+      "bytes": 1435,
+      "sha256": "a6b57f7fb51eb99d35dd974b9a4012b007b12c5ad3a23139778685355a3da75a"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile-final-resource.json",
+      "bytes": 591,
+      "sha256": "ec84ec0fb49623660a1dcf6ab34877cdccef7d18356e07426c1792e34d379dbf"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile-final.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile-retry-resource.json",
+      "bytes": 590,
+      "sha256": "da6b44dc705bf8c0c9cddccde3f7cb37bba84894ce185e1f43fc6b0abc332939"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile-retry.log",
+      "bytes": 1137,
+      "sha256": "89cc89b84e6fd106240e6b2ecb76cc1185865959fe0a3fa5e2f37000d00c9f08"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile-retry2-resource.json",
+      "bytes": 592,
+      "sha256": "eb1ab3cc817db945d1f938feca691729984aa6cf39a741439bdf59918780de3f"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile-retry2.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile-retry3-resource.json",
+      "bytes": 592,
+      "sha256": "f854d30b0b84016f6cee1731aae9a7cb39987eb5b2982b46b23fc5591d5944ce"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile-retry3.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compile.log",
+      "bytes": 3708,
+      "sha256": "ed07209c966305e3d4ce892eca3c8ec7a01e3ee95dac4abeb7240f727cc3b27c"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/compiler.patch",
+      "bytes": 23112,
+      "sha256": "a8dc992e0dcbd8a3f61405f9774c87b1fe0a3c50585979145e0ab1753145fe9f"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/legacy-control-report.json",
+      "bytes": 329,
+      "sha256": "b0a7752e1d6d17f697382633866a923cff1de469ce122a46eeafed45eb831179"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/legacy-control-resource.json",
+      "bytes": 599,
+      "sha256": "7b4dcbfae9c8b31fe04d38f213d3b27e7b4210ca2cb87eb2d9a26116e684d757"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/legacy-control.log",
+      "bytes": 312,
+      "sha256": "caa4abb9c47cb00d03d9259b4fe57d54e62e2a3587707d3471f93ea1cf38eb57"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/legacy-control.mjs",
+      "bytes": 2021,
+      "sha256": "55978064caf0773c690f12ec344ee0070a3cb0528250503aa535c7948b00466e"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit.rs",
+      "bytes": 27793,
+      "sha256": "73999347912498096eadd48af8b4c01bd9c8736efa7e74222cc312b259d94883"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit/arena.rs",
+      "bytes": 7482,
+      "sha256": "693d90ec096f0097e0edad8dc5a503015754dc8b34c1a544a84823c14b6e5499"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit/compute/affine.rs",
+      "bytes": 12186,
+      "sha256": "c3dd833eb58a19f0c1d31b22975a0dafe9dd061f6f3a6dac12d122ed68d40006"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit/compute/call_program.rs",
+      "bytes": 4953,
+      "sha256": "a960ccab5593958e4aa34d019670167516318c12597e0a5b9edad06707d973c4"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit/compute/call_program/layout.rs",
+      "bytes": 2755,
+      "sha256": "afdeb3d082d77a53eaec159b9768edb276db4f0afbdb9988667e24a7f9ccdc3c"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit/compute/exact_assignments/ready.rs",
+      "bytes": 4190,
+      "sha256": "26595c168e6464e26ef81c8fa825148647aa62283e6027ef106769d0614b0fbc"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit/conditional.rs",
+      "bytes": 3217,
+      "sha256": "df78e399fddc9bca42475c4bd15ee026e75f03daf4a395c41fe1fb45254ba28a"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit/conditional/discovery.rs",
+      "bytes": 1317,
+      "sha256": "7a7ccc07bb7327ce635ab4cba8a813274c33564de61a82aec686990fb60414a2"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit/conditional/regions.rs",
+      "bytes": 3999,
+      "sha256": "b041f81cf73a70737224052cab136c8297785e044622886200096cc730583260"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/modified/crates/rumoca-exec-wasm/src/emit/conditional/workspace.rs",
+      "bytes": 2229,
+      "sha256": "d959f02726ca4d917cd45070f84235f704a53710dd006cf29c15ad204b66ef63"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/original/crates/rumoca-exec-wasm/src/emit.rs",
+      "bytes": 26665,
+      "sha256": "742d9d4aa14421322426d696dae5e70be3b37e01f301f4f50cb4f406269c4ede"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/original/crates/rumoca-exec-wasm/src/emit/arena.rs",
+      "bytes": 6827,
+      "sha256": "2f3de0d2fdd30ce388a72866d355354c380ca6c95709375def35f8b819322395"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/original/crates/rumoca-exec-wasm/src/emit/compute/affine.rs",
+      "bytes": 11873,
+      "sha256": "f18540d53341765943b377b638525bbad8199c982693aadea09bfebe1af4c297"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/original/crates/rumoca-exec-wasm/src/emit/compute/call_program.rs",
+      "bytes": 5177,
+      "sha256": "bf45de3af582d7aaf26ad50dbd762eede28ceb64ef651c5e485a646e3e623e44"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/original/crates/rumoca-exec-wasm/src/emit/compute/call_program/layout.rs",
+      "bytes": 2719,
+      "sha256": "906098858c9f289c233e473961d3ded7f37d4ab9a842a5b1c6114153fa333439"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/original/crates/rumoca-exec-wasm/src/emit/compute/exact_assignments/ready.rs",
+      "bytes": 4350,
+      "sha256": "4590939473307a66bdd8866d3c2f75ff44bc989da452198121b9cb00e71ced10"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe-build-resource.json",
+      "bytes": 594,
+      "sha256": "bdecd73cfb7a433bfae29785e9c325da3e532108d7f8515357ded0a13bdd4c73"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe-build-retry-resource.json",
+      "bytes": 597,
+      "sha256": "82ffba443e8315c2a5f8d8eb070a28c01e80ca7896dc4256e0f6246098b56165"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe-build-retry.log",
+      "bytes": 124,
+      "sha256": "5536e82ccd715c2f4690407f57adee337573c5941eea39312365fedcf5be572b"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe-build-retry2-resource.json",
+      "bytes": 599,
+      "sha256": "15af8a3066872c3d80eed287e004aecbd3eedc5ec79a061513c75a5385c322fa"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe-build-retry2.log",
+      "bytes": 72,
+      "sha256": "18ff1a0e504ed2b3b6cc49aa1d8cf82d39b36b098677fd2ac2a75efe61c31eb7"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe-build.log",
+      "bytes": 729,
+      "sha256": "9032ee9e618c7d2a9606c21c7b2e87be899d089d1cca04b7589cb4007e932537"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe-build.mjs",
+      "bytes": 914,
+      "sha256": "a18a348fc76a59be70726a2ae25799b93957cf74c3fc6635fa9496b31c2dc6f0"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe-final-resource.json",
+      "bytes": 592,
+      "sha256": "b2f024f348eba2e0eb731597133d86a4579e28c29c040617b00eec9f067661d6"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe-final.log",
+      "bytes": 72,
+      "sha256": "18ff1a0e504ed2b3b6cc49aa1d8cf82d39b36b098677fd2ac2a75efe61c31eb7"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/probe.rs",
+      "bytes": 5321,
+      "sha256": "44f28c646a4bb5c9a25a72a416f226488916da73c23015bfa3ffcceaef1ac6ca"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/README.md",
+      "bytes": 4790,
+      "sha256": "7990e0378d20583564467df1ea18c3b76a8ac2958cafd56c1f979201e3856987"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/runtime-final-resource.json",
+      "bytes": 592,
+      "sha256": "b56cca2da390af109aba0fdc8ea3f1b932fb3f22df1ee15af96c24d2e02f3535"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/runtime-final.log",
+      "bytes": 867,
+      "sha256": "8bd67c4ec67fed8bea6a4271669fabeea55f4a6ed057577264f13365915aade7"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/runtime-report.json",
+      "bytes": 1044,
+      "sha256": "5d632aef353631b5d17f13fe9df5905e277d3aacdd9f67fc85455250d3cbcd0a"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/runtime-resource.json",
+      "bytes": 586,
+      "sha256": "20b3c796a3c80ed029b1bd7c051e549428e76680dee5b71c8cb822c9dfba59ac"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/runtime-retry-resource.json",
+      "bytes": 591,
+      "sha256": "7ebe7a2ae2f19583c1415a8e2e92ffb1aa3d089c8bdc57692840164b89adec30"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/runtime-retry.log",
+      "bytes": 867,
+      "sha256": "8bd67c4ec67fed8bea6a4271669fabeea55f4a6ed057577264f13365915aade7"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/runtime.log",
+      "bytes": 1214,
+      "sha256": "366019f6cf75731bc0ad1019de6b70b5d592b0cfd38ee3ada1ab1033175efd62"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/runtime.mjs",
+      "bytes": 3664,
+      "sha256": "ea6408a597fd0b42027b351a06e893c051c92ec3ef5f9dda5de1d8c7a43a7b18"
+    },
+    {
+      "path": "dev/artifacts/native-function-conditional-review/source-before.json",
+      "bytes": 951,
+      "sha256": "81384fac69e7497d6b58bb86cc5b6b5288e68fca0323c263c85d498de907922f"
+    }
+  ]
+}

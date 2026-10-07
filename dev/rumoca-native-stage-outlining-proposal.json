@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "status": "STAGED_ROOT_FOCUSED_GATE_PENDING",
+  "scope": "Canonical exec-wasm target-local whole-program stage outlining",
+  "productionPinChanged": false,
+  "applicationRuntimeActivated": false,
+  "externalWritesByThisAgent": false,
+  "buildsByThisAgent": 0,
+  "changes": [
+    {
+      "path": "crates/rumoca-exec-wasm/src/emit/compute/call_program.rs",
+      "beforeSha256": "a960ccab5593958e4aa34d019670167516318c12597e0a5b9edad06707d973c4",
+      "afterSha256": "f0d37a939bc8c9b75bf9dcd7bcb13e5d1ab8cdbb083731c24e3d2a0385316742"
+    },
+    {
+      "path": "crates/rumoca-exec-wasm/src/emit/compute/call_program/groups.rs",
+      "beforeSha256": null,
+      "afterSha256": "a63dbf6985728aa4d07d860e0343ec279894b16329a06c2c6eb4c2eab30d90cc"
+    },
+    {
+      "path": "crates/rumoca-exec-wasm/src/emit/compute/call_program/groups/tests.rs",
+      "beforeSha256": null,
+      "afterSha256": "e235fa2cc7b7d14735edbf7df90d256ea7b3041d79419fcad16d0ceff7c78526"
+    }
+  ],
+  "patchSha256": "109c9166c4e3828d0f9dd577aa8db2f580cb44a60c1dd6cdeb8cac7ffc6aff84",
+  "byteBudget": 1048576,
+  "apiChanged": false,
+  "sourceCertifierChanged": false,
+  "preparationProfileChanged": false,
+  "focusedTests": {
+    "staged": 4,
+    "executedByThisAgent": 0,
+    "status": "UNRUN",
+    "command": "cargo test -p rumoca-exec-wasm --lib stage_groups -- --nocapture"
+  },
+  "rootGate": {
+    "session": 33718,
+    "status": "STARTED_TERMINAL_PENDING"
+  },
+  "originalFullFast": {
+    "sourceSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+    "issuedStages": 13537,
+    "moduleBytes": 14989698,
+    "rejectedFunctionBytes": 13927083,
+    "v8FunctionLimitBytes": 7654321,
+    "afterExecution": "UNRUN"
+  },
+  "limits": [
+    "Oversized individual certified stage is refused; no instruction-level live-range split",
+    "Oversized typed helper body is refused; no typed-body outlining",
+    "Oversized wrapper is refused rather than adding an unproved dispatcher hierarchy",
+    "Full original FAST source/module/numerical/browser parity remains required",
+    "Whole connected localization acceptance remains independent"
+  ],
+  "review": "dev/artifacts/native-stage-outlining/REVIEW.md"
+}

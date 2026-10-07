@@ -1,0 +1,424 @@
+{
+  "status": "EXACT_HARDWARE_BYTES_AND_LOCKSTEP_PASS_OBSERVED_11_9_PERCENT_THROUGHPUT_GAIN_10X_PENDING",
+  "scope": "Full RGB/depth/cloud and64-beam LiDAR GPU rendering/transport plus available Modelica INS/detector; not visual SLAM",
+  "implementation": "Queue mixed RGBA8/RGBA32F framebuffer reads into distinct byte ranges of one capacity-derived pooled PBO, single getBufferSubData, pooled byte staging and raw-bit scatter to existing sensor arrays. Pose remains held, no dropped or pipelined simulation captures.",
+  "selection": "Packed synchronous readback selected by default after numeric parity and ABBA; async path unchanged; explicit matched-profile configure override retained.",
+  "sameBundle": true,
+  "sameInputs": true,
+  "rates": {
+    "cameraHz": 90,
+    "lidarHz": 20,
+    "imuHz": 90,
+    "gpsHz": 10
+  },
+  "flowCounts": {
+    "lab/sensors/imu/0": 450,
+    "lab/node/physics/truth": 450,
+    "lab/camera/info": 450,
+    "lab/node/sensor/frame": 450,
+    "lab/node/detector/features": 450,
+    "lab/node/slam/estimate": 450,
+    "lab/node/map/estimate": 450,
+    "lab/node/evaluation/metrics": 450,
+    "lab/slam/odometry": 450,
+    "lab/sensors/lidar/0": 100,
+    "lab/navigation/gps": 50
+  },
+  "scene": "High Main Street, all cars/pedestrians, cloud enabled, seeded measured inputs",
+  "aggregates": [
+    {
+      "enabled": false,
+      "simulationSeconds": 10,
+      "wallMs": 22786.100000023842,
+      "simulationRate": 0.4388640443072547,
+      "meanSensorMs": 12.592111112276713
+    },
+    {
+      "enabled": true,
+      "simulationSeconds": 10,
+      "wallMs": 20362.799999952316,
+      "simulationRate": 0.4910915984060845,
+      "meanSensorMs": 9.744777776930068
+    }
+  ],
+  "throughputRatio": 1.1190062270452592,
+  "sensorWallReduction": 0.22612041062523902,
+  "order": [
+    {
+      "name": "a-unbatched",
+      "packed": false,
+      "rate": 0.443663596516456,
+      "sensorMs": 12.216666666931577,
+      "finalViewer": {
+        "timestamp": 17228.7,
+        "windowMs": 1016.6000000000004,
+        "targetFps": 30,
+        "fps": 30.493802872319485,
+        "captureHz": 0,
+        "visionHz": 0,
+        "lidarHz": 0,
+        "renderedFrames": 31,
+        "capturedFrames": 0,
+        "visionFrames": 0,
+        "lidarFrames": 0,
+        "meanFrameIntervalMs": 33.42258064593038,
+        "p95FrameIntervalMs": 37.699999928474426,
+        "meanRenderSubmitMs": 2.845161291860765,
+        "longTasks": null
+      }
+    },
+    {
+      "name": "b-batched",
+      "packed": true,
+      "rate": 0.487990552501768,
+      "sensorMs": 9.849777775605519,
+      "finalViewer": {
+        "timestamp": 16092.1,
+        "windowMs": 1000.1000000000004,
+        "targetFps": 30,
+        "fps": 29.99700029996999,
+        "captureHz": 0,
+        "visionHz": 0,
+        "lidarHz": 0,
+        "renderedFrames": 30,
+        "capturedFrames": 0,
+        "visionFrames": 0,
+        "lidarFrames": 0,
+        "meanFrameIntervalMs": 33.32333333492279,
+        "p95FrameIntervalMs": 35.90000009536743,
+        "meanRenderSubmitMs": 2.306666672229767,
+        "longTasks": null
+      }
+    },
+    {
+      "name": "c-batched",
+      "packed": true,
+      "rate": 0.4942323089579952,
+      "sensorMs": 9.639777778254615,
+      "finalViewer": {
+        "timestamp": 16039,
+        "windowMs": 1000,
+        "targetFps": 30,
+        "fps": 30,
+        "captureHz": 0,
+        "visionHz": 0,
+        "lidarHz": 0,
+        "renderedFrames": 30,
+        "capturedFrames": 0,
+        "visionFrames": 0,
+        "lidarFrames": 0,
+        "meanFrameIntervalMs": 33.303333330154416,
+        "p95FrameIntervalMs": 36.800000071525574,
+        "meanRenderSubmitMs": 2.8666666706403094,
+        "longTasks": null
+      }
+    },
+    {
+      "name": "d-unbatched",
+      "packed": false,
+      "rate": 0.4341672238452407,
+      "sensorMs": 12.96755555762185,
+      "finalViewer": {
+        "timestamp": 17252.7,
+        "windowMs": 1016.6000000000004,
+        "targetFps": 30,
+        "fps": 29.510131811922083,
+        "captureHz": 0,
+        "visionHz": 0,
+        "lidarHz": 0,
+        "renderedFrames": 30,
+        "capturedFrames": 0,
+        "visionFrames": 0,
+        "lidarFrames": 0,
+        "meanFrameIntervalMs": 33.32999999920527,
+        "p95FrameIntervalMs": 39.299999952316284,
+        "meanRenderSubmitMs": 2.599999996026357,
+        "longTasks": null
+      }
+    }
+  ],
+  "controls": {
+    "unit": "13 GPU readback+worker controls passed, includes packed mixed-format signed-zero/NaN payload, overflow and copy failure cleanup",
+    "hardware": "3 actor poses RGB/depth/cloud/LiDAR byte exact; independent sensor-rate test passed",
+    "finalSelectedDefault": {
+      "build": "PASS TypeScript and Vite",
+      "unit": "14 controls across3 files PASS",
+      "hardware": "7 hardware controls PASS: packed byte parity, existing GPU readback/worker parity and exact sensor-clock lockstep"
+    }
+  },
+  "resource": {
+    "elapsedMs": 82965.768475,
+    "peakRssKiB": 2162800,
+    "minimumAvailableKiB": 56679328,
+    "limitSeconds": 180,
+    "limitRssMiB": 4096,
+    "exitCode": 0
+  },
+  "sourceSnapshot": {
+    "src/gpu-readback.ts": "134fb50e64454d4486ee7532fa6b42ea470e3668e1b187d727d4481bff3c70d7",
+    "src/world.ts": "16743cb42b5ac63894522e8ca79d9850504e7b0249e0a7ddea3dd17b3f5da3bc",
+    "src/lidar.ts": "081fe37c36976d6951b6ead538e244dac517dbd2a15e8a491d7989cc831a43c8",
+    "src/sensor-render.worker.ts": "357ec6a2d94888f8a1109fdb0dd40f7a0dbafac1e6d0f35469840ce5ac7fae0e",
+    "src/sensor-geometry-batches.ts": "aa34a72ff0706c3b688a448f7600f8a3d85f00e2d46f4472a1ac93b1d9a5c8cc",
+    "src/gpu-sensor-profiler.ts": "78ed2aa8c10ccd5acddc7134387ad2cb6925521a9d0f1449eb3bfc38516ad01d",
+    "scripts/profile-browser.mjs": "452c51721f2bff7f6aa70dbaca6ec109d2628b4eadf99a844cfef7b60407d3d7",
+    "dev/benchmark-sensor-packed-readback.mjs": "3b8dfe4e2ccc0c88076f5a81dddd467794d7e79ee02199bffcaa14a08f60fc0d",
+    "dev/chromium-native-profile.mjs": "9b3bcd4689d821315ea7d94b8df854f2c4d45d58d09c2c08092833e69cb25d48",
+    "dev/probe-gpu-capabilities.mjs": "718fe857c3303e82e1148868e563bd349dae44df0d8eb163db1bf0b156c509ce",
+    "tests/gpu-readback.test.ts": "b8c0525d75b5cad40bd0292fcf4a71d3b7e27780b386f1bfaf584b87eb5c5ca5",
+    "tests/browser/sensor-packed-readback.spec.ts": "b7ffdd8bdbaf4819319a75fc7c67b1b79443a51acfef29ae202ab91de592e3a2"
+  },
+  "sourceSnapshotNote": "Post-ABBA source differs only in selected packed default false->true for World and worker; exact ABBA executable bundle manifests retained separately. Other concurrent module source changes belong to root.",
+  "raw": {
+    "a-unbatched/bundle.json": {
+      "bytes": 1481,
+      "sha256": "c15e14848f4cbad2bf7b7a578a7902b5ac0fe015e7fa9fe65b9cfff97daab528"
+    },
+    "a-unbatched/timings.json": {
+      "bytes": 1096567,
+      "sha256": "4d112876d19d08eecebdc995cfee7d5983a1e2b5b0d04a6ce23214f8d376ddfe"
+    },
+    "a-unbatched/run.log": {
+      "bytes": 5873,
+      "sha256": "e40a03ba33a56eda68096f25cd999ba13a092148737ebcffa0712211c9751aa5"
+    },
+    "a-unbatched/main.cpuprofile": {
+      "bytes": 113754,
+      "sha256": "902f827208a6afaf16d522217b7b62f42d8cecb34f9737fc694da6d515ca2d63"
+    },
+    "a-unbatched/worker-0.cpuprofile": {
+      "bytes": 272148,
+      "sha256": "b9d6b4e5173396ea12b7a0c7c3353c7fb7886fd82a9b0f26595602f5f49602c9"
+    },
+    "a-unbatched/worker-1.cpuprofile": {
+      "bytes": 65610,
+      "sha256": "064391c574fdeb480770a0288e8a3c21bdf9efaa86f7748205be0f1c27c23ae0"
+    },
+    "a-unbatched/worker-2.cpuprofile": {
+      "bytes": 64245,
+      "sha256": "7a3d90f8dd6b0f057786d862c1c9276a4cd4df26883c7fd7a91663df28d9d8a6"
+    },
+    "a-unbatched/worker-3.cpuprofile": {
+      "bytes": 124011,
+      "sha256": "d59f54aa09fe70ea15c19461ab6b002005bb20f98a2e669840f756e70c8980ab"
+    },
+    "a-unbatched/worker-4.cpuprofile": {
+      "bytes": 62741,
+      "sha256": "79a7d3898b94562d276e08f247b7c1be1cc21ad684b6475334f1a4282f422c65"
+    },
+    "a-unbatched/worker-5.cpuprofile": {
+      "bytes": 130146,
+      "sha256": "9787d7ea1ebb1ca70fbca89a1880f41098e15993d40d2dbdc1f47f26c3cca382"
+    },
+    "a-unbatched/worker-6.cpuprofile": {
+      "bytes": 154303,
+      "sha256": "4c8182c4e59400d5e872bec5b36b12449e7a364b5109e47d04be11cb0dadde17"
+    },
+    "b-batched/bundle.json": {
+      "bytes": 1481,
+      "sha256": "c15e14848f4cbad2bf7b7a578a7902b5ac0fe015e7fa9fe65b9cfff97daab528"
+    },
+    "b-batched/timings.json": {
+      "bytes": 1089391,
+      "sha256": "d8b9d115dc54bbc14380a9167f4b800311846d392963a6700bfb0f0dc90bcd2a"
+    },
+    "b-batched/run.log": {
+      "bytes": 5895,
+      "sha256": "89d7a012bce5010a98fcd1f31e46687387fc71f01cdadaeccfa003fd6ab655f9"
+    },
+    "b-batched/main.cpuprofile": {
+      "bytes": 108857,
+      "sha256": "20606f4907c863542807173e02f1a80991723ea68a9a901e11cbcbbaf36f934f"
+    },
+    "b-batched/worker-0.cpuprofile": {
+      "bytes": 57325,
+      "sha256": "0fe3d4cba94ac81638888c16f434a3e0af2ed24bdc21ae7893ea8168b778c6f4"
+    },
+    "b-batched/worker-1.cpuprofile": {
+      "bytes": 260923,
+      "sha256": "59f21acce81adebd7f100735bb9f5b95310a654d4710c0bfddcd94bab9bc591f"
+    },
+    "b-batched/worker-2.cpuprofile": {
+      "bytes": 129442,
+      "sha256": "45091e72acdb387f5d198277ef95a203f142268b5eaeca802af5036593be09ec"
+    },
+    "b-batched/worker-3.cpuprofile": {
+      "bytes": 149106,
+      "sha256": "de5bbae18bdd446ea68575e6c7ce24d20c6a3bda0f31fb84ecd5a0d1485b2258"
+    },
+    "b-batched/worker-4.cpuprofile": {
+      "bytes": 58539,
+      "sha256": "d00caca8e529620bec34518674535c4f67733623b57e5955f66fe0dbf2df7442"
+    },
+    "b-batched/worker-5.cpuprofile": {
+      "bytes": 58275,
+      "sha256": "4393c0a607807decdc67d99f0c583733111ee7caf12ebf3d2b2303376b375407"
+    },
+    "b-batched/worker-6.cpuprofile": {
+      "bytes": 103252,
+      "sha256": "d6ebe577ef83c9cbb0908fe48a01ffd4794c2e3b5a15b8dace40c87cf43beabd"
+    },
+    "c-batched/bundle.json": {
+      "bytes": 1481,
+      "sha256": "c15e14848f4cbad2bf7b7a578a7902b5ac0fe015e7fa9fe65b9cfff97daab528"
+    },
+    "c-batched/timings.json": {
+      "bytes": 1089670,
+      "sha256": "75ca2f216254eab98af4e9601ce56016b236e8d52d1730d37174b22ab5e28f95"
+    },
+    "c-batched/run.log": {
+      "bytes": 5866,
+      "sha256": "191dda916dd5798de0dfb82152f9fac63119e15bac23860d944434888995e60c"
+    },
+    "c-batched/main.cpuprofile": {
+      "bytes": 102105,
+      "sha256": "f93c63e8fa6ee9dc7c0db318a99f87ed0e477c512a422ba87de3ffde72e804cc"
+    },
+    "c-batched/worker-0.cpuprofile": {
+      "bytes": 59618,
+      "sha256": "b49b78b385e9c580ce8854b965f2b041a5805ccdf36f530986ccbaf2b4e31d42"
+    },
+    "c-batched/worker-1.cpuprofile": {
+      "bytes": 107413,
+      "sha256": "075b27e1153f74491c13ac2359b32645d83c4024e0c267817f25b7f8aeec0060"
+    },
+    "c-batched/worker-2.cpuprofile": {
+      "bytes": 254265,
+      "sha256": "bf7d5797d6ebe0f97fbb216fc9edd78e54464663c78fc5650e2dc68e39863696"
+    },
+    "c-batched/worker-3.cpuprofile": {
+      "bytes": 147246,
+      "sha256": "daa2ba823c1bf44f9eb001fe0da17f2622289d7b3bdd737baa9b53cbc57f404a"
+    },
+    "c-batched/worker-4.cpuprofile": {
+      "bytes": 121463,
+      "sha256": "7869d8e3bc99a2df126599a00cc9c94bcb09240f704b499c7fb4861826ccd47b"
+    },
+    "c-batched/worker-5.cpuprofile": {
+      "bytes": 55948,
+      "sha256": "7ca36c8af2d1ddf389a93e32d87fe869b122502eb25dc920113b4f0a9b0e6258"
+    },
+    "c-batched/worker-6.cpuprofile": {
+      "bytes": 57851,
+      "sha256": "981068e994ae68969235200e058c166eb9eb7b3531bd0e108bd5c249e8210fcd"
+    },
+    "d-unbatched/bundle.json": {
+      "bytes": 1481,
+      "sha256": "c15e14848f4cbad2bf7b7a578a7902b5ac0fe015e7fa9fe65b9cfff97daab528"
+    },
+    "d-unbatched/timings.json": {
+      "bytes": 1095368,
+      "sha256": "b322bc473fa9041918281291406b3d3d5d3290351d78d589086e695b27990735"
+    },
+    "d-unbatched/run.log": {
+      "bytes": 5847,
+      "sha256": "2e9c643be81a13fb2737788746ac2369510d63dc075429a403fd2fcdc744c401"
+    },
+    "d-unbatched/main.cpuprofile": {
+      "bytes": 116691,
+      "sha256": "d0acb848b356b54daa8364e1351640d96bf7d8d732fdf97dc26d8e0d7375a3a7"
+    },
+    "d-unbatched/worker-0.cpuprofile": {
+      "bytes": 65603,
+      "sha256": "e595540ec92cc30a76637401d401ec58a336c6c0fe14be2eddfe40f192b5abef"
+    },
+    "d-unbatched/worker-1.cpuprofile": {
+      "bytes": 137793,
+      "sha256": "7e8592d1b45c279f105d4aa75b93700e19466cf66db5aabbd58302e8c67fd7fd"
+    },
+    "d-unbatched/worker-2.cpuprofile": {
+      "bytes": 152120,
+      "sha256": "6bc8474e35c3329e3695b9508c72b49205c0143d5646945fa9789c0abdf6ce73"
+    },
+    "d-unbatched/worker-3.cpuprofile": {
+      "bytes": 265239,
+      "sha256": "c87a0df588393fe2a7d8925a1b0cca4f5d86d714b1a214bcde4643bdcb3e3ea6"
+    },
+    "d-unbatched/worker-4.cpuprofile": {
+      "bytes": 65366,
+      "sha256": "f68848b6f997e359b05a3acff076f32a2a2c4bf0587d255f2157a7f0cd33659c"
+    },
+    "d-unbatched/worker-5.cpuprofile": {
+      "bytes": 67728,
+      "sha256": "3b5b552cfc4a96ee29ffc0d78127652b4ca3e48a441cf4bdad4944d4e1647b3a"
+    },
+    "d-unbatched/worker-6.cpuprofile": {
+      "bytes": 122206,
+      "sha256": "c8ff5f520ad91c3c94c40dd35e4d1435c508729ec9fcc3e08bfc350bdede49e4"
+    }
+  },
+  "capability": {
+    "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 3090/PCIe/SSE2, OpenGL ES 3.2)",
+    "multiview": false,
+    "maxViews": null,
+    "webgpu": false,
+    "webgpuFeatures": [],
+    "webgpuInfo": null,
+    "scope": "Capability only; no WebGPU/multiview renderer or numeric/performance acceptance"
+  },
+  "limitations": [
+    "ABBA browser and children restricted to cores8/9; runnable scheduling adds walltime. Separate unrestricted/normal-priority characterization now recorded; it is not a matched gain.",
+    "CDP CPU profiles enabled equally in each ABBA run; native perf/GPU-query/trace overhead excluded from ABBA.",
+    "Only one hardware machine and one reversed pair per condition; observed gain is not a statistical confidence interval.",
+    "30Hz viewer scheduling retained; missed deadlines remain, inspect retained per-run viewer distributions.",
+    "No Modelica numerical models, estimator, production compiler pins, sensor rates, depth noise or JS computer-vision math changed.",
+    "Do not multiply sequential gains from separate bundle measurements or claim10x/fullSLAM."
+  ],
+  "finalResource": {
+    "elapsedMs": 88790.28905200001,
+    "peakRssKiB": 2513784,
+    "minimumAvailableKiB": 55795544,
+    "limitSeconds": 180,
+    "limitRssMiB": 4096,
+    "exitCode": 0
+  },
+  "commands": {
+    "comparison": "nix develop path:.#ci --command node dev/rumoca-bounded-run.mjs --seconds 180 --rss-mib 4096 --log <scratch>/packed-abba.log -- nice -n 10 taskset -c 8,9 env SLAM_SENSOR_PROFILE_OUT=<scratch>/packed-abba node dev/benchmark-sensor-packed-readback.mjs",
+    "gate": "nix develop path:.#ci --command node dev/rumoca-bounded-run.mjs --seconds 180 --rss-mib 4096 --log <scratch>/packed-final-gate.log -- nice -n 10 taskset -c 8,9 bash -c \"npm run build && npx vitest run tests/gpu-readback.test.ts tests/sensor-render-worker.test.ts tests/sensor-geometry-batches.test.ts && SLAM_BROWSER_GPU=1 npx playwright test tests/browser/sensor-packed-readback.spec.ts tests/browser/gpu-readback.spec.ts tests/browser/sensor-rates.spec.ts\""
+  },
+  "finalBundle": {
+    "index.html": {
+      "bytes": 451,
+      "sha256": "1f005e96fab979d8883ac94bddcba2bfce93108a5e38c53a4a2875c9fd8dedb3"
+    },
+    "assets/editor.worker-h19R126F.js": {
+      "bytes": 251659,
+      "sha256": "a6f05ad5eeccc4470c76395a26ccb3bbba0bca46946d28f8d44cfdfccbaaa225"
+    },
+    "assets/index-B1mGwatl.js": {
+      "bytes": 3422085,
+      "sha256": "98d7b41d69945624067539ea7367eb4c9961af78e0a4f846e3ab97b8c3c81018"
+    },
+    "assets/modelica-lsp.worker-B-3Ki2Sb.js": {
+      "bytes": 6806,
+      "sha256": "c65d5e2342790c4e734f65afd6188941fb0cec43bc18be7ad1a960c8f0483de3"
+    },
+    "assets/modelica-runtime-math.worker-CCizLMX1.js": {
+      "bytes": 10117,
+      "sha256": "73dc76378f66853ddb6b53dae3d4747ddcbf293b391f95487b77d7bd79b01117"
+    },
+    "assets/modelica-state.worker-D8Xf8AWk.js": {
+      "bytes": 819246,
+      "sha256": "f9e78652431d40e0269b98ac10b4f920ef9181aecd714311d549b912cb1e2d70"
+    },
+    "assets/modelica-vision.worker-DuXKo6E9.js": {
+      "bytes": 852011,
+      "sha256": "119225fad29c443824fc94dfe157523f0b6ee2feeaa30a6a2a4144f135ba1d9e"
+    },
+    "assets/physics.worker-CNbjWayI.js": {
+      "bytes": 1653,
+      "sha256": "ddd52673d51e2d2d887e0f3b4fc7402df7a4b0caa7db3f9dd730e06d2cec8945"
+    },
+    "assets/sensor-render.worker-CKiEWxkI.js": {
+      "bytes": 723715,
+      "sha256": "77e4fd3ff969b78ea49429276de20fd44e4dbd922e3ef2777e2611c155b9ca35"
+    },
+    "assets/viewer.worker-BRivRdu2.js": {
+      "bytes": 721415,
+      "sha256": "9df091503aef1bdf6bb288bc75f8d1ac56594140bb090352c5041789bcffccaf"
+    }
+  },
+  "unrestrictedCharacterization": "dev/sensor-normal-preview-performance-verification.json",
+  "flowCountsScope": "Per450-frame run; two runs per condition total900camera/200LiDAR/900IMU/100GPS captures"
+}

@@ -1,0 +1,104 @@
+{
+  "status": "ACTUAL_FULL_FAST_EARLY_PREPARATION_PROFILE_AND_TERMINAL_COUNTERS_ROOT_REHASH_PASS",
+  "baselineEvidence": {
+    "path": "dev/rumoca-fast-native-preparation-counts-verification.json",
+    "sha256": "bdba466e38c5bfc1778a828cb5a31943c2ea6805fa080711f0a3775a1c81dced",
+    "independentlyRehashedFiles": 12
+  },
+  "sourceSha256": "d42da6959fee8a629c6a9850fef31559ba692f5bafd3001ba69106200f34ea11",
+  "producerSha256": "a04a1d082d4de3cb8e12ee7fcad97131b5b059a2903b5a7fdce452732c113711",
+  "producerSourceManifestSha256": "ab1819fccee7b380d7c3a0104ecab4f109e5eab555e8b925aa34ab04d2a7be01",
+  "diagnosticOnly": true,
+  "profile": {
+    "pid": 101761,
+    "samples": 797,
+    "lostSamples": 0,
+    "event": "cpu/cycles/Pu",
+    "requestedSeconds": 8,
+    "requestedFrequencyHz": 99,
+    "callGraph": "dwarf,16384",
+    "intervalScope": "Observed running process before its first NATIVE_PREPARATION marker; early DAE projection/dependency preparation, not native schedule certification or WASM execution.",
+    "resource": {
+      "exitCode": 0,
+      "elapsedMs": 8173.664409,
+      "peakRssKiB": 22248,
+      "minimumAvailableKiB": 57377884,
+      "note": "Exact completed guardian stdout session19434; observer process only, not compiler memory."
+    },
+    "selfPercent": {
+      "projectionExpressionValidationMemo": 41.68,
+      "expressionDomainContext": 10.59,
+      "visitedInsert": 10.08,
+      "structuralResolveCoordinate": 5.33,
+      "valueTypeScalarCount": 5.31,
+      "projectionAllScalars": 4.9,
+      "visitExpressionOnce": 4.67,
+      "primitiveOperation": 4.62,
+      "binderDomain": 4.31
+    },
+    "rawTrace": {
+      "path": "$HOME/scratch/slam_web/profiles/full-fast-early-diagnostic/perf.data",
+      "bytes": 13372920,
+      "sha256": "01a14e5d64eb5cb90ea99cf77730055632be7d9c0572dafcf53d34e2fc14a05b",
+      "retainedOutsideRepository": true
+    }
+  },
+  "terminalBaseline": {
+    "resource": {
+      "exitCode": 137,
+      "stopped": "rss-limit",
+      "signal": "SIGKILL",
+      "elapsedMs": 245631.189916,
+      "peakRssKiB": 8406428,
+      "minimumAvailableKiB": 51806188,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "secondsLimit": 600,
+      "captureNote": "Values transcribed exactly from authoritative guardian stdout of agent session 62022 after terminal completion; initial stdout was not automatically saved to file.",
+      "log": "$HOME/scratch/slam_web/tmp/fast-native-preparation-diagnostic/run/replay.log",
+      "cpuAffinity": "6,7",
+      "nice": 15,
+      "workers": 4
+    },
+    "sourcePasses": 3,
+    "completeDependencyPasses": 2,
+    "finalFrontier": "third before_coverage; no third dependency_progress/complete marker",
+    "counts": {
+      "families": 13537,
+      "reads": 633864,
+      "producerReadPairsPerOldDerive": 8580616968,
+      "edgesPerCompletePass": 90552,
+      "edgeCapacityPerCompletePass": 103488,
+      "edgeCapacityBytes": 827904,
+      "valueOpCapacityBytesPerPass": 140298496,
+      "readCapacityBytesPerPass": 25354560
+    },
+    "artifacts": {
+      "solveIssued": false,
+      "nativeIssued": false,
+      "numericalCases": 0
+    }
+  },
+  "nextActions": [
+    "Qualify candidate-index v2, then retry the exact unchanged full-size source under the same guards.",
+    "If RSS remains limiting, measure retained scalar AD and artifact allocations before subsequent native validation.",
+    "Preserve exact root/domain/guard obligations in any projection optimization."
+  ],
+  "limitations": [
+    "This early profile does not attribute the later 8GiB RSS limit.",
+    "Observed edge capacity is under1MiB per completed graph; it does not explain the RSS limit.",
+    "No full-size executable, numerical detector execution, uint8/float32 path, full SLAM or runtime throughput is established."
+  ],
+  "archive": [
+    {
+      "path": "record.log",
+      "bytes": 187,
+      "sha256": "75d6d1cb95f43a6773f137a2b45f7ba9fb88e338bef9d813dd4ea2c67862dc9a"
+    },
+    {
+      "path": "perf-self.txt",
+      "bytes": 2383,
+      "sha256": "3321ffdd1d2e17f03ec9142e30c3244a6bf60953c20fd805c84848097e20ea21"
+    }
+  ]
+}

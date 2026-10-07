@@ -1,0 +1,2395 @@
+{
+  "status": "ACTUAL_PINNED_NODE_AND_CHROMIUM_PHYSICS_CPU_PROFILE_PASS",
+  "recordedAt": "2026-10-04T22:02:18.788Z",
+  "sourceSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+  "compilerWasmSha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4",
+  "compiler": {
+    "version": "0.10.0",
+    "revision": "e1e7783f1fb4"
+  },
+  "workload": {
+    "rates": {
+      "cameraHz": 90,
+      "lidarHz": 20,
+      "imuHz": 90,
+      "gpsHz": 10
+    },
+    "solver": {
+      "dt": 0.005,
+      "mode": "rk-like",
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "cameraFrames": 900,
+    "physicsEndpoints": 1000,
+    "source": "models/LabQuadrotor.mo",
+    "warmupCameraFrames": 30,
+    "autopilot": true,
+    "indoorTour": false,
+    "commandTime": "held at each camera-frame start"
+  },
+  "node": {
+    "status": "ACTUAL_PINNED_PHYSICS_PROFILE_AND_DELTA_PARITY_PASS",
+    "sourceSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+    "compilerWasmSha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4",
+    "compiler": {
+      "version": "0.10.0",
+      "revision": "e1e7783f1fb4"
+    },
+    "node": "v24.21.0",
+    "rates": {
+      "cameraHz": 90,
+      "lidarHz": 20,
+      "imuHz": 90,
+      "gpsHz": 10
+    },
+    "frames": 900,
+    "solver": {
+      "dt": 0.005,
+      "mode": "rk-like",
+      "atol": 1e-8,
+      "rtol": 0.000001
+    },
+    "runs": [
+      {
+        "mode": "baseline",
+        "preparationMs": 3815.641499,
+        "events": 1000,
+        "inputApiCalls": 1000,
+        "omittedIdenticalBatches": 0,
+        "visibleValues": 269,
+        "neededSnapshotValues": 25,
+        "meanJsonBytes": 9878.661,
+        "perEvent": {
+          "inputEncoding": {
+            "samples": 1000,
+            "meanMs": 0.004351470999999947,
+            "p95Ms": 0.004799999999704596,
+            "totalMs": 4.351470999999947
+          },
+          "inputApi": {
+            "samples": 1000,
+            "meanMs": 0.05250750999998308,
+            "p95Ms": 0.07753099999990809,
+            "totalMs": 52.507509999983085
+          },
+          "advance": {
+            "samples": 1000,
+            "meanMs": 1.8700968380000076,
+            "p95Ms": 2.707402000000002,
+            "totalMs": 1870.0968380000077
+          },
+          "stateApi": {
+            "samples": 1000,
+            "meanMs": 0.24470615500001167,
+            "p95Ms": 0.25616400000035355,
+            "totalMs": 244.70615500001168
+          },
+          "stateParse": {
+            "samples": 1000,
+            "meanMs": 0.08063490099999127,
+            "p95Ms": 0.10214199999973061,
+            "totalMs": 80.63490099999126
+          },
+          "extract": {
+            "samples": 1000,
+            "meanMs": 0.0780155079999995,
+            "p95Ms": 0.10329100000035396,
+            "totalMs": 78.0155079999995
+          },
+          "total": {
+            "samples": 1000,
+            "meanMs": 2.249677482000002,
+            "p95Ms": 3.2615900000000693,
+            "totalMs": 2249.677482000002
+          }
+        },
+        "perCameraFrameMs": 2.4996416466666687,
+        "last": {
+          "time": 10.333333333333334,
+          "x": 1.6514494044140813,
+          "y": 2.998531814206594,
+          "z": 1.8319312688671294,
+          "quaternion": [
+            0.01952169478011004,
+            -0.0046580260001342685,
+            -0.01050279012487491,
+            0.9997434158954418
+          ],
+          "velocity": [
+            -0.5634239832656099,
+            0.14553441534149483,
+            0.008093849203256356
+          ],
+          "accel": [
+            -0.04019596959437172,
+            0.00918023237963785,
+            9.795340661298766
+          ],
+          "gyro": [
+            -0.003399040777535136,
+            -0.00806676147606812,
+            0.38094698547847816
+          ],
+          "command": {
+            "forward": 0.6,
+            "left": 0,
+            "up": 0.0026946525457942623,
+            "yaw": 0.4
+          },
+          "propellerAngles": [
+            7771.983936552138,
+            7771.563752267539,
+            -7883.298999432251,
+            -7883.449632751504
+          ]
+        },
+        "actualParity": "reference trace"
+      },
+      {
+        "mode": "delta-input-transport",
+        "preparationMs": 581.1504689999992,
+        "events": 1000,
+        "inputApiCalls": 900,
+        "omittedIdenticalBatches": 100,
+        "visibleValues": 269,
+        "neededSnapshotValues": 25,
+        "meanJsonBytes": 9878.661,
+        "perEvent": {
+          "inputEncoding": {
+            "samples": 1000,
+            "meanMs": 0.0064183770000272485,
+            "p95Ms": 0.009151000000201748,
+            "totalMs": 6.418377000027249
+          },
+          "inputApi": {
+            "samples": 1000,
+            "meanMs": 0.04838162499997998,
+            "p95Ms": 0.06997100000080536,
+            "totalMs": 48.38162499997998
+          },
+          "advance": {
+            "samples": 1000,
+            "meanMs": 1.7868360000000285,
+            "p95Ms": 1.8060069999992265,
+            "totalMs": 1786.8360000000284
+          },
+          "stateApi": {
+            "samples": 1000,
+            "meanMs": 0.2271919979999566,
+            "p95Ms": 0.24626400000124704,
+            "totalMs": 227.19199799995658
+          },
+          "stateParse": {
+            "samples": 1000,
+            "meanMs": 0.07996412100001361,
+            "p95Ms": 0.0964719999992667,
+            "totalMs": 79.96412100001362
+          },
+          "extract": {
+            "samples": 1000,
+            "meanMs": 0.07513856000000851,
+            "p95Ms": 0.09849099999883038,
+            "totalMs": 75.13856000000851
+          },
+          "total": {
+            "samples": 1000,
+            "meanMs": 2.143966560000001,
+            "p95Ms": 2.181453999999576,
+            "totalMs": 2143.9665600000008
+          }
+        },
+        "perCameraFrameMs": 2.3821850666666675,
+        "last": {
+          "time": 10.333333333333334,
+          "x": 1.6514494044140813,
+          "y": 2.998531814206594,
+          "z": 1.8319312688671294,
+          "quaternion": [
+            0.01952169478011004,
+            -0.0046580260001342685,
+            -0.01050279012487491,
+            0.9997434158954418
+          ],
+          "velocity": [
+            -0.5634239832656099,
+            0.14553441534149483,
+            0.008093849203256356
+          ],
+          "accel": [
+            -0.04019596959437172,
+            0.00918023237963785,
+            9.795340661298766
+          ],
+          "gyro": [
+            -0.003399040777535136,
+            -0.00806676147606812,
+            0.38094698547847816
+          ],
+          "command": {
+            "forward": 0.6,
+            "left": 0,
+            "up": 0.0026946525457942623,
+            "yaw": 0.4
+          },
+          "propellerAngles": [
+            7771.983936552138,
+            7771.563752267539,
+            -7883.298999432251,
+            -7883.449632751504
+          ]
+        },
+        "actualParity": "all25public values bit-identical at every measured endpoint"
+      }
+    ],
+    "sourceUnchanged": true,
+    "physicsStepsSkipped": 0,
+    "hostMathFallback": false,
+    "productionPinChanged": false,
+    "limitations": [
+      "Isolated actual session on one CPU; no GPU sensors, rendering, worker RPC or whole-pipeline throughput.",
+      "Diagnostic JSON parse is timed separately and excluded from production-equivalent total; extraction includes its own production parse.",
+      "Sampling profiler and native perf overhead affect timings; not an unprofiled speedup claim.",
+      "Native perf JIT symbols require corresponding V8 map/dump; no Rust source phase attributed from unresolved code."
+    ]
+  },
+  "chromium": {
+    "status": "ACTUAL_PINNED_CHROMIUM_WORKER_PHYSICS_PROFILE_PASS",
+    "recordedAt": "2026-10-04T21:56:29.792Z",
+    "browser": "154.0.8037.92",
+    "sourceSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+    "compilerWasmSha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4",
+    "probeSha256": "95f2d4cc364d9aed5c7348f711266264de5ea8d1cc90e48485abe5b47d2bf6e1",
+    "preparationMs": 3965.5,
+    "frames": 900,
+    "events": 1000,
+    "rates": {
+      "cameraHz": 90,
+      "lidarHz": 20,
+      "imuHz": 90,
+      "gpsHz": 10
+    },
+    "perEvent": {
+      "inputEncoding": {
+        "count": 1000,
+        "meanMs": 0.003200000166893005,
+        "p95Ms": 0
+      },
+      "setInputs": {
+        "count": 1000,
+        "meanMs": 0.0800999984741211,
+        "p95Ms": 0.10000002384185791
+      },
+      "advance": {
+        "count": 1000,
+        "meanMs": 2.5706999992132187,
+        "p95Ms": 8.5
+      },
+      "stateJson": {
+        "count": 1000,
+        "meanMs": 0.33469999992847443,
+        "p95Ms": 0.40000009536743164
+      },
+      "snapshotParseAndExtract": {
+        "count": 1000,
+        "meanMs": 0.09970000064373016,
+        "p95Ms": 0.20000004768371582
+      },
+      "total": {
+        "count": 1000,
+        "meanMs": 3.0883999984264374,
+        "p95Ms": 10.699999928474426
+      }
+    },
+    "perCameraFrameMs": 3.4315555538071525,
+    "meanJsonBytes": 9878.661,
+    "visibleValues": 269,
+    "last": {
+      "time": 10.333333333333334,
+      "x": 1.6514494044140813,
+      "y": 2.998531814206594,
+      "z": 1.8319312688671294,
+      "quaternion": [
+        0.01952169478011004,
+        -0.0046580260001342685,
+        -0.01050279012487491,
+        0.9997434158954418
+      ],
+      "velocity": [
+        -0.5634239832656099,
+        0.14553441534149483,
+        0.008093849203256356
+      ],
+      "accel": [
+        -0.04019596959437172,
+        0.00918023237963785,
+        9.795340661298766
+      ],
+      "gyro": [
+        -0.003399040777535136,
+        -0.00806676147606812,
+        0.38094698547847816
+      ],
+      "command": {
+        "forward": 0.6,
+        "left": 0,
+        "up": 0.0026946525457942623,
+        "yaw": 0.4
+      },
+      "propellerAngles": [
+        7771.983936552138,
+        7771.563752267539,
+        -7883.298999432251,
+        -7883.449632751504
+      ]
+    },
+    "compiler": {
+      "version": "0.10.0",
+      "revision": "e1e7783f1fb4"
+    },
+    "scope": "Unmodified full Modelica plant in an isolated dedicated worker. Same high sensor-clock endpoints, solver tolerances and held commands; no GPU, rendering, RPC or whole-pipeline throughput.",
+    "productionPinChanged": false,
+    "physicsStepsSkipped": 0,
+    "hostMathFallback": false,
+    "profileSamples": 2329,
+    "cpuSummary": {
+      "samples": 2329,
+      "sampledMicroseconds": 3287683,
+      "topExclusive": [
+        {
+          "functionName": "wasm-function[23]",
+          "microseconds": 878119
+        },
+        {
+          "functionName": "wasm-function[32]",
+          "microseconds": 356292
+        },
+        {
+          "functionName": "wasm-function[5276]",
+          "microseconds": 288440
+        },
+        {
+          "functionName": "wasm-function[354]",
+          "microseconds": 197058
+        },
+        {
+          "functionName": "wasm-function[1118]",
+          "microseconds": 137646
+        },
+        {
+          "functionName": "wasm-function[5131]",
+          "microseconds": 129002
+        },
+        {
+          "functionName": "wasm-function[4104]",
+          "microseconds": 109379
+        },
+        {
+          "functionName": "frame",
+          "microseconds": 105132
+        },
+        {
+          "functionName": "wasm-function[176]",
+          "microseconds": 97550
+        },
+        {
+          "functionName": "readPhysicsSnapshot",
+          "microseconds": 92175
+        },
+        {
+          "functionName": "wasm-function[2038]",
+          "microseconds": 83700
+        },
+        {
+          "functionName": "wasm-function[3505]",
+          "microseconds": 69981
+        },
+        {
+          "functionName": "set_inputs",
+          "microseconds": 58719
+        },
+        {
+          "functionName": "(idle)",
+          "microseconds": 55881
+        },
+        {
+          "functionName": "wasm-function[5574]",
+          "microseconds": 51797
+        },
+        {
+          "functionName": "encode",
+          "microseconds": 40825
+        },
+        {
+          "functionName": "wasm-function[3476]",
+          "microseconds": 37033
+        },
+        {
+          "functionName": "wasm-function[7308]",
+          "microseconds": 37010
+        },
+        {
+          "functionName": "wasm-function[7674]",
+          "microseconds": 35947
+        },
+        {
+          "functionName": "wasm-function[3379]",
+          "microseconds": 31822
+        },
+        {
+          "functionName": "wasm-function[12893]",
+          "microseconds": 18915
+        },
+        {
+          "functionName": "wasm-function[6041]",
+          "microseconds": 16424
+        },
+        {
+          "functionName": "wasm-function[4424]",
+          "microseconds": 15936
+        },
+        {
+          "functionName": "wasm-function[2234]",
+          "microseconds": 14002
+        },
+        {
+          "functionName": "wasm-function[1959]",
+          "microseconds": 13761
+        }
+      ],
+      "scope": "Actual dedicated worker CDP profile. Unresolved stripped WASM symbols cannot establish exact Rust ownership; includes parent finalization idle tail."
+    }
+  },
+  "resources": {
+    "node": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10",
+        "/nix/store/gxq2cd70i077rah1d4hkzc1lpq8q4pv8-nodejs-24.21.0/bin/node",
+        "--experimental-transform-types",
+        "--perf-basic-prof",
+        "--perf-basic-prof-path=$HOME/scratch/slam_web/tmp/physics-critical-path",
+        "--interpreted-frames-native-stack",
+        "dev/probe-physics-critical-path.mjs",
+        "$HOME/scratch/slam_web/tmp/physics-critical-path"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/node-profile.log",
+      "elapsedMs": 10743.633784,
+      "peakRssKiB": 594192,
+      "minimumAvailableKiB": 58376024,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    },
+    "chromium": {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "taskset",
+        "-c",
+        "10",
+        "node",
+        "dev/probe-physics-browser-cpu.mjs",
+        "$HOME/scratch/slam_web/tmp/physics-critical-path/browser"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/browser.log",
+      "elapsedMs": 9725.156801000001,
+      "peakRssKiB": 1404244,
+      "minimumAvailableKiB": 57902016,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    }
+  },
+  "nativePerf": {
+    "samples": 439,
+    "lost": 0,
+    "finalized": true,
+    "termination": "owned perf recorder received SIGINT and exited after writing its final data",
+    "symbols": "best-effort exact-address join against the preserved V8 perf map; stripped module has no Rust owner names",
+    "summary": {
+      "samples": 439,
+      "lostSamples": 0,
+      "method": "perf script -G first native sample IP joined to preservedV8 perf-basic-prof map ranges; best-effort JIT address mapping, no Rust source-symbol claims",
+      "top": [
+        {
+          "symbol": "JS:wasm-function[23]-23",
+          "samples": 87,
+          "percent": 19.81776765375854
+        },
+        {
+          "symbol": "unresolved/native",
+          "samples": 79,
+          "percent": 17.995444191343964
+        },
+        {
+          "symbol": "JS:wasm-function[32]-32",
+          "samples": 50,
+          "percent": 11.389521640091116
+        },
+        {
+          "symbol": "JS:wasm-function[5276]-5276",
+          "samples": 35,
+          "percent": 7.972665148063781
+        },
+        {
+          "symbol": "JS:wasm-function[354]-354",
+          "samples": 32,
+          "percent": 7.289293849658314
+        },
+        {
+          "symbol": "JS:wasm-function[5131]-5131",
+          "samples": 21,
+          "percent": 4.783599088838269
+        },
+        {
+          "symbol": "JS:wasm-function[1118]-1118",
+          "samples": 19,
+          "percent": 4.328018223234624
+        },
+        {
+          "symbol": "JS:wasm-function[4104]-4104",
+          "samples": 17,
+          "percent": 3.8724373576309796
+        },
+        {
+          "symbol": "JS:wasm-function[3505]-3505",
+          "samples": 12,
+          "percent": 2.733485193621868
+        },
+        {
+          "symbol": "JS:wasm-function[176]-176",
+          "samples": 9,
+          "percent": 2.050113895216401
+        },
+        {
+          "symbol": "JS:wasm-function[7308]-7308",
+          "samples": 7,
+          "percent": 1.5945330296127562
+        },
+        {
+          "symbol": "JS:wasm-function[15944]-15944",
+          "samples": 6,
+          "percent": 1.366742596810934
+        },
+        {
+          "symbol": "JS:wasm-function[2038]-2038",
+          "samples": 6,
+          "percent": 1.366742596810934
+        },
+        {
+          "symbol": "JS:wasm-function[6041]-6041",
+          "samples": 5,
+          "percent": 1.1389521640091116
+        },
+        {
+          "symbol": "JS:wasm-function[9398]-9398",
+          "samples": 4,
+          "percent": 0.9111617312072893
+        }
+      ]
+    }
+  },
+  "generatedCode": {
+    "compilerWasmSha256": "1e0e098a7ae368c89bad1826efe35369921c803269b989946120e38ebf41aaf4",
+    "disassembly": "$HOME/scratch/slam_web/tmp/physics-critical-path/compiler.disassembly",
+    "observations": [
+      "Hot wasm-function[23] starts a 1088-byte stack frame and a roughly 32-way tag br_table.",
+      "Hot wasm-function[32] includes vector growth and memory.fill.",
+      "These are observed bytecode shapes, not an exact Rust function attribution from the stripped module."
+    ]
+  },
+  "solveInventory": {
+    "sourceSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+    "schema": 70,
+    "layout": {
+      "y": 262,
+      "p": 192
+    },
+    "states": 21,
+    "algebraics": 175,
+    "outputs": 66,
+    "pureCallOwners": 2,
+    "continuous": {
+      "implicit_rhs": {
+        "nodes": 6,
+        "kinds": {
+          "ScalarPrograms": 1,
+          "Map": 5
+        },
+        "opcodes": {
+          "LoadY": 278,
+          "Const": 56,
+          "Binary": 225,
+          "LoadP": 111,
+          "Unary": 35,
+          "StoreOutput": 84,
+          "TensorLoad": 99,
+          "PureCall": 2,
+          "TensorBinary": 64,
+          "StoreOutputRange": 38,
+          "MatrixMultiply": 20,
+          "Select": 13
+        },
+        "operators": {
+          "Binary:Mul": 77,
+          "Binary:Add": 39,
+          "Unary:Sqrt": 14,
+          "Binary:Sub": 87,
+          "Binary:Div": 9,
+          "Binary:Atan2": 2,
+          "Unary:Neg": 11,
+          "Binary:Max": 7,
+          "Binary:Min": 3,
+          "Unary:Asin": 1,
+          "TensorBinary:Sub": 48,
+          "TensorBinary:Div": 1,
+          "TensorBinary:Mul": 6,
+          "TensorBinary:Add": 9,
+          "Unary:Sin": 5,
+          "Binary:Or": 1,
+          "Unary:Cos": 4
+        },
+        "calls": [
+          {
+            "inputStarts": [
+              4,
+              8
+            ],
+            "dstStart": 11
+          },
+          {
+            "inputStarts": [
+              9
+            ],
+            "dstStart": 13
+          }
+        ]
+      },
+      "derivative_rhs": {
+        "nodes": 6,
+        "kinds": {
+          "Map": 3,
+          "ScalarPrograms": 2,
+          "LinSolve": 1
+        },
+        "opcodes": {
+          "LoadP": 2,
+          "LoadY": 13,
+          "Binary": 8,
+          "StoreOutput": 7,
+          "TensorLoad": 6,
+          "TensorBinary": 2,
+          "StoreOutputRange": 1
+        },
+        "operators": {
+          "Binary:Mul": 7,
+          "TensorBinary:Add": 1,
+          "TensorBinary:Sub": 1,
+          "Binary:Sub": 1
+        },
+        "calls": []
+      },
+      "residual": {
+        "nodes": 6,
+        "kinds": {
+          "ScalarPrograms": 1,
+          "Map": 5
+        },
+        "opcodes": {
+          "LoadY": 278,
+          "Const": 56,
+          "Binary": 225,
+          "LoadP": 111,
+          "Unary": 35,
+          "StoreOutput": 84,
+          "TensorLoad": 99,
+          "PureCall": 2,
+          "TensorBinary": 64,
+          "StoreOutputRange": 38,
+          "MatrixMultiply": 20,
+          "Select": 13
+        },
+        "operators": {
+          "Binary:Mul": 77,
+          "Binary:Add": 39,
+          "Unary:Sqrt": 14,
+          "Binary:Sub": 87,
+          "Binary:Div": 9,
+          "Binary:Atan2": 2,
+          "Unary:Neg": 11,
+          "Binary:Max": 7,
+          "Binary:Min": 3,
+          "Unary:Asin": 1,
+          "TensorBinary:Sub": 48,
+          "TensorBinary:Div": 1,
+          "TensorBinary:Mul": 6,
+          "TensorBinary:Add": 9,
+          "Unary:Sin": 5,
+          "Binary:Or": 1,
+          "Unary:Cos": 4
+        },
+        "calls": [
+          {
+            "inputStarts": [
+              4,
+              8
+            ],
+            "dstStart": 11
+          },
+          {
+            "inputStarts": [
+              9
+            ],
+            "dstStart": 13
+          }
+        ]
+      },
+      "manifold_residual": {
+        "nodes": 0,
+        "kinds": {},
+        "opcodes": {},
+        "operators": {},
+        "calls": []
+      }
+    },
+    "events": {
+      "nodes": null,
+      "kinds": {},
+      "opcodes": {
+        "LoadY": 12,
+        "LoadP": 12,
+        "Binary": 12,
+        "StoreOutput": 12
+      },
+      "operators": {
+        "Binary:Sub": 12
+      },
+      "calls": []
+    },
+    "refresh": {
+      "algebraic": 241,
+      "tearingBlocks": 0,
+      "nativeRefusal": "native tensor targets are not one bounded dense injective range"
+    },
+    "rawWireNote": "raw original JSON retained; diagnostic reads never reissue/roundtrip source-owner u64 IDs",
+    "producerBinarySha256": "745f8942e586d94a697e81aca41f2044b52781c608d3059f9f4a549fa1c58bf2",
+    "producerSourceClosureSha256": "53db01b95ff69ab59122c068b5697c162a199c2f3937bfc3dca4a57e1d2eacd8",
+    "scope": "Actual full-source Solve lowering only. No native ODE or native RHS execution admitted."
+  },
+  "adapter": {
+    "status": "FROZEN_REVIEW_FULL_PLANT_BROWSER_PARITY_ACTIVATION_AND_CPU_PROFILE_PASS_NO_CRITICAL_PATH_GAIN_ESTABLISHED",
+    "owner": "rumoca-sim/src/wasm_execution.rs",
+    "contract": "Existing SolveExecutionBackend injected into the existing ME component/RK45 path; supported original selected scalar programs only. LinSolve, Min/Max, multi-output/range, pure calls, directional/event/assignment schedules decline before execution. Complete original output mapping and exact input lengths retained.",
+    "coverage": {
+      "blocks": [
+        {
+          "block": "implicit_rhs",
+          "programs": 121,
+          "outputs": 258,
+          "admitted": 53,
+          "operations": 1313,
+          "admittedOperations": 431,
+          "refusals": {
+            "WASM ME scalar profile declines Binary": 6,
+            "WASM ME profile requires one terminal scalar output": 46,
+            "WASM ME scalar profile declines MatrixMultiply": 16
+          }
+        },
+        {
+          "block": "derivative_rhs",
+          "programs": 17,
+          "outputs": 21,
+          "admitted": 15,
+          "operations": 86,
+          "admittedOperations": 70,
+          "refusals": {
+            "WASM ME profile requires one terminal scalar output": 2
+          }
+        },
+        {
+          "block": "root_conditions",
+          "programs": 12,
+          "outputs": 12,
+          "admitted": 12,
+          "operations": 48,
+          "admittedOperations": 48,
+          "refusals": {}
+        }
+      ],
+      "schedules": [
+        {
+          "plan": "algebraic",
+          "dispatches": [
+            {
+              "dispatch": "Certified",
+              "refusal": null,
+              "steps": [
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(3)",
+                  "programs": 2,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 6
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4)",
+                  "programs": 15,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 51
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(7)",
+                  "programs": 8,
+                  "admitted": false,
+                  "admittedPrograms": 2,
+                  "targetCount": 9
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(10)",
+                  "programs": 12,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 13
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(13)",
+                  "programs": 9,
+                  "admitted": false,
+                  "admittedPrograms": 7,
+                  "targetCount": 9
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(16)",
+                  "programs": 9,
+                  "admitted": false,
+                  "admittedPrograms": 7,
+                  "targetCount": 9
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(19)",
+                  "programs": 9,
+                  "admitted": false,
+                  "admittedPrograms": 7,
+                  "targetCount": 9
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(22)",
+                  "programs": 37,
+                  "admitted": false,
+                  "admittedPrograms": 27,
+                  "targetCount": 40
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(28)",
+                  "programs": 1,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 1
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(34)",
+                  "programs": 1,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 1
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(40)",
+                  "programs": 1,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 1
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(46)",
+                  "programs": 48,
+                  "admitted": false,
+                  "admittedPrograms": 3,
+                  "targetCount": 70
+                }
+              ]
+            },
+            {
+              "dispatch": "Uncertified",
+              "refusal": null,
+              "steps": [
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(1)",
+                  "programs": 2,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 6
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(2)",
+                  "programs": 120,
+                  "admitted": false,
+                  "admittedPrograms": 53,
+                  "targetCount": 215
+                },
+                {
+                  "kind": "ProjectComplete"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "plan": "derivative",
+          "dispatches": [
+            {
+              "dispatch": "Certified",
+              "refusal": null,
+              "steps": [
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967299)",
+                  "programs": 1,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 3
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967300)",
+                  "programs": 6,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 26
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967303)",
+                  "programs": 8,
+                  "admitted": false,
+                  "admittedPrograms": 7,
+                  "targetCount": 8
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967306)",
+                  "programs": 8,
+                  "admitted": false,
+                  "admittedPrograms": 7,
+                  "targetCount": 8
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967309)",
+                  "programs": 8,
+                  "admitted": false,
+                  "admittedPrograms": 7,
+                  "targetCount": 8
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967312)",
+                  "programs": 13,
+                  "admitted": false,
+                  "admittedPrograms": 10,
+                  "targetCount": 16
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967317)",
+                  "programs": 1,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 1
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967322)",
+                  "programs": 1,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 1
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967327)",
+                  "programs": 1,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 1
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967332)",
+                  "programs": 40,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 50
+                }
+              ]
+            },
+            {
+              "dispatch": "Uncertified",
+              "refusal": null,
+              "steps": [
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967297)",
+                  "programs": 1,
+                  "admitted": false,
+                  "admittedPrograms": 0,
+                  "targetCount": 3
+                },
+                {
+                  "kind": "Assignments",
+                  "identity": "RefreshSequenceId(4294967298)",
+                  "programs": 68,
+                  "admitted": false,
+                  "admittedPrograms": 31,
+                  "targetCount": 119
+                },
+                {
+                  "kind": "ProjectComplete"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "plan": "root",
+          "dispatches": [
+            {
+              "dispatch": "Certified",
+              "refusal": null,
+              "steps": [
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                }
+              ]
+            },
+            {
+              "dispatch": "Uncertified",
+              "refusal": null,
+              "steps": [
+                {
+                  "kind": "ProjectComplete"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "plan": "event",
+          "dispatches": [
+            {
+              "dispatch": "Certified",
+              "refusal": null,
+              "steps": [
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                },
+                {
+                  "kind": "Project"
+                }
+              ]
+            },
+            {
+              "dispatch": "Uncertified",
+              "refusal": null,
+              "steps": [
+                {
+                  "kind": "ProjectComplete"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "scope": "Source-issued scalar admission inventory only; not runtime execution or full compiled RHS"
+    },
+    "interpretedWork": "Static counts are not dynamic CPU hit share. No whole issued assignment sequence is admitted; complete derivative RHS remains canonical.",
+    "configuration": "Structured interactive configuration preserves Auto default and typed Interpreter policy. Six binding controls passed, including18-step Auto/Interpreter/legacy traces, checked initial inputs, invalid-input rollback, reset and edited-source propagation. Actual wasm32 execution remains pending.",
+    "producerBinarySha256": "2e23ac8ab3eb770e1bc2207658a67657c1bcaddc90c9ed44a265792fde584f70",
+    "gates": {
+      "failedRkOnly": {
+        "reason": "Pre-existing unguarded sim test imports require solver-diffsol; no owned tests ran",
+        "resource": {
+          "command": [
+            "nice",
+            "-n",
+            "10",
+            "taskset",
+            "-c",
+            "6,7",
+            "cargo",
+            "test",
+            "-p",
+            "rumoca-sim",
+            "--no-default-features",
+            "--features",
+            "solver-rk45",
+            "--lib",
+            "portable_me_",
+            "-j2",
+            "--config",
+            "profile.dev.package.rumoca-eval-dae.opt-level=3"
+          ],
+          "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/admission.log",
+          "elapsedMs": 294091.613281,
+          "peakRssKiB": 1560252,
+          "minimumAvailableKiB": 53248512,
+          "peakCacheBytes": null,
+          "rssLimitMiB": 8192,
+          "availableFloorMiB": 16384,
+          "rssScope": "owned process group and identified descendants, including detached browser groups",
+          "secondsLimit": 600,
+          "signal": null,
+          "exitCode": 101
+        }
+      },
+      "sixControls": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10,11",
+          "cargo",
+          "test",
+          "-p",
+          "rumoca-sim",
+          "--no-default-features",
+          "--features",
+          "solver-rk45,solver-diffsol",
+          "--lib",
+          "portable_me_",
+          "-j2",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/admission-both-solvers.log",
+        "elapsedMs": 27818.880102000003,
+        "peakRssKiB": 1154700,
+        "minimumAvailableKiB": 56450644,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      },
+      "fullSourceInventory": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10",
+          "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/sim-profile-test",
+          "--exact",
+          "wasm_execution_profile::tests::portable_me_actual_full_source_admission_inventory",
+          "--ignored",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/full-source-inventory.log",
+        "elapsedMs": 132.77562700000001,
+        "peakRssKiB": null,
+        "minimumAvailableKiB": null,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 0
+      },
+      "scopedClippyAttempt": {
+        "status": "HISTORICAL_SIBLING_LINT_FAILURE_SUBSEQUENT_FINAL_SCOPED_CLIPPY_PASS",
+        "sourceManifestSha256": "b958ccf0ddc72e5f7b997fa480a45003a6d724a2f8b2a865102d3c087df35e27",
+        "resource": {
+          "command": [
+            "nice",
+            "-n",
+            "10",
+            "taskset",
+            "-c",
+            "10,11",
+            "cargo",
+            "clippy",
+            "-p",
+            "rumoca-bind-wasm",
+            "-p",
+            "rumoca-sim",
+            "--no-default-features",
+            "--features",
+            "rumoca-bind-wasm/sim-rk45,rumoca-bind-wasm/sim-diffsol",
+            "--all-targets",
+            "-j2",
+            "--config",
+            "profile.dev.package.rumoca-eval-dae.opt-level=3",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/scoped-clippy.log",
+          "elapsedMs": 13395.430714,
+          "peakRssKiB": 1224388,
+          "minimumAvailableKiB": 56210864,
+          "peakCacheBytes": null,
+          "rssLimitMiB": 8192,
+          "availableFloorMiB": 16384,
+          "rssScope": "owned process group and identified descendants, including detached browser groups",
+          "secondsLimit": 600,
+          "signal": null,
+          "exitCode": 101
+        },
+        "reason": "rumoca-eval-dae projection/query/guard_memo.rs excessive_nesting at126 and217; no sim/bind gate success claimed.",
+        "freshBrowserBuild": "Subsequent frozen package build passed; see reviewBrowserBuild."
+      }
+    },
+    "configurationControls": {
+      "status": "SIX_HOST_BINDING_CONTROLS_PASS_WITH_SEPARATE_FULL_PLANT_REVIEW_WASM_BROWSER_PROOF",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10,11",
+          "cargo",
+          "test",
+          "-p",
+          "rumoca-bind-wasm",
+          "--no-default-features",
+          "--features",
+          "sim-rk45,sim-diffsol",
+          "--lib",
+          "interactive_",
+          "-j2",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/configuration-object.log",
+        "elapsedMs": 26302.505411000002,
+        "peakRssKiB": 1399596,
+        "minimumAvailableKiB": 57022064,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      },
+      "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/configuration-object.log",
+      "initialFailure": {
+        "reason": "Serde accepted [] as default-filled struct; strict JSON-object boundary added and all controls rerun.",
+        "resource": {
+          "command": [
+            "nice",
+            "-n",
+            "10",
+            "taskset",
+            "-c",
+            "10,11",
+            "cargo",
+            "test",
+            "-p",
+            "rumoca-bind-wasm",
+            "--no-default-features",
+            "--features",
+            "sim-rk45,sim-diffsol",
+            "--lib",
+            "interactive_",
+            "-j2",
+            "--config",
+            "profile.dev.package.rumoca-eval-dae.opt-level=3"
+          ],
+          "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/configuration.log",
+          "elapsedMs": 344027.542151,
+          "peakRssKiB": 1582356,
+          "minimumAvailableKiB": 52668584,
+          "peakCacheBytes": null,
+          "rssLimitMiB": 8192,
+          "availableFloorMiB": 16384,
+          "rssScope": "owned process group and identified descendants, including detached browser groups",
+          "secondsLimit": 600,
+          "signal": null,
+          "exitCode": 101
+        },
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/configuration.log"
+      },
+      "sourceHashes": {
+        "crates/rumoca-bind-wasm/src/simulation_session_api.rs": "b84d9c6f365079cf48b53679a57f6f4ba8a41c7c51b5bd804dfd4f5ff2c01d58",
+        "crates/rumoca-bind-wasm/src/simulation_session_api/options.rs": "6237762c08846b328f1fd6ecbace116f74c29e59929a92b9f0bb0ce9cba83882",
+        "crates/rumoca-bind-wasm/src/tests/simulation_runtime_tests.rs": "e8061946327aa1e5c3fe1efcc90e98be2ef795bb9cbb6fd0afe10b74f9bc1791"
+      }
+    },
+    "nextRhsCapability": {
+      "status": "READ_ONLY_OWNER_ANALYSIS_NOT_IMPLEMENTED",
+      "actualIssuedNode": "continuous.derivative_rhs.nodes[4].LinSolve",
+      "matrix": {
+        "n": 3,
+        "representation": "full",
+        "input": "P",
+        "inputStart": 22,
+        "count": 9
+      },
+      "rhs": {
+        "input": "Y",
+        "inputStart": 44,
+        "count": 3
+      },
+      "sourceByteSpan": {
+        "start": 4414,
+        "end": 4437
+      },
+      "selectedCanonicalPolicy": "SmallDense (n<=16; source pattern Full), not Diagonal",
+      "canonicalOwner": "rumoca-eval-solve/src/linear_solve.rs::solve_all_unchecked / gaussian_eliminate",
+      "requirements": [
+        "Preserve finite matrix/RHS checks, last equal-magnitude pivot selected by Iterator::max_by(total_cmp(abs)), row normalization and elimination order, finite solution and original fault span.",
+        "Whole derivative outputs and complete exact-assignment schedules remain original owned programs; no matrix inverse, assumed diagonal inertia, rewritten plant or skipped integration steps.",
+        "Existing ME component and RK45/events remain unchanged; use CompiledSolveAssignmentSchedule checked program_ids/final_scalar_program/target_indices hook, with all required simultaneous local outputs and ordered inter-program Y updates."
+      ],
+      "runtimeAdmission": false
+    },
+    "finalScopedControls": {
+      "status": "SEVEN_CONTROLS_PASS_ONE_FULL_SOURCE_FIXTURE_IGNORED_IN_FOCUSED_COMMAND",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10,11",
+          "cargo",
+          "test",
+          "-p",
+          "rumoca-sim",
+          "--no-default-features",
+          "--features",
+          "solver-rk45,solver-diffsol",
+          "--lib",
+          "portable_me_",
+          "-j2",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/model-policy.log",
+        "elapsedMs": 128997.14700900001,
+        "peakRssKiB": 1568396,
+        "minimumAvailableKiB": 51584348,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "finalScopedClippy": {
+      "status": "PASS",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10,11",
+          "cargo",
+          "clippy",
+          "-p",
+          "rumoca-bind-wasm",
+          "-p",
+          "rumoca-sim",
+          "--no-default-features",
+          "--features",
+          "rumoca-bind-wasm/sim-rk45,rumoca-bind-wasm/sim-diffsol",
+          "--all-targets",
+          "-j2",
+          "--config",
+          "profile.dev.package.rumoca-eval-dae.opt-level=3",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/scoped-clippy-final.log",
+        "elapsedMs": 43845.425713000004,
+        "peakRssKiB": 1371196,
+        "minimumAvailableKiB": 47856328,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      }
+    },
+    "reviewBrowserBuild": {
+      "status": "PASS",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10,11",
+          "bash",
+          "-c",
+          "export PATH=\"/nix/store/sffq2m1v9g60ff8prg579dmmcyryrkam-rust-nightly-2026-02-27/bin:$HOME/.cargo/bin:$PATH\"; export RUSTC=/nix/store/sffq2m1v9g60ff8prg579dmmcyryrkam-rust-nightly-2026-02-27/bin/rustc CARGO=/nix/store/sffq2m1v9g60ff8prg579dmmcyryrkam-rust-nightly-2026-02-27/bin/cargo; exec /nix/store/dmfar0ixi9f97dr03drbfrmiv30nck5i-wasm-pack-0.15.0/bin/wasm-pack build crates/rumoca-bind-wasm --mode no-install --target web --release --no-opt --out-dir \"$HOME/scratch/slam_web/tmp/physics-critical-path/review-compiler\" -- --locked --features full-web"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/fresh-wasm.log",
+        "elapsedMs": 248623.636028,
+        "peakRssKiB": 1784976,
+        "minimumAvailableKiB": 53308424,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 600,
+        "signal": null,
+        "exitCode": 0
+      },
+      "sourceManifestSha256": "1198b1d5ad45968dc73268140b201fbf52de3c94693c0de75017ac96ce2e1616",
+      "beforeAfterSourceIdentical": true,
+      "compilerWasmSha256": "ab869fb0dadc54d75badf3c6e39a492d4d408a207829732e20ce64a72aa831d2",
+      "compilerJsSha256": "5807a2603f02bb0b9d2bca99ec6bcb6d9bfb32ac00e4745c99b865c064c0794f",
+      "toolchain": "nightly-2026-02-27 (Rust1.95.0-nightly6a979b3e3)",
+      "wasmPack": "0.15.0",
+      "wasmBindgen": "0.2.126",
+      "flags": "wasm-pack --mode no-install --target web --release --no-opt --locked --features full-web",
+      "concurrency": {
+        "cargo": 2,
+        "tests": 2,
+        "rayon": 2
+      },
+      "artifactDirectory": "$HOME/scratch/slam_web/tmp/physics-critical-path/review-compiler",
+      "configSha256": "5dc1dea951da37400acdfa095c08e5defff287e1f46894772eb04f8fbadbee06",
+      "sourceEditsReleasedAfterArtifactFreeze": true,
+      "ownedSourceHashes": {
+        "crates/rumoca-sim/src/wasm_execution.rs": "4663472b1406a0c352798381075f1bc66ab2a01d047a95e7e7da6e58d24087a3",
+        "crates/rumoca-sim/src/wasm_execution/profile.rs": "49427297e16e70b42b0ede93aa5f08aa872581ed27895af16f92ebe5e186f75b",
+        "crates/rumoca-sim/src/wasm_execution/profile/tests.rs": "330eafe597b1691fe802292ce3a9364b3e3a2d2022ba2c8d0296c0934e7c74dd",
+        "crates/rumoca-sim/src/lib.rs": "adf5976b8847b25d82d95871f5ae2e08c634104f34416be2fe653fb422d6cd4b",
+        "crates/rumoca-sim/Cargo.toml": "caf4c2799368990df04a23d2a8b63f009530a7355d000a7e52d4e550884fcd96",
+        "crates/rumoca-bind-wasm/src/simulation_session_api.rs": "b84d9c6f365079cf48b53679a57f6f4ba8a41c7c51b5bd804dfd4f5ff2c01d58",
+        "crates/rumoca-bind-wasm/src/simulation_session_api/options.rs": "6237762c08846b328f1fd6ecbace116f74c29e59929a92b9f0bb0ce9cba83882",
+        "crates/rumoca-bind-wasm/src/tests/simulation_runtime_tests.rs": "e8061946327aa1e5c3fe1efcc90e98be2ef795bb9cbb6fd0afe10b74f9bc1791",
+        "Cargo.lock": "f1891f9cf66eaad7e6318f7d2240b8090e5dbe9848e123d8fbd8d1a54ba6e0c6"
+      },
+      "wasmBytes": 35725907,
+      "jsBytes": 78672,
+      "sourceManifestFiles": 2355
+    },
+    "verificationBoundary": {
+      "status": "OPERATIONAL_SCOPED_EVIDENCE_ONLY",
+      "normativeSpec": "SPEC0033 §6a",
+      "tier1Complete": false,
+      "requiredConcurrency": 4,
+      "fixed20CanaryRun": false,
+      "cohortParity": "unmeasured",
+      "reason": "Bounded two-job focused checks/builds do not establish the required fixed-four-thread Tier1 plus fixed20canary."
+    },
+    "browserParity": {
+      "status": "ACTUAL_REVIEW_CHROMIUM_FULL_PLANT_POLICY_PARITY_PASS",
+      "recordedAt": "2026-10-04T23:39:10.445Z",
+      "browser": "154.0.8037.92",
+      "sourceSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+      "editedSourceSha256": "79c0e2a8430d6e9b118f7bc5d4e1bbe9bb070dddc31b447dd4dbcb0e6ac5ea04",
+      "compilerWasmSha256": "ab869fb0dadc54d75badf3c6e39a492d4d408a207829732e20ce64a72aa831d2",
+      "compilerJsSha256": "5807a2603f02bb0b9d2bca99ec6bcb6d9bfb32ac00e4745c99b865c064c0794f",
+      "probeSha256": "e6e54795237029a30e6a4bf7dd20323e90a407fcf8846f79ac361fee5ebddd66",
+      "runs": [
+        {
+          "index": 0,
+          "policy": "interpreter",
+          "preparationMs": 1306.7000000476837,
+          "frames": 930,
+          "events": 1033,
+          "advanceMs": 4226.900001168251,
+          "advancePerCameraFrameMs": 4.545053764697044,
+          "last": {
+            "time": 10.333333333333334,
+            "x": 1.6573746912600675,
+            "y": 2.9974473018197814,
+            "z": 1.8322422157069294,
+            "quaternion": [
+              0.0206234802485481,
+              -0.004669601851209475,
+              -0.010497631804491892,
+              0.9997212944653554
+            ],
+            "velocity": [
+              -0.5631019076218979,
+              0.1467757090960445,
+              0.008194253800197657
+            ],
+            "accel": [
+              -0.04019592577003565,
+              0.009180377400685832,
+              9.795310788465715
+            ],
+            "gyro": [
+              -0.0033990071560681435,
+              -0.008066801610969636,
+              0.3809469858280777
+            ],
+            "command": {
+              "forward": 0.6,
+              "left": 0,
+              "up": 0.0026946525457942623,
+              "yaw": 0.4
+            },
+            "propellerAngles": [
+              7772.002026485713,
+              7771.535790711257,
+              -7883.264740962807,
+              -7883.369844563857
+            ]
+          },
+          "kernelsInstantiated": 0,
+          "kernelCallsIncludingPreparationAndControls": 0
+        },
+        {
+          "index": 1,
+          "policy": "auto",
+          "preparationMs": 542.9000000953674,
+          "frames": 930,
+          "events": 1033,
+          "advanceMs": 4209.200001239777,
+          "advancePerCameraFrameMs": 4.526021506709437,
+          "last": {
+            "time": 10.333333333333334,
+            "x": 1.6573746912600662,
+            "y": 2.9974473018197823,
+            "z": 1.8322422157069291,
+            "quaternion": [
+              0.020623480248548178,
+              -0.004669601851209473,
+              -0.010497631804491838,
+              0.9997212944653553
+            ],
+            "velocity": [
+              -0.5631019076218973,
+              0.14677570909604498,
+              0.008194253800197664
+            ],
+            "accel": [
+              -0.04019592577003561,
+              0.00918037740068586,
+              9.795310788465716
+            ],
+            "gyro": [
+              -0.003399007156068174,
+              -0.008066801610970585,
+              0.3809469858280776
+            ],
+            "command": {
+              "forward": 0.6,
+              "left": 0,
+              "up": 0.0026946525457942623,
+              "yaw": 0.4
+            },
+            "propellerAngles": [
+              7772.002026485713,
+              7771.535790711257,
+              -7883.264740962807,
+              -7883.369844563857
+            ]
+          },
+          "kernelsInstantiated": 120,
+          "kernelCallsIncludingPreparationAndControls": 715310
+        },
+        {
+          "index": 2,
+          "policy": "auto",
+          "preparationMs": 437.89999997615814,
+          "frames": 930,
+          "events": 1033,
+          "advanceMs": 4264.999998450279,
+          "advancePerCameraFrameMs": 4.586021503709977,
+          "last": {
+            "time": 10.333333333333334,
+            "x": 1.6573746912600662,
+            "y": 2.9974473018197823,
+            "z": 1.8322422157069291,
+            "quaternion": [
+              0.020623480248548178,
+              -0.004669601851209473,
+              -0.010497631804491838,
+              0.9997212944653553
+            ],
+            "velocity": [
+              -0.5631019076218973,
+              0.14677570909604498,
+              0.008194253800197664
+            ],
+            "accel": [
+              -0.04019592577003561,
+              0.00918037740068586,
+              9.795310788465716
+            ],
+            "gyro": [
+              -0.003399007156068174,
+              -0.008066801610970585,
+              0.3809469858280776
+            ],
+            "command": {
+              "forward": 0.6,
+              "left": 0,
+              "up": 0.0026946525457942623,
+              "yaw": 0.4
+            },
+            "propellerAngles": [
+              7772.002026485713,
+              7771.535790711257,
+              -7883.264740962807,
+              -7883.369844563857
+            ]
+          },
+          "kernelsInstantiated": 120,
+          "kernelCallsIncludingPreparationAndControls": 715310
+        },
+        {
+          "index": 3,
+          "policy": "interpreter",
+          "preparationMs": 388.7999999523163,
+          "frames": 930,
+          "events": 1033,
+          "advanceMs": 4096.5999965667725,
+          "advancePerCameraFrameMs": 4.4049462328674975,
+          "last": {
+            "time": 10.333333333333334,
+            "x": 1.6573746912600675,
+            "y": 2.9974473018197814,
+            "z": 1.8322422157069294,
+            "quaternion": [
+              0.0206234802485481,
+              -0.004669601851209475,
+              -0.010497631804491892,
+              0.9997212944653554
+            ],
+            "velocity": [
+              -0.5631019076218979,
+              0.1467757090960445,
+              0.008194253800197657
+            ],
+            "accel": [
+              -0.04019592577003565,
+              0.009180377400685832,
+              9.795310788465715
+            ],
+            "gyro": [
+              -0.0033990071560681435,
+              -0.008066801610969636,
+              0.3809469858280777
+            ],
+            "command": {
+              "forward": 0.6,
+              "left": 0,
+              "up": 0.0026946525457942623,
+              "yaw": 0.4
+            },
+            "propellerAngles": [
+              7772.002026485713,
+              7771.535790711257,
+              -7883.264740962807,
+              -7883.369844563857
+            ]
+          },
+          "kernelsInstantiated": 0,
+          "kernelCallsIncludingPreparationAndControls": 0
+        }
+      ],
+      "controls": [
+        {
+          "policy": "interpreter",
+          "rollback": true,
+          "repeatedTime": true,
+          "resetReplayEndpoints": 33
+        },
+        {
+          "policy": "auto",
+          "rollback": true,
+          "repeatedTime": true,
+          "resetReplayEndpoints": 33
+        },
+        {
+          "policy": "auto",
+          "rollback": true,
+          "repeatedTime": true,
+          "resetReplayEndpoints": 33
+        },
+        {
+          "policy": "interpreter",
+          "rollback": true,
+          "repeatedTime": true,
+          "resetReplayEndpoints": 33
+        },
+        {
+          "sourceEdit": true,
+          "frames": 120,
+          "events": 133,
+          "allVisibleFieldsCompared": true
+        }
+      ],
+      "comparisons": 349162,
+      "maxAbsoluteDifference": 6.821210263296962e-12,
+      "maxScaledDifference": 3.410605131648481e-13,
+      "tolerance": 2e-9,
+      "rates": {
+        "cameraHz": 90,
+        "lidarHz": 20,
+        "imuHz": 90,
+        "gpsHz": 10
+      },
+      "compiler": {
+        "version": "0.10.1",
+        "revision": "03e6b59a47f1"
+      },
+      "productionPinChanged": false,
+      "physicsStepsSkipped": 0,
+      "hostMathFallback": false,
+      "scope": "Same-build Auto/Interpreter full Modelica quadrotor with unchanged adaptive integrator, tolerances and high-rate endpoint schedule. Diagnostic wrappers count generated eval_residual calls without changing arguments/results. ABBA advance timing includes those counters, cold first30frames and parity/JSON controls between runs; no causal whole-pipeline or CPU-hit-share claim.",
+      "resource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10",
+          "node",
+          "dev/probe-physics-portable-me.mjs",
+          "$HOME/scratch/slam_web/tmp/physics-critical-path/review-compiler",
+          "$HOME/scratch/slam_web/tmp/physics-critical-path/portable-parity"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/browser-parity.log",
+        "elapsedMs": 30890.80138,
+        "peakRssKiB": 1398408,
+        "minimumAvailableKiB": 54638668,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 0
+      },
+      "upstreamIndependentParity": "Same-build interpreter differential proof; existing independent plant proof remains separate."
+    },
+    "browserProfiles": {
+      "auto": {
+        "status": "ACTUAL_REVIEW_CHROMIUM_WORKER_PHYSICS_PROFILE_PASS",
+        "executionPolicy": "auto",
+        "recordedAt": "2026-10-04T23:40:12.708Z",
+        "browser": "154.0.8037.92",
+        "sourceSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+        "compilerWasmSha256": "ab869fb0dadc54d75badf3c6e39a492d4d408a207829732e20ce64a72aa831d2",
+        "probeSha256": "7469b1ec557582d0e5224ae6590b20539ebe68f5a3326d50b1f0fa47f88ab276",
+        "preparationMs": 1392.3000000715256,
+        "frames": 900,
+        "events": 1000,
+        "rates": {
+          "cameraHz": 90,
+          "lidarHz": 20,
+          "imuHz": 90,
+          "gpsHz": 10
+        },
+        "perEvent": {
+          "inputEncoding": {
+            "count": 1000,
+            "meanMs": 0.006599999666213989,
+            "p95Ms": 0.09999990463256836
+          },
+          "setInputs": {
+            "count": 1000,
+            "meanMs": 0.6188999999761582,
+            "p95Ms": 1
+          },
+          "advance": {
+            "count": 1000,
+            "meanMs": 4.296000000357628,
+            "p95Ms": 5.199999928474426
+          },
+          "stateJson": {
+            "count": 1000,
+            "meanMs": 0.7247000027894974,
+            "p95Ms": 1.100000023841858
+          },
+          "snapshotParseAndExtract": {
+            "count": 1000,
+            "meanMs": 0.09150000059604645,
+            "p95Ms": 0.20000004768371582
+          },
+          "total": {
+            "count": 1000,
+            "meanMs": 5.737700003385544,
+            "p95Ms": 6.899999976158142
+          }
+        },
+        "perCameraFrameMs": 6.375222225983937,
+        "meanJsonBytes": 9877.904,
+        "visibleValues": 269,
+        "last": {
+          "time": 10.333333333333334,
+          "x": 1.6573746912600662,
+          "y": 2.9974473018197823,
+          "z": 1.8322422157069291,
+          "quaternion": [
+            0.020623480248548178,
+            -0.004669601851209473,
+            -0.010497631804491838,
+            0.9997212944653553
+          ],
+          "velocity": [
+            -0.5631019076218973,
+            0.14677570909604498,
+            0.008194253800197664
+          ],
+          "accel": [
+            -0.04019592577003561,
+            0.00918037740068586,
+            9.795310788465716
+          ],
+          "gyro": [
+            -0.003399007156068174,
+            -0.008066801610970585,
+            0.3809469858280776
+          ],
+          "command": {
+            "forward": 0.6,
+            "left": 0,
+            "up": 0.0026946525457942623,
+            "yaw": 0.4
+          },
+          "propellerAngles": [
+            7772.002026485713,
+            7771.535790711257,
+            -7883.264740962807,
+            -7883.369844563857
+          ]
+        },
+        "compiler": {
+          "version": "0.10.1",
+          "revision": "03e6b59a47f1"
+        },
+        "scope": "Unmodified full Modelica plant in an isolated dedicated worker. Same high sensor-clock endpoints, solver tolerances and held commands; no GPU, rendering, RPC or whole-pipeline throughput.",
+        "productionPinChanged": false,
+        "physicsStepsSkipped": 0,
+        "hostMathFallback": false,
+        "profileSamples": 5338,
+        "attribution": {
+          "sampledUs": 5897131,
+          "advanceUs": 4240059,
+          "advanceGeneratedKernelInclusiveUs": 18019,
+          "generatedKernelLeafUs": 29665,
+          "compilerWasmLeafUs": 5499641,
+          "generatedModuleUrls": [
+            "wasm://wasm/34fb088a",
+            "wasm://wasm/51f809be",
+            "wasm://wasm/5c3692d2",
+            "wasm://wasm/d1a7e1ce",
+            "wasm://wasm/74c2057e",
+            "wasm://wasm/21f2577e",
+            "wasm://wasm/c54f2432",
+            "wasm://wasm/443e0476",
+            "wasm://wasm/bc21b242",
+            "wasm://wasm/9f70682a",
+            "wasm://wasm/0309a722",
+            "wasm://wasm/59b1b096",
+            "wasm://wasm/a3de8752",
+            "wasm://wasm/b9888ed6",
+            "wasm://wasm/8893c7b6",
+            "wasm://wasm/f08feaf6",
+            "wasm://wasm/619a80b2",
+            "wasm://wasm/32779afe",
+            "wasm://wasm/09ce542e",
+            "wasm://wasm/c690a37e"
+          ],
+          "scope": "Weighted CDP samples: generated modules use wasm:// URLs; compiler uses served /compiler.wasm. Native-inclusive advance samples include imported math descendants. These sampled durations are not exact invocation counts or unprofiled timings."
+        }
+      },
+      "interpreter": {
+        "status": "ACTUAL_REVIEW_CHROMIUM_WORKER_PHYSICS_PROFILE_PASS",
+        "executionPolicy": "interpreter",
+        "recordedAt": "2026-10-04T23:40:43.035Z",
+        "browser": "154.0.8037.92",
+        "sourceSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+        "compilerWasmSha256": "ab869fb0dadc54d75badf3c6e39a492d4d408a207829732e20ce64a72aa831d2",
+        "probeSha256": "7469b1ec557582d0e5224ae6590b20539ebe68f5a3326d50b1f0fa47f88ab276",
+        "preparationMs": 1294.1000000238419,
+        "frames": 900,
+        "events": 1000,
+        "rates": {
+          "cameraHz": 90,
+          "lidarHz": 20,
+          "imuHz": 90,
+          "gpsHz": 10
+        },
+        "perEvent": {
+          "inputEncoding": {
+            "count": 1000,
+            "meanMs": 0.004400000095367431,
+            "p95Ms": 0
+          },
+          "setInputs": {
+            "count": 1000,
+            "meanMs": 0.6351999998092651,
+            "p95Ms": 1.0999999046325684
+          },
+          "advance": {
+            "count": 1000,
+            "meanMs": 4.71049999821186,
+            "p95Ms": 6.299999952316284
+          },
+          "stateJson": {
+            "count": 1000,
+            "meanMs": 0.7563000024557114,
+            "p95Ms": 1.0999999046325684
+          },
+          "snapshotParseAndExtract": {
+            "count": 1000,
+            "meanMs": 0.10209999978542328,
+            "p95Ms": 0.20000004768371582
+          },
+          "total": {
+            "count": 1000,
+            "meanMs": 6.208500000357628,
+            "p95Ms": 8.5
+          }
+        },
+        "perCameraFrameMs": 6.898333333730697,
+        "meanJsonBytes": 9877.99,
+        "visibleValues": 269,
+        "last": {
+          "time": 10.333333333333334,
+          "x": 1.6573746912600675,
+          "y": 2.9974473018197814,
+          "z": 1.8322422157069294,
+          "quaternion": [
+            0.0206234802485481,
+            -0.004669601851209475,
+            -0.010497631804491892,
+            0.9997212944653554
+          ],
+          "velocity": [
+            -0.5631019076218979,
+            0.1467757090960445,
+            0.008194253800197657
+          ],
+          "accel": [
+            -0.04019592577003565,
+            0.009180377400685832,
+            9.795310788465715
+          ],
+          "gyro": [
+            -0.0033990071560681435,
+            -0.008066801610969636,
+            0.3809469858280777
+          ],
+          "command": {
+            "forward": 0.6,
+            "left": 0,
+            "up": 0.0026946525457942623,
+            "yaw": 0.4
+          },
+          "propellerAngles": [
+            7772.002026485713,
+            7771.535790711257,
+            -7883.264740962807,
+            -7883.369844563857
+          ]
+        },
+        "compiler": {
+          "version": "0.10.1",
+          "revision": "03e6b59a47f1"
+        },
+        "scope": "Unmodified full Modelica plant in an isolated dedicated worker. Same high sensor-clock endpoints, solver tolerances and held commands; no GPU, rendering, RPC or whole-pipeline throughput.",
+        "productionPinChanged": false,
+        "physicsStepsSkipped": 0,
+        "hostMathFallback": false,
+        "profileSamples": 5493,
+        "attribution": {
+          "sampledUs": 6364439,
+          "advanceUs": 4643814,
+          "advanceGeneratedKernelInclusiveUs": 0,
+          "generatedKernelLeafUs": 0,
+          "compilerWasmLeafUs": 6015021,
+          "generatedModuleUrls": [],
+          "scope": "Weighted CDP samples: generated modules use wasm:// URLs; compiler uses served /compiler.wasm. Native-inclusive advance samples include imported math descendants. These sampled durations are not exact invocation counts or unprofiled timings."
+        }
+      },
+      "autoResource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10",
+          "node",
+          "dev/probe-physics-browser-cpu.mjs",
+          "$HOME/scratch/slam_web/tmp/physics-critical-path/review-auto-profile",
+          "$HOME/scratch/slam_web/tmp/physics-critical-path/review-compiler",
+          "auto"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/auto-profile.log",
+        "elapsedMs": 10031.392343,
+        "peakRssKiB": 1305364,
+        "minimumAvailableKiB": 53054456,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 0
+      },
+      "interpreterResource": {
+        "command": [
+          "nice",
+          "-n",
+          "10",
+          "taskset",
+          "-c",
+          "10",
+          "node",
+          "dev/probe-physics-browser-cpu.mjs",
+          "$HOME/scratch/slam_web/tmp/physics-critical-path/review-interpreter-profile",
+          "$HOME/scratch/slam_web/tmp/physics-critical-path/review-compiler",
+          "interpreter"
+        ],
+        "log": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/interpreter-profile.log",
+        "elapsedMs": 10203.953431,
+        "peakRssKiB": 1298300,
+        "minimumAvailableKiB": 56053040,
+        "peakCacheBytes": null,
+        "rssLimitMiB": 8192,
+        "availableFloorMiB": 16384,
+        "rssScope": "owned process group and identified descendants, including detached browser groups",
+        "secondsLimit": 180,
+        "signal": null,
+        "exitCode": 0
+      },
+      "generatedKernelAdvanceSampleFraction": 0.004249705015897184,
+      "interpretation": "About0.425% of sampled advance time is inside generated kernels. Remaining compiler/runtime work is not all classified as interpretation. Sequential sampled runs and diagnostic counterABBA do not establish causal throughput gain."
+    }
+  },
+  "browserGeneratedKernelEngine": {
+    "engine": "Chromium WebAssembly engine through js_sys WebAssembly.Module and Instance",
+    "memory": "The current wasm_bindgen::memory() is imported as env.memory",
+    "call": "Synchronous js_sys::Function::call5 invokes the generated eval_residual export",
+    "constructorPath": [
+      "rumoca-sim wasm_execution::WasmExpression::compile",
+      "rumoca-exec-wasm compile_expression_scalar_program_block_wasm",
+      "CompiledKernelWasm::from_module cfg(target_arch = wasm32)",
+      "WasmKernelRuntime::new"
+    ],
+    "scope": "The frozen review package's generated scalar kernels execute directly in the browser engine. Wasmi is used in separate native backend tests, not inside this browser runtime. No new bridge redesign or throughput gain is established by this source audit."
+  },
+  "artifacts": [
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/report.json",
+      "sha256": "fb2460907085af321bbf6d471db6e54b5c9eaf293bfbe773c3fd65fb3f9d664b"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/node-resource.json",
+      "sha256": "30390e0d02a711b0d05272d43fec9f0a4d6d99e9f376f35b6367da8d882329fa"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/baseline.cpuprofile",
+      "sha256": "eed15df508fbb7506a27529b93e036b237508a0aec71d7c72e53c04165ec1d1c"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/delta-input-transport.cpuprofile",
+      "sha256": "44c996c935bc8b224bc92667a39ad4e359b3788bfa1cd9b9851004dd98ada4b5"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/native.perf.data",
+      "sha256": "80b0b9e6a14bc3b782082fb7d4416a7995ca029a9b4454826926504e55dc1e08"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/native-symbol-summary.json",
+      "sha256": "87ecddf82c302bcf42f291358ef984a53c0dcb3c007f2b574d0f627f433a62d8"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/browser/report.json",
+      "sha256": "9e83f415e1d0d411791d28cdc0ce1ef7d0061d5a8d4533bbf12b982667b9a009"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/browser/worker.cpuprofile",
+      "sha256": "e3fba6f8a5eeb34bb5e61689aef14141107cdbaba4966f925fb67ba6942fc82d"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/browser-resource.json",
+      "sha256": "99d01111448474580828abf2b07ce6791f55c832f0bbeef4af3cfe2489e6e648"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/solve-inventory/source.mo",
+      "sha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/solve-inventory/solve.json",
+      "sha256": "348115895b67c0fa420f8fbc2753ea1466dfe9f65faa1bcb5e2b60821b586f06"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/solve-inventory/summary.json",
+      "sha256": "6c91c7c34bc526fcc7b208dde83da1698230aa28cfe626369eb9319cd2a994d9"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/browser/cpu-summary.json",
+      "sha256": "c74f8b810f797811aacbe9d5104d0580f2fce411096ad373c5bfecb88996c849"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/coverage-summary.json",
+      "sha256": "b361db217598787a0e9eb97dd5db547fc815976f971e1474701c66851b25ca5a"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/full-source-inventory.json",
+      "sha256": "643ef2df059058666df9c15eae7f20d33af256132086d8ce0fee4997fcfc4e77"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/full-source-inventory-resource.json",
+      "sha256": "945edc3a16aead44627f69b77c3f5d79668d2c052088255f5ac45c52c75c78c2"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/admission-resource.json",
+      "sha256": "7e933c2521ead8679e3ad46c83a85be1fed9ed3df2cf4ea51fbcf86e9a79a485"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/admission-both-solvers-resource.json",
+      "sha256": "b894ab61931820bac08dcab7374be85207407e572fe5ce7ae82183a922de07fc"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/source-during-build.json",
+      "sha256": "92d600704daa18bdfceb6545ddb115a4796fc4184cc45219ad66081afbe3cd44"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/affinity-transition.json",
+      "sha256": "b762df4dca8fbfca81d9796c6f1ab73506fada2c87e3b9abd52c763dd9fdf54b"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/final-source-before.sha256",
+      "sha256": "1198b1d5ad45968dc73268140b201fbf52de3c94693c0de75017ac96ce2e1616"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/final-source-after.sha256",
+      "sha256": "1198b1d5ad45968dc73268140b201fbf52de3c94693c0de75017ac96ce2e1616"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/fresh-wasm-resource.json",
+      "sha256": "46dbb1a6e67379cda145aceeffd3a81e206fa01ed9beb7da442b24c97e8a0200"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/model-policy-resource.json",
+      "sha256": "dbf024c31a7fcc7756318d45a2e159aeee71d97aa0eb9bfe248713f7344fcfb9"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/scoped-clippy-final-resource.json",
+      "sha256": "7893a8f9a33463d84e781a58d055bb2077f7600149f683f6ede0bc48cc653220"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/portable-parity/report.json",
+      "sha256": "3791f0d16266ea28e17976fc2b66184c37bdaeb14a996ee338d926a8793dad89"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/browser-parity-resource.json",
+      "sha256": "09f5c143ab1bada2ac5271c119489ca3161cef560d0263a1a153a790f1e49495"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/review-auto-profile/report.json",
+      "sha256": "f154867a93201229f63165ac5b92422391511d3855d463b37a170f0d852b7607"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/review-auto-profile/worker.cpuprofile",
+      "sha256": "51c6d70a92e6f7ec003e90e3d222095ec45a285004050c3c07940b13596e12e3"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/auto-profile-resource.json",
+      "sha256": "78fe96d4aaa6d4c0d7511b0b2d897a4cc15a4c4310484027fe354baa4edf6d0a"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/review-interpreter-profile/report.json",
+      "sha256": "3a22872ee7d9d04c344a445d87b993de6c3c699b45bd238e0ac85c051271bbc7"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/review-interpreter-profile/worker.cpuprofile",
+      "sha256": "b7683e5ee0551bbd2aa3f884b444f3d3b52763ed08ebfa71b6f5599146c2aae0"
+    },
+    {
+      "path": "$HOME/scratch/slam_web/tmp/physics-critical-path/adapter/interpreter-profile-resource.json",
+      "sha256": "d968d7feae56912d20ae06305b3c68069e25e068e8a4df036cdd2712fe7f3abd"
+    }
+  ],
+  "limitations": [
+    "Isolated CPU-only session: no scene, GPU sensor capture, worker RPC or end-to-end SLAM performance.",
+    "Sampling overhead and sequential warming prevent attributing a speedup to the diagnostic setter change.",
+    "advance_to is ~83% of measured production-equivalent CPU time; delta setter transport remains diagnostic only.",
+    "State JSON carries269 visible values (~9879bytes), whereas the current snapshot consumes25. Snapshot optimization is secondary.",
+    "Production pin, solver, plant source, steps and sensor-rate endpoints unchanged. Full native RHS, full SLAM and10x target remain unproved."
+  ]
+}

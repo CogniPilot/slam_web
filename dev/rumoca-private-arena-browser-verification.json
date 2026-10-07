@@ -1,0 +1,2206 @@
+{
+  "schemaVersion": 1,
+  "status": "ACTUAL_BROWSER_PRIVATE_POOL_PARITY_LIFETIME_AND_SCOPED_SPEEDUP_PASS",
+  "recordedAt": "2026-10-05T06:17:39.811Z",
+  "productionCompilerPinChanged": false,
+  "fullSlam": false,
+  "wholePipelineThroughputClaim": false,
+  "compiler": {
+    "sourceClosureSha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+    "sourceFiles": 2418,
+    "sourceBookend": "Exact frozen compiler manifest verified before and after full-web build and after all browser gates.",
+    "branch": "slam-native-functions",
+    "revision": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+    "dirty": true,
+    "artifactLocation": "$HOME/scratch/slam_web/tmp/private-arena-browser-build/compiler",
+    "wasmSha256": "239b5e4362d10b1a6a247a0a2b661b9d89fe039a89eccb970d63c21e44f66088",
+    "jsSha256": "2a4e048d42ef5d1b67567369bab2e35a632ac3aa85ac15cb7c889e8fd5fa2124",
+    "nativeProducer": {
+      "sourceClosureSha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+      "sourceFiles": 2418,
+      "compilerRevision": "03e6b59a47f1adc48488b89e4c462c5fa50f3aaf",
+      "cargoJsonSha256": "f3c78a43ee8f233753a1a112bc07efe8a4c5c9acd234dd279782aa5ca2346df6",
+      "producer": {
+        "originalExecutable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_bind_wasm-8f249060a38fed66",
+        "frozenExecutable": "$HOME/scratch/slam_web/tmp/private-arena-pool-gate/final-producer",
+        "sha256": "3c1b80f111d4068b70ec1dcb86a88a8121910564ff5b2cf5f2e5f2f460bd4c47",
+        "bytes": 130340512
+      },
+      "compilerArtifacts": [
+        {
+          "packageId": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-ir-dae#0.10.1",
+          "target": {
+            "kind": [
+              "lib"
+            ],
+            "crate_types": [
+              "lib"
+            ],
+            "name": "rumoca_ir_dae",
+            "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-ir-dae/src/lib.rs",
+            "edition": "2024",
+            "doc": true,
+            "doctest": true,
+            "test": true
+          },
+          "profile": {
+            "opt_level": "1",
+            "debuginfo": "line-tables-only",
+            "debug_assertions": true,
+            "overflow_checks": true,
+            "test": true
+          },
+          "fresh": true,
+          "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_ir_dae-c0dfd6b7626dbe2a"
+        },
+        {
+          "packageId": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-exec-wasm#0.10.1",
+          "target": {
+            "kind": [
+              "lib"
+            ],
+            "crate_types": [
+              "lib"
+            ],
+            "name": "rumoca_exec_wasm",
+            "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-exec-wasm/src/lib.rs",
+            "edition": "2024",
+            "doc": true,
+            "doctest": true,
+            "test": true
+          },
+          "profile": {
+            "opt_level": "1",
+            "debuginfo": "line-tables-only",
+            "debug_assertions": true,
+            "overflow_checks": true,
+            "test": true
+          },
+          "fresh": true,
+          "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_exec_wasm-7ba3aa4be1a55df4"
+        },
+        {
+          "packageId": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-ir-solve#0.10.1",
+          "target": {
+            "kind": [
+              "lib"
+            ],
+            "crate_types": [
+              "lib"
+            ],
+            "name": "rumoca_ir_solve",
+            "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-ir-solve/src/lib.rs",
+            "edition": "2024",
+            "doc": true,
+            "doctest": true,
+            "test": true
+          },
+          "profile": {
+            "opt_level": "1",
+            "debuginfo": "line-tables-only",
+            "debug_assertions": true,
+            "overflow_checks": true,
+            "test": true
+          },
+          "fresh": true,
+          "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_ir_solve-ac26f2dc3ce45572"
+        },
+        {
+          "packageId": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-core#0.10.1",
+          "target": {
+            "kind": [
+              "lib"
+            ],
+            "crate_types": [
+              "lib"
+            ],
+            "name": "rumoca_core",
+            "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-core/src/lib.rs",
+            "edition": "2024",
+            "doc": true,
+            "doctest": true,
+            "test": true
+          },
+          "profile": {
+            "opt_level": "1",
+            "debuginfo": "line-tables-only",
+            "debug_assertions": true,
+            "overflow_checks": true,
+            "test": true
+          },
+          "fresh": true,
+          "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_core-35a081cd43ac37f3"
+        },
+        {
+          "packageId": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-phase-dae#0.10.1",
+          "target": {
+            "kind": [
+              "lib"
+            ],
+            "crate_types": [
+              "lib"
+            ],
+            "name": "rumoca_phase_dae",
+            "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-phase-dae/src/lib.rs",
+            "edition": "2024",
+            "doc": true,
+            "doctest": true,
+            "test": true
+          },
+          "profile": {
+            "opt_level": "1",
+            "debuginfo": "line-tables-only",
+            "debug_assertions": true,
+            "overflow_checks": true,
+            "test": true
+          },
+          "fresh": true,
+          "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_phase_dae-5020629a90de7420"
+        },
+        {
+          "packageId": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-phase-solve#0.10.1",
+          "target": {
+            "kind": [
+              "lib"
+            ],
+            "crate_types": [
+              "lib"
+            ],
+            "name": "rumoca_phase_solve",
+            "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-phase-solve/src/lib.rs",
+            "edition": "2024",
+            "doc": true,
+            "doctest": true,
+            "test": true
+          },
+          "profile": {
+            "opt_level": "1",
+            "debuginfo": "line-tables-only",
+            "debug_assertions": true,
+            "overflow_checks": true,
+            "test": true
+          },
+          "fresh": true,
+          "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_phase_solve-2f26c6f8a94b81c8"
+        },
+        {
+          "packageId": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-eval-solve#0.10.1",
+          "target": {
+            "kind": [
+              "lib"
+            ],
+            "crate_types": [
+              "lib"
+            ],
+            "name": "rumoca_eval_solve",
+            "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-eval-solve/src/lib.rs",
+            "edition": "2024",
+            "doc": true,
+            "doctest": true,
+            "test": true
+          },
+          "profile": {
+            "opt_level": "1",
+            "debuginfo": "line-tables-only",
+            "debug_assertions": true,
+            "overflow_checks": true,
+            "test": true
+          },
+          "fresh": true,
+          "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_eval_solve-5082cfdea88cf354"
+        },
+        {
+          "packageId": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-eval-dae#0.10.1",
+          "target": {
+            "kind": [
+              "lib"
+            ],
+            "crate_types": [
+              "lib"
+            ],
+            "name": "rumoca_eval_dae",
+            "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-eval-dae/src/lib.rs",
+            "edition": "2024",
+            "doc": true,
+            "doctest": true,
+            "test": true
+          },
+          "profile": {
+            "opt_level": "3",
+            "debuginfo": "line-tables-only",
+            "debug_assertions": true,
+            "overflow_checks": true,
+            "test": true
+          },
+          "fresh": true,
+          "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_eval_dae-a900cbbc37d90f28"
+        },
+        {
+          "packageId": "path+file://$HOME/git/rumoca-native-functions/crates/rumoca-bind-wasm#0.10.1",
+          "target": {
+            "kind": [
+              "cdylib",
+              "rlib"
+            ],
+            "crate_types": [
+              "cdylib",
+              "rlib"
+            ],
+            "name": "rumoca_bind_wasm",
+            "src_path": "$HOME/git/rumoca-native-functions/crates/rumoca-bind-wasm/src/lib.rs",
+            "edition": "2024",
+            "doc": true,
+            "doctest": true,
+            "test": true
+          },
+          "profile": {
+            "opt_level": "1",
+            "debuginfo": "line-tables-only",
+            "debug_assertions": true,
+            "overflow_checks": true,
+            "test": true
+          },
+          "fresh": false,
+          "executable": "$HOME/scratch/slam_web/build/rumoca-native-target/debug/deps/rumoca_bind_wasm-8f249060a38fed66"
+        }
+      ]
+    },
+    "storageImplementationRecord": "dev/rumoca-private-arena-pool-verification.json"
+  },
+  "browser": "154.0.8037.92",
+  "sourceSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+  "allocation": {
+    "emittedModules": 205,
+    "moduleConstructionErrors": 0,
+    "instanceConstructionErrors": 0,
+    "events": 33,
+    "comparedFields": 8877,
+    "maxScaledDifference": 0,
+    "previousFailureRecord": "dev/rumoca-physics-instantiation-verification.json",
+    "derivative": {
+      "module": {
+        "id": 204,
+        "phase": "auto:advance",
+        "exports": [
+          {
+            "name": "memory",
+            "kind": "memory"
+          },
+          {
+            "name": "eval_assignments",
+            "kind": "function"
+          }
+        ],
+        "imports": [
+          {
+            "module": "env",
+            "name": "memory",
+            "kind": "memory"
+          },
+          {
+            "module": "env",
+            "name": "rumoca_private_arena",
+            "kind": "memory"
+          },
+          {
+            "module": "env",
+            "name": "rumoca_private_arena_base",
+            "kind": "global"
+          }
+        ],
+        "bytes": 28282,
+        "sha256": "dcbc1237f289bdf05cc1050d7b4e32da3a8f45101f5f18bc7f8977a6220cfffd",
+        "artifact": "modules/dcbc1237f289bdf05cc1050d7b4e32da3a8f45101f5f18bc7f8977a6220cfffd.wasm"
+      },
+      "execution": {
+        "moduleId": 204,
+        "phase": "auto:advance",
+        "calls": {
+          "eval_assignments": 558
+        },
+        "nonzeroStatuses": {
+          "eval_assignments": 0
+        }
+      }
+    },
+    "nativeInventoryByteMatch": false
+  },
+  "fullPlant": {
+    "framesPerRun": 930,
+    "rates": {
+      "cameraHz": 90,
+      "lidarHz": 20,
+      "imuHz": 90,
+      "gpsHz": 10
+    },
+    "comparisons": 349162,
+    "maxScaledDifference": 4.547473508864641e-13,
+    "tolerance": 2e-9,
+    "controls": [
+      {
+        "policy": "interpreter",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "policy": "auto",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "policy": "auto",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "policy": "interpreter",
+        "rollback": true,
+        "repeatedTime": true,
+        "resetReplayEndpoints": 33
+      },
+      {
+        "sourceEdit": true,
+        "frames": 120,
+        "events": 133,
+        "allVisibleFieldsCompared": true
+      }
+    ],
+    "runs": [
+      {
+        "index": 0,
+        "policy": "interpreter",
+        "kernelCoverage": {
+          "preparation": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "advance": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "controls": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "total": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          }
+        }
+      },
+      {
+        "index": 1,
+        "policy": "auto",
+        "kernelCoverage": {
+          "preparation": {
+            "eval_residual": {
+              "modules": 67,
+              "calls": 12,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 2,
+              "calls": 3,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 135,
+              "calls": 731,
+              "nonzeroStatuses": 0
+            }
+          },
+          "advance": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 61356,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 1,
+              "calls": 15461,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 2853479,
+              "nonzeroStatuses": 0
+            }
+          },
+          "controls": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 2664,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 629,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 112158,
+              "nonzeroStatuses": 0
+            }
+          },
+          "total": {
+            "eval_residual": {
+              "modules": 67,
+              "calls": 64032,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 3,
+              "calls": 16093,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 135,
+              "calls": 2966368,
+              "nonzeroStatuses": 0
+            }
+          }
+        }
+      },
+      {
+        "index": 2,
+        "policy": "auto",
+        "kernelCoverage": {
+          "preparation": {
+            "eval_residual": {
+              "modules": 67,
+              "calls": 12,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 2,
+              "calls": 3,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 135,
+              "calls": 731,
+              "nonzeroStatuses": 0
+            }
+          },
+          "advance": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 61356,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 1,
+              "calls": 15461,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 2853479,
+              "nonzeroStatuses": 0
+            }
+          },
+          "controls": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 2664,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 629,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 112158,
+              "nonzeroStatuses": 0
+            }
+          },
+          "total": {
+            "eval_residual": {
+              "modules": 67,
+              "calls": 64032,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 3,
+              "calls": 16093,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 135,
+              "calls": 2966368,
+              "nonzeroStatuses": 0
+            }
+          }
+        }
+      },
+      {
+        "index": 3,
+        "policy": "interpreter",
+        "kernelCoverage": {
+          "preparation": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "advance": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "controls": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          },
+          "total": {
+            "eval_residual": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_assignments": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            },
+            "eval_private": {
+              "modules": 0,
+              "calls": 0,
+              "nonzeroStatuses": 0
+            }
+          }
+        }
+      }
+    ],
+    "scope": "Complete unchanged plant and original Modelica mass edit, original adaptive solver/tolerances and selected lockstep endpoints. Counters observe arguments/results without replacement. Instrumented timings are not the speed evidence."
+  },
+  "lifetime": {
+    "pools": 2,
+    "observedKernels": 414,
+    "comparisons": 35508,
+    "maxScaledDifference": 0,
+    "checks": {
+      "concurrentOriginalAndEdited": true,
+      "privatePublicMemorySeparate": true,
+      "alignedDistinctObservedBases": true,
+      "sharedPoolExercised": true,
+      "resetPreservesOtherSession": true,
+      "freshPoolAfterFree": true,
+      "externallyRetainedFunctions": 276,
+      "originalAndEditedFrames": 30,
+      "replayFrames": 30,
+      "freshFrames": 30
+    },
+    "scope": "Unmodified module/import/call arguments and results. Actual imported memory identity and immutable bases observed. Concurrent original/edited complete plants, reset and session free/fresh controls. Distinct observed bases do not independently establish complete region extents; allocator/Wasmi extent and alias controls are recorded separately. No timing or GC/physical-memory-release claim. Retained old functions are never called after their owning session is freed."
+  },
+  "comparison": {
+    "baseline": {
+      "jsSha256": "c87d8559fadf55302abf590de2aabe72d3f2fb8b8f8401879f2adab3d60974d1",
+      "wasmSha256": "46bda124c7d8b0aa426fc9be5e214addf5bcfff6c4d3d2cb9b8f523a2de9e125",
+      "wasmBytes": 35837109
+    },
+    "candidate": {
+      "jsSha256": "2a4e048d42ef5d1b67567369bab2e35a632ac3aa85ac15cb7c889e8fd5fa2124",
+      "wasmSha256": "239b5e4362d10b1a6a247a0a2b661b9d89fe039a89eccb970d63c21e44f66088",
+      "wasmBytes": 35863060
+    },
+    "order": [
+      "baseline",
+      "candidate",
+      "candidate",
+      "baseline"
+    ],
+    "runs": [
+      {
+        "index": 0,
+        "compiler": "baseline",
+        "frames": 930,
+        "events": 1033,
+        "advancePerCameraFrameMs": 3.4386021524347283,
+        "completeLoopMs": 4080.1999999284744
+      },
+      {
+        "index": 1,
+        "compiler": "candidate",
+        "frames": 930,
+        "events": 1033,
+        "advancePerCameraFrameMs": 1.3494623648223056,
+        "completeLoopMs": 2164.2000000476837
+      },
+      {
+        "index": 2,
+        "compiler": "candidate",
+        "frames": 930,
+        "events": 1033,
+        "advancePerCameraFrameMs": 1.0887096771629907,
+        "completeLoopMs": 1732.1999999284744
+      },
+      {
+        "index": 3,
+        "compiler": "baseline",
+        "frames": 930,
+        "events": 1033,
+        "advancePerCameraFrameMs": 3.233978494264746,
+        "completeLoopMs": 3766.600000023842
+      }
+    ],
+    "comparisons": 277877,
+    "maxScaledDifference": 0,
+    "baselineMeanAdvanceMs": 3.336290323349737,
+    "candidateMeanAdvanceMs": 1.2190860209926482,
+    "candidateSpeedup": 2.736714445001299,
+    "countersEnabled": false,
+    "scope": "Auto execution for both immutable compiler artifacts, same worker and baseline/candidate/candidate/baseline order. Same unchanged full plant, 90/20/90/10 Hz endpoint schedule, adaptive solver and tolerances. Advance timings include cold first30 frames and exclude preparation, snapshot extraction, sensors, rendering and all SLAM algorithms. Compiler artifacts contain multiple changes, so differences cannot be attributed to one patch. Shared-host load is not controlled by this probe."
+  },
+  "resources": {
+    "build": {
+      "command": [
+        "taskset",
+        "-c",
+        "6,7",
+        "nice",
+        "-n",
+        "15",
+        "bash",
+        "$HOME/scratch/slam_web/tmp/private-arena-browser-build/build.sh"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/private-arena-browser-build/build.log",
+      "elapsedMs": 66287.148846,
+      "peakRssKiB": 1797132,
+      "minimumAvailableKiB": 58313232,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 8192,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 600,
+      "signal": null,
+      "exitCode": 0
+    },
+    "instantiation": {
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "nice",
+        "-n",
+        "15",
+        "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+        "dev/probe-physics-instantiation.mjs",
+        "$HOME/scratch/slam_web/tmp/private-arena-browser-build/compiler",
+        "$HOME/scratch/slam_web/tmp/private-arena-browser-build/instantiation"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/private-arena-browser-build/instantiation/run.log",
+      "elapsedMs": 22212.178238,
+      "peakRssKiB": 1454812,
+      "minimumAvailableKiB": 59459608,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 4096,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 60,
+      "signal": null,
+      "exitCode": 0
+    },
+    "fullPlant": {
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "nice",
+        "-n",
+        "15",
+        "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+        "dev/probe-physics-portable-me.mjs",
+        "$HOME/scratch/slam_web/tmp/private-arena-browser-build/compiler",
+        "$HOME/scratch/slam_web/tmp/private-arena-browser-build/full-plant"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/private-arena-browser-build/full-plant/run.log",
+      "elapsedMs": 22074.640972,
+      "peakRssKiB": 1351800,
+      "minimumAvailableKiB": 59580656,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 4096,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    },
+    "lifetime": {
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "nice",
+        "-n",
+        "15",
+        "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+        "dev/probe-physics-private-pool.mjs",
+        "$HOME/scratch/slam_web/tmp/private-arena-browser-build/compiler",
+        "$HOME/scratch/slam_web/tmp/private-arena-browser-build/lifetime"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/private-arena-browser-build/lifetime/run.log",
+      "elapsedMs": 6312.508546,
+      "peakRssKiB": 1320032,
+      "minimumAvailableKiB": 59590424,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 4096,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 90,
+      "signal": null,
+      "exitCode": 0
+    },
+    "comparison": {
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "nice",
+        "-n",
+        "15",
+        "/nix/store/m0256z6rrjwmvxkbymm7a28n0nw2zll9-nodejs-slim-24.21.0/bin/node",
+        "dev/probe-physics-compiler-comparison.mjs",
+        "$HOME/scratch/slam_web/tmp/target-value-browser-build/compiler",
+        "$HOME/scratch/slam_web/tmp/private-arena-browser-build/compiler",
+        "$HOME/scratch/slam_web/tmp/private-arena-browser-build/comparison"
+      ],
+      "log": "$HOME/scratch/slam_web/tmp/private-arena-browser-build/comparison/run.log",
+      "elapsedMs": 19206.30344,
+      "peakRssKiB": 1465624,
+      "minimumAvailableKiB": 59468972,
+      "peakCacheBytes": null,
+      "rssLimitMiB": 4096,
+      "availableFloorMiB": 16384,
+      "rssScope": "owned process group and identified descendants, including detached browser groups",
+      "secondsLimit": 180,
+      "signal": null,
+      "exitCode": 0
+    }
+  },
+  "limits": [
+    "Physics timing excludes sensors, snapshot extraction, rendering and all SLAM algorithms; no 10x whole-pipeline claim.",
+    "Compiler artifacts include other generic emitter changes; the measured difference is not an isolated-patch causal benchmark.",
+    "Observed private bases are distinct; complete extent/latefault/reentrancy controls are separate native/Wasmi gates.",
+    "External functions were retained but not called after their owning sessions were freed; no browser GC or physical-memory-release assertion.",
+    "Browser private modules were captured, not byte-matched to the new native inventory.",
+    "Fixed20 MSL canary and application/compiler-pin integration are separate gates.",
+    "Full persistent correlated visual filter graph, image frontend, mapping and loop closure remain incomplete."
+  ],
+  "artifacts": [
+    {
+      "path": "dev/artifacts/private-arena-browser/build/build.sh",
+      "sha256": "c8529854963217df2562a13ee67c34d67488c91ce70b430c485557bb34b33a5b",
+      "bytes": 1042,
+      "rawSha256": "c8529854963217df2562a13ee67c34d67488c91ce70b430c485557bb34b33a5b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/build/build.log",
+      "sha256": "2040987194fc8d156fcae919b9f2411b159869d42afc5f15f8d8da82df9fa967",
+      "bytes": 1471,
+      "rawSha256": "fb46f3f46dd56b55c8aea572b16c83a350ddaf91d2f76ecfba84aa15acefe51b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/build/resource.json",
+      "sha256": "f83c19fc8ff83b9aea9a72cdbacb7e9a04da46c51d97c897b4f2169b92ff50c9",
+      "bytes": 483,
+      "rawSha256": "0bf3010c5209d111114ef55f325c4d3e9175dd271184da67908098d6c1b28daf"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/build/source-before.sha256",
+      "sha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf",
+      "bytes": 297674,
+      "rawSha256": "066171474e5d97c199c7c7cffb90426fe252d359b67167a2acd000dec120b2cf"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/report.json",
+      "sha256": "c2e7207b4c9b417a6664f5daf522258ef877dfa1ccaaa4c932027da1c48c0e07",
+      "bytes": 193880,
+      "rawSha256": "c2e7207b4c9b417a6664f5daf522258ef877dfa1ccaaa4c932027da1c48c0e07"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/run.log",
+      "sha256": "348aa23fb756fc42bfb932462eda1af769b50f782da3ee76a13fa2e8b869ebfb",
+      "bytes": 151,
+      "rawSha256": "348aa23fb756fc42bfb932462eda1af769b50f782da3ee76a13fa2e8b869ebfb"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/resource.json",
+      "sha256": "6c6e1781faf8d241a5bd5b5c06694eeb47124c34cf22f7c3a35f4f058ec08c34",
+      "bytes": 670,
+      "rawSha256": "383d5519ab672a940226e7813c3e44e3ed274ae74f7c4da4a6a30580d365405e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/executed-probe.mjs",
+      "sha256": "18948727a196032e7ae2598eb4f164f8a3f2fdb2e344c3a4e7099aa9603dc1a9",
+      "bytes": 9002,
+      "rawSha256": "18948727a196032e7ae2598eb4f164f8a3f2fdb2e344c3a4e7099aa9603dc1a9"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/full-plant/report.json",
+      "sha256": "fb0bcbcc2825eeb750043599bf0fbfe76676a75f2e2b8bdc89331a9e1d3f8098",
+      "bytes": 85690,
+      "rawSha256": "fb0bcbcc2825eeb750043599bf0fbfe76676a75f2e2b8bdc89331a9e1d3f8098"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/full-plant/run.log",
+      "sha256": "ad1e0f877fb4507e955d36e677adc83ab7ab3cc5f382451a7b1ad8cfdae62492",
+      "bytes": 62513,
+      "rawSha256": "ad1e0f877fb4507e955d36e677adc83ab7ab3cc5f382451a7b1ad8cfdae62492"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/full-plant/resource.json",
+      "sha256": "8e2ba01e77b99a957322e140a912edcef17a9925798a1631f5a822904a1fa313",
+      "bytes": 663,
+      "rawSha256": "a5ec279c2cbe153319e550d7daacfb45f2178499ba99b060352161609997f3f3"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/full-plant/executed-probe.mjs",
+      "sha256": "7b4d2b54b99cb3ef2d90c24d7b493a47211573d9081456389d5ae575811f4f22",
+      "bytes": 14494,
+      "rawSha256": "7b4d2b54b99cb3ef2d90c24d7b493a47211573d9081456389d5ae575811f4f22"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/comparison/report.json",
+      "sha256": "001b0c09b740643f186cbbd6485d4efd819183fec0303e2b14ecc9413a2b82f9",
+      "bytes": 7063,
+      "rawSha256": "001b0c09b740643f186cbbd6485d4efd819183fec0303e2b14ecc9413a2b82f9"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/comparison/run.log",
+      "sha256": "3686b6122ff7d69ec00c50acb4d1c904537882476892c7ac927a2596c18fb29c",
+      "bytes": 4903,
+      "rawSha256": "3686b6122ff7d69ec00c50acb4d1c904537882476892c7ac927a2596c18fb29c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/comparison/resource.json",
+      "sha256": "820aeeff4a0f073741f1b108048b4ef83b6d45ef119f28a51a0a50a870d5289c",
+      "bytes": 735,
+      "rawSha256": "e5172bbefa32f41afd64aa8954029ad9d9daf0699184bc8925f68bc965aa4677"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/comparison/executed-probe.mjs",
+      "sha256": "72b38d1fed9192abf66ebc1c469683e530a64461a1530242623fac4b92c77dc4",
+      "bytes": 7749,
+      "rawSha256": "72b38d1fed9192abf66ebc1c469683e530a64461a1530242623fac4b92c77dc4"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/lifetime/report.json",
+      "sha256": "63c185331e721e64a8910c1ce3d8e10af2b949164e0cfa7b1e0656b80e78f5ae",
+      "bytes": 82144,
+      "rawSha256": "63c185331e721e64a8910c1ce3d8e10af2b949164e0cfa7b1e0656b80e78f5ae"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/lifetime/run.log",
+      "sha256": "f85348d8ae07462c0edd3d4743986e6223c8cb8c896b0e96cef93fea8965bdae",
+      "bytes": 438,
+      "rawSha256": "f85348d8ae07462c0edd3d4743986e6223c8cb8c896b0e96cef93fea8965bdae"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/lifetime/resource.json",
+      "sha256": "a644b1ff4aeaf2a4d472306636c978c6f090b6caa2ce0e57c3dabcc1d1268462",
+      "bytes": 658,
+      "rawSha256": "e62aa46b861f6fe6cd612cf8ee6a554485633af10596e90d3d34dc5311712937"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/lifetime/executed-probe.mjs",
+      "sha256": "02a67289f649d51ac173551cae2510f53ffadc23b76bea63c5256d76e98bd77b",
+      "bytes": 10399,
+      "rawSha256": "02a67289f649d51ac173551cae2510f53ffadc23b76bea63c5256d76e98bd77b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/03b5af2b03c8b5c22430bdb012c3e532f3062a92632259452d23b821306247c0.wasm",
+      "sha256": "03b5af2b03c8b5c22430bdb012c3e532f3062a92632259452d23b821306247c0",
+      "bytes": 604,
+      "rawSha256": "03b5af2b03c8b5c22430bdb012c3e532f3062a92632259452d23b821306247c0"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/045b2b4e6a54305c5b680a239d09d20d53c439772958584019913116ca8836a4.wasm",
+      "sha256": "045b2b4e6a54305c5b680a239d09d20d53c439772958584019913116ca8836a4",
+      "bytes": 3362,
+      "rawSha256": "045b2b4e6a54305c5b680a239d09d20d53c439772958584019913116ca8836a4"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/04f1369ee71b6d3c532cc18e692b02d008d328906b7b9561b3ea4b0352e47bbb.wasm",
+      "sha256": "04f1369ee71b6d3c532cc18e692b02d008d328906b7b9561b3ea4b0352e47bbb",
+      "bytes": 117,
+      "rawSha256": "04f1369ee71b6d3c532cc18e692b02d008d328906b7b9561b3ea4b0352e47bbb"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/05689835edc7d6038f66d4c2a4421f0cf8896356ffe5141494b6444b4d127b03.wasm",
+      "sha256": "05689835edc7d6038f66d4c2a4421f0cf8896356ffe5141494b6444b4d127b03",
+      "bytes": 116,
+      "rawSha256": "05689835edc7d6038f66d4c2a4421f0cf8896356ffe5141494b6444b4d127b03"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/06e7e0dcc2ce18d4571f04b9c82687a7230f6ec743749f4d0719fe82a8d20879.wasm",
+      "sha256": "06e7e0dcc2ce18d4571f04b9c82687a7230f6ec743749f4d0719fe82a8d20879",
+      "bytes": 85,
+      "rawSha256": "06e7e0dcc2ce18d4571f04b9c82687a7230f6ec743749f4d0719fe82a8d20879"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/074a6a491fd1f99a773ce879100a4a6b89237ec3cd10dc16bd6297f184d3d7eb.wasm",
+      "sha256": "074a6a491fd1f99a773ce879100a4a6b89237ec3cd10dc16bd6297f184d3d7eb",
+      "bytes": 502,
+      "rawSha256": "074a6a491fd1f99a773ce879100a4a6b89237ec3cd10dc16bd6297f184d3d7eb"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/0ab5097a8d63085bcf2119df3f45654480b8929e9e6d152c89fb04be6dd33c9c.wasm",
+      "sha256": "0ab5097a8d63085bcf2119df3f45654480b8929e9e6d152c89fb04be6dd33c9c",
+      "bytes": 1246,
+      "rawSha256": "0ab5097a8d63085bcf2119df3f45654480b8929e9e6d152c89fb04be6dd33c9c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/0f0743e98c865ef926643398969c1448f6300eac3d04881cb7bec0e7cb2fd358.wasm",
+      "sha256": "0f0743e98c865ef926643398969c1448f6300eac3d04881cb7bec0e7cb2fd358",
+      "bytes": 515,
+      "rawSha256": "0f0743e98c865ef926643398969c1448f6300eac3d04881cb7bec0e7cb2fd358"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/10e7b8e4cc72b5b279b3b92c32b016e24418076202769b017c6408972a74f4fe.wasm",
+      "sha256": "10e7b8e4cc72b5b279b3b92c32b016e24418076202769b017c6408972a74f4fe",
+      "bytes": 451,
+      "rawSha256": "10e7b8e4cc72b5b279b3b92c32b016e24418076202769b017c6408972a74f4fe"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/14379dbafadb964fb8bf3d97b0d95a43856ca3b232cb75c205c4a4a71214da71.wasm",
+      "sha256": "14379dbafadb964fb8bf3d97b0d95a43856ca3b232cb75c205c4a4a71214da71",
+      "bytes": 822,
+      "rawSha256": "14379dbafadb964fb8bf3d97b0d95a43856ca3b232cb75c205c4a4a71214da71"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/14b2f852db6376806f428413efca3613c36d13201148bc33a2a9028678c312e6.wasm",
+      "sha256": "14b2f852db6376806f428413efca3613c36d13201148bc33a2a9028678c312e6",
+      "bytes": 778,
+      "rawSha256": "14b2f852db6376806f428413efca3613c36d13201148bc33a2a9028678c312e6"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/14c96f2c21b806acc1ce3a66a5e55c4126b06cdc57213a40e7609abd75ecdde5.wasm",
+      "sha256": "14c96f2c21b806acc1ce3a66a5e55c4126b06cdc57213a40e7609abd75ecdde5",
+      "bytes": 147,
+      "rawSha256": "14c96f2c21b806acc1ce3a66a5e55c4126b06cdc57213a40e7609abd75ecdde5"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/14e8c697fbdeb749b10b58051a652429994c1c9ed8dd724bd1f465463cca3c06.wasm",
+      "sha256": "14e8c697fbdeb749b10b58051a652429994c1c9ed8dd724bd1f465463cca3c06",
+      "bytes": 832,
+      "rawSha256": "14e8c697fbdeb749b10b58051a652429994c1c9ed8dd724bd1f465463cca3c06"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/16d56d92f7179929bbb5ba66a7ab03ca53b350946ef1e89031015b8079fe21a1.wasm",
+      "sha256": "16d56d92f7179929bbb5ba66a7ab03ca53b350946ef1e89031015b8079fe21a1",
+      "bytes": 502,
+      "rawSha256": "16d56d92f7179929bbb5ba66a7ab03ca53b350946ef1e89031015b8079fe21a1"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/195fccabd29bd99258cc0774109ee8b08093c269beca4238200a12c937ad7425.wasm",
+      "sha256": "195fccabd29bd99258cc0774109ee8b08093c269beca4238200a12c937ad7425",
+      "bytes": 740,
+      "rawSha256": "195fccabd29bd99258cc0774109ee8b08093c269beca4238200a12c937ad7425"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/1b1bdc6492dd89fe27cd43b40ebf45180d9000732ef843f855d5dfd97ff18d7d.wasm",
+      "sha256": "1b1bdc6492dd89fe27cd43b40ebf45180d9000732ef843f855d5dfd97ff18d7d",
+      "bytes": 117,
+      "rawSha256": "1b1bdc6492dd89fe27cd43b40ebf45180d9000732ef843f855d5dfd97ff18d7d"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/1cc3f80ed8d1a7e7e0db344f485fd88812395b477d54e90b393e1ddc99b93fa0.wasm",
+      "sha256": "1cc3f80ed8d1a7e7e0db344f485fd88812395b477d54e90b393e1ddc99b93fa0",
+      "bytes": 1218,
+      "rawSha256": "1cc3f80ed8d1a7e7e0db344f485fd88812395b477d54e90b393e1ddc99b93fa0"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/1f01fb02d0f546127640795410538a728c95e77a1aff285fbff8749aec2aae87.wasm",
+      "sha256": "1f01fb02d0f546127640795410538a728c95e77a1aff285fbff8749aec2aae87",
+      "bytes": 132,
+      "rawSha256": "1f01fb02d0f546127640795410538a728c95e77a1aff285fbff8749aec2aae87"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/1ff9b30986f004d9807c0038579e3793f534d2aac3dd95e156e2110ad63fbef2.wasm",
+      "sha256": "1ff9b30986f004d9807c0038579e3793f534d2aac3dd95e156e2110ad63fbef2",
+      "bytes": 234,
+      "rawSha256": "1ff9b30986f004d9807c0038579e3793f534d2aac3dd95e156e2110ad63fbef2"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/252e069481c16dc41d5670df717c9a4ebe6fe43ae3b834012ad069ab0226bcd1.wasm",
+      "sha256": "252e069481c16dc41d5670df717c9a4ebe6fe43ae3b834012ad069ab0226bcd1",
+      "bytes": 502,
+      "rawSha256": "252e069481c16dc41d5670df717c9a4ebe6fe43ae3b834012ad069ab0226bcd1"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/25593d01c39299e7da36c54650963c812f5e1459af3804bccaab4fde41e4b95d.wasm",
+      "sha256": "25593d01c39299e7da36c54650963c812f5e1459af3804bccaab4fde41e4b95d",
+      "bytes": 742,
+      "rawSha256": "25593d01c39299e7da36c54650963c812f5e1459af3804bccaab4fde41e4b95d"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/263c447516e8d091f2d3a8aed45fe0736f3eda3e43280364258ded6009d06392.wasm",
+      "sha256": "263c447516e8d091f2d3a8aed45fe0736f3eda3e43280364258ded6009d06392",
+      "bytes": 485,
+      "rawSha256": "263c447516e8d091f2d3a8aed45fe0736f3eda3e43280364258ded6009d06392"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/26512462832fba9c6a698376a0bac7edef6152b3b9257b0ea39a6db6673d6a90.wasm",
+      "sha256": "26512462832fba9c6a698376a0bac7edef6152b3b9257b0ea39a6db6673d6a90",
+      "bytes": 132,
+      "rawSha256": "26512462832fba9c6a698376a0bac7edef6152b3b9257b0ea39a6db6673d6a90"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/26f1ccebb54e49ad5d85c7535fefb263caa49f31381bcc0be5cad50ea99dd477.wasm",
+      "sha256": "26f1ccebb54e49ad5d85c7535fefb263caa49f31381bcc0be5cad50ea99dd477",
+      "bytes": 132,
+      "rawSha256": "26f1ccebb54e49ad5d85c7535fefb263caa49f31381bcc0be5cad50ea99dd477"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/286e46f70ffbe0114c2cef98a04b05313826f77567704189cb0e5d0d1dd60236.wasm",
+      "sha256": "286e46f70ffbe0114c2cef98a04b05313826f77567704189cb0e5d0d1dd60236",
+      "bytes": 117,
+      "rawSha256": "286e46f70ffbe0114c2cef98a04b05313826f77567704189cb0e5d0d1dd60236"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/28d09b8eaf2536520575d6fbc8380d8b54a9bfc8bd1f9b80c6ab9d92dcbe1d63.wasm",
+      "sha256": "28d09b8eaf2536520575d6fbc8380d8b54a9bfc8bd1f9b80c6ab9d92dcbe1d63",
+      "bytes": 573,
+      "rawSha256": "28d09b8eaf2536520575d6fbc8380d8b54a9bfc8bd1f9b80c6ab9d92dcbe1d63"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/2a21438ec0186bcb0ce0b34aa1dfa2d18a12da916735fd24ed0331d8bb885e17.wasm",
+      "sha256": "2a21438ec0186bcb0ce0b34aa1dfa2d18a12da916735fd24ed0331d8bb885e17",
+      "bytes": 684,
+      "rawSha256": "2a21438ec0186bcb0ce0b34aa1dfa2d18a12da916735fd24ed0331d8bb885e17"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/2b0f0e0318d940ad7be62e4aed889dde593a262d8527fdafefbb961d2501a735.wasm",
+      "sha256": "2b0f0e0318d940ad7be62e4aed889dde593a262d8527fdafefbb961d2501a735",
+      "bytes": 182,
+      "rawSha256": "2b0f0e0318d940ad7be62e4aed889dde593a262d8527fdafefbb961d2501a735"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/2c8682edfdb17b166d45ddc24a731c78b0dbe23d0bc256089459bbe25111a716.wasm",
+      "sha256": "2c8682edfdb17b166d45ddc24a731c78b0dbe23d0bc256089459bbe25111a716",
+      "bytes": 584,
+      "rawSha256": "2c8682edfdb17b166d45ddc24a731c78b0dbe23d0bc256089459bbe25111a716"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/2d6d3f47a99adee03af1ffb49d4ccab598979c1d36cadb5cceb8e6d40e226a75.wasm",
+      "sha256": "2d6d3f47a99adee03af1ffb49d4ccab598979c1d36cadb5cceb8e6d40e226a75",
+      "bytes": 742,
+      "rawSha256": "2d6d3f47a99adee03af1ffb49d4ccab598979c1d36cadb5cceb8e6d40e226a75"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/2eefa8c6e02d0497ff58b69dcf5c06f5bdbe0b4c2d25075608f9ba7995af7a4c.wasm",
+      "sha256": "2eefa8c6e02d0497ff58b69dcf5c06f5bdbe0b4c2d25075608f9ba7995af7a4c",
+      "bytes": 822,
+      "rawSha256": "2eefa8c6e02d0497ff58b69dcf5c06f5bdbe0b4c2d25075608f9ba7995af7a4c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/311bedd27180d160a3ae9dfdb328ce348b8c68e3e2bf5de298e84d218e1af5d3.wasm",
+      "sha256": "311bedd27180d160a3ae9dfdb328ce348b8c68e3e2bf5de298e84d218e1af5d3",
+      "bytes": 542,
+      "rawSha256": "311bedd27180d160a3ae9dfdb328ce348b8c68e3e2bf5de298e84d218e1af5d3"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/3298a7bf09e81ee7cacaa51839d159194fa3fc587f8ca4cde1061884a63af01e.wasm",
+      "sha256": "3298a7bf09e81ee7cacaa51839d159194fa3fc587f8ca4cde1061884a63af01e",
+      "bytes": 639,
+      "rawSha256": "3298a7bf09e81ee7cacaa51839d159194fa3fc587f8ca4cde1061884a63af01e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/32d60150c2b331f7be77b85830f0af3d719ffb4316928fe5d325b7be50be481c.wasm",
+      "sha256": "32d60150c2b331f7be77b85830f0af3d719ffb4316928fe5d325b7be50be481c",
+      "bytes": 117,
+      "rawSha256": "32d60150c2b331f7be77b85830f0af3d719ffb4316928fe5d325b7be50be481c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/34bc05e73560bd27f4ec298df01081cd0ff8873931a3e34d30d53c40e3f57d52.wasm",
+      "sha256": "34bc05e73560bd27f4ec298df01081cd0ff8873931a3e34d30d53c40e3f57d52",
+      "bytes": 132,
+      "rawSha256": "34bc05e73560bd27f4ec298df01081cd0ff8873931a3e34d30d53c40e3f57d52"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/37dcc41b43ff3e6ea5fe9dbe359ef8b834314bde1314cca35da63dcc4ba37ce8.wasm",
+      "sha256": "37dcc41b43ff3e6ea5fe9dbe359ef8b834314bde1314cca35da63dcc4ba37ce8",
+      "bytes": 797,
+      "rawSha256": "37dcc41b43ff3e6ea5fe9dbe359ef8b834314bde1314cca35da63dcc4ba37ce8"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/380e722cef2f5dbd94ddfc126a6e334456002199efafe5322a85f45f6d406688.wasm",
+      "sha256": "380e722cef2f5dbd94ddfc126a6e334456002199efafe5322a85f45f6d406688",
+      "bytes": 1270,
+      "rawSha256": "380e722cef2f5dbd94ddfc126a6e334456002199efafe5322a85f45f6d406688"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/3934431436fafed274240527c5f8298a868cc15b027ad1c13cb91c6b8bc6570a.wasm",
+      "sha256": "3934431436fafed274240527c5f8298a868cc15b027ad1c13cb91c6b8bc6570a",
+      "bytes": 1064,
+      "rawSha256": "3934431436fafed274240527c5f8298a868cc15b027ad1c13cb91c6b8bc6570a"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/397dad6e66bb57f946f3cd9b5e47ec4656a69fdbf7df4d406165e1f648963cef.wasm",
+      "sha256": "397dad6e66bb57f946f3cd9b5e47ec4656a69fdbf7df4d406165e1f648963cef",
+      "bytes": 117,
+      "rawSha256": "397dad6e66bb57f946f3cd9b5e47ec4656a69fdbf7df4d406165e1f648963cef"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/3a08a865fa28c60ef7b1d014130326377d0df592ee6fd1c1321d3c976d004cd9.wasm",
+      "sha256": "3a08a865fa28c60ef7b1d014130326377d0df592ee6fd1c1321d3c976d004cd9",
+      "bytes": 805,
+      "rawSha256": "3a08a865fa28c60ef7b1d014130326377d0df592ee6fd1c1321d3c976d004cd9"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/3a7b853c652bfcb87a4a371bdae45152dc7658222828d4a6dd06556dddf8edc7.wasm",
+      "sha256": "3a7b853c652bfcb87a4a371bdae45152dc7658222828d4a6dd06556dddf8edc7",
+      "bytes": 684,
+      "rawSha256": "3a7b853c652bfcb87a4a371bdae45152dc7658222828d4a6dd06556dddf8edc7"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/3b33566e9fb11b88977b41cdd26e782322b7b46bfe4d0bc7c606e42a4bf98379.wasm",
+      "sha256": "3b33566e9fb11b88977b41cdd26e782322b7b46bfe4d0bc7c606e42a4bf98379",
+      "bytes": 734,
+      "rawSha256": "3b33566e9fb11b88977b41cdd26e782322b7b46bfe4d0bc7c606e42a4bf98379"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/3ce88fe71475d2752d5c986710902b2df79b55b932c0d1a1815a04747dea3e33.wasm",
+      "sha256": "3ce88fe71475d2752d5c986710902b2df79b55b932c0d1a1815a04747dea3e33",
+      "bytes": 451,
+      "rawSha256": "3ce88fe71475d2752d5c986710902b2df79b55b932c0d1a1815a04747dea3e33"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/3cf33504c9cfc41539c6b199cb34a48b366b05529f2f37dee8942a8001830ad7.wasm",
+      "sha256": "3cf33504c9cfc41539c6b199cb34a48b366b05529f2f37dee8942a8001830ad7",
+      "bytes": 451,
+      "rawSha256": "3cf33504c9cfc41539c6b199cb34a48b366b05529f2f37dee8942a8001830ad7"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/3dfeaa3f2939a3a68204b82a3bc7541951a9459b0db1365dc0f441587ea5a883.wasm",
+      "sha256": "3dfeaa3f2939a3a68204b82a3bc7541951a9459b0db1365dc0f441587ea5a883",
+      "bytes": 914,
+      "rawSha256": "3dfeaa3f2939a3a68204b82a3bc7541951a9459b0db1365dc0f441587ea5a883"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/3e712b14e4eff340d78ba90eabf5594a4f563c7ee4433b6c7ba279bbc854f99b.wasm",
+      "sha256": "3e712b14e4eff340d78ba90eabf5594a4f563c7ee4433b6c7ba279bbc854f99b",
+      "bytes": 740,
+      "rawSha256": "3e712b14e4eff340d78ba90eabf5594a4f563c7ee4433b6c7ba279bbc854f99b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/40001e24da8bf48f57258108d7fe902a05970fb7dbfbada82941aae68bea2859.wasm",
+      "sha256": "40001e24da8bf48f57258108d7fe902a05970fb7dbfbada82941aae68bea2859",
+      "bytes": 2256,
+      "rawSha256": "40001e24da8bf48f57258108d7fe902a05970fb7dbfbada82941aae68bea2859"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/4047d2777c80af497c51517871384beaedb60a42be686fa62b02148fc0437235.wasm",
+      "sha256": "4047d2777c80af497c51517871384beaedb60a42be686fa62b02148fc0437235",
+      "bytes": 162,
+      "rawSha256": "4047d2777c80af497c51517871384beaedb60a42be686fa62b02148fc0437235"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/415b504f839fd8071edf3f0d0c8e008e4c32b18db07866c1ca23cdb3550e57a7.wasm",
+      "sha256": "415b504f839fd8071edf3f0d0c8e008e4c32b18db07866c1ca23cdb3550e57a7",
+      "bytes": 46248,
+      "rawSha256": "415b504f839fd8071edf3f0d0c8e008e4c32b18db07866c1ca23cdb3550e57a7"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/43705ec5585fb5aae9a4c79d08ba6ad9e4687bcad567084330d2acc7dc2df780.wasm",
+      "sha256": "43705ec5585fb5aae9a4c79d08ba6ad9e4687bcad567084330d2acc7dc2df780",
+      "bytes": 740,
+      "rawSha256": "43705ec5585fb5aae9a4c79d08ba6ad9e4687bcad567084330d2acc7dc2df780"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/44c19787a3d2514719323cf214b8bafc0427a370c7f867f59114213fb2e06dd2.wasm",
+      "sha256": "44c19787a3d2514719323cf214b8bafc0427a370c7f867f59114213fb2e06dd2",
+      "bytes": 451,
+      "rawSha256": "44c19787a3d2514719323cf214b8bafc0427a370c7f867f59114213fb2e06dd2"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/4627a5166fd83647da3b59c42272d39df4802d5a502019cb301ad0e58e22e682.wasm",
+      "sha256": "4627a5166fd83647da3b59c42272d39df4802d5a502019cb301ad0e58e22e682",
+      "bytes": 515,
+      "rawSha256": "4627a5166fd83647da3b59c42272d39df4802d5a502019cb301ad0e58e22e682"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/46db0eb0df0850ff107894bd7e6443a134ebe0c6b5cc1747cca6bdb65293186a.wasm",
+      "sha256": "46db0eb0df0850ff107894bd7e6443a134ebe0c6b5cc1747cca6bdb65293186a",
+      "bytes": 450,
+      "rawSha256": "46db0eb0df0850ff107894bd7e6443a134ebe0c6b5cc1747cca6bdb65293186a"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/47c339ddf38b5f41a31276a908f136d2c8a8dc548b2b972bd8194a8f3738a96a.wasm",
+      "sha256": "47c339ddf38b5f41a31276a908f136d2c8a8dc548b2b972bd8194a8f3738a96a",
+      "bytes": 561,
+      "rawSha256": "47c339ddf38b5f41a31276a908f136d2c8a8dc548b2b972bd8194a8f3738a96a"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/4a79207c9cb57b6221cd515aa875b572f849a2143923f44817ad26cba133dfdd.wasm",
+      "sha256": "4a79207c9cb57b6221cd515aa875b572f849a2143923f44817ad26cba133dfdd",
+      "bytes": 200,
+      "rawSha256": "4a79207c9cb57b6221cd515aa875b572f849a2143923f44817ad26cba133dfdd"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/4a8f9a25d5199c2b3ee588e964c9e23dd1c43cf0dcb93af587b03abeba397d6c.wasm",
+      "sha256": "4a8f9a25d5199c2b3ee588e964c9e23dd1c43cf0dcb93af587b03abeba397d6c",
+      "bytes": 504,
+      "rawSha256": "4a8f9a25d5199c2b3ee588e964c9e23dd1c43cf0dcb93af587b03abeba397d6c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/4b145cf6e322a18537589577461e7c96cda5836fa96f6c470a86cb44c64b89dc.wasm",
+      "sha256": "4b145cf6e322a18537589577461e7c96cda5836fa96f6c470a86cb44c64b89dc",
+      "bytes": 502,
+      "rawSha256": "4b145cf6e322a18537589577461e7c96cda5836fa96f6c470a86cb44c64b89dc"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/4b9a218f9191a62f20374a5df8634f25180a28f4af745b21e4c37f800cc9ce27.wasm",
+      "sha256": "4b9a218f9191a62f20374a5df8634f25180a28f4af745b21e4c37f800cc9ce27",
+      "bytes": 597,
+      "rawSha256": "4b9a218f9191a62f20374a5df8634f25180a28f4af745b21e4c37f800cc9ce27"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/4ccec36a4fcc3c96c38cdacb1c7610d5af021324a94d02ab910638587c3270c9.wasm",
+      "sha256": "4ccec36a4fcc3c96c38cdacb1c7610d5af021324a94d02ab910638587c3270c9",
+      "bytes": 116,
+      "rawSha256": "4ccec36a4fcc3c96c38cdacb1c7610d5af021324a94d02ab910638587c3270c9"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/4dc1e1c0d0c08bb59038bb0c837b6d7cc629e1e7289505ddd504c90820a2d2a7.wasm",
+      "sha256": "4dc1e1c0d0c08bb59038bb0c837b6d7cc629e1e7289505ddd504c90820a2d2a7",
+      "bytes": 451,
+      "rawSha256": "4dc1e1c0d0c08bb59038bb0c837b6d7cc629e1e7289505ddd504c90820a2d2a7"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/4de8db4e38caae720989c314db4639380ec6125ff1644754f52b987943dd009a.wasm",
+      "sha256": "4de8db4e38caae720989c314db4639380ec6125ff1644754f52b987943dd009a",
+      "bytes": 502,
+      "rawSha256": "4de8db4e38caae720989c314db4639380ec6125ff1644754f52b987943dd009a"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/5133fca287f569acae3c8a514ac3823449e9c4b9abe46e7f03e1723048ea3da6.wasm",
+      "sha256": "5133fca287f569acae3c8a514ac3823449e9c4b9abe46e7f03e1723048ea3da6",
+      "bytes": 739,
+      "rawSha256": "5133fca287f569acae3c8a514ac3823449e9c4b9abe46e7f03e1723048ea3da6"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/5160a8e332e3227f97ea5cf7e19afc30509789a6ccdf31c7b50ff00d0b35425f.wasm",
+      "sha256": "5160a8e332e3227f97ea5cf7e19afc30509789a6ccdf31c7b50ff00d0b35425f",
+      "bytes": 742,
+      "rawSha256": "5160a8e332e3227f97ea5cf7e19afc30509789a6ccdf31c7b50ff00d0b35425f"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/5483cbe6119804a6e91f5063da584ad82f72d839e8515abc179f7e87ad796054.wasm",
+      "sha256": "5483cbe6119804a6e91f5063da584ad82f72d839e8515abc179f7e87ad796054",
+      "bytes": 451,
+      "rawSha256": "5483cbe6119804a6e91f5063da584ad82f72d839e8515abc179f7e87ad796054"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/557b298f560d39c67c685f6a333ecdecabed3a22038723ead4f75aec99f81559.wasm",
+      "sha256": "557b298f560d39c67c685f6a333ecdecabed3a22038723ead4f75aec99f81559",
+      "bytes": 504,
+      "rawSha256": "557b298f560d39c67c685f6a333ecdecabed3a22038723ead4f75aec99f81559"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/56df7bca15099fd286c50a9ddfabc2554a427fdbc8e44a2606e9053d9ab9a65e.wasm",
+      "sha256": "56df7bca15099fd286c50a9ddfabc2554a427fdbc8e44a2606e9053d9ab9a65e",
+      "bytes": 734,
+      "rawSha256": "56df7bca15099fd286c50a9ddfabc2554a427fdbc8e44a2606e9053d9ab9a65e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/57b5af287b20ab15da2cf8ab808d8a8380c7263ab5055f2268c667f04c6fb72c.wasm",
+      "sha256": "57b5af287b20ab15da2cf8ab808d8a8380c7263ab5055f2268c667f04c6fb72c",
+      "bytes": 451,
+      "rawSha256": "57b5af287b20ab15da2cf8ab808d8a8380c7263ab5055f2268c667f04c6fb72c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/5afe2149c66728c53819355c9ea50cd0b9378f05abf119423e3a42820fb59201.wasm",
+      "sha256": "5afe2149c66728c53819355c9ea50cd0b9378f05abf119423e3a42820fb59201",
+      "bytes": 449,
+      "rawSha256": "5afe2149c66728c53819355c9ea50cd0b9378f05abf119423e3a42820fb59201"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/5f03d1637b139b1978a76a43af40226bce62eafb91129f13a12e75139411cc20.wasm",
+      "sha256": "5f03d1637b139b1978a76a43af40226bce62eafb91129f13a12e75139411cc20",
+      "bytes": 553,
+      "rawSha256": "5f03d1637b139b1978a76a43af40226bce62eafb91129f13a12e75139411cc20"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/635935e4af58b41d4620e9a38a1dd8aa12efa5b39589b80d9199c5dd55961f68.wasm",
+      "sha256": "635935e4af58b41d4620e9a38a1dd8aa12efa5b39589b80d9199c5dd55961f68",
+      "bytes": 182,
+      "rawSha256": "635935e4af58b41d4620e9a38a1dd8aa12efa5b39589b80d9199c5dd55961f68"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/64c5101185accc3f996082b8ab92d409dd7bb1d289493f94083e5d34260cb048.wasm",
+      "sha256": "64c5101185accc3f996082b8ab92d409dd7bb1d289493f94083e5d34260cb048",
+      "bytes": 740,
+      "rawSha256": "64c5101185accc3f996082b8ab92d409dd7bb1d289493f94083e5d34260cb048"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/64dce3bfff7339f4fa93b4107676e21fdb33c774391b6648af64d330f36bfbbe.wasm",
+      "sha256": "64dce3bfff7339f4fa93b4107676e21fdb33c774391b6648af64d330f36bfbbe",
+      "bytes": 546,
+      "rawSha256": "64dce3bfff7339f4fa93b4107676e21fdb33c774391b6648af64d330f36bfbbe"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/6613dd02548e4740eef2b9cc4a6378a92d0030b808ec48a79a49e94a99c49b82.wasm",
+      "sha256": "6613dd02548e4740eef2b9cc4a6378a92d0030b808ec48a79a49e94a99c49b82",
+      "bytes": 553,
+      "rawSha256": "6613dd02548e4740eef2b9cc4a6378a92d0030b808ec48a79a49e94a99c49b82"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/6704811478ca77a7a46a69d2b22c3095483add0bae27951b492f082488519584.wasm",
+      "sha256": "6704811478ca77a7a46a69d2b22c3095483add0bae27951b492f082488519584",
+      "bytes": 560,
+      "rawSha256": "6704811478ca77a7a46a69d2b22c3095483add0bae27951b492f082488519584"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/692cb60b1720a1610e37b243cbb8ce2c04948537521b2bfb20c5fa3708a65009.wasm",
+      "sha256": "692cb60b1720a1610e37b243cbb8ce2c04948537521b2bfb20c5fa3708a65009",
+      "bytes": 894,
+      "rawSha256": "692cb60b1720a1610e37b243cbb8ce2c04948537521b2bfb20c5fa3708a65009"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/6b2bb519d89048f566389e8f97bb1af57ad5877b1c7158300114cddb7703f3f5.wasm",
+      "sha256": "6b2bb519d89048f566389e8f97bb1af57ad5877b1c7158300114cddb7703f3f5",
+      "bytes": 1045,
+      "rawSha256": "6b2bb519d89048f566389e8f97bb1af57ad5877b1c7158300114cddb7703f3f5"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/6bd18007ce424b61b57cd7e93b2f5d77099a4a8dccda65ea58a58b91dc4b6701.wasm",
+      "sha256": "6bd18007ce424b61b57cd7e93b2f5d77099a4a8dccda65ea58a58b91dc4b6701",
+      "bytes": 2280,
+      "rawSha256": "6bd18007ce424b61b57cd7e93b2f5d77099a4a8dccda65ea58a58b91dc4b6701"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/6c7b31913c3476e87f7279f238766e86aab766205824835e8c76b06b553b9761.wasm",
+      "sha256": "6c7b31913c3476e87f7279f238766e86aab766205824835e8c76b06b553b9761",
+      "bytes": 117,
+      "rawSha256": "6c7b31913c3476e87f7279f238766e86aab766205824835e8c76b06b553b9761"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/6e59247fa62b818c83552b4b55513d0d21c976c3f40aced2e0dcd8b14562bc62.wasm",
+      "sha256": "6e59247fa62b818c83552b4b55513d0d21c976c3f40aced2e0dcd8b14562bc62",
+      "bytes": 874,
+      "rawSha256": "6e59247fa62b818c83552b4b55513d0d21c976c3f40aced2e0dcd8b14562bc62"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/6f6a4db6838b39e515af1d14f4fd302a96736687814e4dee3e7d563a9ea23217.wasm",
+      "sha256": "6f6a4db6838b39e515af1d14f4fd302a96736687814e4dee3e7d563a9ea23217",
+      "bytes": 914,
+      "rawSha256": "6f6a4db6838b39e515af1d14f4fd302a96736687814e4dee3e7d563a9ea23217"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/700875ba9861af3d640116e1c6da146637052cf4776f6c61b966853e2245381d.wasm",
+      "sha256": "700875ba9861af3d640116e1c6da146637052cf4776f6c61b966853e2245381d",
+      "bytes": 1218,
+      "rawSha256": "700875ba9861af3d640116e1c6da146637052cf4776f6c61b966853e2245381d"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/72f2882f83def19f2a810379e487e438e5dbdc9fb4b5ba548f472a3d4b16450b.wasm",
+      "sha256": "72f2882f83def19f2a810379e487e438e5dbdc9fb4b5ba548f472a3d4b16450b",
+      "bytes": 117,
+      "rawSha256": "72f2882f83def19f2a810379e487e438e5dbdc9fb4b5ba548f472a3d4b16450b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/73a05e7faa500b5b1453bcab2713cdb161c6b527cc841864c0087d5b9ecdacfe.wasm",
+      "sha256": "73a05e7faa500b5b1453bcab2713cdb161c6b527cc841864c0087d5b9ecdacfe",
+      "bytes": 740,
+      "rawSha256": "73a05e7faa500b5b1453bcab2713cdb161c6b527cc841864c0087d5b9ecdacfe"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/74c187e25c2a980660b22eb875458a9f4e01b8f403c00b66461cbd7bdc9c6abe.wasm",
+      "sha256": "74c187e25c2a980660b22eb875458a9f4e01b8f403c00b66461cbd7bdc9c6abe",
+      "bytes": 117,
+      "rawSha256": "74c187e25c2a980660b22eb875458a9f4e01b8f403c00b66461cbd7bdc9c6abe"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/761718a707be800d841de7b3d32341ec568b7eaffc5de241b6cf84691ee6255d.wasm",
+      "sha256": "761718a707be800d841de7b3d32341ec568b7eaffc5de241b6cf84691ee6255d",
+      "bytes": 679,
+      "rawSha256": "761718a707be800d841de7b3d32341ec568b7eaffc5de241b6cf84691ee6255d"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/76a40c757d5c8020140aae74a5d0df7b7aae20f1609a96a17349f963f60776c1.wasm",
+      "sha256": "76a40c757d5c8020140aae74a5d0df7b7aae20f1609a96a17349f963f60776c1",
+      "bytes": 2304,
+      "rawSha256": "76a40c757d5c8020140aae74a5d0df7b7aae20f1609a96a17349f963f60776c1"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/76cf6f8bca7be2e65d892c7baa4c3dc313ad4571935531790d6b3b832db320cd.wasm",
+      "sha256": "76cf6f8bca7be2e65d892c7baa4c3dc313ad4571935531790d6b3b832db320cd",
+      "bytes": 502,
+      "rawSha256": "76cf6f8bca7be2e65d892c7baa4c3dc313ad4571935531790d6b3b832db320cd"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/7749117f306ccee96147082b67d54de92be1cf4fa458ee566cf29c00ca864d73.wasm",
+      "sha256": "7749117f306ccee96147082b67d54de92be1cf4fa458ee566cf29c00ca864d73",
+      "bytes": 132,
+      "rawSha256": "7749117f306ccee96147082b67d54de92be1cf4fa458ee566cf29c00ca864d73"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/7766e3ce716478ddd86610006cafde42b1cf5f4936a5d9cf4bd07ea2dedfcc68.wasm",
+      "sha256": "7766e3ce716478ddd86610006cafde42b1cf5f4936a5d9cf4bd07ea2dedfcc68",
+      "bytes": 765,
+      "rawSha256": "7766e3ce716478ddd86610006cafde42b1cf5f4936a5d9cf4bd07ea2dedfcc68"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/7780891732a162d6674216d275ba1a131d89b7530482a39c7195a669894f44cc.wasm",
+      "sha256": "7780891732a162d6674216d275ba1a131d89b7530482a39c7195a669894f44cc",
+      "bytes": 553,
+      "rawSha256": "7780891732a162d6674216d275ba1a131d89b7530482a39c7195a669894f44cc"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/77bb38df6e02fa52981ecee97e21a0c2f544fadc2c9344bbf7169d8508b5f027.wasm",
+      "sha256": "77bb38df6e02fa52981ecee97e21a0c2f544fadc2c9344bbf7169d8508b5f027",
+      "bytes": 542,
+      "rawSha256": "77bb38df6e02fa52981ecee97e21a0c2f544fadc2c9344bbf7169d8508b5f027"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/780ed83d5b06064881da75dc97980750fdbbc622b90b71f54383d50b10d28e26.wasm",
+      "sha256": "780ed83d5b06064881da75dc97980750fdbbc622b90b71f54383d50b10d28e26",
+      "bytes": 523,
+      "rawSha256": "780ed83d5b06064881da75dc97980750fdbbc622b90b71f54383d50b10d28e26"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/783b28bc1677b0bafed7480904a9978679893e1817b812d72da287e2f243bbff.wasm",
+      "sha256": "783b28bc1677b0bafed7480904a9978679893e1817b812d72da287e2f243bbff",
+      "bytes": 553,
+      "rawSha256": "783b28bc1677b0bafed7480904a9978679893e1817b812d72da287e2f243bbff"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/7a9ec4c8dbd38fbd5adf3cc9b59b21a8f7b5297c78131604fafc7a09c2cfa3f2.wasm",
+      "sha256": "7a9ec4c8dbd38fbd5adf3cc9b59b21a8f7b5297c78131604fafc7a09c2cfa3f2",
+      "bytes": 502,
+      "rawSha256": "7a9ec4c8dbd38fbd5adf3cc9b59b21a8f7b5297c78131604fafc7a09c2cfa3f2"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/7ea9c500f948578cada5f28779f6fc4e1106ceb6732c3d60de0626d4882fc2bd.wasm",
+      "sha256": "7ea9c500f948578cada5f28779f6fc4e1106ceb6732c3d60de0626d4882fc2bd",
+      "bytes": 553,
+      "rawSha256": "7ea9c500f948578cada5f28779f6fc4e1106ceb6732c3d60de0626d4882fc2bd"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/83985ae47d1b234b1e3a9c92b02e888c5517d6b824b848dbfd4847272fd2c6c9.wasm",
+      "sha256": "83985ae47d1b234b1e3a9c92b02e888c5517d6b824b848dbfd4847272fd2c6c9",
+      "bytes": 117,
+      "rawSha256": "83985ae47d1b234b1e3a9c92b02e888c5517d6b824b848dbfd4847272fd2c6c9"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8399df4203e5eb080283a58a22b2c8edaa6722d23606d2eb89ce685d045ea2aa.wasm",
+      "sha256": "8399df4203e5eb080283a58a22b2c8edaa6722d23606d2eb89ce685d045ea2aa",
+      "bytes": 117,
+      "rawSha256": "8399df4203e5eb080283a58a22b2c8edaa6722d23606d2eb89ce685d045ea2aa"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/83e36bef3e463340df5389cf17e0ba78b10eb071d1a9bf61dd939e7997cb3949.wasm",
+      "sha256": "83e36bef3e463340df5389cf17e0ba78b10eb071d1a9bf61dd939e7997cb3949",
+      "bytes": 739,
+      "rawSha256": "83e36bef3e463340df5389cf17e0ba78b10eb071d1a9bf61dd939e7997cb3949"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/845eefba0ef32a7997e6684681f1c67f5e5d0e8a4d7da7a3759ec260247570c7.wasm",
+      "sha256": "845eefba0ef32a7997e6684681f1c67f5e5d0e8a4d7da7a3759ec260247570c7",
+      "bytes": 791,
+      "rawSha256": "845eefba0ef32a7997e6684681f1c67f5e5d0e8a4d7da7a3759ec260247570c7"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/84e913c24b8143b8dd673670986596c1f1530afc360e699e541abc1100214e1e.wasm",
+      "sha256": "84e913c24b8143b8dd673670986596c1f1530afc360e699e541abc1100214e1e",
+      "bytes": 1823,
+      "rawSha256": "84e913c24b8143b8dd673670986596c1f1530afc360e699e541abc1100214e1e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8524234b58caa4e268dd3d8536ca4554ecf193719a1594b403aaa6a11a50dcc4.wasm",
+      "sha256": "8524234b58caa4e268dd3d8536ca4554ecf193719a1594b403aaa6a11a50dcc4",
+      "bytes": 117,
+      "rawSha256": "8524234b58caa4e268dd3d8536ca4554ecf193719a1594b403aaa6a11a50dcc4"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8537eb171033807bf025cfdcb80a7d569bfff21a7fa23733093398820f8a5588.wasm",
+      "sha256": "8537eb171033807bf025cfdcb80a7d569bfff21a7fa23733093398820f8a5588",
+      "bytes": 1218,
+      "rawSha256": "8537eb171033807bf025cfdcb80a7d569bfff21a7fa23733093398820f8a5588"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8538fa148c42bae83e7d096cfa720f52a88999d48e37062eb7e6185b160c114b.wasm",
+      "sha256": "8538fa148c42bae83e7d096cfa720f52a88999d48e37062eb7e6185b160c114b",
+      "bytes": 765,
+      "rawSha256": "8538fa148c42bae83e7d096cfa720f52a88999d48e37062eb7e6185b160c114b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/857d91c12215b19f9d1e12d11c2eb1760cb464664ddee15bcd363db22790ce86.wasm",
+      "sha256": "857d91c12215b19f9d1e12d11c2eb1760cb464664ddee15bcd363db22790ce86",
+      "bytes": 797,
+      "rawSha256": "857d91c12215b19f9d1e12d11c2eb1760cb464664ddee15bcd363db22790ce86"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/88e795ad7838f44bd7e9473e7c51b63095cff13082dec220926b208f9097dc01.wasm",
+      "sha256": "88e795ad7838f44bd7e9473e7c51b63095cff13082dec220926b208f9097dc01",
+      "bytes": 734,
+      "rawSha256": "88e795ad7838f44bd7e9473e7c51b63095cff13082dec220926b208f9097dc01"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/89590fef81ff287159ba928d1eb8d120f4908ebe74e9f9f92290a522fd2c0e6e.wasm",
+      "sha256": "89590fef81ff287159ba928d1eb8d120f4908ebe74e9f9f92290a522fd2c0e6e",
+      "bytes": 450,
+      "rawSha256": "89590fef81ff287159ba928d1eb8d120f4908ebe74e9f9f92290a522fd2c0e6e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8aa272f7ee81bb7aea2ebc3345db372ff4de1da5a6483d9272f6f58764dd6ddf.wasm",
+      "sha256": "8aa272f7ee81bb7aea2ebc3345db372ff4de1da5a6483d9272f6f58764dd6ddf",
+      "bytes": 553,
+      "rawSha256": "8aa272f7ee81bb7aea2ebc3345db372ff4de1da5a6483d9272f6f58764dd6ddf"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8aafe86a002e0c514e33b517b303511315fce6d014b4fce15827fca86a48a1ed.wasm",
+      "sha256": "8aafe86a002e0c514e33b517b303511315fce6d014b4fce15827fca86a48a1ed",
+      "bytes": 765,
+      "rawSha256": "8aafe86a002e0c514e33b517b303511315fce6d014b4fce15827fca86a48a1ed"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8b2010cacf105278f826475c539d1d1b0f9aee6a7c9ef1cd8bc481c96d0768ff.wasm",
+      "sha256": "8b2010cacf105278f826475c539d1d1b0f9aee6a7c9ef1cd8bc481c96d0768ff",
+      "bytes": 553,
+      "rawSha256": "8b2010cacf105278f826475c539d1d1b0f9aee6a7c9ef1cd8bc481c96d0768ff"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8d9f518544b1e78a29d5c30e440625119223ef078324560f3f435a323efeccbf.wasm",
+      "sha256": "8d9f518544b1e78a29d5c30e440625119223ef078324560f3f435a323efeccbf",
+      "bytes": 679,
+      "rawSha256": "8d9f518544b1e78a29d5c30e440625119223ef078324560f3f435a323efeccbf"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8e57504a0686bdf7fa958851712554587a14e28f805611d41244d0b8d5c3c31c.wasm",
+      "sha256": "8e57504a0686bdf7fa958851712554587a14e28f805611d41244d0b8d5c3c31c",
+      "bytes": 1218,
+      "rawSha256": "8e57504a0686bdf7fa958851712554587a14e28f805611d41244d0b8d5c3c31c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/8fcd864fa73151942ecc9f616dc39534612ea920003db2bb818006d731862fb0.wasm",
+      "sha256": "8fcd864fa73151942ecc9f616dc39534612ea920003db2bb818006d731862fb0",
+      "bytes": 684,
+      "rawSha256": "8fcd864fa73151942ecc9f616dc39534612ea920003db2bb818006d731862fb0"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/90b8e8bda35ed8cf17c41b39d0c4601289b727a290ce27450cb1ed34090773df.wasm",
+      "sha256": "90b8e8bda35ed8cf17c41b39d0c4601289b727a290ce27450cb1ed34090773df",
+      "bytes": 451,
+      "rawSha256": "90b8e8bda35ed8cf17c41b39d0c4601289b727a290ce27450cb1ed34090773df"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/92805fd135d58f79f792eec27e836d0ed836a8c9a8f89ca419f34c66f2667447.wasm",
+      "sha256": "92805fd135d58f79f792eec27e836d0ed836a8c9a8f89ca419f34c66f2667447",
+      "bytes": 959,
+      "rawSha256": "92805fd135d58f79f792eec27e836d0ed836a8c9a8f89ca419f34c66f2667447"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/92e08c015d39dc23f5a5917783c5de411de30d930924dae3ffe964ef9968486c.wasm",
+      "sha256": "92e08c015d39dc23f5a5917783c5de411de30d930924dae3ffe964ef9968486c",
+      "bytes": 914,
+      "rawSha256": "92e08c015d39dc23f5a5917783c5de411de30d930924dae3ffe964ef9968486c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/9351a5f09739207afb9dfa105f544b7a94d15c3dd8d4409343a81a6be1b83df7.wasm",
+      "sha256": "9351a5f09739207afb9dfa105f544b7a94d15c3dd8d4409343a81a6be1b83df7",
+      "bytes": 147,
+      "rawSha256": "9351a5f09739207afb9dfa105f544b7a94d15c3dd8d4409343a81a6be1b83df7"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/947a624110303de9664b7ac2106bb1f79bd5d8c564165cd286926df81b9b3f4e.wasm",
+      "sha256": "947a624110303de9664b7ac2106bb1f79bd5d8c564165cd286926df81b9b3f4e",
+      "bytes": 914,
+      "rawSha256": "947a624110303de9664b7ac2106bb1f79bd5d8c564165cd286926df81b9b3f4e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/94b79b6b12588da0c46efcc5924e20ad30b07539f3953619afdb09ff1788b303.wasm",
+      "sha256": "94b79b6b12588da0c46efcc5924e20ad30b07539f3953619afdb09ff1788b303",
+      "bytes": 451,
+      "rawSha256": "94b79b6b12588da0c46efcc5924e20ad30b07539f3953619afdb09ff1788b303"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/9b5411c2d49a8acb86f03c42c3b66122087ba7486d881370cedfce42166b7f31.wasm",
+      "sha256": "9b5411c2d49a8acb86f03c42c3b66122087ba7486d881370cedfce42166b7f31",
+      "bytes": 132,
+      "rawSha256": "9b5411c2d49a8acb86f03c42c3b66122087ba7486d881370cedfce42166b7f31"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/9c2774c0eef3b6b1a0d96f2967ec3f7dd9d5f1710ab59834fbb9b635d441687c.wasm",
+      "sha256": "9c2774c0eef3b6b1a0d96f2967ec3f7dd9d5f1710ab59834fbb9b635d441687c",
+      "bytes": 676,
+      "rawSha256": "9c2774c0eef3b6b1a0d96f2967ec3f7dd9d5f1710ab59834fbb9b635d441687c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/9cb64131ad461c2c689aaba757d3a8531b643f2df1dfa66a55a19cf0743addd6.wasm",
+      "sha256": "9cb64131ad461c2c689aaba757d3a8531b643f2df1dfa66a55a19cf0743addd6",
+      "bytes": 4464,
+      "rawSha256": "9cb64131ad461c2c689aaba757d3a8531b643f2df1dfa66a55a19cf0743addd6"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/9e1721dc4331a6e2c185d84e07d3c83a41ba0cc0486378ff340ff116bb6ea3dc.wasm",
+      "sha256": "9e1721dc4331a6e2c185d84e07d3c83a41ba0cc0486378ff340ff116bb6ea3dc",
+      "bytes": 117,
+      "rawSha256": "9e1721dc4331a6e2c185d84e07d3c83a41ba0cc0486378ff340ff116bb6ea3dc"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/9f13f0997a2d97aaa0ecacb383ab399c3df74e613092595c12b54ad6c73bfa20.wasm",
+      "sha256": "9f13f0997a2d97aaa0ecacb383ab399c3df74e613092595c12b54ad6c73bfa20",
+      "bytes": 182,
+      "rawSha256": "9f13f0997a2d97aaa0ecacb383ab399c3df74e613092595c12b54ad6c73bfa20"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/a00d0d1ba9cc333b3431b6ba2131f078972fb9fe2c41d57acc4747fb1beda7c6.wasm",
+      "sha256": "a00d0d1ba9cc333b3431b6ba2131f078972fb9fe2c41d57acc4747fb1beda7c6",
+      "bytes": 200,
+      "rawSha256": "a00d0d1ba9cc333b3431b6ba2131f078972fb9fe2c41d57acc4747fb1beda7c6"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/a01910b8d1ac40203cd6aef52f15549c8e4594d01a7e4a01a41e0a412a7b0a53.wasm",
+      "sha256": "a01910b8d1ac40203cd6aef52f15549c8e4594d01a7e4a01a41e0a412a7b0a53",
+      "bytes": 451,
+      "rawSha256": "a01910b8d1ac40203cd6aef52f15549c8e4594d01a7e4a01a41e0a412a7b0a53"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/a283465ef4f914f27296e902bccfdaf098875657aec0902c5b9582c7c34b492b.wasm",
+      "sha256": "a283465ef4f914f27296e902bccfdaf098875657aec0902c5b9582c7c34b492b",
+      "bytes": 117,
+      "rawSha256": "a283465ef4f914f27296e902bccfdaf098875657aec0902c5b9582c7c34b492b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/a671cebf4b5351e6d436bd3606487d4a0101aeae1f07e12bafec1bb016b4b0a9.wasm",
+      "sha256": "a671cebf4b5351e6d436bd3606487d4a0101aeae1f07e12bafec1bb016b4b0a9",
+      "bytes": 147,
+      "rawSha256": "a671cebf4b5351e6d436bd3606487d4a0101aeae1f07e12bafec1bb016b4b0a9"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/a79e76d82719222486d96cb010608cb7e4688f3c9e67e4aa24e2df761be3df60.wasm",
+      "sha256": "a79e76d82719222486d96cb010608cb7e4688f3c9e67e4aa24e2df761be3df60",
+      "bytes": 894,
+      "rawSha256": "a79e76d82719222486d96cb010608cb7e4688f3c9e67e4aa24e2df761be3df60"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/aa5878159036ac2faaae32c933ecda9cc096ca77c995a10d0f4dc5edf2892d8c.wasm",
+      "sha256": "aa5878159036ac2faaae32c933ecda9cc096ca77c995a10d0f4dc5edf2892d8c",
+      "bytes": 675,
+      "rawSha256": "aa5878159036ac2faaae32c933ecda9cc096ca77c995a10d0f4dc5edf2892d8c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/aa9d791a143cf5fc48730525cf9c57263c30f07a624b41d5007f30b58723da35.wasm",
+      "sha256": "aa9d791a143cf5fc48730525cf9c57263c30f07a624b41d5007f30b58723da35",
+      "bytes": 451,
+      "rawSha256": "aa9d791a143cf5fc48730525cf9c57263c30f07a624b41d5007f30b58723da35"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/aae4fccd58fd2f848adcfbe1d3294d78d6c6c1676338884e0e27804a832df118.wasm",
+      "sha256": "aae4fccd58fd2f848adcfbe1d3294d78d6c6c1676338884e0e27804a832df118",
+      "bytes": 844,
+      "rawSha256": "aae4fccd58fd2f848adcfbe1d3294d78d6c6c1676338884e0e27804a832df118"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/abda872eb8da0f0d4369aa7142ee9021b9989e6bfad25c1cd615726222961506.wasm",
+      "sha256": "abda872eb8da0f0d4369aa7142ee9021b9989e6bfad25c1cd615726222961506",
+      "bytes": 1216,
+      "rawSha256": "abda872eb8da0f0d4369aa7142ee9021b9989e6bfad25c1cd615726222961506"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/adef9e0d32aef91763db2f2cc1682e9fd296c60f88d3de0d2d9e3685a1b3aee2.wasm",
+      "sha256": "adef9e0d32aef91763db2f2cc1682e9fd296c60f88d3de0d2d9e3685a1b3aee2",
+      "bytes": 210,
+      "rawSha256": "adef9e0d32aef91763db2f2cc1682e9fd296c60f88d3de0d2d9e3685a1b3aee2"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/af286a777a4989baec16c0b7495f0cab04c76748bd6f10bec5fa28e1dc8d480c.wasm",
+      "sha256": "af286a777a4989baec16c0b7495f0cab04c76748bd6f10bec5fa28e1dc8d480c",
+      "bytes": 132,
+      "rawSha256": "af286a777a4989baec16c0b7495f0cab04c76748bd6f10bec5fa28e1dc8d480c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b0e889266939a4af8c1d5d601ecf3f09b9b14c8d263fa9d5b2a652d1a5653ccb.wasm",
+      "sha256": "b0e889266939a4af8c1d5d601ecf3f09b9b14c8d263fa9d5b2a652d1a5653ccb",
+      "bytes": 200,
+      "rawSha256": "b0e889266939a4af8c1d5d601ecf3f09b9b14c8d263fa9d5b2a652d1a5653ccb"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b155aec00e2870c7ee9456b3d4e8e5e983192068c47df8a5be6f0ae6327ac1d7.wasm",
+      "sha256": "b155aec00e2870c7ee9456b3d4e8e5e983192068c47df8a5be6f0ae6327ac1d7",
+      "bytes": 797,
+      "rawSha256": "b155aec00e2870c7ee9456b3d4e8e5e983192068c47df8a5be6f0ae6327ac1d7"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b15a1c7fb523cb71f1e77b7278797ad496f904a2adea47aeee91677bf764174e.wasm",
+      "sha256": "b15a1c7fb523cb71f1e77b7278797ad496f904a2adea47aeee91677bf764174e",
+      "bytes": 995,
+      "rawSha256": "b15a1c7fb523cb71f1e77b7278797ad496f904a2adea47aeee91677bf764174e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b22db36f90a786ebe76c2188457e019d3a0a3a80485526b3ec5c43a7a248c334.wasm",
+      "sha256": "b22db36f90a786ebe76c2188457e019d3a0a3a80485526b3ec5c43a7a248c334",
+      "bytes": 117,
+      "rawSha256": "b22db36f90a786ebe76c2188457e019d3a0a3a80485526b3ec5c43a7a248c334"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b3a91a4e21af858c09900ca2b7800eb384d7f91c60905fb024f589fc287f8884.wasm",
+      "sha256": "b3a91a4e21af858c09900ca2b7800eb384d7f91c60905fb024f589fc287f8884",
+      "bytes": 132,
+      "rawSha256": "b3a91a4e21af858c09900ca2b7800eb384d7f91c60905fb024f589fc287f8884"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b4b27010d741ea918b94d090a716a08592feec0312cb281d5d5043c61b196f08.wasm",
+      "sha256": "b4b27010d741ea918b94d090a716a08592feec0312cb281d5d5043c61b196f08",
+      "bytes": 217,
+      "rawSha256": "b4b27010d741ea918b94d090a716a08592feec0312cb281d5d5043c61b196f08"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b4f0be01aa17bd2f049a69f9632cd441c12140ae262403c762471bca0fe545ff.wasm",
+      "sha256": "b4f0be01aa17bd2f049a69f9632cd441c12140ae262403c762471bca0fe545ff",
+      "bytes": 553,
+      "rawSha256": "b4f0be01aa17bd2f049a69f9632cd441c12140ae262403c762471bca0fe545ff"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b5fffb5dbf66ffb1febea1b003ed4eff767e80026a891f63b9ad79d28f73d62d.wasm",
+      "sha256": "b5fffb5dbf66ffb1febea1b003ed4eff767e80026a891f63b9ad79d28f73d62d",
+      "bytes": 547,
+      "rawSha256": "b5fffb5dbf66ffb1febea1b003ed4eff767e80026a891f63b9ad79d28f73d62d"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b66e0bc7328452ff9ca22f04d13576fae2912e74ce92d934b56609dae45edc37.wasm",
+      "sha256": "b66e0bc7328452ff9ca22f04d13576fae2912e74ce92d934b56609dae45edc37",
+      "bytes": 914,
+      "rawSha256": "b66e0bc7328452ff9ca22f04d13576fae2912e74ce92d934b56609dae45edc37"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/b9b242bdb60c14244f8dd3ab4649969a317588f68ca99196c3e2ed673a5b3a7e.wasm",
+      "sha256": "b9b242bdb60c14244f8dd3ab4649969a317588f68ca99196c3e2ed673a5b3a7e",
+      "bytes": 451,
+      "rawSha256": "b9b242bdb60c14244f8dd3ab4649969a317588f68ca99196c3e2ed673a5b3a7e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ba0c3bc5b9c73b7d2f53519e1f03f94461e551b1871f6041367bc31e6d8a0859.wasm",
+      "sha256": "ba0c3bc5b9c73b7d2f53519e1f03f94461e551b1871f6041367bc31e6d8a0859",
+      "bytes": 117,
+      "rawSha256": "ba0c3bc5b9c73b7d2f53519e1f03f94461e551b1871f6041367bc31e6d8a0859"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ba2d4feaf8a7bf2679807db517a1da5674a8002b7dcba7c6d58a323b0f628e44.wasm",
+      "sha256": "ba2d4feaf8a7bf2679807db517a1da5674a8002b7dcba7c6d58a323b0f628e44",
+      "bytes": 117,
+      "rawSha256": "ba2d4feaf8a7bf2679807db517a1da5674a8002b7dcba7c6d58a323b0f628e44"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/bd283970747ed4b43eacca01f4f204d692ee0731768f015e430bf4f798998b4e.wasm",
+      "sha256": "bd283970747ed4b43eacca01f4f204d692ee0731768f015e430bf4f798998b4e",
+      "bytes": 894,
+      "rawSha256": "bd283970747ed4b43eacca01f4f204d692ee0731768f015e430bf4f798998b4e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/bd99b9d238d5d5a0c311ba97fe072fe0bcfcca97938f84f5b671dc781821b864.wasm",
+      "sha256": "bd99b9d238d5d5a0c311ba97fe072fe0bcfcca97938f84f5b671dc781821b864",
+      "bytes": 817,
+      "rawSha256": "bd99b9d238d5d5a0c311ba97fe072fe0bcfcca97938f84f5b671dc781821b864"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/bf2032b11cd7acdf4b2ea4e7c7352a9854d56f5263f72b2c0802298b6d61e5e4.wasm",
+      "sha256": "bf2032b11cd7acdf4b2ea4e7c7352a9854d56f5263f72b2c0802298b6d61e5e4",
+      "bytes": 742,
+      "rawSha256": "bf2032b11cd7acdf4b2ea4e7c7352a9854d56f5263f72b2c0802298b6d61e5e4"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/c0219f0ae138db0b827cbe6475bc8c5423f07e7f908b8cb9f8ea35f25e9b048c.wasm",
+      "sha256": "c0219f0ae138db0b827cbe6475bc8c5423f07e7f908b8cb9f8ea35f25e9b048c",
+      "bytes": 502,
+      "rawSha256": "c0219f0ae138db0b827cbe6475bc8c5423f07e7f908b8cb9f8ea35f25e9b048c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/c074ed58faf2b87ac07613d73485612716b26668e3f91b795edd1bda2d0760be.wasm",
+      "sha256": "c074ed58faf2b87ac07613d73485612716b26668e3f91b795edd1bda2d0760be",
+      "bytes": 797,
+      "rawSha256": "c074ed58faf2b87ac07613d73485612716b26668e3f91b795edd1bda2d0760be"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/c11ccc8d6984a580fca6da5e31e240c65bdb53e3489635713a14f7e1b95f2ef7.wasm",
+      "sha256": "c11ccc8d6984a580fca6da5e31e240c65bdb53e3489635713a14f7e1b95f2ef7",
+      "bytes": 1799,
+      "rawSha256": "c11ccc8d6984a580fca6da5e31e240c65bdb53e3489635713a14f7e1b95f2ef7"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/c34f82bc6b12d064cb6c5029e81c5ee5ac7a8d03d9ee4aa9afc63c642139177b.wasm",
+      "sha256": "c34f82bc6b12d064cb6c5029e81c5ee5ac7a8d03d9ee4aa9afc63c642139177b",
+      "bytes": 1294,
+      "rawSha256": "c34f82bc6b12d064cb6c5029e81c5ee5ac7a8d03d9ee4aa9afc63c642139177b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/c36a45bc37729464646251992ba2963e74a2c7e0c900a27adbd5c1996b42b83c.wasm",
+      "sha256": "c36a45bc37729464646251992ba2963e74a2c7e0c900a27adbd5c1996b42b83c",
+      "bytes": 117,
+      "rawSha256": "c36a45bc37729464646251992ba2963e74a2c7e0c900a27adbd5c1996b42b83c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/c85fdcb5e0ff845a03c5e3a43de824fb14d85072dd14cca4b117416e0eb370cf.wasm",
+      "sha256": "c85fdcb5e0ff845a03c5e3a43de824fb14d85072dd14cca4b117416e0eb370cf",
+      "bytes": 451,
+      "rawSha256": "c85fdcb5e0ff845a03c5e3a43de824fb14d85072dd14cca4b117416e0eb370cf"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/c90a25f8494605805940200e7e6e9f9277903f8cda07b419a8d9ca2343efc348.wasm",
+      "sha256": "c90a25f8494605805940200e7e6e9f9277903f8cda07b419a8d9ca2343efc348",
+      "bytes": 117,
+      "rawSha256": "c90a25f8494605805940200e7e6e9f9277903f8cda07b419a8d9ca2343efc348"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ca8fd47dd1628090d465a13bc615cbc0a5403d9722d3d8512cd9ee60247e7dec.wasm",
+      "sha256": "ca8fd47dd1628090d465a13bc615cbc0a5403d9722d3d8512cd9ee60247e7dec",
+      "bytes": 765,
+      "rawSha256": "ca8fd47dd1628090d465a13bc615cbc0a5403d9722d3d8512cd9ee60247e7dec"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/cbf2edfb405d55c41eef5cd57d5cfcefb33d907bf535eb4b18550a58d9f0e50f.wasm",
+      "sha256": "cbf2edfb405d55c41eef5cd57d5cfcefb33d907bf535eb4b18550a58d9f0e50f",
+      "bytes": 182,
+      "rawSha256": "cbf2edfb405d55c41eef5cd57d5cfcefb33d907bf535eb4b18550a58d9f0e50f"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ccb299bc256ebaaa21c1aeb5fd0999709b042e97ff1418ae4c0b85cbedfc735b.wasm",
+      "sha256": "ccb299bc256ebaaa21c1aeb5fd0999709b042e97ff1418ae4c0b85cbedfc735b",
+      "bytes": 1209,
+      "rawSha256": "ccb299bc256ebaaa21c1aeb5fd0999709b042e97ff1418ae4c0b85cbedfc735b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ce6528cb948b7d2fb7481efb07495b4bc2bf6953ece36a706e950295e2280512.wasm",
+      "sha256": "ce6528cb948b7d2fb7481efb07495b4bc2bf6953ece36a706e950295e2280512",
+      "bytes": 117,
+      "rawSha256": "ce6528cb948b7d2fb7481efb07495b4bc2bf6953ece36a706e950295e2280512"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/cf2e5e030e25582c178db1f91a72c33c36d8ff41978113d48a52bf37a37a7c56.wasm",
+      "sha256": "cf2e5e030e25582c178db1f91a72c33c36d8ff41978113d48a52bf37a37a7c56",
+      "bytes": 145,
+      "rawSha256": "cf2e5e030e25582c178db1f91a72c33c36d8ff41978113d48a52bf37a37a7c56"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/cf6ed98e61dfd5715fd07f45cf8db7c45f246044b3b36f2ddc9ac37dcb7150b1.wasm",
+      "sha256": "cf6ed98e61dfd5715fd07f45cf8db7c45f246044b3b36f2ddc9ac37dcb7150b1",
+      "bytes": 451,
+      "rawSha256": "cf6ed98e61dfd5715fd07f45cf8db7c45f246044b3b36f2ddc9ac37dcb7150b1"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/d0de095000263d0ddd76abca94d3aa757caade3201cd58a363ebf2a515d2c769.wasm",
+      "sha256": "d0de095000263d0ddd76abca94d3aa757caade3201cd58a363ebf2a515d2c769",
+      "bytes": 620,
+      "rawSha256": "d0de095000263d0ddd76abca94d3aa757caade3201cd58a363ebf2a515d2c769"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/d4d0eb4ec2d90bb4d1c40ea1a5baa1a184cb4a110d908adf38dca162fe6c9982.wasm",
+      "sha256": "d4d0eb4ec2d90bb4d1c40ea1a5baa1a184cb4a110d908adf38dca162fe6c9982",
+      "bytes": 739,
+      "rawSha256": "d4d0eb4ec2d90bb4d1c40ea1a5baa1a184cb4a110d908adf38dca162fe6c9982"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/d4d4d3f4144b1238fbba56a34ca90413f9ec2e1e6f346e77cdd9d89e4f0f0bef.wasm",
+      "sha256": "d4d4d3f4144b1238fbba56a34ca90413f9ec2e1e6f346e77cdd9d89e4f0f0bef",
+      "bytes": 145,
+      "rawSha256": "d4d4d3f4144b1238fbba56a34ca90413f9ec2e1e6f346e77cdd9d89e4f0f0bef"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/d5b14eff19f975d8f9670607eccf244ceae0bc1c022f067e881122ddaac65630.wasm",
+      "sha256": "d5b14eff19f975d8f9670607eccf244ceae0bc1c022f067e881122ddaac65630",
+      "bytes": 960,
+      "rawSha256": "d5b14eff19f975d8f9670607eccf244ceae0bc1c022f067e881122ddaac65630"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/d5f47a2a074a55115af7d6cb1c033060b35286891f1acbd5b9267084cf428057.wasm",
+      "sha256": "d5f47a2a074a55115af7d6cb1c033060b35286891f1acbd5b9267084cf428057",
+      "bytes": 894,
+      "rawSha256": "d5f47a2a074a55115af7d6cb1c033060b35286891f1acbd5b9267084cf428057"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/d670abb01ce702cbd5b670e4c5ebf0b652e42fd569c9c3a9e4897c8d7234c4ac.wasm",
+      "sha256": "d670abb01ce702cbd5b670e4c5ebf0b652e42fd569c9c3a9e4897c8d7234c4ac",
+      "bytes": 684,
+      "rawSha256": "d670abb01ce702cbd5b670e4c5ebf0b652e42fd569c9c3a9e4897c8d7234c4ac"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/d7561b7b9c2f3bdeb22b4dbda4cc4c08a45a1b47cb5bab38f6342675dc630476.wasm",
+      "sha256": "d7561b7b9c2f3bdeb22b4dbda4cc4c08a45a1b47cb5bab38f6342675dc630476",
+      "bytes": 451,
+      "rawSha256": "d7561b7b9c2f3bdeb22b4dbda4cc4c08a45a1b47cb5bab38f6342675dc630476"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/d76f22d31a9aa10ec8fae23d6974808adbad1f9d1e77e9ed4e013bbeef89b557.wasm",
+      "sha256": "d76f22d31a9aa10ec8fae23d6974808adbad1f9d1e77e9ed4e013bbeef89b557",
+      "bytes": 451,
+      "rawSha256": "d76f22d31a9aa10ec8fae23d6974808adbad1f9d1e77e9ed4e013bbeef89b557"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/dcbc1237f289bdf05cc1050d7b4e32da3a8f45101f5f18bc7f8977a6220cfffd.wasm",
+      "sha256": "dcbc1237f289bdf05cc1050d7b4e32da3a8f45101f5f18bc7f8977a6220cfffd",
+      "bytes": 28282,
+      "rawSha256": "dcbc1237f289bdf05cc1050d7b4e32da3a8f45101f5f18bc7f8977a6220cfffd"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/dcd0ddd1476a12807ed629e63963492d2063c24a4fdf4a16eb484802bb008e80.wasm",
+      "sha256": "dcd0ddd1476a12807ed629e63963492d2063c24a4fdf4a16eb484802bb008e80",
+      "bytes": 147,
+      "rawSha256": "dcd0ddd1476a12807ed629e63963492d2063c24a4fdf4a16eb484802bb008e80"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ddc0f5c5715201dfbc6fc09ee9efef43de93cd4d37a993059bb0244b588c6c4d.wasm",
+      "sha256": "ddc0f5c5715201dfbc6fc09ee9efef43de93cd4d37a993059bb0244b588c6c4d",
+      "bytes": 147,
+      "rawSha256": "ddc0f5c5715201dfbc6fc09ee9efef43de93cd4d37a993059bb0244b588c6c4d"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/df35ac2bef8c59f33307a1627cd59b27545595b146e860993e972b69d363378b.wasm",
+      "sha256": "df35ac2bef8c59f33307a1627cd59b27545595b146e860993e972b69d363378b",
+      "bytes": 2232,
+      "rawSha256": "df35ac2bef8c59f33307a1627cd59b27545595b146e860993e972b69d363378b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/df63a3bcdaa39dabad62b02e27a4332ab8b09ca56af99b9294561edb9c2e211e.wasm",
+      "sha256": "df63a3bcdaa39dabad62b02e27a4332ab8b09ca56af99b9294561edb9c2e211e",
+      "bytes": 740,
+      "rawSha256": "df63a3bcdaa39dabad62b02e27a4332ab8b09ca56af99b9294561edb9c2e211e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/e49b4609f987403da1ac6452a9fb6981d47e54e5219b62463fe5dfff1aff36ed.wasm",
+      "sha256": "e49b4609f987403da1ac6452a9fb6981d47e54e5219b62463fe5dfff1aff36ed",
+      "bytes": 679,
+      "rawSha256": "e49b4609f987403da1ac6452a9fb6981d47e54e5219b62463fe5dfff1aff36ed"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/e6699521365ce51d3fc7fd60453c650320bdd580551df017e3ee482b17fe06da.wasm",
+      "sha256": "e6699521365ce51d3fc7fd60453c650320bdd580551df017e3ee482b17fe06da",
+      "bytes": 734,
+      "rawSha256": "e6699521365ce51d3fc7fd60453c650320bdd580551df017e3ee482b17fe06da"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/e695c26404539908a45ea38c59ed33832214dd65b322c30c85e29f7ac0a92435.wasm",
+      "sha256": "e695c26404539908a45ea38c59ed33832214dd65b322c30c85e29f7ac0a92435",
+      "bytes": 451,
+      "rawSha256": "e695c26404539908a45ea38c59ed33832214dd65b322c30c85e29f7ac0a92435"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/e873090ef940d6511f80ac85f002eb2f6673a318ce3d946b314535dd706b8666.wasm",
+      "sha256": "e873090ef940d6511f80ac85f002eb2f6673a318ce3d946b314535dd706b8666",
+      "bytes": 217,
+      "rawSha256": "e873090ef940d6511f80ac85f002eb2f6673a318ce3d946b314535dd706b8666"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ea810b8c34a349009c92da720e3cab5d3490f1cfc13321a7ecc3af998215fbfd.wasm",
+      "sha256": "ea810b8c34a349009c92da720e3cab5d3490f1cfc13321a7ecc3af998215fbfd",
+      "bytes": 679,
+      "rawSha256": "ea810b8c34a349009c92da720e3cab5d3490f1cfc13321a7ecc3af998215fbfd"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ea86b2ba092f68114a39729b8711f245b570ae62cb9993e091c400b68216e32f.wasm",
+      "sha256": "ea86b2ba092f68114a39729b8711f245b570ae62cb9993e091c400b68216e32f",
+      "bytes": 217,
+      "rawSha256": "ea86b2ba092f68114a39729b8711f245b570ae62cb9993e091c400b68216e32f"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ed405f15108a22e5c79b067f78034bb4fb1637292ebe1e0a42f0ca27bbb3e686.wasm",
+      "sha256": "ed405f15108a22e5c79b067f78034bb4fb1637292ebe1e0a42f0ca27bbb3e686",
+      "bytes": 914,
+      "rawSha256": "ed405f15108a22e5c79b067f78034bb4fb1637292ebe1e0a42f0ca27bbb3e686"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/f01825f91c8f28883bbe9c81fcc24591660bcba7f8d25f2a514ddf48e0e7d20b.wasm",
+      "sha256": "f01825f91c8f28883bbe9c81fcc24591660bcba7f8d25f2a514ddf48e0e7d20b",
+      "bytes": 217,
+      "rawSha256": "f01825f91c8f28883bbe9c81fcc24591660bcba7f8d25f2a514ddf48e0e7d20b"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/f0ebc792162214c78a1676f01a78ca1046e79ef7594c5db344fa7c6c32f202cf.wasm",
+      "sha256": "f0ebc792162214c78a1676f01a78ca1046e79ef7594c5db344fa7c6c32f202cf",
+      "bytes": 200,
+      "rawSha256": "f0ebc792162214c78a1676f01a78ca1046e79ef7594c5db344fa7c6c32f202cf"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/f2193e5fa2d4917ecf220968d40d41772eeee07014b5669cdfda5a60e04bc006.wasm",
+      "sha256": "f2193e5fa2d4917ecf220968d40d41772eeee07014b5669cdfda5a60e04bc006",
+      "bytes": 147,
+      "rawSha256": "f2193e5fa2d4917ecf220968d40d41772eeee07014b5669cdfda5a60e04bc006"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/f2911bbbd633efae72d94b99de5103f6ef0b6f6f045e3b14e9f62250f4eb38dd.wasm",
+      "sha256": "f2911bbbd633efae72d94b99de5103f6ef0b6f6f045e3b14e9f62250f4eb38dd",
+      "bytes": 914,
+      "rawSha256": "f2911bbbd633efae72d94b99de5103f6ef0b6f6f045e3b14e9f62250f4eb38dd"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/f335bc8b7e48f67acbec2387f21386aeaa847b97ed64018080966e8b995aea41.wasm",
+      "sha256": "f335bc8b7e48f67acbec2387f21386aeaa847b97ed64018080966e8b995aea41",
+      "bytes": 778,
+      "rawSha256": "f335bc8b7e48f67acbec2387f21386aeaa847b97ed64018080966e8b995aea41"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/f6b0412965d762858a4d99a4df6251c685cc3b17b6eeaa9b69484beb41f9f894.wasm",
+      "sha256": "f6b0412965d762858a4d99a4df6251c685cc3b17b6eeaa9b69484beb41f9f894",
+      "bytes": 117,
+      "rawSha256": "f6b0412965d762858a4d99a4df6251c685cc3b17b6eeaa9b69484beb41f9f894"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/f76a31516eec653e57b31e7fac2b5026d07ea2ab6a2d8a00dc2959257f4b9c5c.wasm",
+      "sha256": "f76a31516eec653e57b31e7fac2b5026d07ea2ab6a2d8a00dc2959257f4b9c5c",
+      "bytes": 147,
+      "rawSha256": "f76a31516eec653e57b31e7fac2b5026d07ea2ab6a2d8a00dc2959257f4b9c5c"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/f8785947edae5550a3fefef3055f58e8421004671a18d195499e82712ab96b1d.wasm",
+      "sha256": "f8785947edae5550a3fefef3055f58e8421004671a18d195499e82712ab96b1d",
+      "bytes": 485,
+      "rawSha256": "f8785947edae5550a3fefef3055f58e8421004671a18d195499e82712ab96b1d"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/f886e6f4dcf7abd242bd9c5312971691515f495615437e3c1d66195077ac188e.wasm",
+      "sha256": "f886e6f4dcf7abd242bd9c5312971691515f495615437e3c1d66195077ac188e",
+      "bytes": 751,
+      "rawSha256": "f886e6f4dcf7abd242bd9c5312971691515f495615437e3c1d66195077ac188e"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/fb328fabdf3a29942bd553d1a8fa155fdd67da04672cfeaad432fdeccc752c18.wasm",
+      "sha256": "fb328fabdf3a29942bd553d1a8fa155fdd67da04672cfeaad432fdeccc752c18",
+      "bytes": 914,
+      "rawSha256": "fb328fabdf3a29942bd553d1a8fa155fdd67da04672cfeaad432fdeccc752c18"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/fc5bf8181a9bc0588181a9e3c014493bc733985c53c0fb5600d53b21bff9d87f.wasm",
+      "sha256": "fc5bf8181a9bc0588181a9e3c014493bc733985c53c0fb5600d53b21bff9d87f",
+      "bytes": 117,
+      "rawSha256": "fc5bf8181a9bc0588181a9e3c014493bc733985c53c0fb5600d53b21bff9d87f"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/fe4c35fa3e22e4958cf0732611867841c27ec6224c532ee087ee2d506facedc0.wasm",
+      "sha256": "fe4c35fa3e22e4958cf0732611867841c27ec6224c532ee087ee2d506facedc0",
+      "bytes": 451,
+      "rawSha256": "fe4c35fa3e22e4958cf0732611867841c27ec6224c532ee087ee2d506facedc0"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ff0275010882d0b54ae63c86fe946bf10a156c5d982ccba9915910b66572b8b3.wasm",
+      "sha256": "ff0275010882d0b54ae63c86fe946bf10a156c5d982ccba9915910b66572b8b3",
+      "bytes": 147,
+      "rawSha256": "ff0275010882d0b54ae63c86fe946bf10a156c5d982ccba9915910b66572b8b3"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ff2822b684fe86464b445ee9875045ea330c6f67de43866fd9e63424686e0fa6.wasm",
+      "sha256": "ff2822b684fe86464b445ee9875045ea330c6f67de43866fd9e63424686e0fa6",
+      "bytes": 117,
+      "rawSha256": "ff2822b684fe86464b445ee9875045ea330c6f67de43866fd9e63424686e0fa6"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/instantiation/modules/ffd7cace5699ae531d6a8fc35fce78477f25a2de91bb55e3d4f743ce75000f21.wasm",
+      "sha256": "ffd7cace5699ae531d6a8fc35fce78477f25a2de91bb55e3d4f743ce75000f21",
+      "bytes": 523,
+      "rawSha256": "ffd7cace5699ae531d6a8fc35fce78477f25a2de91bb55e3d4f743ce75000f21"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/LabQuadrotor.mo",
+      "sha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658",
+      "bytes": 18397,
+      "rawSha256": "945690a6db098b680ad360edb51ab8dd8da4fcf6215d2900d4be05d8ac898658"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/sensor-clock.ts",
+      "sha256": "9107844d8a524ca3dfa4ddb26f6fe475ee97d109ff2b5d3064b3bd7a8a49eb55",
+      "bytes": 2369,
+      "rawSha256": "9107844d8a524ca3dfa4ddb26f6fe475ee97d109ff2b5d3064b3bd7a8a49eb55"
+    },
+    {
+      "path": "dev/artifacts/private-arena-browser/physics-snapshot.ts",
+      "sha256": "ddf12e7f90e9610d1d309701e8d5919d56daefc6e0cf79b07da0f54619195393",
+      "bytes": 1251,
+      "rawSha256": "ddf12e7f90e9610d1d309701e8d5919d56daefc6e0cf79b07da0f54619195393"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "status": "ROOT_INDEPENDENT_CONDITIONAL_INTEGRATION_ARCHIVE_REHASH_PASS",
+  "report": "dev/rumoca-native-function-conditional-integration-verification.json",
+  "reportSha256": "45718708cf3def4a86659b7604cfca1d79e3873a0f2e91029560b10cf6e64b67",
+  "files": 205,
+  "bytes": 19827957,
+  "scope": "Archive integrity and recorded affected-package/component gates only; no fullworkspace/compilerbrowserpackage/fullSLAM/throughput acceptance"
+}
