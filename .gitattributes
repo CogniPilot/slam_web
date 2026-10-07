@@ -1,0 +1,2 @@
+# Modelica and Motoko share .mo; every .mo file here is Modelica.
+*.mo linguist-language=Modelica
