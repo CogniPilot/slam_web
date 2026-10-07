@@ -262,10 +262,12 @@ package RGBDGraphProcessing
       if valid then
         // Warm-start from the durable corrected view, not immutable raw
         // captures. The chronological fixed row is mapped by catalogSlot.
-        for node in 1:problem.nodeCount loop
-          slot := problem.catalogSlot[node];
-          problem.positions[node,:] := previous.estimator.poses.positions[slot,:];
-          problem.rotations[node,:,:] := previous.estimator.poses.rotations[slot,:,:];
+        for node in 1:nodeCapacity loop
+          if node <= problem.nodeCount then
+            slot := problem.catalogSlot[node];
+            problem.positions[node,:] := previous.estimator.poses.positions[slot,:];
+            problem.rotations[node,:,:] := previous.estimator.poses.rotations[slot,:,:];
+          end if;
         end for;
         result.reason := 4;
         (finalPosition,finalRotation,result.optimizerStatus,result.costBefore,result.costAfter,
@@ -280,18 +282,20 @@ package RGBDGraphProcessing
           and activeNodes == problem.nodeCount and activeEdges == problem.edgeCount;
         proposal.poses := previous.estimator.poses;
         changed := false;
-        for node in 1:problem.nodeCount loop
-          slot := problem.catalogSlot[node];
-          valid := valid and RGBDUncertaintyProper(finalRotation[node,:,:]);
-          for axis in 1:dimension loop
-            valid := valid and abs(finalPosition[node,axis]) <= 1e6;
-            changed := changed or finalPosition[node,axis] <> proposal.poses.positions[slot,axis];
-            for column in 1:dimension loop
-              changed := changed or finalRotation[node,axis,column] <> proposal.poses.rotations[slot,axis,column];
+        for node in 1:nodeCapacity loop
+          if node <= problem.nodeCount then
+            slot := problem.catalogSlot[node];
+            valid := valid and RGBDUncertaintyProper(finalRotation[node,:,:]);
+            for axis in 1:dimension loop
+              valid := valid and abs(finalPosition[node,axis]) <= 1e6;
+              changed := changed or finalPosition[node,axis] <> proposal.poses.positions[slot,axis];
+              for column in 1:dimension loop
+                changed := changed or finalRotation[node,axis,column] <> proposal.poses.rotations[slot,axis,column];
+              end for;
             end for;
-          end for;
-          proposal.poses.positions[slot,:] := finalPosition[node,:];
-          proposal.poses.rotations[slot,:,:] := finalRotation[node,:,:];
+            proposal.poses.positions[slot,:] := finalPosition[node,:];
+            proposal.poses.rotations[slot,:,:] := finalRotation[node,:,:];
+          end if;
         end for;
         // The gauge is exact, not merely close after a numerical update.
         valid := valid and max(abs(proposal.poses.positions[anchorSlot,:]

@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const model='RGBDGraphProcessingAcceptance';
-const checkCount=31;
+const checkCount=33;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'graph-processing-semantics-'));

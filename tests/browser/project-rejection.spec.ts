@@ -4,6 +4,7 @@ test('rejects a stored unsupported project without autosaving a replacement over
  const legacy=JSON.stringify({format:'slam-lab-project',version:1,name:'Stored source must survive',runtime:'retired',detectorLanguage:'modelica',algorithm:'retained unsupported source fixture',detector:'retained detector',physics:'retained physics',algorithmPreset:'custom',detectorPreset:'custom',environment:'city',seed:7,graph:{nodes:[],edges:[]}});
  await page.addInitScript(text=>localStorage.setItem('slam-lab.project.v1',text),legacy);
  await page.goto('/');
+ await expect(page.locator('#startup-screen')).toBeHidden({timeout:90_000});
  await expect(page.locator('#status')).toContainText('retired runtime',{timeout:30000});
  await expect(page.getByRole('button',{name:'Save project',exact:true})).toBeDisabled();
  await expect(page.getByRole('button',{name:'Apply & reset',exact:true})).toBeEnabled();

@@ -58,10 +58,11 @@ function validFaultIdentity(fault:NativeProgramFault,kernelCount:number){
 
 function validate(value:NativeProgramArtifact){
   // This field records the producer's Solve schema; this loader consumes the
-  // executable ABI and never decodes Solve IR. Schemas72/73 have the reviewed v3
-  // ABI. Older v1/v2 artifacts remain restricted to the reviewed schema70.
+  // executable ABI and never decodes Solve IR. Schema73 also issues the same
+  // direct f64 v2 ABI when no calls, gathers or typed lanes need a checked entry.
   const reviewedSchema=value?.solve_schema_version===70
-    ||[72,73].includes(value?.solve_schema_version)&&value?.profile==='native-direct-program-f64-v3';
+    ||[72,73].includes(value?.solve_schema_version)&&value?.profile==='native-direct-program-f64-v3'
+    ||value?.solve_schema_version===73&&value?.profile==='native-direct-program-f64-v2';
   if(!value||!['native-direct-program-f64-v1','native-direct-program-f64-v2','native-direct-program-f64-v3'].includes(value.profile)||!reviewedSchema
     ||typeof value.model_name!=='string'||!value.model_name||!digest(value.source_sha256)
     ||!digest(value.module_sha256)||typeof value.compiler?.version!=='string'||!value.compiler.version

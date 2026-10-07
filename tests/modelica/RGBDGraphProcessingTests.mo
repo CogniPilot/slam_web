@@ -2,7 +2,7 @@
 // specified chain and loop graph; graph proposals and selected bounds are computed by the
 // production Modelica chain, rather than supplied by this fixture.
 package RGBDGraphProcessingTests
-  constant Integer checkCount = 31;
+  constant Integer checkCount = 33;
 
   function Fixture
     input Real clock;
@@ -77,6 +77,59 @@ package RGBDGraphProcessingTests
     result.estimator.localization.estimator.referenceRotation := result.estimator.poses.rotations[32,:,:];
   end Fixture;
 
+  function PartialFixture
+    input Real clock;
+    input Integer count;
+    output RGBDGraphProcessing.State result;
+  protected
+    Integer owner;
+  algorithm
+    result := Fixture(clock);
+    result.estimator.localization.catalog.nextId := count+1;
+    result.estimator.localization.catalog.nextSlot := count+1;
+    result.estimator.localization.catalog.lastEpoch := count;
+    result.estimator.localization.catalog.lastTime := count;
+    result.estimator.localization.graph.lastCaptureId := count;
+    result.estimator.localization.graph.revision := count;
+    result.estimator.localization.predictionTime := count;
+    result.estimator.localization.steps := count;
+    result.estimator.localization.lastProcessedImageEpoch := count;
+    result.estimator.localization.lastProcessedImageTime := count;
+    result.estimator.localization.estimator.lastUsedEpoch := count;
+    result.estimator.localization.estimator.position := result.estimator.poses.positions[count,:];
+    result.estimator.localization.estimator.rotation := result.estimator.poses.rotations[count,:,:];
+    result.estimator.localization.map.catalogRevision := count;
+    result.estimator.localization.map.frame := count;
+    result.estimator.localization.map.imageEpoch := count;
+    result.estimator.localization.map.imageTime := count;
+    result.estimator.poses.catalogNextId := count+1;
+    result.captures.catalogNextId := count+1;
+    result.captures.lastStep := count;
+    for node in 1:RGBDGraphProcessing.nodeCapacity loop
+      if node > count then
+        result.estimator.localization.catalog.occupied[node] := false;
+        result.estimator.poses.enabled[node] := false;
+        result.estimator.poses.ids[node] := -77;
+        result.estimator.poses.positions[node,:] := fill(1e99,3);
+        result.estimator.poses.rotations[node,:,:] := fill(-1e99,3,3);
+      end if;
+    end for;
+    for edge in 1:RGBDGraphMeasurements.edgeCapacity loop
+      if result.estimator.localization.graph.edges[edge].currentId > count then
+        result.estimator.localization.graph.edges[edge].enabled := false;
+      end if;
+    end for;
+    for point in 1:RGBDCatalogMapping.mapCapacity loop
+      owner := mod(point-1,count)+1;
+      result.estimator.localization.map.anchorId[point] := owner;
+      result.estimator.localization.map.anchorSlot[point] := owner;
+      result.estimator.localization.map.lastSeen[point] := count;
+      result.estimator.localization.map.lastFrame[point] := count;
+      result.estimator.localization.map.point[point,:] := result.estimator.poses.positions[owner,:]
+        +result.estimator.poses.rotations[owner,:,:]*result.estimator.localization.map.localPoint[point,:];
+    end for;
+  end PartialFixture;
+
   function EqualVocabulary
     input RGBDVisualVocabulary.State a; input RGBDVisualVocabulary.State b;
     output Boolean same;
@@ -134,7 +187,7 @@ package RGBDGraphProcessingTests
     RGBDGraphProcessing.State corrected;
     RGBDGraphProcessing.State normalized; RGBDGraphProcessing.Policy policy;
     RGBDGraphProcessing.Result result; RGBDGraphProcessing.Result retry;
-    Boolean valid; Integer owner; Integer selectedIndex;
+    Boolean valid; Integer owner; Integer selectedIndex; Integer count;
   algorithm
     assert(RGBDKeyframes.keyframeCapacity == 128 and RGBDGraphMeasurements.edgeCapacity == 256
       and RGBDKeyframes.featureCapacity == 350 and RGBDCatalogMapping.mapCapacity == 14400,
@@ -252,5 +305,36 @@ package RGBDGraphProcessingTests
     checks[31] := RGBDGraphProcessing.Valid(fresh) and fresh.vocabulary.generation == 7
       and fresh.vocabulary.sourceRevision == 19 and fresh.vocabulary.version == 41
       and fresh.vocabulary.count == 0 and not fresh.vocabulary.ready;
+    // Smaller active prefixes retain the full arrays and opaque inactive poses.
+    for scenario in 32:33 loop
+      count := if scenario == 32 then 33 else 127;
+      previous := PartialFixture(clock,count);
+      policy := RGBDGraphProcessing.DefaultPolicy();
+      result := RGBDGraphProcessing.Correct(previous,policy,true);
+      checks[scenario] := RGBDGraphProcessing.Valid(previous) and result.accepted
+        and result.costBefore > 1e-6 and result.costAfter < 1e-12
+        and result.projectedCount == RGBDCatalogMapping.mapCapacity
+        and RGBDGraphProcessing.Valid(result.next) and RawHeld(previous,result.next);
+      for node in 1:RGBDGraphProcessing.nodeCapacity loop
+        if node <= count then
+          checks[scenario] := checks[scenario]
+            and max(abs(result.next.estimator.poses.positions[node,:]-previous.estimator.poses.positions[1,:])) < 1e-5
+            and max(abs(result.next.estimator.poses.rotations[node,:,:]-previous.estimator.poses.rotations[1,:,:])) < 1e-5;
+        else
+          checks[scenario] := checks[scenario]
+            and result.next.estimator.poses.ids[node] == previous.estimator.poses.ids[node]
+            and max(abs(result.next.estimator.poses.positions[node,:]-previous.estimator.poses.positions[node,:])) == 0
+            and max(abs(result.next.estimator.poses.rotations[node,:,:]-previous.estimator.poses.rotations[node,:,:])) == 0;
+        end if;
+      end for;
+      for point in 1:RGBDCatalogMapping.mapCapacity loop
+        owner := result.next.estimator.localization.map.anchorSlot[point];
+        checks[scenario] := checks[scenario]
+          and max(abs(result.next.estimator.localization.map.point[point,:]
+            -result.next.estimator.poses.positions[owner,:]
+            -result.next.estimator.poses.rotations[owner,:,:]
+              *result.next.estimator.localization.map.localPoint[point,:])) < 1e-12;
+      end for;
+    end for;
   end Run;
 end RGBDGraphProcessingTests;

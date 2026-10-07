@@ -5560,3 +5560,110 @@ The current native source remains `95e903a5fda560e974024f2d0d6fa99bff6ff5db098d7
 at the snapshot above. Please adopt this for subsequent source-bound issuance;
 no persistent State layout changed. These are OMC reference checks, not a
 native/WASM issuance claim. Your compiler/runtime priorities remain unchanged.
+
+### Response 36 application loop bounds fixed, 2026-10-07
+
+Both runtime-bound loops in `RGBDGraphProcessing.Correct` now iterate over
+`nodeCapacity`, guarded by `node <= problem.nodeCount`, as requested. Warm-start
+and corrected-pose publication retain the same active-node order and math.
+Persistent State and all capacities are unchanged.
+
+All 33 independent OMC graph-processing checks pass: the original 31 plus two
+partial-catalog controls with 33 and 127 active nodes. Both retain full
+128/256/350/14400 arrays, correct the active poses, reproject all 14400 map
+points, preserve immutable raw owners, and leave deliberately invalid opaque
+inactive poses untouched. Resource-bound run: 51.6 s, 1.01 GiB peak RSS, two
+cores, single-threaded numerical runtime. This is reference verification,
+not production throughput. Receipt:
+`dev/artifacts/modelica-graph-processing-semantics/graph-processing-semantics-udPoGI/report.json`.
+
+Please use the new exact 59-file native snapshot for subsequent compiler probes:
+
+- `dev/artifacts/modelica-graph-bounds-2026-10-07/native-source/source.mo`
+- SHA256 `5d485ddd965180a6eb5f8ffd7b3fcae6425cc590994966583fd2ef00915282ff`
+- Adjacent source manifest binds every file; `../parse.json` records successful
+  installed Rumoca 0.10.0 parsing. No native/WASM issuance is claimed yet.
+
+PR 390's paired WASM package is now downloadable from run 37684703486,
+artifact 11511416451. We are checking it against the existing strict compiler
+ABI gates without replacing the published dependency or adding a host fallback.
+
+### New source-bound ToDae refusal after loop fix, 2026-10-07
+
+The exact new `5d485ddd` snapshot reaches a different refusal with PR 390 CI's
+paired package, run 37684703486/artifact 11511416451. The actual package reports
+merge revision `7e8ec61d2adf` (parents `4afaf0af02dc` and `1f2bf06974c6`),
+version 0.10.2, WASM SHA256
+`444f029ee3bc57e47c260f72192288f3d9238d7159f1abda809637bfc816b5ef`:
+
+```
+D435FastSLAMStep failed in ToDae: unsupported Flat semantic owner
+`function conditional`: `RGBDGraphProcessing.Correct` reads
+`problem__nodeCount`, which only some branches of the conditional at
+byte 659592 define
+```
+
+Preparation refuses after 5.66 s, about 635 MiB peak process-group RSS. The
+conditional is the guarded `problem := PrepareProblem(...); valid :=
+problem.accepted;` before the now-bounded warm-start. Please fix this at the
+compiler's conditional definedness owner; we have not initialized unused
+scratch records or removed the acceptance guards to work around it.
+
+**Small reproducer:** `tests/compiler-probes/fixtures/GuardedProblem.mo`, model
+`GuardedProblemProbe`, reproduces the same refusal (`problem__nodeCount`,
+byte 695) in under a second. The nested outer request plus successive validity
+guards matter: the otherwise identical control with no outer request and no
+preceding validity refinement prepared and executed all 14 input cases.
+The strict numerical gate is `tests/compiler-probes/modelica-guarded-problem.test.ts`:
+
+```sh
+RUMOCA_BRANCH_PKG=/path/to/paired/package nix develop path:.#ci -c \
+  npx vitest run --config tests/compiler-probes/vitest.config.ts \
+  tests/compiler-probes/modelica-guarded-problem.test.ts --no-cache --maxWorkers 1
+```
+
+The sparse RGB descriptor comparison now passes both 13x17 RGB and 9x11 RGBA
+WASM cases against the frozen dense reference, including every public f64 bit,
+actual NaN/Infinity, disabled images, depth units and recovery. These small
+controls do not establish full350/native848 vision throughput or full SLAM.
+The separate 90x160 connected-array program is issued as schema73/profilev2,
+28803 scalar stages (2.35 MB module); our previously schema70-only v2 loader
+refuses it before numerical execution. This is a consumer review issue and a
+compiler compactness/performance observation, not a request to weaken numerical
+or provenance gates. Production remains pinned to 0.10.0.
+
+### Consumer review and reproducer reference checks, 2026-10-07
+
+The nested `GuardedProblem` reproducer passes all 14 expected cases in OMC,
+including disabled requests and Integer values above 2^53; the exact nested
+version still refuses in Rumoca ToDae. The paired package's direct f64 v2 ABI
+was reviewed at `native_program_api.rs`: unchanged five arguments, direct Y/P
+storage, no typed lanes, no scratch entry. Our loader now admits **schema73/v2**
+specifically, retaining all other validation. An actual 90x160 connected-array
+artifact passes eight moving frames bit-exactly, readonly input, same-artifact
+checkpoint reload, reset, stale-source refusal and unknown-schema refusal in
+Node. No browser numerical or SLAM qualification is claimed from that test.
+
+The original split-stage/compact-schedule gate remains separate; no compiler
+stage count or performance assertion was relaxed. Complete receipt and frozen
+artifact: `dev/artifacts/modelica-graph-bounds-2026-10-07/report.json`.
+Summary: `dev/modelica-graph-bounds-2026-10-07.md`. The pending full-SLAM
+compiler-definedness and compiler-owned State interchange requests remain.
+
+### Browser f64 check and final graph receipt, 2026-10-07
+
+The same compiler-issued schema73/v2 module now passes in a static Chromium
+worker: three moving frames, 86400 exact f64 values, readonly inputs and exact
+whole-memory checkpoint reload. The browser fetches ordinary static source and
+artifact files; no compiler or algorithm runs on a server. Receipt:
+`dev/artifacts/modelica-graph-bounds-2026-10-07/f64-browser.json`.
+This is the direct 90x160 array contract, not a detector or full SLAM test.
+
+The final 33-check OMC graph repeat also verifies the geometry of every one of
+the 14400 projected map points in both partial-catalog controls. All checks
+pass; source bookends match. Receipt:
+`dev/artifacts/modelica-graph-processing-semantics/graph-processing-semantics-ZtAyrm/report.json`
+(42.4 s, 1.01 GiB peak RSS). Production snapshot SHA stays `5d485ddd` above;
+only the test gained those explicit per-point assertions. All 215 unit tests,
+TypeScript and production build pass. Browser smoke: 20 pass, one optional
+compiler-candidate skip. Native/WASM SLAM admission is still refused as recorded.
