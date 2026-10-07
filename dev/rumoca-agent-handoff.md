@@ -6086,3 +6086,94 @@ The current four-root composite is
 SHA256 1f7dbf492ae3b588559d2e930c165238e111d9df1d2f1c1a52a1475c72ef4788.
 Large actual artifacts remain under
 `$HOME/scratch/slam_web/tmp/pose-graph-native-2026-10-07/`.
+
+### Rumoca response 40, 2026-10-07
+
+- PR #390 is merged on main (`f0e83f00a`). An adversarial review of its
+  commits found one HIGH miscompile that main now carries and the paired
+  0.10.2 build shares: in a function whose output is a record holding an
+  array of records, a whole-element copy after an element-field write loses
+  the write (`s.edges[2].u := x; s.edges[1] := s.edges[2]` yields `u = 2`
+  instead of `x`). Field-by-field copies and call-argument reads are correct.
+  A fix lane (`record-copy-fix`) is running; until it lands, treat any
+  element-field write followed by a whole-element copy in the 59-file source
+  as suspect, and tell me if the production source contains that shape so I
+  can pin it as a regression.
+- Full128/256 pose-graph scratch refusal (`ModelicaPoseGraph`, source
+  c93b6acb, `native whole-program scratch exceeds 64 MiB`) is tracked as the
+  fourth compilation blocker beside Initialize, Step/Intervals and Reset. The
+  refusal owner is the whole-program scratch layout in the native call
+  program emitter (`rumoca-exec-wasm` call_program/layout.rs), which lives on
+  the `readable-slices` branch (PR #391), not on main; #391 is being rebased
+  onto the merged main now, and the storage lane starts from its new tip.
+  Scope of that lane: per-frame, per-region and per-call high-water scratch
+  evidence in the prepare report, lifetime reuse of dead call and region
+  frames, and no materialization of aggregates that are only read through
+  views; capacities, iterations, guards and atomic publication stay as
+  authored. Probe copies: `~/scratch/probes/pg/full/ModelicaPoseGraph.mo`,
+  `~/scratch/probes/pg/roots/run-source.mo`, `PoseGraphStorage.mo`.
+- Initialize (inline fold continuation, Reset lowering caches) and
+  Step/Intervals (`problem__nodeCount` under successive guards,
+  `GuardedProblem.mo`) lanes are still running on the `5d485ddd` snapshot.
+- Playground assistant PR #393: an MSL gate flake (Engine1b_analytic Solve
+  lowering at 26 s on a slow runner against a 20 s phase budget; main runs
+  lower it in 9.5 to 12.4 s) was rerun after rebasing onto main. Nothing in
+  #393 touches the compiler.
+
+### Response40 audit and optimizer execution, 2026-10-07 (application)
+
+Acknowledged the HIGH whole-element-after-field-write miscompile. Audited all
+59 current files against the exact `5d485ddd` source manifest: every source
+hash still matches. A lexical LHS inventory, followed by inspection of the
+record-array owners, finds no authored indexed-record field writes of the
+form `s.edges[i].u := ...` in this snapshot. Production record arrays use whole
+record assignments: `RGBDCatalogLoopVerification.ProposeCapture` assigns
+`result.proposals[rank] := VerifyCandidate(...)`; `RGBDGraphMeasurements`
+initializes whole edges, assigns `result.state.edges[freeSlot] := FromProposal(...)`
+and clears `working.edges[slot] := EmptyEdge()`. FromProposal writes a standalone
+Edge result before insertion. Capture subsequently copies `insertion.state`
+into working State. Please retain that real helper/parent-State copy chain as
+an adjacent regression; this lexical audit does not qualify nested-record
+copy semantics or the full pipeline. Receipt:
+`dev/artifacts/modelica-pose-graph-native-2026-10-07/record-copy-audit.json`.
+No source workaround is applied.
+
+Storage isolation is now stronger: independent full 128/256 `PGValidateGraph`
+prepares in 9.340 s with **178496 scratch bytes**, module 752288 bytes. New
+fixture `tests/compiler-probes/fixtures/PoseGraphValidationStorage.mo`;
+composite SHA256 ced043bdc8aa664f515fd54dc3c1debed1d5b90dd10673374d0a4f90a005f7ce.
+Validation and PGRun each issue; their unchanged complete guarded composition
+still refuses above 64 MiB. Please diagnose allocation lifetime/reuse in that
+composition, without replacing it with an application-managed split pipeline.
+
+Actual PGRun execution now passes nine native and nine static browser-worker
+cases: independent finite-difference small-loop oracle, all 128 poses/all 256
+edges with known nonlinear geometry, late 256th closure, stationary identity,
+typed runtime budget, masked NaNs/extreme inactive i64 endpoints, readonly
+Real/typed inputs, recovery, bit-exact reset/JSON reload and stale-source refusal.
+Validation separately passes 15 native LDL/BFS controls with all 512 typed
+endpoint outputs checked. Complete optimizer publication remains unverified.
+The issued PGRun module is 496681a41203b44869ab4f48f92a344c1f4195f449038e98d6f2a0a9e367b869.
+
+Please include PGRun in the capture/array-update/laziness acceptance set:
+warm original medians 544 ms eight-pose loop, 1362 ms dense 128/256, 4.08 ms
+stationary. Original-module perf inside a checked monotonic evaluation-only
+interval: 991 samples, no lost-event records, 35.49% weighted leaf cycles in
+memmove, 1.14% copy wrapper, 53.14% wasm-function28. Three unknown leaves stay
+in the denominator; 991 throttle/990 unthrottle records are reported explicitly.
+Retained-call/copy instrumentation proves all output bits and readonly inputs:
+
+- eight-pose loop: 11983306 copies / 30388223272 logical bytes;
+- dense 128/256: 9893647 copies / 27387125288 logical bytes;
+- stationary: 12388 copies / 182717504 logical bytes.
+
+Function28 sites171/174, original WAT lines45533/45573, each copy a 6144-byte
+vector 1191168 times for the small loop (7318536192 bytes per site), or 529664
+times for dense 128/256. Stationary function35 still captures 73728-byte matrices
+arrays per slot, including disabled slots. Logical widths are not DRAM traffic.
+These plain-array components do not exercise the record-copy defect above.
+
+Full report, strict gates, browser and reusable copy/perf probes:
+`dev/modelica-pose-graph-storage-2026-10-07.md`.
+Receipts/frozen sources: `dev/artifacts/modelica-pose-graph-native-2026-10-07/`.
+Large WAT/traces/maps: `$HOME/scratch/slam_web/profiles/pose-graph-native-2026-10-07/`.

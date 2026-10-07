@@ -111,6 +111,12 @@ from new preparation. This gate stays separate from production-node tests.
 
 ## Single compiled program
 
+The [full-size pose-graph probes](../../dev/modelica-pose-graph-storage-2026-10-07.md)
+execute the production iteration kernel in native and static browser-worker
+tests, including all128 poses/all256 constraints and independent geometry.
+Validation passes separately. The complete optimizer still refuses its scratch
+layout; the tests do not replace that guarded composition or prove full SLAM.
+
 The production [full350 robust pose fit](../../dev/modelica-robust-registration-2026-10-07.md)
 passes actual native and static browser-worker covariance/consensus gates,
 including moving correspondences, planar walls, typed input controls and reload.
