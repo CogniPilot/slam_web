@@ -123,6 +123,13 @@ native preset's RGB3 DAE layout. Full-size native issuance still times out;
 the smaller diagnostic module exposes whole-grayscale-image loop copies.
 Its strict full-size numerical gate awaits a real compiler-issued artifact.
 
+The unchanged [full350 matcher](../../dev/modelica-matcher-2026-10-07.md) now
+passes actual native and static browser-worker numerical gates, including a
+recompiled Modelica ratio edit and JSON reload. Runtime profiling identifies
+whole-descriptor matrix captures inside the native loop envelope, even with
+zero current candidates. This remains a component qualification; complete
+SLAM and fast execution are not established.
+
 `modelica-native-program.test.ts` is staged for RUM-011. It requires the new
 official `prepare_native_program` API, and compares a single WASM executable
 against the older compiler-issued stage modules for every Y bit in a 160×90

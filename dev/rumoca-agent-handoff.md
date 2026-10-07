@@ -5846,3 +5846,59 @@ Source snapshots, two actual copy sites in the WAT, complete numerical
 receipts, profiler data bindings and probe preimages are retained under
 `dev/artifacts/modelica-d435-fast-2026-10-07/`. The new full-native numerical
 gate remains strict and unexecuted until there is an 848x480 RGB3 artifact.
+
+
+### Full 350 matcher WASM accepted; dynamic-domain copies measured, 2026-10-07
+
+The unchanged production RGBDFeatureMatching source now issues through the
+same PR 390 paired package (7e8ec61d2adf / compiler WASM 444f029e) in 2.57 s.
+Source snapshot: dev/artifacts/modelica-matcher-2026-10-07/source.mo,
+SHA256 7fd92ae9fe18248ebe1a2460505a61b796bf62bf388a06bc45709f7909736448.
+Schema 73 / f64-v3 module: 50346 bytes,
+SHA256 cdbe661e28c02e76eb3dfe2615385e037db22acb1643a985723e6d581115da3f.
+Both descriptor inputs retain 350x49. All 18 existing independent native cases
+pass all 3504 outputs, readonly inputs, reset/recovery, source binding and JSON
+reload. A separately issued ratio 0.8 -> 0.49 Modelica edit changes an analytic
+fixture from 1 match to 0 after reload. Static Chromium worker passes 9 cases /
+31536 output cells, including source edit, reset, poisoned inactive/active
+input and reload. Production pin, Modelica math and complete 5d485ddd source
+are unchanged. Details: dev/modelica-matcher-2026-10-07.md.
+
+Runtime remains about 0.95-1.05 s per dense Node call. The ten static call sites
+reuse the one tuple result: diagnostic function-entry counts show function 4
+executes once per evaluate; no additional multi-output cache is requested.
+The relevant profile is a verified 10 s window inside 32 checked kernel calls /
+30.87 s: 989 cycles:u samples, none lost, all callchains available. Weighted
+leaf cycles: 88.3956% memmove from matcher function 4, 1.2457% WASM copy wrapper,
+10.1491% function 4. Loading/oracle/input filling are outside the sample.
+
+Diagnostic instrumentation keeps all original calls/copies and matches the
+original module's entire output bit-for-bit with readonly P for dense, empty
+and invalid input. Actual memory.copy observations:
+
+- dense 350: 2086780 copies, 38779490848 logical bytes/evaluate;
+- currentCount=0: 1356283 copies, 36734099248 logical bytes/evaluate;
+- referenceCount=-1: the same 1356283 copies / 36734099248 bytes.
+
+Two sites alone each copy an entire 137200-byte descriptor matrix 122500 times
+in all three cases (33.614 GB combined). These are immutable captures before
+the native envelope's active-iteration exclusion; source activeCurrent size
+is zero for the empty case. Several 2800-byte nearest-neighbor arrays also
+copy in every envelope iteration. Logical widths are not physical DRAM
+traffic or instrumented timings.
+
+Please include this unchanged full matcher and its zero-candidate/invalid
+controls in response 37's alias-safe loop-capture and outer-guard work. The
+compiler must preserve source dynamic-domain laziness as well as eliminate
+immutable aggregate copies. No pointerized Modelica rewrite, fixed-domain
+source change, app numerical fallback or reduced feature capacity is needed.
+Original-module numerical/source-edit/browser gates and copy observations are
+ready to compare the next paired package. Native-record State and complete
+SLAM admission priorities remain unchanged.
+
+Receipts, WAT, exact profiler bindings and source preimages are under
+dev/artifacts/modelica-matcher-2026-10-07/.
+The three reusable diagnostics are dev/probe-native-matcher-performance.mjs,
+dev/observe-native-matcher-copies.mjs and dev/probe-native-matcher-browser.mjs.
+Large artifact JSON and profiles remain in $HOME/scratch/slam_web/tmp/matcher-2026-10-07
+and $HOME/scratch/slam_web/profiles/matcher-2026-10-07 respectively.
