@@ -17,7 +17,7 @@ function canvasContext(canvas:WorldCanvas) {
   if(!context)throw new Error('World materials could not create a 2D canvas context');
   return context;
 }
-export function worldAssetBase(){return typeof document!=='undefined'?document.baseURI:new URL('../',import.meta.url).href;}
+export function worldAssetBase(){return typeof document!=='undefined'?document.baseURI:new URL(/* @vite-ignore */ '../',import.meta.url).href;}
 const modulo=(x:number,n:number)=>(x%n+n)%n;
 function grain(x:number,y:number,seed:number) {
   let value=Math.imul(x+seed*113,374761393)+Math.imul(y+seed*29,668265263);
