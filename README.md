@@ -4,7 +4,7 @@ An open source UAV lab that runs in your browser. Explore a simulated city, see
 what a drone's sensors see, and edit the math behind its motion—all without
 installing a robotics stack.
 
-[**Open the browser demo →**](https://cognipilot.github.io/slam_web/)
+[**Open the browser demo →**](https://cognipilot.github.io/slam_web/) · [Source on GitHub](https://github.com/CogniPilot/slam_web)
 
 [![SLAM Lab city simulation, sensor views, and Modelica editor](docs/slam_web.png)](https://cognipilot.github.io/slam_web/)
 
