@@ -1,2 +1,27 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101820"><link rel="icon" href="./favicon.svg"><title>SLAM Lab · Browser robotics</title></head><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101820">
+  <link rel="icon" href="./favicon.svg">
+  <link rel="stylesheet" href="/src/startup.css">
+  <title>SLAM Lab · Browser robotics</title>
+</head>
+<body class="app-loading">
+  <div id="startup-screen" class="startup-screen">
+    <div class="startup-card">
+      <h1>SLAM<span>LAB</span></h1>
+      <p id="startup-message" role="status">Loading SLAM Lab…</p>
+      <progress id="startup-progress" max="4" value="0" aria-label="Loading SLAM Lab" aria-describedby="startup-message"></progress>
+      <div class="startup-actions">
+        <button id="startup-open" type="button" hidden>Open workspace</button>
+        <a href="">Reload page</a>
+      </div>
+      <noscript>Enable JavaScript to open SLAM Lab.</noscript>
+    </div>
+  </div>
+  <div id="app" inert aria-busy="true"></div>
+  <script type="module" src="/src/start.ts"></script>
+</body>
+</html>

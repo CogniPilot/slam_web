@@ -1,3 +1,4 @@
+import {openExperimentFile} from './source-files';
 import {test,expect} from '@playwright/test';
 import {openModelicaPropagation} from './reference-project';
 
@@ -21,14 +22,14 @@ test('sensor and evaluation Modelica edits run in workers, persist, and preserve
  expect(baseline.actors.time).toBe(baseline.frame.time);expect(baseline.acquisition.actorMotion).toEqual(baseline.actors);expect(baseline.acquisition.truth.time).toBe(baseline.actors.time);
  expect(baseline.displayed).toEqual(baseline.actors);
  baseline.actorPositions.forEach((position:number[],i:number)=>expect(position).toEqual([baseline.actors.east[i],0,-baseline.actors.north[i]]));
- await page.getByLabel('Edit node').selectOption('sensor');
- const sensor=await page.getByLabel('Node source code').inputValue();
+ await openExperimentFile(page,'sensor');
+ const sensor=await page.getByLabel('Modelica source').inputValue();
  expect(sensor).toContain('{0.015,-0.012,0.02}');
  expect(sensor).toContain('model ActorMotion');
  const editedSensor=sensor.replace('{0.015,-0.012,0.02}','{0.115,-0.012,0.02}').replace('{0.78,0.78,0.78,2.2,2.2,2.2}','{1.56,0.78,0.78,2.2,2.2,2.2}');
  await page.evaluate(source=>(window as any).__slamLab.sourceEditor.editor.setValue(source),editedSensor);
- await page.getByLabel('Edit node').selectOption('evaluation');
- const evaluation=await page.getByLabel('Node source code').inputValue();
+ await openExperimentFile(page,'evaluation');
+ const evaluation=await page.getByLabel('Modelica source').inputValue();
  expect(evaluation).toContain('currentError = sqrt(squaredDistance);');
  const editedEvaluation=evaluation.replace('currentError = sqrt(squaredDistance);','currentError = 2.0*sqrt(squaredDistance);');
  await page.evaluate(source=>(window as any).__slamLab.sourceEditor.editor.setValue(source),editedEvaluation);

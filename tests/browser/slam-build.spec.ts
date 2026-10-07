@@ -1,3 +1,4 @@
+import {openSourceFile,openExperimentFile} from './source-files';
 import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {test,expect,type Page} from '@playwright/test';
 import {readFileSync,appendFileSync} from 'node:fs';
@@ -36,7 +37,7 @@ async function openWorkspace(page:Page){
   await page.getByRole('button',{name:'▶ Run',exact:true}).click();
   progress('baseline ready');
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
-  await page.getByLabel('SLAM source file').selectOption('models/SLAM/RGBDFastSLAMReset.mo');
+  await openSourceFile(page,'models/SLAM/RGBDFastSLAMReset.mo');
   await expect(page.getByRole('button',{name:'Check WASM build',exact:true})).toBeVisible();
   const snapshot=await page.evaluate(()=>{
     const project=(window as any).__slamLab.project;
@@ -114,7 +115,7 @@ test('actual CI compiler refusal is visible and a synchronous WASM build can be 
   await page.getByRole('button',{name:'Check WASM build',exact:true}).click();
   const compilerWorker=await created;
   await expect(page.locator('#slam-build-result')).toHaveText('Compiling RGBDFastSLAMReset…');
-  await page.getByLabel('Edit node').selectOption('evaluation');
+  await openExperimentFile(page,'evaluation');
   await expect(page.getByRole('button',{name:'Cancel build',exact:true})).toBeVisible();
   await page.getByRole('button',{name:'Cancel build',exact:true}).click();
   await expect(page.locator('#slam-build-result')).toHaveText('Build cancelled.');
@@ -122,7 +123,7 @@ test('actual CI compiler refusal is visible and a synchronous WASM build can be 
   await expect.poll(()=>page.workers().includes(compilerWorker),{timeout:15000}).toBe(false);
   progress('compiler worker terminated');
   expect(await page.evaluate(()=>(window as any).__slamLab.slamBuildReceipt)).toBeUndefined();
-  await page.getByLabel('Edit node').selectOption('slam');
+  await openSourceFile(page,'models/SLAM/RGBDFastSLAMReset.mo');
   await expect(page.getByRole('button',{name:'Check WASM build',exact:true})).toBeEnabled();
   // A retry must start a new compiler worker after cancellation.
   await page.getByRole('button',{name:'Check WASM build',exact:true}).click();

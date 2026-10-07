@@ -16,6 +16,18 @@ async function service() {
 }
 
 describe('actual Rumoca Modelica language server',()=>{
+  it('discovers qualified entry points using the same compiler as the language service',async()=>{
+    const {request}=await service();await request('initialize');
+    const source='package Examples model InertialOnly Real x; equation x=1; end InertialOnly; end Examples;';
+    const result=await request('modelica/simulationModels',{source,defaultModel:'Examples.InertialOnly'});
+    expect(result.result).toMatchObject({ok:true,models:['Examples.InertialOnly'],selectedModel:'Examples.InertialOnly'});
+    const multiple=await request('modelica/simulationModels',{source,defaultModel:'Examples.Other',workspaceSources:{
+      'models/Examples/Other.mo':'within Examples; model Other Real x; equation x=2; end Other;'
+    }});
+    expect(multiple.result.models).toEqual(['Examples.InertialOnly','Examples.Other']);
+    expect((await request('modelica/simulationModels',{source:3,defaultModel:''})).error.code).toBe(-32602);
+    await request('shutdown');
+  });
   it('resolves actual companion definitions and removes them again when empty settings clear the singleton',async()=>{
     const {server,messages,request,notify}=await service();await request('initialize');
     const text='model UsesCompanion\n  Companion.Value x;\nend UsesCompanion;';

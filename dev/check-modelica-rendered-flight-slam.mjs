@@ -6,6 +6,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {rgbdSlamSourceManifest} from '../src/modelica-slam-source-manifest.mjs';
+import {captureFailureFields,parseCaptureFailureTrace} from './rendered-flight-capture-diagnostics.mjs';
 
 const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),home=os.homedir();
 if(process.argv.length!==3)throw Error('Usage: node dev/check-modelica-rendered-flight-slam.mjs <capture-directory>');
@@ -25,6 +26,9 @@ let frameRows=13,sampleRows=37,intervalRows=36;
 let height,width,channels,rawCamera=false,depthUnits=1;
 const referenceCflags=process.env.SLAM_REFERENCE_CFLAGS??'-O0';
 const pairDiagnostic=process.env.SLAM_REFERENCE_PAIR_DIAGNOSTIC==='1';
+const captureDiagnostic=process.env.SLAM_REFERENCE_CAPTURE_DIAGNOSTIC==='1';
+if(!['0','1'].includes(process.env.SLAM_REFERENCE_CAPTURE_DIAGNOSTIC??'0'))
+  throw Error('SLAM_REFERENCE_CAPTURE_DIAGNOSTIC must be 0 or 1');
 if(!['-O0','-O2'].includes(referenceCflags))throw Error('SLAM_REFERENCE_CFLAGS must be -O0 or -O2');
 const referenceSeconds=Number(process.env.SLAM_REFERENCE_SECONDS??120);
 const maximumReferenceSeconds=extended?540:300;
@@ -270,7 +274,8 @@ try{
     'tests/modelica/RGBDCompleteStateComparison.mo','tests/modelica/RGBDRenderedFrameInput.mo','tests/modelica/RGBDRenderedVisualDiagnostics.mo',
     'tests/modelica/RGBDRenderedCitySLAMAcceptance.mo','tests/modelica/RGBDRenderedFlightSLAMAcceptance.mo',
     ...(sensorLoss?['tests/modelica/RGBDRenderedSensorLossAcceptance.mo','models/Sensors/D435ImageProfile.mo']:[])];
-  const sources=[...names,'src/modelica-slam-source-manifest.mjs','dev/check-modelica-rendered-flight-slam.mjs','dev/rumoca-bounded-run.mjs']
+  const sources=[...names,'src/modelica-slam-source-manifest.mjs','dev/check-modelica-rendered-flight-slam.mjs',
+    'dev/rendered-flight-capture-diagnostics.mjs','dev/rumoca-bounded-run.mjs']
     .map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
   for(const source of sources)copy(path.join(app,source.path),path.join(durable,'sources',source.path));
   const library=path.join(home,'.openmodelica/libraries/Modelica 4.1.0+maint.om');
@@ -278,7 +283,8 @@ try{
   for(const entry of librarySources)copy(path.join(library,entry.path),path.join(durable,'installed-msl',entry.path));
   const script=path.join(output,'rendered-flight-slam.mos');
   const pairFile=pairDiagnostic?path.join(output,'matched-pairs.mat'):'';
-  const gridSource=`model ${model}\n  extends ${sensorLoss?'RGBDRenderedSensorLossAcceptance':'RGBDRenderedFlightSLAMAcceptance'}(imageSize={${height},${width}},rgbChannels=${channels},depthUnits=${depthUnits}${sensorLoss?'':',pairDiagnosticsFile='+JSON.stringify(pairFile)}${extended?`,replayFrames=${frameRows},extended=true`:''});\nend ${model};\n`;
+  if(captureDiagnostic&&sensorLoss)throw Error('Capture diagnostics require a flight reference scenario');
+  const gridSource=`model ${model}\n  extends ${sensorLoss?'RGBDRenderedSensorLossAcceptance':'RGBDRenderedFlightSLAMAcceptance'}(imageSize={${height},${width}},rgbChannels=${channels},depthUnits=${depthUnits}${sensorLoss?'':',pairDiagnosticsFile='+JSON.stringify(pairFile)}${extended?`,replayFrames=${frameRows},extended=true`:''}${captureDiagnostic?',captureDiagnostics=true':''});\nend ${model};\n`;
   const gridEntry=path.join(output,'grid-entrypoint.mo');fs.writeFileSync(gridEntry,gridSource);
   fs.writeFileSync(script,'setDebugFlags("gen,-evalfunc,-nfEvalConstArgFuncs,-nfExpandFuncArgs,-nfExpandOperations,nfScalarize,execstat");\n'
     +'setCommandLineOptions("--preOptModules-=evalFunc");\nloadModel(Modelica,{"4.1.0"});\ngetVersion(Modelica);\n'
@@ -330,8 +336,12 @@ try{
     beginCount:(trace.match(/^RENDERED_FLIGHT_REPLAY_BEGIN$/gm)??[]).length,
     completed:(trace.match(/^RENDERED_FLIGHT_REPLAY_END .*$/gm)??[]),
     frames:(trace.match(/^RENDERED_FLIGHT_REPLAY_FRAME .*$/gm)??[])};
+  const captureReceipts=parseCaptureFailureTrace(trace);
+  const expectedCaptureEpoch=result.metrics[0]?.find(row=>row[2]===1&&row[3]===1&&row[4]===0)?.[0]??null;
+  const captureTraceConsistent=result.rowsValid&&(expectedCaptureEpoch===null?captureReceipts.length===0
+    :captureReceipts.length===1&&captureReceipts[0].epoch===expectedCaptureEpoch);
   const pass=terminal.status===0&&resources?.exitCode===0&&bookendsEqual&&simulationSucceeded&&result.rowsValid&&result.checks.length===checkCount&&result.checks.every(Boolean)
-    &&(!extended||extendedPoseEvaluation.pass);
+    &&(!extended||extendedPoseEvaluation.pass)&&(!captureDiagnostic||captureTraceConsistent);
   const report={status:pass?(sensorLoss?'OMC_RENDERED_SENSOR_LOSS_REFERENCE_PASS':'OMC_RENDERED_FLIGHT_SLAM_REFERENCE_PASS'):'FAILED_OR_INCOMPLETE',model,scenario,
     scope:`${frameRows} actual Rumoca plant/Three RGB-D frames and${intervalRows} source-measured held IMU intervals through complete Modelica localization/mapping reference. No authored acceleration, pose/velocity/rotation state injection, host estimator math, runtime WASM/browser estimator or throughput qualification. Raw modeled IMU has no stochastic bias/noise.`,
     cameraInput:{rawCamera,channels,depthUnits,depthNoise:captureManifest.acquisition.depthNoise,hostMetricDepthConversion:false},
@@ -339,6 +349,10 @@ try{
       mutations:[{epoch:3,kind:'all-zero Z16 depth'},{epoch:4,kind:'uniform RGB8=128'}],
       capturedBytesModified:false,imuModified:false,claim:'Controlled unavailable measurements, not observed capture faults.'}:null,
     matchedPairDiagnostic:pairDiagnostic?{requested:true,path:'matched-pairs.mat',present:fs.existsSync(pairFile),sha256:fs.existsSync(pairFile)?sha(fs.readFileSync(pairFile)):null}:null,
+    captureFailureDiagnostic:{requested:captureDiagnostic,
+      fields:captureFailureFields,parsed:captureReceipts,expectedCaptureEpoch,
+      traceConsistent:captureDiagnostic?captureTraceConsistent:null,
+      receipts:trace.match(/^RENDERED_FLIGHT_CAPTURE_FAILURE .*$/gm)??[]},
     captureDirectory:path.relative(app,capture),captureManifestSha256:sha(manifestBytes),captureFiles:snapshot,frames,
     imageSize:[height,width],gridEntrypoint:{path:'grid-entrypoint.mo',sha256:sha(gridSource),source:gridSource},
     physics,imu:{sampleCount:sampleRows,intervalCount:intervalRows,initial:measurements.samples[0].imu,convention:measurements.semantics},

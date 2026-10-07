@@ -132,12 +132,16 @@ protected
   constant Integer noiseDimension = 4*spaceDimension;
   constant Integer channelCount = 4;
   constant Integer quaternionSize = 4;
-  Boolean transactionAllowed; Boolean imageOn;
+  Boolean transactionAllowed;
+  Boolean imageOn;
   RGBDLocalizationCatalog.Estimator proposed;
   RGBDLocalizationProcessing.Result publication;
   RGBDKeyframes.Frame measurement;
-  Boolean frameAccepted; Integer frameRejectionReason;
-  Real orientationVector[spaceDimension]; Real orientationAngle; Real orientationValid;
+  Boolean frameAccepted;
+  Integer frameRejectionReason;
+  Real orientationVector[spaceDimension];
+  Real orientationAngle;
+  Real orientationValid;
   Real orientationQuaternion[quaternionSize];
   Real producerNextPosition[spaceDimension];
   Real producerNextVelocity[spaceDimension];
@@ -364,9 +368,14 @@ algorithm
   // One initialized capture cannot form a relative graph. The next Step
   // invokes correction only after a real admitted catalog capture.
   next := publication.next;
-  graphCorrectionAccepted := false; graphReason := 1; graphCommitReason := 0;
-  graphFilterReason := 0; covarianceStatus := 0; roundoffCertified := false;
-  graphCostBefore := 0; graphCostAfter := 0;
+  graphCorrectionAccepted := false;
+  graphReason := 1;
+  graphCommitReason := 0;
+  graphFilterReason := 0;
+  covarianceStatus := 0;
+  roundoffCertified := false;
+  graphCostBefore := 0;
+  graphCostAfter := 0;
   (orientationVector,orientationAngle,orientationValid,orientationQuaternion) :=
     SLAMRotationCoordinates(next.estimator.localization.estimator.rotation);
   nextQuaternion := if orientationValid > 0.5 then orientationQuaternion else {1.0,0.0,0.0,0.0};

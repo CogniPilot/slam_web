@@ -1,3 +1,4 @@
+import {openExperimentFile} from './source-files';
 // Pending the replacement native host deployment adapter. Existing parity assertions stay intact.
 import {test,expect} from '@playwright/test';
 import process from 'node:process';
@@ -9,14 +10,14 @@ for(const detector of ['Modelica FAST · full resolution','Modelica Harris','Mod
   await page.getByRole('button',{name:'Ⅱ Pause'}).click();
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
   await openModelicaPropagation(page);
-  await page.getByLabel('Edit node').selectOption('detector');
-  if(detector.startsWith('Modelica '))await page.getByLabel('Node preset').selectOption(detector);
+  await openExperimentFile(page,'detector');
+  if(detector.startsWith('Modelica '))await page.getByLabel('Feature detector preset').selectOption(detector);
   if(detector.startsWith('Modelica Harris')) {
     // Exercise edited Modelica, rather than deploying a fixed prebuilt detector.
-    const editor=page.getByLabel('Node source code');
+    const editor=page.getByLabel('Modelica source');
     await editor.fill((await editor.inputValue()).replace('harris_k = 0.04','harris_k = 0.07'));
   }
-  await page.getByLabel('Edit node').selectOption('slam');await page.getByLabel('Node preset').selectOption('Modelica inertial propagation');
+  await openExperimentFile(page,'slam');await page.getByLabel('Run model').selectOption('ModelicaInertial');
   await page.getByRole('button',{name:'Apply & reset'}).click();
   await expect(page.getByRole('button',{name:'Step',exact:true})).toBeEnabled({timeout:90_000});
   await page.getByLabel('External adapter endpoint').fill(process.env.SLAM_COMPANION_ENDPOINT??'ws://127.0.0.1:19979');await page.getByRole('button',{name:'Connect',exact:true}).click();

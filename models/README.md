@@ -4,6 +4,7 @@ The source tree follows the responsibilities of a robotics library. Start with t
 
 | Directory | Contents |
 | --- | --- |
+| Examples | Selectable top-level experiments, starting with inertial navigation |
 | Vehicles | Quadrotor dynamics and teaching controller |
 | Sensors | D435 image constants, observations and availability |
 | Vision/Features | Harris and FAST kernels and feature selection |
@@ -19,6 +20,8 @@ The source tree follows the responsibilities of a robotics library. Start with t
 | Evaluation | Teaching metrics |
 | upstream | Exact vendored sources, licenses and provenance |
 
-This reorganization preserves the existing Modelica class names and exact mathematical source. These are source directories, not yet qualified Modelica packages: the browser currently compiles editable standalone documents. A package namespace migration must coordinate Rumoca workspace loading, compiler model names, editor dependency context and saved projects; an empty `package.mo` beside global classes would not be a valid Modelica library.
+`Examples/package.mo` is a Modelica package: choose `Examples.InertialOnly`, `Examples.ResponsiveInertial`, or `Examples.SmoothedInertial` as the entry point. Compose components and wire their arrays in Modelica; the host provides sensor inputs and displays outputs. These examples currently implement inertial navigation. The full RGB-D SLAM lifecycle is staged separately.
+
+The other directories group existing standalone classes and inline packages by responsibility. Their public names remain stable. Moving them into a qualified library namespace requires coordinated compiler workspace loading and saved-project migration.
 
 [Source locations](../src/modelica-source-locations.mjs) provide one inventory for dynamic tooling. Saved flat-directory workspace paths migrate to the new locations without changing any source text. Historical compiler receipts and numerical evidence retain their original paths and hashes.

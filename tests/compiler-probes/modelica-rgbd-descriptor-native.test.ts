@@ -17,7 +17,8 @@ beforeAll(async()=>{
   const raw=readFileSync(artifactPath,'utf8');artifact=JSON.parse(raw);report.artifactFileSha256=sha(raw);
   expect(artifact.model_name).toBe('RGBDDescriptorFrame');expect(artifact.var_layout.shapes.rgb).toEqual([90,160,4]);expect(artifact.var_layout.shapes.depth).toEqual([90,160]);
   expect(artifact.var_layout.shapes.pixels).toEqual([350,2]);expect(artifact.var_layout.shapes.descriptor).toEqual([350,49]);expect(artifact.var_layout.shapes.point).toEqual([350,3]);
-  expect(artifact.abi.y_count).toBe(32951);
+  // Private compiler scratch is not part of the descriptor's public contract.
+  // The sparse patch kernel no longer materializes a full grayscale image.
   program=await NativeProgram.instantiate(artifact,source);report.moduleSha256=artifact.module_sha256;report.moduleBytes=artifact.module_bytes.length;report.profile=artifact.profile;report.compiler=artifact.compiler;save();
 });
 afterAll(()=>{
@@ -37,9 +38,12 @@ function execute(name:string,f:DescriptorFrameFixture){
   const p=new Uint8Array(program.memory.buffer,artifact.abi.p_offset,artifact.abi.p_count*8),pBefore=p.slice();
   const started=performance.now();program.evaluate(0);const executeMs=performance.now()-started;
   identicalBytes(p,pBefore,'complete public/parameter P storage');
-  const outputs:[string,number[]][]=[['gray',expected.gray.flat()],['descriptor',expected.descriptor.flat()],['point',expected.point.flat()],['enabled',expected.enabled],['invalidCount',[expected.invalidCount]]];
+  const outputs:[string,number[]][]=[['descriptor',expected.descriptor.flat()],['point',expected.point.flat()],['enabled',expected.enabled],['invalidCount',[expected.invalidCount]]];
+  // Historical artifacts expose their dense intermediate. Keep checking it
+  // when explicitly supplied with the matching frozen source.
+  if(artifact.var_layout.shapes.gray)outputs.unshift(['gray',expected.gray.flat()]);
   for(const [name,values] of outputs){const actual=program.output(name);expect(actual.length).toBe(values.length);for(let i=0;i<values.length;i++)if(!Number.isFinite(actual[i])||Math.abs(actual[i]-values[i])>2e-11)throw new Error(`${name}/${i}: ${actual[i]} != ${values[i]} (${name==='descriptor'?'49-sample patch normalization':'calibrated/full-frame oracle'})`);}
-  (report.actualCases as unknown[]).push({name,outputsChecked:32951,invalidCount:expected.invalidCount,executeMs});save();
+  (report.actualCases as unknown[]).push({name,outputsChecked:outputs.reduce((n,[,values])=>n+values.length,0),invalidCount:expected.invalidCount,executeMs});save();
   if(fixturePath)fixtures.push({name,inputs:fields.map(([name,values])=>({name,count:values.length,float64Base64:packed(values)})),expected:outputs.map(([name,values])=>({name,count:values.length,float64Base64:packed(values),absoluteTolerance:2e-11}))});
   return expected;
 }

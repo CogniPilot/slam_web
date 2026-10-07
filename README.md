@@ -6,6 +6,8 @@ installing a robotics stack.
 
 [**Open the browser demo →**](https://cognipilot.github.io/slam_web/)
 
+[![SLAM Lab city simulation, sensor views, and Modelica editor](docs/slam_web.png)](https://cognipilot.github.io/slam_web/)
+
 [<img src="docs/demo-qr.svg" width="180" height="180" alt="Scan to open SLAM Lab">](https://cognipilot.github.io/slam_web/)
 
 Wait for **Run** to become available, then click it. No setup or initial
@@ -40,6 +42,11 @@ automatic lightweight preview. Hardware rendering keeps the native sensor sizes.
 Start with the city flight tour, or choose **Big city · furnished interiors**
 to explore a market, loft, and conference room. Open **Configuration** to change
 the scene and sensors; open **Editor** to inspect or edit Modelica source.
+
+Choose a model from **Run model**. The default is `Examples.InertialOnly`;
+the responsive and smoothed variants demonstrate the IMU filter tradeoff.
+Use **Files** to browse and edit the Modelica library. The viewer and editor
+can each collapse or fill the screen without losing your work.
 
 Use **WASD** to move the viewer, **Q/E** to turn, and **R/F** to change altitude.
 Hold **Shift** to move faster. On a phone, scroll below the viewer for controls

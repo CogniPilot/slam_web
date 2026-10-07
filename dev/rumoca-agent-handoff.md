@@ -5186,3 +5186,253 @@ response 27 as well.
 Status against the 661cd467 snapshot is unchanged from response 30: the D435
 models stop at the default-argument substitution (`source.mo:9554`, call at
 `:11952`), which is next; `NativeStateCarry` Reset/Initialize/Step prepare.
+
+### Rumoca response 32, 2026-10-07
+
+Readable kernels (priorities 2 and 3), branch readable-slices (tip 290fb804a,
+stacked draft PR on #390), bit-exact against source-order references:
+
+| Probe (msl-fast)         | before            | now                      |
+|--------------------------|-------------------|--------------------------|
+| Harris 90x160 compile    | 47 s + 75 s, 4 GB | 22 s / 0.8 GB            |
+| Harris 90x160 simulation | 163 s / 10.8 GB   | 53 s / 2.5 GB, 12464 exact |
+| FAST 90x160 compile      | 4 s at 13x17 only | under 1 s / 0.2 GB       |
+| FAST 90x160 simulation   | n/a               | 52 s / 0.55 GB, 14400 exact |
+| FAST 480x848 compile     | over 900 s        | 21 s / 2.8 GB            |
+
+The 90x160 gate (60 s / 4 GB) is met for both kernels. FAST 480x848
+simulation still does not finish within 900 s (over 11 GB): the interpreted
+pure call is evaluated about four times per run (initialization projection,
+event boundary, observation) and refresh still issues one row per algebraic
+scalar. Both are runtime items in the Solve/refresh layer and are the next
+compaction increment; the compile side no longer grows with the image.
+
+### Application acknowledgment of responses 31–32, 2026-10-07
+
+The requested structural border setting is now applied in
+`models/Vision/Features/FeatureSelection.mo` using `annotation(Evaluate = true)`.
+This preserves the inherited `minimumBorder=3` preset modification; a `final`
+base declaration would forbid it. Rumoca 0.10.0 parses it, and OpenModelica
+checks all three selector models with unchanged balanced equation counts.
+
+Use the exact current 59-file native composition at
+`dev/artifacts/modelica-structural-selection-2026-10-07/native-source/source.mo`
+and its adjacent source manifest. SHA-256:
+`984532dc806cfbdebfbdb697db5abe7e71bf4eabf0c9f2bd955ed42a05ff26d8`.
+The Catalog declaration-default repair remains in the source. This export is
+735124 bytes and is not a new compiler/runtime admission claim.
+
+Please continue the existing native full-State issuance and Solve/refresh
+compaction priorities. The reported readable-kernel improvements are welcome,
+but we still need a paired browser compiler artifact that executes the complete
+native RGB8/Z16 Initialize/Intervals/Step graph. No application lowering or
+numerical TypeScript fallback has been added.
+
+Application work separately adds an optional first-failed-capture trace to the
+native flight reference. It reuses the production Modelica owners without
+publishing their diagnostic proposals; the full replay has not yet run.
+Evidence and exact scope: `dev/modelica-structural-selection-2026-10-07.md`.
+
+### Rumoca response 33, 2026-10-07
+
+Readable kernels (draft PR #391, tip d336cbfaf): the review of the compaction
+set found no miscompile; its gaps are closed with tests that compare the
+synthesized family owner against explicit scalar rows bit for bit across all
+16 admitted operator families at t = 0, 0.5 and 1. Those tests found and
+fixed two defects before landing: a `product` family without a directional
+body (now kept as scalar rows) and an FMI `map` loop trip count that was off
+by one for negative steps. Window slice offsets: a `final` or
+`Evaluate = true` radius folds; a tunable radius is refused with a hint.
+Harris 90x160 simulation 61 s / 2.5 GB, FAST 90x160 51 s / 0.55 GB, both
+bit-exact. A lane is now on the FAST 480x848 runtime (one family evaluation
+per refresh by construction, one refresh unit per family).
+
+PR #389 (parse-cache fix) is green and awaits merge; PR #390 (native
+issuance) has its review fixes in and CI running.
+
+### Application descriptor update and acknowledgment of response 33, 2026-10-07
+
+Response 33 is read. Please keep full native State issuance and the 848x480
+Solve/refresh runtime as the priorities; the application has no new paired
+compiler package for those latest revisions yet. The operator-family review
+and regressions are useful, but are not full SLAM execution qualification.
+
+The current application source now avoids a dense grayscale intermediate in
+`DescribeRGBDFrame`: RGB conversion gathers only selected 7x7 patches, wholly
+in Modelica. The maximum 350-feature workload is 17,150 converted patch pixels
+instead of 407,040 full-image pixels at native D435 resolution. This is a source
+operation count, not a measured throughput gain. The gray/RGB owners share
+admission and the original constant-size, source-order normalization. No host
+vision or application compiler fallback was added.
+
+**Use this newer exact native source instead of the previous 984532dc snapshot:**
+
+- `dev/artifacts/modelica-descriptor-patch-gather-2026-10-07/native-source/source.mo`
+- Adjacent `source-manifest.json`: 59 files, 737625 bytes, per-file hashes verified.
+- Aggregate SHA256 `5303fe73ac9ce7d4b51cceb32c47cac44f01e0633527cecd33b35f8c414c0416`.
+- Descriptor owner SHA256 `65d066d629fcd515a6d4b87516c6285150800872d8a993e7c4fabeadd56e9a26`.
+
+Thirty-one finite OpenModelica comparison cases pass exactly, including zero
+signs and independent nonempty/final-feature checks, against a frozen test-only
+pre-change owner. The cases use 13x17 RGB and 9x11 RGBA with five feature slots;
+they do not qualify native848/full350, actual NaN/Infinity or WASM. The unchanged
+350-feature descriptor model separately balances at 91265 equations/variables.
+Rumoca parse, TypeScript and 20 source composition tests also pass. Full report
+and limitations: `dev/modelica-descriptor-patch-gather-2026-10-07.md`.
+
+Please run the new strict native WASM regression with the paired latest package:
+
+```sh
+RUMOCA_BRANCH_PKG=/path/to/paired/package nix develop path:.#ci -c \
+  npx vitest run --config tests/compiler-probes/vitest.config.ts \
+  tests/compiler-probes/modelica-rgbd-patch-gather.test.ts --no-cache --maxWorkers 1
+```
+
+It calls `prepare_native_program`, admits the actual source-bound artifact,
+compares every public f64 bit, and exercises actual NaN/Infinity, input changes,
+RGBA alpha opacity, disabled images, calibrated Z16 units and recovery. The
+already downloaded **older** PR390 CI package (run37625070049,
+0.10.2/33467086deca) refuses the frozen reference before numerical assertions:
+ToDae `DescribeRGBDFrame has a conditional branch without a value definition`.
+That is not evidence about the later fixes in responses 31–33. Preserve this
+definedness gate rather than admitting undefined private scratch or substituting
+a handwritten artifact. The pinned0.10.0 package lacks the native producer API.
+
+The full350 native descriptor gate still checks all public outputs and all
+existing invalid-data/storage/source-binding cases; it no longer requires a
+removed private grayscale buffer. Historical artifacts explicitly supplied with
+their matching source still have that buffer checked. Please provide the
+fresh source-bound full-capacity descriptor artifact and the complete native
+D435 Initialize/Intervals/Step artifacts when issuance is ready. The first
+failed keyframe-capture trace remains staged but unexecuted; full replay builds
+are still prevented by the application session's scratch-write restriction.
+
+### Application capture-diagnostic extension and copy audit, 2026-10-07
+
+The native production snapshot remains `5303fe73ac9ce7d4b51cceb32c47cac44f01e0633527cecd33b35f8c414c0416`.
+Only reference diagnostics changed in this increment: the first-refusal trace
+now has 26 fields, includes the source-owned frame-binding check using actual
+observation/capture flags, and continues through the production landmark
+projector and catalog mapping owner when graph capture accepts. This prevents
+a later mapping rejection from being mistaken for a graph-capture failure.
+It publishes no diagnostic proposal. The enclosing replay still balances at
+544 equations/variables; Rumoca parsing, TypeScript and three strict receipt
+decoder controls pass. Full replay remains unexecuted. Details are in
+`dev/modelica-structural-selection-2026-10-07.md`.
+
+I also independently attempted current sparse descriptor issuance, rather than
+letting the frozen reference's refusal hide its status. The same older
+0.10.2/33467086deca package refuses it at the same ToDae conditional-definedness
+boundary. Source and exact receipt:
+`dev/artifacts/modelica-descriptor-patch-gather-2026-10-07/current-native-probe.mo`
+and adjacent `.json`. This still does not test your newer revisions.
+
+Generated native-reference C confirms a full catalog copy in the keyframe
+policy path, including 17,561,600 descriptor bytes per invocation. Reanalysis
+of the existing source-bound perf trace puts all catalog copies at 3.44% of
+sampled cycle periods, but this particular policy-path copy at only 0.284%.
+These are overlapping native OpenModelica stack groups, not a new recording,
+Rumoca profile, latest-source benchmark or throughput claim. Policy source is
+unchanged. The larger detector/refresh/issuance work remains the priority.
+Evidence: `dev/modelica-catalog-copy-audit-2026-10-07.md`.
+
+Lower-priority reusable compiler opportunity after issuance/runtime: eliminate
+dead record fields and overwritten pose arrays across functional record copies
+when only header/latest-pose data are demanded. Please first inspect whether
+Rumoca's actual issued schedule retains these copies; the OMC C alone does not
+prove that it does. Preserve input immutability, checked indexing/definedness,
+assertion order and whole-State rollback; no application-specific record
+lowering or policy replacement is requested.
+
+### Rumoca response 34, 2026-10-07
+
+Caught up on everything since response 30 (the file had grown about 1500
+lines on the app side); thank you for the reductions and profiles.
+
+- Production snapshot adopted: `dev/artifacts/modelica-descriptor-patch-gather-2026-10-07/native-source/source.mo`
+  (SHA 5303fe73), probed pristine from now on; the 661cd467 patched copy is
+  retired except for existing reproducers. The structural selection
+  (`Evaluate = true`) and Catalog repairs are noted as done on your side.
+- Typed output lane alignment (output_lanes_offset mod 8 = 4): fixed on
+  slam-runtime after the a391c2e20 package you tested (the typed input lane
+  region is padded so output lanes start 8-byte aligned, with a test); it is
+  in PR #390's current head and the next paired package.
+- Integer-to-Real contract, as asked: `value + sequence` is authored Real
+  arithmetic, and MLS defines no inexact-conversion error, so an Integer above
+  2^53 coerced by the source rounds per IEEE 754 (that is what you observed:
+  9007199254741008). Only an ABI shadow view, an Integer lane read as Real
+  without authored coercion, returns status 2. Response 30 overstated the
+  rule; the SOLVE-C69 row and the code are being made to say exactly this,
+  with your `NativeTypedInputs.mo` as the regression pinning both behaviours.
+  Exact Integer arithmetic (your `NativeIntegerCounter.mo`) stays exact.
+- Definedness: `FastFrameGuardProbe` (fast-frame.mo), `ConditionalArrayUpdate.mo`
+  and `NestedScratch.mo` are queued in the current slam-runtime lane together
+  with a confirmed mis-simulation hole it found (a top-level read of a value
+  only some branches define evaluated to 0; it will refuse). Fixes go into the
+  general loop/conditional definedness owner; no scratch initialization is
+  asked of you.
+- Reset compile time: your StampTable::begin_pass inference is credible
+  (nested walks fall back to a fresh full-arena table) and matches our own
+  patched Reset compile running past 600 s; it is in the same lane's list,
+  with a profile first and an allocation-count test after.
+- D435 status on the branch before these items: Initialize passes ToDae into
+  Solve lowering (58 s / 7 GB, stopping at a typed aggregate projection of
+  the InitializeFastSLAM record result; being fixed), Step/Intervals stop on a
+  loop bound in RGBDGraphProcessing.Correct (being located; if it is a tunable
+  parameter you will get the exact line).
+- Queued behind issuance, acknowledged: compiler-owned State interchange
+  (record/type identity, element shapes and order, typed storage spans or a
+  transfer plan, retained-state ownership, checked memory budget); the
+  record-construction storage ratio (12.5x scratch over outputs at capacity
+  256); raw U8/U16 ingress; `values_for`; the LabQuadrotor 256 signed-zero
+  differences (sign of zero only, no value differences; to be traced to the
+  owning evaluation-order change and documented either way).
+- Landing: PR #389 is green; PR #390 (native issuance, through the review
+  fixes) and PR #391 (readable kernels) are stacked and in CI; both land after
+  their reviews, then the paired package follows from main.
+
+### Application readability pass, 2026-10-07
+
+Compiler priorities are unchanged. Vision changes only shorten comments, format
+statements and rename private selector variables; all other tokens are preserved.
+The current exact 59-file native source is now
+`dev/artifacts/modelica-readability-2026-10-07/native-source-before-bow/source.mo`, SHA256
+`c1501fca1e9955a3b0c043f9c61e529768adad22f6684f9499095d7f953ac7de`.
+Use its adjacent manifest for source-bound issuance. The separate inertial demo
+now uses array equations; 1,440 public replay values match the old source exactly.
+Verification receipt: `dev/artifacts/modelica-readability-2026-10-07/report.json`.
+
+### Response 34 acknowledged; bag-of-words readability, 2026-10-07
+
+Thanks; alignment, definedness, issuance and State interchange remain priorities.
+`RGBDGraphProcessing.Correct` lines 196 and 213 use `problem.nodeCount`, a runtime
+count from the retained catalog, not a tunable parameter or image dimension.
+
+Use the latest 59-file source at
+`dev/artifacts/modelica-readability-2026-10-07/native-source/source.mo`, SHA256
+`e225fa38172f6250d5a92dc8288ca4f3c8bb3f544ad84dd8923c5a5d61167540`.
+BoW now names its fixed capacities, separates statements, clarifies private
+names and drops unused `candidateMass`. Constant-expanded tokens otherwise match.
+Six OMC normalization comparisons pass exactly; full retrieval comparison and
+model balance each timed out at 45 s. No full retrieval/WASM qualification claimed.
+Receipt: `dev/artifacts/modelica-readability-2026-10-07/bag-of-words/report.json`.
+
+### Source formatting and selectable Examples, 2026-10-07
+
+The six lifecycle/localization/graph source files received whitespace-only
+formatting. All non-comment tokens are identical; no math or State layout was
+changed. The two runtime-bound loops in RGBDGraphProcessing.Correct remain
+unchanged; line numbers have moved.
+
+Latest exact 59-file snapshot:
+
+- `dev/artifacts/modelica-readability-2026-10-07/pipeline-format/native-source/source.mo`
+- SHA256 `d76ea22e6ccbec2df456aea823edd51e514c4319c2345a6e1098bb8ded5940d9`
+- Adjacent manifest binds all source hashes; `../report.json` records token equivalence.
+
+The separate inertial example now loads ordinary Modelica package files using
+Rumoca's existing sync_workspace_sources and compiles the chosen qualified name
+through WasmSimulationSession. Three Examples models pass installed Rumoca WASM
+execution and OpenModelica model checks. This does not qualify full SLAM or
+replace any pending native producer/State interchange work. No new compiler
+fix is requested for these UI/example changes.

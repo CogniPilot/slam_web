@@ -4,7 +4,7 @@ type RpcId=number|string|null;
 type Message={jsonrpc:'2.0';id?:RpcId;method?:string;params?:any;result?:any;error?:{code:number;message:string}};
 type Position={line:number;character:number};
 type Document={text:string;version:number};
-type Rumoca=Pick<typeof import('@cognipilot/rumoca'),'get_version'|'get_git_commit'|'sync_workspace_sources'|'lsp_diagnostics'|'lsp_completion'|'lsp_hover'|'lsp_definition'|'lsp_document_symbols'|'lsp_semantic_tokens'|'lsp_semantic_token_legend'|'lsp_code_actions'>;
+type Rumoca=Pick<typeof import('@cognipilot/rumoca'),'get_version'|'get_git_commit'|'sync_workspace_sources'|'lsp_diagnostics'|'lsp_completion'|'lsp_hover'|'lsp_definition'|'lsp_document_symbols'|'lsp_semantic_tokens'|'lsp_semantic_token_legend'|'lsp_code_actions'> & Partial<Pick<typeof import('@cognipilot/rumoca'),'get_simulation_models'>>;
 class RpcError extends Error {constructor(readonly code:number,message:string){super(message);}}
 const position=(value:any):Position=>{
   if(!Number.isInteger(value?.line)||!Number.isInteger(value?.character)||value.line<0||value.character<0||value.line>0xffffffff||value.character>0xffffffff)throw new RpcError(-32602,'Expected a zero-based UTF-16 LSP position');
@@ -142,6 +142,20 @@ export class RumocaLanguageServer {
         if(this.shuttingDown&&message.method!=='exit')throw new RpcError(-32600,'Language server is shutting down');
         switch(message.method) {
           case 'initialized':case '$/cancelRequest':case '$/setTrace':break;
+          case 'modelica/simulationModels': {
+            if(typeof params.source!=='string'||typeof params.defaultModel!=='string')
+              throw new RpcError(-32602,'Model discovery requires source and defaultModel');
+            const api=await this.api();
+            if(!api.get_simulation_models)throw new RpcError(-32601,'Rumoca model discovery is unavailable');
+            const companions=JSON.parse(workspaceSources({modelica:{workspaceSources:params.workspaceSources}}));
+            const names=new Set<string>();
+            for(const source of [params.source,...Object.values(companions)]){
+              const discovered=JSON.parse(api.get_simulation_models(source as string,params.defaultModel));
+              if(!discovered.ok)throw new RpcError(-32602,discovered.error??'Model discovery failed');
+              discovered.models.forEach((name:string)=>names.add(name));
+            }
+            result={ok:true,models:Array.from(names),selectedModel:names.has(params.defaultModel)?params.defaultModel:undefined,error:null};break;
+          }
           case 'workspace/didChangeConfiguration': {
             const next=workspaceSources(params.settings),changed=next!==this.workspace;
             this.workspace=next;

@@ -1,3 +1,4 @@
+import {openExperimentFile} from './source-files';
 import {openModelicaPropagation} from './reference-project';
 import { test,expect } from '@playwright/test';
 test.fixme('full Modelica serverless UAV sensor → vision → SLAM graph, persistence and replay',async({page})=>{
@@ -19,8 +20,8 @@ test.fixme('full Modelica serverless UAV sensor → vision → SLAM graph, persi
   expect(snapshot.topics).toContain('lab/node/detector/features');expect(snapshot.topics).toContain('lab/slam/odometry');
   expect(snapshot.pose[2]).toBeGreaterThan(1);expect(snapshot.estimate.every(Number.isFinite)).toBe(true);
   await page.screenshot({path:'test-results/slam-lab.png',fullPage:true});
-  await page.getByLabel('Edit node').selectOption('detector');
-  await page.getByLabel('Node preset').selectOption('Modelica FAST · full resolution');
+  await openExperimentFile(page,'detector');
+  await page.getByLabel('Feature detector preset').selectOption('Modelica FAST · full resolution');
   await page.getByRole('button',{name:'Apply & reset'}).click();
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.ready),{timeout:90_000}).toBe(true);
   await expect(page.getByRole('button',{name:'Step',exact:true})).toBeEnabled({timeout:90_000});
@@ -40,8 +41,8 @@ test('native vision source remains editable while Modelica inertial propagation 
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab?.latest?.frame.sequence??-1),{timeout:90_000}).toBeGreaterThan(0);
   await page.getByRole('button',{name:'Ⅱ Pause'}).click();
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
-  await page.getByLabel('Edit node').selectOption('detector');
-  await page.getByLabel('Node preset').selectOption('Modelica FAST · integration pending');
+  await openExperimentFile(page,'detector');
+  await page.getByLabel('Feature detector preset').selectOption('Modelica FAST · integration pending');
   await page.getByRole('button',{name:'Apply & reset'}).click();
   await expect(page.getByRole('button',{name:'Step',exact:true})).toBeEnabled({timeout:90_000});
   await page.getByRole('button',{name:'Step',exact:true}).click();
@@ -49,8 +50,8 @@ test('native vision source remains editable while Modelica inertial propagation 
   expect(await page.evaluate(()=>(window as any).__slamLab.latest.estimate.features)).toBeUndefined();
   await expect(page.locator('#metric-features')).toHaveText('Pending');
   await expect(page.locator('#flight-status')).toContainText('visual SLAM pending');
-  await page.getByLabel('Edit node').selectOption('slam');
-  await page.getByLabel('Node preset').selectOption('Modelica inertial propagation');
+  await openExperimentFile(page,'slam');
+  await page.getByLabel('Run model').selectOption('ModelicaInertial');
   await page.getByRole('button',{name:'Apply & reset'}).click();
   await expect(page.getByRole('button',{name:'Step',exact:true})).toBeEnabled({timeout:90_000});
   await page.getByRole('button',{name:'Step',exact:true}).click();

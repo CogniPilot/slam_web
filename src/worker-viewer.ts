@@ -26,7 +26,8 @@ export class WorkerViewer {
   private previousMapVersion=-1;
   readonly cloudTransfer=new ViewerCloudTransfer();
   private previousDepthCloudEnabled?:boolean;
-  constructor(private readonly world:World,container:HTMLElement){
+  private presented=true;
+  constructor(private readonly world:World,private readonly container:HTMLElement){
     this.canvas.style.width='100%';this.canvas.style.height='100%';
     const offscreen=this.canvas.transferControlToOffscreen();
     this.worker.onmessage=({data})=>{
@@ -34,14 +35,20 @@ export class WorkerViewer {
       const request=this.requests.get(data.id);if(request){this.requests.delete(data.id);data.error?request.reject(new Error(data.error)):request.resolve(data.result);}
     };
     this.worker.onerror=error=>{for(const pending of this.requests.values())pending.reject(new Error(error.message));this.requests.clear();};
-    this.ready=this.call('init',{canvas:offscreen,width:container.clientWidth,height:container.clientHeight,pixelRatio:Math.min(devicePixelRatio,2),base:new URL(import.meta.env.BASE_URL,document.baseURI).href},[offscreen]).then(value=>{
+    this.ready=this.call('init',{canvas:offscreen,width:Math.max(1,container.clientWidth),height:Math.max(1,container.clientHeight),pixelRatio:Math.min(devicePixelRatio,2),base:new URL(import.meta.env.BASE_URL,document.baseURI).href},[offscreen]).then(value=>{
       this.graphics=value.graphics;world.renderer.domElement.remove();container.appendChild(this.canvas);
       world.controls.disconnect();world.controls.connect(this.canvas);this.camera();
     });
-    new ResizeObserver(()=>this.send('resize',{width:container.clientWidth,height:container.clientHeight})).observe(container);
-    document.addEventListener('visibilitychange',()=>this.send('visibility',{visible:!document.hidden}));
-    this.send('visibility',{visible:!document.hidden});
+    new ResizeObserver(()=>{
+      if(container.clientWidth&&container.clientHeight)this.send('resize',{width:container.clientWidth,height:container.clientHeight});
+      this.syncPresentation();
+    }).observe(container);
+    document.addEventListener('visibilitychange',()=>this.syncPresentation());
+    this.syncPresentation();
   }
+  private syncPresentation(){this.send('visibility',{visible:this.presented&&!document.hidden&&this.container.clientWidth>0&&this.container.clientHeight>0});}
+  presentationVisible(visible:boolean){this.presented=visible;this.syncPresentation();}
+  async present(){await this.ready;this.camera(true);await this.call('present',{});}
   private call(type:string,args:Record<string,unknown>,transfer:Transferable[]=[]):Promise<any>{
     const id=++this.sequence;return new Promise((resolve,reject)=>{this.requests.set(id,{resolve,reject});this.worker.postMessage({id,type,...args},transfer);});
   }

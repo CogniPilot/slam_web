@@ -82,6 +82,7 @@ package RGBDRenderedFlightSLAMReference
     input String pairDiagnosticsFile = "";
     input Integer replayFrames = frameCount;
     input Boolean extended = false;
+    input Boolean captureDiagnostics = false;
   protected
     Real calibrationMatrix[1,14]; Real calibration[14]; Real opticalToBody[3,3];
     Real initialImu[1,6]; Real acquisition[replayFrames,2];
@@ -90,6 +91,7 @@ package RGBDRenderedFlightSLAMReference
     Real scores[imageSize[1]*imageSize[2]]; Real selectedFeatures[RGBDKeyframes.featureCapacity,3];
     Real selectionCount; Real selectionStatus; Real rowRaw[24]; Real rowDiagnostics[16];
     Real matchedPairs[RGBDKeyframes.featureCapacity,7]; Boolean pairsWritten;
+    Real captureStages[26]; Boolean captureTraced; String captureMessage;
     Integer epoch; Integer observations; Integer captures; Real frameTime;
     RGBDGraphProcessing.State fresh; RGBDGraphProcessing.State previous;
     RGBDFastSLAMRawCompositionReference.Outcome initialized;
@@ -132,6 +134,7 @@ package RGBDRenderedFlightSLAMReference
     rowRaw := RGBDRenderedCitySLAMReference.Metrics(initialized,0,0,0,0,0);
     for column in 1:24 loop raw[1,column] := rowRaw[column]; end for;
     previous := initialized.next; observations := 0; captures := 0;
+    captureTraced := false;
     for frame in 2:replayFrames loop
       epoch := integer(acquisition[frame,1]); frameTime := acquisition[frame,2];
       checks[1] := checks[1] and acquisition[frame,1] == frame-1
@@ -154,6 +157,22 @@ package RGBDRenderedFlightSLAMReference
       (selectedFeatures,selectionCount,selectionStatus) := SelectRasterFeatures(scores,
         size(rgb,2),size(rgb,1),RGBDKeyframes.featureCapacity,3,
         {18.0,0.0,1e8,3.0,RGBDKeyframes.featureCapacity,1.0,3.0,3.0},false,true);
+      if captureDiagnostics and not captureTraced and current.accepted
+        and current.imageCompleted and not current.mappingAccepted then
+        // Log the first refusal only; retain every original numerical gate.
+        // Mapping refusal prevents graph correction, so this is the actual
+        // accepted producer pose/covariance used to build the measurement.
+        captureStages := RGBDRenderedVisualDiagnostics.CaptureFailure(previous,
+          current.next.estimator.localization.estimator,rgb,depth,
+          selectedFeatures[:,1:2],selectionCount,calibration,opticalToBody,epoch,frameTime,
+          {current.observationAccepted,current.captureAccepted},depthUnits);
+        captureMessage := "RENDERED_FLIGHT_CAPTURE_FAILURE epoch="+String(epoch)+" stages=";
+        for stage in 1:size(captureStages,1) loop
+          captureMessage := captureMessage+(if stage == 1 then "" else ",")+String(captureStages[stage]);
+        end for;
+        Modelica.Utilities.Streams.print(captureMessage,"flight-replay-trace.log");
+        captureTraced := true;
+      end if;
       (rowDiagnostics,matchedPairs) := RGBDRenderedVisualDiagnostics.Evaluate(previous,rgb,depth,
         selectedFeatures[1:RGBDKeyframes.featureCapacity,1:2],selectionCount,calibration,opticalToBody,depthUnits);
       if frame == 2 and pairDiagnosticsFile <> "" then
@@ -236,6 +255,7 @@ model RGBDRenderedFlightSLAMAcceptance
   parameter String pairDiagnosticsFile = "";
   parameter Integer replayFrames = RGBDRenderedFlightSLAMReference.frameCount;
   parameter Boolean extended = false;
+  parameter Boolean captureDiagnostics = false;
   output Boolean checks[24]; output Real raw[replayFrames,24]; output Real diagnostics[replayFrames,16];
 algorithm
   // The dataset contains the complete changing flight. Replay it at the
@@ -243,6 +263,7 @@ algorithm
   // solver/initialization evaluation of this test harness.
   when initial() then
     (checks,raw,diagnostics) := RGBDRenderedFlightSLAMReference.Run(datasetFile,time,imageSize,rgbChannels,depthUnits,
-      pairDiagnosticsFile=pairDiagnosticsFile,replayFrames=replayFrames,extended=extended);
+      pairDiagnosticsFile=pairDiagnosticsFile,replayFrames=replayFrames,extended=extended,
+      captureDiagnostics=captureDiagnostics);
   end when;
 end RGBDRenderedFlightSLAMAcceptance;

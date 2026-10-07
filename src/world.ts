@@ -173,6 +173,7 @@ export class World {
     if(offscreen){this.renderer.setSize(offscreen.width,offscreen.height,false);this.view.aspect=offscreen.width/offscreen.height;this.view.updateProjectionMatrix();}
     else new ResizeObserver(() => {
       const element=container as HTMLElement;
+      if(element.clientWidth===0||element.clientHeight===0)return;
       this.renderer.setSize(element.clientWidth, element.clientHeight);
       this.view.aspect = element.clientWidth / element.clientHeight; this.view.updateProjectionMatrix();
     }).observe(container as HTMLElement);

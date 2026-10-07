@@ -5,6 +5,10 @@ import harrisProfile from '../models/Vision/Features/D435HarrisFeatures.mo?raw';
 import fastNative from '../models/Vision/Features/FastNativeFrame.mo?raw';
 import fastProfile from '../models/Vision/Features/D435FastFeatures.mo?raw';
 import modelicaInertial from '../models/Estimation/Inertial/ModelicaInertial.mo?raw';
+import exampleModels from '../models/Examples/package.mo?raw';
+import inertialExample from '../models/Examples/InertialOnly.mo?raw';
+import responsiveExample from '../models/Examples/ResponsiveInertial.mo?raw';
+import smoothedExample from '../models/Examples/SmoothedInertial.mo?raw';
 import sensorEquations from '../models/Sensors/SensorObservations.mo?raw';
 import sensorAvailability from '../models/Sensors/SensorAvailability.mo?raw';
 import actorMotion from '../models/Scene/ActorMotion.mo?raw';
@@ -19,7 +23,13 @@ export const detectors: Record<string,string> = { 'Modelica Harris · integratio
 export function visibleDetectorPresets(_project:Pick<Project,'detectorPreset'|'detectorLanguage'>):Record<string,string> {
   return {...detectors};
 }
-export const algorithms: Record<string,string> = { 'Modelica inertial propagation':modelicaInertial };
+export const algorithms: Record<string,string> = { 'Modelica inertial propagation':inertialExample };
+const defaultModelicaSources = {
+  'models/Examples/package.mo':exampleModels,
+  'models/Examples/ResponsiveInertial.mo':responsiveExample,
+  'models/Examples/SmoothedInertial.mo':smoothedExample,
+  'models/Estimation/Inertial/ModelicaInertial.mo':modelicaInertial,
+};
 /** Add the new editable component without replacing a saved sensor model. */
 export function withActorMotion(source:string):string {
   return /\bmodel\s+ActorMotion\b/.test(source)?source:`${source}\n${actorMotion}`;
@@ -31,6 +41,9 @@ export interface Project {
   environment: Environment; seed: number; algorithm: string; detector: string; physics: string;
   algorithmPreset: string; detectorPreset: string;
   runtime: 'modelica';
+  entryPoint?:string;
+  modelicaSources?:Record<string,string>;
+  mainSourcePath?:string;
   algorithmArtifact?:InertialSessionMetadata;
   /** Complete editable SLAM source snapshot; distinct from the active estimator. */
   slamWorkspace?:RGBDSlamWorkspace;
@@ -48,11 +61,41 @@ export interface Project {
   peopleEnabled?:boolean;
   lightingMode?:'day'|'night'|'cycle';
 }
-export const defaultProject = (mobile=false): Project => ({ format:'slam-lab-project',version:1,name:'My quadrotor SLAM',environment:'city',sceneDetail:mobile?'low':'medium',depthCloudEnabled:false,lidarEnabled:false,seed:7,algorithm:modelicaInertial,detector:modelicaHarris,detectorLanguage:'modelica',physics,algorithmPreset:'Modelica inertial propagation',detectorPreset:'Modelica Harris · integration pending',runtime:'modelica',sensorModelica:defaultSensorModelica,evaluationModelica:defaultEvaluationModelica,graph:defaultGraph() });
+export const defaultProject = (mobile=false): Project => ({
+  format:'slam-lab-project',
+  version:1,
+  name:'My quadrotor SLAM',
+  environment:'city',
+  sceneDetail:mobile?'low':'medium',
+  depthCloudEnabled:false,
+  lidarEnabled:false,
+  seed:7,
+  algorithm:algorithms['Modelica inertial propagation'],
+  entryPoint:'Examples.InertialOnly',
+  mainSourcePath:'models/Examples/InertialOnly.mo',
+  modelicaSources:{...defaultModelicaSources},
+  algorithmPreset:'Modelica inertial propagation',
+  detector:modelicaHarris,
+  detectorPreset:'Modelica Harris · integration pending',
+  detectorLanguage:'modelica',
+  runtime:'modelica',
+  physics,
+  sensorModelica:defaultSensorModelica,
+  evaluationModelica:defaultEvaluationModelica,
+  graph:defaultGraph(),
+});
 export function parseProject(text: string): Project {
   const p=JSON.parse(text);
   if(p.format!=='slam-lab-project'||p.version!==1) throw new Error('Unsupported project version');
   for(const key of ['name','algorithm','detector','physics','algorithmPreset','detectorPreset']) if(typeof p[key]!=='string') throw new Error(`Project is missing ${key}`);
+  if(p.entryPoint!==undefined&&(typeof p.entryPoint!=='string'||!p.entryPoint.trim()))throw new Error('Invalid Modelica entry point');
+  if(p.mainSourcePath!==undefined&&(typeof p.mainSourcePath!=='string'||!/^models\/(?:[A-Za-z_]\w*\/)*[A-Za-z_]\w*\.mo$/.test(p.mainSourcePath)))throw new Error('Invalid main source path');
+  if(p.modelicaSources!==undefined){
+    if(!p.modelicaSources||typeof p.modelicaSources!=='object'||Array.isArray(p.modelicaSources))throw new Error('Invalid Modelica library');
+    for(const [path,source] of Object.entries(p.modelicaSources))
+      if(!/^models\/(?:[A-Za-z_]\w*\/)*[A-Za-z_]\w*\.mo$/.test(path)||typeof source!=='string')throw new Error('Invalid Modelica library source');
+    if(p.mainSourcePath&&Object.hasOwn(p.modelicaSources,p.mainSourcePath))throw new Error('Main source must not be duplicated in the library');
+  }
   if(p.runtime!=='modelica'||p.detectorLanguage!=='modelica'||p.graph?.nodes?.some((n:any)=>n.kind==='python'))throw new Error('This project uses a retired runtime. Convert its algorithm, detector and custom nodes to Modelica before opening it. Your saved source has not been changed.');
   if(!['city','warehouse','courtyard','tokyo','asset-city','big-city'].includes(p.environment)||!Number.isInteger(p.seed)) throw new Error('Invalid project settings');
   if(p.sceneDetail!==undefined&&!['low','medium','high'].includes(p.sceneDetail))throw new Error('Invalid scene detail level');

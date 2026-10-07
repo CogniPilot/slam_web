@@ -76,4 +76,81 @@ package RGBDRenderedVisualDiagnostics
       end if;
     end for;
   end Evaluate;
+
+  function CaptureFailure
+    input RGBDGraphProcessing.State previous;
+    input RGBDLocalizationCatalog.Estimator estimated "Accepted current producer, before any graph correction";
+    input Real rgb[:,:,:]; input Real depth[size(rgb,1),size(rgb,2)];
+    input Real pixels[RGBDKeyframes.featureCapacity,2]; input Real activeCount;
+    input Real calibration[14]; input Real opticalToBody[3,3];
+    input Integer epoch; input Real imageTime;
+    input Real producerFlags[2] "Actual observationAccepted and captureAccepted receipts";
+    input Real depthUnits = 1.0;
+    output Real stages[26] "Frame/policy/graph receipts, projected candidates, mapping admission/reasons, frame binding";
+  protected
+    Real descriptor[RGBDKeyframes.featureCapacity,RGBDKeyframes.descriptorSize];
+    Real point[RGBDKeyframes.featureCapacity,3]; Real enabled[RGBDKeyframes.featureCapacity];
+    Real invalidCount; Boolean frameAccepted; Boolean frameBound; Integer frameReason;
+    Real candidatePoint[RGBDKeyframes.featureCapacity,3];
+    Real candidateEnabled[RGBDKeyframes.featureCapacity];
+    Real projectedCount; Real projectionInvalidCount; Real projectionConfiguration; Real projectionPose;
+    RGBDKeyframes.Frame measurement; RGBDKeyframes.Catalog policyCatalog;
+    RGBDKeyframePolicy.Decision decision; RGBDCatalogGraphCapture.Result visual;
+    RGBDCatalogMapping.Result mapped;
+  algorithm
+    // Diagnostic replay only: reuse the production descriptor, frame, policy
+    // capture, projection and map owners. Never publish any diagnostic proposal.
+    stages := zeros(size(stages,1));
+    (descriptor,point,enabled,invalidCount) := DescribeRGBDFrame(rgb,depth,pixels,activeCount,
+      {calibration[5],calibration[6],calibration[3],calibration[4]},calibration[1:4],
+      calibration[8],calibration[9],calibration[7],0.28,10.0,1e-6,depthUnits=depthUnits);
+    (measurement,frameAccepted,frameReason) := RGBDLocalizationFrame.Build(
+      previous.estimator.localization.generation,previous.estimator.localization.catalog.nextId,
+      epoch,epoch,imageTime,activeCount,descriptor,point,enabled,pixels,
+      {size(rgb,1),size(rgb,2)},{size(depth,1),size(depth,2)},
+      {calibration[5],calibration[6],calibration[3],calibration[4]},calibration[1:4],
+      opticalToBody,calibration[10:12],calibration[8],calibration[9],calibration[7],
+      estimated.position,estimated.rotation,estimated.covariance,
+      previous.estimator.localization.catalog.vocabularyVersion,
+      if producerFlags[1] > 0.5 or producerFlags[2] > 0.5 then 1.0 else 0.0,true);
+    stages[1:2] := {if frameAccepted then 1.0 else 0.0,frameReason};
+    frameBound := RGBDLocalizationCatalog.FrameBound(previous.estimator.localization,
+      estimated,measurement,epoch,imageTime,producerFlags[1],producerFlags[2],frameAccepted);
+    stages[26] := if frameBound then 1.0 else 0.0;
+    if frameBound then
+      policyCatalog := previous.estimator.localization.catalog;
+      policyCatalog.bodyPositions := previous.estimator.poses.positions;
+      policyCatalog.bodyRotations := previous.estimator.poses.rotations;
+      decision := RGBDKeyframePolicy.Select(policyCatalog,measurement,true,1.0,true);
+      stages[3:5] := {if decision.valid then 1.0 else 0.0,
+        if decision.captureRequested then 1.0 else 0.0,decision.reason};
+      if decision.valid and decision.captureRequested then
+        visual := RGBDCatalogGraphCapture.Capture(previous.estimator.localization.catalog,
+          measurement,previous.vocabulary.words,previous.vocabulary.enabled,
+          previous.estimator.localization.graph,true);
+        stages[6:12] := {if visual.accepted then 1.0 else 0.0,visual.rejectionReason,
+          visual.loopDiagnostics.retrievalRejectionReason,visual.sequentialDiagnostics.rejectionReason,
+          visual.graphDiagnostics.rejectionReason,visual.sequentialDiagnostics.matchedCount,
+          visual.sequentialDiagnostics.inlierCount};
+        if visual.accepted then
+          (candidatePoint,candidateEnabled,projectedCount,projectionInvalidCount,
+            projectionConfiguration,projectionPose) := RGBDProjectLandmarks(
+              point,enabled,activeCount,1.0,estimated.rotation,estimated.position,
+              opticalToBody,calibration[10:12]);
+          stages[13:16] := {projectionConfiguration,projectionPose,projectedCount,projectionInvalidCount};
+          mapped := RGBDCatalogMapping.Capture(previous.estimator.localization.catalog,
+            previous.estimator.localization.graph,previous.estimator.localization.map,
+            visual,candidatePoint,candidateEnabled,1.0,true,
+            previousNodePosition=previous.estimator.poses.positions,
+            previousNodeRotation=previous.estimator.poses.rotations,
+            previousPoseRevision=previous.estimator.poses.revision);
+          stages[17:25] := {if mapped.accepted then 1.0 else 0.0,mapped.rejectionReason,
+            mapped.diagnostics.catalogUpdateRejectionReason,mapped.diagnostics.catalogRejectionReason,
+            mapped.diagnostics.correctionReason,mapped.diagnostics.updateRejectionReason,
+            mapped.diagnostics.mapRejectionReason,mapped.diagnostics.anchorRejectionReason,
+            mapped.diagnostics.invalidCandidateCount};
+        end if;
+      end if;
+    end if;
+  end CaptureFailure;
 end RGBDRenderedVisualDiagnostics;

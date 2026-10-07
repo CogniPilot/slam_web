@@ -14,7 +14,7 @@ export interface InertialSolverSession {
   free():void;
 }
 export interface InertialSessionMetadata {
-  format:'rumoca-simulation-session';version:1;modelName:'ModelicaInertial';
+  format:'rumoca-simulation-session';version:1;modelName:string;
   sourceSha256:string;compilerVersion:string;compilerCommit:string;
   executionPolicy:'auto';
 }

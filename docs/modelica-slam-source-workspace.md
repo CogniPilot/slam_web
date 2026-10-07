@@ -1,16 +1,16 @@
 # Editing the Modelica SLAM source workspace
 
-Select the SLAM node in the editor, then choose a file in **Modelica source**.
-The list contains the full frontend, localization, vocabulary, catalog, mapping
-and graph implementation. **Active estimator** returns to the source used by
-the current experiment.
+Open **Files** in the editor and browse **SLAM sources** for the full frontend,
+localization, vocabulary, mapping and graph implementation. The **Examples**
+folder contains runnable inertial experiments. **Run model** selects the
+Modelica entry point independently of the file being edited.
 
 Opening a new workspace snapshots all59 native D435 dependency files, including
 `D435FastSLAM`, `D435ImageProfile` and `RGBDFastSLAMIntervals`, and files you
 have not opened. Edits are autosaved with the project; **Save project** saves
 immediately. **Download** exports a portable project that can be reopened with
 **Open project**. The saved dependency texts are retained on reload rather than
-silently replaced by a newer site's defaults. **Export node source** exports
+silently replaced by a newer site's defaults. **Export source** exports
 the file currently being edited.
 
 New workspaces use schemaVersion2. Older schemaVersion1 projects retain their
@@ -19,7 +19,7 @@ native entrypoints. Both versions support local saves and portable downloads.
 
 Source files are grouped by responsibility: `Vision/Features`,
 `Estimation/Inertial`, `Mapping`, `LoopClosure`, `Optimization`, and `SLAM`.
-The file selector shows those paths. Projects saved with the original flat
+The explorer shows those paths. Projects saved with the original flat
 `models/` paths migrate their path keys when opened; every edited source byte
 and the original dependency inventory remain intact. Conflicting old and new
 keys are rejected. See [the source guide](../models/README.md).
@@ -33,7 +33,7 @@ propagation. Opening or editing the workspace does not replace that estimator.
 browser worker. It checks each lifecycle entrypoint and the resulting executable
 ABI, and shows the exact source hash, compiler version and any compilation error.
 **Cancel build** terminates the compiler worker even during a synchronous WASM
-call; it remains available when you switch editor nodes. A build uses a snapshot
+call; it remains available when you switch files. A build uses a snapshot
 of the source. Editing during compilation makes the result stale and requires a
 new check. Build results do not activate an estimator or alter saved source.
 

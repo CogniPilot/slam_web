@@ -1,5 +1,4 @@
 // Source-owned held-IMU batching for the complete raw-camera SLAM lifecycle.
-// Not yet included in the qualified source manifest or browser runtime.
 model RGBDFastSLAMIntervals
   parameter Integer imageHeight(min=1) = RGBDKeyframes.imageHeight;
   parameter Integer imageWidth(min=1) = RGBDKeyframes.imageWidth;
@@ -234,19 +233,38 @@ protected
   Real previousEndpoint;
 algorithm
   next := previous;
-  accepted := false; imageCompleted := false; mappingAccepted := false;
-  graphCorrectionAccepted := false; roundoffCertified := false;
-  graphCostBefore := 0.0; graphCostAfter := 0.0;
+  accepted := false;
+  imageCompleted := false;
+  mappingAccepted := false;
+  graphCorrectionAccepted := false;
+  roundoffCertified := false;
+  graphCostBefore := 0.0;
+  graphCostAfter := 0.0;
   nextQuaternion := {1.0,0.0,0.0,0.0};
-  selectionValid := 0.0; predictionAccepted := 0.0; initializationAccepted := 0.0;
-  observationAccepted := 0.0; captureAccepted := 0.0; matchCount := 0.0;
-  features := zeros(featureCapacity,spaceDimension); featureEnabled := zeros(featureCapacity);
-  trackingCurrentPixel := zeros(featureCapacity,2); trackingReferencePixel := zeros(featureCapacity,2);
+  selectionValid := 0.0;
+  predictionAccepted := 0.0;
+  initializationAccepted := 0.0;
+  observationAccepted := 0.0;
+  captureAccepted := 0.0;
+  matchCount := 0.0;
+  features := zeros(featureCapacity,spaceDimension);
+  featureEnabled := zeros(featureCapacity);
+  trackingCurrentPixel := zeros(featureCapacity,2);
+  trackingReferencePixel := zeros(featureCapacity,2);
   trackingEnabled := zeros(featureCapacity);
-  publicationReason := 1; ledgerReason := 1; vocabularyReason := 0; graphReason := 1;
-  graphCommitReason := 0; graphFilterReason := 0; covarianceStatus := 0;
-  processedIntervals := 0; failedInterval := 0; batchReason := 1;
-  chronologyValid := false; continueBatch := false; previousEndpoint := 0.0;
+  publicationReason := 1;
+  ledgerReason := 1;
+  vocabularyReason := 0;
+  graphReason := 1;
+  graphCommitReason := 0;
+  graphFilterReason := 0;
+  covarianceStatus := 0;
+  processedIntervals := 0;
+  failedInterval := 0;
+  batchReason := 1;
+  chronologyValid := false;
+  continueBatch := false;
+  previousEndpoint := 0.0;
   if requested then
     batchReason := 2;
     if intervalCount >= 1 and intervalCount <= maximumIntervals then
@@ -262,7 +280,9 @@ algorithm
               and intervalTimes[interval] > previousEndpoint
               and abs(intervalTimes[interval]-previousEndpoint-durations[interval])
                 <= 1e-12*max(1.0,abs(intervalTimes[interval]));
-            if chronologyValid then previousEndpoint := intervalTimes[interval]; end if;
+            if chronologyValid then
+              previousEndpoint := intervalTimes[interval];
+            end if;
           end if;
         end for;
         if chronologyValid then
@@ -328,7 +348,9 @@ algorithm
                 if accepted and SLAMExactRealEqual(predictionAccepted,1.0) then
                   processedIntervals := processedIntervals+1;
                 else
-                  failedInterval := interval; batchReason := 5; continueBatch := false;
+                  failedInterval := interval;
+                  batchReason := 5;
+                  continueBatch := false;
                 end if;
               end if;
             end for;
@@ -341,14 +363,24 @@ algorithm
     // Keep only the failing call's rejection codes and batch diagnostics.
     // Neither a partial State nor an earlier image/producer/display result escapes.
     next := previous;
-    accepted := false; imageCompleted := false; mappingAccepted := false;
-    graphCorrectionAccepted := false; roundoffCertified := false;
-    graphCostBefore := 0.0; graphCostAfter := 0.0;
+    accepted := false;
+    imageCompleted := false;
+    mappingAccepted := false;
+    graphCorrectionAccepted := false;
+    roundoffCertified := false;
+    graphCostBefore := 0.0;
+    graphCostAfter := 0.0;
     nextQuaternion := {1.0,0.0,0.0,0.0};
-    selectionValid := 0.0; predictionAccepted := 0.0; initializationAccepted := 0.0;
-    observationAccepted := 0.0; captureAccepted := 0.0; matchCount := 0.0;
-    features := zeros(featureCapacity,spaceDimension); featureEnabled := zeros(featureCapacity);
-    trackingCurrentPixel := zeros(featureCapacity,2); trackingReferencePixel := zeros(featureCapacity,2);
+    selectionValid := 0.0;
+    predictionAccepted := 0.0;
+    initializationAccepted := 0.0;
+    observationAccepted := 0.0;
+    captureAccepted := 0.0;
+    matchCount := 0.0;
+    features := zeros(featureCapacity,spaceDimension);
+    featureEnabled := zeros(featureCapacity);
+    trackingCurrentPixel := zeros(featureCapacity,2);
+    trackingReferencePixel := zeros(featureCapacity,2);
     trackingEnabled := zeros(featureCapacity);
   end if;
 end AdvanceFastSLAMIntervals;

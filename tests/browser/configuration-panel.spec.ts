@@ -13,23 +13,23 @@ test.beforeAll(async()=>{
   script=result.outputFiles[0].text;
 });
 test.beforeEach(async({page})=>{
-  await page.setContent('<main><div class="run-controls"><button>Run</button><label><input id="tour" type="checkbox" checked>Flight tour</label><select id="tour-mode" aria-label="Flight tour route"><option>Street circuit</option></select></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option>City blocks</option></select><label><input id="cars" type="checkbox" checked>Cars</label></div><p id="graphics-budget">Graphics budget</p><span id="sensor-rate-summary"></span><aside><h2>Editable source</h2><textarea aria-label="Node source code">model Kept end Kept;</textarea></aside></main>');
+  await page.setContent('<main><div class="run-controls"><button>Run</button><label><input id="tour" type="checkbox" checked>Flight tour</label><select id="tour-mode" aria-label="Flight tour route"><option>Street circuit</option></select></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option>City blocks</option></select><label><input id="cars" type="checkbox" checked>Cars</label></div><p id="graphics-budget">Graphics budget</p><span id="sensor-rate-summary"></span><aside><h2>Editable source</h2><textarea aria-label="Modelica source">model Kept end Kept;</textarea></aside></main>');
   await page.evaluate(()=>{document.getElementById('cars')!.addEventListener('change',()=>{(window as any).retainedHandler=true;});});
   await page.addScriptTag({content:script});
 });
 
 test('pane switches with keyboard and preserves existing source and control handlers',async({page})=>{
-  await expect(page.getByLabel('Node source code')).toBeVisible();
+  await expect(page.getByLabel('Modelica source')).toBeVisible();
   await expect(page.getByLabel('Environment')).toBeHidden();
   await page.getByRole('tab',{name:'Editor',exact:true}).focus();await page.keyboard.press('ArrowRight');
   await expect(page.getByRole('tab',{name:'Configuration',exact:true})).toBeFocused();
-  await expect(page.getByLabel('Node source code')).toBeHidden();
+  await expect(page.getByLabel('Modelica source')).toBeHidden();
   await expect(page.getByRole('button',{name:'Run',exact:true})).toBeVisible();
   await page.getByLabel('Cars',{exact:true}).uncheck();
   expect(await page.evaluate(()=>(window as any).retainedHandler)).toBe(true);
   await page.getByRole('tab',{name:'Configuration',exact:true}).focus();await page.keyboard.press('Home');
-  await expect(page.getByLabel('Node source code')).toHaveValue('model Kept end Kept;');
-  await expect(page.getByLabel('Node source code')).toBeVisible();
+  await expect(page.getByLabel('Modelica source')).toHaveValue('model Kept end Kept;');
+  await expect(page.getByLabel('Modelica source')).toBeVisible();
 });
 
 test('custom sensor rates survive quality changes, reset explicitly and disable pending edits',async({page})=>{

@@ -8,7 +8,7 @@ test('rejects a stored unsupported project without autosaving a replacement over
  await expect(page.getByRole('button',{name:'Save project',exact:true})).toBeDisabled();
  await expect(page.getByRole('button',{name:'Apply & reset',exact:true})).toBeEnabled();
  await page.getByLabel('Project name').fill('An edit must not overwrite the rejected source');
- await page.getByLabel('Node source code').fill('model Edited\n Real x;\nequation\n x=1;\nend Edited;');
+ await page.getByLabel('Modelica source').fill('model Edited\n Real x;\nequation\n x=1;\nend Edited;');
  // Wait beyond the real autosave debounce and allow its transaction to finish.
  await page.waitForTimeout(700);
  expect(await page.evaluate(()=>localStorage.getItem('slam-lab.project.v1'))).toBe(legacy);

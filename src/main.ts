@@ -20,16 +20,21 @@ import {createRGBDSlamWorkspace,editRGBDSlamWorkspace,rgbdSlamWorkspaceManifest}
 import {checkRGBDSlamBuild,type SlamBuildReceipt} from './modelica-slam-build';
 import {DepthPreview} from './depth-preview';
 import {ColorPreview} from './color-preview';
+import {createSourceExplorer} from './source-explorer';
+import {mountWorkspacePanes} from './workspace-panes';
+import {startupScreen} from './startup-screen';
+import './workspace.css';
 
+const startup=startupScreen();
 document.querySelector('#app')!.innerHTML=`
-<header><a class="brand" href="./"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button></div></header>
+<header><a class="brand" href="./"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button></div><a class="project-github" href="https://github.com/CogniPilot/slam_web" target="_blank" rel="noopener noreferrer" aria-label="SLAM Lab on GitHub">GitHub</a><a class="powered-by" href="https://github.com/CogniPilot/rumoca" target="_blank" rel="noopener noreferrer"><img src="${import.meta.env.BASE_URL}brand/rumoca.svg" width="24" height="24" alt=""><span>Powered by Rumoca</span></a></header>
 <main><div class="toolbar"><div class="run-controls"><button id="run" class="primary" disabled>▶ Run</button><button id="step" disabled>Step</button><button id="reset" disabled>↺ Reset</button><select id="speed" aria-label="Simulation speed"><option value="1">1× real time</option><option value="4">4× real time</option><option value="Infinity">As fast as possible</option></select><label class="check"><input id="tour" type="checkbox" checked>Flight tour</label></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option value="city">City blocks</option><option value="warehouse">Warehouse</option><option value="courtyard">Courtyard</option></select><label class="check"><input id="show-map" type="checkbox" checked>Show map</label><button id="help">Lesson guide</button></div></div>
 <div class="workspace"><section class="visuals"><div class="scene panel"><div class="panel-label"><span class="live-dot"></span>WORLD VIEW<span class="right">Three.js · orbit to explore</span></div><div id="world"></div><div class="scene-overlay"><span>QUADROTOR + D435</span><small id="flight-status">Initializing browser runtimes</small></div><div class="scene-bottom">WASD move · Q/E yaw · R/F altitude <span id="sim-time">t = 0.00 s</span></div></div>
 <div class="sensor-row"><div class="panel sensor"><div class="panel-label">RGB CAMERA<span class="right">features overlay</span></div><canvas id="rgb" width="160" height="90"></canvas><div class="sensor-foot">69° × 42° · RGBA8</div></div><div class="panel sensor"><div class="panel-label">DEPTH CAMERA<span class="right">axial depth, meters</span></div><canvas id="depth" width="160" height="90"></canvas><div class="sensor-foot">87° × 58° · 0.28–10 m</div></div><div class="panel trajectory"><div class="panel-label">TRAJECTORY<span class="right">ENU · meters</span></div><canvas id="trajectory" width="260" height="146"></canvas><div class="legend"><span class="truth-key">Truth</span><span class="estimate-key">Estimate</span><span class="compare-key">External</span></div></div></div>
 <div class="metrics"><div><small>SIM TIME</small><strong id="metric-time">0.00 <em>s</em></strong></div><div><small>TRAJECTORY RMSE</small><strong id="metric-ate">— <em>m</em></strong></div><div><small>FEATURES</small><strong id="metric-features">0</strong></div><div><small>MAP POINTS</small><strong id="metric-points">0</strong></div><div><small>SIM / WALL TIME</small><strong id="metric-rtf">— <em>×</em></strong></div></div></section>
-<aside class="panel editor"><div class="editor-top"><div><small>EDITABLE NODE</small><h2 id="editor-title">RGB-D / inertial SLAM</h2></div><span id="language" class="badge">Modelica · Rumoca</span></div><div class="editor-selects"><select id="node-select" aria-label="Edit node"></select><select id="preset" aria-label="Node preset"></select></div><p id="editor-description">Estimate a 6-DOF pose from camera images and the airframe IMU. Ground truth is kept out of this node.</p><textarea id="code" aria-label="Node source code" spellcheck="false"></textarea><div class="editor-bottom"><span id="line-count"></span><button id="apply" disabled class="primary">Apply & reset</button></div></aside></div>
-<div class="bottom-row"><section class="panel topics"><div class="section-header"><div><h2>Node data flow</h2><p>Direct buffers between connected nodes</p></div><span class="badge" id="bus-state">Loading</span></div><div id="topics"></div></section><section class="panel connection"><h2>Embedded deployment</h2><p>Portable Modelica programs will run in the browser and on embedded hardware. Native deployment and optional ROS 2 / MAVLink adapters are under development.</p><button id="deploy" disabled>Deploy project</button><small id="deploy-state">Modelica embedded host integration pending</small></section><section class="panel recordings"><h2>Experiments</h2><p>Record synchronized sensor frames, then rerun them through edited nodes.</p><button id="record" disabled>● Record dataset</button><button id="export-recording" disabled>Export dataset</button><label class="button">Replay dataset<input id="replay" type="file" accept=".json" hidden></label><button id="export-node">Export node source</button><small id="record-state">Up to 300 RGB-D / IMU frames per recording</small></section></div>
-<div id="status" role="status">Loading Modelica environment…</div><details id="lesson" class="panel lesson"><summary>Lesson guide · Modelica robotics</summary><ol><li><b>Run the default experiment.</b> Modelica inertial propagation prepares automatically. Phones start in the city with Low graphics; desktops use Balanced graphics. Click Run to start; no initial Apply is needed. Test physics and camera data. Native feature detection is pending. This baseline has no visual localization, map or loop closure; full Modelica SLAM integration is pending.</li><li><b>Edit Modelica.</b> Physics, detector and estimator source use Rumoca diagnostics and highlighting. Apply resets the experiment.</li><li><b>Save your work.</b> Projects save locally and can be downloaded and reopened. Custom Modelica graph-node execution is still pending.</li></ol><p>Select sensor rates in Configuration. RGB and depth share a simulation clock; IMU, GPS and LiDAR use their selected rates. Physics waits for every sensor event before advancing. Three.js presents the world independently at a target of 30 FPS. The camera uses 848×480 pinhole optics with stereo disparity noise; the D435 has no IMU, so IMU measurements belong to the airframe. Traffic, pedestrians and lighting vary the scene. Open the site to use the browser environment.</p></details></main>`;
+<aside class="panel editor"><div class="editor-top"><button id="files-toggle" aria-controls="source-explorer" aria-expanded="false">Files</button><div><small>MODELICA SOURCE</small><h2 id="editor-title">RGB-D / inertial SLAM</h2></div><span id="language" class="badge">Modelica · Rumoca</span></div><div class="editor-selects"><label>Preset <select id="preset" aria-label="Feature detector preset"></select></label></div><p id="editor-description">Estimate a 6-DOF pose from camera images and the airframe IMU.</p><textarea id="code" aria-label="Modelica source" spellcheck="false"></textarea><div class="editor-bottom"><span id="line-count"></span><button id="apply" disabled class="primary">Apply & reset</button></div></aside></div>
+<div class="bottom-row"><section class="panel connection"><h2>Embedded deployment</h2><p>Portable Modelica programs will run in the browser and on embedded hardware. Native deployment and optional ROS 2 / MAVLink adapters are under development.</p><button id="deploy" disabled>Deploy project</button><small id="deploy-state">Modelica embedded host integration pending</small></section><section class="panel recordings"><h2>Experiments</h2><p>Record synchronized sensor frames, then rerun them through edited source.</p><button id="record" disabled>● Record dataset</button><button id="export-recording" disabled>Export dataset</button><label class="button">Replay dataset<input id="replay" type="file" accept=".json" hidden></label><button id="export-node">Export source</button><small id="record-state">Up to 300 RGB-D / IMU frames per recording</small></section></div>
+<div id="status" role="status">Loading Modelica environment…</div><details id="lesson" class="panel lesson"><summary>Lesson guide · Modelica robotics</summary><ol><li><b>Run the default experiment.</b> Modelica inertial propagation prepares automatically. Phones start in the city with Low graphics; desktops use Balanced graphics. Click Run to start; no initial Apply is needed. Test physics and camera data. Native feature detection is pending. This baseline has no visual localization, map or loop closure; full Modelica SLAM integration is pending.</li><li><b>Edit Modelica.</b> Physics, detector and estimator source use Rumoca diagnostics and highlighting. Apply resets the experiment.</li><li><b>Save your work.</b> Projects save locally and can be downloaded and reopened. Full Modelica SLAM execution integration is pending.</li></ol><p>Select sensor rates in Configuration. RGB and depth share a simulation clock; IMU, GPS and LiDAR use their selected rates. Physics waits for every sensor event before advancing. Three.js presents the world independently at a target of 30 FPS. The camera uses 848×480 pinhole optics with stereo disparity noise; the D435 has no IMU, so IMU measurements belong to the airframe. Traffic, pedestrians and lighting vary the scene. Open the site to use the browser environment.</p></details></main>`;
 
 const el=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id)! as T;
 el('environment').insertAdjacentHTML('afterend','<select id="scene-detail" aria-label="Graphics quality" aria-describedby="graphics-budget"><option value="low">Low · economical</option><option value="medium">Medium · balanced</option><option value="high">High · showcase</option></select>');
@@ -70,6 +75,7 @@ const initializationReady=new Promise<void>(resolve=>{finishInitialization=resol
 let initialized=false;
 const navigation=new NavigationHandoff();
 let viewer:WorkerViewer|undefined;
+let viewerPresented=true;
 el('graphics-state').insertAdjacentHTML('afterend','<div id="performance-state"></div>');
 const performanceMonitor=new BrowserPerformanceMonitor({targetFps:30,onUpdate:s=>{
   const display=viewer?.latest??s;
@@ -80,20 +86,61 @@ runtime.onSensor=()=>performanceMonitor.captured();runtime.onLidar=()=>performan
 const code=el<HTMLTextAreaElement>('code');
 const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
 const sourceEditor=createSourceEditor(code);
-const slamFileRow=document.createElement('label');slamFileRow.className='slam-source-files';
-slamFileRow.textContent='Modelica source ';
-const slamFileSelect=document.createElement('select');slamFileSelect.setAttribute('aria-label','SLAM source file');
-slamFileSelect.add(new Option('Active estimator',''));
-const slamFiles=document.createElement('optgroup');slamFiles.label='Full SLAM sources · execution pending';
-function refreshSlamFiles(){
-  const manifest=rgbdSlamWorkspaceManifest(project.slamWorkspace?.schemaVersion??2);
-  slamFiles.replaceChildren(...manifest.paths.map(path=>new Option(path.slice('models/'.length),path)));
+const runModelLabel=document.createElement('label');runModelLabel.className='run-model';runModelLabel.textContent='Run model';
+const runModel=document.createElement('select');runModel.id='run-model';runModel.setAttribute('aria-label','Run model');
+runModelLabel.append(runModel);document.querySelector('.run-controls')!.append(runModelLabel);
+let modelDiscovery=0,modelDiscoveryTimer:ReturnType<typeof setTimeout>|undefined;
+async function refreshRunModels(){
+  const token=++modelDiscovery,owner=project,source=project.algorithm,companions=project.modelicaSources;
+  const entryPoint=project.entryPoint??'ModelicaInertial';
+  if(!Array.from(runModel.options).some(option=>option.value===entryPoint))runModel.add(new Option(entryPoint,entryPoint));
+  runModel.value=entryPoint;
+  try{
+    const models=await sourceEditor.simulationModels(source,entryPoint,companions);
+    if(token!==modelDiscovery||owner!==project||source!==project.algorithm||companions!==project.modelicaSources)return;
+    runModel.replaceChildren(...models.map(name=>new Option(name,name)));
+    if(!models.includes(entryPoint)){
+      const missing=new Option(entryPoint+' · missing from source',entryPoint);missing.disabled=true;runModel.add(missing);
+    }
+    runModel.value=entryPoint;runModel.title='Select a top-level Modelica model. Run compiles your saved source.';
+  }catch(error){if(token===modelDiscovery)runModel.title=String(error);}
 }
-slamFileSelect.append(slamFiles);slamFileRow.append(slamFileSelect);
-document.querySelector('.editor-selects')!.after(slamFileRow);
+runModel.onchange=()=>{
+  ++modelDiscovery;
+  project.entryPoint=runModel.value;delete project.algorithmArtifact;
+  changed();status(`Selected ${project.entryPoint} · click Run to compile and start`);
+};
+const explorer=createSourceExplorer(id=>{void openSource(id);});
+const workbench=document.createElement('div');workbench.className='editor-workbench';
+const sourceDocument=document.createElement('div');sourceDocument.className='source-document';
+const editorView=el('editor-view');
+sourceDocument.append(...Array.from(editorView.children).filter(child=>!child.classList.contains('editor-top')));
+workbench.append(explorer.element,sourceDocument);editorView.append(workbench);
+function showFiles(show:boolean){
+  workbench.classList.toggle('files-open',show);
+  explorer.element.hidden=!show;
+  el('files-toggle').setAttribute('aria-expanded',String(show));
+}
+showFiles(!mobileDefaults);
+el('files-toggle').onclick=()=>showFiles(explorer.element.hidden);
+function refreshFiles(){
+  const manifest=rgbdSlamWorkspaceManifest(project.slamWorkspace?.schemaVersion??2);
+  explorer.update([
+    ...project.graph.nodes.filter(node=>node.kind!=='map').map(node=>({id:'experiment:'+node.id,path:node.kind==='slam'&&project.mainSourcePath?project.mainSourcePath.slice('models/'.length):'Experiment/'+({physics:'Quadrotor',sensor:'Sensors',detector:'FeatureDetector',slam:'Main',evaluation:'Evaluation',map:'Map',modelica:node.id}[node.kind])+'.mo'})),
+    ...Object.keys(project.modelicaSources??{}).map(path=>({id:'library:'+path,path:path.slice('models/'.length)})),
+    ...manifest.paths.map(path=>({id:path,path:'SLAM sources/'+path.slice('models/'.length)}))
+  ],viewingSlamFile()?activeSlamFile:viewingLibraryFile()?'library:'+activeLibraryFile:'experiment:'+selected.id);
+}
+mountWorkspacePanes([
+  {name:'viewer',panel:document.querySelector('.scene')!,header:document.querySelector('.scene .panel-label')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!},
+  {name:'editor',panel:document.querySelector('aside.editor')!,header:document.querySelector('.configuration-tabs')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!}
+],()=>{
+  viewerPresented=!document.querySelector('.scene.pane-collapsed, aside.editor.pane-fullscreen');
+  viewer?.presentationVisible(viewerPresented);
+});
 const slamBuildPanel=document.createElement('div');slamBuildPanel.className='slam-source-build';slamBuildPanel.hidden=true;
 slamBuildPanel.innerHTML='<button id="check-slam-build">Check WASM build</button> <button id="cancel-slam-build" hidden>Cancel build</button><pre id="slam-build-result" role="status">Checks all saved SLAM sources using Rumoca in this browser. Execution integration is pending.</pre>';
-slamFileRow.after(slamBuildPanel);
+document.querySelector('.editor-selects')!.after(slamBuildPanel);
 let slamBuildAbort:AbortController|undefined;
 let slamBuildReceipt:SlamBuildReceipt|undefined;
 el('check-slam-build').onclick=async()=>{
@@ -116,9 +163,10 @@ el('check-slam-build').onclick=async()=>{
 };
 el('cancel-slam-build').onclick=()=>slamBuildAbort?.abort();
 window.addEventListener('pagehide',()=>slamBuildAbort?.abort());
-let activeSlamFile='',slamFileLoad=0;
+let activeSlamFile='',activeLibraryFile='',slamFileLoad=0;
 const viewingSlamFile=()=>selected.kind==='slam'&&!!activeSlamFile&&!!project.slamWorkspace;
-const selectedSource=()=>viewingSlamFile()?project.slamWorkspace!.sources[activeSlamFile]:sourceFor(selected,project);
+const viewingLibraryFile=()=>selected.kind==='slam'&&!!activeLibraryFile&&Object.hasOwn(project.modelicaSources??{},activeLibraryFile);
+const selectedSource=()=>viewingSlamFile()?project.slamWorkspace!.sources[activeSlamFile]:viewingLibraryFile()?project.modelicaSources![activeLibraryFile]:sourceFor(selected,project);
 function syncApplyButton(){
   const button=el<HTMLButtonElement>('apply');
   button.disabled=compiling||viewingSlamFile();
@@ -139,6 +187,7 @@ function changed(requiresCompilation=true) {
 function syncProject() {
   slamBuildAbort?.abort();
   if(activeSlamFile&&!Object.hasOwn(project.slamWorkspace?.sources??{},activeSlamFile))activeSlamFile='';
+  if(activeLibraryFile&&!Object.hasOwn(project.modelicaSources??{},activeLibraryFile))activeLibraryFile='';
   el<HTMLInputElement>('name').value=project.name;
   el<HTMLSelectElement>('environment').value=project.environment;
   el<HTMLSelectElement>('scene-detail').value=project.sceneDetail??'high';
@@ -149,32 +198,36 @@ function syncProject() {
   el<HTMLInputElement>('people-enabled').checked=project.peopleEnabled??true;
   el<HTMLSelectElement>('lighting-mode').value=project.lightingMode??'day';
   configuration.sync(project);
-  refreshNodes();
   selectNode(project.graph.nodes.find(n=>n.id===selected?.id)??project.graph.nodes.find(n=>n.kind==='slam')!,false);
-}
-function refreshNodes() {
-  const select=el<HTMLSelectElement>('node-select');select.replaceChildren();
-  for(const node of project.graph.nodes) {const option=new Option(node.title,node.id);select.add(option);}
-  select.value=selected.id;
+  return refreshRunModels();
 }
 function selectNode(node:GraphNode,showEditor=true) {
+  ++slamFileLoad;
   if(showEditor)configuration.showEditor();
   selected=node;
-  el('editor-title').textContent=node.title;el<HTMLSelectElement>('node-select').value=node.id;
+  el('editor-title').textContent=node.title;
   el('language').textContent=nodeRuntimeLabel(node,project);
-  const description:Record<string,string>={physics:'Edit the rigid-body plant, velocity controller and flight-tour setpoints in Modelica.',sensor:'Three.js renders RGB/depth at each Rumoca timestamp. Edit Modelica SensorObservations, SensorAvailability and ActorMotion to change IMU/GPS noise, roof gates, traffic routes and walking speed. GPU shaders apply stereo disparity noise, dropout and depth-unit quantization. The camera has an independent pixel/time random stream. No truth pose goes to vision nodes.',detector:'Return [u, v, score] features in RGB pixel coordinates. Change the threshold, replace the detector, or write your own.',slam:'Estimate a 6-DOF pose from calibrated RGB-D, detected features and an airframe IMU. The map origin is the initial body pose.',map:'Display the estimated 3D point cloud. Rendering never feeds the estimated map back into simulated camera images.',evaluation:'Edit Modelica initial-heading reference transforms, trajectory RMSE and orientation error. This sink receives true and estimated poses; it never feeds observations back to the estimator.',modelica:'Custom Modelica node: edit array equations and connect compatible ports. Execution integration is pending; editing and local persistence are available.'};
+  const description:Record<string,string>={
+    physics:'Quadrotor dynamics, controller and flight-tour setpoints.',
+    sensor:'IMU/GPS observations and scene motion. Three.js renders camera images and depth noise at the simulation timestamps.',
+    detector:'Image features in RGB pixel coordinates. Native feature detection integration is pending.',
+    slam:'Modelica estimator and experiment composition.',
+    map:'Estimated 3D point cloud display.',
+    evaluation:'Trajectory and orientation errors in the initial reference frame.',
+    modelica:'Editable Modelica source. Runtime integration is pending.'
+  };
   el('editor-description').textContent=description[node.kind];
-  if(node.kind==='detector'&&project.detectorLanguage==='modelica')el('editor-description').textContent='Native Rumoca feature detection is pending. The legacy vision adapter is removed. Source editing, diagnostics and persistence remain available; the running camera / inertial baseline does not produce features.';
   code.value=selectedSource();code.readOnly=!['physics','sensor','detector','slam','evaluation','modelica'].includes(node.kind);
   if(code.readOnly&&node.kind!=='slam')code.value='// This built-in node is configured through its graph ports.\n// Connect an editable Modelica node to describe a transformation.';
-  if(node.kind==='slam')el('editor-description').textContent=/\bmodel\s+ModelicaInertial\b/.test(project.algorithm)?'Edit IMU filtering, quaternion kinematics and inertial propagation in Modelica. This baseline has no visual corrections, covariance filter, map or loop closure. Embedded host integration is pending.':'Edit your Modelica estimator. Full SLAM sources are available in the source selector; browser execution integration is pending.';
-  refreshSlamFiles();
-  slamFileRow.hidden=node.kind!=='slam';
+  if(node.kind==='slam'){
+    el('editor-title').textContent=viewingLibraryFile()?activeLibraryFile.slice('models/'.length):project.mainSourcePath?.slice('models/'.length)??'Main.mo';
+    el('editor-description').textContent='Wire components in Modelica and choose the entry point with Run model. The current examples run inertial navigation; full RGB-D SLAM integration is pending.';
+  }
+  refreshFiles();
   slamBuildPanel.hidden=!viewingSlamFile()&&!slamBuildAbort;
-  slamFileSelect.value=viewingSlamFile()?activeSlamFile:'';
   if(viewingSlamFile()){
     el('editor-title').textContent=activeSlamFile.slice('models/'.length);
-    el('editor-description').textContent='Edit the full Modelica SLAM source workspace. All dependency files are saved with this project. Browser execution integration is pending; the active experiment still uses the estimator selected above.';
+    el('editor-description').textContent='Edit the full Modelica SLAM source workspace. All dependency files are saved with this project. Browser execution integration is pending; Run model still selects the active experiment.';
   }
   const presets=el<HTMLSelectElement>('preset');presets.replaceChildren();
   const collection=node.kind==='detector'?visibleDetectorPresets(project):node.kind==='slam'?algorithms:{};
@@ -184,35 +237,62 @@ function selectNode(node:GraphNode,showEditor=true) {
   presets.add(new Option('Custom source','custom'));
   presets.value=node.kind==='detector'?project.detectorPreset:node.kind==='slam'?project.algorithmPreset:'custom';
   if(!presets.value)presets.value='custom';presets.disabled=compiling||viewingSlamFile()||!['slam','detector'].includes(node.kind);
-  sourceEditor.setWorkspaceSources(viewingSlamFile()?project.slamWorkspace!.sources:undefined,viewingSlamFile()?activeSlamFile:undefined);
+  document.querySelector<HTMLElement>('.editor-selects')!.hidden=viewingSlamFile()||node.kind!=='detector';
+  const library=selected.kind==='slam'?{...project.modelicaSources,[project.mainSourcePath??'models/Main.mo']:project.algorithm}:undefined;
+  sourceEditor.setWorkspaceSources(viewingSlamFile()?project.slamWorkspace!.sources:library,
+    viewingSlamFile()?activeSlamFile:viewingLibraryFile()?activeLibraryFile:project.mainSourcePath??'models/Main.mo');
   sourceEditor.setLanguage(code.readOnly?'plaintext':'modelica');
   sourceEditor.syncFromTextarea();
   el<HTMLButtonElement>('export-node').disabled=!['physics','sensor','detector','slam','evaluation','modelica'].includes(node.kind);
   lineCount();
   syncApplyButton();
 }
-function lineCount(){el('line-count').textContent=`${code.value.split('\n').length} lines · ${code.readOnly?'built-in node':'editable source'}`;}
+function lineCount(){el('line-count').textContent=`${code.value.split('\n').length} lines · ${code.readOnly?'read-only source':'editable source'}`;}
 code.addEventListener('input',()=>{
+  if(viewingLibraryFile()){
+    project.modelicaSources={...project.modelicaSources,[activeLibraryFile]:code.value};
+    delete project.algorithmArtifact;
+    if(modelDiscoveryTimer)clearTimeout(modelDiscoveryTimer);
+    modelDiscoveryTimer=setTimeout(()=>{void refreshRunModels();},350);
+    lineCount();changed();return;
+  }
   if(viewingSlamFile()){
     project.slamWorkspace=editRGBDSlamWorkspace(project.slamWorkspace!,activeSlamFile,code.value);
     lineCount();changed(false);return;
   }
-  setSource(selected,project,code.value);if(selected.kind==='slam'){project.algorithmPreset='custom';project.runtime='modelica';delete project.algorithmArtifact;}if(selected.kind==='detector')project.detectorPreset='custom';el<HTMLSelectElement>('preset').value='custom';lineCount();changed();
+  setSource(selected,project,code.value);if(selected.kind==='slam'){
+    project.algorithmPreset='custom';project.runtime='modelica';delete project.algorithmArtifact;
+    if(modelDiscoveryTimer)clearTimeout(modelDiscoveryTimer);
+    modelDiscoveryTimer=setTimeout(()=>{void refreshRunModels();},350);
+  }if(selected.kind==='detector')project.detectorPreset='custom';el<HTMLSelectElement>('preset').value='custom';lineCount();changed();
 });
-slamFileSelect.onchange=async()=>{
-  const path=slamFileSelect.value,token=++slamFileLoad,owner=project;
-  if(!path){activeSlamFile='';selectNode(selected);return;}
-  slamFileSelect.disabled=true;
+async function openSource(id:string){
+  if(id.startsWith('experiment:')){
+    const node=project.graph.nodes.find(node=>node.id===id.slice('experiment:'.length));
+    if(!node)return;
+    activeSlamFile='';activeLibraryFile='';selectNode(node);
+    if(mobileDefaults)showFiles(false);
+    sourceEditor.editor.focus();return;
+  }
+  if(id.startsWith('library:')){
+    const path=id.slice('library:'.length);
+    if(!Object.hasOwn(project.modelicaSources??{},path))return;
+    activeSlamFile='';activeLibraryFile=path;selectNode(project.graph.nodes.find(node=>node.kind==='slam')!);
+    if(mobileDefaults)showFiles(false);
+    sourceEditor.editor.focus();return;
+  }
+  const path=id,token=++slamFileLoad,owner=project;
   try{
     const workspace=owner.slamWorkspace??await createRGBDSlamWorkspace('d435-native');
     if(token!==slamFileLoad||owner!==project)return;
+    if(!Object.hasOwn(workspace.sources,path))throw new Error('Unknown source file: '+path);
     if(!owner.slamWorkspace){owner.slamWorkspace=workspace;changed(false);}
-    activeSlamFile=path;selectNode(selected);
-  }catch(error){status(String(error),true);slamFileSelect.value=viewingSlamFile()?activeSlamFile:'';}
-  finally{if(token===slamFileLoad)slamFileSelect.disabled=false;}
-};
+    activeSlamFile=path;activeLibraryFile='';selectNode(project.graph.nodes.find(node=>node.kind==='slam')!);
+    if(mobileDefaults)showFiles(false);
+    sourceEditor.editor.focus();
+  }catch(error){if(token===slamFileLoad&&owner===project)status(String(error),true);}
+}
 code.addEventListener('keydown',e=>{if(e.key==='Tab'&&!code.readOnly){e.preventDefault();const at=code.selectionStart;code.setRangeText('    ',at,code.selectionEnd,'end');code.dispatchEvent(new Event('input'));}});
-el<HTMLSelectElement>('node-select').onchange=e=>selectNode(project.graph.nodes.find(n=>n.id===(e.target as HTMLSelectElement).value)!);
 el<HTMLSelectElement>('preset').onchange=async e=>{
   const value=(e.target as HTMLSelectElement).value;if(value==='custom')return;
   if(selected.kind==='detector'){project.detector=detectors[value];project.detectorPreset=value;project.detectorLanguage='modelica';delete project.detectorArtifact;}
@@ -294,7 +374,7 @@ el<HTMLInputElement>('show-graph').onchange=()=>{for(const object of [world.grap
 function syncViewerFlags(){viewer?.visibility({uncertainty:el<HTMLInputElement>('show-uncertainty').checked,graph:el<HTMLInputElement>('show-graph').checked,showMap:el<HTMLInputElement>('show-map').checked,showPaths:el<HTMLInputElement>('show-paths').checked});}
 el<HTMLInputElement>('show-matches').onchange=()=>{if(latest)drawSensors(latest.frame,latest.estimate);};
 el('help').onclick=()=>{el<HTMLDetailsElement>('lesson').open=!el<HTMLDetailsElement>('lesson').open;el('lesson').scrollIntoView({behavior:'smooth'});};
-function disableRun(disabled:boolean){for(const id of ['run','step','reset','apply','record'])el<HTMLButtonElement>(id).disabled=disabled;}
+function disableRun(disabled:boolean){for(const id of ['run','step','reset','apply','record'])el<HTMLButtonElement>(id).disabled=disabled;runModel.disabled=compiling;}
 async function compile() {
   await initializationReady;
   if(compiling)return;
@@ -354,7 +434,11 @@ el<HTMLInputElement>('replay').onchange=async e=>{
     if(dirty||!ready)await compile();await runtime.loadReplay(records,data.evaluationOrigin);truthPath=[];estimatePath=[];comparisons.clear();externalLatest=undefined;runtime.play();el('run').textContent='Ⅱ Pause';
   }catch(error){status(String(error),true);}
 };
-el('export-node').onclick=()=>download(viewingSlamFile()?activeSlamFile.split('/').at(-1)!:`${selected.id}.mo`,selectedSource(),'text/plain');
+el('export-node').onclick=()=>{
+  const path=viewingSlamFile()?activeSlamFile:viewingLibraryFile()?activeLibraryFile:
+    selected.kind==='slam'?project.mainSourcePath:undefined;
+  download(path?.split('/').at(-1)??`${selected.id}.mo`,selectedSource(),'text/plain');
+};
 const cameraControls=new ViewerCameraControls(),keys=new Set<string>();
 el('world').tabIndex=0;el('world').setAttribute('aria-label','World camera');
 el('world').addEventListener('pointerdown',()=>el('world').focus({preventScroll:true}));
@@ -369,7 +453,7 @@ el('keyboard-mode').addEventListener('change',()=>{
 });
 window.addEventListener('keydown',e=>{
   const key=e.key.toLowerCase();
-  if(isTextEntry(e.target)||e.ctrlKey||e.metaKey||e.altKey||!VIEWER_KEYS.has(key))return;
+  if(document.body.classList.contains('app-loading')||!viewerPresented||isTextEntry(e.target)||e.ctrlKey||e.metaKey||e.altKey||!VIEWER_KEYS.has(key))return;
   e.preventDefault();
   if(el<HTMLSelectElement>('keyboard-mode').value==='viewer')cameraControls.keys.add(key);
   else{keys.add(key);updateCommand();}
@@ -452,17 +536,15 @@ runtime.onFrame=(frame,estimate,truth,metrics)=>{
   el('record-state').textContent=`${runtime.records.length} recorded frames${runtime.recording?' · recording':''}`;
   el<HTMLButtonElement>('export-recording').disabled=runtime.records.length===0;
 };
-setInterval(()=>{
-  const table=document.createElement('table');const head=document.createElement('tr');for(const text of ['Port','Samples','Buffer bytes']){const th=document.createElement('th');th.textContent=text;head.append(th);}table.append(head);
-  for(const [key,stat] of runtime.flow.stats){const row=document.createElement('tr');for(const text of [key,String(stat.count),stat.bufferBytes===null?'—':stat.bufferBytes.toLocaleString()]){const td=document.createElement('td');td.textContent=text;row.append(td);}table.append(row);}el('topics').replaceChildren(table);
-},1000);
 // A single independently paced overview; simulation awaits every graph node.
 // Correct the deadline phase rather than drawing bursts after a missed slot.
 let cameraWall=performance.now();
 function render(now=0){
   if(performanceMonitor.shouldRender(now)){
     const started=performance.now();world.controls.update();cameraControls.update(world.view,world.controls,(now-cameraWall)/1000);cameraWall=now;
-    if(viewer){viewer.flushClouds();viewer.camera();viewer.running(runtime.running);}else world.render(runtime.running);
+    if(viewerPresented){
+      if(viewer){viewer.flushClouds();viewer.camera();viewer.running(runtime.running);}else world.render(runtime.running);
+    }
     if(pendingSensorPreview){const {frame,estimate}=pendingSensorPreview;pendingSensorPreview=undefined;drawSensors(frame,estimate);drawTrajectory();}
     performanceMonitor.rendered(performance.now()-started);
   }
@@ -470,9 +552,9 @@ function render(now=0){
 }requestAnimationFrame(render);
 // Exposed state supports browser integration checks without privileged access.
 (window as any).__slamLab={runtime,comparisons,sourceEditor,performanceMonitor,get initialized(){return initialized;},get viewer(){return viewer;},get project(){return project;},get slamBuildReceipt(){return slamBuildReceipt;},get latest(){return latest;},get ready(){return ready;},get compiling(){return compiling;},get externalSamples(){return Array.from(comparisons.streams.values()).reduce((sum,s)=>sum+s.samples,0);},get externalLatest(){return externalLatest;}};
-syncProject();
 void (async()=>{
-  try{project=await loadProject(mobileDefaults);selected=project.graph.nodes.find(n=>n.kind==='slam')!;syncProject();}
+  startup.stage(0,'Opening your project…');
+  try{project=await loadProject(mobileDefaults);selected=project.graph.nodes.find(n=>n.kind==='slam')!;}
   catch(error){
     localPersistenceBlocked=true;el<HTMLButtonElement>('save').disabled=true;
     el<HTMLButtonElement>('apply').disabled=false;el<HTMLButtonElement>('reset').disabled=false;
@@ -482,16 +564,23 @@ void (async()=>{
     notice.append(backup);el('status').after(notice);status(String(error),true);
   }
   try{
+    const modelsReady=syncProject();
+    startup.stage(1,'Preparing the scene and graphics…');
     if(typeof OffscreenCanvas!=='undefined'&&typeof HTMLCanvasElement.prototype.transferControlToOffscreen==='function'){
       const candidate=new WorkerViewer(world,el('world'));
-      try{await candidate.ready;viewer=candidate;world.onBuild=(environment,detail,preservePresentation)=>candidate.configure(environment,detail,project.carsEnabled??true,project.peopleEnabled??true,preservePresentation);world.onPose=truth=>candidate.pose(truth);world.onActors=(cars,people)=>candidate.actors(cars,people);world.onActorMotion=frame=>candidate.actorMotion(frame);world.onEnvironmentVisible=visible=>candidate.sceneVisible(visible);world.onLighting=mode=>candidate.lighting(mode);await world.enableSensorWorker();}
+      try{await candidate.ready;viewer=candidate;candidate.presentationVisible(viewerPresented);world.onBuild=(environment,detail,preservePresentation)=>candidate.configure(environment,detail,project.carsEnabled??true,project.peopleEnabled??true,preservePresentation);world.onPose=truth=>candidate.pose(truth);world.onActors=(cars,people)=>candidate.actors(cars,people);world.onActorMotion=frame=>candidate.actorMotion(frame);world.onEnvironmentVisible=visible=>candidate.sceneVisible(visible);world.onLighting=mode=>candidate.lighting(mode);await world.enableSensorWorker();}
       catch(error){candidate.worker.terminate();candidate.canvas.remove();viewer=undefined;el('world').appendChild(world.renderer.domElement);world.controls.disconnect();world.controls.connect(world.renderer.domElement);world.onBuild=async()=>{};world.onPose=()=>{};world.onActors=()=>{};world.onActorMotion=()=>{};world.onEnvironmentVisible=()=>{};world.onLighting=()=>{};status(`Rendering worker unavailable: ${error} · using main-thread renderer`);}
     }
     await buildProjectScene();
-    el('bus-state').textContent='Direct buffers';
     initialized=true;finishInitialization();
+    startup.stage(2,'Compiling your Modelica model…');
     if(!localPersistenceBlocked){await compile();if(ready)status('Ready · click Run to start the Modelica inertial experiment');}
     else{el<HTMLButtonElement>('apply').disabled=false;el<HTMLButtonElement>('reset').disabled=false;}
+    if(!ready&&!localPersistenceBlocked){startup.fail(el('status').textContent);return;}
+    startup.stage(3,'Preparing the editor and first view…');
+    await modelsReady;
+    if(viewer)await viewer.present();else world.render();
+    startup.complete();
   }
-  catch(error){status(String(error),true);}
+  catch(error){status(String(error),true);startup.fail(error);}
 })();

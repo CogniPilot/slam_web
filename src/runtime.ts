@@ -74,7 +74,6 @@ export class Runtime {
     this.pause();
     if(this.stepping) throw new Error('Wait for the current lockstep frame to finish');
     const order=validateGraph(project.graph);
-    if(!/\bmodel\s+ModelicaInertial\b/.test(project.algorithm))throw new Error('Full Modelica RGB-D / inertial SLAM integration is pending. The separately labeled Modelica inertial propagation preset can run physics and camera experiments; it has no visual localization, map or loop closure.');
     if(order.some(node=>node.kind==='modelica'))throw new Error('Custom Modelica graph-node execution is pending. Source editing, Rumoca diagnostics and project persistence are available.');
     this.onStatus('Compiling Modelica in Rumoca WASM…');
     const base=new URL(import.meta.env.BASE_URL,location.href).href;
@@ -90,13 +89,13 @@ export class Runtime {
     // Recycle beyond the storefront block and before the training enclosure.
     const actorRoute=project.environment==='city'?{pedestrianRadius:7.1,carRadius:1.65,pedestrianCrossings:true,streetCars:true,carStreetHalfLength:33}:project.environment==='big-city'?{pedestrianRadius:5.8,carRadius:1.65}:undefined;
     await this.modelicaMath.call('init',{base,sensorSource:project.sensorModelica??defaultSensorModelica,evaluationSource:project.evaluationModelica??defaultEvaluationModelica,origin:this.origin,actorRoute},180_000);
-    this.onStatus('Compiling algorithm nodes to WASM…');
+    this.onStatus('Compiling selected Modelica model to WASM…');
     for(const node of order) if(['detector','slam'].includes(node.kind)) {
       if(node.kind==='detector'&&project.detectorLanguage==='modelica') {
         this.pendingNodes.set(node.id,'Rumoca native full-frame feature detection pending');
       } else if(node.kind==='slam'&&project.runtime==='modelica') {
         this.modelicaState=new WorkerRpc(new Worker(new URL('./modelica-state.worker.ts',import.meta.url),{type:'module'}));
-        const result=await this.modelicaState.call<{artifact:InertialSessionMetadata}>('init',{base,source:project.algorithm},180_000);
+        const result=await this.modelicaState.call<{artifact:InertialSessionMetadata}>('init',{base,source:project.algorithm,workspaceSources:project.modelicaSources,modelName:project.entryPoint??'ModelicaInertial'},180_000);
         project.algorithmArtifact=result.artifact;
       }
     }

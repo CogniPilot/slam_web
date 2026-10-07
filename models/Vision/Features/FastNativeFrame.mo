@@ -17,13 +17,17 @@ protected
   constant Integer circleSize = FastCircleStencil.sampleCount;
   constant Integer arcLength = 9;
   Real extended[circleSize+arcLength-1];
-  Real low2[circleSize+arcLength-3]; Real high2[circleSize+arcLength-3];
-  Real low4[circleSize+arcLength-5]; Real high4[circleSize+arcLength-5];
-  Real low8; Real high8;
-  Real bright; Real dark; Real response;
+  Real low2[circleSize+arcLength-3];
+  Real high2[circleSize+arcLength-3];
+  Real low4[circleSize+arcLength-5];
+  Real high4[circleSize+arcLength-5];
+  Real low8;
+  Real high8;
+  Real bright;
+  Real dark;
+  Real response;
 algorithm
-  // Shared ordered windows:2,4,8 then9 circle samples. Static loop bounds
-  // avoid modulo-binder lowering and keep the same bright/dark FAST-9 math.
+  // Reuse ordered minima/maxima for windows of 2, 4, 8, then 9 samples.
   for i in 1:circleSize loop
     extended[i] := differences[i];
   end for;
@@ -38,9 +42,7 @@ algorithm
     low4[i] := if noEvent(low2[i] < low2[i+2]) then low2[i] else low2[i+2];
     high4[i] := if noEvent(high2[i] > high2[i+2]) then high2[i] else high2[i+2];
   end for;
-  // Each arc's final stages are consumed once. Keep them scalar instead of
-  // materializing six temporary arrays at every image pixel. Ordered strict
-  // comparisons retain the same ties, signed zeros and nonfinite behavior.
+  // Final arc stages need no intermediate arrays.
   score := 0.0;
   for arc in 1:circleSize loop
     low8 := if noEvent(low4[arc] < low4[arc+4]) then low4[arc] else low4[arc+4];
@@ -52,8 +54,7 @@ algorithm
   end for;
 end FastCircleScore;
 
-// Compatibility entry point for standalone patch experiments. Unused patch
-// cells remain opaque; the same circle scorer is used by the full image path.
+// Standalone patch scoring reads only the FAST circle.
 function FastPatchScore
   input Real gray[2*FastCircleStencil.radius+1,2*FastCircleStencil.radius+1];
   output Real score;
@@ -68,9 +69,7 @@ algorithm
   score := FastCircleScore(differences);
 end FastPatchScore;
 
-// Match the selector's rounded-rank admission, including the bin just below
-// its raw-score threshold. Keeping an extra bin makes this a conservative
-// score floor; it never removes a candidate that can affect selection order.
+// Keep two rank bins below the threshold to preserve selector admission.
 function FastSelectionScoreFloor
   input Real absoluteThreshold;
   input Real rankScale;
@@ -83,9 +82,7 @@ algorithm
   end if;
 end FastSelectionScoreFloor;
 
-// Every nine-sample arc contains adjacent cardinal samples, including the
-// wraparound pair. Opposite-only pairs cannot form such an arc. Nonfinite
-// differences retain full scoring and its domain diagnostics.
+// Every FAST-9 arc contains adjacent cardinal samples, including wraparound.
 function FastCircleCanReachScore
   input Real differences[FastCircleStencil.sampleCount];
   input Real scoreFloor;
@@ -94,21 +91,27 @@ protected
   constant Integer cardinalCount = 4;
   constant Integer stride = div(FastCircleStencil.sampleCount,cardinalCount);
   Integer sample;
-  Boolean firstBright; Boolean firstDark;
-  Boolean lastBright; Boolean lastDark; Boolean bright; Boolean dark;
+  Boolean firstBright;
+  Boolean firstDark;
+  Boolean lastBright;
+  Boolean lastDark;
+  Boolean bright;
+  Boolean dark;
 algorithm
   possible := true;
   if scoreFloor > 0.0 and scoreFloor <= 255.0 then
     firstBright := differences[1] >= scoreFloor;
     firstDark := -differences[1] >= scoreFloor;
-    lastBright := firstBright; lastDark := firstDark;
+    lastBright := firstBright;
+    lastDark := firstDark;
     possible := false;
     for cardinal in 2:cardinalCount loop
       sample := 1+(cardinal-1)*stride;
       bright := differences[sample] >= scoreFloor;
       dark := -differences[sample] >= scoreFloor;
       possible := possible or (lastBright and bright) or (lastDark and dark);
-      lastBright := bright; lastDark := dark;
+      lastBright := bright;
+      lastDark := dark;
     end for;
     possible := possible or (lastBright and firstBright) or (lastDark and firstDark);
     if not possible then
@@ -155,9 +158,7 @@ algorithm
   end if;
 end FastFrameScores;
 
-// Full-frame candidate: production FastRasterStages and presets remain separate.
-// RGB/RGBA and scores are row-major; channels are contiguous in the native ABI.
-// Optional historical alpha is never read by grayscale or FAST scoring.
+// Row-major RGB/RGBA input; alpha is ignored.
 model FastNativeFrame
   parameter Integer height = 90;
   parameter Integer width = 160;

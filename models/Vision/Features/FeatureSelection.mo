@@ -1,6 +1,4 @@
-// Full raster selection mathematics, including ranking and suppression. The
-// host only transfers arrays, preserves source provenance and rejects valid=0.
-// No algorithm is generated or executed by host selection code.
+// Ranked raster selection with stable ties and square suppression.
 function SelectRasterFeatures
   input Real scores[:];
   input Integer width;
@@ -18,12 +16,29 @@ protected
   Real candidateRank[size(scores,1)];
   Boolean occupied[size(scores,1)];
   Integer candidateCount;
-  Integer radius; Integer cap; Integer spacing; Integer border; Integer start;
-  Integer x; Integer y; Integer index; Integer position;
-  Integer root; Integer child; Integer heapSize; Integer temporaryIndex;
-  Real temporaryRank; Real scaled; Real low; Real fraction; Real rank;
-  Real maximum; Real threshold; Real guard;
-  Boolean active; Boolean descending;
+  Integer radius;
+  Integer featureLimit;
+  Integer sampleSpacing;
+  Integer border;
+  Integer firstPixel;
+  Integer x;
+  Integer y;
+  Integer index;
+  Integer position;
+  Integer root;
+  Integer child;
+  Integer heapSize;
+  Integer temporaryIndex;
+  Real temporaryRank;
+  Real scaled;
+  Real low;
+  Real fraction;
+  Real rank;
+  Real maximum;
+  Real threshold;
+  Real guard;
+  Boolean aboveThreshold;
+  Boolean sifting;
 algorithm
   features := zeros(capacity,3);
   count := 0.0;
@@ -40,10 +55,10 @@ algorithm
     then 1.0 else 0.0;
   // Protected conversion is needed even for rejected nonfinite settings.
   radius := if valid > 0.0 then integer(settings[4]) else 0;
-  cap := if valid > 0.0 then integer(settings[5]) else 1;
-  spacing := if valid > 0.0 then integer(settings[6]) else 1;
+  featureLimit := if valid > 0.0 then integer(settings[5]) else 1;
+  sampleSpacing := if valid > 0.0 then integer(settings[6]) else 1;
   border := if valid > 0.0 then integer(settings[7]) else 0;
-  start := if valid > 0.0 then integer(settings[8]) else 0;
+  firstPixel := if valid > 0.0 then integer(settings[8]) else 0;
   candidateCount := 0;
   maximum := 0.0;
   threshold := 0.0;
@@ -53,11 +68,11 @@ algorithm
     candidateRank := zeros(size(scores,1));
     occupied := fill(false,size(scores,1));
     if grid then
-      // Original grid traversal validates only visited scores, stopping at cap.
-      y := start;
-      while y < height-border and count < cap loop
-        x := start;
-        while x < width-border and count < cap loop
+      // Grid mode reads only visited pixels.
+      y := firstPixel;
+      while y < height-border and count < featureLimit loop
+        x := firstPixel;
+        while x < width-border and count < featureLimit loop
           index := y*width+x+1;
           if abs(scores[index]) <= 1.7976931348623157e308 then
             count := count+1.0;
@@ -67,13 +82,12 @@ algorithm
           else
             valid := 0.0;
           end if;
-          x := x+spacing;
+          x := x+sampleSpacing;
         end while;
-        y := y+spacing;
+        y := y+sampleSpacing;
       end while;
     else
-      // Include the entire image in maximum/domain validation, even outside the
-      // candidate border. The safe-integer rank domain is not silently widened.
+      // Validate every score, including pixels outside the candidate border.
       for i in 1:size(scores,1) loop
         if abs(scores[i]*settings[3]) <= 9007199254740991.0 then
           maximum := max(maximum,scores[i]);
@@ -84,9 +98,9 @@ algorithm
       threshold := max(settings[1],maximum*settings[2]);
       guard := floor(threshold*settings[3])-1.0;
       if valid > 0.0 then
-        y := start;
+        y := firstPixel;
         while y < height-border loop
-          x := start;
+          x := firstPixel;
           while x < width-border loop
             index := y*width+x+1;
             scaled := scores[index]*settings[3];
@@ -99,18 +113,16 @@ algorithm
               candidateIndex[candidateCount] := index;
               candidateRank[candidateCount] := rank;
             end if;
-            x := x+spacing;
+            x := x+sampleSpacing;
           end while;
-          y := y+spacing;
+          y := y+sampleSpacing;
         end while;
-        // In-place heap sort, O(N log N). Key is ascending rank, descending
-        // raster index; reverse traversal gives exact descending-rank stable
-        // raster ties without a quadratic full-frame comparison expansion.
+        // Heap order: ascending rank, descending raster index. Read in reverse.
         heapSize := candidateCount;
         for build in 1:candidateCount loop
           root := candidateCount-build+1;
-          descending := true;
-          while root <= div(heapSize,2) and descending loop
+          sifting := true;
+          while root <= div(heapSize,2) and sifting loop
             child := 2*root;
             if child < heapSize then
               if candidateRank[child+1] > candidateRank[child] or
@@ -120,24 +132,30 @@ algorithm
             end if;
             if candidateRank[child] > candidateRank[root] or
               (candidateRank[child] == candidateRank[root] and candidateIndex[child] < candidateIndex[root]) then
-              temporaryRank := candidateRank[root]; temporaryIndex := candidateIndex[root];
-              candidateRank[root] := candidateRank[child]; candidateIndex[root] := candidateIndex[child];
-              candidateRank[child] := temporaryRank; candidateIndex[child] := temporaryIndex;
+              temporaryRank := candidateRank[root];
+              temporaryIndex := candidateIndex[root];
+              candidateRank[root] := candidateRank[child];
+              candidateIndex[root] := candidateIndex[child];
+              candidateRank[child] := temporaryRank;
+              candidateIndex[child] := temporaryIndex;
               root := child;
             else
-              descending := false;
+              sifting := false;
             end if;
           end while;
         end for;
         for remove in 1:candidateCount loop
           heapSize := candidateCount-remove+1;
-          temporaryRank := candidateRank[heapSize]; temporaryIndex := candidateIndex[heapSize];
-          candidateRank[heapSize] := candidateRank[1]; candidateIndex[heapSize] := candidateIndex[1];
-          candidateRank[1] := temporaryRank; candidateIndex[1] := temporaryIndex;
+          temporaryRank := candidateRank[heapSize];
+          temporaryIndex := candidateIndex[heapSize];
+          candidateRank[heapSize] := candidateRank[1];
+          candidateIndex[heapSize] := candidateIndex[1];
+          candidateRank[1] := temporaryRank;
+          candidateIndex[1] := temporaryIndex;
           heapSize := heapSize-1;
           root := 1;
-          descending := true;
-          while root <= div(heapSize,2) and descending loop
+          sifting := true;
+          while root <= div(heapSize,2) and sifting loop
             child := 2*root;
             if child < heapSize then
               if candidateRank[child+1] > candidateRank[child] or
@@ -147,25 +165,29 @@ algorithm
             end if;
             if candidateRank[child] > candidateRank[root] or
               (candidateRank[child] == candidateRank[root] and candidateIndex[child] < candidateIndex[root]) then
-              temporaryRank := candidateRank[root]; temporaryIndex := candidateIndex[root];
-              candidateRank[root] := candidateRank[child]; candidateIndex[root] := candidateIndex[child];
-              candidateRank[child] := temporaryRank; candidateIndex[child] := temporaryIndex;
+              temporaryRank := candidateRank[root];
+              temporaryIndex := candidateIndex[root];
+              candidateRank[root] := candidateRank[child];
+              candidateIndex[root] := candidateIndex[child];
+              candidateRank[child] := temporaryRank;
+              candidateIndex[child] := temporaryIndex;
               root := child;
             else
-              descending := false;
+              sifting := false;
             end if;
           end while;
         end for;
-        active := true;
+        aboveThreshold := true;
         for candidate in 1:candidateCount loop
           position := candidateCount-candidate+1;
           index := candidateIndex[position];
           // Preserve the original early stop on raw score, before occupancy.
           if scores[index] < threshold then
-            active := false;
+            aboveThreshold := false;
           end if;
-          if active and count < cap and not occupied[index] then
-            x := mod(index-1,width); y := div(index-1,width);
+          if aboveThreshold and count < featureLimit and not occupied[index] then
+            x := mod(index-1,width);
+            y := div(index-1,width);
             count := count+1.0;
             features[integer(count),1] := x;
             features[integer(count),2] := y;
@@ -189,9 +211,10 @@ end SelectRasterFeatures;
 model FeatureSelection
   parameter Integer width = 160;
   parameter Integer height = 90;
-  // Existing editable cap accepts any1..14400; retain storage for that domain.
+  // Storage covers the full editable feature limit.
   parameter Integer capacity = 14400;
-  parameter Integer minimumBorder = 0;
+  // Structural loop bound; presets may modify it before compilation.
+  parameter Integer minimumBorder = 0 annotation(Evaluate = true);
   parameter Boolean grid = false;
   input Boolean enabled = true;
   input Real scores[width*height] = zeros(width*height);

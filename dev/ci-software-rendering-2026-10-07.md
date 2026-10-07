@@ -97,3 +97,12 @@ it does not establish performance on a physical mobile device.
 The deployment condition also rejects cancelled runs, including manual runs
 whose build completed before cancellation. Ordinary pushes still require both
 browser shards; the manual bypass remains explicit and defaults to false.
+
+The subsequent workspace and startup review passed all 215 unit tests and the
+production build in the pinned Nix CI environment. The built static site passed
+20 browser smoke tests with one optional compiler-candidate test skipped. These
+checks cover startup progress and compilation-error recovery, Run without Apply,
+saved Modelica examples, the file explorer, collapse/fullscreen controls, sensor
+packing, and the phone layout. The phone screenshot also confirms that the
+GitHub link and Rumoca credit fit the title bar. This used software rendering;
+it does not qualify full SLAM, hardware throughput, or a physical phone.

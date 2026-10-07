@@ -1,3 +1,4 @@
+import {openSourceFile,openExperimentFile} from './source-files';
 import {test,expect} from '@playwright/test';
 test('physics, sensor, inertial and evaluation editors update live diagnostics',async({page})=>{
   await page.goto('/');
@@ -5,17 +6,17 @@ test('physics, sensor, inertial and evaluation editors update live diagnostics',
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
   await expect(page.locator('.monaco-editor')).toBeVisible();
-  await page.getByLabel('Edit node').selectOption('physics');
+  await openExperimentFile(page,'physics');
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.status),{timeout:30000}).toContain('ready');
   await page.evaluate(()=>(window as any).__slamLab.sourceEditor.editor.setValue('model Broken\n  Real x;\nequation\n  x = ;\nend Broken;'));
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.getDiagnostics().some((d:any)=>d.severity===1)),{timeout:30000}).toBe(true);
-  expect(await page.getByLabel('Node source code').inputValue()).toContain('model Broken');
+  expect(await page.getByLabel('Modelica source').inputValue()).toContain('model Broken');
   await page.evaluate(()=>(window as any).__slamLab.sourceEditor.editor.setValue('model Good\n  Real x;\nequation\n  x = 1;\nend Good;'));
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.getDiagnostics().filter((d:any)=>d.severity===1).length),{timeout:30000}).toBe(0);
   for(const node of ['sensor','slam','evaluation']){
-    await page.getByLabel('Edit node').selectOption(node);
+    await openExperimentFile(page,node);
     await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.status),{timeout:30000}).toContain('Rumoca');
-    const original=await page.getByLabel('Node source code').inputValue();
+    const original=await page.getByLabel('Modelica source').inputValue();
     expect(original).toMatch(/(?:model|function) /);
     await page.evaluate(()=>(window as any).__slamLab.sourceEditor.editor.setValue('model Broken\n Real x;\nequation\n x = ;\nend Broken;'));
     await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.getDiagnostics().some((d:any)=>d.severity===1)),{timeout:30000}).toBe(true);

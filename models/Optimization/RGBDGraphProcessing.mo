@@ -17,21 +17,41 @@ package RGBDGraphProcessing
 
   record Policy
     SchmidtGraphPoseCorrection.Policy filter;
-    Integer maximumIterations; Integer maximumPCG; Integer maximumBacktracks;
-    Real initialDamping; Real maximumPositionStep; Real maximumAngleStep; Real pcgTolerance;
-    Integer covariancePCG; Real covarianceTolerance;
-    Real anchorWeight; Real anchorPositionLimit; Real anchorAngleLimit; Real transportWeight;
-    Real consistencyTolerance; Real maximumConfidence;
+    Integer maximumIterations;
+    Integer maximumPCG;
+    Integer maximumBacktracks;
+    Real initialDamping;
+    Real maximumPositionStep;
+    Real maximumAngleStep;
+    Real pcgTolerance;
+    Integer covariancePCG;
+    Real covarianceTolerance;
+    Real anchorWeight;
+    Real anchorPositionLimit;
+    Real anchorAngleLimit;
+    Real transportWeight;
+    Real consistencyTolerance;
+    Real maximumConfidence;
   end Policy;
 
   record Result
     State next;
     Boolean accepted;
     Integer reason "0 accepted;1 idle;2 owner/chronology;3 graph problem;4 optimizer;5 anchor;6 selection;7 commit";
-    Boolean attempted; Integer commitReason; Integer filterReason; Integer mapReason;
-    Integer anchorReason; Integer selectionReason; Integer covarianceStatus;
-    Real optimizerStatus; Real costBefore; Real costAfter; Real acceptedIterations; Real pcgIterations;
-    Integer projectedCount; Integer prunedCount;
+    Boolean attempted;
+    Integer commitReason;
+    Integer filterReason;
+    Integer mapReason;
+    Integer anchorReason;
+    Integer selectionReason;
+    Integer covarianceStatus;
+    Real optimizerStatus;
+    Real costBefore;
+    Real costAfter;
+    Real acceptedIterations;
+    Real pcgIterations;
+    Integer projectedCount;
+    Integer prunedCount;
     Boolean roundoffCertified;
   end Result;
 
@@ -39,28 +59,52 @@ package RGBDGraphProcessing
     output Policy result;
   algorithm
     result.filter := SchmidtGraphPoseCorrection.DefaultPolicy();
-    result.maximumIterations := 8; result.maximumPCG := 48; result.maximumBacktracks := 8;
-    result.initialDamping := 1e-3; result.maximumPositionStep := 0.5;
-    result.maximumAngleStep := 0.15; result.pcgTolerance := 1e-6;
-    result.covariancePCG := 48; result.covarianceTolerance := 1e-10;
-    result.anchorWeight := 0.5; result.anchorPositionLimit := 5.0; result.anchorAngleLimit := 0.35;
-    result.transportWeight := 0.5; result.consistencyTolerance := 1e-6; result.maximumConfidence := 8;
+    result.maximumIterations := 8;
+    result.maximumPCG := 48;
+    result.maximumBacktracks := 8;
+    result.initialDamping := 1e-3;
+    result.maximumPositionStep := 0.5;
+    result.maximumAngleStep := 0.15;
+    result.pcgTolerance := 1e-6;
+    result.covariancePCG := 48;
+    result.covarianceTolerance := 1e-10;
+    result.anchorWeight := 0.5;
+    result.anchorPositionLimit := 5.0;
+    result.anchorAngleLimit := 0.35;
+    result.transportWeight := 0.5;
+    result.consistencyTolerance := 1e-6;
+    result.maximumConfidence := 8;
   end DefaultPolicy;
 
   function EmptySelected
-    input Integer generation; input Integer sourceRevision;
+    input Integer generation;
+    input Integer sourceRevision;
     output GraphGaugeUncertainty.Estimate result;
   algorithm
-    result.binding.generation := generation; result.binding.sourceRevision := sourceRevision;
-    result.binding.graphRevision := 0; result.binding.catalogPoseRevision := 0;
-    result.binding.anchorId := 0; result.binding.anchorEpoch := -1; result.binding.anchorCaptureSequence := 0;
-    result.binding.currentId := 0; result.binding.currentEpoch := -1; result.binding.currentCaptureSequence := 0;
-    result.binding.referenceId := 0; result.binding.referenceEpoch := -1; result.binding.referenceCaptureSequence := 0;
+    result.binding.generation := generation;
+    result.binding.sourceRevision := sourceRevision;
+    result.binding.graphRevision := 0;
+    result.binding.catalogPoseRevision := 0;
+    result.binding.anchorId := 0;
+    result.binding.anchorEpoch := -1;
+    result.binding.anchorCaptureSequence := 0;
+    result.binding.currentId := 0;
+    result.binding.currentEpoch := -1;
+    result.binding.currentCaptureSequence := 0;
+    result.binding.referenceId := 0;
+    result.binding.referenceEpoch := -1;
+    result.binding.referenceCaptureSequence := 0;
     result.binding.chart := GraphGaugeUncertainty.chartENUPositionRightLocalAttitude;
-    result.binding.anchorTime := 0; result.binding.currentTime := 0; result.binding.referenceTime := 0;
-    result.binding.factorProvenance := 0; result.binding.anchorBoundProvenance := 0;
-    result.positions := zeros(2,dimension); result.covariance := zeros(12,12);
-    for node in 1:2 loop result.rotations[node,:,:] := identity(dimension); end for;
+    result.binding.anchorTime := 0;
+    result.binding.currentTime := 0;
+    result.binding.referenceTime := 0;
+    result.binding.factorProvenance := 0;
+    result.binding.anchorBoundProvenance := 0;
+    result.positions := zeros(2,dimension);
+    result.covariance := zeros(12,12);
+    for node in 1:2 loop
+      result.rotations[node,:,:] := identity(dimension);
+    end for;
   end EmptySelected;
 
   function Empty
@@ -78,7 +122,8 @@ package RGBDGraphProcessing
       localization.sourceRevision,localization.catalog.vocabularyVersion);
     result.captures := RGBDGraphCaptureLedger.Empty(localization.generation,localization.sourceRevision);
     result.attempt.generation := localization.generation;
-    result.attempt.graphRevision := 0; result.attempt.factorProvenance := 0;
+    result.attempt.graphRevision := 0;
+    result.attempt.factorProvenance := 0;
     result.anchor := RGBDGraphAnchorBound.Empty(localization.generation,localization.sourceRevision);
     result.selected := EmptySelected(localization.generation,localization.sourceRevision);
   end Empty;
@@ -141,10 +186,20 @@ package RGBDGraphProcessing
     input Boolean requested;
     output Result result;
   protected
-    Boolean valid; Boolean anchorAccepted; Boolean contextAccepted; Boolean changed;
-    Integer oldest; Integer currentId; Integer referenceId; Integer anchorSlot;
-    Integer currentSlot; Integer referenceSlot; Integer currentNode; Integer referenceNode;
-    Integer contextReason; Integer slot;
+    Boolean valid;
+    Boolean anchorAccepted;
+    Boolean contextAccepted;
+    Boolean changed;
+    Integer oldest;
+    Integer currentId;
+    Integer referenceId;
+    Integer anchorSlot;
+    Integer currentSlot;
+    Integer referenceSlot;
+    Integer currentNode;
+    Integer referenceNode;
+    Integer contextReason;
+    Integer slot;
     RGBDGraphMeasurements.Problem problem;
     RGBDGraphEstimatorCommit.Proposal proposal;
     RGBDGraphEstimatorCommit.Result committed;
@@ -152,15 +207,29 @@ package RGBDGraphProcessing
     RGBDGraphSelectedGauge.Result selected;
     RGBDGraphAnchorBound.Estimate anchor;
     GraphGaugeUncertainty.Binding binding;
-    Real finalPosition[nodeCapacity,dimension]; Real finalRotation[nodeCapacity,dimension,dimension];
-    Real activeNodes; Real activeEdges;
+    Real finalPosition[nodeCapacity,dimension];
+    Real finalRotation[nodeCapacity,dimension,dimension];
+    Real activeNodes;
+    Real activeEdges;
   algorithm
-    result.next := previous; result.accepted := false; result.reason := 1;
-    result.attempted := false; result.commitReason := 0; result.filterReason := 0; result.mapReason := 0;
-    result.anchorReason := 0; result.selectionReason := 0; result.covarianceStatus := 0;
-    result.optimizerStatus := 0; result.costBefore := 0; result.costAfter := 0;
-    result.acceptedIterations := 0; result.pcgIterations := 0;
-    result.projectedCount := 0; result.prunedCount := 0; result.roundoffCertified := false;
+    result.next := previous;
+    result.accepted := false;
+    result.reason := 1;
+    result.attempted := false;
+    result.commitReason := 0;
+    result.filterReason := 0;
+    result.mapReason := 0;
+    result.anchorReason := 0;
+    result.selectionReason := 0;
+    result.covarianceStatus := 0;
+    result.optimizerStatus := 0;
+    result.costBefore := 0;
+    result.costAfter := 0;
+    result.acceptedIterations := 0;
+    result.pcgIterations := 0;
+    result.projectedCount := 0;
+    result.prunedCount := 0;
+    result.roundoffCertified := false;
     if requested then
       result.reason := 2;
       valid := Valid(previous) and previous.estimator.localization.initialized
@@ -209,7 +278,8 @@ package RGBDGraphProcessing
         valid := (result.optimizerStatus == 1 or result.optimizerStatus == 2)
           and result.costAfter >= 0 and result.costAfter <= result.costBefore
           and activeNodes == problem.nodeCount and activeEdges == problem.edgeCount;
-        proposal.poses := previous.estimator.poses; changed := false;
+        proposal.poses := previous.estimator.poses;
+        changed := false;
         for node in 1:problem.nodeCount loop
           slot := problem.catalogSlot[node];
           valid := valid and RGBDUncertaintyProper(finalRotation[node,:,:]);
@@ -247,25 +317,34 @@ package RGBDGraphProcessing
         // advance it only at atomic Commit, after all bound checks succeed.
         context.generation := previous.estimator.localization.generation;
         context.sourceRevision := previous.estimator.localization.sourceRevision;
-        context.graphRevision := 0; context.catalogPoseRevision := 0;
-        context.captureIds := fill(0,nodeCapacity); context.captureSequences := fill(0,nodeCapacity);
+        context.graphRevision := 0;
+        context.catalogPoseRevision := 0;
+        context.captureIds := fill(0,nodeCapacity);
+        context.captureSequences := fill(0,nodeCapacity);
         (context,contextAccepted,contextReason) := RGBDGraphSelectedGauge.ContextFromLedger(
           context,previous.captures,previous.estimator.localization.catalog,
           previous.estimator.localization.graph,previous.estimator.localization.sourceRevision,
           previous.estimator.localization.steps,previous.estimator.poses.revision,true);
-        result.reason := 6; valid := contextAccepted;
+        result.reason := 6;
+        valid := contextAccepted;
       end if;
       if valid then
-        currentNode := currentId-oldest+1; referenceNode := referenceId-oldest+1;
-        binding.generation := context.generation; binding.sourceRevision := context.sourceRevision;
-        binding.graphRevision := context.graphRevision; binding.catalogPoseRevision := context.catalogPoseRevision;
-        binding.anchorId := oldest; binding.anchorEpoch := previous.captures.epochs[anchorSlot];
+        currentNode := currentId-oldest+1;
+        referenceNode := referenceId-oldest+1;
+        binding.generation := context.generation;
+        binding.sourceRevision := context.sourceRevision;
+        binding.graphRevision := context.graphRevision;
+        binding.catalogPoseRevision := context.catalogPoseRevision;
+        binding.anchorId := oldest;
+        binding.anchorEpoch := previous.captures.epochs[anchorSlot];
         binding.anchorCaptureSequence := previous.captures.sequences[anchorSlot];
         binding.anchorTime := previous.captures.times[anchorSlot];
-        binding.currentId := currentId; binding.currentEpoch := previous.captures.epochs[currentSlot];
+        binding.currentId := currentId;
+        binding.currentEpoch := previous.captures.epochs[currentSlot];
         binding.currentCaptureSequence := previous.captures.sequences[currentSlot];
         binding.currentTime := previous.captures.times[currentSlot];
-        binding.referenceId := referenceId; binding.referenceEpoch := previous.captures.epochs[referenceSlot];
+        binding.referenceId := referenceId;
+        binding.referenceEpoch := previous.captures.epochs[referenceSlot];
         binding.referenceCaptureSequence := previous.captures.sequences[referenceSlot];
         binding.referenceTime := previous.captures.times[referenceSlot];
         binding.chart := GraphGaugeUncertainty.chartENUPositionRightLocalAttitude;
@@ -278,23 +357,33 @@ package RGBDGraphProcessing
           proposal.poses.positions,proposal.poses.rotations,currentNode,referenceNode,binding,
           anchor,proposal.graphRevision,policy.transportWeight,true,
           policy.covariancePCG,policy.covarianceTolerance);
-        result.selectionReason := selected.rejectionReason; result.covarianceStatus := selected.covarianceStatus;
-        result.roundoffCertified := selected.roundoffCertified; valid := selected.accepted;
+        result.selectionReason := selected.rejectionReason;
+        result.covarianceStatus := selected.covarianceStatus;
+        result.roundoffCertified := selected.roundoffCertified;
+        valid := selected.accepted;
       end if;
       if valid then
-        result.reason := 7; proposal.selected := selected.estimate;
+        result.reason := 7;
+        proposal.selected := selected.estimate;
         committed := RGBDGraphEstimatorCommit.Commit(previous.estimator,proposal,binding,
           previous.attempt,policy.filter,true,policy.consistencyTolerance,policy.maximumConfidence);
-        result.attempted := committed.attempted; result.commitReason := committed.reason;
-        result.filterReason := committed.filterReason; result.mapReason := committed.mapReason;
+        result.attempted := committed.attempted;
+        result.commitReason := committed.reason;
+        result.filterReason := committed.filterReason;
+        result.mapReason := committed.mapReason;
         // An evaluated graph/filter factor is consumed even when the filter
         // or final map refuses. Preserve the whole numerical owner on refusal.
-        if committed.attempted then result.next.attempt := committed.nextAttempt; end if;
+        if committed.attempted then
+          result.next.attempt := committed.nextAttempt;
+        end if;
         if committed.accepted then
-          result.next.estimator := committed.next; result.next.anchor := anchor;
+          result.next.estimator := committed.next;
+          result.next.anchor := anchor;
           result.next.selected := selected.estimate;
-          result.projectedCount := committed.projectedCount; result.prunedCount := committed.prunedCount;
-          result.accepted := true; result.reason := 0;
+          result.projectedCount := committed.projectedCount;
+          result.prunedCount := committed.prunedCount;
+          result.accepted := true;
+          result.reason := 0;
         end if;
       end if;
     end if;

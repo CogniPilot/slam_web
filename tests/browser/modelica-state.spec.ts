@@ -1,3 +1,4 @@
+import {openExperimentFile} from './source-files';
 // Pending the replacement native host deployment adapter.
 import {test,expect} from '@playwright/test';
 import process from 'node:process';
@@ -7,9 +8,9 @@ test.fixme('edited stateful Modelica deploys identical persistent WASM and reloa
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab?.ready),{timeout:90000}).toBe(true);
   await page.getByRole('button',{name:'Ⅱ Pause'}).click();
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
-  await page.getByLabel('Edit node').selectOption('slam');
-  await page.getByLabel('Node preset').selectOption('Modelica inertial propagation');
-  const editor=page.getByLabel('Node source code');await editor.fill((await editor.inputValue()).replace('accel_tau = 0.03','accel_tau = 0.06'));
+  await openExperimentFile(page,'slam');
+  await page.getByLabel('Run model').selectOption('ModelicaInertial');
+  const editor=page.getByLabel('Modelica source');await editor.fill((await editor.inputValue()).replace('accel_tau = 0.03','accel_tau = 0.06'));
   await expect(page.locator('#language')).toContainText('Modelica');
   await page.getByRole('button',{name:'Apply & reset'}).click();
   await expect(page.getByRole('button',{name:'Step',exact:true})).toBeEnabled({timeout:90000});

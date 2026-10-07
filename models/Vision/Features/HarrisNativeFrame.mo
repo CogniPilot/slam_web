@@ -1,6 +1,5 @@
-// Full-frame grayscale and central gradients, then ordered 5x5 Harris tensors.
-// Scores retain the four-pixel-border crop; the frame adapter places score[y,x]
-// at image pixel (x+4,y+4). This authored Modelica file is the source of truth.
+// Harris response from central gradients and 5x5 structure tensors.
+// score[y,x] corresponds to image pixel (x+scoreBorder,y+scoreBorder).
 model HarrisNativeFrame
   parameter Integer height = 90;
   parameter Integer width = 160;
@@ -19,10 +18,13 @@ model HarrisNativeFrame
   output Real score[scoreHeight,scoreWidth];
 protected
   Real gray[height,width];
-  Real dx[gradientHeight,gradientWidth]; Real dy[gradientHeight,gradientWidth];
-  Real gxx[gradientHeight,gradientWidth]; Real gyy[gradientHeight,gradientWidth];
+  Real dx[gradientHeight,gradientWidth];
+  Real dy[gradientHeight,gradientWidth];
+  Real gxx[gradientHeight,gradientWidth];
+  Real gyy[gradientHeight,gradientWidth];
   Real gxy[gradientHeight,gradientWidth];
-  Real xx[scoreHeight,scoreWidth]; Real yy[scoreHeight,scoreWidth];
+  Real xx[scoreHeight,scoreWidth];
+  Real yy[scoreHeight,scoreWidth];
   Real xy[scoreHeight,scoreWidth];
 equation
   for y in 1:height loop

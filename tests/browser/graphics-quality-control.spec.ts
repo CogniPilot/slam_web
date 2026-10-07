@@ -14,7 +14,7 @@ test('Configuration persists custom sensor rates without resetting a compiled ex
     return {time:r.time,sequence:lab.latest.frame.sequence};
   });
   await openConfiguration(page);
-  await expect(page.getByLabel('Node source code')).toBeHidden();
+  await expect(page.getByLabel('Modelica source')).toBeHidden();
   for(const [label,value] of [['RGB + depth rate','60'],['LiDAR rate','5'],['Airframe IMU rate','180'],['GPS rate','1']]){
     await page.getByLabel(label,{exact:true}).selectOption(value);
     await expect(page.locator('#status')).toHaveText('Sensor rates updated · run preserved · press Run to continue');

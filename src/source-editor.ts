@@ -49,6 +49,7 @@ export interface SourceEditor {
   getDiagnostics():LspDiagnostic[];
   requestCompletion(position:LspPosition):Promise<LspCompletion[]>;
   requestHover(position:LspPosition):Promise<any>;
+  simulationModels(source:string,defaultModel:string,workspaceSources?:Readonly<Record<string,string>>):Promise<string[]>;
   dispose():void;
 }
 
@@ -139,6 +140,14 @@ export function createSourceEditor(textarea:HTMLTextAreaElement,onChange?:()=>vo
     syncFromTextarea(){editor.updateOptions({readOnly:textarea.readOnly});if(model.getValue()!==textarea.value){mutating=true;model.setValue(textarea.value);mutating=false;}},
     get ready(){return ready;},get language(){return language;},get status(){return status;},editor,
     getDiagnostics:()=>diagnostics.map(d=>({...d})),
+    async simulationModels(source,defaultModel,workspaceSources){
+      await ready;
+      if(!client)throw new Error('Rumoca language server is unavailable');
+      const result=await client.request('modelica/simulationModels',{source,defaultModel,workspaceSources});
+      if(!result?.ok||!Array.isArray(result.models)||result.models.some((name:unknown)=>typeof name!=='string'))
+        throw new Error(result?.error??'Rumoca returned an invalid model list');
+      return result.models;
+    },
     async requestCompletion(p){const token=generation,version=model.getVersionId(),context=workspaceGeneration;
       const current=()=>token===generation&&version===model.getVersionId()&&context===workspaceGeneration;
       await ready;if(!current())return [];flushChange();if(!client)return [];

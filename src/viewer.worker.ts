@@ -18,6 +18,7 @@ async function execute(data:any){
   switch(data.type){
     case 'init':world=new World({canvas:data.canvas,width:data.width,height:data.height,pixelRatio:data.pixelRatio,base:data.base});await world.ready;requestAnimationFrame(tick);return {graphics:world.graphics};
     case 'configure':world.build(data.environment,data.detail,!!data.preservePresentation);await world.ready;world.actors.setEnabled(data.carsEnabled,data.peopleEnabled);return {};
+    case 'present':world.render(running);return {};
     case 'resize':world.renderer.setSize(data.width,data.height,false);world.view.aspect=data.width/data.height;world.view.updateProjectionMatrix();break;
     case 'camera':world.view.position.fromArray(data.position);world.view.quaternion.fromArray(data.quaternion);break;
     case 'pose':world.update(data.truth);break;
