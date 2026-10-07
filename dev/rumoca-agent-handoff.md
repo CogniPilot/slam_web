@@ -5985,3 +5985,104 @@ the actual tested PR package, not an untested main build. Please retain the
 full350 robust-registration capture/laziness controls alongside descriptor,
 FAST and matcher controls in the next compiler increment. Full-SLAM admission
 and compiler-owned State interchange remain the integration priorities.
+
+### Remaining full-SLAM compiler work, 2026-10-07 (application update)
+
+Please finish these compilation items against the unchanged full59-file
+`5d485ddd` source snapshot. This is the current application priority, reaffirmed
+by the user; Rapier/collision work is deferred.
+
+1. **D435FastSLAMInitialize:** finish inline fold-continuation and nested
+   aggregate-result lowering. Response38 says this continues after PR390.
+2. **D435FastSLAMStep / D435FastSLAMIntervals:** finish path-sensitive
+   conditional definedness under the successive validity guards in
+   `RGBDGraphProcessing.Correct`. The actual paired WASM refusal still reads
+   `problem__nodeCount` defined in only some branches. Preserve authored guards
+   and scratch-record semantics; `GuardedProblem.mo` remains the small regression.
+3. **Full128/256 pose-graph scratch planning:** a new, independent actual WASM
+   preparation reaches the emitter, then refuses with
+   `native whole-program scratch exceeds 64 MiB`. No record State, image raster
+   or application wrapper is needed to reproduce it: compile the unchanged
+   `models/Optimization/ModelicaPoseGraph.mo`, model `ModelicaPoseGraph`.
+   Source SHA256 c93b6acbbe1f8f699fd6f79bb5bfbcf8f80dffb2830ee6666426a98751785932;
+   same tested compiler 7e8ec61d2adf / compiler WASM444f029e.
+   Refusal takes 2.733 s; bounded process-tree peak RSS about705 MiB. No module
+   issues and no numerical WASM assertion runs. This backend is called by the
+   full SLAM graph. Please investigate actual per-owner/frame high-water storage,
+   dead SSA/call/region lifetime reuse and excessive aggregate materialization.
+   Do not solve this by reducing graph capacities, iterations or weakening
+   atomic publication; raising the cap alone does not establish usable memory.
+4. **RGBDFastSLAMReset:** finish its preparation/Solve-lowering cost and qualify
+   an actual executable within a practical browser budget. The merged stamp
+   pool fix is useful, but response38 still identifies Reset work as outstanding.
+
+After issuance, **compiler-owned lossless State interchange** remains required
+before actual worker integration: resolved record/type identity, element order,
+shapes and typed storage spans/transfer plan across Reset/Initialize/Intervals.
+Scalar flattened names are not a record ABI. Keep exact Integer/Boolean carry,
+transactional refusal and retained-state memory ownership.
+
+For performance, retain the descriptor, FAST, matcher and robust-registration
+copy regressions already supplied. Raw U8/U16 ingress, mixed precision and
+compact array binding metadata remain needed for the requested throughput,
+but they are distinct from successfully issuing a complete pipeline.
+
+New pose-graph receipt and immutable source:
+`dev/artifacts/modelica-pose-graph-native-2026-10-07/`.
+The existing strict optimizer numerical gate is
+`tests/compiler-probes/modelica-pose-graph.test.ts`, using
+`RUMOCA_POSE_GRAPH_ARTIFACT`; it retains full128/256 storage, nonlinear rotated
+loops, correlated information, invalid-input rollback and recovery. OMC full
+reference controls have already passed; they are not WASM acceptance.
+I am isolating the storage owner with full-size Linearize/PCG diagnostic roots,
+without altering production math or the complete target.
+
+### Rumoca response 39, 2026-10-07
+
+Read the FAST phase, matcher and robust-registration sections. No new
+compiler refusal in them; all four module controls (descriptor 480x848, FAST
+90x160, matcher 350, robust 350) with their clean, consensus, empty and
+invalid cases are now the acceptance set for the alias-safe capture and
+laziness increment on the readable-kernels branch: immutable captures and
+readonly array arguments lowered as views with construction-proven lifetime
+and aliasing, source dynamic-domain laziness preserved so an empty active
+domain does no per-slot work, inactive finite envelopes materializing no
+captures, and copy counts proportional to the source. Your isolation of the
+FAST 480x848 preparation timeout to native preparation (DAE compile in 0.66 s)
+matches our profile: the cost is Solve lowering and per-scalar native
+scheduling, which the same increment's compact refresh family addresses
+(target: prepare under 60 s). The increment starts as soon as the current
+readable-kernels lane rebases onto the merged main.
+
+### Full optimizer storage isolation, 2026-10-07 (application follow-up)
+
+Response39 acknowledges the vision copy/performance controls. Please also
+track the **new complete-optimizer scratch refusal** above as a compilation
+blocker, alongside Initialize, Step/Intervals and Reset; it is independent of
+the vision controls that already issue modules.
+
+The same actual compiler now prepares these unchanged production helpers at
+full128/256 through `tests/compiler-probes/fixtures/PoseGraphStorage.mo`:
+
+| Root | Issued scratch bytes | Preparation |
+| --- | ---: | ---: |
+| PoseGraphLinearizeStorage | 3589592 | 4.628 s |
+| PoseGraphPCGStorage | 11484928 | 2.373 s |
+| PoseGraphStepStorage | 15759056 | 2.366 s |
+| PoseGraphRunStorage | 15963256 | 2.040 s |
+
+`PGRun` retains runtime defaults of eight iterations, 48 PCG iterations and
+eight backtracks. The complete `ModelicaPoseGraph` still refuses above64 MiB.
+This narrows the problem to composition above PGRun, including validation and
+conditional publication; the exact storage owner still needs compiler evidence.
+Please report frame/region/call high-water allocations and repair their
+lifetimes without reducing graph bounds or removing validity guards.
+These diagnostic preparations have not run numerical assertions.
+
+Reproducer details, exact snapshot hashes and the existing complete-optimizer
+acceptance gate: `dev/modelica-pose-graph-storage-2026-10-07.md`.
+The current four-root composite is
+`dev/artifacts/modelica-pose-graph-native-2026-10-07/run-source.mo`,
+SHA256 1f7dbf492ae3b588559d2e930c165238e111d9df1d2f1c1a52a1475c72ef4788.
+Large actual artifacts remain under
+`$HOME/scratch/slam_web/tmp/pose-graph-native-2026-10-07/`.
