@@ -14,6 +14,10 @@ function sensor():SensorFrame {
       {time:12.5,dt:.01,imu:{accel:[7,8,9],gyro:[.7,.8,.9]}}]};
 }
 afterEach(()=>vi.unstubAllGlobals());
+function expectSameBytes(actual:Uint8Array,expected:Uint8Array){
+  const view=(bytes:Uint8Array)=>Buffer.from(bytes.buffer,bytes.byteOffset,bytes.byteLength);
+  expect(view(actual).equals(view(expected))).toBe(true);
+}
 
 it('maps distinct calibrated optics and off-axis centre without aligning or copying images',()=>{
   const frame=sensor(),result=localizationFrameFromSensor(frame,true);
@@ -75,7 +79,7 @@ it('preserves raw NaN payload, signed zero, negative depth and RGB bytes at nonz
   }
   const result=localizationFrameFromSensor(frame);
   expect(result.rgb).toBe(frame.rgb);expect(result.depth).toBe(frame.depth);
-  expect(new Uint8Array(result.depth.buffer)).toEqual(depthBytes);expect(new Uint8Array(result.rgb.buffer)).toEqual(rgbBytes);
+  expectSameBytes(new Uint8Array(result.depth.buffer),depthBytes);expectSameBytes(new Uint8Array(result.rgb.buffer),rgbBytes);
   expect(Object.is(result.depth[1],-0)).toBe(true);expect(result.depth[3]).toBe(-1);
 });
 
@@ -94,7 +98,7 @@ it('refuses malformed small metadata and mismatched image storage without changi
     f=>{f.depth=new Float64Array(90*160) as unknown as Float32Array;},
   ];
   for(const change of changes){const frame=sensor();change(frame);const before=new Uint8Array(frame.depth.buffer).slice();
-    expect(()=>localizationFrameFromSensor(frame)).toThrow();expect(new Uint8Array(frame.depth.buffer)).toEqual(before);}
+    expect(()=>localizationFrameFromSensor(frame)).toThrow();expectSameBytes(new Uint8Array(frame.depth.buffer),before);}
 });
 
 // A transport-only worker endpoint: no compiler or estimator is simulated.

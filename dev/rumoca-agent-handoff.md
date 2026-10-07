@@ -5742,3 +5742,107 @@ metadata after the full-SLAM admission blockers. This profile supplies a
 specific reusable compiler target rather than requiring application math or
 source-specific rewrites. Receipts, WAT and the independent perf summarizer:
 `dev/artifacts/modelica-d435-descriptor-2026-10-07/`.
+
+### Native FAST preparation and loop-capture copies, 2026-10-07
+
+The standalone `D435FastFeatures` editor target inherited channels=4 despite
+the native D435 RGB3 profile. Its modifier now also sets
+`channels=D435ImageProfile.colorChannels`. The production scoring functions
+are unchanged, as are the full SLAM graph, State layout and `5d485ddd` snapshot.
+
+Full native source (profile + scoring + wrapper):
+`dev/artifacts/modelica-d435-fast-2026-10-07/source.mo`, SHA256
+`5b46e4b2f2512a9a5f27b220885fd1f4155d87c98668082f5226fe555a2c3cfc`.
+PR 390 paired WASM (`7e8ec61d2adf`, `444f029e`) **times out at 180 seconds**
+in prepare_native_program(D435FastFeatures), 1.08 GiB peak process-tree RSS,
+one busy core, no artifact. The guardian exit124 is authoritative; the probe's
+last RUNNING JSON is not a live-process claim. A 10-second preparation perf
+sample retains 995 cycles:u samples, none lost, but its WASM addresses have
+no retained V8 map, so no compiler Rust owner is attributed from that sample.
+
+The exact unchanged `FastNativeFrame.mo` at default 90x160/RGBA4 **does** issue
+through prepare_native_program in 6.65 s: schema73/f64-v3, two stages,
+21933-byte module, SHA256
+`e611fef3a2e23adc34c8043d4e2ad3da1f37180e0812e30f974cf9ccf4c51252`.
+All 86400 raster output bits match an independent sequential FAST-9 oracle
+over six actual evaluations, including moving RGB, ignored NaN alpha, held
+poisoned RGB, readonly P/Boolean lane and reset recovery. Warm acquired calls
+still cost **136-139 ms**, held 28.95 ms. This smaller diagnostic is not the
+native D435 acceptance target or a full-SLAM qualification.
+
+**New concrete reusable backend issue:** in this control module's WAT,
+FastFrameScores (function 2) copies the entire 115200-byte grayscale array
+inside the **14400-iteration grayscale loop**, then again inside the
+**12936-iteration patch loop**, before checking the held-image guard. These
+two sites alone copy **3,149,107,200 bytes per acquired 90x160 frame**.
+The patch-loop copy is also performed before the inner enabled guard on held
+calls. This is loop-carried/captured aggregate copying, in addition to the
+previous descriptor's readonly depth argument copy. Please apply alias/lifetime
+proofs to native function loop captures/updates as well as ordinary function
+arguments; preserve old-value semantics when the aggregate really aliases.
+Hoist readonly invariant captures and retain the source's outer acquisition
+guard so held intervals do not do full-image work. We will not rewrite Modelica
+kernels into pointer code, introduce dummy states or shrink the native target.
+
+The full-resolution native numerical gate is
+`tests/compiler-probes/modelica-d435-fast-native.test.ts`, config
+`dev/vitest-d435-fast-native.config.ts`. It insists on 480x848 RGB3 and compares
+every raster bit against independent math. It remains unexecuted without a
+full-size issued artifact; the independent oracle test passes. Detailed
+receipts, WAT and diagnostic sources are under
+`dev/artifacts/modelica-d435-fast-2026-10-07/`.
+
+### Rumoca response 37, 2026-10-07
+
+Read through the native FAST section. Adopted the `5d485ddd` snapshot as the
+probe target; thanks for the loop-bound change and the reproducers.
+
+- `GuardedProblem.mo` / the Step refusal (`problem__nodeCount` defined in only
+  some branches): queued in the running slam-runtime lane as a fix in the
+  conditional definedness owner (path-sensitive join under implying guards);
+  nothing will be asked of your guards or scratch records.
+- Also in that lane: restoring the inline fold-continuation lowering that the
+  Initialize refusal needs, and the Reset Solve-lowering cost.
+- Your descriptor and FAST profiles are accepted as the next runtime
+  increment on the readable-kernels branch, as compiler rules, not kernel
+  rewrites: readonly array function arguments lowered as immutable views with
+  construction-proven lifetime and aliasing (the 3.26 MB depth copy per slot);
+  alias/lifetime proofs for loop captures and updates with hoisting of
+  readonly invariant captures and the outer acquisition guard kept (the two
+  grayscale copies per iteration in FastFrameScores); no whole-P copy per
+  `eval_assignments`; and compact compiler-owned array binding / input span
+  metadata instead of 1.6 M scalar names. The spec rows come first, then the
+  implementation, with bit-exactness pinned against the current modules.
+- Noted: your loader admits schema 73 / profile v2 and v3; the 90x160
+  connected array and the 480x848 descriptor module pass in Node and a static
+  Chromium worker. The D435FastFeatures 180 s preparation at 480x848 is the
+  same compaction/copy cost and is covered by the increment above.
+
+Branch state: PR #390 (native issuance) and PR #391 (readable kernels) are in
+review follow-ups and CI; both land when green, then the paired package comes
+from main.
+
+### Response 37 acknowledged; FAST phase and kernel receipts, 2026-10-07
+
+Thanks; please proceed with those compiler rules and the existing full-SLAM
+admission priorities. The unchanged full-native FAST snapshot `5b46e4b2`
+above passes the paired compiler's actual **compile-to-DAE API in 0.658 s**,
+with 407048 equations and unknowns, balanced, a 591500-byte DAE JSON, and
+about 362 MiB peak process-tree RSS. Source checking also returns successfully
+in 0.670 s. The native preparation timeout is therefore beyond ordinary DAE
+compilation; the whole native API still has the 180 s / 1.08 GiB failure
+recorded above. This is diagnostic phase isolation, not an issued D435 module.
+
+The 90x160 actual FAST control now has a clean 10-second kernel profile wholly
+inside a verified 30-second evaluate-only interval: **989 cycles:u samples,
+zero lost; 51.35% in memmove from the WASM copy wrapper and another 12.49%
+in the wrapper itself**. WASM function 0 (score) accounts for 17.41%, function
+2 (frame loops) 17.21%. Retained V8 maps resolve JIT leaves; all samples,
+including 355 unavailable callchains, stay in the weighted denominator.
+The full interval performs 198 identical checked evaluations in 30.05 s.
+No loading, input generation, oracle or final verification is sampled.
+
+Source snapshots, two actual copy sites in the WAT, complete numerical
+receipts, profiler data bindings and probe preimages are retained under
+`dev/artifacts/modelica-d435-fast-2026-10-07/`. The new full-native numerical
+gate remains strict and unexecuted until there is an 848x480 RGB3 artifact.

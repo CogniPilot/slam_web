@@ -118,6 +118,11 @@ static browser worker. Its kernel profile identifies repeated whole-image
 argument copies. This component proof does not admit complete SLAM or change
 the production compiler pin; the original capability gate below remains separate.
 
+The [D435 FAST gate](../../dev/modelica-d435-fast-2026-10-07.md) verifies the
+native preset's RGB3 DAE layout. Full-size native issuance still times out;
+the smaller diagnostic module exposes whole-grayscale-image loop copies.
+Its strict full-size numerical gate awaits a real compiler-issued artifact.
+
 `modelica-native-program.test.ts` is staged for RUM-011. It requires the new
 official `prepare_native_program` API, and compares a single WASM executable
 against the older compiler-issued stage modules for every Y bit in a 160×90
