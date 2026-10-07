@@ -3,7 +3,7 @@ import {expect,test} from '@playwright/test';
 test('free camera keys move the actual worker view while simulation is paused and leave editing alone',async({page})=>{
   const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto('/');
-  await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab?.initialized),{timeout:90000}).toBe(true);
+  await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.ready&&lab.compiling===false;}),{timeout:90000}).toBe(true);
   await page.evaluate(()=>{const lab=(window as any).__slamLab;lab.runtime.pause();});
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
   await page.evaluate(()=>{

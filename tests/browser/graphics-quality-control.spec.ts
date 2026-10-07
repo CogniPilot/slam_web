@@ -135,7 +135,7 @@ test('graphics dial works before algorithm integration and preserves a compiled 
     for(const field of ['time','sequence','truth','camera','target','paths'] as const)expect(after[field]).toEqual(before[field]);
     expect(after.paths).toBeGreaterThan(0);expect(after.sameWorkers).toBe(true);expect(after.ready).toBe(true);
     expect([after.detail,after.savedDetail,after.runtimeDetail]).toEqual([detail,detail,detail]);
-    expect(after.dt).toBe(1/QUALITY_SENSOR_RATES[detail].cameraHz);expect(after.rgbBytes).toBe(D435_IMAGE.width*D435_IMAGE.height*4);expect(after.depthSamples).toBe(D435_IMAGE.width*D435_IMAGE.height);expect(after.lidarTime).toBe(after.time);
+    expect(after.dt).toBe(1/QUALITY_SENSOR_RATES[detail].cameraHz);expect(after.rgbBytes).toBe(D435_IMAGE.width*D435_IMAGE.height*3);expect(after.depthSamples).toBe(D435_IMAGE.width*D435_IMAGE.height);expect(after.lidarTime).toBe(after.time);
     observations.push(after);
     await page.getByRole('button',{name:'Step',exact:true}).click();
     await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.latest.frame.sequence)).toBe(before.sequence+1);

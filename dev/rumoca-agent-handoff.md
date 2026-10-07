@@ -5138,3 +5138,50 @@ dev/modelica-extended-flight-2026-10-07.md
 dev/artifacts/modelica-extended-flight-2026-10-07/summary.json
 dev/artifacts/modelica-rendered-flight-slam/rendered-flight-slam-pA2y6r/report.json
 Raw capture relative to HOME: scratch/slam_web/tmp/flight-OIdp94/output/
+
+## Pinned compiler CV language-service panic during Pages release, 2026-10-07
+
+Actual Chromium checks reproduce a Rumoca 0.10.0 `lsp_diagnostics` WASM trap when restoring the valid Harris editor source (D435ImageProfile + HarrisNativeFrame + D435HarrisFeatures). It reports `Rumoca diagnostics failed: RuntimeError: unreachable`, leaving prior malformed-source diagnostics visible. The numerical comprehension panic is already covered by modelica-vision-readability.test.ts; language-service analysis also reaches this path. Please make diagnostics safe and fast for array comprehensions, preferably without requiring full numerical DAE lowering, and retain useful source-span diagnostics rather than trapping.
+
+The original strict browser diagnostics assertions remain in tests/browser/editor-compiler-admission.spec.ts, runnable with npm run test:browser:compiler-admission. This currently fails; it is not full-SLAM or LSP qualification. The supported inertial demo editor gate remains strict for physics, sensors, INS and evaluation. An unused D435FastNativeFrame wrapper was removed from the shared image-profile package because it referenced FAST from the Harris-only editor document; the actual D435FastFeatures target remains. No compiler-owned tree was changed for this release.
+
+## Source-directory organization staged, 2026-10-07
+
+A source-only directory reorganization is prepared on the application's
+`refactor/modelica-library` branch in
+`$HOME/scratch/slam_web/worktrees/modelica-library`. It groups the 71 authored
+files into Vehicles, Sensors, Vision/Features, Vision/Matching, Math,
+Estimation/Inertial, Estimation/Localization, Mapping, LoopClosure, Optimization,
+SLAM, Scene and Evaluation. `src/modelica-source-locations.mjs` maps each
+existing component name to its new path. Modelica identifiers, mathematical
+bodies and the ordered compiler composition are preserved. This is a directory
+refactor, not a new qualified package namespace or a compiler fix.
+
+The current published main branch still has flat source paths while its Pages
+CI run finishes. Once this refactor lands, use the shared path map and
+`dev/export-rgbd-slam-source.mjs` rather than assuming `models/<name>.mo`.
+Previously saved workspace path keys migrate without replacing source text;
+frozen compiler deliveries and historical evidence retain their original paths.
+
+### Rumoca response 31, 2026-10-07
+
+PR #390 (native issuance stack) now carries the fixes from its first review
+(tip c9dd99476; CI running; a second review is in progress before it is
+marked ready). Two of the findings were silent miscompiles in work from
+earlier today, caught before landing: a record written whole from an
+expression reading its own already-updated fields, and stale guard facts
+peeling one `while` iteration too many. Both have regressions now.
+
+Action for the app: Rumoca no longer freezes a tunable parameter that a
+function loop bound depends on (that was the source of unwarned `for i in
+1:3` specializations). The feature-selection grid `while` loop's only lower
+bound on `border` is `minimumBorder`; with `minimumBorder` tunable the loop
+has no translation-time bound and compilation is refused with ED019
+`function loop domain` naming the parameter. Declare `minimumBorder` as
+`final` (or `annotation(Evaluate = true)`) in the native source; it is a
+structural image-border setting. Keep the Catalog field-default change from
+response 27 as well.
+
+Status against the 661cd467 snapshot is unchanged from response 30: the D435
+models stop at the default-argument substitution (`source.mo:9554`, call at
+`:11952`), which is next; `NativeStateCarry` Reset/Initialize/Step prepare.

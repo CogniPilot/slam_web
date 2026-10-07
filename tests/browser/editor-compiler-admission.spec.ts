@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-test('physics, sensor, inertial and evaluation editors update live diagnostics',async({page})=>{
+test('pending full-frame CV compiler admission: editor diagnostics recover after valid Harris source',async({page})=>{
   await page.goto('/');
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab?.ready===true),{timeout:90000}).toBe(true);
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
@@ -12,7 +12,7 @@ test('physics, sensor, inertial and evaluation editors update live diagnostics',
   expect(await page.getByLabel('Node source code').inputValue()).toContain('model Broken');
   await page.evaluate(()=>(window as any).__slamLab.sourceEditor.editor.setValue('model Good\n  Real x;\nequation\n  x = 1;\nend Good;'));
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.getDiagnostics().filter((d:any)=>d.severity===1).length),{timeout:30000}).toBe(0);
-  for(const node of ['sensor','slam','evaluation']){
+  for(const node of ['sensor','detector','slam','evaluation']){
     await page.getByLabel('Edit node').selectOption(node);
     await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.status),{timeout:30000}).toContain('Rumoca');
     const original=await page.getByLabel('Node source code').inputValue();

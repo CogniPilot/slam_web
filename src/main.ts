@@ -462,7 +462,7 @@ function render(now=0){
   requestAnimationFrame(render);
 }requestAnimationFrame(render);
 // Exposed state supports browser integration checks without privileged access.
-(window as any).__slamLab={runtime,comparisons,sourceEditor,performanceMonitor,get initialized(){return initialized;},get viewer(){return viewer;},get project(){return project;},get slamBuildReceipt(){return slamBuildReceipt;},get latest(){return latest;},get ready(){return ready;},get externalSamples(){return Array.from(comparisons.streams.values()).reduce((sum,s)=>sum+s.samples,0);},get externalLatest(){return externalLatest;}};
+(window as any).__slamLab={runtime,comparisons,sourceEditor,performanceMonitor,get initialized(){return initialized;},get viewer(){return viewer;},get project(){return project;},get slamBuildReceipt(){return slamBuildReceipt;},get latest(){return latest;},get ready(){return ready;},get compiling(){return compiling;},get externalSamples(){return Array.from(comparisons.streams.values()).reduce((sum,s)=>sum+s.samples,0);},get externalLatest(){return externalLatest;}};
 syncProject();
 void (async()=>{
   try{project=await loadProject(mobileDefaults);selected=project.graph.nodes.find(n=>n.kind==='slam')!;syncProject();}

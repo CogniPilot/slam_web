@@ -7,10 +7,3 @@ package D435ImageProfile
   constant Integer colorChannels = 3;
   constant Real depthUnits = 0.001 "Default SDK scale, meters per Z16 unit";
 end D435ImageProfile;
-
-// Full-frame Rumoca compilation target; inherited FAST math is unchanged.
-// This is a staged target, not evidence of full-SLAM browser admission.
-model D435FastNativeFrame
-  extends FastNativeFrame(width=D435ImageProfile.width,
-    height=D435ImageProfile.height,channels=D435ImageProfile.colorChannels);
-end D435FastNativeFrame;

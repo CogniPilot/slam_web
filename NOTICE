@@ -1,0 +1,9 @@
+SLAM Web
+Copyright 2026 Cognipilot
+
+Licensed under the Apache License, Version 2.0.
+
+Vendored quadrotor sources retain their upstream notices in
+models/upstream/quadrotor/NOTICE.md and models/upstream/quadrotor/LICENSE.
+Third-party rendering assets retain the licenses and attribution bundled
+under public/models and public/textures.

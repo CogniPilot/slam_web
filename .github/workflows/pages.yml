@@ -11,17 +11,15 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    name: CI
+    name: Build and unit tests
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: cachix/install-nix-action@v31.11.1
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      # Content-addressed Nix outputs use GitHub's cache; cache.nixos.org
-      # remains the upstream for already-published toolchain dependencies.
       - name: Cache Nix build outputs
         uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
         with:
@@ -30,40 +28,122 @@ jobs:
           diagnostic-endpoint: ''
       - uses: actions/cache@v6.1.0
         with:
-          path: |
-            ~/scratch/slam_web/build/npm-cache
+          path: ~/scratch/slam_web/build/npm-cache
           key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-npm-
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-npm-
       - name: Check pinned toolchain
         run: nix build --no-update-lock-file --print-build-logs .#checks.x86_64-linux.toolchain
       - name: Build and verify the Modelica browser application
-        run: nix develop --no-update-lock-file .#ci --command bash scripts/verify.sh
-      - name: Report pending full-SLAM compiler admission (not part of the inertial demo)
+        run: nix develop --no-update-lock-file .#ci --command bash scripts/verify.sh --build-only
+      - name: Report pending full-SLAM compiler admission
         id: compiler-admission
         continue-on-error: true
         run: nix develop --no-update-lock-file .#ci --command npm run test:compiler-admission
       - name: Summarize compiler admission
         if: always()
         run: |
-          echo "Full-SLAM compiler admission: ${{ steps.compiler-admission.outcome }}. This experimental suite must pass before full SLAM can be advertised." >> "$GITHUB_STEP_SUMMARY"
+          echo "Experimental full-SLAM compiler admission: ${{ steps.compiler-admission.outcome }}. This must pass before full SLAM can be advertised." >> "$GITHUB_STEP_SUMMARY"
+      # All browser shards test this exact build. Deployment waits for every shard.
+      - uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: dist
+  browser:
+    name: Browser tests (${{ matrix.shard }}/6)
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: cachix/install-nix-action@v31.11.1
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Cache Nix build outputs
+        uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
+        with:
+          use-gha-cache: enabled
+          use-flakehub: disabled
+          diagnostic-endpoint: ''
+      - uses: actions/cache@v6.1.0
+        with:
+          path: ~/scratch/slam_web/build/npm-cache
+          key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-npm-
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: github-pages
+          path: ${{ runner.temp }}/pages-artifact
+      - name: Restore the verified static build
+        run: |
+          mkdir -p dist
+          tar --extract --file "$RUNNER_TEMP/pages-artifact/artifact.tar" --directory dist
+      - name: Install test dependencies and run this browser shard
+        run: |
+          nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && npm run test:browser -- --shard=${{ matrix.shard }}/6'
       - name: Retain browser failure evidence
         if: failure()
         uses: actions/upload-artifact@v7.0.2
         with:
-          name: browser-test-results
+          name: browser-test-results-${{ matrix.shard }}
           path: |
             test-results
             playwright-report
           if-no-files-found: ignore
           retention-days: 7
-      - uses: actions/upload-pages-artifact@v5.0.0
-        if: github.event_name != 'pull_request'
+  compiler-browser:
+    name: Experimental CV language-server admission
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: cachix/install-nix-action@v31.11.1
         with:
-          path: dist
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Cache Nix build outputs
+        uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
+        with:
+          use-gha-cache: enabled
+          use-flakehub: disabled
+          diagnostic-endpoint: ''
+      - uses: actions/cache@v6.1.0
+        with:
+          path: ~/scratch/slam_web/build/npm-cache
+          key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-npm-
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: github-pages
+          path: ${{ runner.temp }}/pages-artifact
+      - name: Restore the verified static build
+        run: |
+          mkdir -p dist
+          tar --extract --file "$RUNNER_TEMP/pages-artifact/artifact.tar" --directory dist
+      - name: Check full-frame CV diagnostics
+        id: admission
+        run: |
+          nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && npm run test:browser:compiler-admission'
+      - name: Report experimental admission
+        if: always()
+        run: |
+          echo "Experimental full-frame CV language-server admission: ${{ steps.admission.outcome }}. This does not qualify full browser SLAM." >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain compiler failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: compiler-browser-test-results
+          path: test-results
+          if-no-files-found: ignore
+          retention-days: 7
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: build
+    needs: [build, browser]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:

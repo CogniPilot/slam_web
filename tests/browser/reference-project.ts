@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 export async function openModelicaPropagation(page:Page,packedReadback?:boolean,readback?:'sync'|'async'){
  // Startup prepares the default experiment without requiring Apply. Import
  // only after that finishes, so it cannot race the initial compilation.
- await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.initialized&&(lab.ready||document.querySelector('#status')?.classList.contains('error'));}),{timeout:90000}).toBe(true);
+ await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.initialized&&lab.compiling===false;}),{timeout:90000}).toBe(true);
  if(packedReadback!==undefined)await page.evaluate(enabled=>(window as any).__slamLab.runtime.world.setSensorPackedReadback(enabled),packedReadback);
  if(readback!==undefined)await page.evaluate(mode=>(window as any).__slamLab.runtime.world.setSensorReadback(mode),readback);
  const source=readFileSync('models/ModelicaInertial.mo','utf8');

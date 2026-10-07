@@ -19,7 +19,7 @@ test('independent sensor rates capture exact poses and hold physics behind each 
         const result=await original(type,args,timeout);
         if(w.committedTruth.time!==held)throw new Error('Physics advanced during GPU capture');
         records.push({kind:type,time:args.truth.time,actorTime:args.actorMotion.time,
-          scanTime:result.scan?.time,cloudTime:result.depthCloud?.time,rgb:result.rgb?.length});return result;
+          scanTime:result.scan?.time,cloudTime:(result.depthRaster??result.depthCloud)?.time,rgb:result.rgb?.length});return result;
       }
       return original(type,args,timeout);
     };
