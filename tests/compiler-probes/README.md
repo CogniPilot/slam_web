@@ -111,6 +111,12 @@ from new preparation. This gate stays separate from production-node tests.
 
 ## Single compiled program
 
+The production [full350 robust pose fit](../../dev/modelica-robust-registration-2026-10-07.md)
+passes actual native and static browser-worker covariance/consensus gates,
+including moving correspondences, planar walls, typed input controls and reload.
+Profiling exposes repeated whole-point-array captures in inactive native loop
+envelopes. This remains component evidence, not full browser SLAM.
+
 The current full-resolution descriptor check is documented in
 [Native D435 descriptor](../../dev/modelica-d435-descriptor-2026-10-07.md):
 actual 848x480 RGB3/350-feature WASM passes numerical checks in Node and a

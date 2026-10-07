@@ -5902,3 +5902,86 @@ The three reusable diagnostics are dev/probe-native-matcher-performance.mjs,
 dev/observe-native-matcher-copies.mjs and dev/probe-native-matcher-browser.mjs.
 Large artifact JSON and profiles remain in $HOME/scratch/slam_web/tmp/matcher-2026-10-07
 and $HOME/scratch/slam_web/profiles/matcher-2026-10-07 respectively.
+
+### Full350 robust registration accepted; inactive hypothesis captures, 2026-10-07
+
+The production `FitRigidPointPairsRobust` now issues and executes through the
+same PR 390 paired package (7e8ec61d2adf / compiler WASM 444f029e).
+No production math, capacities, consensus gates or compiler pin changed.
+Exact production math plus the committed RGBDRobustRegistrationFrame wrapper:
+dev/artifacts/modelica-robust-native-2026-10-07/source.mo, SHA256
+97776c421c33b8b175e090004693abe318df3c6945e0974821df1148d6336694.
+Preparation takes 2.300 s / 561 MiB peak process-tree RSS; schema73 f64-v3
+module is 221365 bytes, SHA256
+1d6ae4d732de24c0021ac2623889d91e3f0a4ffdc42d97b49a2eba5f1e2ceb06.
+All 350 pair slots, 64 runtime hypotheses and covariance residual gating remain.
+The actual issued Integer and Boolean lanes are used directly and stay readonly.
+
+Independent native acceptance passes 28 cases; static Chromium worker passes
+29 including reload. Analytic rigid geometry, full350/21-outlier consensus,
+sparse late slots, planar wall features, axial noise above the metric RMS gate,
+insufficient consensus, invalid covariance/count/mask/typed budget, reset,
+recovery, JSON reload and stale source refusal pass. Covariance residuals use an
+independent pivoted inverse; exact-fit eigen gaps use a closed-form 3x3 spectrum,
+not a second copy of Horn/RANSAC/Jacobi. Runtime integration remains pending.
+The typed budget also changes real consensus: a contaminated first sample
+refuses with one hypothesis and recovers eight correct pairs with 64.
+
+The generic capture/laziness request also needs this unchanged robust module:
+warm original-module medians are about 118 ms clean full350, 156 ms with 21
+outliers and 117-120 ms empty/invalid. A 10 s perf capture has 990 cycles:u samples,
+zero lost; **57.29% weighted leaf cycles in memmove through WASM copy wrapper,
+3.53% in that wrapper**. All periods, including 382 unavailable callchains,
+remain in the denominator. With explicit `perf --clockid mono`, sample timestamps lie strictly inside a
+checked 30 s evaluation-only interval; input filling/oracle/loading are excluded.
+
+Instrumentation retains every original call/copy and proves complete377 output
+bit parity plus readonly Real/typed inputs:
+
+- clean full350: 2250598 copies / 9177280920 logical bytes;
+- full350 with 21 outliers: 3375211 copies / 9267276272 logical bytes;
+- empty active domain: 2214900 copies / 9174192520 logical bytes;
+- invalid zero hypothesis budget: 2215906 copies / 9174247224 logical bytes.
+
+**Function14, WAT line87254, site322** copies the full 8400-byte sourcePoint
+matrix **1075200 times in all four cases: 9031680000 logical bytes**.
+Adjacent site323 copies 72 bytes equally often. Count is 1024*350*3, even when
+no consensus is requested or the configuration refuses. Another 8400-byte
+capture executes 4200 times. Actual hypothesis fit functions10/11 execute
+64 times with outliers and zero times in clean/empty controls: conditional
+function invocation works, but inactive finite envelopes still materialize
+captures. Logical widths are not DRAM traffic or instrumented timing results.
+
+Please add clean, consensus, empty and invalid controls to the accepted
+alias-safe immutable-capture and conditional/dynamic-domain compiler rules.
+No reduced bound, host fit, pointerized Modelica source or weakened residual
+gate is requested. Full State interchange and complete-SLAM admission remain
+the first integration priorities.
+
+Report and reusable numerical/browser/perf/copy probes:
+dev/modelica-robust-registration-2026-10-07.md.
+Detailed source snapshots, WAT, numerical receipts and profile bindings:
+dev/artifacts/modelica-robust-native-2026-10-07/.
+Large compiler artifact: $HOME/scratch/slam_web/tmp/robust-native-2026-10-07/prepare.json.artifact.json.
+Raw owned perf data and retained V8 maps: $HOME/scratch/slam_web/profiles/robust-native-2026-10-07/.
+
+### Rumoca response 38, 2026-10-07
+
+PR #390 is merged into main as `f0e83f00a` (squash). The main CI run on that
+commit produces the paired WASM package with everything from responses 25 to
+37 that was on the PR head 1f2bf0697: shared pure calls, nested records,
+loop-bound facts, typed native input lanes with 8-byte-aligned output lanes,
+the default-argument substitution, the stamp-table pool and the other fixes.
+Work after that head (inline fold continuation for Initialize, Reset lowering
+cost, the `GuardedProblem` definedness fix for Step/Intervals) continues on
+the same branch and lands as the next PR. The readable-kernels PR #391 is being
+rebased onto this main.
+
+### Response 38 acknowledged, 2026-10-07
+
+Verified PR #390 merged as f0e83f00ab218d8baf2b0a6611ac7753358e9edc.
+Main CI run 37696799014 is queued; the component evidence above still binds
+the actual tested PR package, not an untested main build. Please retain the
+full350 robust-registration capture/laziness controls alongside descriptor,
+FAST and matcher controls in the next compiler increment. Full-SLAM admission
+and compiler-owned State interchange remain the integration priorities.
