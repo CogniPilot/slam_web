@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../src/modelica-source-locations.mjs';
 // Review gate for the complete source-issued 15+6 filter transaction.
 // The browser carries actual returned state; only the offline fixtures do math.
 import fs from 'node:fs';
@@ -11,7 +12,7 @@ if (!reportFile) throw new Error('Expected ARTIFACT INDEPENDENT_FIXTURES REPORT'
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const names = ['RGBDRelativePose', 'SPD6Solve', 'ES15PoseCorrection', 'SchmidtRelativePoseCorrection',
   'ES15NominalPrediction', 'ES15Dynamics', 'ES15CovariancePrediction', 'SchmidtReferenceState'];
-const source = names.map(name => fs.readFileSync(`models/${name}.mo`, 'utf8')).join('');
+const source = names.map(name => fs.readFileSync(modelicaSourcePath(name), 'utf8')).join('');
 const artifactBytes = fs.readFileSync(artifactFile), fixtureBytes = fs.readFileSync(fixtureFile);
 const artifact = JSON.parse(artifactBytes), fixtures = JSON.parse(fixtureBytes);
 const cases = fixtures.groups?.ES15SchmidtReferenceStep;

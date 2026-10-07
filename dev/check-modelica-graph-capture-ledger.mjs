@@ -9,8 +9,8 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const model='RGBDGraphCaptureLedgerAcceptance',count=16;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'graph-capture-ledger-semantics-'));
-const names=['models/RGBDRegistrationUncertainty.mo','models/RGBDKeyframes.mo',
-  'models/RGBDGraphCaptureLedger.mo','tests/modelica/RGBDGraphCaptureLedgerTests.mo',
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/LoopClosure/RGBDKeyframes.mo',
+  'models/Optimization/RGBDGraphCaptureLedger.mo','tests/modelica/RGBDGraphCaptureLedgerTests.mo',
   'tests/modelica/RGBDGraphCaptureLedgerAcceptance.mo'];
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const sources=[...names,'dev/check-modelica-graph-capture-ledger.mjs'].map(p=>({path:p,sha256:sha(fs.readFileSync(path.join(app,p)))}));

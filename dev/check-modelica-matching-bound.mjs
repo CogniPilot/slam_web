@@ -8,7 +8,7 @@ const out=fs.mkdtempSync(path.join(scratch,'matching-bound-'));
 const durable=path.join('dev/artifacts/modelica-matching-bound',path.basename(out));fs.mkdirSync(durable,{recursive:true});
 const baselinePath='dev/artifacts/descriptor-matching-bound-2026-10-07/before/RGBDFeatureMatching.mo';
 const baselineSha='d419269d34302d8ef5ee3fc8a723482126e291879096295ab670f419bdb8df78';
-const names=['models/RGBDFeatureMatching.mo','models/FastNativeFrame.mo','models/FeatureSelection.mo',
+const names=['models/Vision/Matching/RGBDFeatureMatching.mo','models/Vision/Features/FastNativeFrame.mo','models/Vision/Features/FeatureSelection.mo',
   'tests/modelica/RGBDMatchingBoundAcceptance.mo',baselinePath,'dev/check-modelica-matching-bound.mjs','dev/rumoca-bounded-run.mjs'];
 const sources=names.map(file=>({path:file,sha256:sha(fs.readFileSync(file))}));
 for(const {path:file}of sources){const target=path.join(durable,'sources',file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(file,target);}

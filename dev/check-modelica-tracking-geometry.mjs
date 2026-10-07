@@ -10,9 +10,9 @@ const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'tracking-geometry-'));
 const durable=path.join(app,'dev/artifacts/modelica-native-frontend',path.basename(output));
-const names=['models/RGBDInertialLocalizationStep.mo',
+const names=['models/Estimation/Localization/RGBDInertialLocalizationStep.mo',
   'dev/artifacts/modelica-native-frontend/preimages/RGBDInertialLocalizationStep.mo',
-  'models/SchmidtReferenceState.mo','tests/modelica/RGBDTrackingGeometryAcceptance.mo',
+  'models/Estimation/Inertial/SchmidtReferenceState.mo','tests/modelica/RGBDTrackingGeometryAcceptance.mo',
   'dev/check-modelica-tracking-geometry.mjs','dev/rumoca-bounded-run.mjs'];
 const sources=names.map(name=>{
   const bytes=fs.readFileSync(path.join(app,name)),target=path.join(output,'source-preimages',name);

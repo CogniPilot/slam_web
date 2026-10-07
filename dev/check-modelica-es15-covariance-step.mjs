@@ -11,7 +11,7 @@ const scratch=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(scratch,{recursive:true});
 const output=fs.mkdtempSync(path.join(scratch,'es15-covariance-step-'));
 const model='ES15CovarianceStepTests';
-const files=['models/ES15CovariancePrediction.mo',
+const files=['models/Estimation/Inertial/ES15CovariancePrediction.mo',
   'tests/modelica/ES15CovariancePredictionOriginal.mo','tests/modelica/ES15CovarianceStepTests.mo',
   'dev/check-modelica-es15-covariance-step.mjs','dev/rumoca-bounded-run.mjs'];
 const sha=value=>createHash('sha256').update(value).digest('hex');

@@ -134,7 +134,7 @@ try{
       assert(captureFile(proof.path,proof.sha256).length===proof.bytes,'Startup proof byte count: '+key);
       if(key==='js'||key==='wasm')assert(captureManifest.servedResources.some(value=>value.sourcePath===proof.sourcePath&&value.sha256===proof.sha256),'Startup compiler bytes actually served: '+key);
     }
-    assert(startupPhysics.source.sourcePath==='models/LabQuadrotor.mo','Exact plant source owner');
+    assert(startupPhysics.source.sourcePath==='models/Vehicles/LabQuadrotor.mo','Exact plant source owner');
     const state=JSON.parse(captureFile(startupPhysics.stateJson.path,startupPhysics.stateJson.sha256)),initial=startupPhysics.initialSnapshot;
     assert(state.time===0&&initial.time===state.time,'Unadvanced initialized source time');
     const fields={x:initial.x,y:initial.y,z:initial.z,qw:initial.quaternion?.[0],qx:initial.quaternion?.[1],qy:initial.quaternion?.[2],qz:initial.quaternion?.[3],
@@ -188,7 +188,7 @@ try{
   }
   assert(offset===mat.length,'No trailing or missing MAT bytes');
   stage='source-freeze';
-  const productionNames=[...new Set([...rgbdSlamSourceManifest.paths,'models/RGBDFastSLAMIntervals.mo'])];
+  const productionNames=[...new Set([...rgbdSlamSourceManifest.paths,'models/SLAM/RGBDFastSLAMIntervals.mo'])];
   const names=[...productionNames,'tests/modelica/RGBDLocalizationInitializeTests.mo',
     'tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo','tests/modelica/RGBDLocalizationAdvanceFunctionAcceptance.mo',
     'tests/modelica/RGBDFastInitializationFunctionAcceptance.mo','tests/modelica/RGBDFastAdvanceFunctionAcceptance.mo',

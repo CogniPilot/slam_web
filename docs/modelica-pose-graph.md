@@ -1,6 +1,6 @@
 # Editable Modelica pose-graph numerical component
 
-[ModelicaPoseGraph.mo](../models/ModelicaPoseGraph.mo) implements bounded nonlinear
+[ModelicaPoseGraph.mo](../models/Optimization/ModelicaPoseGraph.mo) implements bounded nonlinear
 pose-graph optimization in Modelica. Its **full optimizer is not yet numerically
 accepted**: exact128-node/256-edge preparation times out in structural incidence.
 The source-issued manifold edge component has passed actual WASM residual and

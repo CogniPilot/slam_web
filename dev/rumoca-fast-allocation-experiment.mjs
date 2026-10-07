@@ -112,7 +112,7 @@ if (mode === 'prepare') {
   if (fresh !== expected) throw Error('Qualified main inventory differs from requested source manifest');
   const preimages = readJson(path.join(audit, 'preimages.json'));
   for (const item of preimages.files) if (sha(fs.readFileSync(path.join(main, item.path))) !== item.before_sha256) throw Error(`Diagnostic preimage mismatch: ${item.path}`);
-  const original = fs.readFileSync(path.join(app, 'models/FastNativeFrame.mo'));
+  const original = fs.readFileSync(path.join(app, 'models/Vision/Features/FastNativeFrame.mo'));
   if (sha(original) !== sourceSha) throw Error('Original full FAST source changed');
   const copiedFilesBefore = copiedFileManifest(main);
   fs.mkdirSync(directory, { recursive: true }); fs.mkdirSync(buildEnvironment.TMPDIR, { recursive: true });

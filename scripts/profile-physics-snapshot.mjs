@@ -12,7 +12,7 @@ for(let i=0;i<args.length;i++){
 const count=Number(options.get('--iterations')??500);
 if(!Number.isInteger(count)||count<50||count>5000)throw new Error('Iterations must be50..5000');
 await init({module_or_path:await readFile('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-const source=await readFile('models/LabQuadrotor.mo','utf8');
+const source=await readFile('models/Vehicles/LabQuadrotor.mo','utf8');
 const session=rumoca.WasmSimulationSession.withInteractiveOptions(source,'LabQuadrotor',.005,'rk-like',1e-8,1e-6,
   '[["forward",0],["left",0],["up",0],["yaw",0]]');
 const legacy=()=>({time:session.time(),x:session.get('x'),y:session.get('y'),z:session.get('z'),

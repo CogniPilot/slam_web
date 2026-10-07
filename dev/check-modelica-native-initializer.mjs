@@ -11,14 +11,14 @@ const raw=process.argv.includes('--raw');
 const scratch=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(scratch,{recursive:true});
 const output=fs.mkdtempSync(path.join(scratch,'native-initializer-'));
 const sha=value=>createHash('sha256').update(value).digest('hex');
-const names=['models/RGBDFeatureMatching.mo','models/RigidPointRegistration.mo',
-  'models/RGBDRelativePose.mo','models/RGBDRegistrationUncertainty.mo',
-  'models/RGBDVisualObservation.mo','models/RGBDVisualRelativeObservation.mo','models/RGBDLandmarkProjection.mo',
-  'models/SPD6Solve.mo','models/ES15PoseCorrection.mo','models/SchmidtRelativePoseCorrection.mo',
-  'models/ES15NominalPrediction.mo','models/ES15Dynamics.mo','models/ES15CovariancePrediction.mo',
-  'models/SchmidtReferenceState.mo','models/RGBDInertialLocalizationStep.mo',
-  'models/RGBDInertialLocalizationInitialize.mo','models/FastNativeFrame.mo','models/FeatureSelection.mo',
-  'models/RGBDFastInertialLocalizationInitialize.mo','tests/modelica/RGBDLocalizationInitializeTests.mo',
+const names=['models/Vision/Matching/RGBDFeatureMatching.mo','models/Math/RigidPointRegistration.mo',
+  'models/Estimation/Localization/RGBDRelativePose.mo','models/Estimation/Localization/RGBDRegistrationUncertainty.mo',
+  'models/Estimation/Localization/RGBDVisualObservation.mo','models/Estimation/Localization/RGBDVisualRelativeObservation.mo','models/Mapping/RGBDLandmarkProjection.mo',
+  'models/Math/SPD6Solve.mo','models/Estimation/Inertial/ES15PoseCorrection.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo',
+  'models/Estimation/Inertial/ES15NominalPrediction.mo','models/Estimation/Inertial/ES15Dynamics.mo','models/Estimation/Inertial/ES15CovariancePrediction.mo',
+  'models/Estimation/Inertial/SchmidtReferenceState.mo','models/Estimation/Localization/RGBDInertialLocalizationStep.mo',
+  'models/Estimation/Localization/RGBDInertialLocalizationInitialize.mo','models/Vision/Features/FastNativeFrame.mo','models/Vision/Features/FeatureSelection.mo',
+  'models/Estimation/Localization/RGBDFastInertialLocalizationInitialize.mo','tests/modelica/RGBDLocalizationInitializeTests.mo',
   'tests/modelica/RGBDNativeInitializationAcceptance.mo'];
 const sources=[...names,'dev/check-modelica-native-initializer.mjs','dev/rumoca-bounded-run.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 for(const source of sources){const target=path.join(output,'sources',source.path);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(path.join(app,source.path),target);}

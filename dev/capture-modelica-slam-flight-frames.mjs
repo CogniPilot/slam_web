@@ -22,7 +22,7 @@ const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const json=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');
 function files(root){return fs.readdirSync(root,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?files(path.join(root,entry.name)):[path.join(root,entry.name)]).sort();}
 const relative=file=>path.relative(repo,file).split(path.sep).join('/');
-const inventory=()=>[...files(path.join(repo,'src')),...files(path.join(repo,'public')),self,path.join(repo,'models/LabQuadrotor.mo'),path.join(repo,'dev/rumoca-bounded-run.mjs'),path.join(repo,'package.json'),path.join(repo,'package-lock.json')].sort().map(file=>({path:relative(file),bytes:fs.statSync(file).size,sha256:sha(fs.readFileSync(file))}));
+const inventory=()=>[...files(path.join(repo,'src')),...files(path.join(repo,'public')),self,path.join(repo,'models/Vehicles/LabQuadrotor.mo'),path.join(repo,'dev/rumoca-bounded-run.mjs'),path.join(repo,'package.json'),path.join(repo,'package-lock.json')].sort().map(file=>({path:relative(file),bytes:fs.statSync(file).size,sha256:sha(fs.readFileSync(file))}));
 if(process.argv.slice(2).some(arg=>arg.startsWith('--')&&arg!=='--execute'))throw new Error('No public options; --execute directory is internal');
 
 if(process.argv[2]!=='--execute'){
@@ -45,7 +45,7 @@ if(process.argv[2]!=='--execute'){
   fs.mkdirSync(output,{recursive:true});fs.mkdirSync(source,{recursive:true});
   const before=inventory();json(path.join(output,'sources-before.json'),before);
   for(const folder of ['src','public'])fs.cpSync(path.join(repo,folder),path.join(source,folder),{recursive:true});
-  fs.mkdirSync(path.join(source,'models'),{recursive:true});fs.copyFileSync(path.join(repo,'models/LabQuadrotor.mo'),path.join(source,'models/LabQuadrotor.mo'));
+  fs.mkdirSync(path.join(source,'models'),{recursive:true});fs.copyFileSync(path.join(repo,'models/Vehicles/LabQuadrotor.mo'),path.join(source,'models/Vehicles/LabQuadrotor.mo'));
   for(const file of ['package.json','package-lock.json'])fs.copyFileSync(path.join(repo,file),path.join(source,file));
   fs.symlinkSync(path.join(repo,'node_modules'),path.join(source,'node_modules'),'dir');
   // Retain source preimages, but keep the large frozen asset/build workspace on scratch.
@@ -59,7 +59,7 @@ if(process.argv[2]!=='--execute'){
   const harness=`import {World,D435} from './src/world';
 import {readPhysicsSnapshot} from './src/physics-snapshot';
 import {SensorClock} from './src/sensor-clock';
-import physicsSource from './models/LabQuadrotor.mo?raw';
+import physicsSource from './models/Vehicles/LabQuadrotor.mo?raw';
 const harnessStarted=performance.now();
 const world=new World(document.querySelector('#view') as HTMLElement);
 world.build('city','medium');world.configureActors(false,false);world.setDepthCloudEnabled(false);world.setLighting('day');
@@ -171,7 +171,7 @@ try{
     if(frames.length!==frameCount||result.measurements.samples.length!==imuSampleCount||result.calls.length!==heldIntervalCount||result.measurements.batches.length!==frameCount-1)throw new Error('Unexpected full flight acquisition counts');
     if(hardwareRequested&&result.graphics.acceleration!=='hardware-reported')throw new Error('Requested hardware renderer unavailable: '+JSON.stringify(result.graphics));
     const proof=name=>({path:name,sha256:sha(fs.readFileSync(path.join(output,name))),bytes:fs.statSync(path.join(output,name)).size});
-    const sourceFile='physics-source.mo';fs.copyFileSync(path.join(source,'models/LabQuadrotor.mo'),path.join(output,sourceFile));
+    const sourceFile='physics-source.mo';fs.copyFileSync(path.join(source,'models/Vehicles/LabQuadrotor.mo'),path.join(output,sourceFile));
     const identity=(sourcePath,proofPath)=>{const entry=before.find(item=>item.path===sourcePath);if(!entry)throw new Error(`Missing physics input ${sourcePath}`);return {sourcePath,path:proofPath??sourcePath,sha256:entry.sha256,bytes:entry.bytes};};
     const js=identity('public/vendor/rumoca/rumoca_bind_wasm.js'),wasm=identity('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm');
     for(const input of [js,wasm]){
@@ -186,7 +186,7 @@ try{
     fs.mkdirSync(path.join(output,'oracle'),{recursive:true});
     const states=result.physicsStates.map((text,index)=>{const name=`oracle/physics-state-${String(index).padStart(3,'0')}.json`;fs.writeFileSync(path.join(output,name),text);return {index,time:result.measurements.samples[index].time,...proof(name)};});
     const {initialSnapshot,finalSnapshot,...physicsOptions}=result.startupPhysics;
-    const physics={...physicsOptions,initialSnapshot:{path:'oracle-physics-snapshots.json',index:0},finalSnapshot:{path:'oracle-physics-snapshots.json',index:heldIntervalCount},source:identity('models/LabQuadrotor.mo',sourceFile),js,wasm,physicsWorker:identity('src/physics.worker.ts','source-preimages/src/physics.worker.ts'),snapshotReader:identity('src/physics-snapshot.ts','source-preimages/src/physics-snapshot.ts'),runtime:identity('src/runtime.ts','source-preimages/src/runtime.ts'),sensorClock:identity('src/sensor-clock.ts','source-preimages/src/sensor-clock.ts'),stateJson:states,calls:proof('physics-calls.json'),scope:'Actual source/session acquisition provenance. Truth fields and raw session states are separate oracle evidence, not estimator inputs.'};
+    const physics={...physicsOptions,initialSnapshot:{path:'oracle-physics-snapshots.json',index:0},finalSnapshot:{path:'oracle-physics-snapshots.json',index:heldIntervalCount},source:identity('models/Vehicles/LabQuadrotor.mo',sourceFile),js,wasm,physicsWorker:identity('src/physics.worker.ts','source-preimages/src/physics.worker.ts'),snapshotReader:identity('src/physics-snapshot.ts','source-preimages/src/physics-snapshot.ts'),runtime:identity('src/runtime.ts','source-preimages/src/runtime.ts'),sensorClock:identity('src/sensor-clock.ts','source-preimages/src/sensor-clock.ts'),stateJson:states,calls:proof('physics-calls.json'),scope:'Actual source/session acquisition provenance. Truth fields and raw session states are separate oracle evidence, not estimator inputs.'};
     const after=inventory();json(path.join(output,'sources-after.json'),after);if(JSON.stringify(before)!==JSON.stringify(after))throw new Error('Source/asset bookends changed');
     // No favicon is requested by this harness; every actual resource must resolve locally.
     if(errors.length)throw new Error(errors.join('\n'));

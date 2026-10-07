@@ -40,7 +40,7 @@ try {
   if(process.env.SLAM_PROFILE_SENSOR_RATES)settings.sensorRates=JSON.parse(process.env.SLAM_PROFILE_SENSOR_RATES);
   // The complete Modelica SLAM profile is pending. Select the available INS
   // workload explicitly and keep that limitation in the durable report.
-  const algorithm=await readFile(new URL('../models/ModelicaInertial.mo',import.meta.url),'utf8');
+  const algorithm=await readFile(new URL('../models/Estimation/Inertial/ModelicaInertial.mo',import.meta.url),'utf8');
   await page.evaluate(async({settings,algorithm})=>{const lab=window.__slamLab;Object.assign(lab.project,settings,{algorithm,algorithmPreset:'Modelica inertial propagation',runtime:'modelica'});delete lab.project.algorithmArtifact;await lab.runtime.compile(lab.project);},{settings,algorithm});
   const readback=process.env.SLAM_PROFILE_READBACK??(hardware?'sync':'async');
   if(!['async','sync'].includes(readback))throw new Error('SLAM_PROFILE_READBACK must be async or sync');

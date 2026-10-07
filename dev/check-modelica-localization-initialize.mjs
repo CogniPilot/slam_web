@@ -23,13 +23,13 @@ if(!requested.length||new Set(requested).size!==requested.length||requested.some
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'localization-initialize-semantics-'));
-const names=['models/RGBDFeatureMatching.mo','models/RigidPointRegistration.mo',
-  'models/RGBDRelativePose.mo','models/RGBDRegistrationUncertainty.mo',
-  'models/RGBDVisualObservation.mo','models/RGBDVisualRelativeObservation.mo','models/RGBDLandmarkProjection.mo',
-  'models/SPD6Solve.mo','models/ES15PoseCorrection.mo','models/SchmidtRelativePoseCorrection.mo',
-  'models/ES15NominalPrediction.mo','models/ES15Dynamics.mo','models/ES15CovariancePrediction.mo',
-  'models/SchmidtReferenceState.mo','models/RGBDInertialLocalizationStep.mo',
-  'models/RGBDInertialLocalizationInitialize.mo','tests/modelica/RGBDLocalizationInitializeTests.mo',
+const names=['models/Vision/Matching/RGBDFeatureMatching.mo','models/Math/RigidPointRegistration.mo',
+  'models/Estimation/Localization/RGBDRelativePose.mo','models/Estimation/Localization/RGBDRegistrationUncertainty.mo',
+  'models/Estimation/Localization/RGBDVisualObservation.mo','models/Estimation/Localization/RGBDVisualRelativeObservation.mo','models/Mapping/RGBDLandmarkProjection.mo',
+  'models/Math/SPD6Solve.mo','models/Estimation/Inertial/ES15PoseCorrection.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo',
+  'models/Estimation/Inertial/ES15NominalPrediction.mo','models/Estimation/Inertial/ES15Dynamics.mo','models/Estimation/Inertial/ES15CovariancePrediction.mo',
+  'models/Estimation/Inertial/SchmidtReferenceState.mo','models/Estimation/Localization/RGBDInertialLocalizationStep.mo',
+  'models/Estimation/Localization/RGBDInertialLocalizationInitialize.mo','tests/modelica/RGBDLocalizationInitializeTests.mo',
   'tests/modelica/RGBDLocalizationInitializeAcceptance.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=[...names,'dev/check-modelica-localization-initialize.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));

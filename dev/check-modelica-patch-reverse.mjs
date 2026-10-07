@@ -16,7 +16,7 @@ const output=fs.mkdtempSync(path.join(scratch,'patch-reverse-'));
 const durable=path.join(app,'dev/artifacts/modelica-patch-reverse',path.basename(output));
 fs.mkdirSync(durable,{recursive:true});
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-const sourceNames=['models/RGBDPatchTracking.mo','tests/modelica/RGBDPatchReverseAcceptance.mo'];
+const sourceNames=['models/Vision/Matching/RGBDPatchTracking.mo','tests/modelica/RGBDPatchReverseAcceptance.mo'];
 const frozenNames=[...sourceNames,'dev/check-modelica-patch-reverse.mjs','dev/rumoca-bounded-run.mjs'];
 const copy=(source,target)=>{fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(source,target);};
 const json=(name,value)=>fs.writeFileSync(path.join(durable,name),JSON.stringify(value,null,2)+'\n');

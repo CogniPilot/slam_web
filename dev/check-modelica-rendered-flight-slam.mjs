@@ -171,7 +171,7 @@ try{
     assert(captureFile(proof.path,proof.sha256).length===proof.bytes,'Physics proof byte count: '+key);
     if(key==='js'||key==='wasm')assert(captureManifest.servedResources.some(value=>value.sourcePath===proof.sourcePath&&value.sha256===proof.sha256),'Compiler proof actually served: '+key);
   }
-  assert(physics.source.sourcePath==='models/LabQuadrotor.mo','Exact plant source identity');
+  assert(physics.source.sourcePath==='models/Vehicles/LabQuadrotor.mo','Exact plant source identity');
   const measurements=JSON.parse(captureFile(captureManifest.measurements.path,captureManifest.measurements.sha256));
   assert(measurements.schema==='rumoca-modeled-imu-hold-v1'&&measurements.frame==='body FLU'
     &&measurements.accelUnits==='m/s^2 specific force'&&measurements.gyroUnits==='rad/s'
@@ -263,13 +263,13 @@ try{
   }
   fs.closeSync(decodeFd);assert(offset===matBytes,'Complete MAT payload');
   stage='source-freeze';
-  const productionNames=[...new Set([...rgbdSlamSourceManifest.paths,'models/RGBDFastSLAMIntervals.mo'])];
+  const productionNames=[...new Set([...rgbdSlamSourceManifest.paths,'models/SLAM/RGBDFastSLAMIntervals.mo'])];
   const names=[...productionNames,'tests/modelica/RGBDLocalizationInitializeTests.mo','tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo',
     'tests/modelica/RGBDLocalizationAdvanceFunctionAcceptance.mo','tests/modelica/RGBDFastInitializationFunctionAcceptance.mo',
     'tests/modelica/RGBDFastAdvanceFunctionAcceptance.mo','tests/modelica/RGBDFastSLAMRawCompositionAcceptance.mo',
     'tests/modelica/RGBDCompleteStateComparison.mo','tests/modelica/RGBDRenderedFrameInput.mo','tests/modelica/RGBDRenderedVisualDiagnostics.mo',
     'tests/modelica/RGBDRenderedCitySLAMAcceptance.mo','tests/modelica/RGBDRenderedFlightSLAMAcceptance.mo',
-    ...(sensorLoss?['tests/modelica/RGBDRenderedSensorLossAcceptance.mo','models/D435ImageProfile.mo']:[])];
+    ...(sensorLoss?['tests/modelica/RGBDRenderedSensorLossAcceptance.mo','models/Sensors/D435ImageProfile.mo']:[])];
   const sources=[...names,'src/modelica-slam-source-manifest.mjs','dev/check-modelica-rendered-flight-slam.mjs','dev/rumoca-bounded-run.mjs']
     .map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
   for(const source of sources)copy(path.join(app,source.path),path.join(durable,'sources',source.path));

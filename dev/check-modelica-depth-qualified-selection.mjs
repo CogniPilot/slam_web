@@ -9,7 +9,7 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const scratch=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(scratch,{recursive:true});
 const output=fs.mkdtempSync(path.join(scratch,'depth-selection-'));
 const durable=path.join(app,'dev/artifacts/modelica-depth-qualified-selection',path.basename(output));
-const names=['models/RGBDFeatureMatching.mo','models/FeatureSelection.mo',
+const names=['models/Vision/Matching/RGBDFeatureMatching.mo','models/Vision/Features/FeatureSelection.mo',
  'tests/modelica/RGBDDepthQualifiedSelectionAcceptance.mo','dev/check-modelica-depth-qualified-selection.mjs','dev/rumoca-bounded-run.mjs'];
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));

@@ -9,16 +9,16 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'held-imu-'));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-const names=['models/RGBDRelativePose.mo','models/SchmidtRelativePoseCorrection.mo',
-  'models/ES15NominalPrediction.mo','models/ES15Dynamics.mo','models/ES15CovariancePrediction.mo',
-  'models/SchmidtReferenceState.mo','tests/modelica/ES15SchmidtPredictionReference.mo',
-  'tests/modelica/ES15HeldIntervalTests.mo','models/RGBDLocalizationCatalog.mo',
+const names=['models/Estimation/Localization/RGBDRelativePose.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo',
+  'models/Estimation/Inertial/ES15NominalPrediction.mo','models/Estimation/Inertial/ES15Dynamics.mo','models/Estimation/Inertial/ES15CovariancePrediction.mo',
+  'models/Estimation/Inertial/SchmidtReferenceState.mo','tests/modelica/ES15SchmidtPredictionReference.mo',
+  'tests/modelica/ES15HeldIntervalTests.mo','models/Estimation/Localization/RGBDLocalizationCatalog.mo',
   'src/modelica-localization-session.ts','dev/check-modelica-held-imu.mjs'];
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 for(const source of sources){const target=path.join(output,'sources',source.path);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(path.join(app,source.path),target);}
 const text=name=>fs.readFileSync(path.join(output,'sources',name),'utf8');
-const wiring={publicPredictionUsesFunction:/ES15PredictHeldInterval\(/.test(text('models/SchmidtReferenceState.mo')),
-  catalogUsesHeldBound:(text('models/RGBDLocalizationCatalog.mo').match(/ES15HeldIntervalValid\(h\)/g)??[]).length===2,
+const wiring={publicPredictionUsesFunction:/ES15PredictHeldInterval\(/.test(text('models/Estimation/Inertial/SchmidtReferenceState.mo')),
+  catalogUsesHeldBound:(text('models/Estimation/Localization/RGBDLocalizationCatalog.mo').match(/ES15HeldIntervalValid\(h\)/g)??[]).length===2,
   hostPreservesIntervals:/const intervals=imuIntervals\(frame,\.2\)/.test(text('src/modelica-localization-session.ts'))};
 const model='ES15HeldIntervalAcceptance';
 const debugFlags='gen,-evalfunc,-nfEvalConstArgFuncs,-nfExpandFuncArgs,-nfExpandOperations,nfScalarize';

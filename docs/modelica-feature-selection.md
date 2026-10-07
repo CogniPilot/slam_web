@@ -1,6 +1,6 @@
 # Editable Modelica feature selection
 
-`models/FeatureSelection.mo` retains the full 160×90 score raster and 14,400
+`models/Vision/Features/FeatureSelection.mo` retains the full 160×90 score raster and 14,400
 output rows, including the editable cap through 14,400. The source owns
 heap ranking, ties-to-even quantization, raster tie order, raw-score early stop,
 square occupancy/NMS, settings validation and the separate grid traversal.

@@ -12,7 +12,7 @@ const dimensionDiagnostic=process.env.RUMOCA_FAST_FRAME_DIMENSION_DIAGNOSTIC==='
 if(dimensionDiagnostic&&(thresholdArtifactFile||dimensionArtifactFile||scoreArtifactFile))throw Error('Dimension diagnostic accepts only its separately compiled artifact');
 fs.mkdirSync(directory,{recursive:true});
 const sha=b=>createHash('sha256').update(b).digest('hex');
-const source=fs.readFileSync('models/FastNativeFrame.mo','utf8');
+const source=fs.readFileSync('models/Vision/Features/FastNativeFrame.mo','utf8');
 const fixtureFile=process.env.RUMOCA_FAST_FRAME_FIXTURES??'dev/artifacts/fast-native-frame/independent-fixtures.json';
 const fixtureBytes=fs.readFileSync(fixtureFile),fixture=JSON.parse(fixtureBytes);
 if(sha(source)!==fixture.sourceSha256||fixture.height!==90||fixture.width!==160||fixture.frames.length!==4||fixture.byteRgbaFrames?.length!==1||fixture.nonfiniteRgbFrames?.length!==2||!fixture.scoreEdit)throw Error('Original fullframe fixture mismatch');

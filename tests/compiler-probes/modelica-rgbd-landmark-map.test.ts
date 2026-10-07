@@ -1,10 +1,11 @@
+import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {beforeAll,afterAll,it,expect} from 'vitest';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {createHash} from 'node:crypto';
 import {NativeProgram,type NativeProgramArtifact} from '../../src/modelica-native-program';
 import {MAP_CAPACITY,CANDIDATE_CAPACITY,mapDefaults,emptyMap,mapFrame,mapOracle,retainMap,fullMap,sparseMap,type MapFrame,type MapSettings} from './modelica-rgbd-landmark-map-fixtures';
-const source=['RGBDSpatialIndex','RGBDLandmarkMap'].map(name=>readFileSync(`models/${name}.mo`,'utf8')).join('\n'),editedSource=source.replace('parameter Real confirmationObservations = 3.0;','parameter Real confirmationObservations = 2.0;');
+const source=['RGBDSpatialIndex','RGBDLandmarkMap'].map(name=>readFileSync(modelicaSourcePath(name),'utf8')).join('\n'),editedSource=source.replace('parameter Real confirmationObservations = 3.0;','parameter Real confirmationObservations = 2.0;');
 const directory=process.env.RUMOCA_MAP_ARTIFACT_DIRECTORY,enabled=Boolean(directory),sha=(v:string|Uint8Array)=>createHash('sha256').update(v).digest('hex');
 const report:Record<string,unknown>={status:enabled?'RUNNING':'SOURCE_ARTIFACT_NOT_AVAILABLE',sourceSha256:sha(source),editedSourceSha256:sha(editedSource),mapCapacity:MAP_CAPACITY,candidateCapacity:CANDIDATE_CAPACITY,oracleFixtureTestsCompleted:0,actualNumericGroupsCompleted:0,actualCases:[],runtimeIntegrated:false,fullSlamAccepted:false,productionPinChanged:false};
 function save(){const p=process.env.RUMOCA_MAP_REPORT;if(p){mkdirSync(resolve(p,'..'),{recursive:true});writeFileSync(p,JSON.stringify(report,null,2)+'\n');}}save();

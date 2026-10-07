@@ -10,21 +10,21 @@ const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'graph-measurement-semantics-'));
 const names=[
-  "models/RGBDRegistrationUncertainty.mo",
-  "models/RGBDKeyframes.mo",
-  "models/RGBDBagOfWords.mo",
-  "models/RGBDKeyframeRetrieval.mo",
-  "models/RGBDFeatureMatching.mo",
-  "models/RigidPointRegistration.mo",
-  "models/RGBDBodyRelativeEdge.mo",
-  "models/RGBDLoopVerification.mo",
-  "models/ModelicaPoseGraph.mo",
-  "models/RGBDCatalogLoopVerification.mo",
+  "models/Estimation/Localization/RGBDRegistrationUncertainty.mo",
+  "models/LoopClosure/RGBDKeyframes.mo",
+  "models/LoopClosure/RGBDBagOfWords.mo",
+  "models/LoopClosure/RGBDKeyframeRetrieval.mo",
+  "models/Vision/Matching/RGBDFeatureMatching.mo",
+  "models/Math/RigidPointRegistration.mo",
+  "models/LoopClosure/RGBDBodyRelativeEdge.mo",
+  "models/LoopClosure/RGBDLoopVerification.mo",
+  "models/Optimization/ModelicaPoseGraph.mo",
+  "models/LoopClosure/RGBDCatalogLoopVerification.mo",
   "tests/modelica/RGBDKeyframeTests.mo",
   "tests/modelica/RGBDKeyframeRetrievalTests.mo",
   "tests/modelica/RGBDLoopVerificationTests.mo",
   "tests/modelica/RGBDCatalogLoopTests.mo",
-  "models/RGBDGraphMeasurements.mo",
+  "models/Optimization/RGBDGraphMeasurements.mo",
   "tests/modelica/RGBDGraphMeasurementTests.mo",
   "tests/modelica/RGBDGraphMeasurementAcceptance.mo"
 ];

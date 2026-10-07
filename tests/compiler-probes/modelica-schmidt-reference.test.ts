@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {expect,it} from 'vitest';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -5,7 +6,7 @@ import {NativeProgram,type NativeProgramArtifact} from '../../src/modelica-nativ
 import {correction,correlated,eye,exp,mat,mm,plus,predicted,product,rot,tr,type Fixture,type Mat} from './schmidt-relative-fixtures';
 import {captureInputs,captured,correctedFactors,covariance,latentFixture,noiseFactor,nominalInputs,poseIndices,predictionInputs,propagated,stationary,transition,type Factors} from './schmidt-reference-fixtures';
 const names=['RGBDRelativePose','SPD6Solve','ES15PoseCorrection','SchmidtRelativePoseCorrection','ES15NominalPrediction','ES15Dynamics','ES15CovariancePrediction','SchmidtReferenceState'];
-const source=names.map(n=>readFileSync(`models/${n}.mo`,'utf8')).join('');
+const source=names.map(n=>readFileSync(modelicaSourcePath(n),'utf8')).join('');
 const sha=(x:string|Uint8Array)=>createHash('sha256').update(x).digest('hex');
 const flat=(x:unknown):number[]=>Array.isArray(x)?x.flat(Infinity) as number[]:[x as number];
 const diff=(a:ArrayLike<number>,b:ArrayLike<number>)=>Math.max(0,...Array.from(a).map((v,i)=>Math.abs(v-b[i])));

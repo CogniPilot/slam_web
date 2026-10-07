@@ -1,8 +1,8 @@
 # Readable Harris source
 
-The selectable Harris source is [HarrisNativeFrame.mo](../models/HarrisNativeFrame.mo),
-with native camera dimensions supplied by [D435HarrisFeatures.mo](../models/D435HarrisFeatures.mo)
-and [D435ImageProfile.mo](../models/D435ImageProfile.mo).
+The selectable Harris source is [HarrisNativeFrame.mo](../models/Vision/Features/HarrisNativeFrame.mo),
+with native camera dimensions supplied by [D435HarrisFeatures.mo](../models/Vision/Features/D435HarrisFeatures.mo)
+and [D435ImageProfile.mo](../models/Sensors/D435ImageProfile.mo).
 Image extents are structural parameters. Traversals use those extents or
 `size(array,axis)`; kernel radii and RGB channel count describe the algorithm.
 

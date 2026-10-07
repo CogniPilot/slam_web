@@ -8,7 +8,7 @@ import {chromium} from '@playwright/test';
 const [baseline,candidate,destination]=process.argv.slice(2);
 if(!destination||fs.existsSync(destination))throw Error('BASELINE_PACKAGE CANDIDATE_PACKAGE FRESH_REPORT required');
 const source=fs.readFileSync('tests/compiler-probes/fixtures/NativeZeroDotProduct.mo','utf8');
-const plantSource=fs.readFileSync('models/LabQuadrotor.mo','utf8');
+const plantSource=fs.readFileSync('models/Vehicles/LabQuadrotor.mo','utf8');
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const files=new Map(),artifacts={};
 for(const [name,directory] of [['baseline',baseline],['candidate',candidate]]){

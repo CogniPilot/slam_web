@@ -27,7 +27,7 @@ const apply=(r:Matrix,v:number[])=>r.map(row=>row.reduce((sum,value,i)=>sum+valu
 // repeating the Modelica Rodrigues matrix construction.
 it('Modelica nominal prediction preserves held-IMU motion, bias correction, and rejected-step recovery',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const source=readFileSync('models/ES15NominalPrediction.mo','utf8');
+  const source=readFileSync('models/Estimation/Inertial/ES15NominalPrediction.mo','utf8');
   const session=rumoca.WasmSimulationSession.withInteractiveOptions(source,'ES15NominalPrediction',.1,'rk-like',1e-10,1e-10,'[]');
   let time=0;
   const position=[1.4,-.8,2.3],velocity=[.7,-.2,.4],gravity=[0,0,-9.81];

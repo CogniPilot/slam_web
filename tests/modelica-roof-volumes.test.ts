@@ -61,7 +61,7 @@ it('production Modelica owns the union of all three city roofs, inclusive faces 
 
 it('production roof profiles explicitly reject malformed counts and preserve source edits and legacy single-volume sessions',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const source=readFileSync('models/SensorAvailability.mo','utf8'),availability=make(source,'SensorAvailability');let tick=0;
+  const source=readFileSync('models/Sensors/SensorAvailability.mo','utf8'),availability=make(source,'SensorAvailability');let tick=0;
   try{
     for(const roofCount of [-1,.5,3.5,4]){
       availability.set_inputs(JSON.stringify([['roofCount',roofCount],['roofEnabled',0]]));availability.advance_to(++tick/90);

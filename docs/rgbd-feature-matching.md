@@ -1,6 +1,6 @@
 # Modelica RGB-D descriptors and matching
 
-[RGBDFeatureMatching.mo](../models/RGBDFeatureMatching.mo) is an editable frontend component with a fixed capacity of 350 features and a 7 × 7 descriptor. It receives measured images and selected image coordinates. It does not receive pose truth. The source is review-only: matching numerical execution and native whole-model admission have not passed, and it is not connected to the running SLAM pipeline.
+[RGBDFeatureMatching.mo](../models/Vision/Matching/RGBDFeatureMatching.mo) is an editable frontend component with a fixed capacity of 350 features and a 7 × 7 descriptor. It receives measured images and selected image coordinates. It does not receive pose truth. The source is review-only: matching numerical execution and native whole-model admission have not passed, and it is not connected to the running SLAM pipeline.
 
 `RGBDDescriptorFrame` receives raw 90 × 160 RGBA samples and a separate 90 × 160 axial-depth image. `channelCount = 4` and `colorChannelCount = 3` are structural constants; alpha is ignored. Gray intensity is `(red + green + blue) / (3 * 255)`. Pixels are zero-based integer coordinates. Each 49-element patch is visited in row-major order, mean-centered, checked for contrast, and normalized to unit length. Invalid points produce zero descriptors, zero optical coordinates and `enabled = 0`.
 

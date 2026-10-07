@@ -9,7 +9,7 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'es15-prediction-functions-'));
 const model='ES15PredictionFunctionParity',count=7;
-const names=['models/ES15NominalPrediction.mo','models/ES15Dynamics.mo',
+const names=['models/Estimation/Inertial/ES15NominalPrediction.mo','models/Estimation/Inertial/ES15Dynamics.mo',
   'tests/modelica/ES15NominalPredictionEquationReference.mo','tests/modelica/ES15DynamicsEquationReference.mo',
   'tests/modelica/ES15PredictionFunctionParity.mo'];
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');

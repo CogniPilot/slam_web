@@ -1,6 +1,6 @@
 # Measured pose graph
 
-`models/RGBDGraphMeasurements.mo` owns a bounded graph of measured body-frame
+`models/Optimization/RGBDGraphMeasurements.mo` owns a bounded graph of measured body-frame
 relative poses. The immutable keyframe catalog owns the node identities, image
 epochs, calibration and pose estimates. The graph has 256 edge slots for the
 catalog's 128 keyframes. These capacities are named constants, not a packed

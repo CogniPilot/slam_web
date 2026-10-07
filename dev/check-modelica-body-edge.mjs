@@ -9,8 +9,8 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'body-edge-semantics-'));
-const names=['models/RGBDRegistrationUncertainty.mo','models/ModelicaPoseGraph.mo',
-  'models/RGBDBodyRelativeEdge.mo','tests/modelica/RGBDBodyEdgeTests.mo'];
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/Optimization/ModelicaPoseGraph.mo',
+  'models/LoopClosure/RGBDBodyRelativeEdge.mo','tests/modelica/RGBDBodyEdgeTests.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const quoted=value=>JSON.stringify(value);

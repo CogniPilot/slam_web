@@ -3,7 +3,7 @@ import fs from 'node:fs';import path from 'node:path';import os from 'node:os';i
 import {fixture,denseInformation,factor} from './graph-covariance-reference.mjs';
 const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),model='ModelicaPoseGraphPairAcceptance';
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});const output=fs.mkdtempSync(path.join(root,'graph-pair-semantics-'));
-const sha=b=>createHash('sha256').update(b).digest('hex');const names=['models/ModelicaPoseGraph.mo','models/ModelicaPoseGraphCovariance.mo','tests/modelica/ModelicaPoseGraphPairAcceptance.mo'];
+const sha=b=>createHash('sha256').update(b).digest('hex');const names=['models/Optimization/ModelicaPoseGraph.mo','models/Optimization/ModelicaPoseGraphCovariance.mo','tests/modelica/ModelicaPoseGraphPairAcceptance.mo'];
 const sources=[...names,'dev/check-modelica-graph-pair.mjs','dev/graph-covariance-reference.mjs'].map(p=>({path:p,sha256:sha(fs.readFileSync(path.join(app,p)))}));
 const preimages=path.join(app,'dev/artifacts/modelica-graph-covariance-semantics',path.basename(output),'source-preimages');
 for(const entry of sources){const target=path.join(preimages,entry.path);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(path.join(app,entry.path),target);}

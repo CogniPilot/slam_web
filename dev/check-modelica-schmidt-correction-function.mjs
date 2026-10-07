@@ -11,7 +11,7 @@ const parent=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(parent,
 const output=fs.mkdtempSync(path.join(parent,'schmidt-correction-function-'));
 const functionOnly=process.env.SCHMIDT_FUNCTION_ONLY==='1';
 const model=functionOnly?'SchmidtCorrectionFunctionOnly':'SchmidtCorrectionFunctionParity';
-const names=['models/RGBDRelativePose.mo','models/SPD6Solve.mo','models/ES15PoseCorrection.mo','models/SchmidtRelativePoseCorrection.mo','tests/modelica/SchmidtCorrectionFunctionParity.mo'];
+const names=['models/Estimation/Localization/RGBDRelativePose.mo','models/Math/SPD6Solve.mo','models/Estimation/Inertial/ES15PoseCorrection.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo','tests/modelica/SchmidtCorrectionFunctionParity.mo'];
 const files=[...names,'tests/compiler-probes/schmidt-relative-fixtures.ts','dev/check-modelica-schmidt-correction-function.mjs','dev/rumoca-bounded-run.mjs'];
 const sha=x=>createHash('sha256').update(x).digest('hex');
 const sources=files.map(p=>({path:p,sha256:sha(fs.readFileSync(path.join(app,p)))}));
@@ -59,7 +59,7 @@ if(fs.existsSync(csvPath)){
  }
 }
 const original=fs.readFileSync(path.join(app,'dev/artifacts/modelica-schmidt-correction-function/SchmidtRelativePoseCorrectionOriginal.mo'));
-const current=fs.readFileSync(path.join(app,'models/SchmidtRelativePoseCorrection.mo'));
+const current=fs.readFileSync(path.join(app,'models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo'));
 const prefixUnchanged=current.subarray(0,original.length).equals(original);const bookendsEqual=sources.every(s=>sha(fs.readFileSync(path.join(app,s.path)))===s.sha256);
 const generatedFunctionExecution=fs.readdirSync(output).filter(n=>n.endsWith('.c')).map(n=>{const bytes=fs.readFileSync(path.join(output,n));return {path:n,sha256:sha(bytes),bytes:bytes.length,correctionCalls:(bytes.toString().match(/omc_SchmidtCorrectRelativePose\(/g)??[]).length,solveCalls:(bytes.toString().match(/omc_SchmidtCorrectionSolve\(/g)??[]).length};}).filter(f=>f.correctionCalls||f.solveCalls);
 const log=fs.readFileSync(path.join(output,'semantics.log'),'utf8');

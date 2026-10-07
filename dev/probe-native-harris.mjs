@@ -13,7 +13,7 @@ for(let i=2;i<process.argv.length;i+=2){
 }
 if(!options.has('--package'))throw new Error('Pass --package with the review-only full-web compiler output directory');
 const directory=resolve(options.get('--package'));
-const source=await readFile(options.has('--source')?resolve(options.get('--source')):new URL('../models/HarrisNativeFrame.mo',import.meta.url),'utf8');
+const source=await readFile(options.has('--source')?resolve(options.get('--source')):new URL('../models/Vision/Features/HarrisNativeFrame.mo',import.meta.url),'utf8');
 const bytes=await readFile(resolve(directory,'rumoca_bind_wasm_bg.wasm'));
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const compiler=await import(pathToFileURL(resolve(directory,'rumoca_bind_wasm.js')).href);

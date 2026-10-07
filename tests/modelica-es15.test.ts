@@ -41,7 +41,7 @@ function numericalJacobian(rotation:Matrix,force:number[],omega:number[],input:'
 
 it('Modelica ES15 dynamics match finite-differenced true/nominal motion with the declared error convention',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const source=readFileSync('models/ES15Dynamics.mo','utf8');
+  const source=readFileSync('models/Estimation/Inertial/ES15Dynamics.mo','utf8');
   const session=rumoca.WasmSimulationSession.withInteractiveOptions(source,'ES15Dynamics',.1,'rk-like',1e-8,1e-6,'[]');
   try {
     const cases=[

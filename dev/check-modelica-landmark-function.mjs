@@ -14,7 +14,7 @@ const models=['RGBDLandmarkFunctionAcceptance','RGBDLandmarkZeroLimitAcceptance'
 const model=process.env.LANDMARK_REFERENCE_MODEL??models[0];
 if(!models.includes(model))throw Error('Unknown landmark reference model');
 const checkCount=12,caseCount=42,stopTime=(caseCount-0.5)/64;
-const names=['models/RGBDLandmarkProjection.mo','tests/modelica/RGBDLandmarkFunctionAcceptance.mo'];
+const names=['models/Mapping/RGBDLandmarkProjection.mo','tests/modelica/RGBDLandmarkFunctionAcceptance.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=[...names,'dev/check-modelica-landmark-function.mjs','dev/rumoca-bounded-run.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const debug='gen,-evalfunc,-nfEvalConstArgFuncs,-nfExpandFuncArgs,-nfExpandOperations,nfScalarize';

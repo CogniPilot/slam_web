@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../src/modelica-source-locations.mjs';
 // Profile the actual source-issued complete 15+6 transaction, without sensors.
 // Usage: node dev/profile-schmidt-transaction.mjs ARTIFACT FIXTURES OUTPUT_DIRECTORY [profile]
 import fs from 'node:fs';
@@ -12,7 +13,7 @@ fs.mkdirSync(outputDirectory,{recursive:true});
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const sourceNames=['RGBDRelativePose','SPD6Solve','ES15PoseCorrection','SchmidtRelativePoseCorrection',
   'ES15NominalPrediction','ES15Dynamics','ES15CovariancePrediction','SchmidtReferenceState'];
-const baselineSource=sourceNames.map(name=>fs.readFileSync(`models/${name}.mo`,'utf8')).join('');
+const baselineSource=sourceNames.map(name=>fs.readFileSync(modelicaSourcePath(name),'utf8')).join('');
 const source=process.env.RUMOCA_TRANSACTION_PROFILE_SOURCE
   ?fs.readFileSync(process.env.RUMOCA_TRANSACTION_PROFILE_SOURCE,'utf8'):baselineSource;
 const artifactBytes=fs.readFileSync(artifactFile),fixtureBytes=fs.readFileSync(fixtureFile);

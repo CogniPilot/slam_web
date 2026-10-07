@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {test,expect} from '@playwright/test';
 import {readFileSync,appendFileSync} from 'node:fs';
 import {defaultGraph} from '../../src/graph';
@@ -21,9 +22,9 @@ test('full Modelica source workspace edits, diagnostics, download and local relo
   // retain their own settings; software-renderer throughput is not under test.
   const fixture={format:'slam-lab-project',version:1,name:'Source workspace test',
     environment:'warehouse',seed:7,sceneDetail:'low',depthCloudEnabled:false,carsEnabled:false,peopleEnabled:false,
-    algorithm:readFileSync('models/ModelicaInertial.mo','utf8'),algorithmPreset:'Modelica inertial propagation',
-    physics:readFileSync('models/LabQuadrotor.mo','utf8'),
-    detector:['D435ImageProfile','FastNativeFrame','D435FastFeatures'].map(name=>readFileSync(`models/${name}.mo`,'utf8')).join('\n'),detectorPreset:'Modelica FAST · integration pending',
+    algorithm:readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8'),algorithmPreset:'Modelica inertial propagation',
+    physics:readFileSync('models/Vehicles/LabQuadrotor.mo','utf8'),
+    detector:['D435ImageProfile','FastNativeFrame','D435FastFeatures'].map(name=>readFileSync(modelicaSourcePath(name),'utf8')).join('\n'),detectorPreset:'Modelica FAST · integration pending',
     detectorLanguage:'modelica',runtime:'modelica',graph:defaultGraph()};
   await page.goto('/__workspace_seed__.txt');
   await page.evaluate(project=>new Promise<void>((resolve,reject)=>{
@@ -41,12 +42,12 @@ test('full Modelica source workspace edits, diagnostics, download and local relo
   progress('project loaded');
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
   const active=await page.evaluate(()=>(window as any).__slamLab.project.algorithm);
-  const path='models/RGBDFastSLAMInterface.mo';
+  const path='models/SLAM/RGBDFastSLAMInterface.mo';
   await page.getByLabel('SLAM source file').selectOption(path);
-  await expect(page.locator('#editor-title')).toHaveText('RGBDFastSLAMInterface.mo');
+  await expect(page.locator('#editor-title')).toHaveText('SLAM/RGBDFastSLAMInterface.mo');
   progress('workspace opened');
-  await page.getByLabel('SLAM source file').selectOption('models/D435FastSLAM.mo');
-  await expect(page.getByLabel('Node source code')).toHaveValue(readFileSync('models/D435FastSLAM.mo','utf8'));
+  await page.getByLabel('SLAM source file').selectOption('models/SLAM/D435FastSLAM.mo');
+  await expect(page.getByLabel('Node source code')).toHaveValue(readFileSync('models/SLAM/D435FastSLAM.mo','utf8'));
   await page.getByLabel('SLAM source file').selectOption(path);
   await expect(page.getByRole('button',{name:'Full SLAM execution pending',exact:true})).toBeDisabled();
   const original=await page.getByLabel('Node source code').inputValue();
@@ -71,12 +72,12 @@ test('full Modelica source workspace edits, diagnostics, download and local relo
     const hover=editor.requestHover(at),completion=editor.requestCompletion(at);
     await Promise.resolve(); // Requests have left; switch before their replies.
     const select=document.querySelector<HTMLSelectElement>('[aria-label="SLAM source file"]')!;
-    select.value='models/ModelicaPoseGraph.mo';select.dispatchEvent(new Event('change',{bubbles:true}));
+    select.value='models/Optimization/ModelicaPoseGraph.mo';select.dispatchEvent(new Event('change',{bubbles:true}));
     return {hover:await hover,completion:await completion};
   },position);
   expect(stale).toEqual({hover:null,completion:[]});
   progress('stale language replies discarded on file switch');
-  await expect(page.getByLabel('Node source code')).toHaveValue(readFileSync('models/ModelicaPoseGraph.mo','utf8'));
+  await expect(page.getByLabel('Node source code')).toHaveValue(readFileSync('models/Optimization/ModelicaPoseGraph.mo','utf8'));
   await page.getByLabel('SLAM source file').selectOption(path);
   await expect(page.getByLabel('Node source code')).toHaveValue(edited);
   await page.getByRole('button',{name:'Save project',exact:true}).click();
@@ -89,7 +90,7 @@ test('full Modelica source workspace edits, diagnostics, download and local relo
   expect(portable.algorithm).toBe(active);
   expect(portable.slamWorkspace.schemaVersion).toBe(2);
   expect(Object.keys(portable.slamWorkspace.sources)).toHaveLength(59);
-  for(const file of ['models/D435FastSLAM.mo','models/D435ImageProfile.mo','models/RGBDFastSLAMIntervals.mo'])
+  for(const file of ['models/SLAM/D435FastSLAM.mo','models/Sensors/D435ImageProfile.mo','models/SLAM/RGBDFastSLAMIntervals.mo'])
     expect(portable.slamWorkspace.sources[file]).toBe(readFileSync(file,'utf8'));
   expect(portable.slamWorkspace.sources[path]).toBe(edited);
   // Every unedited dependency is present verbatim, including files never opened.
@@ -122,14 +123,14 @@ test('full Modelica source workspace edits, diagnostics, download and local relo
   progress('editor restored to active estimator');
   // Opening a version1 project while viewing a native-only file must restore
   // its exact56-file workspace, without undefined source or injected files.
-  await page.getByLabel('SLAM source file').selectOption('models/D435FastSLAM.mo');
+  await page.getByLabel('SLAM source file').selectOption('models/SLAM/D435FastSLAM.mo');
   const old=structuredClone(portable);old.slamWorkspace.schemaVersion=1;
-  for(const file of ['models/D435FastSLAM.mo','models/D435ImageProfile.mo','models/RGBDFastSLAMIntervals.mo'])
+  for(const file of ['models/SLAM/D435FastSLAM.mo','models/Sensors/D435ImageProfile.mo','models/SLAM/RGBDFastSLAMIntervals.mo'])
     delete old.slamWorkspace.sources[file];
   await page.locator('#open').setInputFiles({name:'old-workspace.slam.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(old))});
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.project.slamWorkspace?.schemaVersion)).toBe(1);
   await expect(page.getByLabel('Node source code')).toHaveValue(active);
-  expect(await page.getByLabel('SLAM source file').locator('option[value="models/D435FastSLAM.mo"]').count()).toBe(0);
+  expect(await page.getByLabel('SLAM source file').locator('option[value="models/SLAM/D435FastSLAM.mo"]').count()).toBe(0);
   expect(await page.evaluate(()=>(window as any).__slamLab.project.slamWorkspace)).toEqual(old.slamWorkspace);
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
   progress('historical workspace import preserved exact inventory');

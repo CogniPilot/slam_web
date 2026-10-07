@@ -1,6 +1,6 @@
 # Editable visual-word retrieval
 
-`models/RGBDBagOfWords.mo` is a standalone appearance retrieval component. It
+`models/LoopClosure/RGBDBagOfWords.mo` is a standalone appearance retrieval component. It
 proposes up to four retained keyframe IDs. A proposal is a cosine similarity,
 not a probability or accepted loop constraint. Every proposal still needs the
 full descriptor matcher and geometric registration before it can enter a pose

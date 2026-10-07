@@ -17,6 +17,13 @@ New workspaces use schemaVersion2. Older schemaVersion1 projects retain their
 exact56-file inventory and saved text; loading them does not inject the newer
 native entrypoints. Both versions support local saves and portable downloads.
 
+Source files are grouped by responsibility: `Vision/Features`,
+`Estimation/Inertial`, `Mapping`, `LoopClosure`, `Optimization`, and `SLAM`.
+The file selector shows those paths. Projects saved with the original flat
+`models/` paths migrate their path keys when opened; every edited source byte
+and the original dependency inventory remain intact. Conflicting old and new
+keys are rejected. See [the source guide](../models/README.md).
+
 The workspace is separate from the active estimator. Its execution button says
 **Full SLAM execution pending** until the compiled full-state program is
 integrated and qualified. The usable experiment remains Modelica inertial

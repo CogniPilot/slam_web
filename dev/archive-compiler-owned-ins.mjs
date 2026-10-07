@@ -8,7 +8,7 @@ function retain(source,name){
  files.push({path:destination,bytes:bytes.length,sha256:sha(bytes)});
 }
 for(const name of ['tests.log','tests-resource.json','migration-tests.log','migration-tests-resource.json','typescript.log','typescript-resource.json','build.log','build-resource.json','browser.log','browser-resource.json','browser-report.json','profile.log','profile-resource.json','ins-profile-report.json'])retain(path.join(scratch,name),name);
-for(const file of ['src/modelica-state.worker.ts','src/modelica-inertial-session.ts','src/imu-intervals.ts','src/project.ts','src/runtime.ts','tests/modelica-inertial-session.test.ts','tests/project-migration.test.ts','models/ModelicaInertial.mo','dev/probe-compiler-owned-ins.mjs','dev/profile-compiler-owned-ins.mjs'])retain(file,file.replaceAll('/','__'));
+for(const file of ['src/modelica-state.worker.ts','src/modelica-inertial-session.ts','src/imu-intervals.ts','src/project.ts','src/runtime.ts','tests/modelica-inertial-session.test.ts','tests/project-migration.test.ts','models/Estimation/Inertial/ModelicaInertial.mo','dev/probe-compiler-owned-ins.mjs','dev/profile-compiler-owned-ins.mjs'])retain(file,file.replaceAll('/','__'));
 const profile=JSON.parse(fs.readFileSync(path.join(scratch,'ins-profile-report.json'),'utf8'));
 const historical=fs.realpathSync('dist'),candidate=path.join(os.homedir(),'scratch/slam_web/build/compiler-owned-ins-preview');
 retain(path.join(historical,'assets',profile.baselineWorker.file),'historical-state-worker.js');

@@ -5,7 +5,7 @@ import {NativeProgram,type NativeProgramArtifact} from '../../src/modelica-nativ
 import {rawDescriptorFixture,rawDescriptorOracle,mappedFirstPixel,type DescriptorFrameFixture} from './rgbd-descriptor-frame-fixtures';
 
 const artifactPath=process.env.RUMOCA_NATIVE_DESCRIPTOR_ARTIFACT;
-const sourcePath=process.env.RUMOCA_NATIVE_DESCRIPTOR_SOURCE??'models/RGBDFeatureMatching.mo';
+const sourcePath=process.env.RUMOCA_NATIVE_DESCRIPTOR_SOURCE??'models/Vision/Matching/RGBDFeatureMatching.mo';
 const reportPath=process.env.RUMOCA_NATIVE_DESCRIPTOR_REPORT;
 const fixturePath=process.env.RUMOCA_NATIVE_DESCRIPTOR_FIXTURES;
 const source=readFileSync(sourcePath,'utf8'),sha=(v:string|Uint8Array)=>createHash('sha256').update(v).digest('hex');

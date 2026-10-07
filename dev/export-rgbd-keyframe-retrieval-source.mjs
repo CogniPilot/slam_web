@@ -6,8 +6,8 @@ import {createHash} from 'node:crypto';
 const app=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const output=resolve(process.argv[2]??resolve(homedir(),'scratch/slam_web/tmp/rgbd-keyframe-retrieval-source'));
 mkdirSync(output,{recursive:true});
-const names=['models/RGBDRegistrationUncertainty.mo','models/RGBDKeyframes.mo','models/RGBDBagOfWords.mo',
-  'models/RGBDKeyframeRetrieval.mo','tests/compiler-probes/fixtures/components/RGBDKeyframeRetrievalStep.mo'];
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/LoopClosure/RGBDKeyframes.mo','models/LoopClosure/RGBDBagOfWords.mo',
+  'models/LoopClosure/RGBDKeyframeRetrieval.mo','tests/compiler-probes/fixtures/components/RGBDKeyframeRetrievalStep.mo'];
 const sha=source=>createHash('sha256').update(source).digest('hex');
 const files=names.map(name=>({path:name,source:readFileSync(resolve(app,name),'utf8')}));
 const source=files.map(file=>file.source).join('\n');

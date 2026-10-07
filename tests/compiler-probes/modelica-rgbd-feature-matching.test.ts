@@ -8,7 +8,7 @@ import {featureCapacity,descriptorSize,fullMatchingFixture,matchingOracle,descri
 
 const directory=process.env.RUMOCA_BRANCH_PKG;
 const mode=process.env.RUMOCA_MATCHING_MODE??'session';
-const source=()=>readFileSync('models/RGBDFeatureMatching.mo','utf8');
+const source=()=>readFileSync('models/Vision/Matching/RGBDFeatureMatching.mo','utf8');
 const sha=(v:string|Uint8Array)=>createHash('sha256').update(v).digest('hex');
 function focusedFixture(n=3):MatchingFixture {
   const f=fullMatchingFixture();f.referenceCount=n;f.currentCount=n;

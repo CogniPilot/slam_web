@@ -6,7 +6,7 @@ import {build} from 'esbuild';import {chromium} from '@playwright/test';
 const [directory]=process.argv.slice(2);if(!directory)throw Error('Expected fresh probe directory with baseline/edited sources and artifacts');
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const require=(ok,message)=>{if(!ok)throw Error(message);};
-const source=fs.readFileSync('models/FastNativeFrame.mo','utf8');
+const source=fs.readFileSync('models/Vision/Features/FastNativeFrame.mo','utf8');
 const sources=['baseline','edited'].map(name=>fs.readFileSync(path.join(directory,name+'.mo'),'utf8'));
 const edit='FastSelectionScoreFloor(18.0,1e8)';
 require(sources[0].startsWith(source+'\n')&&sources[0].split(edit).length===2

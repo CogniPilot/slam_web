@@ -9,8 +9,8 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'keyframe-retrieval-semantics-'));
-const names=['models/RGBDRegistrationUncertainty.mo','models/RGBDKeyframes.mo','models/RGBDBagOfWords.mo',
-  'models/RGBDKeyframeRetrieval.mo','tests/modelica/RGBDKeyframeTests.mo',
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/LoopClosure/RGBDKeyframes.mo','models/LoopClosure/RGBDBagOfWords.mo',
+  'models/LoopClosure/RGBDKeyframeRetrieval.mo','tests/modelica/RGBDKeyframeTests.mo',
   'tests/modelica/RGBDKeyframeRetrievalTests.mo','tests/modelica/RGBDKeyframeRetrievalAcceptance.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));

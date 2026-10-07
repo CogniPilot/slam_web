@@ -9,7 +9,7 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'pose-graph-semantics-'));
-const names=['models/ModelicaPoseGraph.mo','tests/modelica/ModelicaPoseGraphAcceptance.mo'];
+const names=['models/Optimization/ModelicaPoseGraph.mo','tests/modelica/ModelicaPoseGraphAcceptance.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=[...names,'dev/check-modelica-pose-graph.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const script=path.join(output,'pose-graph.mos');

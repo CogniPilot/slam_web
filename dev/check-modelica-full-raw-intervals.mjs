@@ -19,7 +19,7 @@ const output=fs.mkdtempSync(path.join(scratch,`full-raw-intervals-${phase}-`));
 const durable=path.join(app,'dev/artifacts/modelica-full-raw-intervals',path.basename(output));
 fs.mkdirSync(durable,{recursive:true});
 const sha=value=>createHash('sha256').update(value).digest('hex');
-const names=[...rgbdSlamSourceManifest.paths,'models/RGBDFastSLAMIntervals.mo',
+const names=[...rgbdSlamSourceManifest.paths,'models/SLAM/RGBDFastSLAMIntervals.mo',
   'tests/modelica/RGBDLocalizationInitializeTests.mo',
   'tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo',
   'tests/modelica/RGBDLocalizationAdvanceFunctionAcceptance.mo',

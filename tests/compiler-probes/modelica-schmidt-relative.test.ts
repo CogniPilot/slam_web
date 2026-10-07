@@ -1,10 +1,11 @@
+import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {expect,it} from 'vitest';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NativeProgram,type NativeProgramArtifact} from '../../src/modelica-native-program';
 import {correction,derivedJacobian,fixture,gaugeFixture,geometryCases,inputs,innovation,jacobian,mat,minus,mv,norm,plus,predicted,product,rot,exp,tr,type Mat} from './schmidt-relative-fixtures';
 
-const source=['RGBDRelativePose','SPD6Solve','ES15PoseCorrection','SchmidtRelativePoseCorrection'].map(n=>readFileSync(`models/${n}.mo`,'utf8')).join('');
+const source=['RGBDRelativePose','SPD6Solve','ES15PoseCorrection','SchmidtRelativePoseCorrection'].map(n=>readFileSync(modelicaSourcePath(n),'utf8')).join('');
 const artifactFile=process.env.RUMOCA_SCHMIDT_RELATIVE_ARTIFACT;
 const sha=(x:string|Uint8Array)=>createHash('sha256').update(x).digest('hex');
 const flat=(v:unknown):number[]=>Array.isArray(v)?v.flat(Infinity) as number[]:[v as number];

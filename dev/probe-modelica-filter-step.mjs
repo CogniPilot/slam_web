@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../src/modelica-source-locations.mjs';
 // Review-only compiler probe; run under dev/rumoca-bounded-run.mjs.
 // No numerical algorithm is implemented here and no production pin is changed.
 import fs from 'node:fs/promises';
@@ -11,7 +12,7 @@ const output=process.env.RUMOCA_FILTER_STEP_OUT;
 if(!directory||!output)throw new Error('Set RUMOCA_BRANCH_PKG and RUMOCA_FILTER_STEP_OUT');
 const sha=value=>crypto.createHash('sha256').update(value).digest('hex');
 const files=['ES15NominalPrediction','ES15Dynamics','ES15CovariancePrediction',
-  'SPD6Solve','ES15PoseCorrection'].map(name=>`models/${name}.mo`).concat('tests/compiler-probes/fixtures/components/ES15FilterStep.mo');
+  'SPD6Solve','ES15PoseCorrection'].map(name=>modelicaSourcePath(name)).concat('tests/compiler-probes/fixtures/components/ES15FilterStep.mo');
 const parts=await Promise.all(files.map(file=>fs.readFile(file,'utf8')));
 const source=parts.join('\n');
 await fs.mkdir(output,{recursive:true});

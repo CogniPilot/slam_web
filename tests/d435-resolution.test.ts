@@ -9,7 +9,7 @@ it('uses a native common D435 mode and keeps color and depth optics distinct',()
   expect(D435.rgbFx).toBeGreaterThan(D435.fx);
   expect(D435.rgbFy).toBeGreaterThan(D435.fy);
   expect(D435.depthNoiseReferenceFx).toBe(D435.fx);
-  const source=readFileSync('models/D435ImageProfile.mo','utf8');
+  const source=readFileSync('models/Sensors/D435ImageProfile.mo','utf8');
   expect(source).toContain(`constant Integer width = ${D435.width};`);
   expect(source).toContain(`constant Integer height = ${D435.height};`);
 });

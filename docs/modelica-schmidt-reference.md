@@ -1,6 +1,6 @@
 # Correlated reference lifecycle
 
-`models/SchmidtReferenceState.mo` stages a complete 15-current + 6-reference
+`models/Estimation/Inertial/SchmidtReferenceState.mo` stages a complete 15-current + 6-reference
 estimator lifecycle in editable Modelica. The current error order is
 `[dp,dv,dtheta,dba,dbg]`, with world-additive position/velocity, body biases and
 right-local attitude. The frozen reference error is `[dp_reference,dtheta_reference]`.

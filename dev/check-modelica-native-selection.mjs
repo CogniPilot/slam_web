@@ -13,7 +13,7 @@ const output=fs.mkdtempSync(path.join(scratch,'native-selection-'));
 const durable=path.join(app,'dev/artifacts/modelica-native-frontend',path.basename(output));
 fs.mkdirSync(durable,{recursive:true});
 const model='RGBDNativeSelectionAcceptance';
-const sourceNames=['models/FeatureSelection.mo','tests/modelica/RGBDNativeSelectionAcceptance.mo'];
+const sourceNames=['models/Vision/Features/FeatureSelection.mo','tests/modelica/RGBDNativeSelectionAcceptance.mo'];
 const frozenNames=[...sourceNames,'dev/check-modelica-native-selection.mjs','dev/rumoca-bounded-run.mjs'];
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const copy=(source,target)=>{fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(source,target);};

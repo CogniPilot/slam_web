@@ -10,7 +10,7 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'spatial-index-semantics-'));
-const names=['tests/modelica/RGBDLandmarkMapReference.mo','models/RGBDSpatialIndex.mo',
+const names=['tests/modelica/RGBDLandmarkMapReference.mo','models/Mapping/RGBDSpatialIndex.mo',
   'tests/modelica/RGBDSpatialIndexTests.mo'];
 const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));

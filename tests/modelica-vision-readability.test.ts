@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../src/modelica-source-locations.mjs';
 import {it,expect} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -42,7 +43,7 @@ function compare(before:string,after:string,model:string,modifications:string,he
 it('compact full-frame tensor kernels preserve all original output bits at different rectangular sizes',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
   for(const [key,model] of [['native','HarrisNativeFrame']] as const){
-    const before=original(key),after=readFileSync(`models/${model}.mo`,'utf8');
+    const before=original(key),after=readFileSync(modelicaSourcePath(model),'utf8');
     for(const [height,width] of [[13,17],[17,23]])
       compare(before,after,model,`height=${height},width=${width},harris_k=0.07`,height,width);
   }

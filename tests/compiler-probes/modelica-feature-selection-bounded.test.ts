@@ -69,7 +69,7 @@ it('invalid settings and unsafe ranks clear full output without eager protected 
 
 it('candidate keeps named full geometry and original evidence independently editable',()=>{
   const candidate=readFileSync('dev/modelica-candidates/FeatureSelectionBounded.mo','utf8');
-  const original=readFileSync('models/FeatureSelection.mo','utf8');
+  const original=readFileSync('models/Vision/Features/FeatureSelection.mo','utf8');
   expect(candidate).toContain('constant Integer width = 160;');
   expect(candidate).toContain('constant Integer height = 90;');
   expect(candidate).toContain('constant Integer capacity = width*height;');

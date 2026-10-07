@@ -8,7 +8,7 @@ const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{rec
 const recheck=process.env.OMC_COVARIANCE_RECHECK_DIR;
 const output=recheck?path.resolve(recheck):fs.mkdtempSync(path.join(root,'graph-covariance-semantics-'));
 const original=recheck?JSON.parse(fs.readFileSync(path.join(output,'report.json'),'utf8')):null;
-const names=['models/ModelicaPoseGraph.mo','models/ModelicaPoseGraphCovariance.mo','tests/modelica/ModelicaPoseGraphCovarianceTests.mo','tests/modelica/ModelicaPoseGraphCovarianceAcceptance.mo'];
+const names=['models/Optimization/ModelicaPoseGraph.mo','models/Optimization/ModelicaPoseGraphCovariance.mo','tests/modelica/ModelicaPoseGraphCovarianceTests.mo','tests/modelica/ModelicaPoseGraphCovarianceAcceptance.mo'];
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const sources=[...names,'dev/check-modelica-graph-covariance.mjs','dev/graph-covariance-reference.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 if(!recheck){const preimages=path.join(app,'dev/artifacts/modelica-graph-covariance-semantics',path.basename(output),'source-preimages');

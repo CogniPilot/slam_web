@@ -3,7 +3,7 @@ import {createHash} from 'node:crypto';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {NativeProgram,type NativeProgramArtifact} from '../../src/modelica-native-program';
 import {defaultE,fixture,I,inverse,multiply,mv,observationJacobian,pointCovariance,pose,rotation,sandwich,transpose,type Fixture,type Matrix} from './rgbd-registration-uncertainty-fixtures';
-const source=readFileSync('models/RGBDRegistrationUncertainty.mo','utf8');
+const source=readFileSync('models/Estimation/Localization/RGBDRegistrationUncertainty.mo','utf8');
 const artifactPath=process.env.RUMOCA_UNCERTAINTY_ARTIFACT;
 const editedPath=process.env.RUMOCA_UNCERTAINTY_EDITED_ARTIFACT;
 const editedSource=source.replace('parameter Real disparitySigma = 0.1;','parameter Real disparitySigma = 0.2;');

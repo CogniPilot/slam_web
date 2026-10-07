@@ -1,6 +1,6 @@
 # Editable Modelica actor motion
 
-[ActorMotion.mo](../models/ActorMotion.mo) owns the complete six-actor stadium
+[ActorMotion.mo](../models/Scene/ActorMotion.mo) owns the complete six-actor stadium
 route and absolute animation-clock mathematics formerly computed in
 `src/world-actors.ts`. Current runtime code dispatches this source through the
 Modelica math worker and supplies its frames to Three.js. Renderer, worker-RPC,

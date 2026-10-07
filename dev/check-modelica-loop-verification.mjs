@@ -9,9 +9,9 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'loop-verification-semantics-'));
-const names=['models/RGBDFeatureMatching.mo','models/RigidPointRegistration.mo',
-  'models/RGBDRegistrationUncertainty.mo','models/RGBDKeyframes.mo','models/RGBDBodyRelativeEdge.mo',
-  'models/RGBDLoopVerification.mo','models/ModelicaPoseGraph.mo','tests/modelica/RGBDLoopVerificationTests.mo'];
+const names=['models/Vision/Matching/RGBDFeatureMatching.mo','models/Math/RigidPointRegistration.mo',
+  'models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/LoopClosure/RGBDKeyframes.mo','models/LoopClosure/RGBDBodyRelativeEdge.mo',
+  'models/LoopClosure/RGBDLoopVerification.mo','models/Optimization/ModelicaPoseGraph.mo','tests/modelica/RGBDLoopVerificationTests.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const script=path.join(output,'loop-verification.mos');
 const scope=process.env.MODELICA_LOOP_CHECK_SCOPE??'proposal';

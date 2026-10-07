@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import init,* as rumoca from '@cognipilot/rumoca';
 import {ModelicaInertialSession} from '../src/modelica-inertial-session';
 
-const source=readFileSync('models/ModelicaInertial.mo','utf8');
+const source=readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8');
 const initial='[["accel[1]",0],["accel[2]",0],["accel[3]",9.81],["gyro[1]",0],["gyro[2]",0],["gyro[3]",0]]';
 async function make(text=source){
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});

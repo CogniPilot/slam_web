@@ -9,9 +9,9 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'raster-selection-guard-'));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-const names=['models/FeatureSelection.mo','tests/modelica/RasterSelectionReference.mo',
-  'tests/modelica/RasterSelectionGuardTests.mo','models/RGBDFastInertialLocalizationStep.mo',
-  'models/RGBDFastInertialLocalizationInitialize.mo','dev/check-modelica-raster-selection-guard.mjs'];
+const names=['models/Vision/Features/FeatureSelection.mo','tests/modelica/RasterSelectionReference.mo',
+  'tests/modelica/RasterSelectionGuardTests.mo','models/Estimation/Localization/RGBDFastInertialLocalizationStep.mo',
+  'models/Estimation/Localization/RGBDFastInertialLocalizationInitialize.mo','dev/check-modelica-raster-selection-guard.mjs'];
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 for(const source of sources){const target=path.join(output,'sources',source.path);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(path.join(app,source.path),target);}
 const text=name=>fs.readFileSync(path.join(output,'sources',name),'utf8');

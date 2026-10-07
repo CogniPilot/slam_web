@@ -11,7 +11,7 @@ const output=path.resolve(process.argv[2]??path.join(process.env.HOME,'scratch/s
 const frames=Number(process.env.SLAM_PHYSICS_FRAMES??900);
 if(!Number.isInteger(frames)||frames<90||frames>3600)throw new Error('Physics frames must be90..3600');
 await fs.mkdir(output,{recursive:true});
-const source=await fs.readFile('models/LabQuadrotor.mo','utf8'),wasm=await fs.readFile('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm');
+const source=await fs.readFile('models/Vehicles/LabQuadrotor.mo','utf8'),wasm=await fs.readFile('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm');
 const digest=v=>crypto.createHash('sha256').update(v).digest('hex');
 await init({module_or_path:wasm});
 const report={status:'RUNNING',sourceSha256:digest(source),compilerWasmSha256:digest(wasm),compiler:{version:compiler.get_version(),revision:compiler.get_git_commit()},node:process.version,rates:QUALITY_SENSOR_RATES.high,frames,solver:{dt:.005,mode:'rk-like',atol:1e-8,rtol:1e-6},runs:[],sourceUnchanged:true,physicsStepsSkipped:0,hostMathFallback:false,productionPinChanged:false};

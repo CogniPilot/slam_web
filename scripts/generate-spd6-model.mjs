@@ -45,4 +45,4 @@ equation
 ${equations.join('\n')}
 end SPD6Solve;
 `;
-await writeFile(new URL('../models/SPD6Solve.mo',import.meta.url),source);
+await writeFile(new URL('../models/Math/SPD6Solve.mo',import.meta.url),source);

@@ -30,7 +30,7 @@ const worldPoints:Mat = [[3,4,5],[-3,2,7],[1,-8,2],[9,4,-2],[0,1,8],[3,-2,6]];
 it.skipIf(!directory)('camera registration composes a calibrated body observation in actual compiler-issued WASM',async()=>{
   const compiler = await import(/* @vite-ignore */ pathToFileURL(resolve(directory!,'rumoca_bind_wasm.js')).href);
   await compiler.default({module_or_path:readFileSync(resolve(directory!,'rumoca_bind_wasm_bg.wasm'))});
-  const source = readFileSync('models/RGBDRelativePose.mo','utf8');
+  const source = readFileSync('models/Estimation/Localization/RGBDRelativePose.mo','utf8');
   const artifact:NativeProgramArtifact = JSON.parse(compiler.prepare_native_program(source,'RGBDRelativePose'));
   const program = await NativeProgram.instantiate(artifact,source);
   const cases:{name:string;valid:number}[]=[];

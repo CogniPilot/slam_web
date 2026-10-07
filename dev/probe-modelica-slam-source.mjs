@@ -20,7 +20,7 @@ fs.mkdirSync(parent,{recursive:true});
 const durable=fs.mkdtempSync(path.join(parent,'source-'));
 const files=manifest.paths.map(file=>({path:file,source:fs.readFileSync(path.join(app,file),'utf8')}));
 const source=files.map(file=>file.source).join(manifest.separator);
-const editedPath='models/RGBDFastSLAMInterface.mo';
+const editedPath='models/SLAM/RGBDFastSLAMInterface.mo';
 const original=files.find(file=>file.path===editedPath).source;
 const edited=original.replace('parameter Integer minimumMeasuredDescriptors = 8;',
   'parameter Integer minimumMeasuredDescriptors = 12;');

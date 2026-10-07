@@ -14,7 +14,7 @@ const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const json=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');
 function files(root){return fs.readdirSync(root,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?files(path.join(root,entry.name)):[path.join(root,entry.name)]).sort();}
 const relative=file=>path.relative(repo,file).split(path.sep).join('/');
-const inventory=()=>[...files(path.join(repo,'src')),...files(path.join(repo,'public')),self,path.join(repo,'models/LabQuadrotor.mo'),path.join(repo,'dev/rumoca-bounded-run.mjs'),path.join(repo,'package.json'),path.join(repo,'package-lock.json')].sort().map(file=>({path:relative(file),bytes:fs.statSync(file).size,sha256:sha(fs.readFileSync(file))}));
+const inventory=()=>[...files(path.join(repo,'src')),...files(path.join(repo,'public')),self,path.join(repo,'models/Vehicles/LabQuadrotor.mo'),path.join(repo,'dev/rumoca-bounded-run.mjs'),path.join(repo,'package.json'),path.join(repo,'package-lock.json')].sort().map(file=>({path:relative(file),bytes:fs.statSync(file).size,sha256:sha(fs.readFileSync(file))}));
 const startup=process.argv.includes('--startup');
 if(process.argv.slice(2).some(arg=>arg.startsWith('--')&&!['--execute','--startup'].includes(arg)))throw new Error('Expected only --startup (or internal --execute directory)');
 
@@ -34,7 +34,7 @@ if(process.argv[2]!=='--execute'){
   fs.mkdirSync(output,{recursive:true});fs.mkdirSync(source,{recursive:true});
   const before=inventory();json(path.join(output,'sources-before.json'),before);
   for(const folder of ['src','public'])fs.cpSync(path.join(repo,folder),path.join(source,folder),{recursive:true});
-  fs.mkdirSync(path.join(source,'models'),{recursive:true});fs.copyFileSync(path.join(repo,'models/LabQuadrotor.mo'),path.join(source,'models/LabQuadrotor.mo'));
+  fs.mkdirSync(path.join(source,'models'),{recursive:true});fs.copyFileSync(path.join(repo,'models/Vehicles/LabQuadrotor.mo'),path.join(source,'models/Vehicles/LabQuadrotor.mo'));
   for(const file of ['package.json','package-lock.json'])fs.copyFileSync(path.join(repo,file),path.join(source,file));
   fs.symlinkSync(path.join(repo,'node_modules'),path.join(source,'node_modules'),'dir');
   // Retain source preimages, but keep the large frozen asset/build workspace on scratch.
@@ -47,7 +47,7 @@ if(process.argv[2]!=='--execute'){
   const html=`<!doctype html><meta charset="utf-8"><title>Measured city RGB-D fixture</title><style>body{margin:20px;background:#15202a;color:white;font:16px monospace}#view{width:640px;height:360px}#camera{width:640px;height:360px;image-rendering:pixelated}#view{display:none}</style><h1>Actual city RGB / 160 × 90</h1><canvas id="camera" width="160" height="90"></canvas><pre id="status">Preparing frozen Three.js city</pre><div id="view"></div><script type="module" src="/harness.ts"></script>`;
   const harness=`import {World,D435} from './src/world';
 import {readPhysicsSnapshot} from './src/physics-snapshot';
-import physicsSource from './models/LabQuadrotor.mo?raw';
+import physicsSource from './models/Vehicles/LabQuadrotor.mo?raw';
 const world=new World(document.querySelector('#view') as HTMLElement);
 world.build('city','medium');world.configureActors(false,false);world.setDepthCloudEnabled(false);world.setLighting('day');
 await world.ready;
@@ -117,12 +117,12 @@ document.querySelector('#status')!.textContent='4 measured near-facade views + 1
       const {stateJson,...physics}=result.startupPhysics;
       const stateFile='physics-initial-state.json',sourceFile='physics-source.mo';
       fs.writeFileSync(path.join(output,stateFile),stateJson);
-      fs.copyFileSync(path.join(source,'models/LabQuadrotor.mo'),path.join(output,sourceFile));
+      fs.copyFileSync(path.join(source,'models/Vehicles/LabQuadrotor.mo'),path.join(output,sourceFile));
       const identity=(sourcePath,proofPath)=>{const entry=before.find(item=>item.path===sourcePath);if(!entry)throw new Error(`Missing physics input ${sourcePath}`);return {sourcePath,path:proofPath??sourcePath,...{sha256:entry.sha256,bytes:entry.bytes}};};
       const js=identity('public/vendor/rumoca/rumoca_bind_wasm.js'),wasm=identity('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm');
       for(const input of [js,wasm])if(!requests.some(request=>request.sourcePath===input.sourcePath&&request.sha256===input.sha256))throw new Error(`Physics resource not actually served: ${input.sourcePath}`);
       for(const input of [js,wasm]){const destination=path.join(output,input.path);fs.mkdirSync(path.dirname(destination),{recursive:true});fs.copyFileSync(path.join(source,input.sourcePath),destination);if(sha(fs.readFileSync(destination))!==input.sha256)throw new Error(`Physics proof copy changed: ${input.sourcePath}`);}
-      startupPhysics={...physics,source:identity('models/LabQuadrotor.mo',sourceFile),js,wasm,physicsWorker:identity('src/physics.worker.ts','source-preimages/src/physics.worker.ts'),snapshotReader:identity('src/physics-snapshot.ts','source-preimages/src/physics-snapshot.ts'),stateJson:{path:stateFile,sha256:sha(fs.readFileSync(path.join(output,stateFile)))},scope:'Actual published Rumoca initialization snapshot used only for diagnostic renderer World.update; not estimator replay input.'};
+      startupPhysics={...physics,source:identity('models/Vehicles/LabQuadrotor.mo',sourceFile),js,wasm,physicsWorker:identity('src/physics.worker.ts','source-preimages/src/physics.worker.ts'),snapshotReader:identity('src/physics-snapshot.ts','source-preimages/src/physics-snapshot.ts'),stateJson:{path:stateFile,sha256:sha(fs.readFileSync(path.join(output,stateFile)))},scope:'Actual published Rumoca initialization snapshot used only for diagnostic renderer World.update; not estimator replay input.'};
     }
     const after=inventory();json(path.join(output,'sources-after.json'),after);if(JSON.stringify(before)!==JSON.stringify(after))throw new Error('Source/asset bookends changed');
     // No favicon is requested by this harness; every actual resource must resolve locally.

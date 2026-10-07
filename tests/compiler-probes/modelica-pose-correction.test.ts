@@ -127,7 +127,7 @@ it('Modelica pose correction solves all16 RHS and preserves the full15-state Jos
   const directory=process.env.RUMOCA_BRANCH_PKG;
   const compiler:typeof rumoca=directory?await import(/* @vite-ignore */ pathToFileURL(resolve(directory,'rumoca_bind_wasm.js')).href):rumoca;
   await (directory?compiler.default:init)({module_or_path:readFileSync(directory?resolve(directory,'rumoca_bind_wasm_bg.wasm'):'public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const source=['models/SPD6Solve.mo','models/ES15PoseCorrection.mo'].map(p=>readFileSync(p,'utf8')).join('\n');
+  const source=['models/Math/SPD6Solve.mo','models/Estimation/Inertial/ES15PoseCorrection.mo'].map(p=>readFileSync(p,'utf8')).join('\n');
   const initial=poseInputs(base(),observation());
   const trace=(message:string)=>{if(process.env.RUMOCA_POSE_TRACE)console.info(message);};
   trace('Preparing complete ES15PoseCorrection session');

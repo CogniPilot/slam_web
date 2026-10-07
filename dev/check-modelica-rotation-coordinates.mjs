@@ -9,7 +9,7 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const scratch=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(scratch,{recursive:true});
 const output=fs.mkdtempSync(path.join(scratch,'rotation-coordinates-'));
 const model='SLAMRotationCoordinatesTests';
-const files=['models/RGBDRelativePose.mo','models/SchmidtRelativePoseCorrection.mo','tests/modelica/SLAMRotationCoordinatesTests.mo','dev/check-modelica-rotation-coordinates.mjs','dev/rumoca-bounded-run.mjs'];
+const files=['models/Estimation/Localization/RGBDRelativePose.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo','tests/modelica/SLAMRotationCoordinatesTests.mo','dev/check-modelica-rotation-coordinates.mjs','dev/rumoca-bounded-run.mjs'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=files.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const omc=process.env.OMC_BIN??'omc';
@@ -48,7 +48,7 @@ if(fs.existsSync(csvPath)){
 }
 const generatedFunctionExecution=fs.readdirSync(output).filter(f=>f.endsWith('.c')).map(f=>{const p=path.join(output,f),data=fs.readFileSync(p);return {path:f,sha256:sha(data),bytes:data.length,references:(data.toString().match(/omc_SLAMRotationCoordinates\(/g)??[]).length};}).filter(f=>f.references);
 const bookendsEqual=sources.every(s=>sha(fs.readFileSync(path.join(app,s.path)))===s.sha256);
-const production=fs.readFileSync(path.join(app,'models/SchmidtRelativePoseCorrection.mo'),'utf8');const referenceBlock=production.slice(production.indexOf('model SLAMRotationLog\n'),production.indexOf('end SLAMRotationLog;')+'end SLAMRotationLog;'.length);
+const production=fs.readFileSync(path.join(app,'models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo'),'utf8');const referenceBlock=production.slice(production.indexOf('model SLAMRotationLog\n'),production.indexOf('end SLAMRotationLog;')+'end SLAMRotationLog;'.length);
 const originalModelSha256=fs.readFileSync(path.join(app,'dev/artifacts/modelica-rotation-coordinates/original-model-sha256.txt'),'utf8').trim();const originalModelUnchanged=sha(referenceBlock)===originalModelSha256;
 const log=fs.readFileSync(path.join(output,'semantics.log'),'utf8');
 const pass=result.status===0&&bookendsEqual&&originalModelUnchanged&&rows>=41&&columns===432&&comparisons===rows*144&&bitDifferences===0&&!failures.length&&times[0]===0&&times.at(-1)===1&&generatedFunctionExecution.length>1&&log.includes('The simulation finished successfully.');

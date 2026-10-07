@@ -5,7 +5,7 @@ hits the 8 GiB RSS guard before issuing a native artifact. Generic Move-packed
 tuple certification and typed Map execution have passed their scoped controls;
 full-frame numerical acceptance remains unmeasured.
 
-The unchanged `models/FastNativeFrame.mo` was attempted once at its full 160×90
+The unchanged `models/Vision/Features/FastNativeFrame.mo` was attempted once at its full 160×90
 RGBA size with the frozen compact-call compiler producer. Source preparation
 completed, but native schedule certification refused
 `native tensor residual has no direct elementwise isolator`. No native artifact

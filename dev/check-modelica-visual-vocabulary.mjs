@@ -11,7 +11,7 @@ const checkCount=43;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'visual-vocabulary-semantics-'));
-const names=['models/RGBDRegistrationUncertainty.mo','models/RGBDKeyframes.mo','models/RGBDBagOfWords.mo','models/RGBDVisualVocabulary.mo','tests/modelica/RGBDVisualVocabularyTests.mo','tests/modelica/RGBDVisualVocabularyAcceptance.mo'];
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/LoopClosure/RGBDKeyframes.mo','models/LoopClosure/RGBDBagOfWords.mo','models/LoopClosure/RGBDVisualVocabulary.mo','tests/modelica/RGBDVisualVocabularyTests.mo','tests/modelica/RGBDVisualVocabularyAcceptance.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=[...names,'dev/check-modelica-visual-vocabulary.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const script=path.join(output,'visual-vocabulary.mos');

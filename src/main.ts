@@ -347,7 +347,7 @@ el<HTMLInputElement>('replay').onchange=async e=>{
     if(dirty||!ready)await compile();await runtime.loadReplay(records,data.evaluationOrigin);truthPath=[];estimatePath=[];comparisons.clear();externalLatest=undefined;runtime.play();el('run').textContent='Ⅱ Pause';
   }catch(error){status(String(error),true);}
 };
-el('export-node').onclick=()=>download(viewingSlamFile()?activeSlamFile.slice('models/'.length):`${selected.id}.mo`,selectedSource(),'text/plain');
+el('export-node').onclick=()=>download(viewingSlamFile()?activeSlamFile.split('/').at(-1)!:`${selected.id}.mo`,selectedSource(),'text/plain');
 const cameraControls=new ViewerCameraControls(),keys=new Set<string>();
 el('world').tabIndex=0;el('world').setAttribute('aria-label','World camera');
 el('world').addEventListener('pointerdown',()=>el('world').focus({preventScroll:true}));

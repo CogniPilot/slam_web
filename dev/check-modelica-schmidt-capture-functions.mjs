@@ -9,9 +9,9 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'schmidt-capture-functions-'));
 const model='SchmidtCaptureFunctionParity',count=4;
-const names=['models/RGBDRelativePose.mo','models/SchmidtRelativePoseCorrection.mo',
-  'models/ES15NominalPrediction.mo','models/ES15Dynamics.mo','models/ES15CovariancePrediction.mo',
-  'models/SchmidtReferenceState.mo','tests/modelica/SchmidtCaptureFunctionParity.mo'];
+const names=['models/Estimation/Localization/RGBDRelativePose.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo',
+  'models/Estimation/Inertial/ES15NominalPrediction.mo','models/Estimation/Inertial/ES15Dynamics.mo','models/Estimation/Inertial/ES15CovariancePrediction.mo',
+  'models/Estimation/Inertial/SchmidtReferenceState.mo','tests/modelica/SchmidtCaptureFunctionParity.mo'];
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const sourceNames=[...names,'dev/check-modelica-schmidt-capture-functions.mjs'];
 const identities=()=>sourceNames.map(p=>({path:p,sha256:sha(fs.readFileSync(path.join(app,p)))}));

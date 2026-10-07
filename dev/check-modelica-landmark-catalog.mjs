@@ -9,7 +9,7 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'landmark-catalog-semantics-'));
-const names=['models/RGBDSpatialIndex.mo','models/RGBDLandmarkMap.mo','models/RGBDMapAnchors.mo','models/RGBDMapAnchorAssignment.mo','models/RGBDAnchoredLandmarkMap.mo','tests/modelica/RGBDLandmarkMapReference.mo','models/RGBDLandmarkCatalog.mo','tests/modelica/RGBDLandmarkCatalogTests.mo'];
+const names=['models/Mapping/RGBDSpatialIndex.mo','models/Mapping/RGBDLandmarkMap.mo','models/Mapping/RGBDMapAnchors.mo','models/Mapping/RGBDMapAnchorAssignment.mo','models/Mapping/RGBDAnchoredLandmarkMap.mo','tests/modelica/RGBDLandmarkMapReference.mo','models/Mapping/RGBDLandmarkCatalog.mo','tests/modelica/RGBDLandmarkCatalogTests.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const script=path.join(output,'landmark-catalog.mos');

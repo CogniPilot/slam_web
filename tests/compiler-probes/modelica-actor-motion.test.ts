@@ -28,7 +28,7 @@ const snapshot=(values:Values)=>fields.flatMap(name=>defaults.map((_,i)=>values[
 it('production-pin editable Modelica batches all six actor routes and absolute animation clocks across seeks and parameter edits',async()=>{
   const wasm=readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm');
   await init({module_or_path:wasm});
-  const source=readFileSync('models/ActorMotion.mo','utf8');
+  const source=readFileSync('models/Scene/ActorMotion.mo','utf8');
   const editedSource=source.replace('{0.78,0.78,0.78,2.2,2.2,2.2}','{0.91,0.78,0.78,2.2,2.2,2.2}')
     .replace('{18.0,18.0,18.0,20.0,20.0,20.0}','{21.0,18.0,18.0,20.0,20.0,20.0}')
     .replace('animationRate = 0.85','animationRate = 0.72');

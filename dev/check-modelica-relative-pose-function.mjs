@@ -4,7 +4,7 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'rgbd-relative-pose-function-'));
 const model='RGBDRelativeBodyPoseFunctionAcceptance',caseCount=18,checkCount=5,stop=(caseCount-0.5)/64;
-const names=['models/RGBDRelativePose.mo','tests/modelica/RGBDRelativeBodyPoseFunctionAcceptance.mo'];
+const names=['models/Estimation/Localization/RGBDRelativePose.mo','tests/modelica/RGBDRelativeBodyPoseFunctionAcceptance.mo'];
 const sha=x=>createHash('sha256').update(x).digest('hex');
 const sources=[...names,'dev/check-modelica-relative-pose-function.mjs','dev/rumoca-bounded-run.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const script=path.join(output,'relative-pose.mos');

@@ -11,7 +11,7 @@ const checkCount=30;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'localization-frame-semantics-'));
-const names=['models/RGBDRegistrationUncertainty.mo','models/RGBDKeyframes.mo','models/SchmidtReferenceState.mo','models/RGBDLocalizationFrame.mo','tests/modelica/RGBDKeyframeRetrievalTests.mo','tests/modelica/RGBDLocalizationFrameTests.mo','tests/modelica/RGBDLocalizationFrameAcceptance.mo'];
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/LoopClosure/RGBDKeyframes.mo','models/Estimation/Inertial/SchmidtReferenceState.mo','models/Estimation/Localization/RGBDLocalizationFrame.mo','tests/modelica/RGBDKeyframeRetrievalTests.mo','tests/modelica/RGBDLocalizationFrameTests.mo','tests/modelica/RGBDLocalizationFrameAcceptance.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=[...names,'dev/check-modelica-localization-frame.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const script=path.join(output,'localization-frame.mos');

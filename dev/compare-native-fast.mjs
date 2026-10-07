@@ -12,7 +12,7 @@ const [beforeFile, afterFile, fixtureFile, directory] = process.argv.slice(2);
 if (!directory) throw Error('Expected BEFORE AFTER FIXTURES OUTPUT_DIRECTORY');
 fs.mkdirSync(directory, {recursive:true});
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const source = fs.readFileSync('models/FastNativeFrame.mo', 'utf8');
+const source = fs.readFileSync('models/Vision/Features/FastNativeFrame.mo', 'utf8');
 const artifactFiles = [beforeFile, afterFile];
 const artifactBytes = artifactFiles.map(file => fs.readFileSync(file));
 const artifacts = artifactBytes.map(bytes => JSON.parse(bytes));

@@ -17,7 +17,7 @@ const requirePrivate=privateSetting==='1';
 if(requirePrivate&&!observeCounters)throw new Error('Private execution coverage requires counters');
 const output=path.resolve(outputArgument),compilerDirectory=path.resolve(compilerArgument);
 await fs.mkdir(output,{recursive:true});
-const source=await fs.readFile('models/LabQuadrotor.mo');
+const source=await fs.readFile('models/Vehicles/LabQuadrotor.mo');
 const edited=Buffer.from(source.toString().replace('parameter Real mass = 2.0;','parameter Real mass = 2.4;'));
 if(source.equals(edited))throw new Error('Expected exact wrapper mass parameter missing');
 const compiler=await fs.readFile(path.join(compilerDirectory,'rumoca_bind_wasm.js'));

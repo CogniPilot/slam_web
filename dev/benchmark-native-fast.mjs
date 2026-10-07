@@ -12,7 +12,7 @@ const consumer=await build({stdin:{contents:"export {NativeProgram} from './src/
 const consumerFile=path.resolve(directory,'consumer.mjs');
 fs.writeFileSync(consumerFile,consumer.outputFiles[0].contents);
 const {NativeProgram}=await import(pathToFileURL(consumerFile));
-const source=fs.readFileSync('models/FastNativeFrame.mo','utf8');
+const source=fs.readFileSync('models/Vision/Features/FastNativeFrame.mo','utf8');
 const artifact=JSON.parse(fs.readFileSync(artifactFile));
 const fixtures=JSON.parse(fs.readFileSync(fixtureFile));
 if(artifact.model_name!=='FastNativeFrame'||fixtures.sourceSha256!==artifact.source_sha256

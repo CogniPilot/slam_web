@@ -1,8 +1,8 @@
 # Readable Modelica vision kernels
 
-Current image algorithms live in [HarrisNativeFrame.mo](../models/HarrisNativeFrame.mo)
-and [FastNativeFrame.mo](../models/FastNativeFrame.mo). The D435 wrappers supply
-native camera dimensions from [D435ImageProfile.mo](../models/D435ImageProfile.mo).
+Current image algorithms live in [HarrisNativeFrame.mo](../models/Vision/Features/HarrisNativeFrame.mo)
+and [FastNativeFrame.mo](../models/Vision/Features/FastNativeFrame.mo). The D435 wrappers supply
+native camera dimensions from [D435ImageProfile.mo](../models/Sensors/D435ImageProfile.mo).
 Use structural image parameters and `size(array,axis)` for traversals. Kernel
 radii, channel count and feature/keyframe/map capacities describe separate
 algorithm choices.

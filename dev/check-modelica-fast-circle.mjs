@@ -18,7 +18,7 @@ const baselineFile=baseline==='square'?'dev/artifacts/fast-circle-2026-10-07/bef
   :'dev/artifacts/fast-score-storage-2026-10-07/before/FastNativeFrame.mo';
 const baselineSha=baseline==='square'?'924b777017afe1b50b4c0f9c9aa12dc0a6d40880ddc6602fe5613973f8099611'
   :'529c3ccb4ab90ddc92c7bb758b9e087fb214d3fde115172d5d080920dc9b49af';
-const names=['models/FastNativeFrame.mo',baselineFile,
+const names=['models/Vision/Features/FastNativeFrame.mo',baselineFile,
   'tests/modelica/FastCircleAcceptance.mo','dev/check-modelica-fast-circle.mjs','dev/rumoca-bounded-run.mjs',
   'dev/artifacts/merged-runtime-guard/original-FastNativeFrame.mo'];
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));

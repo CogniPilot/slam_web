@@ -1,4 +1,4 @@
-The editable [RGBDLandmarkProjection](../models/RGBDLandmarkProjection.mo) creates world ENU candidate coordinates from all 350 calibrated optical RDF slots. It uses the estimated body pose and supplied camera extrinsics:
+The editable [RGBDLandmarkProjection](../models/Mapping/RGBDLandmarkProjection.mo) creates world ENU candidate coordinates from all 350 calibrated optical RDF slots. It uses the estimated body pose and supplied camera extrinsics:
 
 `worldPoint = bodyPosition + bodyRotation * (cameraOriginBody + opticalToBody * opticalPoint)`.
 

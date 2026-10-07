@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../src/modelica-source-locations.mjs';
 // Bounded reference probe of the actual fresh-state constructor assertion.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -38,7 +39,7 @@ if(process.argv[2]==='--worker'){
     'RGBDLocalizationFrame','RGBDLocalizationCatalog','GraphGaugeUncertainty',
     'SchmidtGraphPoseCorrection','RGBDGraphEstimatorCommit','ModelicaPoseGraphCovariance',
     'RGBDGraphCaptureLedger','RGBDGraphAnchorBound','RGBDGraphSelectedGauge','RGBDGraphProcessing'
-  ].map(name=>`models/${name}.mo`);
+  ].map(name=>modelicaSourcePath(name));
   names.push('tests/modelica/RGBDGraphResetConstructorProbe.mo','dev/check-modelica-graph-reset-constructor.mjs','dev/rumoca-bounded-run.mjs');
   const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
   const output=fs.mkdtempSync(path.join(root,'graph-reset-constructor-'));

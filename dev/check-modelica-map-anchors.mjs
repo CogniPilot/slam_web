@@ -9,7 +9,7 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'map-anchor-semantics-'));
-const names=['models/RGBDMapAnchors.mo','tests/modelica/RGBDMapAnchorTests.mo'];
+const names=['models/Mapping/RGBDMapAnchors.mo','tests/modelica/RGBDMapAnchorTests.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const script=path.join(output,'map-anchors.mos');

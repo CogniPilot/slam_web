@@ -6,7 +6,7 @@ import {appearanceFixture, bowOracle, copyBoWState, emptyBoWState, type BoWFixtu
 
 const sha = (data: string | Uint8Array) => createHash('sha256').update(data).digest('hex');
 const artifactPath = process.env.RUMOCA_BOW_ARTIFACT, editedPath = process.env.RUMOCA_BOW_EDITED_ARTIFACT;
-const source = readFileSync('models/RGBDBagOfWords.mo', 'utf8');
+const source = readFileSync('models/LoopClosure/RGBDBagOfWords.mo', 'utf8');
 function revisitFixture(): BoWFixture {
   const initial = appearanceFixture();
   const historical = bowOracle(initial);

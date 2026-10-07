@@ -1,6 +1,6 @@
 # Modelica roof availability
 
-[SensorAvailability](../models/SensorAvailability.mo) and [SensorObservations](../models/SensorObservations.mo) now support up to three roof volumes. Modelica owns the inclusive position comparisons, union of the active volumes, count/bounds validity and GPS availability. These volumes are a demonstration indoor geofence, not a satellite/RF propagation model or proof of visual SLAM handoff.
+[SensorAvailability](../models/Sensors/SensorAvailability.mo) and [SensorObservations](../models/Sensors/SensorObservations.mo) now support up to three roof volumes. Modelica owns the inclusive position comparisons, union of the active volumes, count/bounds validity and GPS availability. These volumes are a demonstration indoor geofence, not a satellite/RF propagation model or proof of visual SLAM handoff.
 
 The fixed structural constant `maximumRoofs=3` bounds compact arrays. `roofCount` selects zero through three active slots. Existing `roofMinimum[3]` and `roofMaximum[3]` remain slot one's inputs, so existing single-volume sources/callers keep their behavior. `roofMinima[3,3]` and `roofMaxima[3,3]` hold additional slots; slot one's matrix row is transmitted for a complete array interface, while the legacy vectors remain authoritative for that slot. Each active minimum must be no greater than its corresponding maximum. `roofConfigurationValid` exposes invalid counts or bounds; availability conservatively returns zero for invalid configurations, and the adapter raises an explicit error.
 

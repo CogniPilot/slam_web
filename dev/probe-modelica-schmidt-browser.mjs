@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../src/modelica-source-locations.mjs';
 // Execute the complete source-issued 15+6 correction in an actual browser worker.
 // Independent numerical expectations are prepared offline, never in the worker.
 import fs from 'node:fs';
@@ -10,7 +11,7 @@ const [artifactFile, fixtureFile, reportFile] = process.argv.slice(2);
 if (!reportFile) throw new Error('Expected ARTIFACT INDEPENDENT_FIXTURES REPORT');
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const source = ['RGBDRelativePose', 'SPD6Solve', 'ES15PoseCorrection', 'SchmidtRelativePoseCorrection']
-  .map(name => fs.readFileSync(`models/${name}.mo`, 'utf8')).join('');
+  .map(name => fs.readFileSync(modelicaSourcePath(name), 'utf8')).join('');
 const artifactBytes = fs.readFileSync(artifactFile), fixtureBytes = fs.readFileSync(fixtureFile);
 const artifact = JSON.parse(artifactBytes), fixtures = JSON.parse(fixtureBytes);
 if (fixtures.schemaVersion !== 1 || fixtures.cases?.length !== 35

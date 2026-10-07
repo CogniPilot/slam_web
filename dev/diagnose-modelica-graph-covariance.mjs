@@ -5,7 +5,7 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const phase=process.env.OMC_COVARIANCE_PHASE??'check';if(!['check','translate'].includes(phase))throw Error('Expected check or translate');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'graph-covariance-phase-'));
-const names=['models/ModelicaPoseGraph.mo','models/ModelicaPoseGraphCovariance.mo','tests/modelica/ModelicaPoseGraphCovarianceTests.mo','tests/modelica/ModelicaPoseGraphCovarianceAcceptance.mo'];
+const names=['models/Optimization/ModelicaPoseGraph.mo','models/Optimization/ModelicaPoseGraphCovariance.mo','tests/modelica/ModelicaPoseGraphCovarianceTests.mo','tests/modelica/ModelicaPoseGraphCovarianceAcceptance.mo'];
 const sha=b=>createHash('sha256').update(b).digest('hex'),sources=names.map(p=>({path:p,sha256:sha(fs.readFileSync(path.join(app,p)))}));
 const script=path.join(output,'phase.mos');fs.writeFileSync(script,'setDebugFlags("gen,execstat,-evalfunc,-nfEvalConstArgFuncs,-nfExpandFuncArgs,-nfExpandOperations,nfScalarize");\n'
  +names.map(p=>`loadFile(${JSON.stringify(path.join(app,p))});`).join('\n')

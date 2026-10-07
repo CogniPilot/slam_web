@@ -37,8 +37,8 @@ it('full14400 actual registration WASM feeds calibrated relative body-pose WASM 
   const compiler=await import(/* @vite-ignore */ pathToFileURL(resolve(directory,'rumoca_bind_wasm.js')).href);
   const compilerBytes=readFileSync(resolve(directory,'rumoca_bind_wasm_bg.wasm'));
   await compiler.default({module_or_path:compilerBytes});
-  const registrationSource=readFileSync('models/RigidPointRegistration.mo','utf8');
-  const relativeSource=readFileSync('models/RGBDRelativePose.mo','utf8');
+  const registrationSource=readFileSync('models/Math/RigidPointRegistration.mo','utf8');
+  const relativeSource=readFileSync('models/Estimation/Localization/RGBDRelativePose.mo','utf8');
   const registrationRaw=readFileSync(registrationFile,'utf8');
   const registrationArtifact:NativeProgramArtifact=JSON.parse(registrationRaw);
   const artifactDirectory=process.env.RUMOCA_CHAIN_ARTIFACT_DIR;

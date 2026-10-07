@@ -27,7 +27,7 @@ function continuousSolution(F:Matrix,G:Matrix,P:Matrix,density:number[],dt:numbe
 
 it('full Modelica ES15 prediction preserves covariance and inertial noise coupling',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const source=readFileSync('models/ES15CovariancePrediction.mo','utf8');
+  const source=readFileSync('models/Estimation/Inertial/ES15CovariancePrediction.mo','utf8');
   const session=rumoca.WasmSimulationSession.withInteractiveOptions(source,'ES15CovariancePrediction',.1,'rk-like',1e-12,1e-12,'[]');
   try {
     const F=matrix(15,15,()=>0),G=matrix(15,12,()=>0);

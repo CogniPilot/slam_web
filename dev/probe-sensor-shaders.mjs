@@ -10,7 +10,7 @@ try{
   const page=await browser.newPage({viewport:{width:1440,height:1000}});
   await page.goto(process.env.SLAM_PROFILE_URL??'http://127.0.0.1:4173');
   await page.waitForFunction(()=>window.__slamLab?.initialized,{},{timeout:90000});
-  const algorithm=await readFile(new URL('../models/ModelicaInertial.mo',import.meta.url),'utf8');
+  const algorithm=await readFile(new URL('../models/Estimation/Inertial/ModelicaInertial.mo',import.meta.url),'utf8');
   await page.evaluate(async algorithm=>{
     const lab=window.__slamLab;Object.assign(lab.project,{algorithm,algorithmPreset:'Modelica inertial propagation',runtime:'modelica'});
     delete lab.project.algorithmArtifact;await lab.runtime.compile(lab.project);

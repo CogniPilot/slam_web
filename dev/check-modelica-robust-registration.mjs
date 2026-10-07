@@ -12,7 +12,7 @@ const scratch=path.join(home,'scratch/slam_web/tmp');fs.mkdirSync(scratch,{recur
 const output=fs.mkdtempSync(path.join(scratch,'robust-registration-'));
 const durable=path.join(app,'dev/artifacts/modelica-robust-registration',path.basename(output));fs.mkdirSync(durable,{recursive:true});
 const model='RGBDRobustRegistrationAcceptance',checkCount=24,rawRows=8,rawColumns=8;
-const sourceNames=['models/RigidPointRegistration.mo','tests/modelica/RGBDRobustRegistrationAcceptance.mo'];
+const sourceNames=['models/Math/RigidPointRegistration.mo','tests/modelica/RGBDRobustRegistrationAcceptance.mo'];
 const freezeNames=[...sourceNames,'dev/check-modelica-robust-registration.mjs','dev/rumoca-bounded-run.mjs'];
 const sha=x=>createHash('sha256').update(x).digest('hex');
 const copy=(source,target)=>{fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(source,target);};

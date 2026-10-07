@@ -8,7 +8,7 @@ import {NativeProgram,type NativeProgramArtifact} from '../../src/modelica-nativ
 const pkg=process.env.RUMOCA_BRANCH_PKG,artifactDirectory=process.env.RUMOCA_LANDMARK_ARTIFACT_DIRECTORY;
 const sessionGate=process.env.RUMOCA_LANDMARK_EXECUTION==='session';
 const enabled=Boolean(pkg||artifactDirectory)&&!sessionGate,sha=(v:string|Uint8Array)=>createHash('sha256').update(v).digest('hex');
-const source=readFileSync('models/RGBDLandmarkProjection.mo','utf8');
+const source=readFileSync('models/Mapping/RGBDLandmarkProjection.mo','utf8');
 const editedSource=source.replace('parameter Real coordinateLimit = 1e6;','parameter Real coordinateLimit = 1.0;');
 const identity=[1,0,0,0,1,0,0,0,1],opticalToBody=[0,0,1,-1,0,0,0,-1,0];
 type Frame={opticalPoint:number[],enabled:number[],activeCount:number,poseAccepted:number,bodyRotation:number[],bodyPosition:number[],opticalToBody:number[],cameraOriginBody:number[]};

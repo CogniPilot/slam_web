@@ -52,7 +52,7 @@ it.skipIf(!directory)(`actual Modelica rigid registration ${mode==='control'?'12
   const compiler:ReviewedCompiler=await import(/* @vite-ignore */ pathToFileURL(resolve(directory!,'rumoca_bind_wasm.js')).href);
   const wasm=readFileSync(resolve(directory!,'rumoca_bind_wasm_bg.wasm'));
   await compiler.default({module_or_path:wasm});
-  const original=readFileSync('models/RigidPointRegistration.mo','utf8');
+  const original=readFileSync('models/Math/RigidPointRegistration.mo','utf8');
   // A control is numerical evidence only. Full admission always uses the
   // original 14,400-point source and fills every matched point.
   const control=mode==='control',capacity=control?12:14400;

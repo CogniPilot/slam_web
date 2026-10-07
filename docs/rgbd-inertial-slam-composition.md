@@ -1,9 +1,9 @@
 # Full Modelica SLAM composition
 
 The full algorithm is the source-owned graph in
-[RGBDFastSLAMInterface.mo](../models/RGBDFastSLAMInterface.mo), with reset,
+[RGBDFastSLAMInterface.mo](../models/SLAM/RGBDFastSLAMInterface.mo), with reset,
 initialization, step and held-IMU interval entrypoints. Native D435 wrappers
-are in [D435FastSLAM.mo](../models/D435FastSLAM.mo). The non-executable
+are in [D435FastSLAM.mo](../models/SLAM/D435FastSLAM.mo). The non-executable
 RGBDInertialSLAM placeholder has been deleted; it is no longer a selectable
 estimator preset.
 

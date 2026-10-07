@@ -7,7 +7,7 @@ export async function openModelicaPropagation(page:Page,packedReadback?:boolean,
  await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.initialized&&lab.compiling===false;}),{timeout:90000}).toBe(true);
  if(packedReadback!==undefined)await page.evaluate(enabled=>(window as any).__slamLab.runtime.world.setSensorPackedReadback(enabled),packedReadback);
  if(readback!==undefined)await page.evaluate(mode=>(window as any).__slamLab.runtime.world.setSensorReadback(mode),readback);
- const source=readFileSync('models/ModelicaInertial.mo','utf8');
+ const source=readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8');
  const project=await page.evaluate(source=>{const project=structuredClone((window as any).__slamLab.project);project.name='Reference Modelica propagation';project.algorithm=source;project.algorithmPreset='Modelica inertial propagation';project.runtime='modelica';delete project.algorithmArtifact;return project;},source);
  await page.locator('#open').setInputFiles({name:'modelica-propagation.slam.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(project))});
  await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.project.name==='Reference Modelica propagation'&&lab.ready;}),{timeout:90000}).toBe(true);

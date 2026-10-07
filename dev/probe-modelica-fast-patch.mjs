@@ -11,7 +11,7 @@ if(!directory)throw Error('Expected BASE_SOURCE BASE_ARTIFACT EDITED_SOURCE EDIT
 fs.mkdirSync(directory,{recursive:true});
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const fixtureBytes=fs.readFileSync('dev/artifacts/fast-native-frame/independent-fixtures.json'),fixtures=JSON.parse(fixtureBytes);
-const original=fs.readFileSync('models/FastNativeFrame.mo','utf8');
+const original=fs.readFileSync('models/Vision/Features/FastNativeFrame.mo','utf8');
 if(fixtures.sourceSha256!==sha(original)||fixtures.patches.length!==23)throw Error('Independent original fixture mismatch');
 const sources=[baselineSourceFile,editedSourceFile].map(file=>fs.readFileSync(file,'utf8'));
 if(!sources[0].startsWith(original)||sources[1]!==sources[0].replace('responses[1] := 0.0;','responses[1] := 1.0;'))throw Error('Unexpected function/source edit');

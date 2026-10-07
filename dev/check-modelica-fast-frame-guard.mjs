@@ -12,10 +12,10 @@ const referenceFlags=`gen,-evalfunc,-nfEvalConstArgFuncs,-nfExpandFuncArgs,-nfEx
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'fast-frame-guard-semantics-'));
-const compilationNames=['models/FastNativeFrame.mo','tests/modelica/FastNativeFrameGuardTests.mo',
+const compilationNames=['models/Vision/Features/FastNativeFrame.mo','tests/modelica/FastNativeFrameGuardTests.mo',
   functionOnly?'tests/modelica/FastFrameScoresGuardAcceptance.mo':'tests/modelica/FastNativeFrameGuardAcceptance.mo'];
 const model=functionOnly?'FastFrameScoresGuardAcceptance':'FastNativeFrameGuardAcceptance';
-const wrapperNames=['models/RGBDFastInertialLocalizationStep.mo','models/RGBDFastInertialLocalizationInitialize.mo'];
+const wrapperNames=['models/Estimation/Localization/RGBDFastInertialLocalizationStep.mo','models/Estimation/Localization/RGBDFastInertialLocalizationInitialize.mo'];
 const names=[...compilationNames,...wrapperNames,'dev/check-modelica-fast-frame-guard.mjs'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));

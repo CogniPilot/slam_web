@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from './modelica-source-locations.mjs';
 // Shared authored-file order for Node export and opt-in browser composition.
 // This inventory selects source text only; Rumoca owns all compilation/math.
 const names=['FastNativeFrame','FeatureSelection','RGBDFeatureMatching','RigidPointRegistration',
@@ -19,20 +20,20 @@ const names=['FastNativeFrame','FeatureSelection','RGBDFeatureMatching','RigidPo
 export const rgbdSlamSourceManifest=Object.freeze({
   schemaVersion:1,
   modelNames:Object.freeze(['RGBDFastSLAMReset','RGBDFastSLAMInitialize','RGBDFastSLAMStep']),
-  paths:Object.freeze(names.map(name=>`models/${name}.mo`)),
+  paths:Object.freeze(names.map(name=>modelicaSourcePath(name))),
   separator:'\n',
   composition:'exact authored files joined with one newline, in this order',
   scope:'Staged image-parameterized FAST/350 RGB-D + IMU acquisition (historical90x160 model defaults); full128/256/14400 mapping and graph correction with one persistent source-owned State, actual optimizer and typed selected bound. Reference composition gates do not qualify the camera producer, full covariance convergence, actual public model execution, Rumoca WASM admission or browser throughput.'
 });
 
 // Native camera composition shares every algorithm and State capacity above.
-// Preserve the legacy inventory for saved workspaces; never silently upgrade
+// Preserve the historical file order for saved workspaces; never silently upgrade
 // a saved dependency by replacing it with a newer bundled file.
 export const rgbdSlamNativeSourceManifest=Object.freeze({
   ...rgbdSlamSourceManifest,
   modelNames:Object.freeze(['RGBDFastSLAMReset','D435FastSLAMInitialize','D435FastSLAMStep','D435FastSLAMIntervals']),
-  paths:Object.freeze([...rgbdSlamSourceManifest.paths,'models/RGBDFastSLAMIntervals.mo',
-    'models/D435ImageProfile.mo','models/D435FastSLAM.mo']),
+  paths:Object.freeze([...rgbdSlamSourceManifest.paths,'models/SLAM/RGBDFastSLAMIntervals.mo',
+    'models/Sensors/D435ImageProfile.mo','models/SLAM/D435FastSLAM.mo']),
   scope:rgbdSlamSourceManifest.scope+' Adds native D435 RGB3/Z16-code entrypoints with explicit source-owned depth units and full-capacity held-IMU batching; source availability does not establish typed input storage or browser execution.'
 });
 

@@ -11,7 +11,7 @@ const checkCount=54;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'graph-pose-correction-semantics-'));
-const names=['models/RGBDRegistrationUncertainty.mo','models/SchmidtRelativePoseCorrection.mo','models/GraphGaugeUncertainty.mo','models/SchmidtGraphPoseCorrection.mo','tests/modelica/GraphGaugeUncertaintyTests.mo','tests/modelica/SchmidtGraphPoseCorrectionTests.mo','tests/modelica/SchmidtGraphPoseCorrectionAcceptance.mo'];
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo','models/Optimization/GraphGaugeUncertainty.mo','models/Estimation/Inertial/SchmidtGraphPoseCorrection.mo','tests/modelica/GraphGaugeUncertaintyTests.mo','tests/modelica/SchmidtGraphPoseCorrectionTests.mo','tests/modelica/SchmidtGraphPoseCorrectionAcceptance.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=[...names,'dev/check-modelica-graph-pose-correction.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const script=path.join(output,'graph-pose-correction.mos');

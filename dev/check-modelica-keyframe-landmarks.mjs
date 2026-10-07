@@ -9,9 +9,9 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'keyframe-landmark-semantics-'));
-const names=['models/RGBDRegistrationUncertainty.mo','models/RGBDKeyframes.mo','models/RGBDSpatialIndex.mo',
-  'models/RGBDLandmarkMap.mo','models/RGBDMapAnchors.mo','models/RGBDMapAnchorAssignment.mo',
-  'models/RGBDAnchoredLandmarkMap.mo','models/RGBDLandmarkCatalog.mo','models/RGBDKeyframeLandmarks.mo',
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/LoopClosure/RGBDKeyframes.mo','models/Mapping/RGBDSpatialIndex.mo',
+  'models/Mapping/RGBDLandmarkMap.mo','models/Mapping/RGBDMapAnchors.mo','models/Mapping/RGBDMapAnchorAssignment.mo',
+  'models/Mapping/RGBDAnchoredLandmarkMap.mo','models/Mapping/RGBDLandmarkCatalog.mo','models/Mapping/RGBDKeyframeLandmarks.mo',
   'tests/modelica/RGBDKeyframeTests.mo','tests/modelica/RGBDKeyframeLandmarkTests.mo',
   'tests/modelica/RGBDKeyframeLandmarkAcceptance.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');

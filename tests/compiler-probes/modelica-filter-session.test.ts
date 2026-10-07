@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {beforeAll,afterAll,it,expect} from 'vitest';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {resolve} from 'node:path';
@@ -25,7 +26,7 @@ function save(){if(process.env.RUMOCA_FILTER_SESSION_REPORT)writeFileSync(proces
 beforeAll(async()=>{
   if(!enabled)return;
   const files=['ES15NominalPrediction','ES15Dynamics','ES15CovariancePrediction','SPD6Solve','ES15PoseCorrection','ES15FilterStep'];
-  source=process.env.RUMOCA_FILTER_SESSION_SOURCE?readFileSync(process.env.RUMOCA_FILTER_SESSION_SOURCE,'utf8'):files.map(f=>readFileSync(`models/${f}.mo`,'utf8')).join('\n');
+  source=process.env.RUMOCA_FILTER_SESSION_SOURCE?readFileSync(process.env.RUMOCA_FILTER_SESSION_SOURCE,'utf8'):files.map(f=>readFileSync(modelicaSourcePath(f),'utf8')).join('\n');
   editedSource=source.replace('next_accepted_count = accepted_count+observation_accepted;','next_accepted_count = accepted_count+observation_accepted+1.0;');
   expect(editedSource).not.toBe(source);report.sourceSha256=sha(source);report.editedSourceSha256=sha(editedSource);save();
   if(artifactDirectory){

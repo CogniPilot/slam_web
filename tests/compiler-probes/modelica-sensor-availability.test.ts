@@ -8,7 +8,7 @@ const directory=process.env.RUMOCA_BRANCH_PKG;
 it.skipIf(!directory)('actual Modelica standalone GPS gate preserves inclusive roof faces, edits and disabled-volume behavior before draws',async()=>{
   const compiler:typeof Rumoca=await import(/* @vite-ignore */ pathToFileURL(resolve(directory!,'rumoca_bind_wasm.js')).href);
   await compiler.default({module_or_path:readFileSync(resolve(directory!,'rumoca_bind_wasm_bg.wasm'))});
-  const session=compiler.WasmSimulationSession.withInteractiveOptions(readFileSync('models/SensorAvailability.mo','utf8'),'SensorAvailability',1/90,'rk-like',1e-12,1e-12,'[]');
+  const session=compiler.WasmSimulationSession.withInteractiveOptions(readFileSync('models/Sensors/SensorAvailability.mo','utf8'),'SensorAvailability',1/90,'rk-like',1e-12,1e-12,'[]');
   let tick=0;
   const check=(position:number[],enabled:number,minimum=[35.8,-5.2,0],maximum=[48.2,5.2,3.8])=>{
     const inputs=[['roofEnabled',enabled],...position.map((v,i)=>[`positionTruth[${i+1}]`,v]),...minimum.map((v,i)=>[`roofMinimum[${i+1}]`,v]),...maximum.map((v,i)=>[`roofMaximum[${i+1}]`,v])];

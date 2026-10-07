@@ -16,8 +16,8 @@ const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const historical='dev/artifacts/modelica-raw-image-inputs/native-source-2026-10-07';
 const manifest=JSON.parse(fs.readFileSync(historical+'/source-manifest.json')),combined=fs.readFileSync(historical+'/source.mo');
 assert.equal(sha(combined),manifest.sourceSha256);let offset=0,before;
-for(const entry of manifest.sources){const bytes=combined.subarray(offset,offset+entry.bytes);assert.equal(sha(bytes),entry.sha256);if(entry.path==='models/RGBDKeyframes.mo')before=String(bytes);offset+=entry.bytes+1;}
-assert(before);const current=fs.readFileSync('models/RGBDKeyframes.mo','utf8');
+for(const entry of manifest.sources){const bytes=combined.subarray(offset,offset+entry.bytes);assert.equal(sha(bytes),entry.sha256);if(entry.path==='models/LoopClosure/RGBDKeyframes.mo')before=String(bytes);offset+=entry.bytes+1;}
+assert(before);const current=fs.readFileSync('models/LoopClosure/RGBDKeyframes.mo','utf8');
 const fixture=fs.readFileSync('tests/modelica/RGBDCatalogEquationBindingAcceptance.mo','utf8');
 const omc=process.env.OMC_BIN??'omc',version=spawnSync(omc,['--version'],{encoding:'utf8'});assert.equal(version.status,0);
 const cases=[];
@@ -29,7 +29,7 @@ for(const [name,source] of [['before',before],['after',current]]){
   const script=path.join(directory,'check.mos');fs.writeFileSync(script,
     'setDebugFlags("gen,-evalfunc,-nfEvalConstArgFuncs,-nfExpandFuncArgs,-nfExpandOperations,nfScalarize");\n'+
     'setCommandLineOptions("--preOptModules-=evalFunc");\n'+
-    `loadFile(${JSON.stringify(path.join(app,'models/RGBDRegistrationUncertainty.mo'))});\n`+
+    `loadFile(${JSON.stringify(path.join(app,'models/Estimation/Localization/RGBDRegistrationUncertainty.mo'))});\n`+
     'loadFile("RGBDKeyframes.mo");\nloadFile("acceptance.mo");\ngetErrorString();\n'+
     'checkModel(RGBDCatalogEquationBindingAcceptance);\ngetErrorString();\n'+
     'simulate(RGBDCatalogEquationBindingAcceptance,stopTime=0.001,numberOfIntervals=1,outputFormat="csv",variableFilter="checks.*",cflags="-O0");\ngetErrorString();\n');
@@ -47,7 +47,7 @@ for(const [name,source] of [['before',before],['after',current]]){
   cases.push({name,sourceSha256:sha(source),diagnosticSourceSha256:sha(reduced),capacities,overdetermined,succeeded,checks,resources:JSON.parse(result.stdout),logSha256:sha(log)});
   fs.cpSync(directory,path.join(root,path.basename(output),name),{recursive:true,filter:file=>!fs.statSync(file).isFile()||/\.(?:mo|mos|json|csv|log)$/.test(file)});
 }
-const bookendsEqual=sha(fs.readFileSync('models/RGBDKeyframes.mo'))===sha(current);
+const bookendsEqual=sha(fs.readFileSync('models/LoopClosure/RGBDKeyframes.mo'))===sha(current);
 const passed=bookendsEqual&&cases[0].overdetermined&&!cases[0].succeeded&&cases[1].succeeded&&!cases[1].overdetermined&&cases[1].checks.length===7&&cases[1].checks.every(Boolean);
 const report={recordedAt:new Date().toISOString(),passed,bookendsEqual,compilerVersion:version.stdout.trim(),historicalSourceSha256:manifest.sourceSha256,cases,
   scope:'OMC equation-balance regression, same actual Catalog and Empty source with explicit small diagnostic capacities. Original declaration bindings must fail model simulation; corrected source must simulate and preserve seven initialization values. Full-capacity State behavior and Rumoca WASM issuance require separate evidence.'};

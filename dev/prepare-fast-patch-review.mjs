@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 const [directory]=process.argv.slice(2);
 if(!directory)throw Error('Expected owned OUTPUT_DIRECTORY');
 const sha=b=>createHash('sha256').update(b).digest('hex');
-const original=fs.readFileSync('models/FastNativeFrame.mo','utf8');
+const original=fs.readFileSync('models/Vision/Features/FastNativeFrame.mo','utf8');
 const fixtures=fs.readFileSync('dev/artifacts/fast-native-frame/independent-fixtures.json');
 if(JSON.parse(fixtures).sourceSha256!==sha(original))throw Error('Independent fixture source changed');
 const wrapper='\nmodel FastPatchNativeProbe\n  input Real gray[7,7] = fill(0.0,7,7);\n  output Real score;\nequation\n  score = FastPatchScore(gray);\nend FastPatchNativeProbe;\n';

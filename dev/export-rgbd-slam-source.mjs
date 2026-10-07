@@ -15,7 +15,7 @@ const intervals=modes.includes('--intervals')||nativeProfile;
 // Keep existing saved browser workspaces intact while the typed Rumoca State
 // boundary is pending. The explicit compiler-review composition adds the
 // source-owned camera transaction without silently changing their dependencies.
-const paths=nativeProfile?nativeManifest.paths:[...manifest.paths,...(intervals?['models/RGBDFastSLAMIntervals.mo']:[])];
+const paths=nativeProfile?nativeManifest.paths:[...manifest.paths,...(intervals?['models/SLAM/RGBDFastSLAMIntervals.mo']:[])];
 const modelNames=nativeProfile?nativeManifest.modelNames
   :intervals?[...manifest.modelNames,'RGBDFastSLAMIntervals']:manifest.modelNames;
 const sha=value=>createHash('sha256').update(value).digest('hex');

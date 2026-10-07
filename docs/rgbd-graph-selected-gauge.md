@@ -1,6 +1,6 @@
 # Selected graph poses in an uncertain absolute gauge
 
-`models/RGBDGraphSelectedGauge.mo` owns the numerical adapter between the
+`models/Optimization/RGBDGraphSelectedGauge.mo` owns the numerical adapter between the
 selected graph covariance and `GraphGaugeUncertainty.Transport`. Its
 `SelectAndTransport` function prepares the actual measured graph, maps the
 supplied final poses from catalog slots into graph-node order, runs the actual

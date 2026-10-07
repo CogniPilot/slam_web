@@ -4,7 +4,7 @@ import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import init,* as pinned from '@cognipilot/rumoca';
-const source=readFileSync('models/LabQuadrotor.mo','utf8');
+const source=readFileSync('models/Vehicles/LabQuadrotor.mo','utf8');
 const sha=(s:string|Uint8Array)=>createHash('sha256').update(s).digest('hex');
 const value=(v:Record<string,number>,name:string)=>{expect(Number.isFinite(v[name]),name).toBe(true);return v[name];};
 const near=(a:number,b:number,label:string,tolerance=1e-7)=>expect(Math.abs(a-b),label).toBeLessThanOrEqual(tolerance*Math.max(1,Math.abs(b)));

@@ -19,7 +19,7 @@ it.skipIf(!directory)('Modelica sensor equations preserve all IMU/GPS axes and r
   const compiler:typeof Rumoca=await import(/* @vite-ignore */ pathToFileURL(resolve(directory!,'rumoca_bind_wasm.js')).href);
   const wasm=readFileSync(resolve(directory!,'rumoca_bind_wasm_bg.wasm'));
   await compiler.default({module_or_path:wasm});
-  const source=readFileSync('models/SensorObservations.mo','utf8');
+  const source=readFileSync('models/Sensors/SensorObservations.mo','utf8');
   console.info(JSON.stringify({event:'sensor_equations_provenance',revision:compiler.get_git_commit(),compilerSha256:createHash('sha256').update(wasm).digest('hex'),sourceSha256:createHash('sha256').update(source).digest('hex'),ticks:90}));
   const make=(name:string,text=source)=>compiler.WasmSimulationSession.withInteractiveOptions(text,name,1/90,'rk-like',1e-12,1e-12,'[]');
   const preparationStart=performance.now();
@@ -65,7 +65,7 @@ it.skipIf(!directory)('Modelica independent truth-reference/error oracle preserv
   const compiler:typeof Rumoca=await import(/* @vite-ignore */ pathToFileURL(resolve(directory!,'rumoca_bind_wasm.js')).href);
   await compiler.default({module_or_path:readFileSync(resolve(directory!,'rumoca_bind_wasm_bg.wasm'))});
   const make=(path:string,name:string)=>compiler.WasmSimulationSession.withInteractiveOptions(readFileSync(path,'utf8'),name,1/90,'rk-like',1e-12,1e-12,'[]');
-  const evaluation=make('models/RuntimeEvaluation.mo','RuntimeEvaluation');
+  const evaluation=make('models/Evaluation/RuntimeEvaluation.mo','RuntimeEvaluation');
   let tick=0,previous=0;
   const evaluate=(s:typeof evaluation,input:Input[])=>{s.set_inputs(JSON.stringify(input));s.advance_to(++tick/90);return JSON.parse(s.state_json()).values as Record<string,number>;};
   const product=(a:number[],b:number[])=>{

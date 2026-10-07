@@ -1,4 +1,5 @@
 import {rgbdSlamManifest,type RGBDSlamSourceProfile} from './modelica-slam-source-manifest.mjs';
+import {migrateModelicaSourcePath} from './modelica-source-locations.mjs';
 
 /** A complete saved text inventory, independent of future bundled sources.
  * This is a source workspace, not an estimator State or executable artifact.
@@ -42,13 +43,18 @@ export function checkedRGBDSlamWorkspace(value:unknown):RGBDSlamWorkspace{
   if(schemaVersion!==1&&schemaVersion!==2)throw new Error('Unsupported Modelica workspace schemaVersion');
   const manifest=rgbdSlamWorkspaceManifest(schemaVersion),knownPaths=new Set(manifest.paths);
   const input=plainRecord(dataValue(record,'sources'),'Modelica workspace sources');
+  const originalKeys=new Map<string,string>();
   for(const key of Reflect.ownKeys(input)){
-    if(typeof key!=='string'||!knownPaths.has(key))
+    if(typeof key!=='string')
       throw new Error(`Unknown Modelica workspace source path: ${String(key)}`);
+    const path=migrateModelicaSourcePath(key);
+    if(!knownPaths.has(path))throw new Error(`Unknown Modelica workspace source path: ${key}`);
+    if(originalKeys.has(path))throw new Error(`Duplicate Modelica workspace source path: ${path}`);
+    originalKeys.set(path,key);
   }
   const sources:Record<string,string>={};
   for(const path of manifest.paths){
-    const source=dataValue(input,path);
+    const source=dataValue(input,originalKeys.get(path)??path);
     if(typeof source!=='string')throw new Error(`Modelica workspace source must be a string: ${path}`);
     sources[path]=source;
   }

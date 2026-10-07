@@ -23,7 +23,7 @@ function inverseFromFactor(L:Matrix):Matrix {
 
 it('Modelica shared SPD solve recovers all sixteen RHS and rejects unusable covariance',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const source=readFileSync('models/SPD6Solve.mo','utf8');
+  const source=readFileSync('models/Math/SPD6Solve.mo','utf8');
   const session=rumoca.WasmSimulationSession.withInteractiveOptions(source,'SPD6Solve',.1,'rk-like',1e-12,1e-12,'[]');
   let time=0;
   const evaluate=(A:Matrix,B:Matrix)=>{

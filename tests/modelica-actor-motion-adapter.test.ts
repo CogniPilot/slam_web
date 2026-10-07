@@ -12,7 +12,7 @@ const vector=(value:number)=>Array.from({length:6},()=>value);
 
 it('production WASM adapter returns complete edited actor batches for negative/repeated/rewound sample time using a monotonic dispatch clock',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const project=defaultProject(),source=readFileSync('models/ActorMotion.mo','utf8');
+  const project=defaultProject(),source=readFileSync('models/Scene/ActorMotion.mo','utf8');
   const clocks:number[]=[],inputs:number[]=[];
   const tracked:AlgebraicFactory=(text,model)=>{
     const session=make(text,model);
@@ -56,7 +56,7 @@ it('production WASM adapter returns complete edited actor batches for negative/r
 
 it('actor initialization refuses missing/renamed interfaces and frees every created production session',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const project=defaultProject(),source=readFileSync('models/ActorMotion.mo','utf8');
+  const project=defaultProject(),source=readFileSync('models/Scene/ActorMotion.mo','utf8');
   for(const [actorSource,count,message] of [['model Unrelated end Unrelated;',3,'ActorMotion initialization failed'],[source.replaceAll('east[','easting['),4,'finite east[1]']] as const){
     let created=0,freed=0;
     const traced:AlgebraicFactory=(text,model)=>{
@@ -85,7 +85,7 @@ it('actor boundary validation refuses malformed batches and preserves finite sig
 
 it('scene route inputs keep pedestrians on sidewalks and cars in lanes, and preserve legacy authored sources',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const project=defaultProject(),source=readFileSync('models/ActorMotion.mo','utf8');
+  const project=defaultProject(),source=readFileSync('models/Scene/ActorMotion.mo','utf8');
   const math=new ModelicaRuntimeMath(make,project.sensorModelica!,project.evaluationModelica!,origin,source);
   const legacySource=source.replace(/  input Real (useSceneRoutes|pedestrianRouteRadius|carRouteRadius) = [^;]+;\n/g,'')
     .replace(/    effectiveRadius\[i\] = radius\[i\]\+useSceneRoutes\*\n      \(\(if i <= 3 then pedestrianRouteRadius else carRouteRadius\)-radius\[i\]\);/,'    effectiveRadius[i] = radius[i];').replaceAll('useSceneRoutes*','0.0*');

@@ -10,7 +10,7 @@ const legacy=(session:rumoca.WasmSimulationSession)=>({time:session.time(),x:ses
 
 it('one Rumoca snapshot preserves every truth/IMU field, exact time, reset, and model interface checks',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
-  const source=readFileSync('models/LabQuadrotor.mo','utf8');
+  const source=readFileSync('models/Vehicles/LabQuadrotor.mo','utf8');
   const create=(text:string)=>rumoca.WasmSimulationSession.withInteractiveOptions(text,'LabQuadrotor',.005,'rk-like',1e-8,1e-6,
     '[["forward",0],["left",0],["up",0],["yaw",0]]');
   const edited=source.replace('mass = 2.0','mass = 2.4');expect(edited).not.toBe(source);

@@ -1,6 +1,6 @@
 # Correlated relative-pose correction
 
-`models/SchmidtRelativePoseCorrection.mo` proposes a correction of the current
+`models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo` proposes a correction of the current
 15-state inertial estimate while retaining a six-state reference pose as a
 Schmidt state. It does not treat that reference as pose truth. The current error
 order is `[dp,dv,dtheta,dba,dbg]`; the augmented order appends

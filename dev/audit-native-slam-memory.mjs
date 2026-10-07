@@ -13,18 +13,18 @@ const source=sourceFiles.map(file=>file.source).join(manifest.separator),sourceS
 const text=file=>sourceFiles.find(entry=>entry.path===file).source;
 const constants=file=>Object.fromEntries([...text(file).matchAll(/constant Integer (\w+)\s*=\s*(\d+)\s*;/g)]
   .map(match=>[match[1],Number(match[2])]));
-const catalogConstants=constants('models/RGBDKeyframes.mo'),camera=constants('models/D435ImageProfile.mo');
+const catalogConstants=constants('models/LoopClosure/RGBDKeyframes.mo'),camera=constants('models/Sensors/D435ImageProfile.mo');
 // Require the exact owning record links; this is not field-name inference in
 // the runtime. It documents the source assumptions behind this partial bound.
 for(const [file,fragment] of [
-  ['models/RGBDGraphProcessing.mo','RGBDGraphEstimatorCommit.State estimator;'],
-  ['models/RGBDGraphEstimatorCommit.mo','RGBDLocalizationCatalog.State localization;'],
-  ['models/RGBDLocalizationCatalog.mo','RGBDKeyframes.Catalog catalog;'],
-  ['models/RGBDFastSLAMInterface.mo','input RGBDGraphProcessing.State previous;'],
-  ['models/RGBDFastSLAMInterface.mo','output RGBDGraphProcessing.State next;'],
-  ['models/D435FastSLAM.mo','channelCount=D435ImageProfile.colorChannels'],
+  ['models/Optimization/RGBDGraphProcessing.mo','RGBDGraphEstimatorCommit.State estimator;'],
+  ['models/Optimization/RGBDGraphEstimatorCommit.mo','RGBDLocalizationCatalog.State localization;'],
+  ['models/Estimation/Localization/RGBDLocalizationCatalog.mo','RGBDKeyframes.Catalog catalog;'],
+  ['models/SLAM/RGBDFastSLAMInterface.mo','input RGBDGraphProcessing.State previous;'],
+  ['models/SLAM/RGBDFastSLAMInterface.mo','output RGBDGraphProcessing.State next;'],
+  ['models/SLAM/D435FastSLAM.mo','channelCount=D435ImageProfile.colorChannels'],
 ])assert.ok(text(file).includes(fragment),`Source ownership changed: ${file}`);
-const record=text('models/RGBDKeyframes.mo').match(/record Catalog\b([\s\S]*?)end Catalog;/)[1];
+const record=text('models/LoopClosure/RGBDKeyframes.mo').match(/record Catalog\b([\s\S]*?)end Catalog;/)[1];
 const fields=['descriptors','opticalPoints'].map(name=>{
   const declaration=record.match(new RegExp(`Real ${name}\\[([^\\]]+)\\];`));
   assert.ok(declaration,`Missing Real catalog field: ${name}`);

@@ -12,7 +12,7 @@ const compilerDirectory=path.resolve(process.argv[3]??'public/vendor/rumoca');
 const executionPolicy=process.argv[4]??'legacy';
 if(!['legacy','auto','interpreter'].includes(executionPolicy))throw new Error('Policy must be legacy, auto or interpreter');
 await fs.mkdir(output,{recursive:true});
-const source=await fs.readFile('models/LabQuadrotor.mo');
+const source=await fs.readFile('models/Vehicles/LabQuadrotor.mo');
 const compiler=await fs.readFile(path.join(compilerDirectory,'rumoca_bind_wasm.js'));
 const wasm=await fs.readFile(path.join(compilerDirectory,'rumoca_bind_wasm_bg.wasm'));
 const sha=data=>createHash('sha256').update(data).digest('hex');

@@ -31,11 +31,32 @@ it('validates saved sources without retaining caller-owned maps',()=>{
   expect(input.sources[path]).toBe('// later external mutation');
 });
 
+it('migrates flat saved paths while preserving every edited source byte',()=>{
+  const sources=Object.fromEntries(Object.entries(authored()).map(([path,source])=>[
+    `models/${path.split('/').at(-1)}`,source
+  ]));
+  const edit='\uFEFF// élève λ\r\n\r\n';
+  sources['models/FastNativeFrame.mo']=edit;
+  sources['models/RGBDFastSLAMReset.mo']='';
+  const reopened=checkedRGBDSlamWorkspace({schemaVersion:1,sources});
+  expect(Object.keys(reopened.sources)).toEqual(manifest.paths);
+  expect(reopened.sources['models/Vision/Features/FastNativeFrame.mo']).toBe(edit);
+  expect(reopened.sources['models/SLAM/RGBDFastSLAMReset.mo']).toBe('');
+});
+
+it('refuses conflicting old and new path identities without reading a getter',()=>{
+  const sources=authored();
+  Object.defineProperty(sources,'models/FastNativeFrame.mo',{
+    get(){throw Error('Getter must not run');}
+  });
+  expect(()=>checkedRGBDSlamWorkspace({schemaVersion:1,sources})).toThrow('Duplicate');
+});
+
 it('retains saved dependency versions, Unicode, empty text and CRLF across JSON save/load and byte-exact assembly',async()=>{
   const original=await createRGBDSlamWorkspace();
   // A non-entrypoint dependency is saved too, rather than filled from today's bundle.
   const edit='\uFEFF// ancienne dépendance λ 😀\r\nmodel SavedDependency\r\nend SavedDependency;\r\n\r\n';
-  const edited=editRGBDSlamWorkspace(editRGBDSlamWorkspace(original,path,edit),'models/RGBDFastSLAMReset.mo','');
+  const edited=editRGBDSlamWorkspace(editRGBDSlamWorkspace(original,path,edit),'models/SLAM/RGBDFastSLAMReset.mo','');
   expect(original.sources[path]).toBe(readFileSync(path,'utf8'));
   expect(edited.sources).not.toBe(original.sources);
   const loaded=checkedRGBDSlamWorkspace(JSON.parse(JSON.stringify(edited)));
@@ -47,7 +68,7 @@ it('retains saved dependency versions, Unicode, empty text and CRLF across JSON 
   expect(assembled.sources).toEqual(manifest.paths.map(path=>({path,sha256:sha(loaded.sources[path]),
     bytes:Buffer.byteLength(loaded.sources[path]),overridden:true})));
   expect(loaded.sources[path]).toBe(edit);
-  expect(loaded.sources['models/RGBDFastSLAMReset.mo']).toBe('');
+  expect(loaded.sources['models/SLAM/RGBDFastSLAMReset.mo']).toBe('');
 });
 
 it('accepts plain null-prototype snapshots and copies non-enumerable data entries',()=>{
@@ -91,7 +112,7 @@ it('refuses incomplete snapshots instead of replacing a missing dependency with 
   expect(()=>editRGBDSlamWorkspace(input as never,path,'repair')).toThrow('data property');
 });
 
-it.each(['Unknown.mo','models/Unknown.mo','../models/FastNativeFrame.mo','models/../models/FastNativeFrame.mo','__proto__'])
+it.each(['Unknown.mo','models/Unknown.mo','../models/Vision/Features/FastNativeFrame.mo','models/../models/Vision/Features/FastNativeFrame.mo','__proto__'])
 ('rejects unknown saved and edited path %s',unknown=>{
   const input=snapshot();Object.defineProperty(input.sources,unknown,{value:'edit',enumerable:true});
   expect(()=>checkedRGBDSlamWorkspace(input)).toThrow('Unknown Modelica workspace source path');

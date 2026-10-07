@@ -10,7 +10,7 @@ const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'matching-active-domain-'));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-const names=['models/RGBDFeatureMatching.mo','tests/modelica/RGBDMatchingDenseReference.mo',
+const names=['models/Vision/Matching/RGBDFeatureMatching.mo','tests/modelica/RGBDMatchingDenseReference.mo',
   'tests/modelica/RGBDMatchingActiveDomainTests.mo','dev/check-modelica-matching-active-domain.mjs'];
 const sources=names.map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 for(const source of sources){

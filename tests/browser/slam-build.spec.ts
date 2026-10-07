@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {test,expect,type Page} from '@playwright/test';
 import {readFileSync,appendFileSync} from 'node:fs';
 import path from 'node:path';
@@ -13,8 +14,8 @@ async function openWorkspace(page:Page){
   progress('seed');
   const fixture={format:'slam-lab-project',version:1,name:'Browser WASM build check',environment:'warehouse',seed:7,
     sceneDetail:'low',depthCloudEnabled:false,carsEnabled:false,peopleEnabled:false,
-    algorithm:readFileSync('models/ModelicaInertial.mo','utf8'),algorithmPreset:'Modelica inertial propagation',
-    physics:readFileSync('models/LabQuadrotor.mo','utf8'),detector:['D435ImageProfile','FastNativeFrame','D435FastFeatures'].map(name=>readFileSync(`models/${name}.mo`,'utf8')).join('\n'),
+    algorithm:readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8'),algorithmPreset:'Modelica inertial propagation',
+    physics:readFileSync('models/Vehicles/LabQuadrotor.mo','utf8'),detector:['D435ImageProfile','FastNativeFrame','D435FastFeatures'].map(name=>readFileSync(modelicaSourcePath(name),'utf8')).join('\n'),
     detectorPreset:'Modelica FAST · integration pending',detectorLanguage:'modelica',runtime:'modelica',graph:defaultGraph()};
   // Seed storage on the actual origin without starting a disposable city and
   // compiler session through the static server's index fallback.
@@ -35,7 +36,7 @@ async function openWorkspace(page:Page){
   await page.getByRole('button',{name:'▶ Run',exact:true}).click();
   progress('baseline ready');
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
-  await page.getByLabel('SLAM source file').selectOption('models/RGBDFastSLAMReset.mo');
+  await page.getByLabel('SLAM source file').selectOption('models/SLAM/RGBDFastSLAMReset.mo');
   await expect(page.getByRole('button',{name:'Check WASM build',exact:true})).toBeVisible();
   const snapshot=await page.evaluate(()=>{
     const project=(window as any).__slamLab.project;
@@ -80,7 +81,7 @@ test('actual CI compiler refusal is visible and a synchronous WASM build can be 
     if(!['rumoca_bind_wasm.js','rumoca_bind_wasm_bg.wasm'].includes(name))return route.continue();
     return route.fulfill({body:readFileSync(path.join(candidate!,name)),contentType:name.endsWith('.wasm')?'application/wasm':'text/javascript'});
   });
-  const edited=readFileSync('models/RGBDFastSLAMReset.mo','utf8')+'\n// Edited while the prior snapshot compiles.\n';
+  const edited=readFileSync('models/SLAM/RGBDFastSLAMReset.mo','utf8')+'\n// Edited while the prior snapshot compiles.\n';
   // Change source in the progress notification's microtask, before the final
   // worker response can be dispatched, independent of rendering speed.
   await page.evaluate(source=>{
@@ -103,7 +104,7 @@ test('actual CI compiler refusal is visible and a synchronous WASM build can be 
   await expect(page.locator('#slam-build-result')).toContainText('RGBDFastSLAMReset');
   await expect(page.locator('#slam-build-result')).toContainText('Source changed during this build');
   const editedWorkspace=await page.evaluate(()=>(window as any).__slamLab.project.slamWorkspace);
-  expect(editedWorkspace.sources['models/RGBDFastSLAMReset.mo']).toBe(edited);
+  expect(editedWorkspace.sources['models/SLAM/RGBDFastSLAMReset.mo']).toBe(edited);
   const editedSha256=sha(manifest.paths.map(file=>editedWorkspace.sources[file]).join(manifest.separator));
   expect(editedSha256).not.toBe(before.sourceSha256);
   await testInfo.attach('ci-compiler-build.json',{body:JSON.stringify(receipt,null,2),contentType:'application/json'});

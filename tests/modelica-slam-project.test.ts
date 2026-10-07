@@ -4,7 +4,7 @@ import {createRGBDSlamWorkspace,editRGBDSlamWorkspace} from '../src/modelica-sla
 import {assembleRGBDSlamSource} from '../src/modelica-slam-source';
 
 it('downloads and reopens all SLAM dependency sources without changing the active estimator',async()=>{
-  const project=defaultProject(),path='models/RGBDFastSLAMInterface.mo';
+  const project=defaultProject(),path='models/SLAM/RGBDFastSLAMInterface.mo';
   const original=await createRGBDSlamWorkspace();
   const edited='// Student policy edit λ\r\n'+original.sources[path].replace(
     'parameter Integer minimumMeasuredDescriptors = 8;','parameter Integer minimumMeasuredDescriptors = 12;');
@@ -23,7 +23,7 @@ it('downloads and reopens all SLAM dependency sources without changing the activ
 
 it('refuses a saved workspace with missing or unknown dependencies instead of silently substituting current sources',async()=>{
   const project=defaultProject(),workspace=await createRGBDSlamWorkspace();
-  const missing={...workspace,sources:{...workspace.sources}};delete missing.sources['models/RGBDFastSLAMStep.mo'];
+  const missing={...workspace,sources:{...workspace.sources}};delete missing.sources['models/SLAM/RGBDFastSLAMStep.mo'];
   expect(()=>parseProject(JSON.stringify({...project,slamWorkspace:missing}))).toThrow();
   expect(()=>parseProject(JSON.stringify({...project,slamWorkspace:{...workspace,
     sources:{...workspace.sources,'models/Unknown.mo':'model Unknown end Unknown;'}}}))).toThrow();

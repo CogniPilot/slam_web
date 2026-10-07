@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {it,expect} from 'vitest';
 import {readFile,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
@@ -30,7 +31,7 @@ function solve(a:Matrix,b:Matrix){
 
 it.skipIf(!directory)('composed Modelica filter step predicts, corrects and rejects without host numerical solves',async()=>{
   const files=['ES15NominalPrediction','ES15Dynamics','ES15CovariancePrediction','SPD6Solve','ES15PoseCorrection'];
-  const source=(await Promise.all([...files.map(name=>readFile(`models/${name}.mo`,'utf8')),readFile('tests/compiler-probes/fixtures/components/ES15FilterStep.mo','utf8')])).join('\n');
+  const source=(await Promise.all([...files.map(name=>readFile(modelicaSourcePath(name),'utf8')),readFile('tests/compiler-probes/fixtures/components/ES15FilterStep.mo','utf8')])).join('\n');
   const reportPath=process.env.RUMOCA_FILTER_STEP_REPORT;
   const report=async(value:unknown)=>{if(reportPath)await writeFile(reportPath,JSON.stringify(value,null,2)+'\n');};
   await report({phase:'initializing compiler',sourceSha256:createHash('sha256').update(source).digest('hex')});

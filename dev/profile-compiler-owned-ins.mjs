@@ -5,7 +5,7 @@ import {chromium} from '@playwright/test';
 const directory=process.argv[2];if(!directory)throw Error('OUTPUT_DIRECTORY required');fs.mkdirSync(directory,{recursive:true});
 const historical=fs.realpathSync('dist'),candidate=process.env.SLAM_INS_BUILD;if(!candidate)throw Error('SLAM_INS_BUILD required');
 const worker=directory=>{const names=fs.readdirSync(path.join(directory,'assets')).filter(n=>/^modelica-state\.worker-.*\.js$/.test(n));if(names.length!==1)throw Error('Expected one INS worker');return names[0];};
-const oldWorker=worker(historical),newWorker=worker(candidate),source=fs.readFileSync('models/ModelicaInertial.mo','utf8');
+const oldWorker=worker(historical),newWorker=worker(candidate),source=fs.readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8');
 const sha=s=>createHash('sha256').update(s).digest('hex');
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--enable-gpu','--use-gl=angle','--use-angle=gl']});
 const errors=[];

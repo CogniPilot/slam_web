@@ -36,7 +36,7 @@ it('assembles current native sources and preserves a previously saved compiler d
 
 it('saves and reopens native entrypoint, camera-profile and core edits as exact owned dependencies',async()=>{
   const workspace=await createRGBDSlamWorkspace('d435-native');
-  const path='models/D435FastSLAM.mo',profile='models/D435ImageProfile.mo';
+  const path='models/SLAM/D435FastSLAM.mo',profile='models/Sensors/D435ImageProfile.mo';
   const edit='\uFEFF// élève λ 😀\r\n'+workspace.sources[path]+'\r\n';
   const changed=editRGBDSlamWorkspace(editRGBDSlamWorkspace(workspace,path,edit),profile,'');
   const project=defaultProject(),reopened=parseProject(JSON.stringify({...project,slamWorkspace:changed}));
@@ -56,24 +56,24 @@ it('keeps old workspaces exact rather than silently adding native dependencies',
   const composition=await assembleRGBDSlamWorkspace(loaded);
   expect(composition.source).toBe(legacy.paths.map(file=>workspace.sources[file]).join('\n'));
   expect(composition.modelNames).toEqual(legacy.modelNames);
-  expect(()=>editRGBDSlamWorkspace(loaded,'models/D435FastSLAM.mo','edit')).toThrow('Unknown');
-  await expect(assembleRGBDSlamSource({'models/D435FastSLAM.mo':'edit'})).rejects.toThrow('Unknown');
+  expect(()=>editRGBDSlamWorkspace(loaded,'models/SLAM/D435FastSLAM.mo','edit')).toThrow('Unknown');
+  await expect(assembleRGBDSlamSource({'models/SLAM/D435FastSLAM.mo':'edit'})).rejects.toThrow('Unknown');
 });
 
 it('refuses missing native files and wrong-inventory schema tags instead of substituting bundled sources',async()=>{
   const nativeWorkspace=await createRGBDSlamWorkspace('d435-native'),old=await createRGBDSlamWorkspace();
   const missing={...nativeWorkspace,sources:{...nativeWorkspace.sources}};
-  delete missing.sources['models/RGBDFastSLAMIntervals.mo'];
+  delete missing.sources['models/SLAM/RGBDFastSLAMIntervals.mo'];
   expect(()=>checkedRGBDSlamWorkspace(missing)).toThrow('data property');
   expect(()=>checkedRGBDSlamWorkspace({...nativeWorkspace,schemaVersion:1})).toThrow('Unknown');
   expect(()=>checkedRGBDSlamWorkspace({...old,schemaVersion:2})).toThrow('data property');
   const getter={...nativeWorkspace,sources:{...nativeWorkspace.sources}};
-  Object.defineProperty(getter.sources,'models/D435FastSLAM.mo',{get(){throw Error('getter must not run');}});
+  Object.defineProperty(getter.sources,'models/SLAM/D435FastSLAM.mo',{get(){throw Error('getter must not run');}});
   expect(()=>checkedRGBDSlamWorkspace(getter)).toThrow('data property');
 });
 
 it('captures every saved native edit before asynchronous assembly begins',async()=>{
-  const workspace=await createRGBDSlamWorkspace('d435-native'),path='models/D435FastSLAM.mo';
+  const workspace=await createRGBDSlamWorkspace('d435-native'),path='models/SLAM/D435FastSLAM.mo';
   const pending=assembleRGBDSlamWorkspace(workspace);
   (workspace.sources as Record<string,string>)[path]='// later caller edit';
   expect((await pending).sources.find(file=>file.path===path)?.sha256).toBe(sha(readFileSync(path,'utf8')));

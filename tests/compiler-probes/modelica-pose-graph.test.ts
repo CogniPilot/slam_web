@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import {NativeProgram,type NativeProgramArtifact} from '../../src/modelica-native-program';
 import {admissibleGraphInputs,cost,eye,expQ,finiteDifferenceOptimizer,graphInputs,inverse,loopFixture,matrix,multiply,mv,norm,numericalJacobians,poseError,product,residual,rotation,transpose,type Edge,type Graph,type Matrix,type Pose} from './pose-graph-fixtures';
 
-const source=readFileSync('models/ModelicaPoseGraph.mo','utf8');
+const source=readFileSync('models/Optimization/ModelicaPoseGraph.mo','utf8');
 const graphArtifact=process.env.RUMOCA_POSE_GRAPH_ARTIFACT;
 const edgeArtifact=process.env.RUMOCA_POSE_GRAPH_EDGE_ARTIFACT;
 const sha=(s:string|Uint8Array)=>createHash('sha256').update(s).digest('hex');

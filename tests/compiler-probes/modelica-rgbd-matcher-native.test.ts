@@ -13,7 +13,7 @@ const sha=(data:string|Uint8Array)=>createHash('sha256').update(data).digest('he
 it.skipIf(!artifactPath)('source-issued full350 matcher executes independent reciprocal and rejection controls',async()=>{
   const bytes=readFileSync(artifactPath!);
   const artifact:NativeProgramArtifact=JSON.parse(bytes.toString());
-  const source=readFileSync('models/RGBDFeatureMatching.mo','utf8');
+  const source=readFileSync('models/Vision/Matching/RGBDFeatureMatching.mo','utf8');
   expect(artifact.model_name).toBe('RGBDFeatureMatching');
   const program=await NativeProgram.instantiate(artifact,source);
   expect(program.input('referenceDescriptor').length).toBe(350*49);
@@ -96,7 +96,7 @@ it.skipIf(!artifactPath)('source-issued full350 matcher executes independent rec
 },120_000);
 
 it.skipIf(!artifactPath||!editedArtifactPath)('actual Modelica ratio edit changes full-capacity matcher results after artifact reload',async()=>{
-  const source=readFileSync('models/RGBDFeatureMatching.mo','utf8');
+  const source=readFileSync('models/Vision/Matching/RGBDFeatureMatching.mo','utf8');
   const editedSource=source.replace('ratio = 0.8','ratio = 0.49');
   expect(editedSource).not.toBe(source);
   const baseline:NativeProgramArtifact=JSON.parse(readFileSync(artifactPath!,'utf8'));

@@ -10,7 +10,7 @@ const [compilerArgument,outputArgument]=process.argv.slice(2);
 if(!compilerArgument||!outputArgument)throw Error('Usage: node dev/probe-physics-private-pool.mjs compiler-directory output-directory');
 const directory=path.resolve(compilerArgument),output=path.resolve(outputArgument);
 await fs.mkdir(output,{recursive:true});
-const source=await fs.readFile('models/LabQuadrotor.mo');
+const source=await fs.readFile('models/Vehicles/LabQuadrotor.mo');
 const js=await fs.readFile(path.join(directory,'rumoca_bind_wasm.js'));
 const wasm=await fs.readFile(path.join(directory,'rumoca_bind_wasm_bg.wasm'));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');

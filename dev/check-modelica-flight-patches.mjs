@@ -100,8 +100,8 @@ try{
  const mat=fs.readFileSync(path.join(input,old.mat.path));assert(sha(mat)===old.mat.sha256,'Frozen actual flight MAT hash');
  copy(path.join(input,old.mat.path),path.join(output,'rendered-flight.mat'));copy(path.join(input,old.mat.path),path.join(durable,'rendered-flight.mat'));
  copy(path.join(input,'report.json'),path.join(durable,'input-report.json'));
- const productionNames=[...new Set([...rgbdSlamSourceManifest.paths,'models/RGBDFastSLAMIntervals.mo'])];
- const names=[...productionNames,'models/RGBDPatchTracking.mo','tests/modelica/RGBDLocalizationInitializeTests.mo','tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo',
+ const productionNames=[...new Set([...rgbdSlamSourceManifest.paths,'models/SLAM/RGBDFastSLAMIntervals.mo'])];
+ const names=[...productionNames,'models/Vision/Matching/RGBDPatchTracking.mo','tests/modelica/RGBDLocalizationInitializeTests.mo','tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo',
   'tests/modelica/RGBDLocalizationAdvanceFunctionAcceptance.mo','tests/modelica/RGBDFastInitializationFunctionAcceptance.mo',
   'tests/modelica/RGBDFastAdvanceFunctionAcceptance.mo','tests/modelica/RGBDFastSLAMRawCompositionAcceptance.mo',
   'tests/modelica/RGBDCompleteStateComparison.mo','tests/modelica/RGBDRenderedFrameInput.mo','tests/modelica/RGBDRenderedVisualDiagnostics.mo',

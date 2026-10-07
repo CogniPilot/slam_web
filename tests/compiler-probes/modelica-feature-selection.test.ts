@@ -75,7 +75,7 @@ it('independent selection fixtures expose exact rank, early-stop, suppression an
 it.skipIf(!directory)('actual Modelica selection matches bounded independent fixtures without claiming full-frame admission',async()=>{
   const compiler:typeof Rumoca=await import(/* @vite-ignore */ pathToFileURL(resolve(directory!,'rumoca_bind_wasm.js')).href);
   await compiler.default({module_or_path:readFileSync(resolve(directory!,'rumoca_bind_wasm_bg.wasm'))});
-  const source=readFileSync('models/FeatureSelection.mo','utf8')+`\nmodel SelectionControl
+  const source=readFileSync('models/Vision/Features/FeatureSelection.mo','utf8')+`\nmodel SelectionControl
     extends FeatureSelection(width=6,height=4,capacity=24,settings={0,0,1,0,24,1,0,0});
     end SelectionControl;
     model GridSelectionControl
@@ -100,7 +100,7 @@ it.skipIf(!directory)('actual Modelica selection matches bounded independent fix
 it.skipIf(!directory)('complete14400 Modelica grid selection retains uncapped350-point raster traversal',async()=>{
   const compiler:typeof Rumoca=await import(/* @vite-ignore */ pathToFileURL(resolve(directory!,'rumoca_bind_wasm.js')).href);
   await compiler.default({module_or_path:readFileSync(resolve(directory!,'rumoca_bind_wasm_bg.wasm'))});
-  const session=compiler.WasmSimulationSession.withInteractiveOptions(readFileSync('models/FeatureSelection.mo','utf8'),'GridFeatureSelection',1/90,'rk-like',1e-12,1e-12,'[]');
+  const session=compiler.WasmSimulationSession.withInteractiveOptions(readFileSync('models/Vision/Features/FeatureSelection.mo','utf8'),'GridFeatureSelection',1/90,'rk-like',1e-12,1e-12,'[]');
   const scores=Array.from({length:14400},(_,i)=>i/14400),p:Settings=[0,0,1,0,14400,6,5,5];
   try{
     session.set_inputs(JSON.stringify(scores.map((v,i)=>[`scores[${i+1}]`,v])));session.advance_to(1/90);
@@ -113,7 +113,7 @@ it.skipIf(!directory)('complete14400 Modelica grid selection retains uncapped350
 it.skipIf(!directory)('complete14400 Modelica raster selection preserves full input geometry and240-feature cap',async()=>{
   const compiler:typeof Rumoca=await import(/* @vite-ignore */ pathToFileURL(resolve(directory!,'rumoca_bind_wasm.js')).href);
   await compiler.default({module_or_path:readFileSync(resolve(directory!,'rumoca_bind_wasm_bg.wasm'))});
-  const source=readFileSync('models/FeatureSelection.mo','utf8');
+  const source=readFileSync('models/Vision/Features/FeatureSelection.mo','utf8');
   const session=compiler.WasmSimulationSession.withInteractiveOptions(source,'FeatureSelection',1/90,'rk-like',1e-12,1e-12,'[]');
   const scores=Array.from({length:14400},(_,i)=>((i*8191)%32749)/1000),p:Settings=[1e-9,.01,1e12,3,240,1,0,0];
   try{

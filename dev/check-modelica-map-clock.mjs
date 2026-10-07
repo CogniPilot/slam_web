@@ -12,7 +12,7 @@ const checkCount=scope==='legacy'?29:scope==='receipts'?17:14;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'map-clock-semantics-'));
-const names=['models/RGBDSpatialIndex.mo','models/RGBDLandmarkMap.mo',
+const names=['models/Mapping/RGBDSpatialIndex.mo','models/Mapping/RGBDLandmarkMap.mo',
   'tests/modelica/RGBDLandmarkMapReference.mo','tests/modelica/RGBDLandmarkMapTests.mo',
   'tests/modelica/RGBDLandmarkReceiptTests.mo','tests/modelica/RGBDMapClockTests.mo',
   `tests/modelica/${model}.mo`];

@@ -1,3 +1,4 @@
+import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 // Test-only independent mathematics; no application worker imports this file.
 import {readFileSync} from 'node:fs';
 import {rawDescriptorFixture,rawDescriptorOracle} from './rgbd-descriptor-frame-fixtures';
@@ -11,7 +12,7 @@ export const localizationSources=['FastNativeFrame','FeatureSelection','RGBDFeat
   'RGBDLandmarkProjection','SPD6Solve','ES15PoseCorrection','SchmidtRelativePoseCorrection',
   'ES15NominalPrediction','ES15Dynamics','ES15CovariancePrediction','SchmidtReferenceState','RGBDInertialLocalizationStep',
   'RGBDFastInertialLocalizationStep'];
-export const localizationSource=()=>localizationSources.map(name=>readFileSync(`models/${name}.mo`,'utf8')).join('\n');
+export const localizationSource=()=>localizationSources.map(name=>readFileSync(modelicaSourcePath(name),'utf8')).join('\n');
 export const initialFactors=():Factors=>({current:mat(15,15,(i,j)=>i===j?Math.sqrt(.1):0),reference:mat(6,15,()=>0)});
 export const predictedFactors=(f:Factors,h=1/90)=>{const s=stationary(h,eye(3));return propagated(f,s.Phi,s.B);};
 export function localizationImage(){

@@ -9,7 +9,7 @@ import {build} from 'esbuild';
 import {chromium} from '@playwright/test';
 const [directory,mode='patch']=process.argv.slice(2);if(!directory||!['patch','differences'].includes(mode))throw Error('Expected directory containing baseline/edited sources and artifacts, optional patch|differences');
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-const source=fs.readFileSync('models/FastNativeFrame.mo','utf8');
+const source=fs.readFileSync('models/Vision/Features/FastNativeFrame.mo','utf8');
 const fixturePath='dev/artifacts/fast-native-frame/independent-fixtures.json';
 const fixtureBytes=fs.readFileSync(fixturePath),fixture=JSON.parse(fixtureBytes);
 const fixtureOwner=fs.readFileSync('dev/artifacts/merged-runtime-guard/original-FastNativeFrame.mo');

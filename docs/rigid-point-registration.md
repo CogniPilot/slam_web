@@ -1,6 +1,6 @@
 # Modelica matched-point rigid registration
 
-[RigidPointRegistration.mo](../models/RigidPointRegistration.mo) fits a proper rigid transform from matched source points to target points. Its default capacity is the complete 160×90 image domain, 14,400 pairs. It consumes matched geometry, without pose truth. Correspondence matching, temporal pose composition, error-state correction and mapping remain separate work; this component is not full visual odometry or SLAM.
+[RigidPointRegistration.mo](../models/Math/RigidPointRegistration.mo) fits a proper rigid transform from matched source points to target points. Its default capacity is the complete 160×90 image domain, 14,400 pairs. It consumes matched geometry, without pose truth. Correspondence matching, temporal pose composition, error-state correction and mapping remain separate work; this component is not full visual odometry or SLAM.
 
 The editable Modelica function makes three ordered passes over the complete input arrays: validity and centroids, centered source/cross-covariance, then fitted residuals. Horn's symmetric 4×4 quaternion matrix supplies the rotation through a normalized, bounded 24-sweep cyclic Jacobi function. Translation is target centroid minus rotated source centroid. The public convention is `targetPoint = rotation * sourcePoint + translation`.
 

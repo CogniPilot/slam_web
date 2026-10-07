@@ -18,7 +18,7 @@ const rumoca=compilerDirectory
   :await import('@cognipilot/rumoca');
 const comparator=process.env.RUMOCA_PROFILE_READ_API??'snapshot';
 if(!['snapshot','batch'].includes(comparator))throw Error('RUMOCA_PROFILE_READ_API must be snapshot or batch');
-const source=fs.readFileSync('models/ModelicaInertial.mo','utf8');
+const source=fs.readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8');
 const wasm=fs.readFileSync(path.join(compilerDirectory??'public/vendor/rumoca','rumoca_bind_wasm_bg.wasm'));
 const sha=data=>createHash('sha256').update(data).digest('hex');
 const names=['accel[1]','accel[2]','accel[3]','gyro[1]','gyro[2]','gyro[3]'];

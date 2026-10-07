@@ -11,7 +11,7 @@ if(!baselineArgument||!candidateArgument||!outputArgument)
   throw new Error('Usage: node dev/probe-physics-compiler-comparison.mjs baseline-directory candidate-directory output-directory');
 const candidatePolicy=process.env.RUMOCA_COMPARISON_EXECUTION_POLICY??'auto';
 if(!['auto','interpreter'].includes(candidatePolicy))throw Error('Candidate execution policy must be auto or interpreter');
-const output=path.resolve(outputArgument),source=await fs.readFile('models/LabQuadrotor.mo');
+const output=path.resolve(outputArgument),source=await fs.readFile('models/Vehicles/LabQuadrotor.mo');
 await fs.mkdir(output,{recursive:true});
 const sha=data=>createHash('sha256').update(data).digest('hex');
 const files=new Map([['/source.mo',source]]),artifacts={};

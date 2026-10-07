@@ -11,16 +11,16 @@ const output=fs.mkdtempSync(path.join(scratch,'localization-advance-function-'))
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const original=process.argv.includes('--original-model');
 const adapter=process.argv.includes('--adapter-model');
-const names=['models/RGBDFeatureMatching.mo','models/RigidPointRegistration.mo',
-  'models/RGBDRelativePose.mo','models/RGBDRegistrationUncertainty.mo',
-  'models/RGBDVisualObservation.mo','models/RGBDVisualRelativeObservation.mo','models/RGBDLandmarkProjection.mo',
-  'models/SPD6Solve.mo','models/ES15PoseCorrection.mo','models/SchmidtRelativePoseCorrection.mo',
-  'models/ES15NominalPrediction.mo','models/ES15Dynamics.mo','models/ES15CovariancePrediction.mo',
-  'models/SchmidtReferenceState.mo','models/RGBDInertialLocalizationStep.mo',
-  'models/RGBDInertialLocalizationInitialize.mo','models/FastNativeFrame.mo','models/FeatureSelection.mo',
-  'models/RGBDFastInertialLocalizationInitialize.mo','tests/modelica/RGBDLocalizationInitializeTests.mo',
+const names=['models/Vision/Matching/RGBDFeatureMatching.mo','models/Math/RigidPointRegistration.mo',
+  'models/Estimation/Localization/RGBDRelativePose.mo','models/Estimation/Localization/RGBDRegistrationUncertainty.mo',
+  'models/Estimation/Localization/RGBDVisualObservation.mo','models/Estimation/Localization/RGBDVisualRelativeObservation.mo','models/Mapping/RGBDLandmarkProjection.mo',
+  'models/Math/SPD6Solve.mo','models/Estimation/Inertial/ES15PoseCorrection.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo',
+  'models/Estimation/Inertial/ES15NominalPrediction.mo','models/Estimation/Inertial/ES15Dynamics.mo','models/Estimation/Inertial/ES15CovariancePrediction.mo',
+  'models/Estimation/Inertial/SchmidtReferenceState.mo','models/Estimation/Localization/RGBDInertialLocalizationStep.mo',
+  'models/Estimation/Localization/RGBDInertialLocalizationInitialize.mo','models/Vision/Features/FastNativeFrame.mo','models/Vision/Features/FeatureSelection.mo',
+  'models/Estimation/Localization/RGBDFastInertialLocalizationInitialize.mo','tests/modelica/RGBDLocalizationInitializeTests.mo',
   'tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo','tests/modelica/RGBDLocalizationAdvanceFunctionAcceptance.mo'];
-if(original)names[names.indexOf('models/RGBDInertialLocalizationStep.mo')]='dev/artifacts/modelica-localization-advance-function/adapter-preimages/RGBDInertialLocalizationStep.qualified-function.mo';
+if(original)names[names.indexOf('models/Estimation/Localization/RGBDInertialLocalizationStep.mo')]='dev/artifacts/modelica-localization-advance-function/adapter-preimages/RGBDInertialLocalizationStep.qualified-function.mo';
 const sources=[...names,'dev/check-modelica-localization-advance-function.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 for(const source of sources){const target=path.join(output,'sources',source.path);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(path.join(app,source.path),target);}
 const model=(original||adapter)?'RGBDLocalizationAdvanceOriginalModelAcceptance':'RGBDLocalizationAdvanceFunctionAcceptance',script=path.join(output,'localization-advance-function.mos');

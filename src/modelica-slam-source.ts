@@ -17,7 +17,7 @@ export interface RGBDSlamSourceComposition {
 
 // Vite creates lazy raw-text loaders. Only the manifest's authored files are
 // requested; no Modelica text is loaded by merely importing this module.
-const loaders=import.meta.glob<string>('../models/*.mo',{query:'?raw',import:'default'});
+const loaders=import.meta.glob<string>('../models/**/*.mo',{query:'?raw',import:'default'});
 const knownPaths=new Set(rgbdSlamNativeSourceManifest.paths);
 
 /** Load one exact manifest path on demand, preserving its authored text. */
@@ -50,7 +50,7 @@ function checkedOverrides(value:unknown,paths:readonly string[]):Map<string,stri
 /** Exact authored source for the selected staged SLAM entrypoints.
  * Load on demand with `await import('./modelica-slam-source')`; this module is
  * deliberately not connected to inertial startup, UI presets or execution.
- * Override keys are exact manifest paths such as `models/RGBDFastSLAMStep.mo`.
+ * Override keys are exact manifest paths such as `models/SLAM/RGBDFastSLAMStep.mo`.
  * Text (including empty edits, CRLF, BOM and trailing newlines) is unchanged.
  * Returned hashes identify text, not successful compilation or execution.
  */

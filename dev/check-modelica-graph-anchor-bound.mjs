@@ -10,13 +10,13 @@ const model='RGBDGraphAnchorBoundAcceptance',count=25;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'graph-anchor-bound-semantics-'));
 const names=[
-  "models/RGBDRegistrationUncertainty.mo",
-  "models/RGBDKeyframes.mo",
-  "models/RGBDGraphCaptureLedger.mo",
-  "models/SchmidtRelativePoseCorrection.mo",
-  "models/GraphGaugeUncertainty.mo",
-  "models/SchmidtGraphPoseCorrection.mo",
-  "models/RGBDGraphAnchorBound.mo",
+  "models/Estimation/Localization/RGBDRegistrationUncertainty.mo",
+  "models/LoopClosure/RGBDKeyframes.mo",
+  "models/Optimization/RGBDGraphCaptureLedger.mo",
+  "models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo",
+  "models/Optimization/GraphGaugeUncertainty.mo",
+  "models/Estimation/Inertial/SchmidtGraphPoseCorrection.mo",
+  "models/Optimization/RGBDGraphAnchorBound.mo",
   "tests/modelica/RGBDGraphCaptureLedgerTests.mo",
   "tests/modelica/RGBDGraphAnchorBoundTests.mo",
   "tests/modelica/RGBDGraphAnchorBoundAcceptance.mo"

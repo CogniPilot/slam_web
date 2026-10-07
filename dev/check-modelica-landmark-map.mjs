@@ -12,7 +12,7 @@ fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'landmark-map-semantics-'));
 const scope=process.env.MODELICA_MAP_CHECK_SCOPE??'legacy';
 if(!['legacy','receipts'].includes(scope))throw Error('MODELICA_MAP_CHECK_SCOPE must be legacy or receipts');
-const names=['models/RGBDSpatialIndex.mo','models/RGBDLandmarkMap.mo',
+const names=['models/Mapping/RGBDSpatialIndex.mo','models/Mapping/RGBDLandmarkMap.mo',
   ...(scope==='legacy'?['tests/modelica/RGBDLandmarkMapReference.mo','tests/modelica/RGBDLandmarkMapTests.mo']:
     ['tests/modelica/RGBDLandmarkReceiptTests.mo'])];
 const functionName=scope==='legacy'?'RGBDLandmarkMapTests.Run':'RGBDLandmarkReceiptTests.Run';

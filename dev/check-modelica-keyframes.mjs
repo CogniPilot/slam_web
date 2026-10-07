@@ -17,7 +17,7 @@ const model=scope==='initialization'?'RGBDKeyframeInitializationAcceptance':'RGB
 const output=process.env.MODELICA_KEYFRAME_CHECK_DIRECTORY
   ??fs.mkdtempSync(path.join(os.homedir(),'scratch/slam_web/tmp/keyframe-semantics-'));
 fs.mkdirSync(output,{recursive:true});
-const names=['models/RGBDRegistrationUncertainty.mo','models/RGBDKeyframes.mo'];
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/LoopClosure/RGBDKeyframes.mo'];
 if(scope==='initialization')names.push('tests/modelica/RGBDKeyframesInitializationReference.mo',
   'tests/modelica/RGBDKeyframeInitializationTests.mo','tests/modelica/RGBDKeyframeInitializationAcceptance.mo');
 else {

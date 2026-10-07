@@ -12,7 +12,7 @@ const baselineFile=baselineKind==='full'?'dev/artifacts/fast-score-gate-2026-10-
   :'dev/artifacts/fast-adjacent-gate-2026-10-07/before/FastNativeFrame.mo';
 const baselineSha=baselineKind==='full'?'8788c590bd176b072352753d634fb5c0e98a8b776ff9833fea11497606f174e1'
   :'9f1f1ba9e8b0eb2b21ac1dd46840deee7414d55b8078c977606cea6271fa5aa7';
-const names=['models/FastNativeFrame.mo','models/FeatureSelection.mo','tests/modelica/FastScoreGateAcceptance.mo',baselineFile,
+const names=['models/Vision/Features/FastNativeFrame.mo','models/Vision/Features/FeatureSelection.mo','tests/modelica/FastScoreGateAcceptance.mo',baselineFile,
   'dev/check-modelica-fast-score-gate.mjs','dev/rumoca-bounded-run.mjs'];
 const sources=names.map(file=>({path:file,sha256:sha(fs.readFileSync(file))}));
 for(const {path:file}of sources){const dest=path.join(durable,'sources',file);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(file,dest);}

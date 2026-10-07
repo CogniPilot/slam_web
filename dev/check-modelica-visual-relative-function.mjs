@@ -9,8 +9,8 @@ const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'rgbd-relative-function-'));
 const model='RGBDVisualRelativeFunctionAcceptance',caseCount=25,checkCount=12;
-const names=['models/RGBDFeatureMatching.mo','models/RigidPointRegistration.mo','models/RGBDRelativePose.mo',
-  'models/RGBDRegistrationUncertainty.mo','models/RGBDVisualObservation.mo','models/RGBDVisualRelativeObservation.mo',
+const names=['models/Vision/Matching/RGBDFeatureMatching.mo','models/Math/RigidPointRegistration.mo','models/Estimation/Localization/RGBDRelativePose.mo',
+  'models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/Estimation/Localization/RGBDVisualObservation.mo','models/Estimation/Localization/RGBDVisualRelativeObservation.mo',
   'tests/modelica/RGBDVisualRelativeFunctionAcceptance.mo'];
 const sha=x=>createHash('sha256').update(x).digest('hex');
 const sources=[...names,'dev/check-modelica-visual-relative-function.mjs','dev/rumoca-bounded-run.mjs']

@@ -2,7 +2,7 @@
 // equations remain editable Modelica. Comprehension occurrence certification
 // in the pinned compiler rejects the equivalent generic reduction source.
 import {readFile,writeFile} from 'node:fs/promises';
-const file=new URL('../models/ES15CovariancePrediction.mo',import.meta.url);
+const file=new URL('../models/Estimation/Inertial/ES15CovariancePrediction.mo',import.meta.url);
 let source=await readFile(file,'utf8');
 const terms=(count,term)=>Array.from({length:count},(_,i)=>term(i+1)).join('+');
 source=source.replace('sum(noiseTransition[node,i,k]*G[k,j] for k in 1:15)',
