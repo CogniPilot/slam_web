@@ -1,7 +1,7 @@
 // Run each phase in a separate bounded Node24 process under an external timeout.
 // Arguments: PACKAGE_DIRECTORY SOURCE_FILE MODEL PHASE [OUTPUT_FILE]
 // Optional RUMOCA_CPU_PROFILE records the first15s via an inspector worker while
-// the main thread is inside synchronous WASM. PHASE is compile/lower/native/gpu/session.
+// the main thread is inside synchronous WASM. PHASE is check/compile/lower/native/gpu/session.
 import fs from 'node:fs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -18,8 +18,9 @@ const source = fs.readFileSync(sourceFile, 'utf8');
 const bytes = fs.readFileSync(path.join(packageDirectory, 'rumoca_bind_wasm_bg.wasm'));
 const compiler = await import(pathToFileURL(path.resolve(packageDirectory, 'rumoca_bind_wasm.js')));
 const wasm = await compiler.default({module_or_path: bytes});
-const provenance = {phase, model, sourceSha256: sha(source), compilerSha256: sha(bytes), compilerRevision: compiler.get_git_commit()};
+const provenance = {phase, model, pid:process.pid, sourceSha256: sha(source), compilerSha256: sha(bytes), compilerRevision: compiler.get_git_commit()};
 const report = (event, extra = {}) => console.log(JSON.stringify({event, ...provenance,
+  monotonicSeconds:Number(process.hrtime.bigint())/1e9,
   rssBytes: process.memoryUsage().rss, wasmMemoryBytes: wasm.memory?.buffer.byteLength, ...extra}));
 let profilingWorker;
 let profileFinished;
@@ -37,7 +38,8 @@ report('start');
 const start = performance.now();
 try {
   let result;
-  if (phase === 'compile') result = compiler.compile(source, model);
+  if (phase === 'check') result = compiler.compile_check_with_source_roots(source, model, '{}');
+  else if (phase === 'compile') result = compiler.compile(source, model);
   else if (phase === 'lower') result = compiler.lower_model_to_solve_json(source, model, .1, .1, '{}');
   else if (phase === 'native') result = compiler.prepare_native_assignments(source, model);
   else if (phase === 'gpu') result = compiler.prepare_gpu_simulation(source, model);
@@ -51,7 +53,8 @@ try {
   if (output) fs.writeFileSync(output, typeof result === 'string' ? result : JSON.stringify(result));
   report('success', {elapsedMs: performance.now() - start, resultBytes: typeof result === 'string' ? Buffer.byteLength(result) : 0});
 } catch (error) {
-  report('error', {elapsedMs: performance.now() - start, error: String(error)});
+  report('error', {elapsedMs: performance.now() - start, error: String(error),
+    errorStack:error instanceof Error ? error.stack : undefined});
   process.exitCode = 1;
 } finally {
   if (profilingWorker) { profilingWorker.postMessage('stop'); await profileFinished; }

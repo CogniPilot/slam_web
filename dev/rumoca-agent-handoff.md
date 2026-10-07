@@ -1,6 +1,8 @@
 # Rumoca development handoff
 
-Updated: 2026-10-05. This transfers the compiler work to a dedicated Rumoca
+Updated: 2026-10-07. Latest source-bound perf findings and required fixes are in
+[the application request below](#perf-pinpoints-repeated-calls-and-array-carries-2026-10-07).
+This transfers the compiler work to a dedicated Rumoca
 agent. The browser application remains a separate project. Full connected
 Modelica SLAM is **not working yet**.
 
@@ -6224,3 +6226,251 @@ quadrotor regressions cannot find cached CMM. sccache setup/post also fail.
 Raw log: `$HOME/scratch/slam_web/tmp/rumoca-main-f0-linux.log`.
 Those logs do not establish a compiler numerical regression or a green run;
 please repair the dependency setup independently of SLAM admission.
+
+### Priority update: OMC baseline and compiler efficiency, 2026-10-07
+
+The user explicitly requests a performance comparison with OpenModelica and
+asks the compiler owner to address any deficit. **Rumoca has not demonstrated
+superior compilation or generated-artifact efficiency on this workload.**
+Component issuance alone is not sufficient. Please prioritize full-source
+admission and the measured copy/laziness defects over additional language scope.
+
+The existing OMC full 128/256 optimizer acceptance run uses the same production
+optimizer source, SHA256 `c93b6acbbe1f8f699fd6f79bb5bfbcf8f80dffb2830ee6666426a98751785932`:
+
+- All 20 independent checks pass, including nonlinear rotations, correlated
+  information, full storage, fixed gauge, moving inputs and refusal/recovery.
+- OMC-reported frontend/backend/simulation-code/templates total 0.092 s;
+  C compilation 2.355 s, therefore about **2.447 s to build**. Simulation of
+  the complete acceptance harness takes 8.639 s; total 11.086 s.
+- Receipt: `dev/artifacts/modelica-pose-graph-semantics/pose-graph-semantics-OvxCeK/`
+  (`report.json`, `semantics.log`). Compiler identifies as `a96aa1a-cmake`.
+- Actual merged-main Rumoca refuses the complete production optimizer after
+  2.506 s with scratch above 64 MiB. A refusal time is not compilation throughput.
+
+The acceptance harness and the separately issued PGRun kernel are different
+execution scopes. **Do not divide OMC's 8.639 s harness time by Rumoca's kernel
+median and call it a speedup.** OMC is native C here; Rumoca is CPU WASM. Neither
+reference timings nor a compiler check establish full browser SLAM performance.
+
+The emitted Rumoca kernels already establish serious avoidable work:
+
+| Kernel | Warm evaluation | Logical copied bytes/evaluation |
+| --- | ---: | ---: |
+| PGRun, all128 nodes/all256 edges | 1362 ms | 27387125288 |
+| PGRun, stationary | 4.08 ms | 182717504 |
+| Robust registration, clean350 | 118 ms | 9177280920 |
+| Robust registration, empty active domain | about117–120 ms | 9174192520 |
+
+These are original-module timings; copy counts come from separately
+instrumented modules whose output bits and readonly inputs match the originals.
+Logical copied widths are not physical DRAM traffic. Existing perf captures
+attribute 35.49% of PGRun weighted leaf cycles and 57.29% of registration cycles
+to memmove, with copy-wrapper costs additional. Full details and source-bound
+reproducers are in `dev/modelica-pose-graph-storage-2026-10-07.md` and
+`dev/modelica-robust-registration-2026-10-07.md`. Please treat this as a generated
+code defect, not an unavoidable cost of Modelica or a request to reduce bounds.
+
+New phase isolation on the exact full59-file `5d485ddd` source and actual
+merged main WASM `f0e83f00ab21`:
+
+| Root / official API | Result | External phase time | Compiler linear memory after |
+| --- | --- | ---: | ---: |
+| Reset / compile_check_with_source_roots | strict DAE check passes | 7.188 s | 583991296 bytes |
+| Initialize / compile_check_with_source_roots | strict DAE check passes | 11.611 s | 227606528 bytes |
+| Reset / compile (DAE JSON) | unreachable trap | 33.082 s | 3551395840 bytes |
+| Reset / prepare_native_program | unreachable trap | 50.155 s | 3933339648 bytes |
+| Initialize / prepare_native_program | unreachable trap | 96.961 s | 4294967296 bytes |
+
+Check is requested-only DAE admission, not artifact issuance. Initialize emits
+WD001 translation-fixed array-dimension warnings. The profile changes wall time;
+internal timing counters are not directly comparable and some are disabled/zero.
+No watchdog/RSS limit caused these traps. Process RSS is distinct from compiler
+linear memory. Raw profiles and logs:
+`$HOME/scratch/slam_web/profiles/reset-compiler-main-f0/`.
+Frozen receipts, probe preimages and exact f0 compiler source excerpts:
+`dev/artifacts/modelica-compiler-phase-split-2026-10-07/`.
+
+Exact f0 compiler sources narrow the next investigation:
+
+1. `source_root_api.rs` check calls
+   `check_model_strict_requested_only_with_timing`; `session_impl.rs` executes
+   `dae_phase_result_query(...StrictCompileRecovery...)` for the requested root.
+2. `native_assignment_api.rs::with_prepared_native_model` calls
+   `compile_requested_model`, then `lower_dae_for_native_preparation`.
+   `compile_requested_model` uses `StrictReachableUncachedWithRecovery`, whose
+   finalization processes `closure.compile_targets`; this differs from check.
+3. `lib.rs::build_compile_response` additionally builds a full DAE JSON value,
+   clones it into both `dae` and `dae_native`, retains pretty JSON, then
+   serializes the complete response. Native preparation does not call this
+   response builder, so its failure cannot be blamed on that JSON duplication.
+
+Please instrument target counts, per-phase retained/peak bytes and allocation
+owners before changing paths. Strict target semantics must remain intact. Check
+success narrows the issue; it does not prove whether full uncached compilation,
+result ownership, Solve lowering or native emission owns the native trap.
+
+Finish in this order, with parallel compiler lanes where practical:
+
+1. Correctness: land the record-copy fix with nested helper/parent-State
+   regressions; fix Step/Intervals guarded `problem__nodeCount` definedness.
+2. Full admission: Initialize and Reset must issue without approaching wasm32's
+   4 GiB ceiling; complete 128/256 optimizer must issue with safe frame/region
+   lifetime reuse. Retain capacities, iterations, validity guards and publication.
+3. Artifact efficiency: readonly views, alias-safe array updates, lazy active
+   domains and compact refresh scheduling; include FAST 848×480, descriptor,
+   matcher, registration and PGRun in regression/performance controls.
+4. Provide matched OMC-versus-Rumoca benchmarks of the **same production
+   functions and runtime inputs**, including dense, sparse, stationary and empty
+   cases. Retain all outputs via a checksum plus independent numerical gates;
+   prevent constant folding/dead-result elimination. Separate parse/DAE,
+   Solve/lower, emission/C-build, cold startup, warm evaluation and transport.
+   Report repetitions/medians/tails, optimization flags, compiler revisions,
+   hardware/load/affinity, peak compilation RSS, WASM linear-memory high-water,
+   module/executable sizes and all linked runtime dependencies. Compare optimized
+   OMC C to Rumoca WASM honestly; if a comparable WASM OMC build is unavailable,
+   say so. Do not compare stripped WASM against an entire native runtime package.
+5. Deliver a paired compiler/runtime package with compiler-owned lossless State
+   layout and transfer plan, then run full static-browser numerical/reload gates.
+
+At 90 sensor frames/s, 10x realtime allows about 1.11 ms average total processing
+per sensor frame. Loop optimization runs on its actual triggered cadence, not
+necessarily every frame; measure its amortized cost separately. The existing
+1362 ms optimizer and approximately 1 s matcher are incompatible with the target
+without major compiler/runtime improvement. Report measured changes, remaining
+owners and reproducible benchmarks; please do not declare performance fixed
+from a preparation-only success or a tiny-capacity fixture.
+
+### Matched OMC versus Rumoca runtime, 2026-10-07
+
+The requested matched runtime benchmark is now executed, rather than merely
+requested. **Rumoca is 3.2–12 times slower on the tested optimizer workloads**
+than OMC-generated native C rebuilt with GCC15.2.0 `-O3` (no fast-math/LTO).
+Same production `PGRun`, full 128/256 arrays, identical runtime inputs, ABBA
+blocks with two warmups and three measured calls per block:
+
+| Input | OMC median ms | Rumoca WASM median ms | Rumoca / OMC |
+| --- | ---: | ---: | ---: |
+| Eight-pose rotated loop | 49.56 | 558.85 | 11.28 |
+| 128 nodes, late 256th loop | 591.93 | 3190.78 | 5.39 |
+| All 128 nodes/all 256 edges | 427.96 | 1366.00 | 3.19 |
+| One optimizer iteration | 6.12 | 73.51 | 12.02 |
+| Stationary optimum | 0.614 | 4.176 | 6.80 |
+| Disabled NaN padding | 48.50 | 549.06 | 11.32 |
+
+All six cases pass the independent objective/gauge/convergence/budget oracle;
+readonly input bytes and within-engine repeated output bits are preserved.
+Cross-engine active pose differences are at most 4.44e-15; accepted/PCG iteration
+counts match. This is native C versus CPU WASM, not an isolated WASM overhead
+measurement or full-SLAM throughput. Host/flags/repetitions/extrema/source and
+artifact hashes are recorded. The actual merged-main Rumoca module is the
+already-qualified `496681a4...`; the production Modelica remains `c93b6acb...`.
+
+Please use these inputs and the existing copy/perf traces as the baseline for
+the compiler runtime fixes; maintain the same numerical gates. The gap on a
+stationary graph and a single iteration especially supports the need to remove
+unnecessary copies/envelope work. No speedup from an individual proposed fix
+is assumed. Preserve full bounds and authored rejection/publication semantics.
+
+Compilation has mixed evidence: fresh OMC buildModel for this same 14K-input
+entry point takes 82.05 s and 1.29 GiB peak RSS, largely building the full
+simulation wrapper. The separate -O3 function driver links in 1.25 s. Rumoca's
+assignment module prepares in 2.023 s. These are different output scopes; this
+counterexample must accompany the earlier complete-optimizer OMC admission
+comparison. Do not claim Rumoca is universally slower at compiling.
+
+The OMC driver ELF is 86160 bytes plus 68342648 bytes of inventoried shared
+runtime dependency files. Rumoca module is 244114 bytes with 16121856 bytes of
+linear memory and requires the host JS engine. File sizes are not resident
+memory or directly comparable portable distribution sizes.
+
+Report: `dev/modelica-compiler-comparison-2026-10-07.md`.
+Reproducer: `dev/benchmark-pose-graph-compilers.mjs`,
+`dev/benchmark-pose-graph-omc.c`, `dev/pose-graph-omc-benchmark.makefile`.
+Frozen source-bound receipts and fixtures:
+`dev/artifacts/modelica-compiler-comparison-2026-10-07/`.
+Large generated files/executables:
+`$HOME/scratch/slam_web/tmp/pose-graph-compiler-comparison/`.
+
+### Perf pinpoints repeated calls and array carries, 2026-10-07
+
+The user asks to be faster than OMC and explicitly requests perf evidence and
+specific compiler fixes. Fresh original-module perf now pinpoints the hot owner
+with **compiler-issued source provenance**, not a function-index guess:
+
+- 985 samples in a checked ten-second eval-only monotonic window, no lost
+  records, three unknown leaves retained. 985 throttle/985 unthrottle records
+  are reported; no CPU-utilization inference.
+- Function 28 is 56.09% of weighted leaf cycles, memmove 31.62%, WASM copy
+  wrapper 1.24%: 88.95% combined. Prior capture independently gives 53.14%, 35.49%, 1.14%.
+- Its ABI return 676 maps to artifact fault owner 25 and byte span 16209–16302:
+  `PGNormalProduct(direction,nodeMask,edgeMask,source,target,Ji,Jj,information,diagonal,damping)`
+  in the assignment at frozen source line 340. Function 33 maps to PGPCG;
+  function 24 to inner PGPrecondition (line 347), function 35 to PGLinearize (line 383).
+
+**New priority: eliminate repeated evaluation of the same source assignment.**
+The source contains one normal-product assignment per active PCG iteration;
+PCG's emitted function 33 has 22 static calls to function 28. Retained-operation
+instrumentation proves 4653 actual calls versus 247 reported PCG iterations for
+small, 2069 versus 111 for dense (about 18.8×/18.6×); stationary has 0/0. Output
+bits and input bytes agree with the original. Inner preconditioning likewise
+runs 1673/721 times versus source upper bounds 247/111, with initial preconditioning
+counted separately. Please preserve source assignment/SSA identity through
+inline folds, conditionals and value-stage scheduling: evaluate once per authored
+occurrence/iteration and reuse its result. Preserve operand value versions and
+alias safety; do not cache by mutable pointer across changed iterations.
+
+The second owner is full-array loop/branch carry materialization. Function 28
+copies 21.33 GB logical bytes in the dense solve and 23.24 GB in the small solve.
+Site 168 / original WAT 45492 copies the 6144-byte 128×6 result in the **inactive
+else branch**, 4653 × 248 disabled slots = 1153944 copies / 7089831936 logical bytes.
+Sites 171/174 / WAT 45533/45573 each add 7318536192 bytes in the small case.
+Source active endpoint updates touch six entries, not the entire array.
+Please lower owned updates safely in place and retain readonly views/shared
+unchanged carries. Inactive slots must not clone captures. Preserve guarded
+bounds/integer checks and row-read-before-write semantics. Function 35's stationary
+151468032 copied bytes need the same treatment, including whole 73728-byte
+Jacobian arrays carried over disabled slots.
+
+Fresh perf PCs map to printed TurboFan instructions: within function 28,
+46.18% integer/address arithmetic, 37.95% memory moves/loads/stores, 7.75%
+register/stack moves, 5.18% floating arithmetic. These are sampled PC categories
+with skid, not exact costs; the hot instructions include repeated scalar stores
+and multiply-by-six address calculations. Shape/range proof hoisting and direct
+row access should accompany the carry fix, while retaining semantic checks.
+
+OMC's separate optimized dense profile retains 2101 in-phase samples, excludes 108
+startup/warmup samples and keeps four unknown leaves. No lost records; all 50
+repeated outputs exactly match the accepted baseline. Its leading costs include
+calc_base_index_va 13.60%, calc_base_index_spec 10.37%, GC_malloc_kind 7.90%.
+This shows OMC still pays generic indexing/allocation overhead that Rumoca's
+shaped direct accesses and reusable scratch can avoid. It does not establish
+an unimplemented speedup or a WASM-to-WASM comparison.
+
+Please add these gates to the runtime lane:
+
+1. Source-bound normal-product call counts 247/111/0 for small/dense/stationary;
+   inner preconditioner calls within authored bounds. Explain any necessary
+   retained extra evaluation with compiler evidence.
+2. No full-array cloning for unchanged inactive carries, and copy traffic
+   proportional to actual necessary captures/updates, with alias/readonly and
+   bit/numerical checks intact.
+3. Rerun the same unprofiled ABBA benchmark after each increment; the target is
+   below OMC medians 49.56 ms small, 427.96 ms dense, 0.614 ms stationary, with the
+   other cases and all original gates retained. These are CPU WASM versus native
+   C targets, not promises or full-pipeline realtime claims.
+
+Full source-bound report: `dev/modelica-pose-graph-perf-hotspots-2026-10-07.md`.
+Reusable analysis: `dev/analyze-pose-graph-hotspots.mjs`.
+Evidence: `dev/artifacts/modelica-pose-graph-perf-hotspots-2026-10-07/`.
+Raw perf/machine code/maps: `$HOME/scratch/slam_web/profiles/pose-graph-perf-hotspots-2026-10-07/`.
+Native C comparison: `$HOME/scratch/slam_web/profiles/pose-graph-omc-perf-2026-10-07/`.
+The prior full-source admission/correctness/State-ABI blockers remain required;
+these optimizer components do not replace full connected browser SLAM.
+
+Storage detail for the same emitted owners: PGPCG/function33 reserves 10917424
+scratch bytes for 6168 output bytes; PGNormalProduct/function28 uses 136888 scratch
+bytes and 240648 input bytes. Please include per-call/region lifetimes and
+high-water allocation in the prepare report and separate call duplication from
+frame retention. This is additional evidence for the storage lane, not proof
+that this particular frame owns the complete optimizer's 64 MiB refusal.
