@@ -1,7 +1,7 @@
 import './style.css';
 import './diagnostics.css';
 import {poseSnapshot} from './trajectory';
-import { World,D435 } from './world';
+import { World } from './world';
 import { Runtime } from './runtime';
 import { sourceFor,setSource,nodeRuntimeLabel,type GraphNode } from './graph';
 import { algorithms,detectors,visibleDetectorPresets,defaultProject,loadProject,readSavedProject,saveProject,parseProject,download } from './project';
@@ -50,6 +50,13 @@ const mobileDefaults=matchMedia('(max-width:760px)').matches;
 let project=defaultProject(mobileDefaults);
 let selected=project.graph.nodes.find(n=>n.kind==='slam')!;
 const world=new World(el('world'));
+document.querySelector('.visuals')!.insertAdjacentHTML('afterbegin','<div id="render-warning" class="render-warning" role="status" hidden></div>');
+if(world.graphics.acceleration==='software'){
+  const camera=world.calibration;
+  el('render-warning').hidden=false;
+  el('render-warning').textContent=`Software rendering detected: graphics are running on the CPU. Reduced preview: ${camera.width} × ${camera.height} RGB-D and 64 × 128 LiDAR, with graphics below Low. Enable browser hardware acceleration for full quality.`;
+}
+const graphicsDescription=()=>world.sensorProfile==='software'?'Software fallback · tiny sensor images · reduced viewer resolution · no shadows or normal maps':GRAPHICS_DESCRIPTIONS[project.sceneDetail??'high'];
 el('frame-timings').insertAdjacentHTML('beforebegin','<div id="graphics-state"></div>');
 el('graphics-state').textContent=`Renderer: ${world.graphics.api} · ${world.graphics.renderer} · ${world.graphics.acceleration==='software'?'software rendering':world.graphics.acceleration==='hardware-reported'?'hardware driver reported':'driver acceleration unknown'} · Vision: native Modelica integration pending`;
 el('graphics-state').insertAdjacentHTML('afterend','<small id="scene-credit"></small>');
@@ -71,7 +78,7 @@ const performanceMonitor=new BrowserPerformanceMonitor({targetFps:30,onUpdate:s=
 }});
 runtime.onSensor=()=>performanceMonitor.captured();runtime.onLidar=()=>performanceMonitor.lidarCaptured();
 const code=el<HTMLTextAreaElement>('code');
-const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates});
+const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
 const sourceEditor=createSourceEditor(code);
 const slamFileRow=document.createElement('label');slamFileRow.className='slam-source-files';
 slamFileRow.textContent='Modelica source ';
@@ -135,7 +142,7 @@ function syncProject() {
   el<HTMLInputElement>('name').value=project.name;
   el<HTMLSelectElement>('environment').value=project.environment;
   el<HTMLSelectElement>('scene-detail').value=project.sceneDetail??'high';
-  el('graphics-budget').textContent=GRAPHICS_DESCRIPTIONS[project.sceneDetail??'high'];
+  el('graphics-budget').textContent=graphicsDescription();
   el<HTMLInputElement>('lidar-enabled').checked=project.lidarEnabled??false;
   el<HTMLInputElement>('depth-cloud-enabled').checked=project.depthCloudEnabled??false;
   el<HTMLInputElement>('cars-enabled').checked=project.carsEnabled??true;
@@ -250,7 +257,7 @@ el<HTMLSelectElement>('scene-detail').onchange=async e=>{
   try{
     while(runtime.busy)await new Promise(resolve=>setTimeout(resolve,20));
     await runtime.setGraphicsQuality(project.sceneDetail);
-    el('graphics-budget').textContent=GRAPHICS_DESCRIPTIONS[project.sceneDetail];
+    el('graphics-budget').textContent=graphicsDescription();
     status(ready?'Graphics quality updated · run preserved · press Run to continue':'Graphics quality updated · select an available experiment to run');
   }catch(error){ready=false;dirty=true;status(String(error),true);}
   finally{

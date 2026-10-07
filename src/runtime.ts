@@ -2,7 +2,7 @@ import {DataFlow} from './data-flow';
 import { WorkerRpc } from './rpc';
 import { ports,portTopic,validateGraph,type PortType } from './graph';
 import {seededRandom,recordedCameraFrame} from './packet';
-import { D435,World } from './world';
+import { World } from './world';
 import {defaultSensorModelica,defaultEvaluationModelica,withActorMotion,type Project} from './project';
 import type {ActorMotionFrame} from './modelica-actor-motion';
 import type { Command,Estimate,Pose,RunRecord,SensorFrame,Truth,SceneDetail } from './types';
@@ -102,7 +102,8 @@ export class Runtime {
     }
     this.project=structuredClone(project);this.order=order;
     this.world.build(project.environment,project.sceneDetail??'high');await this.world.ready;this.world.configureActors(project.carsEnabled??true,project.peopleEnabled??true);this.world.setDepthCloudEnabled(project.depthCloudEnabled??false);this.world.update(truth);this.world.setLighting(project.lightingMode??'day');this.world.setMap([]);
-    await this.world.setDepthNoise({seed:project.seed,disparityNoisePx:D435.depthNoiseDisparityPx!,referenceFx:D435.depthNoiseReferenceFx!,baselineMeters:D435.baseline,dropoutProbability:.005,unitsMeters:.001});
+    const calibration=this.world.calibration;
+    await this.world.setDepthNoise({seed:project.seed,disparityNoisePx:calibration.depthNoiseDisparityPx!,referenceFx:calibration.depthNoiseReferenceFx!,baselineMeters:calibration.baseline,dropoutProbability:.005,unitsMeters:.001});
     this.world.setActorMotion(await this.modelicaMath.call<ActorMotionFrame>('actors',{time:truth.time}));
     this.world.setEstimate({x:0,y:0,z:0,quaternion:[1,0,0,0],confidence:0,points:[]});
     this.world.setEnvironmentVisible(true);
@@ -186,8 +187,8 @@ export class Runtime {
             else {
               const [images,scan]=await this.world.captureSensors(this.cameraLidar);
               if(scan)this.deliveredLidar(scan);
-              frame={...images,sequence:this.sequence,time:t.time,dt:this.dt,calibration:{...D435,depthEncoding:'axial-z16-le'},imu:this.heldImu,imuIntervals:this.imuIntervals};
-              frame.capture={depthNoise:{model:'independent-pixel-hash-v1',seed:this.project.seed,tick:Math.round(t.time*180),unitsMeters:.001}};
+              frame={...images,sequence:this.sequence,time:t.time,dt:this.dt,calibration:{...this.world.calibration,depthEncoding:'axial-z16-le'},imu:this.heldImu,imuIntervals:this.imuIntervals};
+              frame.capture={sensorProfile:this.world.sensorProfile,depthNoise:{model:'independent-pixel-hash-v1',seed:this.project.seed,tick:Math.round(t.time*180),unitsMeters:.001}};
               sensorGps=this.gps;
             }
             this.time=frame.time;

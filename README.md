@@ -11,6 +11,10 @@ installing a robotics stack.
 Wait for **Run** to become available, then click it. No setup or initial
 **Apply & reset** is needed.
 
+The flight tour and live depth image work in the default inertial demo.
+If your browser uses CPU software rendering, a visible warning explains the
+automatic lightweight preview. Hardware rendering keeps the native sensor sizes.
+
 ## Why use it?
 
 - **Start with a link.** Students and collaborators can open the same lab across

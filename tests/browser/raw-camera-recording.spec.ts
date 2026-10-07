@@ -1,9 +1,9 @@
 import {test,expect} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
-import {openModelicaPropagation} from './reference-project';
+import {openEconomicalPropagation} from './reference-project';
 
 test('zero-start dataset export/reload preserves raw Z16 and accepts historical float-depth recordings',async({page},testInfo)=>{
- await page.goto('/');await openModelicaPropagation(page);
+ await openEconomicalPropagation(page);
  await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
  await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
  const original=await page.evaluate(async()=>{

@@ -1,5 +1,5 @@
 import {D435_IMAGE} from "../../src/camera-profile";
-import {openModelicaPropagation} from './reference-project';
+import {openEconomicalPropagation} from './reference-project';
 import {test,expect} from '@playwright/test';
 
 test('Native D435 cameras share lockstep timestamps while the dedicated viewer keeps rendering',async({page})=>{
@@ -7,7 +7,9 @@ test('Native D435 cameras share lockstep timestamps while the dedicated viewer k
   if(packed!==undefined&&!['0','1'].includes(packed))throw Error('SLAM_TEST_PACKED_READBACK must be 0 or 1');
   const readback=process.env.SLAM_TEST_READBACK;
   if(readback!==undefined&&readback!=='sync'&&readback!=='async')throw Error('SLAM_TEST_READBACK must be sync or async');
-  await page.goto('/');await openModelicaPropagation(page,packed===undefined?undefined:packed==='1',readback);
+  await openEconomicalPropagation(page,true);
+  if(packed!==undefined)await page.evaluate(enabled=>(window as any).__slamLab.runtime.world.setSensorPackedReadback(enabled),packed==='1');
+  if(readback!==undefined)await page.evaluate(mode=>(window as any).__slamLab.runtime.world.setSensorReadback(mode),readback);
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab?.latest?.frame.sequence??-1),{timeout:90000}).toBeGreaterThan(1);
   await page.getByRole('button',{name:'Ⅱ Pause'}).click();
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);

@@ -1,11 +1,10 @@
 import {test,expect} from '@playwright/test';
 import {D435_IMAGE} from '../../src/camera-profile';
+import {openEconomicalPropagation} from './reference-project';
 
 test('native D435 images preserve GPU readback and lockstep timing with vision explicitly pending',async({page})=>{
   const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
-  await page.goto('/');
-  await page.getByRole('button',{name:'▶ Run',exact:true}).click({timeout:90_000});
-  await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab?.latest?.frame.sequence??-1),{timeout:90_000}).toBeGreaterThanOrEqual(2);
+  await openEconomicalPropagation(page);
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
   const result=await page.evaluate(async()=>{

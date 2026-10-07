@@ -1,10 +1,10 @@
 import {D435_IMAGE} from "../../src/camera-profile";
 import {expect,test} from '@playwright/test';
-import {openModelicaPropagation} from './reference-project';
+import {openEconomicalPropagation} from './reference-project';
 
 test('independent sensor rates capture exact poses and hold physics behind each GPU barrier',async({page})=>{
   const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
-  await page.goto('/');await openModelicaPropagation(page);
+  await openEconomicalPropagation(page);
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
   const results=await page.evaluate(async()=>{

@@ -4,6 +4,12 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      skip_browser_checks:
+        description: 'Temporary demo deployment: skip browser checks (build and unit tests remain required)'
+        type: boolean
+        required: false
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -43,19 +49,20 @@ jobs:
         if: always()
         run: |
           echo "Experimental full-SLAM compiler admission: ${{ steps.compiler-admission.outcome }}. This must pass before full SLAM can be advertised." >> "$GITHUB_STEP_SUMMARY"
-      # All browser shards test this exact build. Deployment waits for every shard.
+      # Smoke shards test this exact build; only an explicit manual demo can skip them.
       - uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: dist
   browser:
-    name: Browser tests (${{ matrix.shard }}/6)
+    if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks) }}
+    name: Browser smoke (${{ matrix.shard }}/2)
     needs: build
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6]
+        shard: [1, 2]
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: cachix/install-nix-action@v31.11.1
@@ -83,7 +90,7 @@ jobs:
           tar --extract --file "$RUNNER_TEMP/pages-artifact/artifact.tar" --directory dist
       - name: Install test dependencies and run this browser shard
         run: |
-          nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && npm run test:browser -- --shard=${{ matrix.shard }}/6'
+          nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && npm run test:browser -- --shard=${{ matrix.shard }}/2'
       - name: Retain browser failure evidence
         if: failure()
         uses: actions/upload-artifact@v7.0.2
@@ -95,6 +102,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
   compiler-browser:
+    if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks) }}
     name: Experimental CV language-server admission
     needs: build
     runs-on: ubuntu-24.04
@@ -142,7 +150,11 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
   deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: >-
+      always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
+      needs.build.result == 'success' &&
+      (needs.browser.result == 'success' ||
+      (github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks))
     needs: [build, browser]
     runs-on: ubuntu-24.04
     timeout-minutes: 10

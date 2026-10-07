@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 import {World,D435} from './world';
+import {SOFTWARE_CAMERA,type SensorProfileSelection} from './camera-profile';
 import type {Calibration,Environment,SceneDetail,Truth} from './types';
 import type {LidarScan,LidarTimings} from './lidar';
 import type {DepthCloud} from './depth-cloud';
@@ -38,7 +39,7 @@ export interface SensorRenderResult {
   graphics:GraphicsInfo;
   gpuProfile?:GpuSensorProfile;
 }
-type Message=SensorRenderSettings&{id:number;type:string;base?:string;truth?:Truth;actorMotion?:ActorMotionFrame;lidarEnabled?:boolean;profileGpu?:boolean;denseCloudReadback?:boolean};
+type Message=SensorRenderSettings&{id:number;type:string;base?:string;truth?:Truth;actorMotion?:ActorMotionFrame;lidarEnabled?:boolean;profileGpu?:boolean;sensorProfile?:SensorProfileSelection;denseCloudReadback?:boolean};
 const scope=self as unknown as DedicatedWorkerGlobalScope;
 const maximumPending=8;
 let world:World|undefined;
@@ -98,7 +99,8 @@ async function execute(message:Message):Promise<SensorRenderResult|unknown> {
     if(world)throw new Error('Sensor renderer is already initialized; use configure');
     if(typeof message.base!=='string')throw new Error('Sensor renderer requires a site base URL');
     const base=new URL(message.base,scope.location.href).href;
-    world=new World({canvas:new OffscreenCanvas(D435.width,D435.height),width:D435.width,height:D435.height,pixelRatio:1,base});
+    const camera=message.sensorProfile==='software'?SOFTWARE_CAMERA:D435;
+    world=new World({canvas:new OffscreenCanvas(camera.width,camera.height),width:camera.width,height:camera.height,pixelRatio:1,base,sensorProfile:message.sensorProfile});
     // Direct reads avoid PBO copy/fence overhead on the measured hardware
     // driver. Blocking stays in this dedicated worker; software/unknown
     // drivers retain pooled asynchronous reads. Configure can override this

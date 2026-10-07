@@ -4,6 +4,9 @@ import {openModelicaPropagation} from './reference-project';
 import {openConfiguration,openEditor} from './configuration-pane';
 
 test('graphics quality preserves enterable Big city rooms and synchronized GPU sensor geometry',async({page})=>{
+  // Nine full-resolution indoor RGB-D/LiDAR parity captures plus quality
+  // rebuilds take about90s on local SwiftShader; hosted CPUs need headroom.
+  test.setTimeout(180000);
   const errors:string[]=[];
   page.on('pageerror',error=>errors.push(error.message));
   page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
@@ -63,6 +66,7 @@ test('graphics quality preserves enterable Big city rooms and synchronized GPU s
     }
   }
   const before=await page.evaluate(()=>JSON.stringify((window as any).__slamLab.runtime.world.committedTruth));
+  await page.evaluate(()=>(window as any).__slamLab.viewer.worker.postMessage({type:'visibility',visible:true}));
   await openConfiguration(page);
   for(const room of ['store','apartment','conference','overview']){
     await page.getByLabel('Inspect Big city',{exact:true}).selectOption(room);

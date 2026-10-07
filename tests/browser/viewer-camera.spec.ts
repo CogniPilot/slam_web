@@ -1,8 +1,9 @@
 import {expect,test} from '@playwright/test';
+import {openEconomicalPropagation} from './reference-project';
 
 test('free camera keys move the actual worker view while simulation is paused and leave editing alone',async({page})=>{
   const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
-  await page.goto('/');
+  await openEconomicalPropagation(page,true);
   await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.ready&&lab.compiling===false;}),{timeout:90000}).toBe(true);
   await page.evaluate(()=>{const lab=(window as any).__slamLab;lab.runtime.pause();});
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
@@ -21,7 +22,16 @@ test('free camera keys move the actual worker view while simulation is paused an
   const initial=await state();
   const before=await page.locator('#world').screenshot();
   for(const key of ['w','a','q','r']){
-    const previous=await state();await page.keyboard.down(key);await page.waitForTimeout(320);await page.keyboard.up(key);
+    const previous=await state();await page.keyboard.down(key);
+    try{
+      // Wait for the actual camera tick, rather than assuming CPU rendering
+      // can complete a frame inside a fixed wall-clock sleep.
+      await expect.poll(async()=>{
+        const next=await state();
+        if(key==='r')return next.position[1]-previous.position[1]>.5;
+        return JSON.stringify(key==='q'?next.quaternion:next.position)!==JSON.stringify(key==='q'?previous.quaternion:previous.position);
+      },{timeout:15000}).toBe(true);
+    }finally{await page.keyboard.up(key);}
     const next=await state();
     if(key==='q')expect(next.quaternion).not.toEqual(previous.quaternion);
     else expect(next.position).not.toEqual(previous.position);

@@ -21,3 +21,16 @@ export const D435:Calibration=Object.freeze({
   depthNoiseReferenceFx:width/(2*Math.tan(87*Math.PI/360)),
   depthEncoding:'axial-f32-le-rgba8',
 });
+
+/** CPU-backed WebGL sampling preserves physical optics and native disparity noise. */
+export const SOFTWARE_CAMERA:Calibration=Object.freeze({
+  ...D435,width:160,height:90,
+  fx:D435.fx*160/D435.width,fy:D435.fy*90/D435.height,
+  rgbFx:D435.rgbFx*160/D435.width,rgbFy:D435.rgbFy*90/D435.height,
+  cx:(160-1)/2,cy:(90-1)/2,
+});
+export type SensorProfile='native'|'software';
+export type SensorProfileSelection=SensorProfile|'auto';
+export function resolveSensorProfile(acceleration:string,selection:SensorProfileSelection='auto'):SensorProfile {
+  return selection==='auto'?(acceleration==='software'?'software':'native'):selection;
+}

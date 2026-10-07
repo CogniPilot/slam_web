@@ -18,7 +18,7 @@ export interface LidarScan {
   format:'FLU_XYZ_PACK24';
   frame:'FLU';
 }
-export interface LidarOptions {columns?:number;cubeResolution?:256|512;near?:number;far?:number;cubeFaces?:4|6}
+export interface LidarOptions {columns?:number;cubeResolution?:64|256|512;near?:number;far?:number;cubeFaces?:4|6}
 export interface LidarTimings {submitMs:number;waitMs:number;handoffMs:number;totalMs:number;method:string;samples:number;faces:number;drawCalls:number;triangles:number;readbackBytes:number}
 const BEAMS=64;
 
@@ -52,7 +52,7 @@ export class GpuLidar {
     this.columns=options.columns??1024;this.cubeResolution=options.cubeResolution??256;
     this.cubeFaces=options.cubeFaces??4;
     this.near=options.near??.1;this.far=options.far??80;
-    if(!Number.isInteger(this.columns)||this.columns<64||this.columns>4096||!Number.isFinite(this.near)||!Number.isFinite(this.far)||this.near<=0||this.far<=this.near||![256,512].includes(this.cubeResolution)||![4,6].includes(this.cubeFaces))throw new Error('Invalid LiDAR resolution or range');
+    if(!Number.isInteger(this.columns)||this.columns<64||this.columns>4096||!Number.isFinite(this.near)||!Number.isFinite(this.far)||this.near<=0||this.far<=this.near||![64,256,512].includes(this.cubeResolution)||![4,6].includes(this.cubeFaces))throw new Error('Invalid LiDAR resolution or range');
     if(this.columns>renderer.capabilities.maxTextureSize)throw new Error('LiDAR scan exceeds GPU texture limits');
     this.floatingSupported=!!(renderer.getContext() as WebGL2RenderingContext).getExtension('EXT_color_buffer_float');
     const settings={format:THREE.RGBAFormat,type:THREE.UnsignedByteType,colorSpace:THREE.NoColorSpace,minFilter:THREE.NearestFilter,magFilter:THREE.NearestFilter,generateMipmaps:false};

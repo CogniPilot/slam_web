@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {GpuDepthNoise,validateDepthNoise,type DepthNoiseSettings} from './gpu-depth-noise';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { Calibration, Environment, Estimate, Pose, SceneDetail, Truth } from './types';
-import {D435} from './camera-profile';
+import {D435,SOFTWARE_CAMERA,resolveSensorProfile,type SensorProfile,type SensorProfileSelection} from './camera-profile';
 export {D435} from './camera-profile';
 import {covarianceAxes} from './covariance';
 import { seededRandom } from './packet';
@@ -30,11 +30,13 @@ import {GpuDepthCloudRaster,type DepthCloudRaster} from './depth-cloud-raster';
 import {setDensePointBuffer} from './dense-point-buffer';
 import {graphicsQuality} from './graphics-quality';
 import {packTrajectories,type TrajectoryPath,type TrajectoryBuffer} from './trajectory';
-export interface WorldCanvasOptions {canvas:OffscreenCanvas;width:number;height:number;pixelRatio:number;base:string}
+export interface WorldCanvasOptions {canvas:OffscreenCanvas;width:number;height:number;pixelRatio:number;base:string;sensorProfile?:SensorProfileSelection}
 type RawCaptureStorage=ReturnType<typeof allocateRealSenseImages>&{cloud?:Float32Array;lidar?:Float32Array};
 export class World {
   readonly renderer: THREE.WebGLRenderer;
   readonly graphics:GraphicsInfo;
+  readonly calibration:Calibration;
+  readonly sensorProfile:SensorProfile;
   readonly lighting:WorldLighting;
   lightingMode:DaylightMode='day';
   onLighting:(mode:DaylightMode)=>void=()=>{};
@@ -108,11 +110,11 @@ export class World {
   private sensor = new THREE.PerspectiveCamera();
   // RGB bytes are display-encoded sRGB; axial depth bytes are an unencoded
   // integer payload. Sharing their attachment would corrupt one of these.
-  private rgbTarget = new THREE.WebGLRenderTarget(D435.width, D435.height, { depthBuffer: true, type: THREE.UnsignedByteType, colorSpace: THREE.SRGBColorSpace });
-  private depthTarget = new THREE.WebGLRenderTarget(D435.width, D435.height, { depthBuffer: true, type: THREE.UnsignedByteType, colorSpace: THREE.NoColorSpace });
+  private rgbTarget:THREE.WebGLRenderTarget;
+  private depthTarget:THREE.WebGLRenderTarget;
   private depthNoise=new GpuDepthNoise();
   private depthNoiseSettings?:DepthNoiseSettings;
-  private readonly depthCloudGpu=new GpuDepthCloud(this.depthTarget.texture,D435);
+  private readonly depthCloudGpu:GpuDepthCloud;
   private readonly materials:WorldMaterials;
   private readonly assetBase:string;
   private readonly deviceRatio:number;
@@ -133,6 +135,11 @@ export class World {
     this.assetBase=offscreen?.base??new URL(import.meta.env.BASE_URL,document.baseURI).href;
     this.renderer = new THREE.WebGLRenderer({ antialias: true,powerPreference:'high-performance',...(offscreen?{canvas:offscreen.canvas}:{}) });
     this.graphics=graphicsInfo(this.renderer.getContext());
+    this.sensorProfile=resolveSensorProfile(this.graphics.acceleration,offscreen?.sensorProfile);
+    this.calibration=this.sensorProfile==='software'?SOFTWARE_CAMERA:D435;
+    this.rgbTarget=new THREE.WebGLRenderTarget(this.calibration.width,this.calibration.height,{depthBuffer:true,type:THREE.UnsignedByteType,colorSpace:THREE.SRGBColorSpace});
+    this.depthTarget=new THREE.WebGLRenderTarget(this.calibration.width,this.calibration.height,{depthBuffer:true,type:THREE.UnsignedByteType,colorSpace:THREE.NoColorSpace});
+    this.depthCloudGpu=new GpuDepthCloud(this.depthTarget.texture,this.calibration);
     this.readback=new GpuReadback(this.renderer.getContext() as WebGL2RenderingContext);
     this.deviceRatio=offscreen?.pixelRatio??devicePixelRatio;
     this.renderer.setPixelRatio(Math.min(this.deviceRatio,2));
@@ -151,7 +158,7 @@ export class World {
     this.sensorGeometryBatches=new SensorGeometryBatches(this.scene,this.environment);
     this.actors=new WorldActors(this.assetBase);this.scene.add(this.actors.group);
     this.navigation=new WorldNavigation(this.materials);this.scene.add(this.navigation.group);
-    this.lidar=new GpuLidar(this.renderer,this.scene);
+    this.lidar=new GpuLidar(this.renderer,this.scene,this.sensorProfile==='software'?{columns:128,cubeResolution:64}:{});
     this.lidarSensor.position.set(0,.18,0);this.robot.add(this.lidarSensor);
     this.scene.add(this.lidarView);this.lidarView.visible=false;
     this.estimatorView.add(this.trajectories);
@@ -162,7 +169,7 @@ export class World {
     this.controls.minDistance=1;this.controls.maxDistance=70;this.controls.maxPolarAngle=Math.PI*.49;
     this.drone=new WorldDrone(this.assetBase);this.robot.add(this.drone.group);
     const cameraBody = new THREE.Mesh(new THREE.BoxGeometry(.04, .025, .09), new THREE.MeshStandardMaterial({ color: 0x151e29 }));
-    cameraBody.position.set(D435.forward, D435.up, 0); this.robot.add(cameraBody);
+    cameraBody.position.set(this.calibration.forward, this.calibration.up, 0); this.robot.add(cameraBody);
     if(offscreen){this.renderer.setSize(offscreen.width,offscreen.height,false);this.view.aspect=offscreen.width/offscreen.height;this.view.updateProjectionMatrix();}
     else new ResizeObserver(() => {
       const element=container as HTMLElement;
@@ -188,10 +195,11 @@ export class World {
   build(kind:Environment,detail:SceneDetail='high',preservePresentation=false) {
     const camera=preservePresentation?{position:this.view.position.clone(),quaternion:this.view.quaternion.clone(),target:this.controls.target.clone()}:undefined;
     this.currentEnvironment=kind;this.currentDetail=detail;this.ready=Promise.resolve();
-    const quality=graphicsQuality(detail,this.deviceRatio,this.renderer.capabilities.getMaxAnisotropy());
+    if(this.sensorProfile==='software')detail='low';
+    const quality=graphicsQuality(detail,this.deviceRatio,this.renderer.capabilities.getMaxAnisotropy(),this.sensorProfile==='software');
     // Sensor render targets retain their calibrated dimensions. Pixel ratio
     // scales the overview canvas only, including its dedicated viewer worker.
-    this.renderer.setPixelRatio(quality.pixelRatio);this.lighting.setQuality(detail);this.materials.setQuality(quality);
+    this.renderer.setPixelRatio(quality.pixelRatio);this.lighting.setQuality(this.sensorProfile==='software'?'low':detail);this.materials.setQuality(quality);
     if(this.tokyo)this.tokyo.group.visible=kind==='tokyo';
     if(this.cityAssets)this.cityAssets.group.visible=kind==='asset-city';
     if(this.bigCity)this.bigCity.group.visible=kind==='big-city';
@@ -289,7 +297,7 @@ export class World {
   }
   async enableSensorWorker(){
     const rpc=new WorkerRpc(new Worker(new URL('./sensor-render.worker.ts',import.meta.url),{type:'module'}));
-    try{await rpc.call('init',{base:this.assetBase,environment:this.currentEnvironment,detail:this.currentDetail,carsEnabled:this.carsEnabled,peopleEnabled:this.peopleEnabled,lightingMode:this.lightingMode,environmentVisible:this.environmentVisible,depthCloudEnabled:this.depthCloudEnabled});this.sensorRpc=rpc;}
+    try{await rpc.call('init',{base:this.assetBase,sensorProfile:this.sensorProfile,environment:this.currentEnvironment,detail:this.currentDetail,carsEnabled:this.carsEnabled,peopleEnabled:this.peopleEnabled,lightingMode:this.lightingMode,environmentVisible:this.environmentVisible,depthCloudEnabled:this.depthCloudEnabled});this.sensorRpc=rpc;}
     catch(error){rpc.stop();throw error;}
   }
   setSensorWorkerEnabled(enabled:boolean){this.sensorWorkerEnabled=enabled;}
@@ -382,10 +390,10 @@ export class World {
     };
     try{
       if(mode==='sync'){
-        if(this.packedReadback)this.readback.readBatchPackedSync(storage?.destination.byteLength??D435.width*D435.height*(8+(this.depthCloudEnabled?16:0))+this.lidar.readbackByteLength,submit,storage?.destination);
+        if(this.packedReadback)this.readback.readBatchPackedSync(storage?.destination.byteLength??this.calibration.width*this.calibration.height*(8+(this.depthCloudEnabled?16:0))+this.lidar.readbackByteLength,submit,storage?.destination);
         else this.readback.readBatchSync(submit);
       }
-      else if(this.packedReadback)await this.readback.readBatchPacked(storage?.destination.byteLength??D435.width*D435.height*(8+(this.depthCloudEnabled?16:0))+this.lidar.readbackByteLength,submit,storage?.destination);
+      else if(this.packedReadback)await this.readback.readBatchPacked(storage?.destination.byteLength??this.calibration.width*this.calibration.height*(8+(this.depthCloudEnabled?16:0))+this.lidar.readbackByteLength,submit,storage?.destination);
       else await this.readback.readBatch(submit);
       resolve();
       const result=await Promise.all([camera,scan]);
@@ -395,8 +403,8 @@ export class World {
     }
   }
   private rawCaptureStorage(lidarEnabled:boolean,denseCloud=true):RawCaptureStorage {
-    const cloudBytes=this.depthCloudEnabled&&denseCloud?D435.width*D435.height*16:0,lidarBytes=lidarEnabled?this.lidar.readbackByteLength:0;
-    const result=allocateRealSenseImages(D435,D435,this.depthNoiseSettings?.unitsMeters??.001,cloudBytes+lidarBytes);
+    const cloudBytes=this.depthCloudEnabled&&denseCloud?this.calibration.width*this.calibration.height*16:0,lidarBytes=lidarEnabled?this.lidar.readbackByteLength:0;
+    const result=allocateRealSenseImages(this.calibration,this.calibration,this.depthNoiseSettings?.unitsMeters??.001,cloudBytes+lidarBytes);
     const offset=result.images.color.bytes+result.images.depth.bytes;
     return {...result,...(cloudBytes?{cloud:new Float32Array(result.destination.buffer,offset,cloudBytes/4)}:{}),
       ...(lidarBytes?{lidar:new Float32Array(result.destination.buffer,offset+cloudBytes,lidarBytes/4)}:{})};
@@ -406,7 +414,7 @@ export class World {
   setDepthCloud(cloud:DepthCloud){
     this.latestDepthCloud=cloud;this.latestDepthRaster=undefined;
     this.depthCloudView.geometry=this.denseCloudGeometry;this.depthCloudView.material=this.denseCloudMaterial;
-    setDensePointBuffer(this.depthCloudView,cloud.samples,D435.far*2);
+    setDensePointBuffer(this.depthCloudView,cloud.samples,this.calibration.far*2);
     this.denseCloudGeometry=this.depthCloudView.geometry;
     this.placeDepthCloud(cloud);
   }
@@ -485,10 +493,10 @@ export class World {
     this.robot.updateMatrixWorld(true);this.animate(this.previousTime+(this.simulationTime-this.previousTime)*fraction);
     this.controls.update();this.renderer.setRenderTarget(null);this.renderer.render(this.scene,this.view);
   }
-  private optics(fx: number, fy: number,far=D435.far) {
-    this.sensor.near = D435.near; this.sensor.far = far;
-    const n = D435.near;
-    this.sensor.projectionMatrix.makePerspective(-n*D435.width/(2*fx),n*D435.width/(2*fx),n*D435.height/(2*fy),-n*D435.height/(2*fy),n,far);
+  private optics(fx: number, fy: number,far=this.calibration.far) {
+    this.sensor.near = this.calibration.near; this.sensor.far = far;
+    const n = this.calibration.near;
+    this.sensor.projectionMatrix.makePerspective(-n*this.calibration.width/(2*fx),n*this.calibration.width/(2*fx),n*this.calibration.height/(2*fy),-n*this.calibration.height/(2*fy),n,far);
     this.sensor.projectionMatrixInverse.copy(this.sensor.projectionMatrix).invert();
   }
   private renderDepth(){
@@ -510,7 +518,7 @@ export class World {
   capture() {
     // Direct debug/tests may position the robot explicitly before capture.
     this.animate(this.simulationTime);
-    const position = new THREE.Vector3(D435.forward,D435.up,0).applyMatrix4(this.robot.matrixWorld);
+    const position = new THREE.Vector3(this.calibration.forward,this.calibration.up,0).applyMatrix4(this.robot.matrixWorld);
     const direction = new THREE.Vector3(1,0,0).applyQuaternion(this.robot.quaternion);
     this.sensor.position.copy(position);
     this.sensor.up.copy(new THREE.Vector3(0,1,0).applyQuaternion(this.robot.quaternion));
@@ -520,22 +528,22 @@ export class World {
     const cloudVisible=this.depthCloudView.visible;this.depthCloudView.visible=false;
     this.robot.visible = false; this.points.visible = false;this.estimatorView.visible=false;this.lidarView.visible=false;
     this.renderer.setRenderTarget(this.rgbTarget);
-    this.optics(D435.rgbFx,D435.rgbFy,200);
-    const rgb=new Uint8Array(D435.width*D435.height*4),bytes=new Uint8Array(rgb.length);
+    this.optics(this.calibration.rgbFx,this.calibration.rgbFy,200);
+    const rgb=new Uint8Array(this.calibration.width*this.calibration.height*4),bytes=new Uint8Array(rgb.length);
     withCommittedScene(this.scene,()=>{
       this.renderer.render(this.scene,this.sensor);
       const rgbRead=this.rasterRows.bindTopDown(this.renderer,this.rgbTarget);
-      this.renderer.readRenderTargetPixels(rgbRead,0,0,D435.width,D435.height,rgb);
-      this.optics(D435.fx,D435.fy);
+      this.renderer.readRenderTargetPixels(rgbRead,0,0,this.calibration.width,this.calibration.height,rgb);
+      this.optics(this.calibration.fx,this.calibration.fy);
     const measuredDepth=this.renderDepth();
     const depthRead=this.rasterRows.bindTopDown(this.renderer,measuredDepth);
-      this.renderer.readRenderTargetPixels(depthRead,0,0,D435.width,D435.height,bytes);
+      this.renderer.readRenderTargetPixels(depthRead,0,0,this.calibration.width,this.calibration.height,bytes);
     });
     const depth = new Float32Array(bytes.buffer,bytes.byteOffset,bytes.byteLength/4);
     this.scene.overrideMaterial = null; this.scene.background = background;
     this.robot.visible = true; this.points.visible = this.mapVisible;this.estimatorView.visible=diagnosticsVisible;this.lidarView.visible=lidarVisible;this.depthCloudView.visible=cloudVisible;this.lighting.celestialGroup.visible=celestialVisible;
     this.renderer.setRenderTarget(null);
-    return { rgb, depth,depthEncoding:D435.depthEncoding };
+    return { rgb, depth,depthEncoding:this.calibration.depthEncoding };
   }
   async captureAsync(readbackMode:'async'|'sync'='async',submission?:GpuReadSubmission) {
     return this.captureImages(readbackMode,submission) as Promise<{rgb:Uint8Array;depth:Float32Array;depthEncoding:Calibration['depthEncoding'];depthCloud?:DepthCloud}>;
@@ -545,23 +553,23 @@ export class World {
     if(this.asyncCapture)throw new Error('RGB-D capture is already in progress');
     this.asyncCapture=true;
     const started=performance.now(),background=this.scene.background,override=this.scene.overrideMaterial,target=this.renderer.getRenderTarget(),robotVisible=this.robot.visible,pointsVisible=this.points.visible,diagnosticsVisible=this.estimatorView.visible,lidarVisible=this.lidarView.visible,celestialVisible=this.lighting.celestialGroup.visible;
-    const rgbBytes=raw?.images.color.data??new Uint8Array(D435.width*D435.height*4);
+    const rgbBytes=raw?.images.color.data??new Uint8Array(this.calibration.width*this.calibration.height*4);
     const depthBytes=raw?new Uint8Array(raw.images.depth.data.buffer,raw.images.depth.data.byteOffset,raw.images.depth.data.byteLength):new Uint8Array(rgbBytes.length);
     const cloudTruth=this.committedTruth?{...this.committedTruth,quaternion:[...this.committedTruth.quaternion]}:undefined;
-    const cloudSamples=raw?raw.cloud:this.depthCloudEnabled?new Float32Array(D435.width*D435.height*4):undefined;
+    const cloudSamples=raw?raw.cloud:this.depthCloudEnabled?new Float32Array(this.calibration.width*this.calibration.height*4):undefined;
     const cloudVisible=this.depthCloudView.visible;
     let blockingReadback=0;
     let captureRead:Promise<void>|undefined;
     try {
       const submit=(read:(target:THREE.WebGLRenderTarget,bytes:Uint8Array|Float32Array)=>void)=>{
-        const position=new THREE.Vector3(D435.forward,D435.up,0).applyMatrix4(this.robot.matrixWorld);
+        const position=new THREE.Vector3(this.calibration.forward,this.calibration.up,0).applyMatrix4(this.robot.matrixWorld);
         const direction=new THREE.Vector3(1,0,0).applyQuaternion(this.robot.quaternion);
         this.sensor.position.copy(position);this.sensor.up.copy(new THREE.Vector3(0,1,0).applyQuaternion(this.robot.quaternion));
         this.sensor.lookAt(position.clone().add(direction));this.sensor.updateMatrixWorld();
         this.robot.visible=false;this.points.visible=false;this.estimatorView.visible=false;this.lidarView.visible=false;this.depthCloudView.visible=false;
-        this.renderer.setRenderTarget(this.rgbTarget);this.optics(D435.rgbFx,D435.rgbFy,200);this.renderer.render(this.scene,this.sensor);
+        this.renderer.setRenderTarget(this.rgbTarget);this.optics(this.calibration.rgbFx,this.calibration.rgbFy,200);this.renderer.render(this.scene,this.sensor);
         if(!raw)read(this.rasterRows.bindTopDown(this.renderer,this.rgbTarget),rgbBytes);
-        this.optics(D435.fx,D435.fy);const measuredDepth=this.renderDepth();
+        this.optics(this.calibration.fx,this.calibration.fy);const measuredDepth=this.renderDepth();
         if(raw)this.realSensePacking.submit(this.renderer,this.rgbTarget,measuredDepth,raw.images,(width,height,bytes)=>read(this.renderer.getRenderTarget()!,bytes));
         else read(this.rasterRows.bindTopDown(this.renderer,measuredDepth),depthBytes);
         if(cloudSamples){
@@ -572,11 +580,11 @@ export class World {
         if(submission){submit((target,bytes)=>submission.read(target.width,target.height,bytes));captureRead=submission.completed;}
         else if(readbackMode==='async'){
           const submitRead=(read:GpuReadSubmission['read'])=>submit((target,bytes)=>read(target.width,target.height,bytes));
-          captureRead=this.packedReadback?this.readback.readBatchPacked(raw?.destination.byteLength??D435.width*D435.height*(8+(this.depthCloudEnabled?16:0)),submitRead,raw?.destination):this.readback.readBatch(submitRead);
+          captureRead=this.packedReadback?this.readback.readBatchPacked(raw?.destination.byteLength??this.calibration.width*this.calibration.height*(8+(this.depthCloudEnabled?16:0)),submitRead,raw?.destination):this.readback.readBatch(submitRead);
         }
         else {
           const submitRead=(read:GpuReadSubmission['read'])=>submit((target,bytes)=>read(target.width,target.height,bytes));
-          blockingReadback=this.packedReadback?this.readback.readBatchPackedSync(raw?.destination.byteLength??D435.width*D435.height*(8+(this.depthCloudEnabled?16:0)),submitRead,raw?.destination):this.readback.readBatchSync(submitRead);
+          blockingReadback=this.packedReadback?this.readback.readBatchPackedSync(raw?.destination.byteLength??this.calibration.width*this.calibration.height*(8+(this.depthCloudEnabled?16:0)),submitRead,raw?.destination):this.readback.readBatchSync(submitRead);
           captureRead=Promise.resolve();
         }
       });
@@ -596,11 +604,11 @@ export class World {
       if(cloudSamples){
         if(!cloudTruth)throw new Error('Depth cloud requires a committed sensor pose');
         const truth=cloudTruth;
-        depthCloud={time:truth.time,width:D435.width,height:D435.height,samples:cloudSamples,pose:{x:truth.x,y:truth.y,z:truth.z,quaternion:[...truth.quaternion]},originFlu:[D435.forward,0,D435.up]};
+        depthCloud={time:truth.time,width:this.calibration.width,height:this.calibration.height,samples:cloudSamples,pose:{x:truth.x,y:truth.y,z:truth.z,quaternion:[...truth.quaternion]},originFlu:[this.calibration.forward,0,this.calibration.up]};
         this.setDepthCloud(depthCloud);
       }else if(raw&&this.depthCloudEnabled){
         if(!cloudTruth)throw Error('Depth cloud requires a committed sensor pose');
-        const c=D435;
+        const c=this.calibration;
         depthRaster={encoding:'Z16',time:cloudTruth.time,width:c.width,height:c.height,samples:raw.images.depth.data,
           strideBytes:raw.images.depth.strideBytes,unitsMeters:raw.images.depth.unitsMeters,
           calibration:{fx:c.fx,fy:c.fy,cx:c.cx,cy:c.cy,near:c.near,far:c.far},
@@ -608,7 +616,7 @@ export class World {
         this.setDepthRaster(depthRaster);
       }
       return raw?{rgb,depth:raw.images.depth.data,imageLayout:cameraImageLayout(raw.images),...(depthCloud?{depthCloud}:{}),...(depthRaster?{depthRaster}:{})}:
-        {rgb,depth:new Float32Array(depthBytes.buffer,depthBytes.byteOffset,depthBytes.byteLength/4),depthEncoding:D435.depthEncoding,...(depthCloud?{depthCloud}:{})};
+        {rgb,depth:new Float32Array(depthBytes.buffer,depthBytes.byteOffset,depthBytes.byteLength/4),depthEncoding:this.calibration.depthEncoding,...(depthCloud?{depthCloud}:{})};
     } finally {this.asyncCapture=false;}
   }
   setMap(points: number[][],origin?:Pose) {

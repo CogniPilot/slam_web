@@ -10,6 +10,14 @@ test('a fresh visitor starts the prepared inertial experiment with Run alone',as
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.latest?.frame.sequence??-1),{timeout:90_000}).toBeGreaterThan(2);
   await expect(page.getByRole('button',{name:'Ⅱ Pause',exact:true})).toBeVisible();
   expect(await page.evaluate(()=>(window as any).__slamLab.latest.estimate.diagnostics.backend)).toBe('Rumoca Solve IR session');
+  const sensor=await page.evaluate(()=>{
+    const lab=(window as any).__slamLab,{frame}=lab.latest;
+    return {software:lab.runtime.world.graphics.acceleration==='software',width:frame.calibration.width,height:frame.calibration.height,rgb:frame.rgb.length,depth:frame.depth.length,profile:frame.capture.sensorProfile};
+  });
+  expect(sensor.rgb).toBe(sensor.width*sensor.height*3);expect(sensor.depth).toBe(sensor.width*sensor.height);
+  expect([sensor.width,sensor.height]).toEqual(sensor.software?[160,90]:[848,480]);
+  if(sensor.software){await expect(page.locator('#render-warning')).toBeVisible();await expect(page.locator('#render-warning')).toContainText('CPU');expect(sensor.profile).toBe('software');}
+  else await expect(page.locator('#render-warning')).toBeHidden();
 });
 
 test.describe('phone layout',()=>{

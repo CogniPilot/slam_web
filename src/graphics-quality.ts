@@ -11,7 +11,8 @@ export const GRAPHICS_DESCRIPTIONS:Record<SceneDetail,string>={
   medium:'Balanced detail · 512 px shadows · normal maps · layered clouds',
   high:'Full detail · 1024 px shadows · normal maps · detailed clouds',
 };
-export function graphicsQuality(detail:SceneDetail,deviceRatio:number,maxAnisotropy:number){
-  const budget=GRAPHICS_QUALITY[detail];
+export const SOFTWARE_GRAPHICS_QUALITY={pixelRatio:.35,shadows:false,shadowSize:128,anisotropy:1,normalMaps:false,textureSize:128,cloudOctaves:1} as const;
+export function graphicsQuality(detail:SceneDetail,deviceRatio:number,maxAnisotropy:number,software=false){
+  const budget=software?SOFTWARE_GRAPHICS_QUALITY:GRAPHICS_QUALITY[detail];
   return {...budget,pixelRatio:Math.min(deviceRatio,budget.pixelRatio),anisotropy:Math.min(maxAnisotropy,budget.anisotropy)};
 }

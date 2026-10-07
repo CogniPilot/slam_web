@@ -26,6 +26,8 @@
 @media(max-width:760px){.camera-mode{top:128px}.scene-bottom{font-size:9px;left:10px;right:10px}.scene-overlay{left:10px}}
 
 /* Phones keep the world first and the editable workspace in normal page flow. */
+.render-warning{margin:0 0 12px;padding:12px 14px;border:1px solid #b68939;border-radius:8px;background:#342914;color:#ffe3a4;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.render-warning[hidden]{display:none}
 @media(max-width:760px){
   .workspace,.workspace>*{min-width:0}
   header{padding:12px;gap:10px}
