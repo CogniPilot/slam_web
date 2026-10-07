@@ -20,11 +20,21 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
+      # Content-addressed Nix outputs use GitHub's cache; cache.nixos.org
+      # remains the upstream for already-published toolchain dependencies.
+      - name: Cache Nix build outputs
+        uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
+        with:
+          use-gha-cache: enabled
+          use-flakehub: disabled
+          diagnostic-endpoint: ''
       - uses: actions/cache@v4
         with:
           path: |
             ~/scratch/slam_web/build/npm-cache
-          key: ${{ runner.os }}-slam-${{ hashFiles('flake.lock', 'package-lock.json') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-npm-
       - name: Check pinned toolchain
         run: nix flake check --no-update-lock-file
       - name: Build and verify the Modelica browser application

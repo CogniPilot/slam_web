@@ -205,3 +205,5 @@ Editing is informed by the [Rumoca fixed-wing workbench](https://github.com/Cogn
 Apache-2.0. Upstream dependencies retain their own licenses.
 
 The supported inertial demo gates deployment with `npm test`, the production build and browser tests. `npm run test:compiler-admission` retains three strict experimental CV/ESKF numerical tests that currently fail with the pinned Rumoca 0.10.0 compiler. CI reports this suite separately; its result is not evidence that full browser SLAM works.
+
+CI caches content-addressed Nix build outputs in GitHub Actions, using `cache.nixos.org` for upstream dependencies. The npm download cache is keyed by operating system, architecture and `package-lock.json`, with a prefix restore for unchanged packages after dependency edits. `npm ci`, checks and the production build still run for each revision; generated `dist` and `node_modules` are not reused as verification results.
