@@ -45,7 +45,7 @@ if(process.argv[2]!=='--execute'){
   fs.mkdirSync(output,{recursive:true});fs.mkdirSync(source,{recursive:true});
   const before=inventory();json(path.join(output,'sources-before.json'),before);
   for(const folder of ['src','public'])fs.cpSync(path.join(repo,folder),path.join(source,folder),{recursive:true});
-  fs.mkdirSync(path.join(source,'models'),{recursive:true});fs.copyFileSync(path.join(repo,'models/Vehicles/LabQuadrotor.mo'),path.join(source,'models/Vehicles/LabQuadrotor.mo'));
+  fs.mkdirSync(path.join(source,'models/Vehicles'),{recursive:true});fs.copyFileSync(path.join(repo,'models/Vehicles/LabQuadrotor.mo'),path.join(source,'models/Vehicles/LabQuadrotor.mo'));
   for(const file of ['package.json','package-lock.json'])fs.copyFileSync(path.join(repo,file),path.join(source,file));
   fs.symlinkSync(path.join(repo,'node_modules'),path.join(source,'node_modules'),'dir');
   // Retain source preimages, but keep the large frozen asset/build workspace on scratch.

@@ -31,6 +31,7 @@ package RGBDCatalogMapping
 
   record Diagnostics
     Real mapAccepted; Real catalogUpdateRejectionReason;
+    Integer keyframeRejectionReason; Integer sequentialRejectionReason;
     Integer catalogRejectionReason; Integer correctionReason;
     Real updateRejectionReason; Real mapRejectionReason; Integer anchorRejectionReason;
     Real occupiedCount; Real confirmedCount; Real tentativeCount;
@@ -42,6 +43,7 @@ package RGBDCatalogMapping
     output Diagnostics result;
   algorithm
     result.mapAccepted := 0.0; result.catalogUpdateRejectionReason := 0.0;
+    result.keyframeRejectionReason := 0; result.sequentialRejectionReason := 0;
     result.catalogRejectionReason := 0; result.correctionReason := 0;
     result.updateRejectionReason := 0.0; result.mapRejectionReason := 0.0; result.anchorRejectionReason := 0;
     result.occupiedCount := 0.0; result.confirmedCount := 0.0; result.tentativeCount := 0.0;

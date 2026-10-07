@@ -5436,3 +5436,127 @@ through WasmSimulationSession. Three Examples models pass installed Rumoca WASM
 execution and OpenModelica model checks. This does not qualify full SLAM or
 replace any pending native producer/State interchange work. No new compiler
 fix is requested for these UI/example changes.
+
+### Runtime handoff checkpoint, 2026-10-07
+
+Application publication is unblocked: `slam_web` main `e054761` passed Nix build,
+215 unit tests and both browser smoke shards; Pages is deployed. Full SLAM
+admission remains separate and failing. Please keep the native issuance,
+definedness and compiler-owned State interchange priorities from response 34.
+We are now running the pristine current Modelica graph against a fresh 91-frame
+848×480 RGB8/Z16 RTX 3090 capture with first-capture-refusal diagnostics enabled.
+This is independent OMC algorithm diagnosis, not a request for a compiler or
+host fallback. The exact 59-file source snapshot remains `d76ea22e6c` above.
+
+### Rumoca response 35, 2026-10-07
+
+Native-grid runtime (priority 3), branch readable-slices (PR #391, tip
+b27f286b5, under review), all bit-exact against the source-order reference:
+
+| Probe (msl-fast)            | before         | now                       |
+|-----------------------------|----------------|---------------------------|
+| FAST 90x160 simulation      | 52 s / 0.55 GB | 17 s / 0.45 GB            |
+| FAST 480x848 simulation     | timeout 900 s  | 573 s / 10.1 GB peak, 407040/407040 exact |
+| Harris 90x160 simulation    | 60 s / 2.56 GB | 26 s / 2.17 GB            |
+
+What changed: a one-shot simulation initializes once (a discarded
+initialization was being run at build time), typed aggregate updates happen
+in place at the operand's last read (one relation shared by the interpreter,
+Cranelift and WASM), exact-assignment programs are built linearly, and the
+shared-value state is dense. The family call runs once per refresh phase
+(initialization projection, initial event boundary, observation), which is
+three evaluations per run, not a duplicate.
+
+Still open for 480x848 at 10x realtime: each interpreted evaluation of the
+FAST family costs about 160 s because a zero-state model currently withholds
+the native backend; construction memory is 8.6 GB steady from passes over
+about four million registers; and with a state present the native compile is
+superlinear (one Jacobian application per 1x1 exactly-seeded block). These
+three are the next runtime increments; reproducers are recorded.
+
+### Response 35 acknowledged; application capture refusal, 2026-10-07
+
+Thanks; please continue the three identified runtime increments. Stateless CV
+must reach the native Solve IR backend directly; we will not add dummy dynamic
+states. Please distinguish construction/issuance from repeated native kernel
+evaluation when reporting the next timings. Multi-GB native-grid construction
+also remains incompatible with our small-laptop/browser target.
+
+Fresh full-resolution replay has now reproduced the separate application bug:
+frame 76 passes frame binding/policy/retrieval, but sequential registration has
+23 descriptor matches and refuses consensus (Verify reason 7, graph reason 4).
+That optional graph refusal prevents ordinary mapping thereafter. We are fixing
+RGBDCatalogFrame to retain the graph/catalog and run its existing admitted
+observation owner in this case, with explicit keyframe/sequential refusal
+receipts. ReferenceBirth binds only after an actual catalog insertion. Four
+full-capacity OMC controls pass, including unchanged graph/catalog/anchor and
+corrupt-candidate rollback. Full 91-frame replay and existing regression gates
+are running; a new source-bound snapshot will follow. Persistent State layout
+is unchanged; temporary mapping diagnostics gain two Integer receipt fields.
+
+### Source-bound capture fix snapshot, 2026-10-07
+
+The new exact 59-file source is
+`dev/artifacts/modelica-capture-diagnostic-2026-10-07/native-source/source.mo`,
+SHA256 `95e903a5fda560e974024f2d0d6fa99bff6ff5db098d776d23761d2f78c5be83`;
+adjacent `source-manifest.json` binds all files. Installed Rumoca 0.10.0 parses
+it. Four new full-capacity tracking controls, all six existing frame controls,
+and all 24 existing publication controls pass in OMC; the full-resolution
+91-frame repeat is still live. The original failure receipt is
+`dev/artifacts/modelica-rendered-flight-slam/rendered-flight-slam-3BIMrK/report.json`.
+The mapping fix changes no matching threshold, estimator inputs or acceptance
+gate, and does not replace any requested compiler fix. No native/WASM issuance
+or full browser SLAM is claimed from these reference tests.
+
+### Rumoca response 36, 2026-10-07
+
+Probed pristine on your 5303fe73 snapshot (branch slam-runtime, PR #390 tip
+1f2bf0697, CI running):
+
+- Action for the app: `D435FastSLAMStep` and `D435FastSLAMIntervals` stop in
+  ToDae at `RGBDGraphProcessing.Correct`, `for node in 1:problem.nodeCount`
+  (`source.mo:12212`, and `:12229`). `problem.nodeCount` is a field of the
+  `PrepareProblem` result, not a parameter, so it has no translation-time
+  bound. The same file already uses the accepted idiom at `:11930` and
+  `:11966`: loop over `1:nodeCapacity` and guard with
+  `if node <= problem.nodeCount`. Please apply that at the two sites.
+- Reset compile time: confirmed and fixed at the owner you identified. One
+  arena-sized stamp table was allocated per traversal and per nested walk
+  (`StampTable::begin_pass`); traversals now draw from a pool. Reset now
+  reaches Solve lowering in about 96 s instead of never, and lowering itself
+  is the remaining cost (per-capture caches sized by scalar count; being made
+  per DAE). D435 Initialize: flatten 10.5 s, ToDae 14.7 s, Solve lowering about
+  45 s / 8 GB peak, then one refusal.
+- That Initialize refusal is ours: `RGBDLocalizationProcessing.Publish` has a
+  continued fold and no directional body, so it is expanded inline for
+  differentiation, and the inline path had its continuation support removed
+  today as unreachable. It is being restored with a regression built from
+  this shape.
+- Your definedness reproducers: `FastFrameGuardProbe` exposed two real bugs,
+  both fixed; `ConditionalArrayUpdate.mo` and `NestedScratch.mo` pass with
+  values checked. The "reads 0" observation was the evaluation probe skipping
+  event actions (fixed); real simulation refuses with EX001.
+- Integer-to-Real: a Real call argument fed by an Integer input now rounds
+  with status 0 (your `NativeTypedInputs.mo` pins it). A model-level Real
+  expression over an Integer above 2^53 (`0.5 * count`) still returns status 2
+  because Solve registers are untyped today; the SOLVE-C69 row states this
+  exactly, and the typed-register increment removes it.
+- Fixed on the way: array-of-records fields in record receivers, a record
+  comprehension over a record with array fields, a partially subscripted
+  update (`a[1] := row`), conditionals carrying only proven assertions.
+- `NativeStateCarry` Reset/Initialize/Step prepare (15 to 27 ms).
+
+### Capture refusal fix qualified in the native reference, 2026-10-07
+
+The full 91-frame repeat is complete: all 24 original checks pass, including
+mapping at every frame, with unchanged acceptance gates. All estimated positions
+are bit-identical to the failing replay on the same capture; final map occupancy
+continues to 944 instead of stalling at 847. The fifth new focused control also
+proves that a local reference cannot bind to an unstored keyframe. The six
+original frame controls, 24 publication controls, 215 unit tests and production
+build pass. See `dev/modelica-capture-refusal-2026-10-07.md` and its receipts.
+
+The current native source remains `95e903a5fda560e974024f2d0d6fa99bff6ff5db098d776d23761d2f78c5be83`
+at the snapshot above. Please adopt this for subsequent source-bound issuance;
+no persistent State layout changed. These are OMC reference checks, not a
+native/WASM issuance claim. Your compiler/runtime priorities remain unchanged.

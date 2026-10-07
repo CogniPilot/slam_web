@@ -49,11 +49,21 @@ package RGBDCatalogFrame
         true,seeds,sequentialSeed,maximumWordDistanceSquared,minimumAssignments,minimumSimilarity,minimumAge,
         trials,refinements,minimumInliers,minimumFraction,inlierDistance,maximumRms,descriptorRatio,
         maximumDescriptorDistance,registrationCoordinateLimit,rankTolerance,localizationSigma,depthInflation,minimumPivot);
-      // PrepareCapture changes the histogram only. Projection is of the same
-      // calibrated measured geometry, and Capture checks that binding again.
-      result := RGBDCatalogMapping.Capture(catalog,graph,map,visual,candidatePoint,candidateEnabled,
-        poseAccepted,true,coordinateLimit,voxelWidth,mergeRadius,maximumDistance,tentativeLifetime,confirmedLifetime,
-        confirmationObservations,maximumConfidence,maximumTentative,consistencyTolerance,nodePosition,nodeRotation,poseRevision);
+      if visual.rejectionReason == 4 and visual.graphDiagnostics.rejectionReason == 4
+          and visual.sequentialDiagnostics.rejectionReason == 7 then
+        // Failed geometric consensus adds no keyframe or edge. The admitted
+        // observation can still update landmarks against the retained anchors.
+        result := RGBDCatalogObservation.Update(catalog,graph,map,measurement,candidatePoint,candidateEnabled,
+          poseAccepted,true,coordinateLimit,voxelWidth,mergeRadius,maximumDistance,
+          tentativeLifetime,confirmedLifetime,confirmationObservations,maximumConfidence,maximumTentative,consistencyTolerance,
+          nodePosition,nodeRotation,poseRevision);
+      else
+        result := RGBDCatalogMapping.Capture(catalog,graph,map,visual,candidatePoint,candidateEnabled,
+          poseAccepted,true,coordinateLimit,voxelWidth,mergeRadius,maximumDistance,tentativeLifetime,confirmedLifetime,
+          confirmationObservations,maximumConfidence,maximumTentative,consistencyTolerance,nodePosition,nodeRotation,poseRevision);
+      end if;
+      result.diagnostics.keyframeRejectionReason := visual.rejectionReason;
+      result.diagnostics.sequentialRejectionReason := visual.sequentialDiagnostics.rejectionReason;
     else
       result := RGBDCatalogObservation.Update(catalog,graph,map,measurement,candidatePoint,candidateEnabled,
         poseAccepted,requested and decision.valid,coordinateLimit,voxelWidth,mergeRadius,maximumDistance,

@@ -441,7 +441,8 @@ package RGBDLocalizationCatalog
                     if mapped.accepted then
                       result.next.catalog := mapped.catalog; result.next.graph := mapped.graph; result.next.map := mapped.map;
                       result.mappingAccepted := true;
-                      if result.decision.captureRequested and result.next.referenceBirth.epoch == imageEpoch
+                      if result.next.catalog.nextId == previous.catalog.nextId+1
+                        and result.next.referenceBirth.epoch == imageEpoch
                         and result.next.referenceBirth.generation == previous.generation then
                         result.next.referenceBirth.catalogId := measurement.id;
                       end if;

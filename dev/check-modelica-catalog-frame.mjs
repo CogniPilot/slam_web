@@ -6,8 +6,11 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const model='RGBDCatalogFrameAcceptance';
-const checkCount=6;
+if(process.argv.length>3||process.argv[2]!==undefined&&process.argv[2]!=='--tracking')
+  throw Error('Usage: node dev/check-modelica-catalog-frame.mjs [--tracking]');
+const tracking=process.argv[2]==='--tracking';
+const model=tracking?'RGBDCatalogFrameTrackingAcceptance':'RGBDCatalogFrameAcceptance';
+const checkCount=tracking?5:6;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'catalog-frame-semantics-'));
@@ -45,7 +48,14 @@ const names=[
   "tests/modelica/RGBDKeyframeRetrievalTests.mo",
   "tests/modelica/RGBDLoopVerificationTests.mo",
   "tests/modelica/RGBDCatalogLoopTests.mo",
-  `tests/modelica/${model}.mo`
+  ...(tracking?[
+    'models/Estimation/Inertial/SchmidtReferenceState.mo',
+    'models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo',
+    'models/Estimation/Localization/RGBDLocalizationFrame.mo',
+    'models/Estimation/Localization/RGBDLocalizationCatalog.mo',
+    'tests/modelica/RGBDLocalizationCatalogTests.mo'
+  ]:[]),
+  tracking?'tests/modelica/RGBDCatalogFrameTrackingTests.mo':`tests/modelica/${model}.mo`
 ];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=[...names,'dev/check-modelica-catalog-frame.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
@@ -83,7 +93,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===checkCount&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Actual Advance function full128/256/350/14400/96:two noncaptureimages with poisoned capture-only parameters, fullvisualcapture+maponce, late map failure, stale mapepoch and stale graph wholeowner holds. PublicFrameStep projection not qualified',
+  scope:tracking?'Actual full-capacity Advance after failed rigid consensus: retained catalog/graph, admitted map observation with old anchor, refusal receipts, and corrupted-candidate rollback. No browser/WASM qualification.':'Actual Advance function full128/256/350/14400/96:two noncaptureimages with poisoned capture-only parameters, fullvisualcapture+maponce, late map failure, stale mapepoch and stale graph wholeowner holds. PublicFrameStep projection not qualified',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   referenceFrameFunctionQualified:pass,publicFrameStepQualified:false,productionFrameIntegrated:false,fullSlamAccepted:false};
