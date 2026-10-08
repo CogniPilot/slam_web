@@ -35,6 +35,57 @@ ten expression nodes and one structured row-major equation operation. The API
 calls are separate cold processes; this is phase narrowing, not subtraction of
 timings or a matched runtime benchmark.
 
+## Same-size array controls
+
+Further controls retain all 17,150 output cells on the same compiler:
+
+| Source form | Actual browser result |
+| --- | --- |
+| Rank-one `zeros(featureCapacity*descriptorSize)` | Exceeds 20 s |
+| Original matrix shape, `fill(0.0,featureCapacity,descriptorSize)` | Exceeds 20 s |
+| Original matrix shape, copy a runtime input array | Issuance and consumer admission pass in 2.3755 s |
+| Original matrix shape, `fill(value,...)` with runtime scalar input | Two admissions pass in 2.250 and 2.543 s; identical 428-byte modules |
+
+The runtime-copy module is 418 bytes, SHA256
+`8f3bc4b0d773f5c8284bd7703914665d54b73f404aa3ced4b92e155fcbb6b890`.
+It executes in Chromium with all 17,150 output cells compared byte for byte
+across three full-input patterns and reset/replay: 68,600 checked output values.
+Inputs remain readonly; signed zero, subnormals and maximum finite values are
+preserved; memory stays fixed. Outputs are poisoned before every invocation.
+This is array-copy execution, not SLAM, Float32 or a throughput qualification.
+
+The [runtime-fill control](../tests/compiler-probes/fixtures/DescriptorRuntimeFill.mo)
+also executes with every output compared byte for byte: ten finite input values
+and reset/replay check 188,650 output values. These cover both signed zeros,
+positive/negative subnormals and maximum finite values. The scalar input remains
+readonly, including replay, and memory stays fixed. Its module SHA256 is
+`32855ec3471ee74a0b0fe62a6f3461f560ce252bafc9003add5f8e37f48c5552`.
+Thus the same shaped `fill` generator admits and executes when its value is a
+runtime scalar. Investigate constant variability/propagation paths specifically;
+changing production constants into host inputs is not a fix.
+
+The comparison makes constant-array construction/materialization a stronger
+lead than array rank or general input/output movement. Re-evaluating a complete
+constant array for each scalar projection remains a hypothesis, not an observed
+count. The exact compiler source already has `pack_tensor_generator` and
+`TensorFill` in `lower/scalar/builtins.rs`; simply adding a fill opcode is not
+the missing deliverable. Measure whether its `(context_id, expression)` cache
+is reused across output projections and whether preparation reaches this path.
+The Rust owner of the sampled WASM functions is still unverified.
+
+Reproduce with `dev/probe-descriptor-array-forms.mjs COMPILER_DIRECTORY NEW_OUTPUT_DIRECTORY`.
+An optional list of model names selects individual forms. Run
+`dev/check-descriptor-copy-browser.mjs ARRAY_FORMS_DIRECTORY NEW_REPORT [MODEL]`
+to execute the exact browser-issued artifact without compiling again; the model
+defaults to `DescriptorCopyMatrix`, with `DescriptorRuntimeFill` also supported.
+Source forms change
+rank, initializer and input ownership explicitly; no application source changes.
+Receipts and verified exact compiler source blobs are under
+`dev/artifacts/rumoca-array-form-control-2026-10-07/`.
+Its 68-file manifest preserves the originally executed and updated probes
+separately. Four corrupted source, artifact, consumer and shape receipts are
+refused without writing a passing execution report.
+
 ## Removing the record-returning call is insufficient
 
 On the prior exact merge `51e9876d699e`, a diagnostic initializes every Frame

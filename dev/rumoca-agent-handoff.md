@@ -6906,3 +6906,87 @@ Report: dev/modelica-zero-fill-admission-2026-10-07.md.
 Frozen receipts: dev/artifacts/rumoca-zero-fill-admission-2026-10-07/.
 Raw profile: $HOME/scratch/slam_web/profiles/descriptor-zero-fill-native-06cdfe312-2026-10-07/.
 Original constructor capacities, source identity and all prior runtime gates remain.
+
+### Same-size runtime copy passes; constant-array forms remain slow (application)
+
+New controlled forms use the same exact 42729cb4f520 compiler / 2fa70657 WASM.
+All retain 17,150 descriptor output cells and both named authored capacities:
+- DescriptorZeroVector: rank-one zeros(featureCapacity*descriptorSize), browser
+  issuance exceeds 20 s.
+- DescriptorFillMatrix: original matrix shape with fill(0.0,...), exceeds 20 s.
+- DescriptorCopyMatrix: original matrix shape copying runtime pixels input,
+  actual browser issuance and NativeProgram admission pass in 2.3755 s.
+
+The copy's compiler-issued module is 418 bytes, SHA256
+8f3bc4b0d773f5c8284bd7703914665d54b73f404aa3ced4b92e155fcbb6b890.
+It has now executed in Chromium: all 17,150 outputs compared byte for byte for
+three full-input patterns plus reset/replay (68,600 checked output values).
+Input bytes remain unchanged; signed zeros, subnormals and maximum finite values
+are preserved, and the WASM memory buffer stays fixed. Every output is poisoned
+before invocation, so zero-initialized memory cannot satisfy the checks. This is
+an array-copy control, not SLAM execution, Float32 or performance qualification.
+
+This changes the next investigation: array rank and record ownership are not
+necessary for the failure; runtime array input/output movement itself admits and
+works at the same cell count. Focus on constant-array construction/materialization
+and projection/identity reuse. Re-evaluating an entire constant array for each
+scalar projection is a hypothesis, not an observed count. Please measure it and
+retain compact typed constant/fill ownership rather than moving app constants to
+host inputs or reducing capacities.
+
+Reusable browser probes: dev/probe-descriptor-array-forms.mjs and
+ dev/check-descriptor-copy-browser.mjs (the second executes the exact first-issued
+artifact, without loading a compiler). Raw receipts and exact sources:
+$HOME/scratch/slam_web/tmp/descriptor-array-forms-06cdfe312-2026-10-07/.
+The original Frame/lifecycle, guard-definition and six-workload runtime gates
+remain unchanged; no production source, compiler branch or pin was modified.
+
+Exact source follow-up: official GitHub blobs at merge 42729cb4f520 are now
+verified independently by their Git blob SHA1, including builtins.rs
+5ed41e609ea44b67d3e444c504dae8b944f4d4c7. It already contains
+pack_tensor_generator, the (context_id,expression) tensor_generate_cache and
+push_tensor_fill/TensorFill. Please measure whether the constant-only roots
+reach this compact path and reuse it across projections; adding another fill
+opcode alone is not the requested fix. No Rust name is assigned to the sampled
+WASM functions from this source inspection. Exact source blobs/provenance are
+in the raw array-form receipt directory's source-42729/ subdirectory. External
+compiler trees and branches remain untouched.
+
+### Same fill generator with runtime scalar admits in 2.25 s (application)
+
+A further control on the exact same 42729cb4f520 compiler keeps the matrix and
+both authored constants, but changes fill's first argument from literal 0.0 to
+an input Real value. DescriptorRuntimeFill actual browser issuance and app
+NativeProgram admission pass in 2.250 s, issuing a 428-byte module, SHA256
+32855ec3471ee74a0b0fe62a6f3461f560ce252bafc9003add5f8e37f48c5552.
+Source: tests/compiler-probes/fixtures/DescriptorRuntimeFill.mo, SHA256
+cfce17bdc575c4cdb6e45963b2abe4aac4579658a583aa547e394f6439b324bc.
+Raw admission receipts: $HOME/scratch/slam_web/tmp/descriptor-runtime-fill-06cdfe312-2026-10-07/.
+Numerical execution for this additional form is not yet qualified.
+
+This further narrows the lead: the same shaped generator admits with a runtime
+scalar, while fill(0.0,...) and zeros(...) exceed 20 s. Investigate the paths
+selected by constant variability/constant propagation before blaming tensor
+fill itself. Exact literal_values.rs and register_folding.rs Git blobs are
+also retained in the array-form receipt's source-42729/ with verified SHA1/SHA256.
+This still does not identify the sampled hot functions or establish repeated
+whole-array fold counts. Do not turn production constants into host inputs as
+a workaround; preserve the authored source and fix the reusable compiler path.
+
+Runtime-fill execution follow-up: the reusable forms probe now supports this
+fixture and optional model-name selection. Its second independent issuance
+passes in 2.5426 s with the identical 428-byte module/hash. Browser execution
+compares all 17,150 outputs byte for byte for ten finite scalar inputs and
+reset/replay: 188,650 checked output values, including signed zeros, positive/
+negative subnormals and maximum finite values. The scalar input is readonly
+including replay, and the WASM buffer stays fixed. The copy control was also
+re-executed with the added replay readonly/buffer checks and passes all 68,600
+values. dev/check-descriptor-copy-browser.mjs supports an optional third model
+argument DescriptorRuntimeFill; its default remains DescriptorCopyMatrix.
+
+The combined regression receipts, exact source blobs, original issued modules
+and executed probe versions are frozen at
+ dev/artifacts/rumoca-array-form-control-2026-10-07/.
+The initial and re-executed versions are kept separately with source hashes;
+no compiler rebuild or app-source workaround was used. All full lifecycle,
+Float32, atomicity and six-workload throughput gates remain outstanding.
