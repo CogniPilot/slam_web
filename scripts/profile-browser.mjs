@@ -24,6 +24,21 @@ for(const name of ['index.html',...(await readdir(path.join(bundleRoot,'assets')
   bundle[name]={bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};
 }
 await writeFile(path.join(output,'bundle.json'),JSON.stringify(bundle,null,2));
+// Review a paired compiler package without changing the deployed application's pin.
+const compilerDirectory=process.env.SLAM_PROFILE_COMPILER_DIR;
+const compilerFiles=new Map(),compilerManifest={source:compilerDirectory?'review-package':'served-static-package',files:[]};
+for(const name of ['rumoca_bind_wasm.js','rumoca_bind_wasm_bg.wasm']){
+  let bytes;
+  if(compilerDirectory)bytes=await readFile(path.join(compilerDirectory,name));
+  else{
+    const response=await fetch(new URL(`vendor/rumoca/${name}`,profileUrl));
+    if(!response.ok)throw Error(`Cannot inventory compiler asset: ${name}`);
+    bytes=Buffer.from(await response.arrayBuffer());
+  }
+  compilerFiles.set(name,bytes);
+  compilerManifest.files.push({file:name,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
+}
+await writeFile(path.join(output,'compiler.json'),JSON.stringify(compilerManifest,null,2));
 const hardware=process.env.SLAM_PROFILE_SOFTWARE!=='1';
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,
   args:['--no-sandbox',...(process.env.SLAM_PROFILE_JIT==='1'?['--js-flags=--perf-basic-prof --interpreted-frames-native-stack']:[]),...(hardware?['--enable-gpu','--use-gl=angle','--use-angle=gl']:['--use-angle=swiftshader','--enable-unsafe-swiftshader'])]});
@@ -31,6 +46,10 @@ const perfProcesses=[];
 const stopPerf=async()=>{for(const child of perfProcesses){if(child.pid&&child.exitCode===null&&child.signalCode===null){child.kill('SIGINT');await new Promise(resolve=>child.once('exit',resolve));}}};
 try {
   const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];
+  await page.route('**/vendor/rumoca/rumoca_bind_wasm*',route=>{
+    const name=path.basename(new URL(route.request().url()).pathname),bytes=compilerFiles.get(name);
+    return bytes?route.fulfill({body:bytes,contentType:name.endsWith('.wasm')?'application/wasm':'text/javascript'}):route.continue();
+  });
   page.on('pageerror',error=>errors.push(error.message));
   page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
   await page.goto(profileUrl);
@@ -110,6 +129,8 @@ try {
   }
   const sessionTiming=process.env.SLAM_PROFILE_SESSION_TIMING==='1'?await startSessionTiming(root,call,new URL('.',profileUrl).href):undefined;
   if(sessionTiming)await page.evaluate(startRpcTiming);
+  const executionReceipt=()=>page.evaluate(()=>window.__slamLab.runtime.physics.call('executionReceipt'));
+  const executionBefore=process.env.SLAM_PROFILE_EXECUTION_RECEIPT==='1'?await executionReceipt():undefined;
   const cpuBefore=(await root.send('SystemInfo.getProcessInfo')).processInfo;
   const processSnapshot=async processes=>{
     const result=[];
@@ -144,6 +165,7 @@ try {
       flowCounts:Object.fromEntries(Array.from(r.flow.stats,([key,value])=>[key,value.count-(flowBefore.get(key)??0)]))};
   },{count});
   const cpuAfter=(await root.send('SystemInfo.getProcessInfo')).processInfo;
+  const executionAfter=executionBefore?await executionReceipt():undefined;
   const sessionReport=sessionTiming?{...await sessionTiming.finish(),rpc:await page.evaluate(()=>window.__profileRpcTiming.finish())}:undefined;
   if(normalBefore)await writeFile(path.join(output,'normal-process-metadata.json'),JSON.stringify({before:normalBefore,after:await processSnapshot(cpuAfter),scope:'One-time process metadata outside measured loop; no CPU/GPU/native sampling'},null,2));
   await stopPerf();
@@ -161,6 +183,8 @@ try {
   if(report.displayCloudTransferBefore)summary.displayCloudTransfer={before:report.displayCloudTransferBefore,after:report.displayCloudTransferAfter};
   if(geometryBatching!==undefined)summary.geometryBatching=geometryBatching==='1';
   if(sessionReport)summary.sessionTiming=sessionReport;
+  summary.compilerAssets=compilerManifest;
+  if(executionBefore)summary.physicsExecution={before:executionBefore,after:executionAfter};
   await writeFile(path.join(output,'timings.json'),JSON.stringify({summary,samples:report.samples},null,2));
   await page.screenshot({path:path.join(output,'world.png'),fullPage:true});
   console.log(JSON.stringify(summary,null,2));

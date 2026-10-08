@@ -30,6 +30,15 @@ test('imported math descendants remain inside actual generated-kernel time',()=>
   assert.equal(result.attribution.generatedKernelLeafUs,0);
 });
 
+test('static app vendor URLs retain the same compiler and advance attribution',()=>{
+  const profile=fixture();
+  for(const {callFrame:frame} of profile.nodes){
+    frame.url=frame.url.replace('/compiler.js','/vendor/rumoca/rumoca_bind_wasm.js')
+      .replace('/compiler.wasm','/vendor/rumoca/rumoca_bind_wasm_bg.wasm');
+  }
+  assert.deepEqual(analyzePhysicsCpuProfile(profile).attribution,analyzePhysicsCpuProfile(fixture()).attribution);
+});
+
 test('unrecognized WASM frames stay unclassified rather than becoming evidence',()=>{
   const profile=fixture();profile.nodes.push(node(9,'engine-internal','wasm://wasm/unknown'));
   profile.nodes[2].children.push(9);profile.samples=[9];profile.timeDeltas=[17];

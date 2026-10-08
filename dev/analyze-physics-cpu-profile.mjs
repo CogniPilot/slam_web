@@ -11,7 +11,7 @@ export function analyzePhysicsCpuProfile(profile) {
   }
   const bridge=frame=>frame.url.startsWith('wasm://')&&/^(js-to-wasm|wasm-to-js):/.test(frame.functionName);
   const kernel=frame=>frame.url.startsWith('wasm://')&&/^wasm-function\[\d+\]$/.test(frame.functionName);
-  const compiler=frame=>frame.url.endsWith('/compiler.wasm');
+  const compiler=frame=>/\/(?:compiler|rumoca_bind_wasm_bg)\.wasm$/.test(frame.url);
   const attribution={sampledUs:0,advanceUs:0,advanceGeneratedKernelInclusiveUs:0,generatedKernelLeafUs:0,
     compilerWasmLeafUs:0,engineBridgeLeafUs:0,unclassifiedWasmLeafUs:0,generatedModuleUrls:[]};
   const advanceGroups={projectionSingletonAssignmentInclusiveUs:0,typedPureCallInclusiveUs:0,linearSolveInclusiveUs:0};
@@ -34,7 +34,7 @@ export function analyzePhysicsCpuProfile(profile) {
       if(visited.has(current.id))throw new Error('CPU profile call tree contains a cycle');
       visited.add(current.id);
       const currentFrame=current.callFrame;
-      advance||=currentFrame.functionName==='advance_to'&&currentFrame.url.endsWith('/compiler.js');
+      advance||=currentFrame.functionName==='advance_to'&&/\/(?:compiler|rumoca_bind_wasm)\.js$/.test(currentFrame.url);
       native||=kernel(currentFrame);
       if(kernel(currentFrame))moduleUrls.add(currentFrame.url);
       if(compiler(currentFrame)){
@@ -53,7 +53,7 @@ export function analyzePhysicsCpuProfile(profile) {
     }
   }
   attribution.generatedModuleUrls=[...moduleUrls];
-  attribution.scope='Weighted CDP samples. Only unnamed wasm-function[index] frames from the current generated emitter count as kernels; V8 js-to-wasm/wasm-to-js entry trampolines are separate. Compiler functions use served /compiler.wasm. Unclassified WASM frames remain explicit. Inclusive groups can overlap; sampled durations are not exact invocation counts or unprofiled timings.';
+  attribution.scope='Weighted CDP samples. Only unnamed wasm-function[index] frames from the current generated emitter count as kernels; V8 js-to-wasm/wasm-to-js entry trampolines are separate. Compiler functions use served /compiler.wasm or /rumoca_bind_wasm_bg.wasm. Unclassified WASM frames remain explicit. Inclusive groups can overlap; sampled durations are not exact invocation counts or unprofiled timings.';
   return {attribution,advanceGroups,unclassifiedWasmFrames:[...unknownFrames].map(value=>JSON.parse(value)),
     topSelfFrames:[...selfFrames.values()].toSorted((a,b)=>b.microseconds-a.microseconds).slice(0,30)};
 }

@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {createServer} from 'node:http';
 import {build} from 'esbuild';
 import {chromium} from '@playwright/test';
+import {readModelicaModelsLibrary} from '../scripts/modelica-models-library.mjs';
 
 const [compilerArgument,outputArgument]=process.argv.slice(2);
 if(!compilerArgument||!outputArgument)throw new Error('Usage: node dev/probe-physics-portable-me.mjs compiler-directory output-directory');
@@ -15,6 +16,8 @@ const privateSetting=process.env.RUMOCA_PHYSICS_REQUIRE_PRIVATE??'0';
 if(!['0','1'].includes(privateSetting))throw new Error('RUMOCA_PHYSICS_REQUIRE_PRIVATE must be 0 or 1');
 const requirePrivate=privateSetting==='1';
 if(requirePrivate&&!observeCounters)throw new Error('Private execution coverage requires counters');
+const frames=Number(process.env.RUMOCA_PHYSICS_FRAMES??930);
+if(!Number.isInteger(frames)||frames<30||frames>930)throw new Error('RUMOCA_PHYSICS_FRAMES must be 30..930');
 const output=path.resolve(outputArgument),compilerDirectory=path.resolve(compilerArgument);
 await fs.mkdir(output,{recursive:true});
 const source=await fs.readFile('models/Vehicles/LabQuadrotor.mo');
@@ -22,19 +25,23 @@ const edited=Buffer.from(source.toString().replace('parameter Real mass = 2.0;',
 if(source.equals(edited))throw new Error('Expected exact wrapper mass parameter missing');
 const compiler=await fs.readFile(path.join(compilerDirectory,'rumoca_bind_wasm.js'));
 const wasm=await fs.readFile(path.join(compilerDirectory,'rumoca_bind_wasm_bg.wasm'));
+const workspace=Buffer.from(JSON.stringify(readModelicaModelsLibrary()));
 const sha=data=>createHash('sha256').update(data).digest('hex');
 const glue=(await build({stdin:{contents:"export {SensorClock,QUALITY_SENSOR_RATES} from './src/sensor-clock.ts'; export {readPhysicsSnapshot} from './src/physics-snapshot.ts';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'browser',write:false})).outputFiles[0].contents;
-const files=new Map([['/source.mo',source],['/edited.mo',edited],['/compiler.js',compiler],['/compiler.wasm',wasm],['/glue.js',glue]]);
+const files=new Map([['/source.mo',source],['/edited.mo',edited],['/workspace.json',workspace],['/compiler.js',compiler],['/compiler.wasm',wasm],['/glue.js',glue]]);
 const server=createServer((request,response)=>{
   response.setHeader('Content-Type',request.url.endsWith('.js')?'text/javascript':request.url.endsWith('.wasm')?'application/wasm':'text/html');
   response.end(files.get(request.url)??'<!doctype html><title>Portable Modelica ME review</title>');
 });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--disable-gpu']});
-const workerBody=async (base,observeCounters,requirePrivate)=>{
+const workerBody=async (base,observeCounters,requirePrivate,frames)=>{
   const compiler=await import(base+'/compiler.js');
   const {SensorClock,QUALITY_SENSOR_RATES,readPhysicsSnapshot}=await import(base+'/glue.js');
   await compiler.default({module_or_path:base+'/compiler.wasm'});
+  const workspace=await(await fetch(base+'/workspace.json')).text();
+  const loaded=JSON.parse(compiler.sync_workspace_sources(workspace));
+  if(loaded.error_count)throw new Error('Flight library could not load: '+loaded.skipped_files.join(', '));
   // Observe generated expression, exact assignment and private target-value kernels. Do not intercept compiler math,
   // alter operands/results, or change the imported shared memory.
   const originalInstance=WebAssembly.Instance,originalModule=WebAssembly.Module,kernelCounters=[],moduleBytes=new WeakMap();
@@ -106,7 +113,7 @@ const workerBody=async (base,observeCounters,requirePrivate)=>{
     const preparationStart=performance.now(),session=make(source,policy),preparationMs=performance.now()-preparationStart;
     const prepared=counters();
     try{
-      const initial=session.state_json(),result=run(session,930,index<2);
+      const initial=session.state_json(),result=run(session,frames,index<2);
       const advanced=counters();
       if(index===0)reference=result.trace;
       if(index===1){check(result.trace.length===reference.length,'endpoint count');for(let i=0;i<reference.length;i++)compare(reference[i],result.trace[i],'endpoint '+i);}
@@ -129,15 +136,15 @@ const workerBody=async (base,observeCounters,requirePrivate)=>{
           if(requirePrivate)check(delta(prepared,advanced).eval_private.calls>0,'Auto did not execute private target-value kernels during advance');
         }
       }
-      runs.push({index,policy,preparationMs,frames:930,events:result.events,advanceMs:result.advanceMs,advancePerCameraFrameMs:result.advanceMs/930,last:result.last,kernelsInstantiated:Object.values(total).reduce((sum,value)=>sum+value.modules,0),kernelCallsIncludingPreparationAndControls:Object.values(total).reduce((sum,value)=>sum+value.calls,0),kernelCoverage:{preparation:delta(before,prepared),advance:delta(prepared,advanced),controls:delta(advanced,completed),total}});
+      runs.push({index,policy,preparationMs,frames,events:result.events,advanceMs:result.advanceMs,advancePerCameraFrameMs:result.advanceMs/frames,last:result.last,kernelsInstantiated:Object.values(total).reduce((sum,value)=>sum+value.modules,0),kernelCallsIncludingPreparationAndControls:Object.values(total).reduce((sum,value)=>sum+value.calls,0),kernelCoverage:{preparation:delta(before,prepared),advance:delta(prepared,advanced),controls:delta(advanced,completed),total}});
     }finally{session.free();}
   }
   const changed=make(edited,'auto'),changedReference=make(edited,'interpreter');
   try{
-    const a=run(changed,120,true),b=run(changedReference,120,true);
+    const editedFrames=Math.min(120,frames),a=run(changed,editedFrames,true),b=run(changedReference,editedFrames,true);
     for(let i=0;i<a.trace.length;i++)compare(a.trace[i],b.trace[i],'edited '+i);
     check(a.trace.some((value,i)=>value.values['omega_m[1]']!==reference[i].values['omega_m[1]']),'mass source edit did not affect actual motors');
-    controls.push({sourceEdit:true,frames:120,events:a.events,allVisibleFieldsCompared:true});
+    controls.push({sourceEdit:true,frames:editedFrames,events:a.events,allVisibleFieldsCompared:true});
   }finally{changed.free();changedReference.free();}
   WebAssembly.Instance=originalInstance;WebAssembly.Module=originalModule;
   const observedAssignmentKernels=await Promise.all(kernelCounters.filter(counter=>counter.entry==='eval_assignments').map(async counter=>{
@@ -154,13 +161,13 @@ const workerBody=async (base,observeCounters,requirePrivate)=>{
 };
 try{
   const page=await browser.newPage();await page.goto(`http://127.0.0.1:${server.address().port}`);
-  await page.evaluate(({body,observeCounters,requirePrivate})=>{
+  await page.evaluate(({body,observeCounters,requirePrivate,frames})=>{
     window.physicsResult=null;
-    const worker=new Worker(URL.createObjectURL(new Blob([`(${body})(location.origin,${JSON.stringify(observeCounters)},${JSON.stringify(requirePrivate)}).catch(error=>postMessage({error:String(error.stack||error)}));`],{type:'text/javascript'})));
+    const worker=new Worker(URL.createObjectURL(new Blob([`(${body})(location.origin,${JSON.stringify(observeCounters)},${JSON.stringify(requirePrivate)},${frames}).catch(error=>postMessage({error:String(error.stack||error)}));`],{type:'text/javascript'})));
     window.physicsWorker=worker;worker.onmessage=e=>window.physicsResult=e.data;worker.onerror=e=>window.physicsResult={error:e.message};
-  },{body:workerBody.toString(),observeCounters,requirePrivate});
+  },{body:workerBody.toString(),observeCounters,requirePrivate,frames});
   await page.waitForFunction(()=>window.physicsResult!==null,{},{timeout:170000});
   const reply=await page.evaluate(()=>window.physicsResult);if(reply.error)throw new Error(reply.error);
-  const report={status:'ACTUAL_REVIEW_CHROMIUM_FULL_PLANT_POLICY_PARITY_PASS',recordedAt:new Date().toISOString(),browser:browser.version(),sourceSha256:sha(source),editedSourceSha256:sha(edited),compilerWasmSha256:sha(wasm),compilerJsSha256:sha(compiler),probeSha256:sha(await fs.readFile(import.meta.filename)),...reply.result,productionPinChanged:false,physicsStepsSkipped:0,hostMathFallback:false,scope:'Same-build Auto/Interpreter full Modelica quadrotor with unchanged adaptive integrator, tolerances and high-rate endpoint schedule. When enabled, diagnostic wrappers count generated eval_residual, eval_assignments and eval_private calls without changing arguments/results; Interpreter must use none and Auto must use assignments during advance. If private coverage is required, Auto must additionally use private target-value kernels during advance, with zero failure statuses. Observed private module hashes identify browser-instantiated bytes; they have not been matched to native inventory module hashes. ABBA advance timing includes cold first30frames and parity/JSON controls between runs, and counters when enabled; no causal whole-pipeline or CPU-hit-share claim. Projections remain canonical, so kernel hits do not establish a complete native RHS.'};
+  const report={status:'ACTUAL_REVIEW_CHROMIUM_FULL_PLANT_POLICY_PARITY_PASS',recordedAt:new Date().toISOString(),browser:browser.version(),sourceSha256:sha(source),editedSourceSha256:sha(edited),compilerWasmSha256:sha(wasm),compilerJsSha256:sha(compiler),workspaceSha256:sha(workspace),probeSha256:sha(await fs.readFile(import.meta.filename)),...reply.result,productionPinChanged:false,physicsStepsSkipped:0,hostMathFallback:false,scope:'Same-build Auto/Interpreter full Modelica quadrotor with unchanged adaptive integrator, tolerances and high-rate endpoint schedule. When enabled, diagnostic wrappers count generated eval_residual, eval_assignments and eval_private calls without changing arguments/results; Interpreter must use none and Auto must use assignments during advance. If private coverage is required, Auto must additionally use private target-value kernels during advance, with zero failure statuses. Observed private module hashes identify browser-instantiated bytes; they have not been matched to native inventory module hashes. ABBA advance timing includes cold first30frames and parity/JSON controls between runs, and counters when enabled; no causal whole-pipeline or CPU-hit-share claim. Projections remain canonical, so kernel hits do not establish a complete native RHS.'};
   await fs.writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
 }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
