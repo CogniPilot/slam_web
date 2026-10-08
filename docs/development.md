@@ -65,18 +65,18 @@ CI caches content-addressed Nix outputs and npm downloads keyed by the lockfile.
 It still runs `npm ci`, checks, and the production build for every revision;
 `dist` and `node_modules` are not reused as verification results.
 
-The experimental full-SLAM compiler and full-frame CV language-server checks
-remain strict, separately reported admission suites:
+The experimental full-SLAM compiler checks remain a strict, separately reported
+admission suite:
 
 ```sh
 npm run test:compiler-admission
-npm run test:browser:compiler-admission
 ```
 
 These currently fail with pinned Rumoca 0.10.0 and do not gate the inertial demo.
-In particular, full-frame Harris diagnostics encounter a compiler panic. The
-supported editor checks cover physics, sensors, inertial propagation, and
-evaluation. Passing the demo gates does not qualify full browser SLAM.
+Required browser editor checks cover physics, sensors, native-resolution Harris,
+inertial propagation and evaluation, including syntax errors and recovery.
+Passing language-server checks does not qualify numerical CV execution or full
+browser SLAM.
 
 ## Reviewing a local Rumoca build
 

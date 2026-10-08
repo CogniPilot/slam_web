@@ -11,7 +11,6 @@
     "test": "vitest run",
     "test:browser": "playwright test",
     "test:compiler-admission": "vitest run --config vitest.compiler.config.ts",
-    "test:browser:compiler-admission": "playwright test --config playwright.compiler.config.ts",
     "test:browser:gpu": "playwright test --config playwright.gpu.config.ts"
   },
   "dependencies": {

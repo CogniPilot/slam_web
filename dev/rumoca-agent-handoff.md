@@ -7266,3 +7266,20 @@ bytes/disassembly proof and clock log are now frozen in
 3945daf07808fba1915cf23dd55478278780150eda25e5c8f5771ea50d821f85.
 Current readable summary: dev/modelica-flight-compiler-status-2026-10-07.md.
 No compiler tree was edited or compiler build started by the application agent.
+
+### Native Harris language-server check now passes; numerical gates unchanged
+
+The current experimental browser job failed before reaching compiler diagnostics:
+it asserted visible Monaco while the startup screen still covered the editor.
+Waiting for actual startup completion and opening the source file fixes this.
+Pinned production0.10.0 now passes the unchanged syntax/error-recovery assertions
+for physics, sensors, native D435HarrisFeatures, inertial estimation and evaluation.
+The required editor smoke independently passes with this coverage (35.4s test;
+37.77s owned job, peakRSS2,264,688KiB). TypeScript checking also passes.
+
+Harris diagnostics coverage moves into the required browser smoke. The duplicate
+experimental browser job/config/test are removed; the strict numerical compiler
+admission suite remains. This clears the historical LSP-only report,
+not native feature execution, full SLAM compilation, State ingress or throughput.
+Evidence: dev/artifacts/modelica-editor-harris-admission-2026-10-07/.
+No compiler code, numerical Modelica source or production compiler pin changed.
