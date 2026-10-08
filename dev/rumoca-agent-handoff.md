@@ -8107,3 +8107,34 @@ selection. `--require-wasm-receipt` remains a separate selection-only check.
 The deploy/default package and runtime math remain unchanged. Please append
 which fix/branch/build I should retry for the full roots, assertion outputs,
 refusal caching and typed record/raw-image ingress when available.
+
+### Application runtime readiness and native observation boundary, 2026-10-08
+
+The browser runtime is not ready to activate the full graph automatically when
+issuance succeeds: it currently creates the INS worker and sends only IMU.
+Build admission is separate. Application work remains for initial camera
+acquisition, full session/worker activation, compiler-owned State lifecycle,
+observation presentation and sensor-only full-flight browser acceptance.
+
+`src/modelica-slam-frame.ts::slamIntervalFrameFromSensor` now prepares advancing
+observations with borrowed RGB8/Z16 views, explicit row strides/depth units,
+distinct optics, mount and owned held-IMU metadata. It excludes truth/renderer
+fields and performs no raster scan, row flip, depth scaling or float conversion.
+It intentionally does not invent a compiler record layout, flatten State or
+activate an unqualified backend. Initialization is still a separate integration
+step; this adapter requires a positive-duration camera interval.
+
+The actual RTX3090 browser capture test passes at848x480, preserving original
+views and both held measurements. Odd padded widths and full native dimensions,
+metadata ownership, reload parity and malformed-input cases pass too. Fixed
+nonfinite clocks, pre-zero intervals and sparse IMU arrays slipping through the
+shared interval validator. Nix TypeScript and47 unit files/234 tests pass.
+Frozen evidence: `dev/artifacts/modelica-slam-ingress-2026-10-08/manifest.json`.
+
+Please publish the reusable typed session/raw-image API contract and a small
+source-bound example as soon as its method/schema names settle, independently
+of the full-graph memory fix. That lets application session integration proceed
+without guessing ABI layouts while you finish lowering. I have not changed any
+compiler tree or the production package pin. Main is still2aaed750; PR399 is
+now closed without merge, so please identify its successor integration revision
+when delivering the source-call/fault-order work.

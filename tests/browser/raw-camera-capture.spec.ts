@@ -2,11 +2,11 @@ import {test,expect} from '@playwright/test';
 import {build} from 'esbuild';
 
 test('native raw camera/cloud/LiDAR share one direct GPU readback with exact capture parity and recovery',async({page},testInfo)=>{
- const bundle=await build({stdin:{contents:"import * as THREE from 'three';import {World,D435} from './src/world';globalThis.__rawCapture={THREE,World,D435};",resolveDir:process.cwd()},bundle:true,write:false,format:'iife',define:{'import.meta.env.BASE_URL':'"/"'},logLevel:'silent'});
+ const bundle=await build({stdin:{contents:"import * as THREE from 'three';import {World,D435} from './src/world';import {slamIntervalFrameFromSensor} from './src/modelica-slam-frame';globalThis.__rawCapture={THREE,World,D435,slamIntervalFrameFromSensor};",resolveDir:process.cwd()},bundle:true,write:false,format:'iife',define:{'import.meta.env.BASE_URL':'"/"'},logLevel:'silent'});
  await page.route('**/__raw-capture__',route=>route.fulfill({contentType:'text/html',body:'<!doctype html><title>Raw capture</title>'}));
  await page.goto('/__raw-capture__');await page.addScriptTag({content:bundle.outputFiles[0].text});
  const result=await page.evaluate(async()=>{
-  const {THREE,World,D435:c}=(window as any).__rawCapture,world=new World({canvas:new OffscreenCanvas(640,400),width:640,height:400,pixelRatio:1,base:location.origin+'/'});
+  const {THREE,World,D435:c,slamIntervalFrameFromSensor}=(window as any).__rawCapture,world=new World({canvas:new OffscreenCanvas(640,400),width:640,height:400,pixelRatio:1,base:location.origin+'/'});
   await world.ready;world.configureActors(false,false);world.actors.group.visible=false;world.navigation.group.visible=false;world.sensorGeometryBatches.clear();world.environment.clear();world.scene.fog=null;
   const plane=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.MeshBasicMaterial({color:0x789abc,side:THREE.DoubleSide}));
   plane.rotation.y=Math.PI/2;plane.position.set(c.forward+4,1.5+c.up,0);world.environment.add(plane);
@@ -35,7 +35,12 @@ test('native raw camera/cloud/LiDAR share one direct GPU readback with exact cap
   world.renderer.render=render;
   const restored=world.renderer.getRenderTarget()===null&&world.scene.overrideMaterial===null&&world.scene.matrixWorldAutoUpdate&&!world.asyncCapture&&!world.lidar.busy;
   const [recovered]=await world.captureSensorPair(false,'sync',false,true);
+  const held=[{time:.05,dt:.05,imu:{accel:[1,2,9.81],gyro:[.1,0,0]}},{time:.1,dt:.05,imu:{accel:[3,4,9.81],gyro:[.2,0,0]}}];
+  const input=slamIntervalFrameFromSensor({...raw,sequence:9,time:.1,dt:.1,
+    calibration:{...c,depthEncoding:'axial-z16-le'},imu:{accel:[999,0,0],gyro:[999,0,0]},imuIntervals:held});
   const result={graphics:world.graphics,copies:syncCopies,asyncCopies,rgbExact,depthExact,cloudError,
+   slamIngress:{borrowed:input.rgb===raw.rgb&&input.depth===raw.depth,heldIntervals:input.intervals,
+    frameTime:input.frameTime,imageEpoch:input.imageEpoch,depthUnits:input.depthUnits,layout:input.imageLayout},
    shared:[raw.depth,raw.depthCloud.samples,scan.samples].every(view=>view.buffer===raw.rgb.buffer),
    cameraBytes:raw.rgb.byteLength+raw.depth.byteLength,totalBytes:raw.rgb.buffer.byteLength,
    lidarExact:equal(oldScan.samples,scan.samples),cloudExact:equal(normalized.depthCloud.samples,raw.depthCloud.samples),
@@ -49,5 +54,8 @@ test('native raw camera/cloud/LiDAR share one direct GPU readback with exact cap
  await testInfo.attach('raw-camera-capture.json',{body:JSON.stringify(result,null,2),contentType:'application/json'});
  for(const key of ['rgbExact','depthExact','shared','lidarExact','cloudExact','asyncExact','unpackedExact','fallbackExact','rejected','restored','recovery'] as const)expect(result[key]).toBe(true);
  expect(result.fallbackKeys).toEqual(['depth','imageLayout','rgb']);
+ expect(result.slamIngress.borrowed).toBe(true);expect(result.slamIngress.frameTime).toBe(.1);expect(result.slamIngress.imageEpoch).toBe(9);
+ expect(result.slamIngress.depthUnits).toBe(.001);expect(result.slamIngress.layout).toEqual(result.layout);
+ expect(result.slamIngress.heldIntervals.map((i:any)=>i.imu.accel[0])).toEqual([1,3]);
  expect(result.copies).toBe(1);expect(result.asyncCopies).toBe(1);expect(result.cameraBytes).toBe(2035200);expect(result.cloudError).toBeLessThan(2e-6);expect(result.error).toBe(0);
 });

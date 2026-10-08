@@ -29,3 +29,10 @@ Three.js GPU sensors. The SLAM source menu supports editing, LSP diagnostics,
 project persistence and a cancellable browser WASM build check. It does not
 activate an unqualified SLAM artifact. Full browser SLAM and 10× realtime have
 not been achieved.
+
+[The native frame boundary](../src/modelica-slam-frame.ts) prepares positive-duration
+camera observations for the interval entrypoint without scanning or converting
+pixels. It preserves RGB8/Z16 views, row strides, depth units and every held IMU
+interval, and excludes renderer and truth metadata. Its GPU capture and recording
+tests qualify transport only. Initial camera acquisition, compiler ABI binding,
+complete State lifecycle and live backend activation still require integration.
