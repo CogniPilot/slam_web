@@ -1,28 +1,15 @@
-# Modelica source guide
+# Modelica sources
 
-The source tree follows the responsibilities of a robotics library. Start with the vehicle, sensor, or estimator entrypoint, then open its mathematical dependencies.
+The canonical library is maintained in
+[CogniPilot Modelica Models](https://github.com/CogniPilot/modelica_models).
+`Libraries/CogniPilot` is a Git submodule pinned by this repository. Its sources
+are bundled with the static website and remain editable in saved projects.
 
-| Directory | Contents |
-| --- | --- |
-| Examples | Selectable top-level experiments, starting with inertial navigation |
-| Vehicles | Quadrotor dynamics and teaching controller |
-| Sensors | D435 image constants, observations and availability |
-| Vision/Features | Harris and FAST kernels and feature selection |
-| Vision/Matching | Calibrated RGB-D descriptors and patch tracking |
-| Math | Rigid registration and symmetric matrix solves |
-| Estimation/Inertial | Inertial propagation and error-state/Schmidt filtering |
-| Estimation/Localization | RGB-D relative pose and localization transactions |
-| Mapping | Landmark catalogs, spatial indexing and anchor ownership |
-| LoopClosure | Keyframes, visual words, retrieval and verification |
-| Optimization | Pose graph, covariance and graph transactions |
-| SLAM | Public reset, initialization and step entrypoints |
-| Scene | Deterministic actor motion |
-| Evaluation | Teaching metrics |
-| Libraries/CogniPilot | Pinned upstream control, estimation, planning and dynamics packages |
-| upstream | Exact vendored sources, licenses and provenance |
+The other directories contain generated compatibility snapshots from that
+library. `slam-provenance.json` records their upstream revision, class mapping
+and hashes. Algorithm changes belong upstream, rather than in these snapshots.
 
-`Examples/package.mo` is a Modelica package: choose `Examples.InertialOnly`, `Examples.ResponsiveInertial`, or `Examples.SmoothedInertial` as the entry point. Compose components and wire their arrays in Modelica; the host provides sensor inputs and displays outputs. These examples currently implement inertial navigation. The full RGB-D SLAM lifecycle is staged separately.
-
-The other directories group existing standalone classes and inline packages by responsibility. Their public names remain stable. Moving them into a qualified library namespace requires coordinated compiler workspace loading and saved-project migration.
-
-[Source locations](../src/modelica-source-locations.mjs) provide one inventory for dynamic tooling. Saved flat-directory workspace paths migrate to the new locations without changing any source text. Historical compiler receipts and numerical evidence retain their original paths and hashes.
+Use **Docs** in the app to browse package help and **Files** to edit your project
+copy. Saved projects retain their own source when the bundled library changes.
+The web app owns rendering, transport, editing and presentation. Source migration
+does not establish full browser SLAM execution.

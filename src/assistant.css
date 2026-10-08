@@ -1,0 +1,16 @@
+.assistant-panel {padding:16px;overflow:auto;min-height:0;flex:1;font-size:13px}
+.assistant-panel p {line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.assistant-connect {display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.assistant-panel label {display:flex;flex-direction:column;gap:5px;min-width:0}
+.assistant-panel input,.assistant-panel select,.assistant-panel textarea {width:100%;box-sizing:border-box;min-width:0}
+.assistant-panel textarea {font:inherit;resize:vertical;min-height:75px;background:#0d151e;color:inherit;border:1px solid #34505f;border-radius:6px;padding:8px}
+.assistant-log {max-height:280px;overflow:auto;border-block:1px solid #29404a;margin:14px 0}
+.assistant-prompt > div {display:flex;gap:8px;margin-top:8px}
+.assistant-proposal {border-top:1px solid #34505f;padding:12px 0}
+.assistant-proposal h3 {overflow-wrap:anywhere}
+.assistant-proposal button {margin:8px 8px 0 0}
+.assistant-diff {height:300px;min-width:0}
+@media(max-width:500px){.assistant-connect{grid-template-columns:1fr}.assistant-panel{padding:12px}}
+/* App pane styles use .editor too; isolate Monaco's internal diff editors. */
+.assistant-diff {position:relative;overflow:hidden;contain:layout paint}
+.assistant-diff .editor {display:block;min-height:0;max-height:none}

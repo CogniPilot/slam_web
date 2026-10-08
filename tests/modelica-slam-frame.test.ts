@@ -1,9 +1,9 @@
 import {expect,it} from 'vitest';
 import {allocateRealSenseImages,cameraImageLayout} from '../src/gpu-realsense-packing';
-import {slamIntervalFrameFromSensor} from '../src/modelica-slam-frame';
+import {slamInitialFrameFromSensor,slamIntervalFrameFromSensor} from '../src/modelica-slam-frame';
 import {packFrame,unpackFrame} from '../src/packet';
 import {D435} from '../src/camera-profile';
-import type {SensorFrame} from '../src/types';
+import type {InitialSensorFrame,SensorFrame} from '../src/types';
 
 function sensor(width=3,height=2):SensorFrame {
   const {images}=allocateRealSenseImages({width,height},{width,height},.002,128);
@@ -17,6 +17,23 @@ function sensor(width=3,height=2):SensorFrame {
     imuIntervals:[{time:.09,dt:.01,imu:{accel:[1,2,3],gyro:[.1,.2,.3]}},
       {time:.1,dt:.01,imu:{accel:[4,5,6],gyro:[.4,.5,.6]}}]};
 }
+function initial():InitialSensorFrame {return {...sensor(),sequence:0,time:0,dt:0,imuIntervals:[]};}
+
+it('initializes from the time-zero camera and measured IMU without inventing an interval or copying rasters',()=>{
+  const frame=initial(),result=slamInitialFrameFromSensor(frame);
+  expect(result.frameTime).toBe(0);expect(result.imageEpoch).toBe(0);expect(result.imu).toEqual(frame.imu);
+  expect(result.imu).not.toBe(frame.imu);expect(result.rgb).toBe(frame.rgb);expect(result.depth).toBe(frame.depth);
+  expect(Object.hasOwn(result,'intervals')).toBe(false);
+  frame.imu.accel[0]=999;expect(result.imu.accel[0]).toBe(9);
+  expect(()=>slamIntervalFrameFromSensor(frame)).toThrow('timestep');
+});
+
+it('refuses nonzero initialization clocks, elapsed intervals and missing initialization metadata',()=>{
+  for(const change of [{time:.01},{time:NaN},{dt:.01},{imuIntervals:undefined},{imuIntervals:sensor().imuIntervals}])
+    expect(()=>slamInitialFrameFromSensor({...initial(),...change} as InitialSensorFrame)).toThrow('time zero');
+  const frame=initial();frame.imu.accel=Array(3);
+  expect(()=>slamInitialFrameFromSensor(frame)).toThrow('IMU');
+});
 
 it.each([[3,2],[848,480]])('borrows native %i×%i images with strides and exact Z16 units, without raster access',(width,height)=>{
   const frame=sensor(width,height),before=new Uint8Array(frame.rgb.buffer).slice();

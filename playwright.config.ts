@@ -11,6 +11,8 @@ export default defineConfig({
     '**/gpu-depth-noise.spec.ts',
     '**/viewer-cloud-transfer.spec.ts',
     '**/configuration-panel.spec.ts',
+    '**/modelica-docs.spec.ts',
+    '**/assistant.spec.ts',
     '**/workspace-panes.spec.ts',
     '**/modelica-examples.spec.ts',
     '**/project-rejection.spec.ts',

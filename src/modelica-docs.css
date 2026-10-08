@@ -1,0 +1,19 @@
+.modelica-docs { display:flex; flex:1; flex-direction:column; min-height:0; overflow:hidden; }
+.modelica-docs[hidden] { display:none; }
+.docs-toolbar { display:flex; gap:8px; padding:12px; }
+.docs-toolbar input { flex:1; width:0; }
+.docs-status { color:var(--muted); margin:0; padding:0 12px 10px; font-size:11px; overflow-wrap:anywhere; }
+.docs-body { display:grid; grid-template-columns:minmax(130px, 30%) minmax(0, 1fr); flex:1; min-height:0; }
+.docs-body nav { overflow:auto; border-right:1px solid var(--line); padding:6px; }
+.docs-body nav button { display:block; width:100%; text-align:left; font-size:11px; overflow-wrap:anywhere; border:0; background:transparent; }
+.docs-body nav button[aria-current] { color:var(--green); background:#21453e; }
+.docs-body article { padding:14px; min-width:0; overflow:auto; line-height:1.6; overflow-wrap:anywhere; }
+.docs-body article > h2 { font-size:16px; margin-top:0; }
+.docs-body article a { color:var(--green); }
+.docs-body article table { border-collapse:collapse; width:100%; font-size:11px; }
+.docs-body article td, .docs-body article th { padding:6px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+.docs-body article pre { white-space:pre-wrap; }
+@media (max-width:760px) {
+  .docs-body { grid-template-columns:1fr; grid-template-rows:150px minmax(0, 1fr); }
+  .docs-body nav { border-right:0; border-bottom:1px solid var(--line); }
+}

@@ -4,7 +4,7 @@ type RpcId=number|string|null;
 type Message={jsonrpc:'2.0';id?:RpcId;method?:string;params?:any;result?:any;error?:{code:number;message:string}};
 type Position={line:number;character:number};
 type Document={text:string;version:number};
-type Rumoca=Pick<typeof import('@cognipilot/rumoca'),'get_version'|'get_git_commit'|'sync_workspace_sources'|'lsp_diagnostics'|'lsp_completion'|'lsp_hover'|'lsp_definition'|'lsp_document_symbols'|'lsp_semantic_tokens'|'lsp_semantic_token_legend'|'lsp_code_actions'> & Partial<Pick<typeof import('@cognipilot/rumoca'),'get_simulation_models'>>;
+type Rumoca=Pick<typeof import('@cognipilot/rumoca'),'get_version'|'get_git_commit'|'sync_workspace_sources'|'lsp_diagnostics'|'lsp_completion'|'lsp_hover'|'lsp_definition'|'lsp_document_symbols'|'lsp_semantic_tokens'|'lsp_semantic_token_legend'|'lsp_code_actions'> & Partial<Pick<typeof import('@cognipilot/rumoca'),'get_simulation_models'|'list_classes'|'get_class_info'|'compile_check_with_source_roots'>>;
 class RpcError extends Error {constructor(readonly code:number,message:string){super(message);}}
 const position=(value:any):Position=>{
   if(!Number.isInteger(value?.line)||!Number.isInteger(value?.character)||value.line<0||value.character<0||value.line>0xffffffff||value.character>0xffffffff)throw new RpcError(-32602,'Expected a zero-based UTF-16 LSP position');
@@ -142,6 +142,28 @@ export class RumocaLanguageServer {
         if(this.shuttingDown&&message.method!=='exit')throw new RpcError(-32600,'Language server is shutting down');
         switch(message.method) {
           case 'initialized':case '$/cancelRequest':case '$/setTrace':break;
+          case 'modelica/checkModel': {
+            if(typeof params.source!=='string'||typeof params.model!=='string'||!params.model)
+              throw new RpcError(-32602,'Model check requires source and model name');
+            const sources=workspaceSources({modelica:{workspaceSources:params.sources}}),api=await this.api();
+            if(!api.compile_check_with_source_roots)throw new RpcError(-32601,'Rumoca model checking is unavailable');
+            this.syncedWorkspace=undefined;
+            result=JSON.parse(api.compile_check_with_source_roots(params.source,params.model,sources));break;
+          }
+          case 'modelica/documentation': {
+            if(this.documents.size)throw new RpcError(-32602,'Documentation requires a separate read-only workspace worker');
+            const api=await this.api();
+            if(!api.list_classes||!api.get_class_info)throw new RpcError(-32601,'Rumoca documentation is unavailable');
+            const sources=workspaceSources({modelica:{workspaceSources:params.sources}});
+            if(params.name!==undefined&&(typeof params.name!=='string'||!params.name))
+              throw new RpcError(-32602,'Documentation requires a nonempty class name');
+            if(this.syncedWorkspace!==sources){
+              this.syncedWorkspace=undefined;
+              api.sync_workspace_sources(sources);
+              this.syncedWorkspace=sources;
+            }
+            result=JSON.parse(params.name===undefined?api.list_classes():api.get_class_info(params.name));break;
+          }
           case 'modelica/simulationModels': {
             if(typeof params.source!=='string'||typeof params.defaultModel!=='string')
               throw new RpcError(-32602,'Model discovery requires source and defaultModel');

@@ -13,3 +13,4 @@ path into portable sources.
 Use `James Goppert <james.goppert@gmail.com>` as the Git author and committer.
 Create every commit with `git commit -s` so it includes the matching DCO
 `Signed-off-by` trailer. Do not add AI co-author or AI attribution trailers.
+Use neutral branch names and commit messages without assistant or tool branding.

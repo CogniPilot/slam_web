@@ -7,3 +7,7 @@ Vendored quadrotor sources retain their upstream notices in
 models/upstream/quadrotor/NOTICE.md and models/upstream/quadrotor/LICENSE.
 Third-party rendering assets retain the licenses and attribution bundled
 under public/models and public/textures.
+
+GitHub mark: GitHub Octicons, copyright 2026 GitHub Inc., MIT License.
+Source: https://github.com/primer/octicons
+License: public/brand/github-LICENSE.txt

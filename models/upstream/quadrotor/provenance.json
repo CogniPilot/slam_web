@@ -13,5 +13,5 @@
     "QuadrotorSIL.mo": "341a179807eb9d0bff2f356f9219eeed5edcf5dda99da0a53fa4f8d703d1e0bc",
     "LICENSE": "e86c051bb4b1c95a328b865ccf4b1f0fdadec0284ec5e8cadf214c8bde529e41"
   },
-  "dependencies": "RigidBody, LieGroups and Control are provided by the unmodified local modelica_models library; see models/Libraries/CogniPilot/provenance.json."
+  "dependencies": "RigidBody, LieGroups and Control are provided by the pinned modelica_models submodule at models/Libraries/CogniPilot."
 }

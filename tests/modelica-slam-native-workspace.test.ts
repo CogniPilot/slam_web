@@ -13,7 +13,7 @@ it('assembles current native sources and preserves a previously saved compiler d
   expect(Object.keys(workspace.sources)).toEqual(native.paths);
   expect(Object.keys(workspace.sources)).toHaveLength(59);
   const composition=await assembleRGBDSlamWorkspace(workspace);
-  const delivered=JSON.parse(readFileSync('dev/artifacts/modelica-raw-image-inputs/native-source-2026-10-07/source-manifest.json','utf8'));
+  const delivered=JSON.parse(readFileSync('tests/fixtures/modelica-raw-image-inputs/source-manifest.json','utf8'));
   expect(composition.modelNames).toEqual(['RGBDFastSLAMReset','D435FastSLAMInitialize','D435FastSLAMStep','D435FastSLAMIntervals']);
   const current=native.paths.map(file=>readFileSync(file,'utf8')).join(native.separator);
   expect(composition.source).toBe(current);
@@ -21,7 +21,7 @@ it('assembles current native sources and preserves a previously saved compiler d
   expect(composition.sources.every(file=>file.overridden)).toBe(true);
   // A frozen delivery is saved source, not a golden for later algorithm edits.
   // Reopen every original byte and verify that bundled changes cannot replace it.
-  const frozen=readFileSync('dev/artifacts/modelica-raw-image-inputs/native-source-2026-10-07/source.mo');
+  const frozen=readFileSync('tests/fixtures/modelica-raw-image-inputs/source.mo');
   let offset=0;const sources:Record<string,string>={};
   for(const file of delivered.sources){
     const bytes=frozen.subarray(offset,offset+file.bytes);

@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import init,* as rumoca from '@cognipilot/rumoca';
 
 const preimages={
-  native:{path:'dev/artifacts/modelica-harris-nms-native-refactor/preimages/HarrisNativeFrame.mo',sha:'18e456247e415add38f7ffdb509d5bf22e0b818ee27bacc24372244867dcf46a'},
+  native:{path:'tests/fixtures/modelica-harris-before-refactor.mo',sha:'18e456247e415add38f7ffdb509d5bf22e0b818ee27bacc24372244867dcf46a'},
 };
 function original(key:keyof typeof preimages){
   const entry=preimages[key],bytes=readFileSync(entry.path);

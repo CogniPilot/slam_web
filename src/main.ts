@@ -23,11 +23,14 @@ import {ColorPreview} from './color-preview';
 import {createSourceExplorer} from './source-explorer';
 import {mountWorkspacePanes} from './workspace-panes';
 import {startupScreen} from './startup-screen';
+import {createModelicaDocs} from './modelica-docs';
+import {createAssistantPanel} from './assistant-panel';
+import './modelica-docs.css';
 import './workspace.css';
 
 const startup=startupScreen();
 document.querySelector('#app')!.innerHTML=`
-<header><a class="brand" href="./"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button></div><a class="project-github" href="https://github.com/CogniPilot/slam_web" target="_blank" rel="noopener noreferrer" aria-label="SLAM Lab on GitHub">GitHub</a><a class="powered-by" href="https://github.com/CogniPilot/rumoca" target="_blank" rel="noopener noreferrer"><img src="${import.meta.env.BASE_URL}brand/rumoca.svg" width="24" height="24" alt=""><span>Powered by Rumoca</span></a></header>
+<header><a class="brand" href="./"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button></div><a class="project-github" href="https://github.com/CogniPilot/slam_web" target="_blank" rel="noopener noreferrer" aria-label="SLAM Lab on GitHub" title="View source on GitHub"><img src="${import.meta.env.BASE_URL}brand/github.svg" width="24" height="24" alt=""></a><a class="powered-by" href="https://github.com/CogniPilot/rumoca" target="_blank" rel="noopener noreferrer" aria-label="Powered by Rumoca" title="Rumoca Modelica compiler"><span>Powered by</span><img src="${import.meta.env.BASE_URL}brand/rumoca.svg" width="28" height="28" alt=""></a></header>
 <main><div class="toolbar"><div class="run-controls"><button id="run" class="primary" disabled>▶ Run</button><button id="step" disabled>Step</button><button id="reset" disabled>↺ Reset</button><select id="speed" aria-label="Simulation speed"><option value="1">1× real time</option><option value="4">4× real time</option><option value="Infinity">As fast as possible</option></select><label class="check"><input id="tour" type="checkbox" checked>Flight tour</label></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option value="city">City blocks</option><option value="warehouse">Warehouse</option><option value="courtyard">Courtyard</option></select><label class="check"><input id="show-map" type="checkbox" checked>Show map</label><button id="help">Lesson guide</button></div></div>
 <div class="workspace"><section class="visuals"><div class="scene panel"><div class="panel-label"><span class="live-dot"></span>WORLD VIEW<span class="right">Three.js · orbit to explore</span></div><div id="world"></div><div class="scene-overlay"><span>QUADROTOR + D435</span><small id="flight-status">Initializing browser runtimes</small></div><div class="scene-bottom">WASD move · Q/E yaw · R/F altitude <span id="sim-time">t = 0.00 s</span></div></div>
 <div class="sensor-row"><div class="panel sensor"><div class="panel-label">RGB CAMERA<span class="right">features overlay</span></div><canvas id="rgb" width="160" height="90"></canvas><div class="sensor-foot">69° × 42° · RGBA8</div></div><div class="panel sensor"><div class="panel-label">DEPTH CAMERA<span class="right">axial depth, meters</span></div><canvas id="depth" width="160" height="90"></canvas><div class="sensor-foot">87° × 58° · 0.28–10 m</div></div><div class="panel trajectory"><div class="panel-label">TRAJECTORY<span class="right">ENU · meters</span></div><canvas id="trajectory" width="260" height="146"></canvas><div class="legend"><span class="truth-key">Truth</span><span class="estimate-key">Estimate</span><span class="compare-key">External</span></div></div></div>
@@ -167,6 +170,52 @@ let activeSlamFile='',activeLibraryFile='',slamFileLoad=0;
 const viewingSlamFile=()=>selected.kind==='slam'&&!!activeSlamFile&&!!project.slamWorkspace;
 const viewingLibraryFile=()=>selected.kind==='slam'&&!!activeLibraryFile&&Object.hasOwn(project.modelicaSources??{},activeLibraryFile);
 const selectedSource=()=>viewingSlamFile()?project.slamWorkspace!.sources[activeSlamFile]:viewingLibraryFile()?project.modelicaSources![activeLibraryFile]:sourceFor(selected,project);
+function experimentPath(node:GraphNode){
+  if(node.kind==='slam')return project.mainSourcePath??'models/Main.mo';
+  const paths:Partial<Record<GraphNode['kind'],string>>={physics:'models/Vehicles/LabQuadrotor.mo',sensor:'models/Sensors/SensorObservations.mo',detector:'models/Vision/Features/FeatureDetector.mo',evaluation:'models/Evaluation/RuntimeEvaluation.mo'};
+  return paths[node.kind]??`models/Experiment/${node.id}.mo`;
+}
+function projectFiles():Record<string,string>{
+  return {...project.modelicaSources,...project.slamWorkspace?.sources,
+    ...Object.fromEntries(project.graph.nodes.filter(node=>node.kind!=='map').map(node=>[experimentPath(node),sourceFor(node,project)]))};
+}
+function sourceId(path:string){
+  const node=project.graph.nodes.find(node=>experimentPath(node)===path);
+  return node?'experiment:'+node.id:Object.hasOwn(project.modelicaSources??{},path)?'library:'+path:path;
+}
+const documentation=createModelicaDocs({
+  sources:projectFiles,
+  request:(sources,name)=>sourceEditor.documentation(sources,name),
+  openSource:path=>{configuration.showEditor();void openSource(sourceId(path));}
+});
+configuration.addPanel('docs','Docs',documentation.element);
+const assistant=createAssistantPanel({
+  identity:()=>project,
+  files:projectFiles,
+  activePath:()=>viewingSlamFile()?activeSlamFile:viewingLibraryFile()?activeLibraryFile:experimentPath(selected),
+  apply:(path,source)=>{
+    if(compiling)throw new Error('Wait for the current compilation to finish.');
+    const node=project.graph.nodes.find(node=>experimentPath(node)===path);
+    if(node){activeSlamFile='';activeLibraryFile='';selectNode(node,false);}
+    else if(Object.hasOwn(project.modelicaSources??{},path)){
+      activeSlamFile='';activeLibraryFile=path;selectNode(project.graph.nodes.find(node=>node.kind==='slam')!,false);
+    }else if(Object.hasOwn(project.slamWorkspace?.sources??{},path)){
+      activeSlamFile=path;activeLibraryFile='';selectNode(project.graph.nodes.find(node=>node.kind==='slam')!,false);
+    }else throw new Error('Unknown project file');
+    code.value=source;code.dispatchEvent(new Event('input',{bubbles:true}));
+  },
+  diagnostics:()=>({path:viewingSlamFile()?activeSlamFile:viewingLibraryFile()?activeLibraryFile:experimentPath(selected),diagnostics:sourceEditor.getDiagnostics()}),
+  compile:async()=>{
+    const model=project.entryPoint??'ModelicaInertial',path=project.mainSourcePath??'models/Main.mo';
+    return {scope:'selected runnable example',model,path,
+      excluded:'Full SLAM workspace and other experiment sources are not checked.',
+      result:await sourceEditor.checkModel(project.algorithm,model,project.modelicaSources??{})};
+  },
+  searchDocs:query=>documentation.search(query),
+  readDocs:name=>documentation.read(name)
+});
+configuration.addPanel('assistant','Assistant',assistant.element);
+window.addEventListener('pagehide',()=>assistant.agent.cancel());
 function syncApplyButton(){
   const button=el<HTMLButtonElement>('apply');
   button.disabled=compiling||viewingSlamFile();

@@ -15,7 +15,7 @@ const compose=(files:{source:string}[])=>files.map(file=>file.source).join('\n')
 it('preserves the existing 56-file order and exact complete authored source in browser composition',async()=>{
   // Independently retained pre-refactor exporter inventory; its old source
   // hashes are not expected to match later edits to authored Modelica files.
-  const previous=JSON.parse(readFileSync('dev/artifacts/modelica-owned-vocabulary-source/source-manifest.json','utf8'));
+  const previous=JSON.parse(readFileSync('tests/fixtures/modelica-owned-vocabulary-source/source-manifest.json','utf8'));
   expect(manifest.paths).toEqual(previous.sources.map((file:{path:string})=>migrateModelicaSourcePath(file.path)));
   expect(manifest.paths).toHaveLength(56);
   expect(new Set(manifest.paths).size).toBe(56);

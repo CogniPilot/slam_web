@@ -1,4 +1,4 @@
-import type { SensorFrame } from './types';
+import type { SensorFrame,SensorObservation } from './types';
 import {imuIntervals} from './imu-intervals';
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -46,6 +46,11 @@ export function unpackFrame(bytes: Uint8Array): SensorFrame {
   validateSensorFrame(frame);return frame;
 }
 export function validateSensorFrame(frame:SensorFrame) {
+  validateSensorObservation(frame);
+  if(!Number.isFinite(frame.dt)||frame.dt<=0||frame.dt>1)throw new Error('Invalid sensor frame timestamp or timestep');
+  if(frame.imuIntervals!==undefined)imuIntervals(frame);
+}
+export function validateSensorObservation(frame:SensorObservation) {
   const k=frame.calibration;
   if(!k||!Number.isInteger(k.width)||!Number.isInteger(k.height)||k.width<=0||k.height<=0||k.width*k.height>990_000||!(frame.rgb instanceof Uint8Array))throw new Error('Invalid sensor frame shape');
   if(frame.imageLayout){
@@ -54,12 +59,11 @@ export function validateSensorFrame(frame:SensorFrame) {
     for(const [layout,channels,bytes] of [[color,3,frame.rgb.byteLength],[depth,2,frame.depth.byteLength]] as const)
       if(layout.width!==k.width||layout.height!==k.height||!Number.isSafeInteger(layout.strideBytes)||layout.strideBytes<k.width*channels||layout.strideBytes%4||layout.bytes!==layout.strideBytes*k.height||layout.bytes!==bytes)throw Error('Invalid raw camera stride/shape');
   }else if(!(frame.depth instanceof Float32Array)||frame.rgb.length!==k.width*k.height*4||frame.depth.length!==k.width*k.height)throw Error('Invalid sensor frame shape');
-  if(!Number.isSafeInteger(frame.sequence)||frame.sequence<0||!Number.isFinite(frame.time)||frame.time<0||!Number.isFinite(frame.dt)||frame.dt<=0||frame.dt>1)throw new Error('Invalid sensor frame timestamp or timestep');
+  if(!Number.isSafeInteger(frame.sequence)||frame.sequence<0||!Number.isFinite(frame.time)||frame.time<0)throw new Error('Invalid sensor frame timestamp');
   if(![k.fx,k.fy,k.rgbFx,k.rgbFy,k.cx,k.cy,k.near,k.far,k.forward,k.up,k.baseline].every(Number.isFinite)||Math.min(k.fx,k.fy,k.rgbFx,k.rgbFy)<=0||k.near<0||k.far<=k.near||k.baseline<0)throw new Error('Invalid camera calibration');
   if(k.depthNoiseDisparityPx!==undefined&&(!Number.isFinite(k.depthNoiseDisparityPx)||k.depthNoiseDisparityPx<0))throw new Error('Invalid depth noise calibration');
   if(k.depthNoiseReferenceFx!==undefined&&(!Number.isFinite(k.depthNoiseReferenceFx)||k.depthNoiseReferenceFx<=0))throw new Error('Invalid depth noise reference focal length');
   if(!frame.imu||frame.imu.accel.length!==3||frame.imu.gyro.length!==3||![...frame.imu.accel,...frame.imu.gyro].every(Number.isFinite))throw new Error('Invalid airframe IMU');
-  if(frame.imuIntervals!==undefined)imuIntervals(frame);
   if(!frame.imageLayout&&!frame.depth.every(z=>Number.isFinite(z)&&z>=0))throw new Error('Invalid optical depth');
   if((k.opticalToBody===undefined)!==(k.originFlu===undefined))throw new Error('Camera mount requires rotation and origin');
   if(k.opticalToBody){

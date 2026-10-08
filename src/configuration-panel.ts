@@ -55,18 +55,31 @@ export function mountConfigurationPanel(aside:HTMLElement,options:ConfigurationO
   defaults.onclick=()=>{void change(undefined);};
   aside.append(tabs,editor,configuration);
   const buttons=Array.from(tabs.querySelectorAll<HTMLButtonElement>('button'));
+  const panels:HTMLElement[]=[editor,configuration];
   function show(index:number,focus=false) {
-    editor.hidden=index!==0;configuration.hidden=index!==1;
+    panels.forEach((panel,i)=>{panel.hidden=i!==index;});
     buttons.forEach((button,i)=>{button.setAttribute('aria-selected',String(i===index));button.tabIndex=i===index?0:-1;});
     if(focus)buttons[index].focus();
+    panels[index].dispatchEvent(new Event('workspace:show'));
   }
-  buttons.forEach((button,index)=>{
+  function bind(button:HTMLButtonElement,index:number){
     button.onclick=()=>show(index);
     button.onkeydown=event=>{
-      const next=event.key==='ArrowRight'||event.key==='ArrowLeft'?1-index:event.key==='Home'?0:event.key==='End'?1:undefined;
+      const next=event.key==='ArrowRight'?(index+1)%buttons.length:event.key==='ArrowLeft'?(index+buttons.length-1)%buttons.length:event.key==='Home'?0:event.key==='End'?buttons.length-1:undefined;
       if(next!==undefined){event.preventDefault();show(next,true);}
     };
-  });
+  }
+  buttons.forEach(bind);
+  function addPanel(id:string,label:string,panel:HTMLElement){
+    if(document.getElementById(`${id}-tab`))throw new Error(`Duplicate workspace tab: ${id}`);
+    const button=document.createElement('button');button.type='button';button.id=`${id}-tab`;
+    button.textContent=label;button.setAttribute('role','tab');button.setAttribute('aria-controls',`${id}-view`);
+    button.setAttribute('aria-selected','false');button.tabIndex=-1;
+    panel.id=`${id}-view`;panel.hidden=true;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',button.id);
+    const index=panels.length;panels.push(panel);buttons.push(button);bind(button,index);
+    tabs.insertBefore(button,tabs.querySelector('.pane-actions'));aside.append(panel);
+    return {show:()=>show(index)};
+  }
   sync(options.project());
-  return {sync,setBusy,showEditor:()=>show(0)};
+  return {sync,setBusy,addPanel,showEditor:()=>show(0)};
 }

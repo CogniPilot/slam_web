@@ -6,9 +6,9 @@ installing a robotics stack.
 
 [**Open the browser demo →**](https://cognipilot.github.io/slam_web/) · [Source on GitHub](https://github.com/CogniPilot/slam_web)
 
-[![SLAM Lab city simulation, sensor views, and Modelica editor](docs/slam_web.png)](https://cognipilot.github.io/slam_web/)
+[![SLAM Lab city simulation, sensor views, and Modelica editor](docs/assets/slam_web.png)](https://cognipilot.github.io/slam_web/)
 
-[<img src="docs/demo-qr.svg" width="180" height="180" alt="Scan to open SLAM Lab">](https://cognipilot.github.io/slam_web/)
+[<img src="docs/assets/demo-qr.svg" width="180" height="180" alt="Scan to open SLAM Lab">](https://cognipilot.github.io/slam_web/)
 
 Wait for **Run** to become available, then click it. No setup or initial
 **Apply & reset** is needed.
@@ -47,6 +47,8 @@ Choose a model from **Run model**. The default is `Examples.InertialOnly`;
 the responsive and smoothed variants demonstrate the IMU filter tradeoff.
 Use **Files** to browse and edit the Modelica library. The viewer and editor
 can each collapse or fill the screen without losing your work.
+**Docs** shows Modelica package help and components. **Assistant** connects to
+your OpenAI-compatible provider or local Ollama and proposes edits for review.
 The app includes a pinned local copy of [CogniPilot Modelica Models](models/Libraries/README.md),
 including the position, attitude and body-rate controllers that drive the drone's motors.
 
@@ -85,14 +87,14 @@ npm run assets
 npm run dev
 ```
 
+`npm run dev` and `npm run build` initialize the pinned `modelica_models` Git
+submodule automatically. Git and network access are needed on the first build;
+visitors receive the sources in the static site and need neither.
+
 `npm run build` produces a static site. GitHub Actions deploys it to Pages after
 the supported demo's CI checks pass on `main`.
 
-- [Development, tests, and compiler review](docs/development.md)
-- [Modelica source guide](models/README.md)
-- [Camera and sensor details](docs/camera.md)
-- [Editable SLAM workspace](docs/modelica-slam-source-workspace.md)
-- [Architecture and current SLAM integration](docs/architecture.md)
+[User guides](docs/README.md) · [Modelica library](https://github.com/CogniPilot/modelica_models)
 
 ## License
 

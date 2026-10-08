@@ -1,11 +1,11 @@
 import {DataFlow} from './data-flow';
 import { WorkerRpc } from './rpc';
 import { ports,portTopic,validateGraph,type PortType } from './graph';
-import {seededRandom,recordedCameraFrame} from './packet';
+import {seededRandom,recordedCameraFrame,validateSensorObservation} from './packet';
 import { World } from './world';
 import {defaultSensorModelica,defaultEvaluationModelica,withActorMotion,type Project} from './project';
 import type {ActorMotionFrame} from './modelica-actor-motion';
-import type { Command,Estimate,Pose,RunRecord,SensorFrame,Truth,SceneDetail } from './types';
+import type { Command,Estimate,Pose,RunRecord,SensorFrame,InitialSensorFrame,Truth,SceneDetail } from './types';
 import {validatePose} from './evaluation';
 import type {EvaluationResult} from './modelica-runtime-math';
 import type {InertialSessionMetadata} from './modelica-inertial-session';
@@ -26,6 +26,7 @@ export class Runtime {
   gps:GpsSample|null=null;
   tourMode:'circuit'|'indoor'='circuit';
   private sequence=0;
+  private cameraSequence=0;
   private stepping=false;
   private reference?:{truth:Truth;pose:Pose};
   private origin:Pose={x:0,y:0,z:1.5,quaternion:[1,0,0,0]};
@@ -77,6 +78,7 @@ export class Runtime {
     if(order.some(node=>node.kind==='modelica'))throw new Error('Custom Modelica graph-node execution is pending. Source editing, Rumoca diagnostics and project persistence are available.');
     this.onStatus('Compiling Modelica in Rumoca WASM…');
     const base=new URL(import.meta.env.BASE_URL,location.href).href;
+    this.project=undefined;
     this.physics.stop();
     this.pendingNodes.clear();delete project.detectorArtifact;
     this.modelicaState?.stop();this.modelicaState=undefined;
@@ -99,18 +101,37 @@ export class Runtime {
         project.algorithmArtifact=result.artifact;
       }
     }
-    this.project=structuredClone(project);this.order=order;
     this.world.build(project.environment,project.sceneDetail??'high');await this.world.ready;this.world.configureActors(project.carsEnabled??true,project.peopleEnabled??true);this.world.setDepthCloudEnabled(project.depthCloudEnabled??false);this.world.update(truth);this.world.setLighting(project.lightingMode??'day');this.world.setMap([]);
     const calibration=this.world.calibration;
     await this.world.setDepthNoise({seed:project.seed,disparityNoisePx:calibration.depthNoiseDisparityPx!,referenceFx:calibration.depthNoiseReferenceFx!,baselineMeters:calibration.baseline,dropoutProbability:.005,unitsMeters:.001});
     this.world.setActorMotion(await this.modelicaMath.call<ActorMotionFrame>('actors',{time:truth.time}));
     this.world.setEstimate({x:0,y:0,z:0,quaternion:[1,0,0,0],confidence:0,points:[]});
     this.world.setEnvironmentVisible(true);
-    this.random=seededRandom(project.seed);this.gpsRandom=seededRandom(project.seed^0x475053);this.gps=null;this.sequence=0;this.time=truth.time;
-    this.resetSensorClock();
+    this.random=seededRandom(project.seed);this.gpsRandom=seededRandom(project.seed^0x475053);this.gps=null;this.sequence=0;this.cameraSequence=0;this.time=truth.time;
+    this.resetSensorClock(sensorRates(project));
     this.heldImu=(await this.sampleSensors(truth,true,false)).imu;
     this.reference=undefined;this.records=[];this.replay=undefined;
+    this.project=structuredClone(project);this.order=order;
     this.onStatus('Ready · camera + Modelica inertial baseline · native feature detection and SLAM pending');
+  }
+  /** Optional full-SLAM initialization image. It consumes no physics/sensor tick
+   * and publishes no estimate. A failed capture leaves the image ID available. */
+  async captureInitialFrame():Promise<InitialSensorFrame> {
+    if(!this.project)throw new Error('Compile the project first');
+    if(this.running||this.stepping||this.time!==0||this.sequence!==0||this.cameraSequence!==0||this.replay)
+      throw new Error('Initial camera capture requires a paused, fresh time-zero experiment');
+    this.stepping=true;
+    try{
+      const [images,scan]=await this.world.captureSensors(false);
+      if(scan)throw new Error('Initial camera capture must not advance LiDAR');
+      const frame:InitialSensorFrame={rgb:images.rgb,depth:images.depth,imageLayout:images.imageLayout,
+        sequence:this.cameraSequence,time:this.time,dt:0,
+        calibration:{...this.world.calibration,depthEncoding:'axial-z16-le'},
+        imu:structuredClone(this.heldImu),imuIntervals:[]};
+      validateSensorObservation(frame);
+      this.cameraSequence++;
+      return frame;
+    }finally{this.stepping=false;}
   }
   private async sampleSensors(truth:Truth,imu:boolean,gps:boolean){
     const pairs=(random:()=>number)=>Array.from({length:3},()=>[random(),random()]);
@@ -186,7 +207,7 @@ export class Runtime {
             else {
               const [images,scan]=await this.world.captureSensors(this.cameraLidar);
               if(scan)this.deliveredLidar(scan);
-              frame={...images,sequence:this.sequence,time:t.time,dt:this.dt,calibration:{...this.world.calibration,depthEncoding:'axial-z16-le'},imu:this.heldImu,imuIntervals:this.imuIntervals};
+              frame={...images,sequence:this.cameraSequence++,time:t.time,dt:this.dt,calibration:{...this.world.calibration,depthEncoding:'axial-z16-le'},imu:this.heldImu,imuIntervals:this.imuIntervals};
               frame.capture={sensorProfile:this.world.sensorProfile,depthNoise:{model:'independent-pixel-hash-v1',seed:this.project.seed,tick:Math.round(t.time*180),unitsMeters:.001}};
               sensorGps=this.gps;
             }

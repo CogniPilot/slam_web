@@ -1,0 +1,3 @@
+[submodule "models/Libraries/CogniPilot"]
+	path = models/Libraries/CogniPilot
+	url = https://github.com/CogniPilot/modelica_models.git

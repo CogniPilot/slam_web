@@ -1,14 +1,16 @@
 import {describe,it,expect,vi} from 'vitest';
 import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
 import init,* as rumoca from '@cognipilot/rumoca';
 import {RumocaLanguageServer} from '../src/modelica-lsp.worker';
 
 const uri='inmemory://slam/physics.mo';
 const source='model T\n  parameter Real gain=2;\n  Real x(start=0,fixed=true);\nequation\n  der(x)=gain;\nend T;';
 let initialized:Promise<unknown>|undefined;
-async function service() {
+async function service(module=rumoca) {
   initialized??=init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});await initialized;
-  const messages:any[]=[],server=new RumocaLanguageServer(message=>messages.push(message),{load:async()=>rumoca,diagnosticDelayMs:10_000});
+  const messages:any[]=[],server=new RumocaLanguageServer(message=>messages.push(message),{load:async()=>module,diagnosticDelayMs:10_000});
   let nextId=0;
   const request=async(method:string,params:any={})=>{const id=++nextId;await server.handle({jsonrpc:'2.0',id,method,params});return messages.slice().reverse().find(m=>m.id===id);};
   const notify=(method:string,params:any={})=>server.handle({jsonrpc:'2.0',method,params});
@@ -16,6 +18,37 @@ async function service() {
 }
 
 describe('actual Rumoca Modelica language server',()=>{
+  it('reads package documentation and components without disturbing the editor workspace',async()=>{
+    const {server,messages,request,notify}=await service();await request('initialize');
+    await notify('workspace/didChangeConfiguration',{settings:{modelica:{workspaceSources:{'Companion.mo':'model Companion Real y=1; end Companion;'}}}});
+    await notify('textDocument/didOpen',{textDocument:{uri,version:1,text:'model Active Companion x; end Active;'}});
+    const docsApi=await import(/* @vite-ignore */ pathToFileURL(resolve('public/vendor/rumoca/rumoca_bind_wasm.js')).href+'?documentation-context');
+    await docsApi.default({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
+    const docs=await service(docsApi);await docs.request('initialize');
+    const sources={'Help/package.mo':'within; package Help "Package help" annotation(Documentation(info="<html><p>Read me</p></html>")); end Help;',
+      'Help/Filter.mo':'within Help; model Filter "Filter help" parameter Real gain=2 "Gain"; Real x; equation x=gain; end Filter;'};
+    const tree=(await docs.request('modelica/documentation',{sources})).result;
+    expect(tree.classes.some((item:any)=>item.qualified_name==='Help')).toBe(true);
+    const info=(await docs.request('modelica/documentation',{sources,name:'Help'})).result;
+    expect(info.documentation_html).toContain('Read me');
+    const filter=(await docs.request('modelica/documentation',{sources,name:'Help.Filter'})).result;
+    expect(filter.components).toContainEqual(expect.objectContaining({name:'gain',type_name:'Real',variability:'parameter'}));
+    await server.flushDiagnostics(uri);
+    expect(messages.slice().reverse().find(m=>m.method==='textDocument/publishDiagnostics').params.diagnostics).toEqual([]);
+    expect((await request('modelica/documentation',{sources})).error.code).toBe(-32602);
+    const activeInfo=await docs.request('modelica/documentation',{sources:{'models/Active.mo':'model Active "Current project source" Real x=1; end Active;'},name:'Active'});
+    expect(activeInfo.result.description).toBe('Current project source');
+    expect((await docs.request('modelica/documentation',{sources,name:7})).error.code).toBe(-32602);
+    await docs.request('shutdown');
+    await notify('textDocument/didClose',{textDocument:{uri}});await request('shutdown');
+  });
+  it('checks a selected model without creating a simulation session',async()=>{
+    const {request}=await service();await request('initialize');
+    const result=await request('modelica/checkModel',{source,model:'T',sources:{}});
+    expect(result.error).toBeUndefined();expect(result.result).toBeTruthy();
+    expect((await request('modelica/checkModel',{source:3,model:'T'})).error.code).toBe(-32602);
+    await request('shutdown');
+  });
   it('discovers qualified entry points using the same compiler as the language service',async()=>{
     const {request}=await service();await request('initialize');
     const source='package Examples model InertialOnly Real x; equation x=1; end InertialOnly; end Examples;';

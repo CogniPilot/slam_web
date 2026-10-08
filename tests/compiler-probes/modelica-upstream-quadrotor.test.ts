@@ -5,6 +5,7 @@ import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import init,* as pinned from '@cognipilot/rumoca';
 import {modelicaModelsSources} from '../../src/modelica-models-library';
+import {readModelicaModelsLibrary} from '../../scripts/modelica-models-library.mjs';
 const source=readFileSync('models/Vehicles/LabQuadrotor.mo','utf8');
 const sha=(s:string|Uint8Array)=>createHash('sha256').update(s).digest('hex');
 const value=(v:Record<string,number>,name:string)=>{expect(Number.isFinite(v[name]),name).toBe(true);return v[name];};
@@ -18,9 +19,7 @@ it('retains the pinned plant and loads the unmodified upstream control library',
   expect(source).toContain('der(propellerAngles[motor])=spinDirection[motor]*vehicle.omega_m[motor]');
   expect(source).toContain('spinDirection[motorCount] = {1,1,-1,-1}');
   expect(source).toContain('Control.Multirotor.LogLinear.Controller controller');
-  const library='models/Libraries/CogniPilot';
-  const manifest=JSON.parse(readFileSync(`${library}/provenance.json`,'utf8'));
-  for(const [file,digest]of Object.entries(manifest.sources))expect(sha(readFileSync(`${library}/${file}`)),file).toBe(digest);
+  expect(readModelicaModelsLibrary()).toEqual(modelicaModelsSources);
 });
 
 it('actual WASM genuine plant preserves coherent ENU/FLU outputs and actual signed rotor integration, reset and source editing',async()=>{

@@ -17,3 +17,6 @@ dev/artifacts/**
 !.env.example
 
 /dev/*.log
+
+# Local development notes and generated research receipts are not documentation.
+/dev/
