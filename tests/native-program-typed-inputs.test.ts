@@ -2,8 +2,9 @@ import {expect,it} from 'vitest';
 import {NativeProgram,type NativeProgramArtifact} from '../src/modelica-native-program';
 import {typedInputTransport as transport,typedInputOnlyTransport} from './helpers/native-typed-input-transport';
 
-it('uses the typed input base as the fifth argument, preserving full-width integers and readonly inputs',async()=>{
-  const {source,artifact}=await transport(),program=await NativeProgram.instantiate(artifact,source);
+it.each([73,74])('uses schema%i typed input storage, preserving full-width integers and readonly inputs',async schema=>{
+  const {source,artifact}=await transport();artifact.solve_schema_version=schema;
+  const program=await NativeProgram.instantiate(artifact,source);
   const count=program.integerInput('state.count'),sample=program.integerInput('state.samples[1]'),enabled=program.booleanInput('enabled');
   expect(count.byteOffset).toBe(64);expect(sample.byteOffset).toBe(72);expect(enabled.byteOffset).toBe(80);
   expect(program.integerOutput('echo').byteOffset).toBe(88);
@@ -28,8 +29,9 @@ it('uses the typed input base as the fifth argument, preserving full-width integ
   expect(program.integerOutput('echo')[0]).toBe(0n);
 });
 
-it('preserves typed input/output memory through checkpoint reload and refuses invalid Boolean bytes',async()=>{
-  const {source,artifact}=await transport(),program=await NativeProgram.instantiate(artifact,source);
+it.each([73,74])('preserves schema%i typed memory through reload and refuses invalid Boolean bytes',async schema=>{
+  const {source,artifact}=await transport();artifact.solve_schema_version=schema;
+  const program=await NativeProgram.instantiate(artifact,source);
   program.integerInput('state.count')[0]=9007199254740993n;program.booleanInput('enabled')[0]=0;
   program.input('x')[0]=-0.0;program.evaluate(0);
   const snapshot=await program.snapshotMemory();
@@ -50,7 +52,7 @@ it('preserves typed input/output memory through checkpoint reload and refuses in
 it('rejects ambiguous, overlapping, unaligned and inexact typed input contracts before execution',async()=>{
   const {source,artifact}=await transport();
   const changes:Array<(a:NativeProgramArtifact)=>void>=[
-    a=>{a.solve_schema_version=72;},a=>{a.input_lanes={} as never;},
+    a=>{a.solve_schema_version=72;},a=>{a.solve_schema_version=75;},a=>{a.input_lanes={} as never;},
     a=>{delete a.input_lanes;},a=>{delete a.abi.input_lanes_offset;},a=>{delete a.abi.input_lanes_bytes;},
     a=>{delete a.abi.typed_lanes_offset;},a=>{a.abi.input_lanes_offset=40;},a=>{a.abi.typed_lanes_offset=72;},
     a=>{a.abi.input_lanes_bytes=16;},a=>{a.abi.input_lanes_bytes=65536;},a=>{a.abi.input_lanes_offset=65;a.abi.typed_lanes_offset=65;},

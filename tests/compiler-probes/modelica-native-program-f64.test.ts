@@ -4,12 +4,12 @@ import {NativeProgram,type NativeProgramArtifact} from '../../src/modelica-nativ
 
 const sourcePath=process.env.RUMOCA_F64_PROGRAM_SOURCE;
 const artifactPath=process.env.RUMOCA_F64_PROGRAM_ARTIFACT;
-it.skipIf(!sourcePath||!artifactPath)('executes a schema73 compiler-issued direct f64 program across moving frames and reload',async()=>{
+it.skipIf(!sourcePath||!artifactPath)('executes a compiler-issued direct f64 program across moving frames and reload',async()=>{
   const source=readFileSync(sourcePath!,'utf8');
   const artifact=JSON.parse(readFileSync(artifactPath!,'utf8')) as NativeProgramArtifact;
   expect(artifact.model_name).toBe('ConnectedFrame');
   expect(artifact.profile).toBe('native-direct-program-f64-v2');
-  expect(artifact.solve_schema_version).toBe(73);
+  expect([73,74]).toContain(artifact.solve_schema_version);
   const program=await NativeProgram.instantiate(artifact,source);
   const input=program.input('rgb'),gray=program.output('gray'),score=program.output('score');
   expect(input.length).toBe(90*160*3);
@@ -40,7 +40,7 @@ it.skipIf(!sourcePath||!artifactPath)('executes a schema73 compiler-issued direc
   expect([...reload.output('gray')].every(value=>value===5)).toBe(true);
   expect([...reload.output('score')].every(value=>value===27)).toBe(true);
   await expect(NativeProgram.instantiate(artifact,source+'\n// edited')).rejects.toThrow('source');
-  for(const schema of [71,72,74]){
+  for(const schema of [71,72,75]){
     await expect(NativeProgram.instantiate({...artifact,solve_schema_version:schema},source)).rejects.toThrow('Unsupported');
   }
 },30_000);

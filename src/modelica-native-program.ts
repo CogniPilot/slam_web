@@ -44,6 +44,7 @@ const digest=(value:unknown):value is string=>typeof value==='string'&&/^[a-f0-9
 // The reviewed compiler emits env.abs for its canonical unary Abs operation.
 // These are scalar target intrinsics; the issued module retains the algorithm.
 const mathImports=['abs','sin','cos','tan','asin','acos','atan','atan2','sinh','cosh','tanh','asinh','acosh','atanh','exp','log','log2','log10','pow'];
+const typedLaneSchemas=[73,74];
 
 function validFaultIdentity(fault:NativeProgramFault,kernelCount:number){
   // Function and model gather identities come from separate compiler owners.
@@ -58,11 +59,11 @@ function validFaultIdentity(fault:NativeProgramFault,kernelCount:number){
 
 function validate(value:NativeProgramArtifact){
   // This field records the producer's Solve schema; this loader consumes the
-  // executable ABI and never decodes Solve IR. Schema73 also issues the same
-  // direct f64 v2 ABI when no calls, gathers or typed lanes need a checked entry.
+  // executable ABI and never decodes Solve IR. Schema74 adds runtime slice
+  // windows inside the module; its executable and typed-lane ABIs are unchanged.
   const reviewedSchema=value?.solve_schema_version===70
-    ||[72,73].includes(value?.solve_schema_version)&&value?.profile==='native-direct-program-f64-v3'
-    ||value?.solve_schema_version===73&&value?.profile==='native-direct-program-f64-v2';
+    ||[72,...typedLaneSchemas].includes(value?.solve_schema_version)&&value?.profile==='native-direct-program-f64-v3'
+    ||typedLaneSchemas.includes(value?.solve_schema_version)&&value?.profile==='native-direct-program-f64-v2';
   if(!value||!['native-direct-program-f64-v1','native-direct-program-f64-v2','native-direct-program-f64-v3'].includes(value.profile)||!reviewedSchema
     ||typeof value.model_name!=='string'||!value.model_name||!digest(value.source_sha256)
     ||!digest(value.module_sha256)||typeof value.compiler?.version!=='string'||!value.compiler.version
@@ -87,7 +88,7 @@ function validate(value:NativeProgramArtifact){
   if(typed){
     if(a.result!=='status:i32'||a.success_status!==0||a.transactional_y!==true||a.p_readonly!==true
       ||!integer(a.scratch_offset)||!integer(a.scratch_bytes)||!a.scratch_bytes
-      ||a.scratch_offset%8!==0||(value.solve_schema_version!==73&&a.scratch_bytes%8!==0)
+      ||a.scratch_offset%8!==0||(!typedLaneSchemas.includes(value.solve_schema_version)&&a.scratch_bytes%8!==0)
       ||a.scratch_offset<a.p_offset+a.p_count*8||a.scratch_offset+a.scratch_bytes>a.memory_pages*65536)
       throw new Error('Invalid native Modelica transactional scratch ABI');
     if(!Array.isArray(value.math_imports)||value.math_imports.some(name=>!mathImports.includes(name))
@@ -116,7 +117,7 @@ function validate(value:NativeProgramArtifact){
     throw new Error('Unexpected native Modelica typed-call ABI');
   }
   if(hasInputs){
-    if(!typed||value.solve_schema_version!==73||!integer(a.typed_lanes_offset)||!integer(a.input_lanes_offset)
+    if(!typed||!typedLaneSchemas.includes(value.solve_schema_version)||!integer(a.typed_lanes_offset)||!integer(a.input_lanes_offset)
       ||!integer(a.input_lanes_bytes)||!a.input_lanes_bytes||a.typed_lanes_offset!==a.input_lanes_offset
       ||a.input_lanes_offset%8!==0||a.input_lanes_offset<a.scratch_offset!+a.scratch_bytes!
       ||a.input_lanes_offset+a.input_lanes_bytes>a.memory_pages*65536)
