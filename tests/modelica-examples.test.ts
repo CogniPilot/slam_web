@@ -7,17 +7,17 @@ import {ModelicaInertialSession} from '../src/modelica-inertial-session';
 it('runs each qualified example through actual Rumoca and preserves a selected entry point', async () => {
   await init({module_or_path: readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
   const project = defaultProject();
-  expect(project.entryPoint).toBe('Examples.InertialOnly');
+  expect(project.entryPoint).toBe('SLAM.Examples.InertialOnly');
   const loaded=JSON.parse(rumoca.sync_workspace_sources(JSON.stringify(project.modelicaSources)));
   expect(loaded.error_count).toBe(0);
   const names=[project.algorithm,...Object.values(project.modelicaSources!)].flatMap(source=>
     JSON.parse(rumoca.get_simulation_models(source,project.entryPoint!)).models);
   expect(names).toContain(project.entryPoint);
   for (const [name, tau] of [
-    ['Examples.InertialOnly', 0.03],
-    ['Examples.ResponsiveInertial', 0.005],
-    ['Examples.SmoothedInertial', 0.12],
-    ['ModelicaInertial', 0.03],
+    ['SLAM.Examples.InertialOnly', 0.03],
+    ['SLAM.Examples.ResponsiveInertial', 0.005],
+    ['SLAM.Examples.SmoothedInertial', 0.12],
+    ['SLAM.Inertial.ModelicaInertial', 0.03],
   ] as const) {
     expect(names).toContain(name);
     const solver = rumoca.WasmSimulationSession.withInteractiveOptions(project.algorithm, name,
@@ -37,8 +37,20 @@ it('runs each qualified example through actual Rumoca and preserves a selected e
     expect(parseProject(JSON.stringify({...project,entryPoint:name})).entryPoint).toBe(name);
   }
   // A student's new model is discovered by the compiler, without editing an app catalog.
-  const custom = project.algorithm + '\nmodel MyExperiment extends Examples.InertialOnly; end MyExperiment;';
-  expect(JSON.parse(rumoca.get_simulation_models(custom,'Examples.MyExperiment')).models).toContain('Examples.MyExperiment');
+  const custom = project.algorithm + '\nmodel MyExperiment extends SLAM.Examples.InertialOnly; end MyExperiment;';
+  expect(JSON.parse(rumoca.get_simulation_models(custom,'SLAM.Examples.MyExperiment')).models).toContain('SLAM.Examples.MyExperiment');
+  // Reloaded component edits must reach the running example, not a copied alias.
+  const dependency='models/Libraries/CogniPilot/SLAM/Inertial/ModelicaInertial.mo';
+  const edited=project.modelicaSources![dependency].replace('gravity = 9.81','gravity = 9.0');
+  expect(edited).not.toBe(project.modelicaSources![dependency]);
+  const restored=parseProject(JSON.stringify({...project,modelicaSources:{...project.modelicaSources,[dependency]:edited}}));
+  expect(JSON.parse(rumoca.sync_workspace_sources(JSON.stringify(restored.modelicaSources))).error_count).toBe(0);
+  const changed=new ModelicaInertialSession(rumoca.WasmSimulationSession.withInteractiveOptions(
+    restored.algorithm,restored.entryPoint!,.005,'rk-like',1e-10,1e-8,
+    '[["accel[1]",0],["accel[2]",0],["accel[3]",9.81],["gyro[1]",0],["gyro[2]",0],["gyro[3]",0]]'));
+  try{
+    expect(changed.step({time:.1,dt:.1,imu:{accel:[0,0,9.81],gyro:[0,0,0]}}).z).toBeCloseTo(.00405,10);
+  }finally{changed.free();}
   rumoca.sync_workspace_sources('{}');
 }, 90_000);
 
@@ -54,10 +66,19 @@ it('retains the original entry point for saved projects that predate example sel
 
 it('preserves exact library edits on reload and rejects ambiguous or malformed sources',()=>{
   const project=defaultProject();
-  const path='models/Examples/SmoothedInertial.mo';
-  project.modelicaSources![path]='\ufeffwithin Examples;\r\n// Student edit λ\r\n';
+  const path='models/Libraries/CogniPilot/SLAM/Examples/SmoothedInertial.mo';
+  project.modelicaSources![path]='\ufeffwithin SLAM.Examples;\r\n// Student edit λ\r\n';
   expect(parseProject(JSON.stringify(project))).toEqual(project);
   for(const modelicaSources of [[],{[path]:false},{'../escape.mo':''},
     {...project.modelicaSources,[project.mainSourcePath!]:project.algorithm}])
     expect(()=>parseProject(JSON.stringify({...project,modelicaSources}))).toThrow();
+});
+
+it('keeps saved unqualified examples and their dependency text unchanged',()=>{
+  const saved={...defaultProject(),entryPoint:'Examples.InertialOnly',mainSourcePath:'models/Examples/InertialOnly.mo',
+    algorithm:readFileSync('models/Examples/InertialOnly.mo','utf8'),modelicaSources:{
+      'models/Examples/package.mo':readFileSync('models/Examples/package.mo','utf8'),
+      'models/Estimation/Inertial/ModelicaInertial.mo':readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8'),
+    }};
+  expect(parseProject(JSON.stringify(saved))).toEqual(saved);
 });

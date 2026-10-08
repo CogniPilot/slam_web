@@ -43,7 +43,7 @@ Start with the city flight tour, or choose **Big city · furnished interiors**
 to explore a market, loft, and conference room. Open **Configuration** to change
 the scene and sensors; open **Editor** to inspect or edit Modelica source.
 
-Choose a model from **Run model**. The default is `Examples.InertialOnly`;
+Choose a model from **Run model**. The default is `SLAM.Examples.InertialOnly`;
 the responsive and smoothed variants demonstrate the IMU filter tradeoff.
 Use **Files** to browse and edit the Modelica library. The viewer and editor
 can each collapse or fill the screen without losing your work.

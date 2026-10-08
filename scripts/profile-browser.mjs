@@ -40,12 +40,15 @@ for(const name of ['rumoca_bind_wasm.js','rumoca_bind_wasm_bg.wasm']){
 }
 await writeFile(path.join(output,'compiler.json'),JSON.stringify(compilerManifest,null,2));
 const hardware=process.env.SLAM_PROFILE_SOFTWARE!=='1';
+const phoneViewport=process.env.SLAM_PROFILE_PHONE_VIEWPORT==='1';
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,
   args:['--no-sandbox',...(process.env.SLAM_PROFILE_JIT==='1'?['--js-flags=--perf-basic-prof --interpreted-frames-native-stack']:[]),...(hardware?['--enable-gpu','--use-gl=angle','--use-angle=gl']:['--use-angle=swiftshader','--enable-unsafe-swiftshader'])]});
 const perfProcesses=[];
 const stopPerf=async()=>{for(const child of perfProcesses){if(child.pid&&child.exitCode===null&&child.signalCode===null){child.kill('SIGINT');await new Promise(resolve=>child.once('exit',resolve));}}};
 try {
-  const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];
+  const page=await browser.newPage(phoneViewport
+    ?{viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:3}
+    :{viewport:{width:1440,height:1000}}),errors=[];
   await page.route('**/vendor/rumoca/rumoca_bind_wasm*',route=>{
     const name=path.basename(new URL(route.request().url()).pathname),bytes=compilerFiles.get(name);
     return bytes?route.fulfill({body:bytes,contentType:name.endsWith('.wasm')?'application/wasm':'text/javascript'}):route.continue();
@@ -59,11 +62,11 @@ try {
   if(process.env.SLAM_PROFILE_SENSOR_RATES)settings.sensorRates=JSON.parse(process.env.SLAM_PROFILE_SENSOR_RATES);
   // The complete Modelica SLAM profile is pending. Select the available INS
   // workload explicitly and keep that limitation in the durable report.
-  const algorithm=await readFile(new URL('../models/Examples/InertialOnly.mo',import.meta.url),'utf8');
+  const algorithm=await readFile(new URL('../models/Libraries/CogniPilot/SLAM/Examples/InertialOnly.mo',import.meta.url),'utf8');
   await page.evaluate(async({settings,algorithm})=>{
     const lab=window.__slamLab;
     Object.assign(lab.project,settings,{algorithm,algorithmPreset:'Modelica inertial propagation',runtime:'modelica',
-      entryPoint:'Examples.InertialOnly',mainSourcePath:'models/Examples/InertialOnly.mo'});
+      entryPoint:'SLAM.Examples.InertialOnly',mainSourcePath:'models/Libraries/CogniPilot/SLAM/Examples/InertialOnly.mo'});
     delete lab.project.algorithmArtifact;await lab.runtime.compile(lab.project);
   },{settings,algorithm});
   const readback=process.env.SLAM_PROFILE_READBACK??(hardware?'sync':'async');
@@ -179,6 +182,7 @@ try {
   }
   const mean=values=>values.reduce((a,b)=>a+b,0)/values.length;
   const summary={cpuProfiling,settings,workload,bundleManifest:'bundle.json',readback,targetSimulationRate:10,targetFrameMs:report.dt*1000/10,simulationRate:report.dt*count/(report.elapsedMs/1000),startSimulationTime:report.startSimulationTime,flowCounts:report.flowCounts,browserCpu:{seconds:cpuSeconds,meanActiveCores:cpuSeconds/(report.elapsedMs/1000),method:cpuProfiling?'CDP process CPU deltas after warmup; includes profiler overhead':'CDP process CPU deltas after warmup; CPU sampling disabled'},mainCpuThrottle:throttle,graphics:report.graphics,frames:count,elapsedMs:report.elapsedMs,meanFrameMs:mean(report.samples.map(s=>s.totalMs)),meanNodeMs:Object.fromEntries(Object.keys(report.samples[0].nodes).map(key=>[key,mean(report.samples.map(s=>s.nodes[key]))])),final:report.samples.at(-1),workers:workers.map(({url,file})=>({url,file})),errors};
+  summary.viewport={...page.viewportSize(),phoneEmulation:phoneViewport};
   if(packedReadback!==undefined)summary.packedReadback=packedReadback==='1';
   if(report.displayCloudTransferBefore)summary.displayCloudTransfer={before:report.displayCloudTransferBefore,after:report.displayCloudTransferAfter};
   if(geometryBatching!==undefined)summary.geometryBatching=geometryBatching==='1';

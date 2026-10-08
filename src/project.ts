@@ -4,11 +4,6 @@ import harrisNative from '../models/Vision/Features/HarrisNativeFrame.mo?raw';
 import harrisProfile from '../models/Vision/Features/D435HarrisFeatures.mo?raw';
 import fastNative from '../models/Vision/Features/FastNativeFrame.mo?raw';
 import fastProfile from '../models/Vision/Features/D435FastFeatures.mo?raw';
-import modelicaInertial from '../models/Estimation/Inertial/ModelicaInertial.mo?raw';
-import exampleModels from '../models/Examples/package.mo?raw';
-import inertialExample from '../models/Examples/InertialOnly.mo?raw';
-import responsiveExample from '../models/Examples/ResponsiveInertial.mo?raw';
-import smoothedExample from '../models/Examples/SmoothedInertial.mo?raw';
 import sensorEquations from '../models/Sensors/SensorObservations.mo?raw';
 import sensorAvailability from '../models/Sensors/SensorAvailability.mo?raw';
 import actorMotion from '../models/Scene/ActorMotion.mo?raw';
@@ -24,14 +19,13 @@ export const detectors: Record<string,string> = { 'Modelica Harris · integratio
 export function visibleDetectorPresets(_project:Pick<Project,'detectorPreset'|'detectorLanguage'>):Record<string,string> {
   return {...detectors};
 }
-export const algorithms: Record<string,string> = { 'Modelica inertial propagation':inertialExample };
-const defaultModelicaSources = {
-  ...modelicaModelsSources,
-  'models/Examples/package.mo':exampleModels,
-  'models/Examples/ResponsiveInertial.mo':responsiveExample,
-  'models/Examples/SmoothedInertial.mo':smoothedExample,
-  'models/Estimation/Inertial/ModelicaInertial.mo':modelicaInertial,
+const inertialExamplePath='models/Libraries/CogniPilot/SLAM/Examples/InertialOnly.mo';
+export const algorithms: Record<string,string> = {
+  'Modelica inertial propagation':modelicaModelsSources[inertialExamplePath],
 };
+// The editable entry file lives in project.algorithm; keep one owner per source.
+const defaultModelicaSources=Object.fromEntries(Object.entries(modelicaModelsSources)
+  .filter(([path])=>path!==inertialExamplePath));
 /** Add the new editable component without replacing a saved sensor model. */
 export function withActorMotion(source:string):string {
   return /\bmodel\s+ActorMotion\b/.test(source)?source:`${source}\n${actorMotion}`;
@@ -73,8 +67,8 @@ export const defaultProject = (mobile=false): Project => ({
   lidarEnabled:false,
   seed:7,
   algorithm:algorithms['Modelica inertial propagation'],
-  entryPoint:'Examples.InertialOnly',
-  mainSourcePath:'models/Examples/InertialOnly.mo',
+  entryPoint:'SLAM.Examples.InertialOnly',
+  mainSourcePath:inertialExamplePath,
   modelicaSources:{...defaultModelicaSources},
   algorithmPreset:'Modelica inertial propagation',
   detector:modelicaHarris,

@@ -19,12 +19,12 @@ test('a fresh visitor sees progress until the inertial experiment is ready, then
   const run=page.getByRole('button',{name:'▶ Run',exact:true});
   await expect(run).toBeEnabled({timeout:90_000});
   expect(await page.evaluate(()=>(window as any).__slamLab.runtime.running)).toBe(false);
-  await expect(page.getByLabel('Run model')).toHaveValue('Examples.InertialOnly');
+  await expect(page.getByLabel('Run model')).toHaveValue('SLAM.Examples.InertialOnly');
   await run.click();
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.latest?.frame.sequence??-1),{timeout:90_000}).toBeGreaterThan(2);
   await expect(page.getByRole('button',{name:'Ⅱ Pause',exact:true})).toBeVisible();
   expect(await page.evaluate(()=>(window as any).__slamLab.latest.estimate.diagnostics.backend)).toBe('Rumoca Solve IR session');
-  expect(await page.evaluate(()=>(window as any).__slamLab.project.algorithmArtifact.modelName)).toBe('Examples.InertialOnly');
+  expect(await page.evaluate(()=>(window as any).__slamLab.project.algorithmArtifact.modelName)).toBe('SLAM.Examples.InertialOnly');
   const sensor=await page.evaluate(()=>{
     const lab=(window as any).__slamLab,{frame}=lab.latest;
     return {software:lab.runtime.world.graphics.acceleration==='software',width:frame.calibration.width,height:frame.calibration.height,rgb:frame.rgb.length,depth:frame.depth.length,profile:frame.capture.sensorProfile};
