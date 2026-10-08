@@ -15,14 +15,16 @@ const scratch=path.join(home,'scratch/slam_web/tmp');fs.mkdirSync(scratch,{recur
 const output=fs.mkdtempSync(path.join(scratch,'rendered-flight-slam-'));
 const durable=path.join(app,'dev/artifacts/modelica-rendered-flight-slam',path.basename(output));fs.mkdirSync(durable,{recursive:true});
 const scenario=process.env.SLAM_REFERENCE_SCENARIO??'flight';
-if(!['flight','sensor-loss','flight-extended'].includes(scenario))throw Error('SLAM_REFERENCE_SCENARIO must be flight, flight-extended or sensor-loss');
+if(!['flight','sensor-loss','flight-extended','revisit'].includes(scenario))throw Error('SLAM_REFERENCE_SCENARIO must be flight, flight-extended, revisit or sensor-loss');
 const sensorLoss=scenario==='sensor-loss';
-const extended=scenario==='flight-extended';
+const revisit=scenario==='revisit';
+const extended=scenario==='flight-extended'||revisit;
 // Declared before the longer replay: evaluation-only tolerances, never model inputs.
 // This is a short moving-flight regression, not general SLAM accuracy certification.
 const extendedPoseLimits=Object.freeze({maximumErrorMeters:0.5,rmseMeters:0.25,minimumOracleDisplacementMeters:1});
-const model=sensorLoss?'RGBDRenderedSensorLossGridAcceptance':extended?'RGBDRenderedFlightExtendedGridAcceptance':'RGBDRenderedFlightGridAcceptance',checkCount=sensorLoss?32:24,diagnosticCount=16;
+const model=sensorLoss?'RGBDRenderedSensorLossGridAcceptance':revisit?'RGBDRenderedRevisitGridAcceptance':extended?'RGBDRenderedFlightExtendedGridAcceptance':'RGBDRenderedFlightGridAcceptance',checkCount=sensorLoss?32:24,diagnosticCount=16;
 let frameRows=13,sampleRows=37,intervalRows=36;
+let cameraHz=30,holdsPerFrame=3;
 let height,width,channels,rawCamera=false,depthUnits=1;
 const referenceCflags=process.env.SLAM_REFERENCE_CFLAGS??'-O0';
 const pairDiagnostic=process.env.SLAM_REFERENCE_PAIR_DIAGNOSTIC==='1';
@@ -150,7 +152,10 @@ try{
   frameRows=captureManifest.frameCount;
   assert(Number.isSafeInteger(frameRows)&&frameRows>=13&&frameRows<=121&&(extended||frameRows===13),
     'Supported source-bound frame count; extended captures require flight-extended');
-  intervalRows=(frameRows-1)*3;sampleRows=intervalRows+1;
+  cameraHz=revisit?15:30;holdsPerFrame=90/cameraHz;
+  assert(captureManifest.acquisition.cameraHz===cameraHz&&captureManifest.acquisition.imuHz===90,
+    'Exact source camera/IMU rates for the selected scenario');
+  intervalRows=(frameRows-1)*holdsPerFrame;sampleRows=intervalRows+1;
   rawCamera=captureManifest.schema==='modelica-rendered-flight-frames-v2';channels=rawCamera?3:4;
   if(sensorLoss)assert(rawCamera,'Sensor-loss qualification requires native raw RGB8/Z16');
   if(rawCamera){depthUnits=captureManifest.frames[0]?.depth?.unitsMeters;assert(Number.isFinite(depthUnits)&&depthUnits>0,'Positive recorded Z16 units');}
@@ -160,14 +165,14 @@ try{
   const before=JSON.parse(captureFile('sources-before.json')),after=JSON.parse(captureFile('sources-after.json'));
   assert(JSON.stringify(before)===JSON.stringify(after)&&sha(Buffer.from(JSON.stringify(before)))===captureManifest.sourcesManifestSha256,'Capture source/asset bookends');
   const physics=captureManifest.physics;
-  assert(physics?.modelName==='LabQuadrotor'&&physics.advanced===true&&physics.initializationApi==='WasmSimulationSession.withInteractiveOptions'
+  assert(physics?.modelName===(revisit?'RenderedRevisitQuadrotor':'LabQuadrotor')&&physics.advanced===true&&physics.initializationApi==='WasmSimulationSession.withInteractiveOptions'
     &&physics.snapshotApi==='readPhysicsSnapshot(session,true)','Actual compiler-owned advanced plant acquisition');
   assert(physics.options?.stepSize===.005&&physics.options.solver==='rk-like'
     &&physics.options.absoluteTolerance===1e-8&&physics.options.relativeTolerance===1e-6,'Exact physics session solver options');
-  const initialInputs=[['forward',0],['left',0],['up',0],['yaw',0]];
+  const initialInputs=revisit?[]:[['forward',0],['left',0],['up',0],['yaw',0]];
   exactArray(JSON.parse(physics.options.inputs),initialInputs,'Exact initialization input commands');
-  exactArray(physics.rates,{cameraHz:30,lidarHz:10,imuHz:90,gpsHz:5},'Exact source sensor-clock rates');
-  assert(captureManifest.acquisition.autopilot===true&&captureManifest.acquisition.indoorTour===false,'Exact acquisition command mode');
+  exactArray(physics.rates,{cameraHz,lidarHz:10,imuHz:90,gpsHz:5},'Exact source sensor-clock rates');
+  assert(captureManifest.acquisition.autopilot===!revisit&&captureManifest.acquisition.indoorTour===false,'Exact acquisition command mode');
   exactArray(captureManifest.acquisition.command,{forward:0,left:0,up:0,yaw:0},'Exact commanded controls');
   for(const key of ['source','js','wasm','physicsWorker','snapshotReader','runtime','sensorClock']){
     const proof=physics[key],entry=before.find(value=>value.path===proof?.sourcePath);
@@ -176,6 +181,16 @@ try{
     if(key==='js'||key==='wasm')assert(captureManifest.servedResources.some(value=>value.sourcePath===proof.sourcePath&&value.sha256===proof.sha256),'Compiler proof actually served: '+key);
   }
   assert(physics.source.sourcePath==='models/Vehicles/LabQuadrotor.mo','Exact plant source identity');
+  if(revisit){
+    const composition=physics.composition,control=composition?.controller;
+    const entry=before.find(value=>value.path===control?.sourcePath);
+    assert(control?.sourcePath==='tests/modelica/RenderedRevisitQuadrotor.mo'&&entry?.sha256===control.sha256
+      &&entry?.bytes===control.bytes&&composition.separator==='\n','Frozen source-owned flight controller');
+    const controller=captureFile(control.path,control.sha256),compiled=captureFile(composition.source.path,composition.source.sha256);
+    assert(controller.length===control.bytes&&compiled.length===composition.source.bytes
+      &&compiled.equals(Buffer.concat([captureFile(physics.source.path,physics.source.sha256),Buffer.from('\n'),controller])),
+    'Exact authored plant/controller compilation source');
+  }
   const measurements=JSON.parse(captureFile(captureManifest.measurements.path,captureManifest.measurements.sha256));
   assert(measurements.schema==='rumoca-modeled-imu-hold-v1'&&measurements.frame==='body FLU'
     &&measurements.accelUnits==='m/s^2 specific force'&&measurements.gyroUnits==='rad/s'
@@ -207,25 +222,25 @@ try{
   if(rawCamera)exactArray(captureManifest.acquisition.depthNoise,{model:'independent-pixel-hash-v1',seed:7,disparityNoisePx:calibration.depthNoiseDisparityPx,referenceFx:calibration.depthNoiseReferenceFx,baselineMeters:calibration.baseline,dropoutProbability:.005,unitsMeters:depthUnits},'Production shader-noise settings');
   exactArray(calibration.opticalToBody,[0,0,1,-1,0,0,0,-1,0],'Exact optical/body convention');vector(calibration.originFlu,'Finite camera origin');
   captureFile(captureManifest.screenshot.path,captureManifest.screenshot.sha256);
-  const frames=captureManifest.frames.map((frame,index)=>{assert(Math.abs(frame.time-index/30)<1e-12&&frame.time===measurements.samples[index*3].time,'Camera endpoint uses actual measured physics time');return validateFrame(frame,index,calibration);});
+  const frames=captureManifest.frames.map((frame,index)=>{assert(Math.abs(frame.time-index/cameraHz)<1e-12&&frame.time===measurements.samples[index*holdsPerFrame].time,'Camera endpoint uses actual measured physics time');return validateFrame(frame,index,calibration);});
   const intervals=[];
   for(let frame=0;frame<frameRows;frame++){
-    const original=captureManifest.frames[frame];exactArray(original.imu,measurements.samples[frame*3].imu,'Frame IMU equals actual endpoint sample');
-    assert(original.imuIntervals.length===(frame===0?0:3),'Three held samples per noninitial camera frame');
+    const original=captureManifest.frames[frame];exactArray(original.imu,measurements.samples[frame*holdsPerFrame].imu,'Frame IMU equals actual endpoint sample');
+    assert(original.imuIntervals.length===(frame===0?0:holdsPerFrame),'Exact held samples per noninitial camera frame');
     if(frame===0){assert(original.dt===0,'Initial acquisition has no interval');continue;}
-    assert(Number.isFinite(original.dt)&&Math.abs(original.dt-1/30)<1e-12,'Actual camera interval duration');
+    assert(Number.isFinite(original.dt)&&Math.abs(original.dt-1/cameraHz)<1e-12,'Actual camera interval duration');
     const batch=measurements.batches[frame-1];assert(batch.sequence===frame&&batch.time===original.time&&batch.dt===original.dt,'Frame/batch exact binding');
     exactArray(batch.imuIntervals,original.imuIntervals,'Manifest and measurement holds agree');
-    for(let hold=0;hold<3;hold++){
-      const index=(frame-1)*3+hold,interval=original.imuIntervals[hold],sample=measurements.samples[index],next=measurements.samples[index+1],call=calls[index];
+    for(let hold=0;hold<holdsPerFrame;hold++){
+      const index=(frame-1)*holdsPerFrame+hold,interval=original.imuIntervals[hold],sample=measurements.samples[index],next=measurements.samples[index+1],call=calls[index];
       assert(interval.sampleIndex===index&&interval.sampleTime===sample.time&&interval.time===next.time
         &&Number.isFinite(interval.dt)&&interval.dt>0&&interval.dt<=.02&&Math.abs(interval.dt-1/90)<1e-12
         &&Math.abs(interval.time-(index+1)/90)<1e-12&&Math.abs(interval.dt-(next.time-sample.time))<1e-15,'Actual previous sample held over complete interval');
       exactArray(interval.imu,sample.imu,'Held values are exact source sample, never interpolation');
       assert(call.index===index&&call.sequence===frame&&call.previousHeldSampleIndex===index&&call.resultSampleIndex===index+1
         &&call.stateIndex===index+1&&call.event.time===interval.time&&call.commandTime===frames[frame-1].time,'Physics advance/hold source lineage');
-      exactArray(JSON.parse(call.inputsJson),[...initialInputs,['autopilot',1],['indoorTour',0],['commandTime',frames[frame-1].time]],'Exact actual physics API command packet');
-      assert(call.event.camera===((index+1)%3===0)&&call.event.imu===true&&call.event.lidar===false
+      exactArray(JSON.parse(call.inputsJson),revisit?[]:[...initialInputs,['autopilot',1],['indoorTour',0],['commandTime',frames[frame-1].time]],'Exact actual physics API command packet');
+      assert(call.event.camera===((index+1)%holdsPerFrame===0)&&call.event.imu===true&&call.event.lidar===false
         &&call.event.gps===((index+1)%18===0),'Exact integer-grid SensorClock event flags');
       intervals.push([interval.time,interval.dt,...interval.imu.accel,...interval.imu.gyro]);
     }
@@ -234,11 +249,15 @@ try{
   const oracle=JSON.parse(captureFile(captureManifest.oracle.path,captureManifest.oracle.sha256));
   assert(oracle.frame==='world FLU'&&oracle.quaternionOrder==='wxyz'&&oracle.poses.length===frameRows,'Separate evaluation oracle');
   const originPose=oracle.poses[0],oracleQuaternionNormErrors=oracle.poses.map((pose,index)=>{
-    const truth=snapshots[index*3];assert(pose.sequence===index&&['x','y','z','time'].every(key=>Number.isFinite(pose[key])&&pose[key]===truth[key]),'Source-bound camera oracle');
+    const truth=snapshots[index*holdsPerFrame];assert(pose.sequence===index&&['x','y','z','time'].every(key=>Number.isFinite(pose[key])&&pose[key]===truth[key]),'Source-bound camera oracle');
     assert(Array.isArray(pose.quaternion)&&pose.quaternion.length===4&&pose.quaternion.every(Number.isFinite),'Finite source oracle quaternion');
     exactArray(pose.quaternion,truth.quaternion,'Source-bound oracle quaternion');return Math.abs(Math.hypot(...pose.quaternion)-1);
   });
   const positions=oracle.poses.map(pose=>[pose.x-originPose.x,pose.y-originPose.y,pose.z-originPose.z]);
+  const revisitGeometry=revisit?{maximumDisplacementMeters:Math.max(...positions.map(position=>Math.hypot(...position))),
+    finalDisplacementMeters:Math.hypot(...positions.at(-1)),duration:frames.at(-1).time-frames[0].time}:null;
+  if(revisit)assert(revisitGeometry.maximumDisplacementMeters>=1.5&&revisitGeometry.finalDisplacementMeters<=.5
+    &&revisitGeometry.duration>=6,'Actual out-and-back flight must leave and revisit the first view');
   const fields=[calibration.fx,calibration.fy,calibration.cx,calibration.cy,calibration.rgbFx,calibration.rgbFy,calibration.baseline,
     calibration.depthNoiseDisparityPx,calibration.depthNoiseReferenceFx,...calibration.originFlu,calibration.near,calibration.far];
   matrix('calibration',1,14,(_,column)=>fields[column]);matrix('opticalToBody',3,3,(row,column)=>calibration.opticalToBody[row*3+column]);
@@ -284,7 +303,7 @@ try{
   const script=path.join(output,'rendered-flight-slam.mos');
   const pairFile=pairDiagnostic?path.join(output,'matched-pairs.mat'):'';
   if(captureDiagnostic&&sensorLoss)throw Error('Capture diagnostics require a flight reference scenario');
-  const gridSource=`model ${model}\n  extends ${sensorLoss?'RGBDRenderedSensorLossAcceptance':'RGBDRenderedFlightSLAMAcceptance'}(imageSize={${height},${width}},rgbChannels=${channels},depthUnits=${depthUnits}${sensorLoss?'':',pairDiagnosticsFile='+JSON.stringify(pairFile)}${extended?`,replayFrames=${frameRows},extended=true`:''}${captureDiagnostic?',captureDiagnostics=true':''});\nend ${model};\n`;
+  const gridSource=`model ${model}\n  extends ${sensorLoss?'RGBDRenderedSensorLossAcceptance':'RGBDRenderedFlightSLAMAcceptance'}(imageSize={${height},${width}},rgbChannels=${channels},depthUnits=${depthUnits}${sensorLoss?'':',pairDiagnosticsFile='+JSON.stringify(pairFile)}${extended?`,replayFrames=${frameRows},extended=true`:''}${captureDiagnostic?',captureDiagnostics=true':''}${revisit?',holdsPerFrame=6,requireLoopClosure=true':''});\nend ${model};\n`;
   const gridEntry=path.join(output,'grid-entrypoint.mo');fs.writeFileSync(gridEntry,gridSource);
   fs.writeFileSync(script,'setDebugFlags("gen,-evalfunc,-nfEvalConstArgFuncs,-nfExpandFuncArgs,-nfExpandOperations,nfScalarize,execstat");\n'
     +'setCommandLineOptions("--preOptModules-=evalFunc");\nloadModel(Modelica,{"4.1.0"});\ngetVersion(Modelica);\n'
@@ -337,14 +356,36 @@ try{
     completed:(trace.match(/^RENDERED_FLIGHT_REPLAY_END .*$/gm)??[]),
     frames:(trace.match(/^RENDERED_FLIGHT_REPLAY_FRAME .*$/gm)??[])};
   const captureReceipts=parseCaptureFailureTrace(trace);
+  const loopSummaries=[...trace.matchAll(/^RENDERED_FLIGHT_LOOP_SUMMARY loops=(\d+) firstView=([01]) corrections=(\d+)$/gm)]
+    .map(match=>({verifiedLoops:Number(match[1]),firstView:match[2]==='1',corrections:Number(match[3])}));
+  const loopClosure=revisit?{scope:'Actual retained kind2 edges and accepted graph correction; no injected loop proposals.',
+    geometry:revisitGeometry,summaries:loopSummaries,
+    captures:trace.match(/^RENDERED_FLIGHT_LOOP_CAPTURE .*$/gm)??[],
+    pass:loopSummaries.length===1&&loopSummaries[0].verifiedLoops>0&&loopSummaries[0].firstView
+      &&loopSummaries[0].corrections>0}:null;
+  const recoverySummaries=[...trace.matchAll(/^RENDERED_FLIGHT_REVISIT_SUMMARY refusals=(\d+) empty=(\d+) recoveries=(\d+)$/gm)]
+    .map(match=>({refusals:Number(match[1]),emptyFrames:Number(match[2]),recoveredObservations:Number(match[3])}));
+  const revisitRecovery=revisit?{scope:'Every refused visual update must match the complete inertial-only State, except explicit image completion and eligible attempted-pair epoch consumption.',
+    summaries:recoverySummaries,
+    pass:recoverySummaries.length===1&&recoverySummaries[0].refusals>0&&recoverySummaries[0].emptyFrames>0
+      &&recoverySummaries[0].recoveredObservations>0&&result.metrics.length>0&&result.metrics.every(rows=>{
+        const refused=rows.slice(1).filter(row=>row[8]===0&&row[9]===0);
+        const first=refused[0]?.[0];
+        return recoverySummaries[0].refusals===refused.length
+          &&recoverySummaries[0].emptyFrames===refused.filter(row=>row[11]===0).length
+          &&recoverySummaries[0].recoveredObservations===rows.filter(row=>row[0]>first&&row[8]===1).length;
+      })}:null;
   const expectedCaptureEpoch=result.metrics[0]?.find(row=>row[2]===1&&row[3]===1&&row[4]===0)?.[0]??null;
   const captureTraceConsistent=result.rowsValid&&(expectedCaptureEpoch===null?captureReceipts.length===0
     :captureReceipts.length===1&&captureReceipts[0].epoch===expectedCaptureEpoch);
   const pass=terminal.status===0&&resources?.exitCode===0&&bookendsEqual&&simulationSucceeded&&result.rowsValid&&result.checks.length===checkCount&&result.checks.every(Boolean)
-    &&(!extended||extendedPoseEvaluation.pass)&&(!captureDiagnostic||captureTraceConsistent);
+    &&(!extended||extendedPoseEvaluation.pass)&&(!captureDiagnostic||captureTraceConsistent)
+    &&(!revisit||(loopClosure.pass&&revisitRecovery.pass));
   const report={status:pass?(sensorLoss?'OMC_RENDERED_SENSOR_LOSS_REFERENCE_PASS':'OMC_RENDERED_FLIGHT_SLAM_REFERENCE_PASS'):'FAILED_OR_INCOMPLETE',model,scenario,
     scope:`${frameRows} actual Rumoca plant/Three RGB-D frames and${intervalRows} source-measured held IMU intervals through complete Modelica localization/mapping reference. No authored acceleration, pose/velocity/rotation state injection, host estimator math, runtime WASM/browser estimator or throughput qualification. Raw modeled IMU has no stochastic bias/noise.`,
-    cameraInput:{rawCamera,channels,depthUnits,depthNoise:captureManifest.acquisition.depthNoise,hostMetricDepthConversion:false},
+    cameraInput:{rawCamera,channels,depthUnits,cameraHz,imuHz:90,holdsPerFrame,depthNoise:captureManifest.acquisition.depthNoise,hostMetricDepthConversion:false},
+    loopClosure,
+    revisitRecovery,
     controlledSensorFaults:sensorLoss?{owner:'tests/modelica/RGBDRenderedSensorLossAcceptance.mo',
       mutations:[{epoch:3,kind:'all-zero Z16 depth'},{epoch:4,kind:'uniform RGB8=128'}],
       capturedBytesModified:false,imuModified:false,claim:'Controlled unavailable measurements, not observed capture faults.'}:null,

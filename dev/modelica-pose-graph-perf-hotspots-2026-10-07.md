@@ -134,3 +134,18 @@ Large raw perf data, machine code, maps and WAT remain under
 `pose-graph-omc-perf-2026-10-07/` and `pose-graph-native-2026-10-07/`.
 See also the [matched runtime benchmark](modelica-compiler-comparison-2026-10-07.md).
 Full browser SLAM and 10x realtime are still unverified.
+
+## Fresh confirmation
+
+A second bounded capture of the unchanged f0 module retained 983 samples with
+zero lost records and one unresolved leaf. The source-bound normal product is
+54.38%, memmove 35.18%, and the copy wrapper 1.24%: 90.80% combined. Every sample
+lies inside the checked evaluation interval; original output and readonly input
+bytes match. Existing retained-operation counters were revalidated against this
+same module and source, rather than inferred from the sampled percentages.
+The run took 48.67 seconds including warmup and a 30-second evaluation window,
+used at most 297328 KiB aggregate RSS, and retained over 50 GiB available memory.
+It was limited to cores 8–9 at nice 15. Concurrent compiler builds were present;
+this confirmation establishes hotspot identity, not a new timing comparison.
+Durable receipt: `dev/artifacts/modelica-pose-graph-perf-confirm-2026-10-07/`.
+Raw trace: `$HOME/scratch/slam_web/profiles/pose-graph-perf-confirm-2026-10-07/`.

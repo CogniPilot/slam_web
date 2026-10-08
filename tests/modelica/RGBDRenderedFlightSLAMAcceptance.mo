@@ -35,7 +35,7 @@ package RGBDRenderedFlightSLAMReference
     input RGBDGraphProcessing.State previous;
     input Real rgb[:,:,:]; input Real depth[size(rgb,1),size(rgb,2)];
     input Real calibration[14]; input Real opticalToBody[3,3];
-    input Real measuredIntervals[holdsPerFrame,8] "time, dt, held specific force XYZ, held gyro XYZ";
+    input Real measuredIntervals[:,8] "time, dt, held specific force XYZ, held gyro XYZ";
     input Integer epoch; input Real frameTime;
     input Real depthUnits = 1.0;
     output RGBDRenderedCitySLAMReference.BatchResult result;
@@ -47,7 +47,9 @@ package RGBDRenderedFlightSLAMReference
   algorithm
     accel := zeros(maximumIntervals,3); gyro := zeros(maximumIntervals,3);
     durations := zeros(maximumIntervals); endpoints := zeros(maximumIntervals);
-    for interval in 1:holdsPerFrame loop
+    assert(size(measuredIntervals,1) >= 1 and size(measuredIntervals,1) <= maximumIntervals,
+      "Measured interval count exceeds the authored batch capacity");
+    for interval in 1:size(measuredIntervals,1) loop
       endpoints[interval] := measuredIntervals[interval,1];
       durations[interval] := measuredIntervals[interval,2];
       accel[interval,:] := measuredIntervals[interval,3:5];
@@ -67,10 +69,37 @@ package RGBDRenderedFlightSLAMReference
         disparityNoise=calibration[8],noiseReferenceFx=calibration[9],
         opticalToBody=opticalToBody,cameraOriginBody=calibration[10:12],
         accel=accel,gyro=gyro,gravity={0,0,-9.81},density=fill(0.01,12),
-        durations=durations,intervalTimes=endpoints,intervalCount=holdsPerFrame,frameTime=frameTime,
+        durations=durations,intervalTimes=endpoints,intervalCount=size(measuredIntervals,1),frameTime=frameTime,
         imageEpoch=epoch,imageRequested=imageRequested,localCaptureRequested=true,
         graphCorrectionRequested=graphCorrectionRequested,depthUnits=depthUnits);
   end Advance;
+
+  function RefusalHeld
+    input RGBDGraphProcessing.State previous;
+    input RGBDGraphProcessing.State predicted;
+    input RGBDGraphProcessing.State current;
+    input Integer epoch; input Real frameTime;
+    input Real relativeValid;
+    output Boolean held;
+  protected
+    RGBDGraphProcessing.State expected;
+    Real pairValid; Real pairEligible; Real captureFresh;
+  algorithm
+    expected := predicted;
+    expected.estimator.localization.lastProcessedImageEpoch := epoch;
+    expected.estimator.localization.lastProcessedImageTime := frameTime;
+    (pairValid,pairEligible,captureFresh) := SchmidtImagePairEligibility(
+      previous.estimator.localization.estimator.referenceAvailable,
+      previous.estimator.localization.estimator.referenceUsed,
+      previous.estimator.localization.estimator.referenceEpoch,epoch,
+      previous.estimator.localization.estimator.lastUsedEpoch);
+    // A rejected eligible innovation consumes its image once, without correction.
+    if relativeValid == 1 and pairEligible == 1 then
+      expected.estimator.localization.estimator.lastUsedEpoch := epoch;
+      expected.estimator.localization.estimator.referenceUsed := 1;
+    end if;
+    held := RGBDCompleteStateComparison.Equal(current,expected,1e-12);
+  end RefusalHeld;
 
   impure function Run
     input String datasetFile; input Real clock;
@@ -83,6 +112,8 @@ package RGBDRenderedFlightSLAMReference
     input Integer replayFrames = frameCount;
     input Boolean extended = false;
     input Boolean captureDiagnostics = false;
+    input Integer holdsPerFrame = RGBDRenderedFlightSLAMReference.holdsPerFrame;
+    input Boolean requireLoopClosure = false;
   protected
     Real calibrationMatrix[1,14]; Real calibration[14]; Real opticalToBody[3,3];
     Real initialImu[1,6]; Real acquisition[replayFrames,2];
@@ -92,16 +123,21 @@ package RGBDRenderedFlightSLAMReference
     Real selectionCount; Real selectionStatus; Real rowRaw[24]; Real rowDiagnostics[16];
     Real matchedPairs[RGBDKeyframes.featureCapacity,7]; Boolean pairsWritten;
     Real captureStages[26]; Boolean captureTraced; String captureMessage;
+    Integer verifiedLoops; Integer loopCorrections; Boolean firstViewLoop;
+    Integer refusals; Integer emptyFrames; Integer recoveredObservations;
     Integer epoch; Integer observations; Integer captures; Real frameTime;
     RGBDGraphProcessing.State fresh; RGBDGraphProcessing.State previous;
     RGBDFastSLAMRawCompositionReference.Outcome initialized;
     RGBDFastSLAMRawCompositionReference.Outcome current;
     RGBDRenderedCitySLAMReference.BatchResult batch;
+    RGBDRenderedCitySLAMReference.BatchResult imuOnly;
   algorithm
     Modelica.Utilities.Streams.print("RENDERED_FLIGHT_REPLAY_BEGIN","flight-replay-trace.log");
     assert(replayFrames >= frameCount and (extended or replayFrames == frameCount),
       "Longer captures require the extended reference contract");
     checks := fill(true,24); raw := zeros(replayFrames,24); diagnostics := zeros(replayFrames,16);
+    verifiedLoops := 0; loopCorrections := 0; firstViewLoop := false;
+    refusals := 0; emptyFrames := 0; recoveredObservations := 0;
     calibrationMatrix := Modelica.Utilities.Streams.readRealMatrix(datasetFile,"calibration",1,14,false);
     calibration := calibrationMatrix[1,:];
     opticalToBody := Modelica.Utilities.Streams.readRealMatrix(datasetFile,"opticalToBody",3,3,false);
@@ -138,7 +174,7 @@ package RGBDRenderedFlightSLAMReference
     for frame in 2:replayFrames loop
       epoch := integer(acquisition[frame,1]); frameTime := acquisition[frame,2];
       checks[1] := checks[1] and acquisition[frame,1] == frame-1
-        and epoch == frame-1 and abs(frameTime-(frame-1)/30.0) < 1e-12;
+        and epoch == frame-1 and abs(frameTime-(frame-1)*holdsPerFrame/90.0) < 1e-12;
       for interval in 1:holdsPerFrame loop
         checks[6] := checks[6]
           and abs(measuredIntervals[(frame-2)*holdsPerFrame+interval,1]
@@ -150,6 +186,25 @@ package RGBDRenderedFlightSLAMReference
         measuredIntervals[(frame-2)*holdsPerFrame+1:(frame-1)*holdsPerFrame,:],epoch,frameTime,depthUnits,
         graphCorrectionRequested=extended);
       current := batch.value;
+      if requireLoopClosure then
+        if current.next.estimator.localization.catalog.nextId <> previous.estimator.localization.catalog.nextId then
+          verifiedLoops := 0;
+          for edge in 1:RGBDGraphMeasurements.edgeCapacity loop
+            if current.next.estimator.localization.graph.edges[edge].enabled
+                and current.next.estimator.localization.graph.edges[edge].kind == 2 then
+              verifiedLoops := verifiedLoops+1;
+              firstViewLoop := firstViewLoop
+                or current.next.estimator.localization.graph.edges[edge].referenceId == 1;
+            end if;
+          end for;
+          Modelica.Utilities.Streams.print("RENDERED_FLIGHT_LOOP_CAPTURE epoch=" + String(epoch)
+            + " time=" + String(frameTime) + " loops=" + String(verifiedLoops)
+            + " graphReason=" + String(current.graphReason),"flight-replay-trace.log");
+        end if;
+        if current.graphCorrectionAccepted and verifiedLoops > 0 then
+          loopCorrections := loopCorrections+1;
+        end if;
+      end if;
       scores := FastFrameScores(rgb,true);
       scores := RGBDDepthQualifiedScores(depth,scores,
         {calibration[5],calibration[6],calibration[3],calibration[4]},calibration[1:4],
@@ -186,9 +241,26 @@ package RGBDRenderedFlightSLAMReference
       checks[8] := checks[8] and current.predictionAccepted == 1 and current.initializationAccepted == 0;
       checks[9] := checks[9] and current.selectionValid == 1 and selectionStatus == 1
         and selectionCount <= RGBDKeyframes.featureCapacity
-        and RGBDFastSLAMRawCompositionReference.SumMask(current.featureEnabled) >= 12
+        and (requireLoopClosure or RGBDFastSLAMRawCompositionReference.SumMask(current.featureEnabled) >= 12)
+        and selectionCount == RGBDFastSLAMRawCompositionReference.SumMask(current.featureEnabled)
         and rowDiagnostics[10] == RGBDFastSLAMRawCompositionReference.SumMask(current.featureEnabled);
-      checks[10] := checks[10] and current.observationAccepted+current.captureAccepted == 1;
+      if requireLoopClosure and current.observationAccepted == 0 and current.captureAccepted == 0 then
+        refusals := refusals+1;
+        if selectionCount == 0 then emptyFrames := emptyFrames+1; end if;
+        imuOnly := Advance(previous,rgb,depth,calibration,opticalToBody,
+          measuredIntervals[(frame-2)*holdsPerFrame+1:(frame-1)*holdsPerFrame,:],epoch,frameTime,
+          depthUnits,imageRequested=false);
+        checks[10] := checks[10] and not current.mappingAccepted and not current.graphCorrectionAccepted
+          and imuOnly.value.accepted and not imuOnly.value.imageCompleted
+          and imuOnly.batchReason == 0 and imuOnly.processedIntervals == holdsPerFrame
+          and imuOnly.failedInterval == 0
+          and RefusalHeld(previous,imuOnly.value.next,current.next,epoch,frameTime,rowDiagnostics[5]);
+      else
+        checks[10] := checks[10] and current.observationAccepted+current.captureAccepted == 1;
+        if refusals > 0 and current.observationAccepted == 1 then
+          recoveredObservations := recoveredObservations+1;
+        end if;
+      end if;
       checks[11] := checks[11] and rowDiagnostics[8] == current.matchCount
         and (current.observationAccepted == 0 or (current.matchCount >= 3
           and RGBDFastSLAMRawCompositionReference.SumMask(current.trackingEnabled) >= 3));
@@ -214,8 +286,10 @@ package RGBDRenderedFlightSLAMReference
         else current.next.estimator.localization.catalog.nextId == 2
           and not current.graphCorrectionAccepted and current.next.estimator.correctionRevision == 0);
       checks[17] := checks[17] and RGBDFastSLAMRawCompositionReference.MapGeometry(current.next);
-      checks[18] := checks[18] and current.mappingAccepted
-        and current.next.estimator.localization.map.imageEpoch == epoch
+      checks[18] := checks[18] and (if requireLoopClosure and not current.mappingAccepted then
+        RGBDCompleteStateComparison.EqualMappingState(current.next.estimator.localization.map,
+          previous.estimator.localization.map,1e-12)
+        else current.mappingAccepted and current.next.estimator.localization.map.imageEpoch == epoch)
         and RGBDFastSLAMRawCompositionReference.SumMask(current.next.estimator.localization.map.occupied) > 0;
       checks[19] := checks[19] and RGBDLocalizationInitializeTests.CloseVector(current.nextQuaternion,
         RGBDLocalizationAdvanceReference.Quaternion(current.next.estimator.localization.estimator.rotation),1e-10);
@@ -240,8 +314,19 @@ package RGBDRenderedFlightSLAMReference
     end for;
     // Keep the original short-flight contract exactly. Longer flights admit
     // source-owned keyframe/graph decisions and check useful completed updates.
-    checks[23] := if extended then observations+captures == replayFrames-1
+    checks[23] := if extended then observations+captures+refusals == replayFrames-1
       and observations > 0 and captures > 0 else observations == 6 and captures == 6;
+    if requireLoopClosure then
+      checks[23] := checks[23] and verifiedLoops > 0 and firstViewLoop and loopCorrections > 0
+        and refusals > 0 and emptyFrames > 0 and recoveredObservations > 0
+        and previous.estimator.localization.map.imageEpoch == replayFrames-1
+        and RGBDFastSLAMRawCompositionReference.SumMask(current.featureEnabled) >= 12;
+      Modelica.Utilities.Streams.print("RENDERED_FLIGHT_LOOP_SUMMARY loops=" + String(verifiedLoops)
+        + " firstView=" + String(if firstViewLoop then 1 else 0)
+        + " corrections=" + String(loopCorrections),"flight-replay-trace.log");
+      Modelica.Utilities.Streams.print("RENDERED_FLIGHT_REVISIT_SUMMARY refusals=" + String(refusals)
+        + " empty=" + String(emptyFrames) + " recoveries=" + String(recoveredObservations),"flight-replay-trace.log");
+    end if;
     Modelica.Utilities.Streams.print("RENDERED_FLIGHT_REPLAY_END observations=" + String(observations)
       + " captures=" + String(captures),"flight-replay-trace.log");
   end Run;
@@ -256,6 +341,8 @@ model RGBDRenderedFlightSLAMAcceptance
   parameter Integer replayFrames = RGBDRenderedFlightSLAMReference.frameCount;
   parameter Boolean extended = false;
   parameter Boolean captureDiagnostics = false;
+  parameter Integer holdsPerFrame = RGBDRenderedFlightSLAMReference.holdsPerFrame;
+  parameter Boolean requireLoopClosure = false;
   output Boolean checks[24]; output Real raw[replayFrames,24]; output Real diagnostics[replayFrames,16];
 algorithm
   // The dataset contains the complete changing flight. Replay it at the
@@ -264,6 +351,6 @@ algorithm
   when initial() then
     (checks,raw,diagnostics) := RGBDRenderedFlightSLAMReference.Run(datasetFile,time,imageSize,rgbChannels,depthUnits,
       pairDiagnosticsFile=pairDiagnosticsFile,replayFrames=replayFrames,extended=extended,
-      captureDiagnostics=captureDiagnostics);
+      captureDiagnostics=captureDiagnostics,holdsPerFrame=holdsPerFrame,requireLoopClosure=requireLoopClosure);
   end when;
 end RGBDRenderedFlightSLAMAcceptance;

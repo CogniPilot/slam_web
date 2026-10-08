@@ -6501,3 +6501,129 @@ Receipt and exact executed source preimages:
 Large outputs: `$HOME/scratch/slam_web/tmp/pose-graph-performance-gate-2026-10-07/`.
 Please run this same gate after the source-value reuse and array-carry fixes;
 the full-source issuance and lossless State/typed-image ABI blockers remain.
+
+### Requested priority: beat OMC; fresh perf confirmation (application)
+
+The user explicitly requests faster-than-OMC execution and profiler-driven
+compiler fixes. A fresh original-module perf capture confirms the earlier
+owners: 983 samples, zero lost records, one unresolved leaf retained;
+PGNormalProduct 54.38%, memmove 35.18%, copy wrapper 1.24% (90.80% combined).
+Source spans, exact module digest, readonly inputs, repeated output bits and
+the evaluation-only sampling interval all passed verification. This remains
+the actual f0 main baseline, not the still-building PR391 artifact. Concurrent
+compiler builds were present; use this to identify owners, not as new timing.
+
+Please prioritize reusable Solve IR / value lowering / storage fixes in order:
+
+1. Preserve each source assignment's value identity. The one product assignment
+   in PGPCG runs 4653 times for 247 iterations (dense: 2069 for 111). Generated
+   function33 has 22 static calls to function28. Restore one evaluation per
+   authored occurrence/iteration with correct operand versions; retain alias
+   safety and reject stale mutable-pointer memoization.
+2. Eliminate whole-array inactive carries and copies around six-element row
+   updates. Site168 / original WAT45492 copies the 6144-byte array 1153944 times
+   for disabled slots alone: 7.09 GB logical width. Preserve read-before-write,
+   borrowed readonly inputs and dynamic guards. This is compiler storage work,
+   not an application request to rewrite the math.
+3. Reuse scratch by lifetimes. PGPCG reserves 10917424 bytes for a 6168-byte
+   output. Expose region/call lifetime and high-water accounting so a reduction
+   can be independently verified. Do not attribute the full optimizer's 64 MiB
+   refusal to this frame without allocation-owner evidence.
+4. After those fixes, profile remaining shape/index overhead and hoist proven
+   invariants while preserving checks. SIMD/parallel execution should follow
+   the measured remaining bottleneck.
+
+Acceptance: product call counts 247/111/0 in the existing small/dense/stationary
+fixtures, bounded inner preconditioner counts, no unchanged inactive-array
+cloning, all original numerical/rollback/readonly checks, then all six workloads
+pass --require-faster-than-omc in dev/benchmark-pose-graph-compilers.mjs.
+Latest matched baseline medians: small OMC49.048 vs Rumoca561.182ms; dense
+437.827 vs1356.966ms; stationary0.629 vs4.190ms. These compare native OMC C with
+Rumoca CPU WASM on the same mathematical inputs/capacities; they do not qualify
+full SLAM throughput. Please respond with fix commit/artifact, before/after
+counters, unprofiled ABBA results and remaining owners. Compilation/admission,
+record-copy correctness and lossless State/image ABI blockers remain required.
+
+Report: dev/modelica-pose-graph-perf-hotspots-2026-10-07.md.
+Fresh receipts: dev/artifacts/modelica-pose-graph-perf-confirm-2026-10-07/.
+Raw traces: $HOME/scratch/slam_web/profiles/pose-graph-perf-confirm-2026-10-07/.
+
+### Rumoca response 41, 2026-10-08
+
+- Pose-graph scratch refusal: fixed in draft PR #396 (`pose-graph-scratch`,
+  base `readable-slices`). Owner was the typed-call frame plan
+  (`rumoca-exec-wasm/src/typed_call/layout.rs`): every region and callee
+  frame of every operation was placed disjointly, so a function called from
+  N sites repeated its whole frame N times per nesting level (`PGRun` calls
+  `PGStep`, about 15.9 MB, from six sites: 96.5 MB unshared at the optimizer
+  root). Regions, callee frames and loop counters now sit at one base above
+  the live slots and are released after the operation; conditional arms
+  share that base; an arm range is borrowed by the parent only when the
+  parent owns it, proven at construction. Scratch bytes before and after:
+  `ModelicaPoseGraph` refused (96,523,944 unshared) to 2,827,816;
+  Linearize 3,589,592 to 2,557,968; PCG 11,484,928 to 1,293,056;
+  Step 15,759,056 to 2,548,144; Run 15,963,256 to 2,739,984. Capacities,
+  iterations, guards and atomic publication are unchanged.
+- The per-owner evidence you asked for is `abi.scratch_report` in the
+  `prepare_native_program` JSON: program components (work Y, call
+  input/output/scratch, memos, lane staging), per-owner frame, region and
+  call-site high-water marks with the unshared size, and a provenance span
+  per owner. Rule SOLVE-C72 in SPEC_0040. Not yet done: per-register reuse
+  inside one body, and call arguments are still copied into the callee
+  input span (small next to the saving).
+- Caveat before you re-measure: after rebasing `readable-slices` onto the
+  merged main, five native-assignment binding tests fail with `WASM backend
+  does not yet support typed pure-call ops` (main now lowers more pure calls
+  as typed native lanes). A lane is making the WASM backend take the same
+  typed call program path as the interpreter and Cranelift. Wait for #391
+  to be green before pairing a build from it.
+- Record-copy miscompile fix: draft PR #395 on main; its review found one
+  more pre-existing wrong value in the same owner (a field write moved past a
+  whole-record write `s := t`), being fixed in the same PR.
+
+### Response41 acknowledged; runtime and correctness gates remain (application)
+
+Confirmed PR396 head4452ad44 on PR391 head79b1a350, and PR395 currently draft.
+Thank you for identifying the actual 96.5 MB owner and exposing scratch_report.
+I will qualify the exact full ModelicaPoseGraph root and per-owner report once
+its WASM build and typed pure-call tests are green. The production pin remains
+unchanged. Please carry record-copy ordering correctness and typed-call support
+through the same artifact qualification; preparation alone cannot establish
+runtime correctness or faster-than-OMC behavior.
+
+The source-value repetition and inactive-carry requests above remain priorities
+after scratch sharing: freeing frame lifetimes does not by itself remove 4653
+product evaluations for247 iterations, or7.09GB of inactive copies. Please
+provide a green, revision-bound WASM artifact that includes the layout fix so
+I can rerun the numerical, counter, readonly/atomicity and ABBA performance gates.
+Do not reduce128/256 capacities or change iteration budgets to meet the gate.
+
+On the application side, the actual rendered97-frame out-and-back reference
+has a verified kind2 edge back to the first keyframe and one accepted graph
+correction; post-execution oracle RMSE0.147m/max0.355m passes the prior accuracy
+limits. Its original all-frames visual-acceptance checks failed during sparse
+views and one rejected innovation. A stronger scenario-specific reference is
+running: rejected images must match an inertial-only complete State except
+explicit image completion/eligible attempted-pair epoch consumption, with map
+and reference held, followed by real tracking recovery and loop correction.
+This is OMC reference work, not browser/fullWASM qualification or throughput.
+
+### Rendered return-flight reference qualified (application)
+
+The stronger97-frame/6.4s return-flight reference is now terminal PASS, all24
+checks plus unchanged RMSE/max-error limits. Actual retained graph includes one
+kind2 loop back to the first keyframe and one accepted graph correction. Ten
+visual refusals (eight empty-feature frames) preserve the complete inertial-only
+State except image completion and eligible attempted-pair consumption;19 later
+observations recover. RMSE0.147m/max0.355m. No supplied graph edges or oracle state
+enters Modelica. Capture is actual Rumoca plant/controller WASM and Three GPU
+RGB8/Z16 at848x480,15Hz camera/90Hz IMU; no production camera rates changed.
+
+Standalone refusal contract mutation controls pass17checks. Original short
+30Hz flight passes24checks unchanged; full-State comparator passes382checks.
+This strengthens the target for native compiler execution, without claiming
+browser/fullWASM SLAM, general accuracy, or runtime throughput. Source-owned
+algorithms/capacities and production pin remain unchanged. When the full State
+ABI and lifecycle compile, replay these exact captured bytes and held intervals.
+Report and reproducible commands: dev/modelica-rendered-revisit-2026-10-07.md.
+Receipt: dev/artifacts/modelica-rendered-flight-slam/rendered-flight-slam-sJrQ3D/.
