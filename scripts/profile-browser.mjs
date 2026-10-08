@@ -8,7 +8,7 @@ import {startSessionTiming,startRpcTiming} from '../dev/profile-session-instrume
 
 // Run against the built preview. One browser, bounded sample count, no server
 // or machine settings changed. perf can wrap this process and its descendants.
-const output=path.resolve(process.env.SLAM_PROFILE_OUT??'test-results/profile');
+const output=path.resolve(process.env.SLAM_PROFILE_OUT??path.join(process.env.HOME,'scratch/slam_web/profiles/browser'));
 const count=Number(process.env.SLAM_PROFILE_FRAMES??60);
 if(!Number.isInteger(count)||count<10||count>1800)throw new Error('Profile frames must be 10..1800');
 await mkdir(output,{recursive:true});
@@ -34,14 +34,19 @@ try {
   page.on('pageerror',error=>errors.push(error.message));
   page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
   await page.goto(profileUrl);
-  await page.waitForFunction(()=>{const lab=window.__slamLab;return lab?.initialized&&lab.ready&&lab.runtime.running;},{},{timeout:90000});
+  await page.waitForFunction(()=>{const lab=window.__slamLab;return lab?.initialized&&lab.ready;},{},{timeout:90000});
   await page.evaluate(async()=>{const r=window.__slamLab.runtime;r.pause();while(r.busy)await new Promise(resolve=>setTimeout(resolve,10));});
   const settings={environment:process.env.SLAM_PROFILE_SCENE??'city',sceneDetail:process.env.SLAM_PROFILE_DETAIL??'high',lidarEnabled:process.env.SLAM_PROFILE_LIDAR==='1',depthCloudEnabled:process.env.SLAM_PROFILE_DEPTH_CLOUD!=='0'};
   if(process.env.SLAM_PROFILE_SENSOR_RATES)settings.sensorRates=JSON.parse(process.env.SLAM_PROFILE_SENSOR_RATES);
   // The complete Modelica SLAM profile is pending. Select the available INS
   // workload explicitly and keep that limitation in the durable report.
-  const algorithm=await readFile(new URL('../models/Estimation/Inertial/ModelicaInertial.mo',import.meta.url),'utf8');
-  await page.evaluate(async({settings,algorithm})=>{const lab=window.__slamLab;Object.assign(lab.project,settings,{algorithm,algorithmPreset:'Modelica inertial propagation',runtime:'modelica'});delete lab.project.algorithmArtifact;await lab.runtime.compile(lab.project);},{settings,algorithm});
+  const algorithm=await readFile(new URL('../models/Examples/InertialOnly.mo',import.meta.url),'utf8');
+  await page.evaluate(async({settings,algorithm})=>{
+    const lab=window.__slamLab;
+    Object.assign(lab.project,settings,{algorithm,algorithmPreset:'Modelica inertial propagation',runtime:'modelica',
+      entryPoint:'Examples.InertialOnly',mainSourcePath:'models/Examples/InertialOnly.mo'});
+    delete lab.project.algorithmArtifact;await lab.runtime.compile(lab.project);
+  },{settings,algorithm});
   const readback=process.env.SLAM_PROFILE_READBACK??(hardware?'sync':'async');
   if(!['async','sync'].includes(readback))throw new Error('SLAM_PROFILE_READBACK must be async or sync');
   await page.evaluate(mode=>window.__slamLab.runtime.world.setSensorReadback(mode),readback);
