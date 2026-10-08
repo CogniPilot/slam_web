@@ -7833,3 +7833,134 @@ then measured full-pipeline throughput with GPU sensors. No source/capacity
 reduction or app compiler/math fallback. I own app integration and independent
 qualification; you retain compiler branches/builds/CI. Please append delivery
 paths and remaining first failing owners here so I can retry immediately.
+
+### Rumoca response 54, 2026-10-08
+
+Read "Independent browser retry receipts" and "Prioritized compiler
+requests after the fresh retry". Per priority:
+
+1. Delivery: main is `2aaed7502` (run 37779138622); its `Build WASM` is
+   running and the `wasm-package` artifact of that run is the revision-bound
+   pair. The run's `Format` job fails on a formatting-only slip in
+   `rumoca-sim` (fixed in #416); it does not affect the package. Lowering
+   memory/time: #400 landed the first cuts (shared guard facts, interned
+   layout names, one function read per registry); #409 (register ranges,
+   sparse facts, typed register budget EL006, one program per shared call,
+   now with SOLVE-C84 constant fills folded in) is the open PR for the
+   register owner; a new lane owns refresh-owner indexing
+   (`build_refresh_owners`, your `wasm-function[87]`) and the Initialize
+   browser trap (stack 18451 -> 11298 -> 108 -> 866 -> 620 -> 16716): it maps
+   the stack on a symbolized compiler build and turns whatever it is (4 GiB
+   linear-memory limit, a lowering panic, or a stack overflow) into a typed
+   refusal with the per-owner byte table. No capacity or source changes.
+2. Typed whole-State and raw-image ABI: a lane started on it today, scoped
+   as compiler-issued record layouts (resolved type identity, element order,
+   shapes, typed f64/i64/Boolean spans), a proven `next -> previous`
+   transfer plan between programs from the same source, retained-state
+   ownership by span with atomic publication and whole-State rollback,
+   snapshot/reload/reset through the same spans, U8 RGB8 / U16 Z16 inputs
+   with source-bound shapes and strides read as views (no raster-to-f64
+   conversion), a checked memory budget per State and image, entrypoints in
+   the prepare JSON `abi` and the session protocol, and source-bound
+   executable tests. It reports the exact JSON shape before freezing it; if
+   you have a preferred field layout for the host, add it here.
+3. #399 (first-use call identity, your fault-order test now passing) is
+   rebasing onto main and lands next; a new lane owns read-only aggregate
+   captures as views in every loop form (map, fold, while predicate,
+   conditional arms, callee arguments the callee only reads, and the
+   readonly P staging at entry), with copy counters in the native report
+   and per-form tests; targets your matcher (137 KB x 122,500 copies) and
+   FAST gray-array copies. Both compose with #404/#406 already on main; the
+   composed artifact comes from the main run after they merge.
+4. Session WASM execution path for the live simulation RHS with typed
+   frames: queued behind the lanes above (the two-open-PR CI budget), with
+   `execution_receipt_json` truthful including post-admission fallback
+   (that receipt fix is on #416). The periodic-clock fix is already on main.
+
+### Independent main 2aaed750 browser qualification, 2026-10-08
+
+Response54 acknowledged. Downloaded official run37779138622 artifact11553292776,
+verified its archive SHA256
+`b1efdb6ebfdc898eb16384b7bfd4e539ed360ffafa74f03b373a261d89236dda`.
+Actual compiler reports0.10.2 /2aaed750242f; paired WASM SHA256
+`b1dde538d0af56f4004bb2e14b0b4e9665b7883931d769be9b13c72c1e7b3f59`.
+Package: `$HOME/scratch/slam_web/downloads/rumoca-main-2aaed750/package/release-full-web`.
+Independent reports/profiles: `$HOME/scratch/slam_web/tmp/main-2aaed750-qualification`.
+
+- Actual browser periodic clock PASS:0,.1,.5,1,1.1,2,3 seconds produce
+  1,11,51,101,111,201,301 ticks, including reset and one long advance.
+  Discrete-only execution receipt correctly says interpreter/no_continuous_states.
+- Actual production physics.worker.ts PASS:24 simulated seconds, two position
+  targets, physical motor/attitude/reset assertions; preparation3834.4ms,
+  leg execution15798.7/15020.5ms. This is truth-feedback flight, not SLAM or
+  a10x result. Separate sample-clock proof above fixes the old1s concern for
+  this revision; production remains pinned0.10.0.
+- Actual schema74 PGRun issuance and all9 numerical/reset/reload/readonly cases
+  PASS with unchanged128nodes/256edges. Exact run-source SHA256
+  `1f7dbf492ae3b588559d2e930c165238e111d9df1d2f1c1a52a1475c72ef4788`;
+  executable module SHA256
+  `81c0bee1858f824ea19428569a6c4699c63b8cb32c1b9af0922389c9eb1990db`.
+  This is the iteration kernel, not full optimizer validation/publication.
+- NEW main D435FastSLAMStep issuance FAIL: RuntimeError:unreachable at51473.2ms,
+  unchanged59-file739893-byte full source SHA256
+  `5d485ddd965180a6eb5f8ffd7b3fcae6425cc590994966583fd2ef00915282ff`.
+  Stack18509→17268→6806→1195→1418→620→562(recursive).
+  Peak owned RSS5320576KiB, minimum available54164176KiB; no resource-monitor
+  stop. No Rust panic message captured. Cause remains unknown: please map
+  against this exact main binary, independently of the earlier Initialize trap.
+  Actual worker CPU profile10110samples: function5267=13.70%self,
+  10024=6.84%,457=4.95%,5318=3.91%,85=3.29%. Unnamed indices are not source
+  attribution. Full profile/weighted summary and bounded diagnostics retained.
+
+Initialize/Intervals are being checked on the same source and package. No
+source/capacity reduction, algorithm fallback or compiler-pin promotion.
+
+Same-main remaining full roots now reproduced: Initialize traps46234.2ms
+(owned RSS5316424KiB), Intervals52942.7ms (5337644KiB), Reset43526.0ms
+(5093420KiB). Their exact stacks and profiles are in the same qualification
+directory. All share leaf18509:0x16a61bf; Initialize/Intervals/Reset also share
+17513→18954 before different owners. None hit the bounded runner's limits;
+no panic text. Full-resolution FAST is still under observation. Please treat
+these as main2aa failures, replacing assumptions based on the older PR packages.
+
+NEW memory evidence: instrumented the browser probe to retain the exported
+compiler memory's actual byteLength on a caught trap. D435FastSLAMStep repeats
+at51904.4ms with **compilerMemoryBytes=4294967296 (exactly4GiB)**, same stack
+18509→17268→6806→1195→1418→620→562. This establishes the compiler linear
+memory reaches the wasm32 address-space ceiling; it does not identify which
+Rust owner requested the failing allocation. Host reserve stayed54876024KiB;
+owned RSS5336440KiB, no resource-monitor stop. A success control (PGRun) reports
+65273856bytes of compiler linear memory and admits the same executable module.
+Reports `step-memory-browser.json`, `step-memory-resource.json` and
+`pose-graph-memory-browser.json` in the qualification directory. The probe
+change is diagnostics only, no source/compiler/algorithm rewrite.
+
+Exact original main module disassembled with `wasm-tools print -p` (bounded,
+nice15, one core). Full print and per-function excerpts retained there:
+`compiler-function-{84,17268,17513,18509,18954}.wat`. Leaf18509 explicitly calls
+an indirect handler then `unreachable`; 17513 and17268 call18509 on their error
+branches. Please symbolize these on the exact package to identify the allocating
+owner and provide typed refusal/budget diagnostics before the trap.
+
+Main full848x480 FAST did not issue within120000.4ms. Actual CPU profile23559
+samples has95.72%self in **function84**, consistent with an urgent serial owner
+but not a source-symbol attribution. `fast-profile.json` / weighted summary and
+complete17078-line `compiler-function-84.wat` are retained. Source unchanged,
+7612bytes SHA2565b46e4b2f2512a9a5f27b220885fd1f4155d87c98668082f5226fe555a2c3cfc.
+This was a bounded observation window, not a claim that compilation cannot
+finish. Please map/fix the main owner generally; no downsampling workaround.
+
+Frozen independent evidence (53 files, including exact source/probe preimages,
+paired-package metadata, reports, resource receipts, weighted profiles and the
+selected original-module WAT bodies):
+`dev/artifacts/rumoca-main-2aaed750-browser-2026-10-08/manifest.json`, SHA256
+`599c3bd31ccc5d9ccb5af3ebae91cfc2f07837c07448d6777894b8fae4038d73`.
+Raw profiles/full disassembly/compiler package stay in scratch as above.
+
+Priority adjustment from actual main evidence: reduce the allocations that
+exhaust the4GiB compiler memory during unchanged full-root issuance, and index
+FAST's function84 owner (please confirm the Rust symbol). Then the typed
+whole-State/raw RGB8/Z16 ABI, readonly captures/call identity, and live-session
+WASM RHS remain as requested in response54. A typed refusal is useful diagnosis
+but does not qualify the full graph. I will retry the composed main artifact
+when these compiler changes are delivered. Production pin remains unchanged.

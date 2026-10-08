@@ -65,8 +65,12 @@ velocity/attitude controller, rate loop and motor allocation. Commands drive
 motor dynamics and the rigid-body plant; the host does not move the simulated
 vehicle directly. The current controller uses truth feedback. Flight-tour
 setpoints are authored in Modelica, but a polynomial planner and estimated-state
-feedback are not connected. Rumoca's interactive periodic-event horizon defect
-remains an open correctness issue; position-tracking checks do not resolve it.
+feedback are not connected. The deployed compiler pin (0.10.0) still has an
+interactive periodic-event horizon defect. An independent browser clock test
+passes through three seconds and reset on main `2aaed750242f` (0.10.2), and
+the production physics worker passes its 24-second position-tracking test with
+that package. These checks qualify that revision separately; they do not
+change the deployed pin or establish full SLAM execution.
 
 Keyboard controls default to an independent viewer camera. WASD translates, Q/E changes yaw, R/F changes altitude and Shift increases movement speed in wall time, even while the simulation is paused. **Drone commands** is an explicit alternate mode requiring a running simulation and Flight tour off. Viewer movement never changes truth or sensing poses.
 

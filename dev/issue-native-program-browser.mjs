@@ -31,7 +31,7 @@ const server = createServer((request, response) => {
   response.statusCode = 404; response.end();
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-let browser, compilerIdentity, compilerElapsedMs, issuedArtifact, issuedRaw, profiler;
+let browser, compilerIdentity, compilerElapsedMs, compilerMemoryBytes, issuedArtifact, issuedRaw, profiler;
 const browserDiagnostics=[];
 function diagnostic(kind,message){
   if(browserDiagnostics.length<64)browserDiagnostics.push({kind,message:message.slice(0,8192)});
@@ -46,9 +46,9 @@ try {
   await page.goto(`http://127.0.0.1:${server.address().port}`);
   if (process.env.RUMOCA_BROWSER_PROFILE) profiler = await startWorkerProfiler(page);
   const result = await page.evaluate(async payload => {
-    const body = `onmessage=async({data})=>{let identity,started,raw,compileMs;try{
+    const body = `onmessage=async({data})=>{let identity,started,raw,compileMs,memory;try{
       const compiler=await import(data.base+'/compiler.js');
-      await compiler.default({module_or_path:data.base+'/compiler.wasm'});
+      ({memory}=await compiler.default({module_or_path:data.base+'/compiler.wasm'}));
       identity={version:compiler.get_version(),revision:compiler.get_git_commit()};
       postMessage({phase:'compiler-ready',compiler:identity});
       if(typeof compiler.prepare_native_program!=='function')throw new Error('Native program producer unavailable');
@@ -58,8 +58,9 @@ try {
       const artifact=JSON.parse(raw);
       const {NativeProgram}=await import(data.base+'/consumer.js');
       await NativeProgram.instantiate(artifact,data.source);
-      postMessage({raw,compileMs,compiler:identity});
+      postMessage({raw,compileMs,compiler:identity,compilerMemoryBytes:memory.buffer.byteLength});
     }catch(error){postMessage({error:String(error.stack||error),compiler:identity,raw,compileMs,
+      compilerMemoryBytes:memory?.buffer.byteLength,
       elapsedMs:started===undefined?undefined:performance.now()-started})}}`;
     const url = URL.createObjectURL(new Blob([body], {type:'text/javascript'}));
     const worker = new Worker(url);
@@ -85,6 +86,7 @@ try {
   }, {source,model,timeoutMs,profileRequested:Boolean(process.env.RUMOCA_BROWSER_PROFILE)});
   compilerIdentity = result.compiler;
   compilerElapsedMs = result.compileMs ?? result.elapsedMs;
+  compilerMemoryBytes = result.compilerMemoryBytes;
   if (result.raw !== undefined) {
     const candidate = JSON.parse(result.raw);
     if (candidate.source_sha256 !== hash(source)) throw new Error('Browser compiler source binding differs');
@@ -103,7 +105,7 @@ try {
     model,browser:browser.version(),compiler:result.compiler,sourceSha256:hash(source),compilerModuleSha256:hash(wasm),compilerJsSha256:hash(js),
     consumerBundleSha256:hash(consumer.outputFiles[0].contents),probeSha256:hash(fs.readFileSync(import.meta.filename)),
     artifactSha256:hash(result.raw),moduleSha256:artifact.module_sha256,moduleBytes:artifact.module_bytes.length,profile:artifact.profile,
-    compileMs:result.compileMs,timeoutMs,abi:artifact.abi,issuedStages:artifact.issued_schedule.length,
+    compileMs:result.compileMs,compilerMemoryBytes,timeoutMs,abi:artifact.abi,issuedStages:artifact.issued_schedule.length,
     scope:'Source text compiled in an actual dedicated browser worker and artifact admitted by NativeProgram. No native producer or numerical fallback. This gate does not execute independent numerical fixtures.',
     browserDiagnostics,diagnosticProfiling:Boolean(profiler),numericalAcceptance:false,runtimeIntegrated:false,productionPinChanged:false,fullSlam:false,
   };
@@ -112,7 +114,7 @@ try {
 } catch (error) {
   fs.mkdirSync(path.dirname(reportFile), {recursive:true});
   fs.writeFileSync(reportFile, `${JSON.stringify({status:issuedArtifact ? 'ACTUAL_BROWSER_COMPILER_ISSUANCE_PASS_CONSUMER_ABI_ADMISSION_FAILED' : 'ACTUAL_BROWSER_COMPILER_ISSUANCE_FAILED',recordedAt:new Date().toISOString(),model,
-    compiler:compilerIdentity,compilerElapsedMs,timeoutMs,sourceSha256:hash(source),compilerModuleSha256:hash(wasm),
+    compiler:compilerIdentity,compilerElapsedMs,compilerMemoryBytes,timeoutMs,sourceSha256:hash(source),compilerModuleSha256:hash(wasm),
     compilerJsSha256:hash(js),consumerBundleSha256:hash(consumer.outputFiles[0].contents),probeSha256:hash(fs.readFileSync(import.meta.filename)),
     artifactSha256:issuedRaw === undefined ? undefined : hash(issuedRaw),moduleSha256:issuedArtifact?.module_sha256,
     profile:issuedArtifact?.profile,compilerIssuedSourceBoundArtifact:Boolean(issuedArtifact),
