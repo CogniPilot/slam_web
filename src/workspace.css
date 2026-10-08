@@ -15,11 +15,7 @@ header .project-actions > button, header .project-actions > .button { white-spac
 .powered-by { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; color: var(--muted); font-size: 11px; text-decoration: none; flex-shrink: 0; white-space:nowrap; }
 .powered-by:hover { color: var(--green); }
 .powered-by img { object-fit: contain; }
-.project-github { display: inline-flex; align-items: center; justify-content:center; width:36px; min-height:44px; flex-shrink:0; text-decoration:none; }
-.project-github img { display:block; }
-.project-github:hover img { filter:brightness(1.3); }
-.project-github:focus-visible, .powered-by:focus-visible { outline:2px solid var(--green); border-radius:4px; outline-offset:2px; }
-.project-github:hover { color: var(--green); }
+.powered-by:focus-visible { outline:2px solid var(--green); border-radius:4px; outline-offset:2px; }
 
 .pane-actions { display: flex; gap: 4px; margin-left: auto; flex-shrink: 0; }
 .pane-actions button { font-size: 11px; padding: 7px 8px; letter-spacing: normal; font-weight: 400; }

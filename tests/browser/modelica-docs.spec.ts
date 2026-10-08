@@ -4,8 +4,6 @@ test('documentation uses the real compiler, sanitizes edited annotations and ope
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
   await expect(page.locator('#startup-screen')).toBeHidden({timeout:90_000});
-  const github=page.getByRole('link',{name:'SLAM Lab on GitHub',exact:true});
-  await expect(github).toHaveText('');await expect(github.locator('img')).toHaveAttribute('src',/brand\/github.svg$/);
   const powered=page.getByRole('link',{name:'Powered by Rumoca',exact:true});
   await expect(powered).toHaveText('Powered by');await expect(powered.locator('img')).toHaveAttribute('src',/brand\/rumoca.svg$/);
   for(const width of [945,800,390]){
