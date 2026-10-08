@@ -21,6 +21,13 @@ async function execute(message: any) {
     session.advance_to(message.time);
   } else if (message.type === 'reset') { session?.reset(); }
   if (!session) throw new Error('No physics session');
+  if (message.type === 'executionReceipt') {
+    const diagnostic=session as WasmSimulationSession&{execution_receipt_json?:()=>string};
+    if(typeof diagnostic.execution_receipt_json!=='function')
+      throw new Error('Installed Rumoca does not expose execution receipts');
+    return {compiler:{version:module.get_version(),revision:module.get_git_commit()},
+      execution:JSON.parse(diagnostic.execution_receipt_json())};
+  }
   return readPhysicsSnapshot(session,true);
 }
 let queue = Promise.resolve();

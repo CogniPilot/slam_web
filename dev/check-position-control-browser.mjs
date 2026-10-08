@@ -8,8 +8,10 @@ import {build} from 'esbuild';
 import {chromium} from '@playwright/test';
 import {readModelicaModelsLibrary} from '../scripts/modelica-models-library.mjs';
 
-const [output,compilerDirectory='public/vendor/rumoca']=process.argv.slice(2);
-if(!output)throw Error('NEW_REPORT [COMPILER_DIRECTORY] required');
+const [output,compilerDirectory='public/vendor/rumoca',...flags]=process.argv.slice(2);
+if(!output)throw Error('NEW_REPORT [COMPILER_DIRECTORY] [--require-wasm-receipt] required');
+if(flags.some(flag=>flag!=='--require-wasm-receipt'))throw Error('Unknown flight probe option');
+const requireWasmReceipt=flags.includes('--require-wasm-receipt');
 assert.ok(!fs.existsSync(output),'Choose a fresh report path');
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const source=fs.readFileSync('models/Vehicles/LabQuadrotor.mo','utf8');
@@ -37,7 +39,7 @@ let browser;
 try{
   browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox']});
   const page=await browser.newPage();await page.goto(`http://127.0.0.1:${server.address().port}`);
-  const execution=await page.evaluate(async({source,workspaceSources})=>{
+  const execution=await page.evaluate(async({source,workspaceSources,requireWasmReceipt})=>{
     const worker=new Worker('/physics.js',{type:'module'});
     let id=0;
     const call=message=>new Promise((resolve,reject)=>{
@@ -51,6 +53,17 @@ try{
       const start=performance.now(),initial=await call({type:'init',source,workspaceSources,base:location.origin+'/'});
       const preparationMs=performance.now()-start;
       near(initial.time,0,0,'initial time');near(initial.z,1.5,1e-10,'initial altitude');
+      const receipts=[];
+      const receipt=async phase=>{
+        if(!requireWasmReceipt)return;
+        const result=await call({type:'executionReceipt'});
+        if(!['interpreter','cranelift','wasm_program'].includes(result.execution?.engine))
+          throw Error('Invalid Rumoca execution receipt');
+        if(result.execution.engine!=='wasm_program')
+          throw Error('Rumoca WASM selection receipt required: '+JSON.stringify(result));
+        receipts.push({phase,...result});
+      };
+      await receipt('initial');
       const targets=[[2,-1,2.5],[-1,1,1.5]],legs=[];
       let totalTime=0,firstMotion;
       for(const target of targets){
@@ -77,21 +90,23 @@ try{
         if(Math.hypot(...last.velocity)>.03)throw Error('Position did not settle');
         legs.push({target,samples,positionErrorMeters:error,executionMs:performance.now()-started});
         totalTime+=12;
+        await receipt('target '+legs.length);
       }
       const reset=await call({type:'reset'});
       for(const key of ['time','x','y','z'])near(reset[key],initial[key],1e-10,'reset '+key);
-      return {preparationMs,initial,firstMotion,legs,reset,simulatedSeconds:totalTime,
+      await receipt('reset');
+      return {preparationMs,initial,firstMotion,legs,reset,receipts,requireWasmReceipt,compiledHotPathVerified:false,simulatedSeconds:totalTime,
         allCommandsPassedThroughProductionWorker:true,truthFeedback:true,
         estimatorFeedback:false,periodicIntegralQualified:false};
     }finally{worker.terminate();}
-  },{source,workspaceSources});
+  },{source,workspaceSources,requireWasmReceipt});
   const report={status:'ACTUAL_BROWSER_POSITION_TRACKING_PASS',browser:browser.version(),
     sourceSha256:sha(source),libraryRevision:provenance.revision,
     librarySourcesSha256:sha(JSON.stringify(workspaceSources)),libraryFiles:Object.keys(workspaceSources).length,
     compilerJsSha256:sha(compilerJs),compilerWasmSha256:sha(compilerWasm),
     workerBundleSha256:sha(worker.outputFiles[0].contents),probeSha256:sha(fs.readFileSync(import.meta.filename)),
     ...execution,scope:'Actual production physics worker and Modelica position/attitude/rate/allocation stack. '
-      +'Truth feedback and physical motors; no pose overrides. Sample-clock correctness, full SLAM and 10x throughput remain separate gates.'};
+      +'Truth feedback and physical motors; no pose overrides. Receipts describe compiler-reported backend selection, not hot-path coverage. Sample-clock correctness, full SLAM and 10x throughput remain separate gates.'};
   fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify({...report,legs:report.legs.map(({samples,...leg})=>leg)}));
 }finally{

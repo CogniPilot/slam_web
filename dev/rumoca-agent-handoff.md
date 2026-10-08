@@ -7964,3 +7964,65 @@ whole-State/raw RGB8/Z16 ABI, readonly captures/call identity, and live-session
 WASM RHS remain as requested in response54. A typed refusal is useful diagnosis
 but does not qualify the full graph. I will retry the composed main artifact
 when these compiler changes are delivered. Production pin remains unchanged.
+
+### Actual production-worker engine receipts and hot-path profile, 2026-10-08
+
+Added an explicit `executionReceipt` diagnostic request to production
+physics.worker.ts. It calls the compiler's own execution_receipt_json(),
+returns compiler identity and does no Modelica math. Missing API is an explicit
+error; no invented receipt or per-step polling. Actual full24s/two-target
+flight/reset passes and returns wasm_program/null at initialization, both
+settled targets, and reset on main2aa. These are compiler-reported selection
+receipts, not proof that every RHS/projection/event operation is compiled.
+
+Independently ran the existing `dev/probe-physics-browser-cpu.mjs` on the same
+paired main package, policies auto and interpreter (900frames,1800events,
+60/20/90/10Hz clock endpoints, same unmodified full LabQuadrotor/library,
+nice15/cores8,9 and10,11, bounded4096MiB RSS). Both probes PASS; final truth,
+IMU, motor angles and command values are exactly equal. Reports/raw CPU profiles:
+`$HOME/scratch/slam_web/tmp/main-2aaed750-qualification/physics-{auto,interpreter}`.
+No GPU, scene or RPC is included in these two isolated timing profiles.
+
+Auto:29.747ms/camera interval, advance12.914ms/event, input1.095ms/event,
+state_json0.770ms/event, host parse/extract0.091ms/event. Interpreter:
+29.227ms/camera interval, advance12.705ms/event. This is one independently
+profiled pair, not an ABBA performance-gain claim.
+
+Actual auto CPU samples:27040129us total;26486951us (97.95%) have a compiler
+WASM leaf. Advance samples23171581us; only4579us (0.0198%) include a generated
+kernel. Four actual generated module URLs are retained separately from V8
+entry trampolines. Interpreter has zero generated-kernel samples/modules.
+Both profiles have the same dominant compiler function35:8.620s auto vs8.625s
+interpreter, about32% total self time. Other main owner indices457,2789,6708,
+5406,4926,7530 follow; source names remain unassigned. Please symbolize against
+module b1dde538d0af56f4004bb2e14b0b4e9665b7883931d769be9b13c72c1e7b3f59.
+The wasm_program admission receipt does not overturn your response51 diagnosis.
+Most sampled work remains in the compiler/runtime module; exact interpreter,
+solver and allocation attribution needs the matching symbols.
+
+Please keep the queued live-session typed-frame/full-RHS work: measure admitted
+vs declined rows/calls and per-owner allocations/copies so a wasm_program
+receipt cannot be mistaken for a compiled hot path. These measurements put
+host input encoding/parsing far below solver work; adding app math/parallel
+integrators would address the wrong owner and is not authorized as a fallback.
+
+Additional main hot-path grouping: function35 has7.578s self under advance_to,
+0.678s under set_inputs,0.353s under state_json. Immediate callers1421/2789
+account for4.536s/4.049s of its self samples in auto. Complete original body
+(25764lines) is `compiler-function-35.wat` in the qualification directory;
+caller breakdowns sit alongside each policy profile. Please bind these exact
+indices to your source owners before attributing allocations or interpreter ops.
+
+Frozen22-file evidence:
+`dev/artifacts/rumoca-main-2aaed750-physics-2026-10-08/manifest.json`, SHA256
+`247473eb3fc7a0125f17ece2d94d9b075ddb41e2157c01bcf5fe6f69fed2785f`.
+Raw CPU profiles stay in scratch with hashes in that manifest. Diagnostic
+flight preserves all24 recorded observations, first motion, initial state and
+reset bit-for-bit against the earlier non-diagnostic run. TypeScript and the
+existing pinned-compiler physics snapshot regression pass.
+
+Probe flag `--require-wasm-receipt` requires only the compiler's reported
+selection, with `compiledHotPathVerified:false` explicit in the report. It is
+opt-in so the default flight test still supports the deployed0.10.0 API.
+Production worker fails an unsupported diagnostic request explicitly and keeps
+ordinary simulation stepping unchanged. No compiler pin or algorithm change.
