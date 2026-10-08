@@ -6754,3 +6754,47 @@ revision-bound artifact before the paired runtime qualification. Please retain
 FAST preparation under 60s is an additional gate, not a replacement for runtime.
 Value identity must respect iteration-local mutations of direction and every
 operand version; no cross-iteration mutable-pointer cache.
+
+### New native full-pipeline perf baseline and compiler targets (application)
+
+The user explicitly asks to beat OMC using perf evidence. A clean generated-C
+driver now replays all 97 actual 848×480 RGB8/Z16 frames and 576 held IMU intervals
+through the unchanged Modelica reference functions. All 6,984 observable metric
+comparisons pass (max 4.44e-16); camera inputs remain readonly. Unprofiled OMC O2
+processing averages 1051.076 ms/frame, 100.903 s for 6.4 simulated seconds
+(0.06343× kernel-only). This excludes file IO, ABI code conversion, metric output,
+GPU/physics and first-image initialization. One cold shared-host replay, not a
+Rumoca speed comparison or full-State equivalence result.
+
+Native perf retains 9,934 processing samples, zero lost records and 56 unresolved
+leaves. Exclusive leaf categories: indexing 45.49%, memmove 29.16%, allocation/GC
+5.60%. The three largest leaves alone are 67.10%. Stack attribution identifies:
+
+- RGBDKeyframes_Catalog_copy_p: nearest owner 25.83% of all cycles; its memmove
+  leaves alone 25.57%. records.c:185 copies every catalog array, including the
+  128×350×49 descriptors (17,561,600 bytes at this Real ABI). A sampled source
+  chain is Capture -> frame advance -> catalog publication. This array width
+  is not a measured copy count or physical bandwidth claim.
+- FastFrameScores inclusive stacks: 39.53%, including generic indexing inside
+  grayscale/stencil/circle helpers. Authored FastNativeFrame.mo has shaped loops
+  and radius bounds; generated functions.c:5866 uses generic real_array_get.
+- MatchRGBDDescriptors nearest owner 6.74%; RetrieveVisualWords 2.90%.
+
+Please make these compiler capabilities reusable: readonly record/array borrowing,
+owned range updates preserving prior State and refusal atomicity, direct shaped
+typed accesses with hoisted proven strides/bounds, and reusable tiny stencil
+scratch. Expose per-source copied bytes and allocation high-water counts. Keep
+all dynamic safety checks that cannot be proven redundant, ordered comparisons,
+signed zero, capacities and invalid-input behavior. Do not patch the app math to
+work around aggregate/value-identity lowering. Native percentages are OMC-only;
+the actual Rumoca 90.80% normal-product/copy profile and 247/111/0 counter targets
+remain the immediate WASM runtime evidence. Reset register admission and Step
+conditional ownership remain prerequisites for a matched full-pipeline run.
+
+Acceptance remains all six unchanged paired faster-than-OMC medians plus existing
+numerical/readonly/atomicity gates, not just a lower scratch number or faster
+preparation. Once the lifecycle issues, compare the same captured raw inputs and
+full reference checks. Current report: dev/modelica-rendered-kernel-perf-2026-10-07.md.
+Durable receipts: dev/artifacts/modelica-rendered-kernel-perf-2026-10-07/.
+Raw input/executable/perf: $HOME/scratch/slam_web/tmp/rendered-slam-native-benchmark/.
+No production math, sensor rates or compiler pin changed.
