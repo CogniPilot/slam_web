@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {spawn} from 'node:child_process';
 import {chromium} from '@playwright/test';
 import {startWorkerProfiler} from './browser-worker-profiler.mjs';
+import {startProfileRun} from './start-profile-run.mjs';
 const [directory]=process.argv.slice(2);
 if(!directory)throw Error('OUTPUT_DIRECTORY required');
 fs.mkdirSync(directory,{recursive:true});
@@ -16,7 +17,7 @@ const sourceManifest=()=>{
     if(item.isDirectory())walk(file);else if(item.isFile())files[file]=sha(fs.readFileSync(file));
   }}
   for(const directory of ['src','models'])walk(directory);
-  for(const file of ['package-lock.json','public/vendor/rumoca/rumoca_bind_wasm.js','public/vendor/rumoca/rumoca_bind_wasm_bg.wasm'])
+  for(const file of ['dev/start-profile-run.mjs','package-lock.json','public/vendor/rumoca/rumoca_bind_wasm.js','public/vendor/rumoca/rumoca_bind_wasm_bg.wasm'])
     files[file]=sha(fs.readFileSync(file));
   return files;
 };
@@ -42,8 +43,7 @@ try{
     {workerUrlIncludes:'sensor-render.worker',autoStart:false,interval:1000});
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto(process.env.SLAM_PROFILE_URL??'http://127.0.0.1:4173');
-  await page.waitForFunction(()=>window.__slamLab?.latest?.frame.sequence>=5,{},{timeout:90000});
-  await page.evaluate(async()=>{const r=window.__slamLab.runtime;r.pause();while(r.busy)await new Promise(resolve=>setTimeout(resolve,10));});
+  await startProfileRun(page,5);
   const readbackMode=process.env.SENSOR_READBACK_MODE;
   if(readbackMode&&!['sync','async'].includes(readbackMode))throw Error('Invalid SENSOR_READBACK_MODE');
   if(readbackMode)await page.evaluate(mode=>window.__slamLab.runtime.world.sensorRpc.call('configure',{readbackMode:mode}),readbackMode);

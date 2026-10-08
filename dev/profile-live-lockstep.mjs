@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {chromium} from '@playwright/test';
+import {startProfileRun} from './start-profile-run.mjs';
 
 const [directory]=process.argv.slice(2);
 if(!directory)throw Error('OUTPUT_DIRECTORY required');
@@ -23,10 +24,7 @@ try{
   page.on('pageerror',error=>errors.push(error.message));
   page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
   await page.goto(url);
-  // ready becomes true before startup finishes saving and starts its run loop.
-  // Observe actual automatic frames before pausing and owning the experiment.
-  await page.waitForFunction(()=>window.__slamLab?.ready===true&&window.__slamLab?.latest?.frame.sequence>=1,{},{timeout:90000});
-  await page.evaluate(async()=>{const r=window.__slamLab.runtime;r.pause();while(r.busy)await new Promise(resolve=>setTimeout(resolve,10));});
+  await startProfileRun(page,1);
   const cdp=await browser.newBrowserCDPSession();
   const cpu=async()=>{
     const {processInfo}=await cdp.send('SystemInfo.getProcessInfo');

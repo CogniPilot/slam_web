@@ -6,12 +6,15 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {chromium} from '@playwright/test';
 import {readBatchPackedSync as directSyncReadback} from '../tests/fixtures/direct-sync-readback-method.mjs';
+import {moreFenceTurns} from '../tests/fixtures/fence-turn-readback.mjs';
+import {startProfileRun} from './start-profile-run.mjs';
 const [directory]=process.argv.slice(2);
 if(!directory)throw Error('OUTPUT_DIRECTORY required');
 fs.mkdirSync(directory,{recursive:true});
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const experiment=process.env.SENSOR_READBACK_EXPERIMENT??'combined';
-if(!['combined','static-read','direct-sync','cpu-cores'].includes(experiment))throw Error('Unknown sensor experiment');
+if(!['combined','static-read','direct-sync','cpu-cores','fence-turns'].includes(experiment))throw Error('Unknown sensor experiment');
+const readbackMode=experiment==='fence-turns'?'async':'sync';
 const parseCpus=value=>{
   if(!/^\d+(,\d+)*$/.test(value??''))throw Error('CPU experiment requires explicit comma-separated baseline/candidate CPU lists');
   const cpus=value.split(',').map(Number);
@@ -27,9 +30,15 @@ if(topology&&new Set(topology.map(cpu=>`${cpu.socket}:${cpu.core}`)).size!==topo
 const files=['src/gpu-realsense-packing.ts','tests/fixtures/split-camera-packing.ts',
   'tests/fixtures/combined-camera-packing.ts',
   'tests/fixtures/direct-sync-readback-method.mjs',
+  'tests/fixtures/fence-turn-readback.mjs','dev/start-profile-run.mjs',
   'src/world.ts','src/gpu-readback.ts','src/lidar.ts','src/runtime.ts','src/sensor-render.worker.ts',
   'public/vendor/rumoca/rumoca_bind_wasm_bg.wasm'];
-const bookend=()=>Object.fromEntries(files.map(file=>[file,sha(fs.readFileSync(file))]));
+const modelFiles=directory=>fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>{
+  const file=path.join(directory,entry.name);
+  return entry.isDirectory()?modelFiles(file):entry.name.endsWith('.mo')?[file]:[];
+});
+const bookend=()=>Object.fromEntries([...files,...modelFiles('models'),
+  'models/Libraries/CogniPilot/provenance.json'].map(file=>[file,sha(fs.readFileSync(file))]));
 const sourcesBefore=bookend(),errors=[],rows=[];
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,
   args:['--no-sandbox','--enable-gpu','--use-gl=angle','--use-angle=gl']});
@@ -79,20 +88,25 @@ try{
       const body=source.replace(method,directSyncReadback.toString().replace(/^function /,''));
       referenceRequests++;await route.fulfill({response,body});
     });
+    if(combined&&experiment==='fence-turns')await context.route('**/src/gpu-readback.ts*',async route=>{
+      const response=await route.fetch(),source=await response.text(),body=moreFenceTurns(source);
+      fs.writeFileSync(path.join(directory,`fence-route-${ordinal}-before.js`),source);
+      fs.writeFileSync(path.join(directory,`fence-route-${ordinal}-after.js`),body);
+      referenceRequests++;await route.fulfill({response,body});
+    });
     const page=await context.newPage();
     page.on('pageerror',error=>errors.push(error.message));
     await page.goto(process.env.SLAM_PROFILE_URL??'http://127.0.0.1:4173');
-    await page.waitForFunction(()=>window.__slamLab?.latest?.frame.sequence>=2,{},{timeout:90000});
-    await page.evaluate(async()=>{
-      const lab=window.__slamLab,r=lab.runtime;r.pause();
-      while(r.busy)await new Promise(resolve=>setTimeout(resolve,10));
+    await startProfileRun(page);
+    await page.evaluate(async readbackMode=>{
+      const lab=window.__slamLab,r=lab.runtime;
       const p=structuredClone(lab.project);
       if(p.algorithmPreset!=='Modelica inertial propagation')throw Error('Unexpected estimator');
       Object.assign(p,{sceneDetail:'medium',environment:'city',lidarEnabled:true,depthCloudEnabled:false,
         carsEnabled:true,peopleEnabled:true,sensorRates:{cameraHz:30,lidarHz:10,imuHz:90,gpsHz:5}});
       await r.compile(p);
-      await r.world.sensorRpc.call('configure',{readbackMode:'sync'});
-    });
+      await r.world.sensorRpc.call('configure',{readbackMode});
+    },readbackMode);
     const affinity=cpuSets?await setBrowserAffinity(cpuSets[Number(combined)]):undefined;
     const parity=await page.evaluate(async()=>{
       const lab=window.__slamLab,r=lab.runtime;
@@ -146,7 +160,7 @@ try{
   const baseline=group(false),combined=group(true);
   const report={status:'CAMERA_PACKING_ABBA_RAW_PARITY_PASS',recordedAt:new Date().toISOString(),
     browser:browser.version(),sources:sourcesBefore,sourceBookendsEqual:true,probeSha256:sha(fs.readFileSync(import.meta.filename)),
-    experiment,topology,order:'production,experimental,experimental,production',baseline,combined,speedRatio:combined.meanRtf/baseline.meanRtf,
+    experiment,readbackMode,topology,order:'production,experimental,experimental,production',baseline,combined,speedRatio:combined.meanRtf/baseline.meanRtf,
     cpuReduction:1-combined.meanCpuSeconds/baseline.meanCpuSeconds,errors,fullSlam:false,
     scope:'150 timed30Hz RGB8/Z16 camera frames per window,64beam10Hz GPU LiDAR,90Hz IMU,5Hz GPS, moving actors and visible independent viewer. Modelica inertial propagation only. Four raw-frame hash samples per window. '
       +(experiment==='cpu-cores'?'Only owned browser-process CPU affinity changes; this measures a diagnostic CPU-budget restriction, not a production optimization. '

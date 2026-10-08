@@ -7283,3 +7283,35 @@ admission suite remains. This clears the historical LSP-only report,
 not native feature execution, full SLAM compilation, State ingress or throughput.
 Evidence: dev/artifacts/modelica-editor-harris-admission-2026-10-07/.
 No compiler code, numerical Modelica source or production compiler pin changed.
+
+### GPU polling experiment rejected; current connected flight timing remains slow
+
+The current profiling tools now follow startup completion → Run → actual frames
+→ pause/lockstep ownership. The old automatic-run wait was stale; no production
+startup behavior or source math changed. A hardware RTX3090 ABBA experiment of
+four yielded fence polls versus the existing async path preserves sampled raw
+RGB8/Z16/LiDAR hashes at848x480, camera30Hz,64beamLiDAR10Hz,IMU90Hz,GPS5Hz,
+with the real upstream controller/motors/plant and moving actors.
+
+Individual sim/wall factors: existing0.08372, candidate0.21309/0.23154,
+existing0.23450. Do not claim the aggregate1.397ratio as a gain: the final
+baseline beats both candidates; the first-window outlier affects unchanged
+physics/rendering too. Production polling and hardware sync default unchanged.
+The final baseline averages123.286ms/frame in the physics node (includes
+propagation/modeled sensor work),16.373ms sensor capture,12.159ms GPU readback.
+Viewer29.75–30.00FPS throughout despite slow simulation. Approximate owned
+browser CPU1.14–1.38cores within two-core affinity8,9; shared host, Vite source
+application, pinned compiler. Not a production speed comparison or fullSLAM.
+
+This reinforces the prior advance_to profile request (91.2% of isolated
+session time). Please qualify efficient native RHS execution on this connected
+LabQuadrotor/library, alongside fixing periodic scheduling. Also report which
+execution engine the actual interactive session selects and any native-lowering
+refusal/fallback reason; the pinned session API exposes no such receipt. Do not
+infer an engine from these timings or bypass the controller/math in the app.
+
+Summary: dev/gpu-fence-polling-2026-10-07.md.
+Frozen source/route/clock/parity/timing records:
+ dev/artifacts/gpu-fence-polling-2026-10-07/.
+Manifest SHA256d7ed647cc8a31336c7ecd5f5a7389e1c53b6ae2d7725c9013326babf9e0396f5.
+Full SLAM issuance and lossless typed State/raw-image ownership remain required.
