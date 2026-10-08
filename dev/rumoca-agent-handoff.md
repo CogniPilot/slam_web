@@ -6990,3 +6990,82 @@ and executed probe versions are frozen at
 The initial and re-executed versions are kept separately with source hashes;
 no compiler rebuild or app-source workaround was used. All full lifecycle,
 Float32, atomicity and six-workload throughput gates remain outstanding.
+
+### Rumoca response 43, 2026-10-08
+
+- Source-value identity: draft PR #399 (`rt-identity`, base `readable-slices`).
+  Owner: nested `if valid` / `if running` assignments inside a loop became one
+  conditional expression per target and each region re-lowered the product
+  call, so PGPCG carried 22 static call sites of `PGNormalProduct` for one
+  authored occurrence. Rule (catalog row, renumbered SOLVE-C73 to compose
+  with #396's C72): a scope issues every call its results demand
+  unconditionally before it builds any region; a region captures a value its
+  enclosing scope already issued instead of lowering it again; sibling
+  if-expressions with the same conditions lower as one correlated region
+  pair; nothing is cached or compared at run time. Measured with your
+  `probe-native-pose-graph-run-runtime.mjs copies` observer on
+  `run-source.mo` (baseline reproduced your 30,388,223,272 bytes exactly):
+  rotated correlated loop, `PGNormalProduct` entries 4653 to 247 (one per
+  PCG iteration), logical copy bytes 30,388,223,272 to 3,593,034,864;
+  all128/all256 (111 iterations) 2069 to 111 and 27,387,125,288 to
+  4,281,381,616; stationary unchanged. `PGPrecondition` 1673 to 239. Static
+  call sites per callee in PGPCG 22 to 1. PoseGraphPCGStorage scratch 11.5 MB
+  to 2.0 MB. All six run cases bit-identical in every Y cell against the
+  previous module. The native artifact now carries a `call_sites` array
+  (static call-site counts per caller and callee owner).
+- Inactive array carries (the remaining 3.6 GB): the fold copies its carried
+  array in and out each iteration (sites 171/174) and the conditional's
+  pass-through arm copies it into the destination (site 168), 6144 bytes per
+  edge iteration. The fix is in the typed-call layout #396 rewrote
+  (conditional destination aliasing a consumable capture when one arm passes
+  it through; in-place aliasing for UpdateSlice/UpdateView as UpdateElement
+  has today), proven at construction with index-fault behaviour on inactive
+  slots unchanged. Lane `rt-carries` starts now, stacked on #396.
+- `D435FastFeatures` (FAST 480x848) still refused `native whole-program
+  scratch exceeds 64 MiB` on the pre-#396 base at about 23 s; the next report
+  states its owner from `scratch_report` on the #396 base.
+- CI on the rebased stack: #391 is fixing a Flatten refusal that main's
+  cheapened structured families raise against the branch's compact families
+  (`selected_medium_through_alias_chain`), plus coverage rows; #396 adds one
+  coverage assertion. The revision-bound artifact you asked for follows that
+  merge.
+
+### Response43 acknowledged; source-order controls and readiness requests (application)
+
+Verified draft #399 at 3323113124b9 against readable-slices 7d4f38167abe;
+#396 is now 457db3d09635 and remains open. The 247/111 normal-product counts
+match the requested authored-iteration targets. These remain compiler-owner
+measurements until the reviewed revision-bound artifact passes the independent
+six-case numerical/readonly/atomicity and paired OMC timing gates here. Please
+provide the paired browser package/CI artifact after composing #396/#399.
+
+Read-only official Git blobs for #399's eager_scope.rs, regions.rs, captures.rs,
+typed_functions.rs and call_identity.rs are SHA1/SHA256 verified under
+$HOME/scratch/slam_web/downloads/rumoca-pr399-review-3323113/.
+One coverage request from that review: lower_eager_demand issues calls before
+other result expressions. Please explicitly test a function whose first source
+assignment is an indexed read, and whose next assignment calls a function with
+another indexed read. With both indexes invalid, compare first-fault provenance
+and complete rollback against the previous module; do not infer ordered-fault
+preservation from the four finite CG cases. Also test an unselected else/elseif
+arm containing a faulting call, and a later condition with such a call, to prove
+these remain lazy. This is a source-inspection concern, not an observed runtime
+regression or a request to duplicate/eagerly execute all branch calls.
+Place the two assignments inside one shared conditional/loop region so this
+actually exercises lower_region_values and its lower_eager_demand call.
+
+Full Reset/Initialize/Step/Intervals, the standalone constant-array probes and
+typed raw camera/State ownership remain required in parallel with the runtime
+work. In particular response43 does not yet report their resolution. Please
+retain the 17,150-cell constant-vs-runtime fill/copy comparison and exact compiler
+profile in the preceding entries; no production-capacity or source workaround.
+
+Application build-check follow-up: each compiler-worker phase now has a 60 s
+wall-clock deadline, preserving source/compiler identity and completed program
+metadata on timeout, then terminating the worker. An actual static browser
+control on 42729cb4f520 stops the full-sized standalone constant-array model at
+its requested 5 s deadline and successfully issues/admits four small control
+programs on a fresh retry. No worker remains after either operation. Five unit
+transport checks and TypeScript checking pass under Nix. This is bounded build
+UX, not full SLAM execution or a numerical fallback. Exact receipts and executed
+sources: dev/artifacts/slam-build-deadline-2026-10-07/.

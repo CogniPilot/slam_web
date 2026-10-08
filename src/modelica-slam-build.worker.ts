@@ -11,7 +11,9 @@ self.onmessage=async({data}:MessageEvent<{base:string;source:string;sourceSha256
   const begin=performance.now();
   const receipt:SlamBuildReceipt={status:'failed',sourceSha256:data.sourceSha256,programs:[],elapsedMs:0};
   let progress:SlamBuildProgress={phase:'loading'};
-  const announce=(next:SlamBuildProgress)=>{progress=next;self.postMessage({progress});};
+  const announce=(next:SlamBuildProgress)=>{
+    progress=next;self.postMessage({progress,receipt:{...receipt,elapsedMs:performance.now()-begin}});
+  };
   try{
     if(data.schemaVersion!==1&&data.schemaVersion!==2)throw new Error('Unsupported SLAM workspace version');
     const manifest=rgbdSlamManifest(data.schemaVersion===2?'d435-native':'legacy');
