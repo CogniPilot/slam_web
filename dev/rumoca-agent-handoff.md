@@ -6627,3 +6627,67 @@ algorithms/capacities and production pin remain unchanged. When the full State
 ABI and lifecycle compile, replay these exact captured bytes and held intervals.
 Report and reproducible commands: dev/modelica-rendered-revisit-2026-10-07.md.
 Receipt: dev/artifacts/modelica-rendered-flight-slam/rendered-flight-slam-sJrQ3D/.
+
+### PR391 actual WASM: Reset register explosion localized (application)
+
+New full-web artifact 11520339497 from run 37705791646 is build-successful, but
+not full-SLAM-admitted. Actual compiler is 0.10.2/git079fca089429, the merge of
+main 0195b672 and PR391 head 79b1a350. It does not include PR396. Compiler WASM
+SHA256 e7606813769242f23b2b011c98d291532dd0f0c6f96daf03c209d9a58ed8d50f.
+Same exact 59-file production source SHA256
+5d485ddd965180a6eb5f8ffd7b3fcae6425cc590994966583fd2ef00915282ff.
+
+Unmodified official compiler: full Step refuses conditional problem__nodeCount
+definition in 5.694s; GuardedProblem minimized probe reproduces in 0.286s.
+Reset traps after 49.056s with 3,925,934,080 bytes linear memory; Initialize traps
+after 98.437s at 4 GiB. Official panic-hook initialization reproduces the same
+Reset failure without an extra message. These are compiler failures, not
+watchdog kills. Keep the branch typed-call correctness gates green as requested
+in response 41; a successful Build WASM alone is not sufficient.
+
+Reset's allocation owner is now concrete: exact merge source
+crates/rumoca-phase-solve/src/lower/scalar.rs:1622, ScalarCompiler::register.
+Original WASM function 10657 matches its three metadata pushes and unique
+"Solve register index overflow" literal. Trap path is 10657 →14278 →18852
+→17442 →18412; it fails growing the Real metadata vector, not issuing a runtime
+scratch frame. Diagnostic-only global stores, with original imports/exports
+preserved and a small control's emitted module/ABI identical, observe:
+
+- next_register 16,777,217; Integer metadata length 16,777,217/capacity 33,554,432;
+- Real and negation metadata each length/capacity 16,777,216;
+- their respective cell widths 16/16/8 bytes; reserved metadata 896 MiB total;
+- raw allocation-error arguments 8 and 536,870,912; the Real vector is doubling
+  from 256 MiB to 512 MiB. Linear memory is 3,923,836,928 bytes at this trap.
+
+Please prioritize compact aggregate/range lowering for full State construction
+and reset, rather than millions of scalar registers. Add per-owner register and
+allocation high-water diagnostics, plus bounded failure with a source-owned
+diagnostic before exhausting WASM memory. Investigate sparse/typed constant
+metadata separately; reducing metadata does not itself remove scalar work.
+Do not lower 128/256 capacities or prune the app source as a workaround. The
+896 MiB is metadata reserved capacity, not an attribution of all 3.9 GB memory.
+The particular source construct that causes this register count is not yet
+localized; compact aggregate lowering is the investigation, not a proven cause.
+
+Runtime priorities remain source-value identity (4,653 products for 247 iterations)
+and inactive array carries (7.09 GB logical copies). Response 41's scratch sharing
+addresses a different owner; qualify it separately. The all-six-workload
+--require-faster-than-omc gate, correctness/readonly/atomicity and unchanged
+algorithm budgets remain required. Raw admission and register receipts:
+$HOME/scratch/slam_web/tmp/pr391-79b1a350-admission/.
+Exact merge source and original selected WAT functions are retained there.
+Durable report/evidence: dev/modelica-compiler-admission-2026-10-07.md and
+dev/artifacts/rumoca-pr391-admission-2026-10-07/.
+
+Fresh original-compiler perf receipts are also available: early preparation
+1,340 samples/no losses/41 unresolved leaves, main-thread weighted cycles 72.57%;
+late 25–35s preparation 1,017/no losses/21 unresolved, main-thread 99.99%.
+Late compiler WASM function 67 is 18.82%, function 12166 is 13.87%; source names are
+unmapped, so please bind these using the compiler's own symbol/source diagnostics.
+All periods/threads remain in the denominator and fall inside monotonic
+preparation boundaries. These are not SLAM runtime or whole-compile percentages.
+Selected original hot-function WAT and summaries are in the durable evidence;
+raw traces/maps are $HOME/scratch/slam_web/profiles/pr391-reset-2026-10-07/
+and pr391-reset-late-2026-10-07/. Both Reset captures finish with the same trap,
+below 4.1 GiB owned RSS, over 49 GiB available, cores 8–9/nice 15. Analyze with
+dev/analyze-compiler-perf.mjs; production pin and math remain unchanged.

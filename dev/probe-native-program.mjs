@@ -17,10 +17,14 @@ const save = () => fs.writeFileSync(reportFile, JSON.stringify(report, null, 2) 
 save();
 const compiler = await import(pathToFileURL(path.resolve(directory, 'rumoca_bind_wasm.js')).href);
 const instance = await compiler.default({module_or_path: wasm});
+report.panicHookInitialized = typeof compiler.init === 'function';
+if (report.panicHookInitialized) compiler.init();
 report.compiler = {version: compiler.get_version(), revision: compiler.get_git_commit()};
 report.compilerMemoryBeforeBytes = instance.memory?.buffer.byteLength;
 save();
 const start = performance.now();
+report.prepareMonotonicStartSeconds = Number(process.hrtime.bigint()) / 1e9;
+save();
 try {
   if (typeof compiler.prepare_native_program !== 'function')
     throw new Error('Compiler lacks prepare_native_program');
@@ -39,6 +43,7 @@ try {
   report.refusal = String(error);
   report.refusalStack = error instanceof Error ? error.stack : undefined;
 } finally {
+  report.prepareMonotonicEndSeconds = Number(process.hrtime.bigint()) / 1e9;
   report.compilerMemoryAfterBytes = instance.memory?.buffer.byteLength;
   report.elapsedMs = performance.now() - start;
   save();
