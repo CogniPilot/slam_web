@@ -7776,3 +7776,9 @@ Frozen full/source.mo, initialize-browser/resource/profile-summary receipts
 are added to the retry evidence. 46 unit files/226 tests pass in48.79s;
 TypeScript passes. Please prioritize delivery of new-main browser bytes so
 we can independently verify the newly merged full-pipeline/clock fixes.
+
+Initializer failure reproduced with bounded browser-console capture enabled:
+41086.6ms, same stack, no compiler panic text (only favicon404). Raw stack
+alone is not an OOM attribution. The issuance probe now retains up to64 error/
+warning/pageerror diagnostics of8KiB each, keeping error diagnosis bounded.
+Main Build WASM started13:05:25UTC; awaiting its revision-bound artifact.

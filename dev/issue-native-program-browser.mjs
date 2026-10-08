@@ -32,9 +32,17 @@ const server = createServer((request, response) => {
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 let browser, compilerIdentity, compilerElapsedMs, issuedArtifact, issuedRaw, profiler;
+const browserDiagnostics=[];
+function diagnostic(kind,message){
+  if(browserDiagnostics.length<64)browserDiagnostics.push({kind,message:message.slice(0,8192)});
+}
 try {
   browser = await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox']});
   const page = await browser.newPage();
+  page.on('console',message=>{
+    if(['error','warning'].includes(message.type()))diagnostic(message.type(),message.text());
+  });
+  page.on('pageerror',error=>diagnostic('pageerror',String(error)));
   await page.goto(`http://127.0.0.1:${server.address().port}`);
   if (process.env.RUMOCA_BROWSER_PROFILE) profiler = await startWorkerProfiler(page);
   const result = await page.evaluate(async payload => {
@@ -97,7 +105,7 @@ try {
     artifactSha256:hash(result.raw),moduleSha256:artifact.module_sha256,moduleBytes:artifact.module_bytes.length,profile:artifact.profile,
     compileMs:result.compileMs,timeoutMs,abi:artifact.abi,issuedStages:artifact.issued_schedule.length,
     scope:'Source text compiled in an actual dedicated browser worker and artifact admitted by NativeProgram. No native producer or numerical fallback. This gate does not execute independent numerical fixtures.',
-    diagnosticProfiling:Boolean(profiler),numericalAcceptance:false,runtimeIntegrated:false,productionPinChanged:false,fullSlam:false,
+    browserDiagnostics,diagnosticProfiling:Boolean(profiler),numericalAcceptance:false,runtimeIntegrated:false,productionPinChanged:false,fullSlam:false,
   };
   fs.writeFileSync(reportFile, `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report));
@@ -108,7 +116,7 @@ try {
     compilerJsSha256:hash(js),consumerBundleSha256:hash(consumer.outputFiles[0].contents),probeSha256:hash(fs.readFileSync(import.meta.filename)),
     artifactSha256:issuedRaw === undefined ? undefined : hash(issuedRaw),moduleSha256:issuedArtifact?.module_sha256,
     profile:issuedArtifact?.profile,compilerIssuedSourceBoundArtifact:Boolean(issuedArtifact),
-    error:String(error.stack||error),diagnosticProfiling:Boolean(profiler),numericalAcceptance:false,runtimeIntegrated:false,productionPinChanged:false,fullSlam:false}, null, 2)}\n`);
+    error:String(error.stack||error),browserDiagnostics,diagnosticProfiling:Boolean(profiler),numericalAcceptance:false,runtimeIntegrated:false,productionPinChanged:false,fullSlam:false}, null, 2)}\n`);
   throw error;
 } finally {
   if (profiler) {
