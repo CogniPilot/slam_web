@@ -7,8 +7,9 @@ configuration. A visual node editor is deferred. The execution target is one
 Modelica processing graph lowered and compiled to WASM by Rumoca through Solve
 IR, including compiler-owned storage and scheduling. The application must not
 implement a parallel Modelica compiler or generate algorithm WASM. Existing
-separate sessions and app-side vision emitters remain migration work; the
-diagram below describes data dependencies, not a required visual editor.
+separate sessions still need consolidation; application-owned algorithm WASM
+emitters have been removed. The diagram below describes data dependencies,
+not a required visual editor.
 
 ```mermaid
 flowchart LR
@@ -30,9 +31,9 @@ flowchart LR
 
 - Coordinates are ENU world, FLU body and Hamilton wxyz quaternions. Camera optical coordinates are right/down/forward. Units are SI.
 - Ports are typed; required inputs have exactly one publisher and zero-delay cycles are rejected. Host code owns rendering, UI, message routing, buffer lifetime and persistence. Algorithm mathematics and decisions belong in Modelica.
-- Independent RGB-D (15/30/60/90 Hz), LiDAR (5/10/20 Hz), IMU (30/60/90/180 Hz) and GPS (1/5/10 Hz) schedules share an exact 180 Hz integer clock grid in `src/sensor-clock.ts`. Physics advances to the next due event and waits for its processing. RGB and depth share each camera timestamp; each camera frame awaits every connected algorithm and local typed output delivery. Wall-time throughput follows the slowest stage; no due sample or frame is dropped. The viewer independently targets 30 wall-time FPS.
-- Quality defaults are Low 15/10/90/5 Hz, Medium 30/10/90/5 Hz and High 90/20/90/10 Hz, in RGB-D/LiDAR/IMU/GPS order. Saved custom rates override defaults until explicitly reset to quality defaults.
-- Features use RGB pixel coordinates and scores. Calibrated frames and connected feature output supply estimator observations. Ground truth only generates sensors and evaluates results.
+- Independent RGB-D (15/30/60 Hz), LiDAR (5/10/20 Hz), IMU (30/60/90/180 Hz) and GPS (1/5/10 Hz) schedules share an exact 180 Hz integer clock grid in `src/sensor-clock.ts`. Physics advances to the next due event and waits for its processing. RGB and depth share each camera timestamp; each camera frame awaits every connected algorithm and local typed output delivery. Wall-time throughput follows the slowest stage; no due sample or frame is dropped. The viewer independently targets 30 wall-time FPS.
+- Quality defaults are Low 15/10/90/5 Hz, Medium 30/10/90/5 Hz and High 60/20/90/10 Hz, in RGB-D/LiDAR/IMU/GPS order. Saved custom rates override defaults until explicitly reset to quality defaults.
+- Features use RGB pixel coordinates and scores. Calibrated frames and connected feature output supply estimator observations. Estimator inputs exclude ground truth; the simulation controller currently uses truth feedback.
 - The versioned `SLB1` envelope is defined in `src/packet.ts`; sizes are explicit, depth floats are little-endian and invalid depth is zero.
 - Physical mounting supplies both `opticalToBody` and `originFlu`, describing a finite proper optical-RDF → body-FLU transform. Older simulated records retain their documented forward/up mounting contract.
 - Physical capture must rectify color, transform factory depth through depth/color extrinsics and retain color-optical Z. Camera and external IMU timestamps map into a measured common domain. Frame validity, sensor identity, bracketing and skew are checked before publication; arrival time never substitutes for measurement time. See [camera contracts](camera.md).
@@ -59,6 +60,14 @@ Lighting, photographic materials and deterministic cars/people belong to the ren
 
 Main Street has an 11.4 m road, 3 m sidewalks and 7.4 × 10 m storefront footprints. Modelica owns actor trajectories: city cars travel straight in opposing lanes and recycle at x = ±33 m before the training enclosure at x = 36 m; pedestrians follow sidewalks and cross at x = −29.8/32 m. Saved actor sources without the scene-route interface retain their authored geometry. The host copies configuration and returned poses without calculating trajectories.
 
+`LabQuadrotor` uses the pinned local CogniPilot library's log-linear position/
+velocity/attitude controller, rate loop and motor allocation. Commands drive
+motor dynamics and the rigid-body plant; the host does not move the simulated
+vehicle directly. The current controller uses truth feedback. Flight-tour
+setpoints are authored in Modelica, but a polynomial planner and estimated-state
+feedback are not connected. Rumoca's interactive periodic-event horizon defect
+remains an open correctness issue; position-tracking checks do not resolve it.
+
 Keyboard controls default to an independent viewer camera. WASD translates, Q/E changes yaw, R/F changes altitude and Shift increases movement speed in wall time, even while the simulation is paused. **Drone commands** is an explicit alternate mode requiring a running simulation and Flight tour off. Viewer movement never changes truth or sensing poses.
 
 LiDAR capture now publishes `samples: Float32Array` with shape `[64, columns, 4]`
@@ -74,9 +83,13 @@ uses explicit `SLR2` framing and copies those raw bytes; it does not produce
 the earlier `SLR1` radial-only packet.
 
 This is acquisition and presentation, not LiDAR odometry. Compiled Modelica
-node consumption of the raw scan remains pending. CPU work still present in
-the camera path includes packed-depth decoding, RGB row transport and depth
-noise; feature selection still ranks and suppresses candidates on the host.
+consumption of the raw scan remains pending. GPU shaders apply depth noise,
+orient rows and pack native RGB8/Z16 images; host glue transfers their buffers
+without per-pixel conversion or feature selection. The viewer can unproject
+the Z16 raster in a shader. Feature detection is currently unavailable in the
+running inertial demo; no host-side vision algorithm substitutes for it.
+Typed raw-image ingress into the complete compiled Modelica graph remains a
+Rumoca integration requirement.
 
 Each LiDAR scan is an instantaneous snapshot at its own scheduled physics timestamp; rotating beam times and motion distortion are not modeled. The 5 Hz simulator option is experimental. Ouster documents [10/20 Hz OS1 operating modes](https://docs.ouster.com/sensor-docs/firmware/sensor-performance); its [OS1 product page](https://ouster.com/products/hardware/os1) lists a 20 Hz maximum. Sensor-worker rendering uses the committed pose for each due sensor, whether or not a camera frame is due at the same time.
 
