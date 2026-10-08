@@ -16,6 +16,7 @@ const revisit=process.env.SLAM_CAPTURE_TRAJECTORY==='revisit';
 if(!['flight','revisit'].includes(process.env.SLAM_CAPTURE_TRAJECTORY??'flight'))throw Error('Unknown capture trajectory');
 const cameraHz=revisit?15:30,holdsPerFrame=90/cameraHz;
 const controllerFile='tests/modelica/RenderedRevisitQuadrotor.mo';
+const libraryDirectory='models/Libraries/CogniPilot';
 const frameCount=Number(process.env.SLAM_CAPTURE_FRAME_COUNT??(revisit?97:13));
 if(!Number.isSafeInteger(frameCount)||frameCount<13||frameCount>121)throw Error('SLAM_CAPTURE_FRAME_COUNT must be13..121');
 const heldIntervalCount=(frameCount-1)*holdsPerFrame,imuSampleCount=heldIntervalCount+1;
@@ -26,7 +27,11 @@ const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const json=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');
 function files(root){return fs.readdirSync(root,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?files(path.join(root,entry.name)):[path.join(root,entry.name)]).sort();}
 const relative=file=>path.relative(repo,file).split(path.sep).join('/');
-const inventory=()=>[...files(path.join(repo,'src')),...files(path.join(repo,'public')),self,path.join(repo,'models/Vehicles/LabQuadrotor.mo'),...(revisit?[path.join(repo,controllerFile)]:[]),path.join(repo,'dev/rumoca-bounded-run.mjs'),path.join(repo,'package.json'),path.join(repo,'package-lock.json')].sort().map(file=>({path:relative(file),bytes:fs.statSync(file).size,sha256:sha(fs.readFileSync(file))}));
+const inventory=()=>[...files(path.join(repo,'src')),...files(path.join(repo,'public')),
+  ...files(path.join(repo,libraryDirectory)),self,path.join(repo,'models/Vehicles/LabQuadrotor.mo'),
+  ...(revisit?[path.join(repo,controllerFile)]:[]),path.join(repo,'dev/rumoca-bounded-run.mjs'),
+  path.join(repo,'package.json'),path.join(repo,'package-lock.json')].sort()
+  .map(file=>({path:relative(file),bytes:fs.statSync(file).size,sha256:sha(fs.readFileSync(file))}));
 if(process.argv.slice(2).some(arg=>arg.startsWith('--')&&arg!=='--execute'))throw new Error('No public options; --execute directory is internal');
 
 if(process.argv[2]!=='--execute'){
@@ -50,6 +55,7 @@ if(process.argv[2]!=='--execute'){
   const before=inventory();json(path.join(output,'sources-before.json'),before);
   for(const folder of ['src','public'])fs.cpSync(path.join(repo,folder),path.join(source,folder),{recursive:true});
   fs.mkdirSync(path.join(source,'models/Vehicles'),{recursive:true});fs.copyFileSync(path.join(repo,'models/Vehicles/LabQuadrotor.mo'),path.join(source,'models/Vehicles/LabQuadrotor.mo'));
+  fs.cpSync(path.join(repo,libraryDirectory),path.join(source,libraryDirectory),{recursive:true});
   if(revisit){fs.mkdirSync(path.dirname(path.join(source,controllerFile)),{recursive:true});fs.copyFileSync(path.join(repo,controllerFile),path.join(source,controllerFile));}
   for(const file of ['package.json','package-lock.json'])fs.copyFileSync(path.join(repo,file),path.join(source,file));
   fs.symlinkSync(path.join(repo,'node_modules'),path.join(source,'node_modules'),'dir');
@@ -65,6 +71,8 @@ if(process.argv[2]!=='--execute'){
   const harness=`import {World,D435} from './src/world';
 import {readPhysicsSnapshot} from './src/physics-snapshot';
 import {SensorClock} from './src/sensor-clock';
+import {modelicaModelsSources} from './src/modelica-models-library';
+import {sourceDigest} from './src/source-digest';
 import physicsSource from './models/Vehicles/LabQuadrotor.mo?raw';
 ${revisit?`import controllerSource from './${controllerFile}?raw';`:"const controllerSource='';"}
 const harnessStarted=performance.now();
@@ -79,6 +87,10 @@ const modulePath=new URL('/vendor/rumoca/rumoca_bind_wasm.js',location.href).hre
 const moduleStarted=performance.now();
 const module=await import(/* @vite-ignore */ modulePath);
 await module.default({module_or_path:new URL('/vendor/rumoca/rumoca_bind_wasm_bg.wasm',location.href).href});
+const workspaceLoaded=JSON.parse(module.sync_workspace_sources(JSON.stringify(modelicaModelsSources)));
+if(workspaceLoaded.error_count)throw new Error('Physics library could not be loaded');
+const workspaceSourcePaths=Object.keys(modelicaModelsSources).sort();
+const workspaceSourceSha256=await sourceDigest(JSON.stringify(workspaceSourcePaths.map(file=>[file,modelicaModelsSources[file]])));
 const moduleLoadMs=performance.now()-moduleStarted,sessionStarted=performance.now();
 const modelName=${JSON.stringify(revisit?'RenderedRevisitQuadrotor':'LabQuadrotor')};
 const initialInputs=${JSON.stringify(revisit?'[]':'[["forward",0],["left",0],["up",0],["yaw",0]]')};
@@ -135,7 +147,7 @@ try{
    batches.push({sequence,time:truth.time,dt:truth.time-time,imuIntervals:intervals});
    await capture(sequence,intervals);time=truth.time;
  }
- (window as any).result={calibration:D435,depthNoise:noise,graphics:world.graphics,frames,measurements:{schema:'rumoca-modeled-imu-hold-v1',frame:'body FLU',accelUnits:'m/s^2 specific force',gyroUnits:'rad/s',samples:imuSamples,batches,semantics:'Previous sample held over (start,time]; endpoint sample applies to next interval. Raw LabQuadrotor modeled readings; SensorObservations bias/random noise not applied.'},oracleSnapshots,physicsStates,calls,startupPhysics:{initialSnapshot:initial,finalSnapshot:truth,initializationApi:'WasmSimulationSession.withInteractiveOptions',snapshotApi:'readPhysicsSnapshot(session,true)',modelName,options:{stepSize:.005,solver:'rk-like',absoluteTolerance:1e-8,relativeTolerance:1e-6,inputs:initialInputs},advanced:true,rates},timings:{worldReadyMs,moduleLoadMs,sessionInitializationMs,initialSnapshotMs,harnessTotalMs:performance.now()-harnessStarted,scope:'Instrumented test-only capture; actual renderer identified in graphics, not full SLAM throughput.'},userAgent:navigator.userAgent,rendererToneMapping:world.renderer.toneMapping,rendererToneMappingExposure:world.renderer.toneMappingExposure};
+ (window as any).result={calibration:D435,depthNoise:noise,graphics:world.graphics,frames,measurements:{schema:'rumoca-modeled-imu-hold-v1',frame:'body FLU',accelUnits:'m/s^2 specific force',gyroUnits:'rad/s',samples:imuSamples,batches,semantics:'Previous sample held over (start,time]; endpoint sample applies to next interval. Raw LabQuadrotor modeled readings; SensorObservations bias/random noise not applied.'},oracleSnapshots,physicsStates,calls,startupPhysics:{initialSnapshot:initial,finalSnapshot:truth,initializationApi:'WasmSimulationSession.withInteractiveOptions',snapshotApi:'readPhysicsSnapshot(session,true)',modelName,options:{stepSize:.005,solver:'rk-like',absoluteTolerance:1e-8,relativeTolerance:1e-6,inputs:initialInputs},advanced:true,rates,workspaceSourcePaths,workspaceSourceSha256},timings:{worldReadyMs,moduleLoadMs,sessionInitializationMs,initialSnapshotMs,harnessTotalMs:performance.now()-harnessStarted,scope:'Instrumented test-only capture; actual renderer identified in graphics, not full SLAM throughput.'},userAgent:navigator.userAgent,rendererToneMapping:world.renderer.toneMapping,rendererToneMappingExposure:world.renderer.toneMappingExposure};
  document.querySelector('#status')!.textContent='${frameCount} actual Rumoca flight camera frames /${imuSampleCount} IMU snapshots /${heldIntervalCount} held intervals. City medium/day; actors off. No estimator.';
 }finally{session.free();}
 `;
@@ -197,8 +209,16 @@ try{
     json(path.join(output,'oracle-physics-snapshots.json'),{scope:'Full Rumoca snapshots for independent acquisition review only; measurements.json is the sensor input.',snapshots:result.oracleSnapshots});
     fs.mkdirSync(path.join(output,'oracle'),{recursive:true});
     const states=result.physicsStates.map((text,index)=>{const name=`oracle/physics-state-${String(index).padStart(3,'0')}.json`;fs.writeFileSync(path.join(output,name),text);return {index,time:result.measurements.samples[index].time,...proof(name)};});
-    const {initialSnapshot,finalSnapshot,...physicsOptions}=result.startupPhysics;
-    const physics={...physicsOptions,initialSnapshot:{path:'oracle-physics-snapshots.json',index:0},finalSnapshot:{path:'oracle-physics-snapshots.json',index:heldIntervalCount},source:identity('models/Vehicles/LabQuadrotor.mo',plantFile),...(revisit?{composition:{controller:identity(controllerFile,'source-preimages/'+controllerFile),source:proof(sourceFile),separator:'\n'}}:{}),js,wasm,physicsWorker:identity('src/physics.worker.ts','source-preimages/src/physics.worker.ts'),snapshotReader:identity('src/physics-snapshot.ts','source-preimages/src/physics-snapshot.ts'),runtime:identity('src/runtime.ts','source-preimages/src/runtime.ts'),sensorClock:identity('src/sensor-clock.ts','source-preimages/src/sensor-clock.ts'),stateJson:states,calls:proof('physics-calls.json'),scope:'Actual source/session acquisition provenance. Truth fields and raw session states are separate oracle evidence, not estimator inputs.'};
+    const {initialSnapshot,finalSnapshot,workspaceSourcePaths,workspaceSourceSha256,...physicsOptions}=result.startupPhysics;
+    const expectedPaths=before.filter(file=>file.path.startsWith(libraryDirectory+'/')&&file.path.endsWith('.mo'))
+      .map(file=>file.path).sort();
+    if(JSON.stringify(workspaceSourcePaths)!==JSON.stringify(expectedPaths))throw new Error('Incomplete compiled physics workspace');
+    const workspaceBytes=Buffer.from(JSON.stringify(expectedPaths.map(file=>[file,fs.readFileSync(path.join(source,file),'utf8')])));
+    if(sha(workspaceBytes)!==workspaceSourceSha256)throw new Error('Compiled physics workspace differs from frozen sources');
+    fs.writeFileSync(path.join(output,'physics-workspace.json'),workspaceBytes);
+    const workspace={...proof('physics-workspace.json'),files:expectedPaths.length,
+      sourceMapSha256:workspaceSourceSha256,libraryManifest:'source-preimages/'+libraryDirectory+'/provenance.json'};
+    const physics={...physicsOptions,initialSnapshot:{path:'oracle-physics-snapshots.json',index:0},finalSnapshot:{path:'oracle-physics-snapshots.json',index:heldIntervalCount},source:identity('models/Vehicles/LabQuadrotor.mo',plantFile),...(revisit?{composition:{controller:identity(controllerFile,'source-preimages/'+controllerFile),source:proof(sourceFile),separator:'\n'}}:{}),js,wasm,workspace,physicsWorker:identity('src/physics.worker.ts','source-preimages/src/physics.worker.ts'),snapshotReader:identity('src/physics-snapshot.ts','source-preimages/src/physics-snapshot.ts'),runtime:identity('src/runtime.ts','source-preimages/src/runtime.ts'),sensorClock:identity('src/sensor-clock.ts','source-preimages/src/sensor-clock.ts'),stateJson:states,calls:proof('physics-calls.json'),scope:'Actual source/session acquisition provenance. Truth fields and raw session states are separate oracle evidence, not estimator inputs.'};
     const after=inventory();json(path.join(output,'sources-after.json'),after);if(JSON.stringify(before)!==JSON.stringify(after))throw new Error('Source/asset bookends changed');
     // No favicon is requested by this harness; every actual resource must resolve locally.
     if(errors.length)throw new Error(errors.join('\n'));

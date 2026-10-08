@@ -7192,3 +7192,77 @@ workspace are covered. The strict conditional-fault checker now also refuses a
 source-order mismatch without requiring a reference; its re-execution passes
 all10cases and matches the original baseline semantics. Frozen execution-strict.json
 and both executed checker versions are retained with the fault evidence above.
+
+### Application qualification of the new PR396 CI package (85090ddc2e45)
+
+Official run37718588656, artifact11526085535 (wasm-package), PR head
+457db3d0963559988031f32bb34e7bca2272bb28. Archive SHA256
+1fac8848d2a6128f9e0b313662d6d31bbedb5c6a95a79d8c073510873ada08d7
+matches GitHub's artifact digest. release-full-web reports0.10.2/85090ddc2e45;
+GitHub verifies that merge's parents483e4ad23ffc and457db3d09635.
+WASM SHA2567283183b63ebd8c6f34d60640278b074030cfb4f614fc36abc3bcf16e33cb324.
+JS SHA256cabd3343961d363d7b9743d7f720e2a28b05348fafa15933d80c6cc501a2f614.
+
+Actual unchanged dedicated-browser-worker checks:
+- D435FastSLAMStep, full59-file source5d485ddd965180a6eb5f8ffd7b3fcae6425cc590994966583fd2ef00915282ff:
+  refuses ToDae after5.709s at RGBDGraphProcessing.Correct/problem__nodeCount,
+  successive guards, byte659592. GuardedProblem.mo remains the minimal case.
+- D435FastFeatures, source5b46e4b2f2512a9a5f27b220885fd1f4155d87c98668082f5226fe555a2c3cfc:
+  no artifact by60s. No numerical execution, scratch-fit or regression cause
+  claimed. This differs from the pre396 ~23s scratch-cap refusal; please locate
+  the current preparation phase before increasing any limit.
+- Full RGBDFastSLAMReset: no artifact by30s; retained CPU profile. Main self
+  sample[69]24.39%, [1926]6.05%, [448]5.21%, [2703]4.86%, [3468]4.85%.
+  This does not establish improvement or completion of the earlier reset issue.
+
+FAST profiling yields a concrete new owner to resolve: wasm-function[87]
+accounts for77.65% of all30s weighted self samples, and93.166% in the5–30s
+window (23.309s of25.018s sampled). Observed chain:
+ [87] <- [88] <- [866] <- [622] <- [16704] <- prepare_native_program.
+No name section/source symbol is inferred. Exact complete original function87
+body verified independently against7283183b: offset2904265, length36738 bytes,
+body SHA256674052e84a73a1f98cdf4b74fcfbb8cb9a5f069bb375c242bbef0bb5e1289e0a.
+The original disassembler was deliberately stopped after the complete target;
+this is not a whole-disassembly success claim. Please map this exact chain/body
+with your matching symbolized/native build and fix the repeated work generally.
+All source capacities, algorithms, scalar types and production pin unchanged.
+
+Raw receipt directory:
+ $HOME/scratch/slam_web/tmp/pr396-457db3d-qualification/
+Compiler package:
+ $HOME/scratch/slam_web/downloads/rumoca-pr396-457db3d/package/release-full-web/
+FAST profiles and disassembly: fast-profile/ within the receipt directory;
+full Reset profile: reset/compiler-profile.json. Each timed browser worker was
+terminated; no new unbounded compiler process remains. Owned peak RSS was
+~1.8GiB FAST/~3.4GiB Reset with8GiB limit and16GiB host reserve.
+
+The actual native GPU flight capture is also updated to load and bind the new
+641-file control library. Fresh capture flight-GTxral passes at848x480 RGB8/Z16,
+30Hz camera/90Hz held IMU, RTX3090 hardware-reported WebGL2, source bookends
+identical. It retains the exact compiled workspace map (SHA256
+ a6655701157445eeb796846e625b921c251850a60de5e74bc8ba2ef6f7daca6f).
+This is a renderer/physical-flight input dataset, not browser SLAM acceptance.
+
+### Fresh physical-controller reference replay and archived compiler evidence
+
+The repaired acquisition harness now proves the complete641-file compiled
+control workspace against both source bookends and the upstream library
+manifest. Fresh hardware GPU capture flight-GTxral replays through unchanged
+Modelica localization/mapping under OMC: all24checks pass, six visual updates,
+feature matches on each frame and map161→540. The short0.4s sequence does not
+qualify loop closure, long-flight accuracy, native WASM execution or throughput.
+Reference: dev/artifacts/modelica-rendered-flight-slam/rendered-flight-slam-CzULRY/.
+CSV SHA25629651abeafd6b7f90ca63e5703798cb9bf6cb068b23a85567fa0194c108577ea.
+
+PR396/85090 also reproduces the strict periodic controller regression: at1.1s,
+101ticks instead of111. Later reset assertions are not reached. No workaround
+or production compiler promotion applied. General interactive event scheduling
+remains required alongside full native issuance and typed State/ingress.
+
+The official candidate source, browser receipts, CPU profiles, exact hot-body
+bytes/disassembly proof and clock log are now frozen in
+ dev/artifacts/rumoca-pr396-85090-browser-2026-10-07/.
+34files; manifest SHA256
+3945daf07808fba1915cf23dd55478278780150eda25e5c8f5771ea50d821f85.
+Current readable summary: dev/modelica-flight-compiler-status-2026-10-07.md.
+No compiler tree was edited or compiler build started by the application agent.

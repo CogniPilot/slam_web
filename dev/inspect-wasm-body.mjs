@@ -67,5 +67,5 @@ if(next!==body.end)throw Error('Disassembly did not reach exact function end');
 const report={status:'ORIGINAL_WASM_FUNCTION_BODY_AND_DISASSEMBLY_VERIFIED',moduleSha256:sha(bytes),functionIndex:index,
   importedFunctions,definedIndex,typeIndex,signature,body,localGroupCount,instructionRows,
   bodySha256:sha(bytes.subarray(body.start,body.end)),disassemblySha256:sha(text),inspectorSha256:sha(fs.readFileSync(import.meta.filename)),
-  scope:'Exact original module bytes and complete selected function disassembly. The preceding whole-module objdump job timed out after emitting this target; this check proves target completeness separately. No source-symbol attribution, compiler modification or numerical execution.'};
+  scope:'Exact original module bytes and complete selected function disassembly, independently of whole-disassembler completion. No source-symbol attribution, compiler modification or numerical execution.'};
 fs.writeFileSync(reportFile,JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));

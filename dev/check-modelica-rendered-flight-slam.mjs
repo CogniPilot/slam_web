@@ -181,6 +181,25 @@ try{
     if(key==='js'||key==='wasm')assert(captureManifest.servedResources.some(value=>value.sourcePath===proof.sourcePath&&value.sha256===proof.sha256),'Compiler proof actually served: '+key);
   }
   assert(physics.source.sourcePath==='models/Vehicles/LabQuadrotor.mo','Exact plant source identity');
+  const plantSource=captureFile(physics.source.path,physics.source.sha256).toString();
+  if(plantSource.includes('Control.Multirotor.LogLinear.Controller'))assert(physics.workspace,'Physical controller requires its compiled library');
+  if(physics.workspace){
+    const workspace=physics.workspace,bytes=captureFile(workspace.path,workspace.sha256);
+    assert(bytes.length===workspace.bytes&&sha(bytes)===workspace.sourceMapSha256,'Compiled physics workspace identity');
+    const entries=JSON.parse(bytes),library='models/Libraries/CogniPilot/';
+    const expectedPaths=before.filter(file=>file.path.startsWith(library)&&file.path.endsWith('.mo')).map(file=>file.path).sort();
+    assert(Array.isArray(entries)&&entries.length===workspace.files,'Complete compiled workspace inventory');
+    exactArray(entries.map(entry=>entry[0]),expectedPaths,'Exact compiled library paths');
+    for(const [file,text]of entries){
+      const entry=before.find(value=>value.path===file);
+      assert(typeof text==='string'&&sha(Buffer.from(text))===entry.sha256,'Compiled library source: '+file);
+      assert(captureFile('source-preimages/'+file,entry.sha256).length===entry.bytes,'Retained library preimage: '+file);
+    }
+    const manifestEntry=before.find(file=>file.path===library+'provenance.json');
+    assert(manifestEntry&&workspace.libraryManifest==='source-preimages/'+manifestEntry.path,'Retained library manifest identity');
+    const manifest=JSON.parse(captureFile(workspace.libraryManifest,manifestEntry.sha256));
+    for(const [file,text]of entries)assert(manifest.sources[file.slice(library.length)]===sha(Buffer.from(text)),'Pinned upstream library source: '+file);
+  }
   if(revisit){
     const composition=physics.composition,control=composition?.controller;
     const entry=before.find(value=>value.path===control?.sourcePath);
