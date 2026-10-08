@@ -1,7 +1,7 @@
 // Run each phase in a separate bounded Node24 process under an external timeout.
 // Arguments: PACKAGE_DIRECTORY SOURCE_FILE MODEL PHASE [OUTPUT_FILE]
 // Optional RUMOCA_CPU_PROFILE records the first15s via an inspector worker while
-// the main thread is inside synchronous WASM. PHASE is check/compile/lower/native/gpu/session.
+// the main thread is inside synchronous WASM. PHASE is check/compile/lower/program/native/gpu/session.
 import fs from 'node:fs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -41,6 +41,7 @@ try {
   if (phase === 'check') result = compiler.compile_check_with_source_roots(source, model, '{}');
   else if (phase === 'compile') result = compiler.compile(source, model);
   else if (phase === 'lower') result = compiler.lower_model_to_solve_json(source, model, .1, .1, '{}');
+  else if (phase === 'program') result = compiler.prepare_native_program(source, model);
   else if (phase === 'native') result = compiler.prepare_native_assignments(source, model);
   else if (phase === 'gpu') result = compiler.prepare_gpu_simulation(source, model);
   else if (phase === 'session') {

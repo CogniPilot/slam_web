@@ -6861,3 +6861,48 @@ Build WASM jobs are live, not qualified artifacts yet. The new constructor
 receipts use the earlier exact 51e9876d699e merge, never these untested revisions.
 Please retain the compact aggregate/register work and provide the reviewed
 scratch-sharing merge artifact for the existing paired runtime gates.
+
+### Newest artifact still refused; blocker reduced to standalone zero-fill (application)
+
+Official PR391 artifact 11523801169 / run 37714315493 / head 06cdfe312114 is
+available and tested. Actual compiler merge 42729cb4f520 (parents d7f16c00e203
+and 06cdfe312114), WASM SHA256
+2fa706579c6f6fe4fb947e764f1eb953ddfa00d39422d605b3aab180469266b7.
+This includes merged #395. No production pin promotion or scratch-merge runtime
+qualification is implied. Full unchanged D435FastSLAMStep still refuses in ToDae
+in 5.854 s: RGBDGraphProcessing.Correct reads problem__nodeCount, only some
+branches at byte 659592 define it. Original isolated EmptyFrame still exceeds
+30 s browser issuance.
+
+More importantly, tests/compiler-probes/fixtures/DescriptorZeroFill.mo is only
+326 bytes: two named constants and a 350×49 Real output initialized with zeros.
+No records, imports or functions. Both capacities match the authored constructor;
+source SHA256 1a2ef18f7b32b15f27a92301e56c6cca495cd57023668db280dc28d018035f85.
+Actual current browser native issuance exceeds 20 s. compile returns balanced DAE
+in 0.237 s: three variables (including constants), zero functions, ten expression
+nodes, one structured row-major equation and 17,150 unknowns/equations.
+
+The earlier exact 51e9876d699e build also stalls after removing the record-return
+call: all 23 Frame fields become unchanged RHS equations at full capacities;
+DAE returns in 0.538 s with zero functions, 118 nodes and 19,587 unknowns/equations,
+Solve lowering exceeds 35 s and browser native issuance exceeds 20 s. Reproduce
+that diagnostic with dev/reduce-reset-frame.mjs NEW_OUTPUT_DIRECTORY --equations.
+The original default reduction remains byte-identical. This corrects the earlier
+lead: repeated function/record projection may contribute, but is not necessary
+for the observed array issuance problem. Do not limit the fix to record inlining.
+
+Fresh original-current-compiler perf samples the real prepare_native_program API
+on the standalone zero-fill model for ten seconds: 1,258 samples, zero lost,
+35 unknown leaves retained, 79.80% main-thread weighted cycles. Largest WASM
+leaves 3420/3346/6425/8014/7045 are 30.00/9.83/7.82/7.17/5.00% of all periods.
+Exact original WAT bodies are saved; Rust names remain unmapped. The process is
+deliberately stopped, not trapped; no whole-compile/runtime percentage claim.
+Please bind these exact functions and instrument per-owner register/row/allocation
+counts. Keep shaped zero-fill compact through native issuance with every output,
+shape and typed semantic preserved. Qualify the standalone array's full output,
+then original Frame and full lifecycle; the Step guard fix remains independent.
+
+Report: dev/modelica-zero-fill-admission-2026-10-07.md.
+Frozen receipts: dev/artifacts/rumoca-zero-fill-admission-2026-10-07/.
+Raw profile: $HOME/scratch/slam_web/profiles/descriptor-zero-fill-native-06cdfe312-2026-10-07/.
+Original constructor capacities, source identity and all prior runtime gates remain.

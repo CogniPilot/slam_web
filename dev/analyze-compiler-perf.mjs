@@ -9,11 +9,12 @@ if (!output) throw Error('PROFILE_DIRECTORY REPORT required');
 const read = name => fs.readFileSync(path.join(directory, name));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const command = JSON.parse(read('command.json'));
-const stoppedLowering = command.phase?.event === 'start' && command.phase?.phase === 'lower';
+const stoppedPreparation = command.phase?.event === 'start'
+  && ['lower','program'].includes(command.phase?.phase);
 let receipt;
-if (stoppedLowering) {
+if (stoppedPreparation) {
   const events = read('phase.log').toString().trim().split('\n').map(line=>JSON.parse(line));
-  assert.equal(events.length,1,'Lowering ended before the observation stop');
+  assert.equal(events.length,1,'Preparation ended before the observation stop');
   assert.deepEqual(events[0],command.phase);
   assert.equal(command.phase.pid,command.pid);
   assert.deepEqual(command.terminal,{code:null,signal:'SIGTERM'});
@@ -59,21 +60,22 @@ const lost = [...dump.matchAll(/PERF_RECORD_LOST(?:_SAMPLES)?\b/g)].length;
 assert.equal(lost, 0, 'Lost perf records');
 assert.ok(samples > 100 && period > 0, 'Insufficient samples');
 const percent = row => ({...row, percent: row.period / period * 100});
-const report = {status: stoppedLowering ? 'ORIGINAL_COMPILER_LOWERING_WINDOW_VERIFIED'
+const report = {status: stoppedPreparation ? (command.phase.phase === 'lower'
+    ? 'ORIGINAL_COMPILER_LOWERING_WINDOW_VERIFIED' : 'ORIGINAL_COMPILER_NATIVE_PREPARATION_WINDOW_VERIFIED')
     : 'ORIGINAL_COMPILER_PREPARATION_WINDOW_VERIFIED', pid: command.pid,
   samples, period, lost, unknown, first, last,
   prepareStart: receipt.prepareMonotonicStartSeconds, prepareEnd: receipt.prepareMonotonicEndSeconds,
   compiler: receipt.compiler, compilerWasmSha256: receipt.compilerWasmSha256,
   sourceSha256: receipt.sourceSha256, threads: [...threads.values()].map(percent),
   leaves: [...groups.values()].sort((a, b) => b.period - a.period).map(percent),
-  inputs: Object.fromEntries([...(stoppedLowering ? ['phase.log'] : ['admission.json']), 'command.json', 'compiler.perf.data',
+  inputs: Object.fromEntries([...(stoppedPreparation ? ['phase.log'] : ['admission.json']), 'command.json', 'compiler.perf.data',
     'compiler.perf.txt', 'compiler.perf.dump.txt', 'compiler.perf.header.txt',
-    stoppedLowering ? 'rumoca-phase-probe.mjs' : 'probe-native-program.mjs', 'capture.mjs'].map(name => {
+    stoppedPreparation ? 'rumoca-phase-probe.mjs' : 'probe-native-program.mjs', 'capture.mjs'].map(name => {
       const bytes = read(name); return [name, {bytes: bytes.length, sha256: sha(bytes)}];
     })),
   analyzerSha256: sha(fs.readFileSync(import.meta.filename)),
   scope: 'Sampled cycles during one preparation window, including V8 workers and unknown leaves. '
-    + (stoppedLowering ? 'The owned process was deliberately stopped after observation, not a compiler trap. ' : '')
+    + (stoppedPreparation ? 'The owned process was deliberately stopped after observation, not a compiler trap. ' : '')
     + 'Not whole-compilation cost, CPU utilization or SLAM execution throughput.'};
 fs.writeFileSync(output, JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify({samples, lost, unknown, first, last, threads: report.threads,
