@@ -6,13 +6,16 @@ import os from 'node:os';
 import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {build} from 'esbuild';
+import {poseGraphPerformanceGate} from './pose-graph-performance-gate.mjs';
 
-const [artifactPath,sourcePath,executablePath,directory] = process.argv.slice(2);
-if (!directory) throw Error('ARTIFACT SOURCE OMC_EXECUTABLE DIRECTORY required');
+const [artifactPath,sourcePath,executablePath,directory,gateOption] = process.argv.slice(2);
+if (!directory || process.argv.length > 7 || (gateOption && gateOption !== '--require-faster-than-omc'))
+  throw Error('ARTIFACT SOURCE OMC_EXECUTABLE DIRECTORY [--require-faster-than-omc] required');
 if (os.endianness() !== 'LE') throw Error('Binary driver currently requires a little-endian host');
 const sha = data => createHash('sha256').update(data).digest('hex');
 const proofFiles = ['src/modelica-native-program.ts','tests/compiler-probes/pose-graph-run-fixtures.ts',
-  'tests/compiler-probes/pose-graph-fixtures.ts','dev/benchmark-pose-graph-omc.c',import.meta.filename];
+  'tests/compiler-probes/pose-graph-fixtures.ts','dev/benchmark-pose-graph-omc.c',import.meta.filename,
+  'dev/pose-graph-performance-gate.mjs'];
 const digests = Object.fromEntries(proofFiles.map(file => [file,sha(fs.readFileSync(file))]));
 async function bundled(entry) {
   const result = await build({entryPoints:[entry],bundle:true,platform:'node',format:'esm',write:false});
@@ -88,6 +91,8 @@ for (const [index,test] of runCases().entries()) {
     const certified = certifyRun(test,name => output[name]);
     let maximumPoseDifference = 0;
     if (!reference) reference = output;
+    for (const name of ['acceptedIterations','pcgIterations'])
+      if (reference[name][0] !== output[name][0]) throw Error(`Cross-engine ${name} mismatch`);
     for (const [name,width] of [['nextPosition',3],['nextRotation',9]])
       test.graph.poses.forEach((_,node) => {
         if (test.graph.active[node]) for (let k=0; k<width; k++) maximumPoseDifference = Math.max(maximumPoseDifference,
@@ -112,3 +117,7 @@ const report = {status:'MATCHED_PGRUN_RUNTIME_PASS',recordedAt:new Date().toISOS
   executableSha256:sha(executable),moduleBytes:artifact.module_bytes.length,executableBytes:executable.length,
   wasmMemoryBytes:program.memory.buffer.byteLength,proofSources:digests,results,fullSlamAccepted:false};
 fs.writeFileSync(path.join(directory,'runtime-comparison.json'),JSON.stringify(report,null,2)+'\n');
+const gate = poseGraphPerformanceGate(report);
+fs.writeFileSync(path.join(directory,'performance-gate.json'),JSON.stringify(gate,null,2)+'\n');
+console.log(JSON.stringify(gate));
+if (gateOption && !gate.passed) process.exitCode = 1;

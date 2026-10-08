@@ -6474,3 +6474,30 @@ bytes and 240648 input bytes. Please include per-call/region lifetimes and
 high-water allocation in the prepare report and separate call duplication from
 frame retention. This is additional evidence for the storage lane, not proof
 that this particular frame owns the complete optimizer's 64 MiB refusal.
+
+### Executable faster-than-OMC gate, 2026-10-07 (application)
+
+The compiler performance target is now executable. Pass
+`--require-faster-than-omc` to `dev/benchmark-pose-graph-compilers.mjs` after its
+four existing arguments. It retains `runtime-comparison.json` and
+`performance-gate.json`, then exits1 unless Rumoca's median is strictly below
+OMC for every one of the six workloads. Each ABBA block must match accepted/PCG
+iteration counts as well as passing the independent numerical checks.
+`dev/pose-graph-performance-gate.mjs REPORT` also checks a trusted existing
+receipt, rejecting missing workloads, changed counts, bad sample inventories,
+wrong block order, pose mismatches and medians inconsistent with raw timings.
+It does not authenticate receipts or qualify full browser SLAM.
+
+Executed on the unchanged f0 main module and production source: all numerical
+checks pass, performance gate correctly exits1, every workload misses the
+performance target. Fresh small/dense/stationary medians are OMC49.05/437.83/0.629ms
+versus Rumoca561.18/1356.97/4.190ms. This is a gate verification, not a compiler
+speedup. The bounded69.45s run used affinity8–9/nice15, peaked at163984KiB RSS
+and retained over51GiB available memory. Three adversarial gate tests and the
+application TypeScript check pass in the Nix CI environment.
+
+Receipt and exact executed source preimages:
+`dev/artifacts/modelica-pose-graph-performance-gate-2026-10-07/`.
+Large outputs: `$HOME/scratch/slam_web/tmp/pose-graph-performance-gate-2026-10-07/`.
+Please run this same gate after the source-value reuse and array-carry fixes;
+the full-source issuance and lossless State/typed-image ABI blockers remain.

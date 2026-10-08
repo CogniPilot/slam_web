@@ -81,8 +81,19 @@ bounded resource wrapper, with the affinity/thread limits above:
 
 ```sh
 node dev/benchmark-pose-graph-compilers.mjs \
-  "$artifact" "$exactSource" "$generatedDirectory/pgrun-driver" "$reportDirectory"
+  "$artifact" "$exactSource" "$generatedDirectory/pgrun-driver" "$reportDirectory" \
+  --require-faster-than-omc
 ```
+
+The optional flag requires Rumoca's median to be strictly below OMC on **every**
+workload. A missed target exits nonzero after retaining the numerical report and
+`performance-gate.json`; numerical success alone remains a separate result.
+Each block must also match accepted/PCG iteration counts across engines.
+`node dev/pose-graph-performance-gate.mjs "$reportDirectory/runtime-comparison.json"`
+checks an existing trusted receipt without rerunning it. It requires all six
+workloads, four ABBA blocks and six finite measurements per engine, recomputes
+medians, and rejects divergent iteration counts or pose comparisons. It does not
+authenticate a supplied receipt or certify full-SLAM execution.
 
 The artifact must be the actual compiler-issued `PoseGraphRunStorage` program,
 bound to its exact source. Full browser SLAM remains unverified; no production
