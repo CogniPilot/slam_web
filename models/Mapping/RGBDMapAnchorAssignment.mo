@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Consume private map insertion receipts. Anchor outputs are a proposal until
 // the surrounding owner commits map geometry, metadata and anchors together.
 function AssignLandmarkAnchors
+
   input Real previousPoint[:,3];
   input Real previousOccupied[size(previousPoint,1)];
   input Real previousLocalPoint[size(previousPoint,1),3];

@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Durable capture birth identities. Catalog ID, camera epoch and accepted
 // processing-step sequence are separate clocks; none is inferred from another.
 package RGBDGraphCaptureLedger
+
   constant Integer capacity = RGBDKeyframes.keyframeCapacity;
   constant Integer identifierLimit = RGBDKeyframes.identifierLimit;
 

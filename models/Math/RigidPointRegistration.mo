@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Horn absolute orientation for matched 3D point pairs. No pose truth enters
 // this component. Correspondence production and temporal pose composition are
 // separate frontend/backend responsibilities.
@@ -73,6 +74,7 @@ end RegistrationEigen4;
 // Three ordered full-domain passes retain compact runtime loop ownership.
 // Disabled or invalid pairs never enter multiplication, even with NaN inputs.
 function FitRigidPointPairs
+
   input Real sourcePoint[:,:];
   input Real targetPoint[:,:];
   input Real pairEnabled[:];
@@ -190,6 +192,7 @@ algorithm
 end FitRigidPointPairs;
 
 model RigidPointRegistration
+
   parameter Integer capacity = 14400;
   parameter Real coordinateLimit = 1e6;
   parameter Real rankTolerance = 1e-8;
@@ -269,6 +272,7 @@ algorithm
 end RegistrationWhitenedResidual3;
 
 function RegistrationPairResidual
+
   input Real source[3]; input Real target[3];
   input Real rotation[3,3]; input Real translation[3];
   input Boolean useCovariance;
@@ -294,6 +298,7 @@ end RegistrationPairResidual;
 // Added configuration: hypotheses1..1024 and consensus fraction in(0,1].
 // Reason7 means no admissible stable consensus within the declared work bounds.
 function FitRigidPointPairsRobust
+
   input Real sourcePoint[:,:];
   input Real targetPoint[:,:];
   input Real pairEnabled[:];

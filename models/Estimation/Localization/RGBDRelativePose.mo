@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Finite proper rotation gate shared by models and held-IMU functions.
 function RGBDProperRotationValue
   input Real rotation[3,3] = identity(3);
@@ -23,6 +24,7 @@ algorithm
 end RGBDProperRotationValue;
 
 model RGBDProperRotation
+
   constant Integer dimension = 3;
   input Real rotation[dimension,dimension] = identity(dimension);
   constant Real tolerance = 1e-6;
@@ -39,6 +41,7 @@ end RGBDProperRotation;
 // This component composes a measurement; it does not estimate covariance,
 // persist keyframes, reject dynamic objects, or implement loop closure.
 model RGBDRelativePose
+
   constant Integer dimension = 3;
   input Real referenceBodyRotation[dimension,dimension] = identity(dimension);
   input Real referenceBodyPosition[dimension] = zeros(dimension);
@@ -85,6 +88,7 @@ end RGBDRelativePose;
 // Ordered callable equivalent of the unchanged equation model above.
 // This preserves its optical reference->current transform and covariance chart.
 function RGBDRelativeBodyPose
+
   input Real referenceBodyRotation[3,3] = identity(3);
   input Real referenceBodyPosition[3] = zeros(3);
   input Real currentFromReference[3,3] = identity(3);

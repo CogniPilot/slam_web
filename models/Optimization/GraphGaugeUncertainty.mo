@@ -1,9 +1,11 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Conditional first-order bound transport, not graph covariance certification.
 // ENU additive position and body right-local attitude; selected order p,theta,p,theta.
 // Anchor/relative cross-correlation is UNKNOWN, never silently set to zero.
 // sourceRevision is a positive session identity token, not a verified hash here.
 // Positive provenance tokens assert caller-provided bounds; they certify nothing.
 package GraphGaugeUncertainty
+
   constant Integer chartENUPositionRightLocalAttitude = 1;
   constant Integer selectedDimension = 12;
   constant Integer anchorDimension = 6;

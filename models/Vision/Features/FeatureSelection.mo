@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Ranked raster selection with stable ties and square suppression.
 function SelectRasterFeatures
   input Real scores[:];
@@ -209,6 +210,7 @@ algorithm
 end SelectRasterFeatures;
 
 model FeatureSelection
+
   parameter Integer width = 160;
   parameter Integer height = 90;
   // Storage covers the full editable feature limit.
@@ -227,9 +229,11 @@ equation
 end FeatureSelection;
 
 model GridFeatureSelection
+
   extends FeatureSelection(capacity=14400,grid=true,settings={0.0,0.0,1.0,0.0,14400.0,6.0,5.0,5.0});
 end GridFeatureSelection;
 
 model FastFeatureSelection
+
   extends FeatureSelection(minimumBorder=3,settings={18.0,0.0,1e8,3.0,240.0,1.0,3.0,3.0});
 end FastFeatureSelection;

@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // The keyframe catalog owns nodes. This owner retains measured body edges,
 // never poses inferred from them. All results are proposals for an outer
 // estimator/reference/catalog/map transaction; callers must publish together.
 package RGBDGraphMeasurements
+
   constant Integer nodeCapacity = RGBDKeyframes.keyframeCapacity;
   constant Integer edgeCapacity = 256;
   constant Integer proposalCapacity = RGBDKeyframeRetrieval.proposalCapacity;

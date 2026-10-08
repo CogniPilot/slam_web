@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // One frame proposal. Expensive retrieval/registration runs only on capture.
 // Both branches remain proposals for the enclosing estimator's atomic commit.
 package RGBDCatalogFrame
+
   function Advance
     input RGBDKeyframes.Catalog catalog;
     input RGBDGraphMeasurements.State graph;

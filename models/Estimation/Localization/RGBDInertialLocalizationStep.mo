@@ -1,9 +1,11 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Concrete carried-state localization transaction. Persistence copies these
 // inputs/outputs verbatim; all image, pose, covariance and commit math is Modelica.
 // Image dimensions are structural parameters;350 selected slots remain bounded.
 // Pixel selection is a source-owned
 // upstream stage (see RGBDFastInertialLocalizationStep). No loop closure here.
 partial model RGBDInertialLocalizationInterface
+
   parameter Integer imageHeight(min=1) = 90;
   parameter Integer imageWidth(min=1) = 160;
   constant Integer featureCapacity = 350;
@@ -101,6 +103,7 @@ partial model RGBDInertialLocalizationInterface
 end RGBDInertialLocalizationInterface;
 
 model RGBDLocalizationOrientation
+
   extends SLAMRotationLog;
   output Real unitQuaternion[4];
 equation
@@ -108,6 +111,7 @@ equation
 end RGBDLocalizationOrientation;
 
 function RGBDLocalizationTracking
+
   input Real index[:]; input Real currentPixels[:,2]; input Real oldPixels[size(index,1),2];
   input Real oldEnabled[size(index,1)]; input Real currentEnabled[size(currentPixels,1)];
   input Integer imageSize[2] "Shared reference/current RGB grid: height, width";
@@ -143,6 +147,7 @@ algorithm
 end RGBDLocalizationTracking;
 
 model RGBDInertialLocalizationStep
+
   extends RGBDInertialLocalizationInterface;
   input Real pixels[featureCapacity,2];
   input Real activeCount;
@@ -257,6 +262,7 @@ end RGBDInertialLocalizationStep;
 // SchmidtReferenceState remain unchanged reference owners. Explicit covariance
 // inputs carry tuned priors; these defaults match the existing public interface.
 pure function AdvanceRGBDLocalization
+
   input Real rgb[:,:,:];
   input Real depth[size(rgb,1),size(rgb,2)];
   input Real rgbCalibration[4] = RGBDNominalCalibration({size(rgb,1),size(rgb,2)},{69.0,42.0});

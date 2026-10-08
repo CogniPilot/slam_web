@@ -48,7 +48,7 @@ it('Node exporter and browser composition share exact source, hashes and file id
     expect(receipt.sourceSha256).toBe(browser.sourceSha256);
     expect(receipt.sources).toEqual(browser.sources.map(({overridden:_,...file})=>file));
     expect(receipt.modelNames).toEqual(browser.modelNames);
-    expect(receipt.composition).toBe('exact authored files joined with one newline, in this order');
+    expect(receipt.composition).toBe('exact generated compatibility files joined with one newline, in this order');
     expect(receipt.compilerInvoked).toBe(false);
     expect(receipt.nativeArtifactIssued).toBe(false);
     expect(receipt.browserIntegrated).toBe(false);

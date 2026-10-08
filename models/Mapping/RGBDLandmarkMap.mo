@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Persistent state is explicit: callers retain only accepted next-state outputs.
 // All coordinates are in one unchanged world ENU frame. Points come from
 // RGBDLandmarkProjection and bodyPosition is estimated, never ground truth.
@@ -50,6 +51,7 @@ partial function RGBDLandmarkMapInterface
 end RGBDLandmarkMapInterface;
 
 function UpdateLandmarkMapWithReceipts
+
   extends RGBDLandmarkMapInterface;
   output Integer insertedFeature[size(previousOccupied,1)] "Original candidate slot, zero for retained/empty slots";
 protected
@@ -226,9 +228,11 @@ algorithm
     tentativeCount := tentativeCount+(if occupied[slot] >= 1.0 and occupied[slot] <= 1.0 and confirmed[slot] < 0.5 then 1.0 else 0.0);
   end for;
 end UpdateLandmarkMapWithReceipts;
+
 // Existing public numerical interface delegates to the same kernel. Receipts
 // are consumed by anchored composition; old callers retain their exact outputs.
 function UpdateLandmarkMap
+
   extends RGBDLandmarkMapInterface;
 protected
   Integer unusedReceipt[size(previousOccupied,1)];
@@ -243,6 +247,7 @@ algorithm
 end UpdateLandmarkMap;
 
 model RGBDLandmarkMap
+
   constant Integer imageHeight = 90;
   constant Integer imageWidth = 160;
   constant Integer mapCapacity = imageHeight*imageWidth;

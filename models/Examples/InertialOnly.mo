@@ -1,5 +1,7 @@
 within Examples;
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 model InertialOnly "Inertial navigation with filtered airframe IMU measurements"
+
   parameter Real accelTimeConstant(unit="s", min=1e-6) = 0.03
     "Accelerometer filter time constant";
   parameter Real gyroTimeConstant(unit="s", min=1e-6) = 0.02

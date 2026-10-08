@@ -1,8 +1,10 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Review composition: full calibrated visual frontend plus its registration
 // noise model. Compile together with RGBDVisualObservation, RGBDFeatureMatching,
 // RigidPointRegistration, RGBDRelativePose and RGBDRegistrationUncertainty.
 // This source has not yet passed a connected source-issued numerical gate.
 model RGBDVisualRelativeObservation
+
   extends RGBDVisualObservation;
   // Retain these with the reference image rather than substituting the current
   // image calibration. The noise model assumes a common stereo baseline and
@@ -55,6 +57,7 @@ end RGBDVisualRelativeObservation;
 // imageEnabled retains its existing meaning
 // (only description is bypassed, matching/registration still report refusals).
 function ObserveRGBDRelativeFrame
+
   input Real rgb[:,:,:]; input Real depth[size(rgb,1),size(rgb,2)];
   input Real pixels[featureCapacity,2]; input Real activeCount;
   input Real rgbCalibration[4]; input Real depthCalibration[4]; input Real noiseReferenceFx;

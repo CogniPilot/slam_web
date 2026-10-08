@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Geometric verification of a retrieved keyframe. A verified measurement is a
 // proposal: graph identity/eviction and shared-image correlation policies must
 // still admit it before any optimizer or estimator state can change.
 package RGBDLoopVerification
+
   constant Integer featureCapacity = RGBDKeyframes.featureCapacity;
   constant Integer dimension = 3;
   constant Integer poseDimension = 6;

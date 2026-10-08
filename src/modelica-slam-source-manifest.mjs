@@ -1,5 +1,5 @@
 import {modelicaSourcePath} from './modelica-source-locations.mjs';
-// Shared authored-file order for Node export and opt-in browser composition.
+// Shared generated snapshot order for Node export and opt-in browser composition.
 // This inventory selects source text only; Rumoca owns all compilation/math.
 const names=['FastNativeFrame','FeatureSelection','RGBDFeatureMatching','RigidPointRegistration',
   'RGBDRelativePose','RGBDRegistrationUncertainty','RGBDVisualObservation','RGBDVisualRelativeObservation',
@@ -22,7 +22,7 @@ export const rgbdSlamSourceManifest=Object.freeze({
   modelNames:Object.freeze(['RGBDFastSLAMReset','RGBDFastSLAMInitialize','RGBDFastSLAMStep']),
   paths:Object.freeze(names.map(name=>modelicaSourcePath(name))),
   separator:'\n',
-  composition:'exact authored files joined with one newline, in this order',
+  composition:'exact generated compatibility files joined with one newline, in this order',
   scope:'Staged image-parameterized FAST/350 RGB-D + IMU acquisition (historical90x160 model defaults); full128/256/14400 mapping and graph correction with one persistent source-owned State, actual optimizer and typed selected bound. Reference composition gates do not qualify the camera producer, full covariance convergence, actual public model execution, Rumoca WASM admission or browser throughput.'
 });
 

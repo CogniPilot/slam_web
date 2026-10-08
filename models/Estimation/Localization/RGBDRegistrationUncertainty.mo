@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Conditional first-order uncertainty of the UNWEIGHTED point-to-point fit.
 // Optical RDF perturbation: delta y = delta t - skew(R*p_ref)*delta theta.
 // No correspondence changes, reference-pose uncertainty or cross-pair covariance
@@ -119,6 +120,7 @@ algorithm
 end RGBDOpticalPointCovariance;
 
 function RGBDRegistrationSandwich
+
   input Real referencePoint[:,:]; input Real currentPoint[:,:];
   input Real pairEnabled[:]; input Real activeCount; input Real registrationAccepted;
   input Real currentFromReference[3,3]; input Real translation[3];
@@ -203,6 +205,7 @@ algorithm
 end RGBDRegistrationSandwich;
 
 model RGBDRegistrationUncertainty
+
   parameter Integer capacity = 350;
   parameter Real coordinateLimit = 100.0;
   parameter Real minimumPivot = 1e-10;

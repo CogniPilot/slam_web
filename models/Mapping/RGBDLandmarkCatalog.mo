@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // A catalog proposal changes map geometry before the spatial index is built.
 // Stable identities prevent an evicted anchor from merging into its successor.
 package RGBDLandmarkCatalog
+
   function Synchronize
     input Real previousPoint[:,3]; input Real previousOccupied[size(previousPoint,1)];
     input Real previousConfidence[size(previousPoint,1)]; input Real previousLastSeen[size(previousPoint,1)];
@@ -146,6 +148,7 @@ package RGBDLandmarkCatalog
 end RGBDLandmarkCatalog;
 
 function UpdateCatalogLandmarkMap
+
   extends RGBDLandmarkMapInterface;
   input Real previousLocalPoint[size(previousOccupied,1),3];
   input Integer previousAnchorId[size(previousOccupied,1)]; input Integer previousAnchorSlot[size(previousOccupied,1)];

@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Source-owned graph correction and persistent session state. These functions
 // compose the actual optimizer, selected bound, gauge transport and atomic
 // filter/map commit; the host supplies neither a solved graph nor a proposal.
 package RGBDGraphProcessing
+
   constant Integer nodeCapacity = RGBDKeyframes.keyframeCapacity;
   constant Integer dimension = RGBDKeyframes.dimension;
   constant Integer identifierLimit = RGBDKeyframes.identifierLimit;

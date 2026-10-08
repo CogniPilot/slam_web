@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Local first-order ERROR SECOND-MOMENT bound about a graph anchor mean.
 // Raw capture means/bounds stay immutable; changing gauge never creates a zero
 // absolute bound. Input capture covariance is assumed a valid local error bound.
 package RGBDGraphAnchorBound
+
   constant Integer dimension = RGBDKeyframes.dimension;
   constant Integer poseDimension = RGBDKeyframes.poseDimension;
   constant Integer capacity = RGBDKeyframes.keyframeCapacity;

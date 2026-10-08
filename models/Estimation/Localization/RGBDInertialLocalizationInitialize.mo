@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Complete time-zero raw RGB-D transaction; no positive-duration prediction.
 // Ordered array math stays in this reusable function, with unchanged model I/O.
 function InitializeRGBDLocalization
+
   input Real rgb[:,:,:];
   input Real depth[size(rgb,1),size(rgb,2)];
   input Real rgbCalibration[4];
@@ -229,6 +231,7 @@ end InitializeRGBDLocalization;
 // Time-zero initialization is a separate source transaction, not h=0 prediction.
 // The outer owner schedules it once and publishes the complete returned tuple.
 model RGBDInertialLocalizationInitialize
+
   extends RGBDInertialLocalizationInterface;
   input Real pixels[featureCapacity,2];
   input Real activeCount;

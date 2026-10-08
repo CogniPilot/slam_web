@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Full-raster source-owned FAST selection composed with the qualified core.
 // The host transports the complete state and does no selection or filter math.
 pure function AdvanceFastRGBDLocalization
+
   input Real rgb[:,:,:];
   input Real depth[size(rgb,1),size(rgb,2)];
   input Real rgbCalibration[4] = RGBDNominalCalibration({size(rgb,1),size(rgb,2)},{69.0,42.0});
@@ -244,6 +246,7 @@ algorithm
 end AdvanceFastRGBDLocalization;
 
 model RGBDFastInertialLocalizationStep
+
   extends RGBDInertialLocalizationInterface;
   parameter Real selectedFeatureLimit = 350.0;
   parameter Real absoluteThreshold = 18.0;

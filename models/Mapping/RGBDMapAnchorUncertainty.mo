@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Per-landmark conditional first-order bound. No landmark/filter independence
 // or joint-landmark guarantee. Local geometry remains an immutable input.
 package RGBDMapAnchorUncertainty
+
   constant Integer anchorCapacity = 128;
   constant Integer landmarkCapacity = 14400;
   constant Integer positionDimension = 3;

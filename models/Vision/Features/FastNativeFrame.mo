@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // FAST-9 samples a radius-three circle, not every cell of a square patch.
 package FastCircleStencil
   constant Integer radius = 3;
@@ -11,6 +12,7 @@ end FastCircleStencil;
 // Ordered FAST-9 score from the sixteen circle-minus-center differences.
 // Strict comparisons retain the second operand on ties, including signed zero.
 function FastCircleScore
+
   input Real differences[FastCircleStencil.sampleCount];
   output Real score;
 protected
@@ -56,6 +58,7 @@ end FastCircleScore;
 
 // Standalone patch scoring reads only the FAST circle.
 function FastPatchScore
+
   input Real gray[2*FastCircleStencil.radius+1,2*FastCircleStencil.radius+1];
   output Real score;
 protected
@@ -84,6 +87,7 @@ end FastSelectionScoreFloor;
 
 // Every FAST-9 arc contains adjacent cardinal samples, including wraparound.
 function FastCircleCanReachScore
+
   input Real differences[FastCircleStencil.sampleCount];
   input Real scoreFloor;
   output Boolean possible;
@@ -125,6 +129,7 @@ end FastCircleCanReachScore;
 
 // Array-level acquisition guard: no grayscale or patch work on held-IMU calls.
 function FastFrameScores
+
   input Real rgb[:,:,:];
   input Boolean enabled = true;
   input Real scoreFloor = 0.0 "Optional conservative selection floor; zero keeps every score";
@@ -160,6 +165,7 @@ end FastFrameScores;
 
 // Row-major RGB/RGBA input; alpha is ignored.
 model FastNativeFrame
+
   parameter Integer height = 90;
   parameter Integer width = 160;
   constant Integer radius = 3;

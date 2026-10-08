@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Editable IMU and GPS observation mathematics. Uniform draws are explicit
 // replayable inputs. Camera noise and quantization run in the GPU depth shader.
 model SensorObservations

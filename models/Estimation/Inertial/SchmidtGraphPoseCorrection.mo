@@ -1,8 +1,10 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Unknown graph/filter cross-correlation fusion; not a fresh independent image.
 // Source-owned first-order math. Not selected by the production browser runtime.
 // Dependencies: GraphGaugeUncertainty, RGBDUncertaintyProper/Skew,
 // SLAMCovariancePSDCheck. No optimizer damping is interpreted as covariance.
 package SchmidtGraphPoseCorrection
+
   constant Integer currentDimension = 15;
   constant Integer referenceDimension = 6;
   constant Integer jointDimension = currentDimension+referenceDimension;

@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Appearance queries share the retained geometry catalog. Only its capture
 // owner publishes history; retrieval never advances a second FIFO or clock.
 package RGBDKeyframeRetrieval
+
   constant Integer proposalCapacity = 4;
 
   function PrepareCapture

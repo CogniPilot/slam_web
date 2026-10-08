@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Fresh state construction runs in the compiled Modelica program. Reload must
 // restore the complete source-bound State, rather than invoking this reset.
 model RGBDFastSLAMReset
+
   constant Integer dimension = RGBDKeyframes.dimension;
   constant Integer currentDimension = RGBDLocalizationFrame.currentDimension;
   input Integer generation = 1;
