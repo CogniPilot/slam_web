@@ -57,7 +57,7 @@ test('static application requests an exact saved-source WASM build and preserves
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.slamBuildReceipt),{timeout:75000}).toBeTruthy();
   const receipt=await page.evaluate(()=>(window as any).__slamLab.slamBuildReceipt);
   expect(receipt.sourceSha256).toBe(before.sourceSha256);
-  expect(receipt.compiler.version).toBe('0.10.0');
+  expect(receipt.compiler.version).toBe('0.10.2');
   expect(receipt.status).toBe('failed');
   expect(receipt.error).toContain('does not expose native WASM program compilation');
   expect(receipt.programs).toEqual([]);

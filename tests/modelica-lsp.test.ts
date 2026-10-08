@@ -81,7 +81,7 @@ describe('actual Rumoca Modelica language server',()=>{
   it('serves completions, hover, definitions, symbols and semantic tokens through JSON-RPC',async()=>{
     const {server,messages,request,notify}=await service();
     const initialized=await request('initialize',{initializationOptions:{base:'/'}});
-    expect(initialized.result.serverInfo.version).toBe('0.10.0');expect(initialized.result.capabilities.positionEncoding).toBe('utf-16');
+    expect(initialized.result.serverInfo.version).toBe(rumoca.get_version());expect(initialized.result.capabilities.positionEncoding).toBe('utf-16');
     expect(initialized.result.capabilities.semanticTokensProvider.legend.tokenTypes).toContain('variable');
     await notify('initialized');await notify('textDocument/didOpen',{textDocument:{uri,version:1,languageId:'modelica',text:source}});
     await server.flushDiagnostics(uri);expect(messages.slice().reverse().find(m=>m.method==='textDocument/publishDiagnostics').params.diagnostics).toEqual([]);

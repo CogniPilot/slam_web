@@ -18,7 +18,7 @@
     "test:browser:gpu": "playwright test --config playwright.gpu.config.ts"
   },
   "dependencies": {
-    "@cognipilot/rumoca": "0.10.0",
+    "@cognipilot/rumoca": "0.10.2",
     "@cognipilot/synapse-fbs": "0.10.0",
     "flatbuffers": "^25.9.23",
     "monaco-editor": "0.55.1",
