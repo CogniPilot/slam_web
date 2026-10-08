@@ -57,14 +57,14 @@ jobs:
           path: dist
   browser:
     if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks) }}
-    name: Browser smoke (${{ matrix.shard }}/2)
+    name: Browser smoke (${{ matrix.shard }}/4)
     needs: build
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2]
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -94,7 +94,7 @@ jobs:
           tar --extract --file "$RUNNER_TEMP/pages-artifact/artifact.tar" --directory dist
       - name: Install test dependencies and run this browser shard
         run: |
-          nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && npm run test:browser -- --shard=${{ matrix.shard }}/2'
+          nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && npm run test:browser -- --shard=${{ matrix.shard }}/4'
       - name: Retain browser failure evidence
         if: failure()
         uses: actions/upload-artifact@v7.0.2
