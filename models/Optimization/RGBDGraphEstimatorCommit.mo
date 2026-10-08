@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Staged graph/map/filter publication. Raw captures and measured edges never
 // change during correction. Graph pose means have a separate versioned owner.
 // Geometry-only map outputs are not independent filter measurements.
 package RGBDGraphEstimatorCommit
+
   constant Integer nodeCapacity = RGBDKeyframes.keyframeCapacity;
   constant Integer dimension = RGBDKeyframes.dimension;
   constant Integer identifierLimit = RGBDKeyframes.identifierLimit;

@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // MLS 3.5 permits exact Real equality inside functions. This helper preserves
 // IEEE equality: signed zeros compare equal; NaN compares unequal to every value.
 function SLAMExactRealEqual
@@ -18,6 +19,7 @@ algorithm
 end ES15HeldIntervalValid;
 
 function SchmidtPredictCovariance
+
   input Real covariance[15,15];
   input Real crossCovariance[15,6];
   input Real referenceCovariance[6,6];
@@ -69,6 +71,7 @@ end SchmidtPredictCovariance;
 // Each substep uses the current midpoint rotation and propagates the full joint
 // covariance. A failed substep rolls back the whole acquisition interval.
 function ES15PredictHeldInterval
+
   input Real position[3]; input Real velocity[3]; input Real rotation[3,3];
   input Real accelBias[3]; input Real gyroBias[3];
   input Real covariance[15,15]; input Real crossCovariance[15,6];
@@ -162,6 +165,7 @@ end ES15PredictHeldInterval;
 // Current errors: world dp,dv; right-local dtheta; body dba,dbg. Reference: dp,dtheta.
 // This source is not yet compiler-admitted or integrated into the production node.
 model SchmidtReferencePrediction
+
   constant Integer currentDimension = 15;
   constant Integer referenceDimension = 6;
   input Real covariance[currentDimension,currentDimension];
@@ -184,6 +188,7 @@ end SchmidtReferencePrediction;
 // Pure capture counterpart of the unchanged equation model below.
 // Keep the shared rotation gates, PSD checks and selection contractions identical.
 pure function SchmidtCaptureReference
+
   input Real position[3] = zeros(3);
   input Real rotation[3,3] = identity(3);
   input Real covariance[currentDimension,currentDimension];
@@ -253,6 +258,7 @@ algorithm
 end SchmidtCaptureReference;
 
 model SchmidtReferenceCapture
+
   constant Integer currentDimension = 15;
   constant Integer referenceDimension = 6;
   input Real position[3] = zeros(3);
@@ -322,6 +328,7 @@ end SchmidtReferenceCapture;
 
 // Predict a complete current/reference state using the actual ES15 transition.
 model ES15SchmidtPrediction
+
   input Real position[3] = zeros(3);
   input Real velocity[3] = zeros(3);
   input Real rotation[3,3] = identity(3);
@@ -372,6 +379,7 @@ end ES15SchmidtPrediction;
 // last-used sentinel. This gate caches no measurement or numerical result.
 // Pure image-ledger eligibility counterpart of the unchanged equation model below.
 pure function SchmidtImagePairEligibility
+
   input Real referenceAvailable = 0.0;
   input Real referenceUsed = 0.0;
   input Real referenceEpoch = 0.0;
@@ -399,6 +407,7 @@ algorithm
 end SchmidtImagePairEligibility;
 
 model SchmidtImagePairGate
+
   input Real referenceAvailable = 0.0;
   input Real referenceUsed = 0.0;
   input Real referenceEpoch = 0.0;
@@ -430,6 +439,7 @@ end SchmidtImagePairGate;
 // still advances when a visual observation or reference replacement is rejected.
 // The host persists these outputs together; it never rebuilds covariance blocks.
 model ES15SchmidtReferenceStep
+
   input Real position[3] = zeros(3);
   input Real velocity[3] = zeros(3);
   input Real rotation[3,3] = identity(3);

@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Mapping consumes an admitted visual/catalog/graph proposal. Publication is
 // still local until estimator/reference and any graph correction also accept.
 package RGBDCatalogMapping
+
   constant Integer mapCapacity = RGBDMapAnchors.mapCapacity;
   constant Integer featureCapacity = RGBDKeyframes.featureCapacity;
   constant Integer dimension = RGBDKeyframes.dimension;

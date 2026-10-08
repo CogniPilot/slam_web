@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // World-additive p/v, right-local theta, body ba/bg: ES15Dynamics convention.
 // Caller owns dt admission. This function does not extend the supported interval.
 function ES15TransitionNoise
@@ -46,6 +47,7 @@ end ES15TransitionNoise;
 // Convenience propagation for callers that need only the current-state block.
 // Joint-state callers use ES15TransitionNoise and propagate covariance once.
 function ES15CovarianceStep
+
   input Real F[15,15];
   input Real G[15,12];
   input Real P[15,15];
@@ -65,6 +67,7 @@ end ES15CovarianceStep;
 
 // Equation adapter preserving the existing model interface and input defaults.
 model ES15CovariancePrediction
+
   input Real F[15,15] = fill(0.0,15,15);
   input Real G[15,12] = fill(0.0,15,12);
   input Real P[15,15] = identity(15);

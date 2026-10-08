@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Capture of a descriptor/calibration/pose/histogram record joins the map
 // transaction. The enclosing estimator/reference/graph must join this commit.
 function UpdateKeyframeLandmarks
+
   extends RGBDLandmarkMapInterface;
   input RGBDKeyframes.Catalog previousCatalog;
   input RGBDKeyframes.Frame measurement;

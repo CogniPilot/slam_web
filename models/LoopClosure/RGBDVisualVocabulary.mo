@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Measured appearance bootstrap. Word identities freeze before histogram storage.
 // This is not a loop constraint, geometric observation or scene/truth signature.
 package RGBDVisualVocabulary
+
   constant Integer vocabularyCapacity = RGBDKeyframes.wordCapacity;
   constant Integer descriptorSize = RGBDKeyframes.descriptorSize;
   constant Integer featureCapacity = RGBDKeyframes.featureCapacity;

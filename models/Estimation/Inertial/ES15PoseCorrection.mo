@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // One complete ES15 pose-observation correction, matching ErrorStateFilter.correct_pose.
 // World-additive p/v, right-local theta, body accel/gyro biases; Hamilton wxyz output.
 // Compile this source together with SPD6Solve.mo for ES15CorrectionSolve below.
@@ -178,5 +179,6 @@ end ES15PoseCorrection;
 // The reference uses strict positive definiteness, without a teaching pivot floor.
 // All symmetry checks, rejected solves, and sixteen RHS stay in SPD6Solve.
 model ES15CorrectionSolve
+
   extends SPD6Solve(pivot_floor=0.0);
 end ES15CorrectionSolve;

@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Staged photometric primitive: no production caller or source-manifest entry.
 // Forward-additive translation only; no depth, correspondence independence,
 // full-image forward/backward check, or uncertainty certificate is implied.

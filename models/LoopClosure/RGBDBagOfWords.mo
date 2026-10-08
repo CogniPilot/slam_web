@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Appearance retrieval only; full descriptor matching and geometric registration
 // must verify each loop proposal.
 function NormalizeVisualWord
@@ -36,6 +37,7 @@ algorithm
 end NormalizeVisualWord;
 
 function RetrieveVisualWords
+
   input Real descriptor[featureCapacity,descriptorSize];
   input Real descriptorEnabled[featureCapacity];
   input Real descriptorCount;
@@ -286,6 +288,7 @@ algorithm
 end RetrieveVisualWords;
 
 model RGBDBagOfWords
+
   constant Integer featureCapacity = 350;
   constant Integer descriptorSize = 49;
   constant Integer vocabularyCapacity = 256;

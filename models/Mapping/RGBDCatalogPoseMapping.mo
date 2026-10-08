@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Corrected pose metadata is explicit; immutable raw catalog poses stay raw.
 // This package does not import RGBDGraphEstimatorCommit (no cyclic dependency).
 package RGBDCatalogPoseMapping
+
   constant Integer nodeCapacity = RGBDKeyframes.keyframeCapacity;
   constant Integer dimension = RGBDKeyframes.dimension;
   record PoseView

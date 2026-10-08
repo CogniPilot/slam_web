@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Quadrotor plant pinned in models/upstream/quadrotor/provenance.json.
 // Control and rigid-body dependencies: models/Libraries/CogniPilot.
 // 6-DOF quadrotor SIL plant model.
@@ -195,6 +196,7 @@ end QuadrotorSIL;
 
 // Application references and ENU/FLU interface around the upstream controllers.
 model LabQuadrotor
+
   constant Integer motorCount = 4;
   constant Real frameHalf = 0.7071067811865476;
   constant Real worldToEnu[3,3] = {{0,-1,0},{1,0,0},{0,0,1}};

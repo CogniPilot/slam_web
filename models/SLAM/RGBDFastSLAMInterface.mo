@@ -1,5 +1,7 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Raw sensor data and the complete persistent Modelica session owner.
 partial model RGBDFastSLAMInterface
+
   parameter Integer imageHeight(min=1) = RGBDKeyframes.imageHeight;
   parameter Integer imageWidth(min=1) = RGBDKeyframes.imageWidth;
   constant Integer featureCapacity = RGBDKeyframes.featureCapacity;

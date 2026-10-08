@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Geometry, observation metadata and keyframe-local anchors share one commit.
 // This owner consumes a coherent catalog proposal; catalog/filter/graph commits
 // must still be coordinated by the enclosing SLAM transaction.
 function UpdateAnchoredLandmarkMap
+
   extends RGBDLandmarkMapInterface;
   input Real previousLocalPoint[size(previousOccupied,1),3];
   input Integer previousAnchorId[size(previousOccupied,1)];
@@ -74,6 +76,7 @@ algorithm
 end UpdateAnchoredLandmarkMap;
 
 model RGBDAnchoredLandmarkMap
+
   constant Integer imageHeight = 90; constant Integer imageWidth = 160;
   constant Integer mapCapacity = imageHeight*imageWidth;
   constant Integer featureCapacity = 350; constant Integer keyframeCapacity = 128;

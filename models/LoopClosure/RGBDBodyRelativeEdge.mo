@@ -1,8 +1,10 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Convert an already verified optical registration into the product residual
 // used by ModelicaPoseGraph. This component does not verify correspondences,
 // admit graph edges, or resolve correlations between reused images.
 // Dependencies: RGBDRegistrationUncertainty.mo (rotation/SPD helpers).
 function RGBDOpticalToBodyEdge
+
   input Real currentFromReference[3,3];
   input Real opticalTranslation[3];
   input Real opticalCovariance[6,6]
@@ -87,6 +89,7 @@ algorithm
 end RGBDOpticalToBodyEdge;
 
 model RGBDBodyRelativeEdge
+
   parameter Real coordinateLimit = 100.0;
   parameter Real minimumPivot = 1e-10;
   input Real currentFromReference[3,3] = identity(3);

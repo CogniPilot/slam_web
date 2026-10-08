@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Mapping between captures: the retained catalog and raw measured graph hold.
 // Reuses the capture/map owner's noncapture validation and insertion receipts.
 package RGBDCatalogObservation
+
   function Update
     input RGBDKeyframes.Catalog previousCatalog;
     input RGBDGraphMeasurements.State previousGraph;

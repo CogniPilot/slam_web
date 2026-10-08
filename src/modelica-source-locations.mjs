@@ -1,4 +1,5 @@
-// Authored source locations. Modelica identifiers remain stable across file moves.
+// Generated compatibility sources; canonical algorithms live in CogniPilot/modelica_models.
+// Modelica identifiers remain stable across file moves.
 export const modelicaSourceLocations=Object.freeze({
   "LabQuadrotor": "models/Vehicles/LabQuadrotor.mo",
   "D435ImageProfile": "models/Sensors/D435ImageProfile.mo",

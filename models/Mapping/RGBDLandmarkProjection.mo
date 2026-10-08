@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Finite proper rotation gate. Invalid entries never enter matrix arithmetic.
 model RGBDLandmarkRotationCheck
   constant Integer dimension = 3;
@@ -29,6 +30,7 @@ end RGBDLandmarkRotationCheck;
 // Points are already calibrated optical RDF (right/down/forward). The supplied
 // estimated body pose maps body FLU into world ENU; there is no truth input.
 model RGBDLandmarkProjection
+
   constant Integer featureCapacity = 350;
   constant Integer dimension = 3;
   parameter Real coordinateLimit = 1e6;
@@ -135,6 +137,7 @@ end RGBDLandmarkRotationValid;
 // unavailable point payloads never enter transforms. World-output overflow is
 // excluded from validCount but is not an optical-input invalidCount event.
 function RGBDProjectLandmarks
+
   input Real opticalPoint[:,3];
   input Real enabled[size(opticalPoint,1)];
   input Real activeCount = 0.0;

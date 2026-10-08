@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Atomic proposal for the catalog and measured graph owners. Publication,
 // estimator correlation, optimization and map updates remain outer owners.
 package RGBDCatalogGraphCapture
+
   record Result
     RGBDKeyframes.Catalog catalog;
     RGBDGraphMeasurements.State graph;

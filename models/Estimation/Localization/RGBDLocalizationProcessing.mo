@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Ordinary acquisition publication retains the authoritative corrected pose view.
 // This owner never reconstructs a post-correction state from raw captures.
 package RGBDLocalizationProcessing
+
   constant Integer capacity = RGBDKeyframes.keyframeCapacity;
   constant Integer dimension = RGBDKeyframes.dimension;
   constant Integer identifierLimit = RGBDKeyframes.identifierLimit;

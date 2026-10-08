@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Bounded pose-graph numerical component; no loop detection or truth inputs.
 // Body-to-world R, world-additive p and RIGHT-local attitude increments.
 // Residual [Ri'*(pj-pi)-translation, Log(measuredRotation'*Ri'*Rj)].
@@ -66,6 +67,7 @@ algorithm
 end PGProperRotation;
 
 function PGExp
+
   input Real angle[3]; output Real R[3,3];
 protected Real square; Real theta; Real a; Real b; Real S[3,3];
 algorithm
@@ -89,6 +91,7 @@ algorithm
 end PGLog;
 
 function PGEdge
+
   input Real pi[3]; input Real Ri[3,3]; input Real pj[3]; input Real Rj[3,3];
   input Real translation[3]; input Real measuredRotation[3,3];
   output Real residual[6]; output Real Ji[6,6]; output Real Jj[6,6]; output Boolean valid;
@@ -184,6 +187,7 @@ algorithm
 end PGNormalProduct;
 
 function PGGraphCost
+
   input Real p[:,3]; input Real R[size(p,1),3,3]; input Real edgeMask[:];
   input Integer source[size(edgeMask,1)]; input Integer target[size(edgeMask,1)];
   input Real translation[size(edgeMask,1),3]; input Real measuredRotation[size(edgeMask,1),3,3];
@@ -203,6 +207,7 @@ algorithm
 end PGGraphCost;
 
 function PGValidateGraph
+
   input Real p[:,3]; input Real R[size(p,1),3,3]; input Real nodeMask[size(p,1)]; input Real edgeMask[:];
   input Real fromNode[size(edgeMask,1)]; input Real toNode[size(edgeMask,1)];
   input Real translation[size(edgeMask,1),3]; input Real measuredRotation[size(edgeMask,1),3,3];
@@ -251,6 +256,7 @@ algorithm
 end PGValidateGraph;
 
 function PGLinearize
+
   input Real p[:,3]; input Real R[size(p,1),3,3]; input Real edgeMask[:];
   input Integer source[size(edgeMask,1)]; input Integer target[size(edgeMask,1)];
   input Real translation[size(edgeMask,1),3]; input Real measuredRotation[size(edgeMask,1),3,3];
@@ -281,6 +287,7 @@ algorithm
 end PGLinearize;
 
 function PGDampedFactor
+
   input Real localBlock[6,6]; input Real damping;
   output Real L[6,6]; output Real diagonal[6]; output Boolean valid;
 protected Real A[6,6];
@@ -291,6 +298,7 @@ algorithm
 end PGDampedFactor;
 
 function PGPrecondition
+
   input Real rhs[:,6]; input Real factors[size(rhs,1),6,6]; input Real nodeMask[size(rhs,1)];
   output Real z[size(rhs,1),6];
 algorithm
@@ -308,6 +316,7 @@ algorithm
 end PGDot;
 
 function PGPCG
+
   input Real gradient[:,6]; input Real blocks[size(gradient,1),6,6]; input Real nodeMask[size(gradient,1)];
   input Real edgeMask[:]; input Integer source[size(edgeMask,1)]; input Integer target[size(edgeMask,1)];
   input Real Ji[size(edgeMask,1),6,6]; input Real Jj[size(edgeMask,1),6,6]; input Real information[size(edgeMask,1),6,6];
@@ -355,6 +364,7 @@ algorithm
 end PGPCG;
 
 function PGRetract
+
   input Real p[:,3]; input Real R[size(p,1),3,3]; input Real nodeMask[size(p,1)]; input Real delta[size(p,1),6]; input Real scale;
   output Real nextP[size(p,1),3]; output Real nextR[size(p,1),3,3];
 algorithm
@@ -367,6 +377,7 @@ algorithm
 end PGRetract;
 
 function PGStep
+
   input Real p[:,3]; input Real R[size(p,1),3,3]; input Real nodeMask[size(p,1)]; input Real edgeMask[:];
   input Integer source[size(edgeMask,1)]; input Integer target[size(edgeMask,1)];
   input Real translation[size(edgeMask,1),3]; input Real measuredRotation[size(edgeMask,1),3,3]; input Real information[size(edgeMask,1),6,6];
@@ -400,6 +411,7 @@ algorithm
 end PGStep;
 
 function PGRun
+
   input Real p[:,3]; input Real R[size(p,1),3,3]; input Real nodeMask[size(p,1)]; input Real edgeMask[:];
   input Integer source[size(edgeMask,1)]; input Integer target[size(edgeMask,1)];
   input Real translation[size(edgeMask,1),3]; input Real measuredRotation[size(edgeMask,1),3,3]; input Real information[size(edgeMask,1),6,6];
@@ -420,6 +432,7 @@ algorithm
 end PGRun;
 
 function OptimizeModelicaPoseGraph
+
   input Real position[:,3]; input Real rotation[size(position,1),3,3]; input Real nodeMask[size(position,1)];
   input Real edgeMask[:]; input Real fromNode[size(edgeMask,1)]; input Real toNode[size(edgeMask,1)];
   input Real translation[size(edgeMask,1),3]; input Real measuredRotation[size(edgeMask,1),3,3]; input Real information[size(edgeMask,1),6,6];
@@ -448,6 +461,7 @@ algorithm
 end OptimizeModelicaPoseGraph;
 
 function PGEdgeDiagnostics
+
   input Real pi[3]; input Real Ri[3,3]; input Real pj[3]; input Real Rj[3,3]; input Real translation[3]; input Real measuredRotation[3,3];
   output Real residual[6]; output Real Ji[6,6]; output Real Jj[6,6]; output Real valid;
 protected Boolean chartValid;
@@ -456,6 +470,7 @@ algorithm
 end PGEdgeDiagnostics;
 
 model ModelicaPoseGraph
+
   parameter Integer nodeCapacity = 128; parameter Integer edgeCapacity = 256;
   parameter Integer maximumIterations = 8; parameter Integer maximumPCG = 48; parameter Integer maximumBacktracks = 8;
   parameter Real initialDamping = 0.001; parameter Real maximumPositionStep = 0.5;
@@ -477,6 +492,7 @@ equation
 end ModelicaPoseGraph;
 
 model ModelicaPoseGraphEdge
+
   input Real pi[3] = zeros(3); input Real pj[3] = zeros(3);
   input Real Ri[3,3] = identity(3); input Real Rj[3,3] = identity(3);
   input Real translation[3] = zeros(3); input Real measuredRotation[3,3] = identity(3);

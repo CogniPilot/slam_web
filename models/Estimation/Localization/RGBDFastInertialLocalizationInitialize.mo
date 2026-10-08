@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Complete raw FAST -> selection -> time-zero RGB-D initialization transaction.
 // All image/ranking/pose/covariance math is Modelica; no host intermediate stage.
 function InitializeFastRGBDLocalization
+
   input Real rgb[:,:,:];
   input Real depth[size(rgb,1),size(rgb,2)];
   input Real rgbCalibration[4];
@@ -172,6 +174,7 @@ end InitializeFastRGBDLocalization;
 // Time-zero source initialization with the full original raster and selection.
 // No h/IMU prediction component is instantiated; the outer owner schedules once.
 model RGBDFastInertialLocalizationInitialize
+
   extends RGBDInertialLocalizationInterface;
   parameter Real selectedFeatureLimit = 350.0;
   parameter Real absoluteThreshold = 18.0;

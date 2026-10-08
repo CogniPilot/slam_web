@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Pinhole intrinsics from image size and horizontal/vertical field of view.
 function RGBDNominalCalibration
   input Integer imageSize[2] "Height, width";
@@ -113,6 +114,7 @@ end RGBDCalibratedPoint;
 
 // Reserve feature slots for pixels with valid calibrated depth.
 function RGBDDepthQualifiedScores
+
   input Real depth[:,:];
   input Real scores[size(depth,1)*size(depth,2)];
   input Real rgbCalibration[4];
@@ -222,6 +224,7 @@ end RGBDNormalizeDescriptor;
 
 // Editable image-patch frontend. No pose truth or host matching enters here.
 function DescribeRGBDFeatures
+
   input Real gray[:,:] "Measured grayscale intensity in [0,1]";
   input Real depth[:,:] "Measured axial samples; depthUnits converts to meters";
   input Real pixels[:,2] "Zero-based, integer image coordinates";
@@ -353,6 +356,7 @@ algorithm
 end RGBDGeometricDistance;
 
 function MatchRGBDDescriptors
+
   input Real referenceDescriptor[:,49];
   input Real currentDescriptor[:,49];
   input Real referencePoint[:,3];
@@ -516,6 +520,7 @@ algorithm
 end MatchRGBDDescriptors;
 
 model RGBDFeatureMatching
+
   constant Integer featureCapacity = 350;
   constant Integer descriptorWidth = 7;
   constant Integer descriptorSize = descriptorWidth*descriptorWidth;
@@ -551,6 +556,7 @@ end RGBDFeatureMatching;
 
 // Held-IMU intervals return empty descriptors without reading either image.
 function DescribeRGBDFrame
+
   input Real rgb[:,:,:];
   input Real depth[size(rgb,1),size(rgb,2)];
   input Real pixels[:,2];
@@ -620,6 +626,7 @@ algorithm
 end DescribeRGBDFrame;
 
 model RGBDDescriptorFrame
+
   parameter Integer imageHeight(min=1) = 90;
   parameter Integer imageWidth(min=1) = 160;
   constant Integer featureCapacity = 350;

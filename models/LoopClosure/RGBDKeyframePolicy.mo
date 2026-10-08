@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Selection only: every camera observation still passes the processing barrier.
 // The estimated pose determines motion; sensor identity never comes from time.
 package RGBDKeyframePolicy
+
   constant Real pi = 3.141592653589793;
   record Decision
     Boolean valid;

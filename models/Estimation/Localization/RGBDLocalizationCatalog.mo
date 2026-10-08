@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // One source-owned publication of localization and optional catalog/map work.
 // The enclosing model binds proposed to the actual localization outputs once.
 // This is not graph correction, independent graph noise, or a complete SLAM preset.
 package RGBDLocalizationCatalog
+
   constant Integer dimension = RGBDKeyframes.dimension;
   constant Integer currentDimension = RGBDLocalizationFrame.currentDimension;
   constant Integer referenceDimension = RGBDKeyframes.poseDimension;

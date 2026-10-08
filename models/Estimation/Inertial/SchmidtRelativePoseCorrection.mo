@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // A correlated, frozen reference pose is a Schmidt state, not pose truth.
 // World-additive p/v; right-local body attitude; current state order p,v,theta,ba,bg.
 // Registration maps reference optical points to current optical coordinates.
@@ -54,6 +55,7 @@ algorithm
 end SLAMCovariancePSDCheck;
 
 model SLAMCovariancePSD
+
   parameter Integer dimension = 21;
   parameter Real relativeTolerance = 1e-12;
   input Real covariance[dimension,dimension];
@@ -65,6 +67,7 @@ end SLAMCovariancePSD;
 // Signed wxyz coordinates of the existing rotation logarithm. The raw-normalized
 // quaternion remains observable even when valid is zero; callers own its fallback.
 function SLAMRotationCoordinates
+
   input Real rotation[3,3];
   output Real vector[3];
   output Real angle;
@@ -108,6 +111,7 @@ algorithm
 end SLAMRotationCoordinates;
 
 model SLAMRotationLog
+
   constant Integer spaceDimension = 3;
   constant Integer quaternionDimension = 4;
   input Real rotation[spaceDimension,spaceDimension] = identity(spaceDimension);
@@ -154,6 +158,7 @@ equation
 end SLAMRotationLog;
 
 model SchmidtRelativePoseCorrection
+
   constant Integer spaceDimension = 3;
   constant Integer errorDimension = 15;
   constant Integer poseDimension = 2*spaceDimension;
@@ -424,6 +429,7 @@ end SchmidtCorrectionSolve;
 // Pure full15+6 Schmidt correction. Rejection preserves the complete input state;
 // diagnostic arithmetic and all original gates remain observable on rejection.
 function SchmidtCorrectRelativePose
+
   input Real position[spaceDimension] = zeros(spaceDimension);
   input Real velocity[spaceDimension] = zeros(spaceDimension);
   input Real rotation[spaceDimension,spaceDimension] = identity(spaceDimension);

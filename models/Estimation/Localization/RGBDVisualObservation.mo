@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Review graph: raw RGB/depth -> descriptors -> matches -> rigid registration
 // -> map-frame body pose. Compile with RGBDFeatureMatching,
 // RigidPointRegistration and RGBDRelativePose source files.
@@ -5,6 +6,7 @@
 // keyframe data. No ground-truth pose or host feature matching enters this graph.
 // This is a visual observation frontend, not a persistent SLAM estimator.
 model RGBDVisualObservation
+
   parameter Integer imageWidth(min=1) = 160;
   parameter Integer imageHeight(min=1) = 90;
   // RGB8 uses three channels; historical RGBA recordings may retain alpha.

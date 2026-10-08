@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Geometric proposals use the same immutable catalog snapshot as retrieval.
 // Graph admission and shared-image correlation remain separate owners.
 package RGBDCatalogLoopVerification
+
   function VerifyCandidate
     input RGBDKeyframes.Catalog catalog;
     input RGBDKeyframes.Frame current;

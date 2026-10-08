@@ -1,6 +1,8 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Numerical first-order adapter. ContextFromLedger binds capture identities to
 // their durable owner; anchor-bound provenance remains an explicit input.
 package RGBDGraphSelectedGauge
+
   constant Integer nodeCapacity = RGBDKeyframes.keyframeCapacity;
   constant Integer edgeCapacity = RGBDGraphMeasurements.edgeCapacity;
   constant Integer identifierLimit = RGBDKeyframes.identifierLimit;

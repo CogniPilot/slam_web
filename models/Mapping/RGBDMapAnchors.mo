@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Landmark coordinates stay local to stable keyframe identities. A graph
 // correction is a proposal until every persistent owner commits it together.
 package RGBDMapAnchors
@@ -155,6 +156,7 @@ package RGBDMapAnchors
 end RGBDMapAnchors;
 
 model RGBDAnchoredMapCorrection
+
   constant Integer mapCapacity = RGBDMapAnchors.mapCapacity;
   constant Integer keyframeCapacity = RGBDMapAnchors.keyframeCapacity;
   constant Integer dimension = RGBDMapAnchors.dimension;

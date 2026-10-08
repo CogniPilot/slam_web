@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Source-owned transport from one accepted localization image to the catalog
 // measurement API. This is not another visual update or an independence claim.
 // Dependencies: RGBDKeyframes, RGBDRegistrationUncertainty, SLAMExactRealEqual.
 package RGBDLocalizationFrame
+
   // Current errors are five3-vectors: world dp,dv, right-local dtheta,dba,dbg.
   constant Integer currentDimension = 5*RGBDKeyframes.dimension;
   constant Integer poseIndices[RGBDKeyframes.poseDimension] = {1,2,3,7,8,9};

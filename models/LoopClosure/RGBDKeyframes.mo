@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Persistent keyframe ownership, independent of the current single-reference
 // filter. A saved histogram and its calibrated geometry share one record/slot.
 // These functions are not yet connected to the browser SLAM estimator.
 package RGBDKeyframes
+
   constant Integer imageHeight = 90;
   constant Integer imageWidth = 160;
   constant Integer featureCapacity = 350;

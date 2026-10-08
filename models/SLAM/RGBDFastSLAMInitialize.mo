@@ -1,5 +1,7 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Public lifecycle adapter; Rumoca compiles the complete Modelica implementation.
 model RGBDFastSLAMInitialize
+
   extends RGBDFastSLAMInterface(h=0.0,intervalTime=0.0);
 equation
   (next,accepted,imageCompleted,mappingAccepted,
@@ -55,6 +57,7 @@ end RGBDFastSLAMInitialize;
 // Ordered raw-camera lifecycle. Reference qualification is separate from
 // compiler issuance and complete browser/runtime admission.
 function InitializeFastSLAM
+
   input RGBDGraphProcessing.State previous;
   input Real rgb[:,:,:];
   input Real depth[size(rgb,1),size(rgb,2)];

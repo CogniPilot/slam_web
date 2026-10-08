@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Evaluate this pure gate before consuming any independent GPS uniform draws.
 // An inclusive demonstration roof volume, not an RF/satellite visibility model.
 model SensorAvailability

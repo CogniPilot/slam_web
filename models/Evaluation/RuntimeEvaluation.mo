@@ -1,3 +1,4 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Evaluation-only initial-heading map. This source never supplies observations
 // or corrections to the estimator. The caller owns previousSquaredError and
 // sampleCount so replay/reset and missing-truth frames stay explicit.

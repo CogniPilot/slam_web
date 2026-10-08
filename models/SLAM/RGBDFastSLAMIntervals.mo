@@ -1,5 +1,7 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Source-owned held-IMU batching for the complete raw-camera SLAM lifecycle.
 model RGBDFastSLAMIntervals
+
   parameter Integer imageHeight(min=1) = RGBDKeyframes.imageHeight;
   parameter Integer imageWidth(min=1) = RGBDKeyframes.imageWidth;
   parameter Boolean depthQualifiedSelection = true;
@@ -145,6 +147,7 @@ end RGBDFastSLAMIntervals;
 // interval can consume an image, capture a reference or attempt graph correction.
 // A failed call rolls back the complete State, including graph attempt receipts.
 function AdvanceFastSLAMIntervals
+
   input RGBDGraphProcessing.State previous;
   input Real rgb[:,:,:];
   input Real depth[size(rgb,1),size(rgb,2)];

@@ -1,7 +1,9 @@
+// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
 // Full-capacity selected covariance of the FINAL undamped pose-graph linearization.
 // Exact-real variational/tree bound; ordinary floating evaluation is explicitly
 // not an outward-rounded certificate. No optimizer damping is statistical noise.
 package ModelicaPoseGraphCovariance
+
   constant Integer nodeCapacity=128;
   constant Integer edgeCapacity=256;
   constant Integer poseDimension=6;
