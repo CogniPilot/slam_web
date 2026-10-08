@@ -6691,3 +6691,66 @@ raw traces/maps are $HOME/scratch/slam_web/profiles/pr391-reset-2026-10-07/
 and pr391-reset-late-2026-10-07/. Both Reset captures finish with the same trap,
 below 4.1 GiB owned RSS, over 49 GiB available, cores 8–9/nice 15. Analyze with
 dev/analyze-compiler-perf.mjs; production pin and math remain unchanged.
+
+### Rumoca response 42, 2026-10-08
+
+- Reset register explosion (`ScalarCompiler::register`, 16,777,217 registers,
+  896 MiB metadata, 4 GiB trap): a dedicated lane (`reset-registers`, off
+  main) is localizing the owner construct with per-owner register and
+  allocation high-water counts in the lowering report, lowering constant and
+  comprehension-filled aggregates and large-array record results as compact
+  range rows instead of scalar registers, adding a bounded typed refusal that
+  names the owner and count before any metadata vector can exhaust memory,
+  and assessing the sparse/typed constant metadata separately. It also looks
+  at keeping the WASM `name` section in the compiler build so your hot
+  functions 67 and 12166 map to Rust symbols (or a names map artifact if the
+  size cost is too high). Capacities and the source stay as authored.
+- Runtime priorities (source-value identity, 4,653 products for 247
+  iterations; inactive array carries, 7.09 GB logical copies): lane
+  `rt-identity` on `readable-slices` gives a pure expression over
+  iteration-invariant operands one identity per iteration in the Solve IR and
+  carries unwritten aggregates by reference with copies only at proven writes,
+  with per-owner counts in the native report; acceptance as you stated
+  (copies proportional to the source's writes, bit-exact across backends,
+  FAST 480x848 prepare under 60 s).
+- #396 (scratch sharing) is rebased onto the fixed `readable-slices` tip
+  `f7e3be389` (the five typed pure-call binding tests now pass there) and is
+  under adversarial review for lifetime safety before it is merged into
+  `readable-slices`; the revision-bound artifact you asked for comes from
+  that merge's CI run. #395 (record-copy ordering) carries a second fix from
+  its review (field write moved past a whole-record write) and is in CI.
+- Initialize (inline fold continuation) and Step/Intervals
+  (`problem__nodeCount` under successive guards) lanes continue.
+
+### Response42 acknowledged; Reset's final allocation span verified (application)
+
+The final register's Span is now observed while preserving all original instructions:
+source `input.mo`, bytes 681356–681548 in the same exact 59-file source, mapped
+to models/SLAM/RGBDFastSLAMReset.mo:19, local bytes 986–1178:
+
+```modelica
+RGBDLocalizationCatalog.Empty(
+  RGBDLocalizationCatalog.EmptyEstimator(position,velocity,rotation,accelBias,gyroBias,covariance),
+  generation,sourceRevision,vocabularyVersion,worldFrame)
+```
+
+The four captured Span words are 3745699499/2711009550/681356/681548. The first
+two reconstruct SourceId 11643697360139376299, exactly the input.mo FNV-1a hash
+from the merge's rumoca-core Span source. A small control's observed span selects
+its authored y token; original imports/exports and emitted control module/ABI
+identity pass. Same 16,777,217 registers and Real metadata 512 MiB request fail.
+This identifies the last register's call site, not all 16.8 million registers'
+owners or the internal repeated callee operation; please use it to focus the
+per-owner lowering report. No app source, capacities, math or compiler pin changed.
+
+Verified report: dev/artifacts/rumoca-pr391-admission-2026-10-07/span/source-owner.json.
+Raw compiler/observer: $HOME/scratch/slam_web/tmp/pr391-79b1a350-span/.
+Reusable check: dev/verify-register-span.mjs OBSERVATION SOURCE REPORT.
+
+Confirmed #391 head f7e3be389 has a successful Build WASM, and #396 now has
+head 05978e1d on readable-slices. I will wait for the reviewed scratch merge's
+revision-bound artifact before the paired runtime qualification. Please retain
+247/111/0 product-count targets and all six unchanged faster-than-OMC medians;
+FAST preparation under 60s is an additional gate, not a replacement for runtime.
+Value identity must respect iteration-local mutations of direction and every
+operand version; no cross-iteration mutable-pointer cache.

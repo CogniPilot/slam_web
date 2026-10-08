@@ -49,13 +49,41 @@ consistent with 8-byte alignment and a 512 MiB request. The three arrays already
 reserve 896 MiB; the observed compiler has 3,923,836,928 bytes linear memory.
 This does not attribute all compiler memory to these arrays or prove the
 diagnostic run's timing equals a cold original compilation.
-The particular source construct responsible for this register count remains
+The final register's source span is now localized to the nested catalog
+constructor below. The callee operation responsible for the expansion remains
 unlocalized; compact aggregate lowering is the compiler investigation requested.
 
 The first observation harness accidentally reused wasm-bindgen's cached original
 instance and stopped before preparing Reset. The successful harness imports the
 same glue under separate module URLs and checks the diagnostic exports before
 recording the result. Only its successful receipt is used here.
+
+### Source span at the trap
+
+A second diagnostic snapshots all four 32-bit words of the register's Span at
+entry, before the stack can unwind. Exact merge `rumoca-core/src/ir_primitives.rs`
+defines SourceId as u64 and byte positions as usize. The observed source-id words
+match the exact FNV-1a hash of `input.mo`; the control span selects its authored
+`y` token. Original imports/exports and control module/ABI equality checks pass.
+
+The final register's bytes 681356–681548 map to
+`models/SLAM/RGBDFastSLAMReset.mo:19`, local bytes 986–1178:
+
+```modelica
+RGBDLocalizationCatalog.Empty(
+  RGBDLocalizationCatalog.EmptyEstimator(position,velocity,rotation,accelBias,gyroBias,covariance),
+  generation,sourceRevision,vocabularyVersion,worldFrame)
+```
+
+The complete current 59-file source is byte-identical to the observed source.
+This identifies the allocation's call site, not how many earlier registers
+belong to it or which operation inside the callee repeatedly expands.
+The same 16,777,217 register count, metadata capacities and 512 MiB failed request
+reproduce. Verify with `dev/verify-register-span.mjs OBSERVATION SOURCE REPORT`.
+Span receipts/scripts and exact merge core source are frozen under
+`dev/artifacts/rumoca-pr391-admission-2026-10-07/span/`;
+large diagnostic module/WAT remain in
+`$HOME/scratch/slam_web/tmp/pr391-79b1a350-span/`.
 
 ## Original compiler perf captures
 
