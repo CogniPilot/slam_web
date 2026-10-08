@@ -2,6 +2,7 @@ import {openSourceFile,openExperimentFile} from './source-files';
 import {test,expect} from '@playwright/test';
 test('physics, sensor, inertial and evaluation editors update live diagnostics',async({page})=>{
   await page.goto('/');
+  await expect(page.locator('#startup-screen')).toBeHidden({timeout:90000});
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab?.ready===true),{timeout:90000}).toBe(true);
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);

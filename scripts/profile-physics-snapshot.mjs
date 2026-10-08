@@ -3,6 +3,7 @@ import {createHash} from 'node:crypto';
 import {performance} from 'node:perf_hooks';
 import init,* as rumoca from '@cognipilot/rumoca';
 import {readPhysicsSnapshot} from '../src/physics-snapshot.ts';
+import {readModelicaModelsLibrary} from './modelica-models-library.mjs';
 
 const options=new Map(),args=process.argv.slice(2);
 for(let i=0;i<args.length;i++){
@@ -12,6 +13,9 @@ for(let i=0;i<args.length;i++){
 const count=Number(options.get('--iterations')??500);
 if(!Number.isInteger(count)||count<50||count>5000)throw new Error('Iterations must be50..5000');
 await init({module_or_path:await readFile('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
+const library=readModelicaModelsLibrary();
+const loaded=JSON.parse(rumoca.sync_workspace_sources(JSON.stringify(library)));
+if(loaded.error_count)throw Error('Could not load the local Modelica library');
 const source=await readFile('models/Vehicles/LabQuadrotor.mo','utf8');
 const session=rumoca.WasmSimulationSession.withInteractiveOptions(source,'LabQuadrotor',.005,'rk-like',1e-8,1e-6,
   '[["forward",0],["left",0],["up",0],["yaw",0]]');
@@ -38,7 +42,8 @@ try{
   }
   const summarize=values=>({meanMs:values.reduce((a,b)=>a+b,0)/values.length,p95Ms:[...values].sort((a,b)=>a-b)[Math.ceil(values.length*.95)-1],samples:values.length});
   const report={runtime:{node:process.version,compiler:rumoca.get_version(),revision:rumoca.get_git_commit()},
-    sourceSha256:createHash('sha256').update(source).digest('hex'),iterations:count,parity:'all17truth/timevalues bit-identical',
+    sourceSha256:createHash('sha256').update(source).digest('hex'),
+    librarySha256:createHash('sha256').update(JSON.stringify(library)).digest('hex'),iterations:count,parity:'all17truth/timevalues bit-identical',
     legacy:summarize(samples.legacy),batch:summarize(samples.batch),snapshotJsonBytes:Buffer.byteLength(session.state_json()),
     limitations:['Observation-only at a fixed held-flight coordinate; integration/rendering/worker/transport excluded.',
       'Alternating methods on one actual Rumoca session; no whole-pipeline speedup claim.']};

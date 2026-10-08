@@ -82,7 +82,7 @@ export class Runtime {
     this.modelicaState?.stop();this.modelicaState=undefined;
     this.modelicaMath?.stop();this.modelicaMath=undefined;
     this.physics=new WorkerRpc(new Worker(new URL('./physics.worker.ts',import.meta.url),{type:'module'}));
-    const truth=await this.physics.call<Truth>('init',{base,source:project.physics});
+    const truth=await this.physics.call<Truth>('init',{base,source:project.physics,workspaceSources:project.modelicaSources});
     validatePose(truth);this.origin={x:truth.x,y:truth.y,z:truth.z,quaternion:[...truth.quaternion]};
     this.modelicaMath=new WorkerRpc(new Worker(new URL('./modelica-runtime-math.worker.ts',import.meta.url),{type:'module'}));
     project.sensorModelica=withActorMotion(project.sensorModelica??defaultSensorModelica);

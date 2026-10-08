@@ -2,6 +2,30 @@ import {test, expect} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 import {openExperimentFile, openLibraryFile} from './source-files';
 
+test('the local flight-control library has live diagnostics and persistent editable source',async({page})=>{
+  await page.goto('/');
+  await expect(page.getByRole('button',{name:'▶ Run',exact:true})).toBeEnabled({timeout:90000});
+  const path='models/Libraries/CogniPilot/Control/Multirotor/LogLinear/package.mo';
+  await openLibraryFile(page,path);
+  const original=readFileSync(path,'utf8');
+  await expect(page.getByLabel('Modelica source')).toHaveValue(original);
+  await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.status),{timeout:30000}).toContain('ready');
+  await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.getDiagnostics()
+    .filter((diagnostic:any)=>diagnostic.severity===1).length),{timeout:30000}).toBe(0);
+  const edited=original.replace('attitudeGain[3](each unit = "1/s") = {2.0, 2.0, 1.0}',
+    'attitudeGain[3](each unit = "1/s") = {2.1, 2.1, 1.0}');
+  expect(edited).not.toBe(original);
+  await page.evaluate(source=>(window as any).__slamLab.sourceEditor.editor.setValue(source),edited);
+  await page.getByRole('button',{name:'Save project',exact:true}).click();
+  await expect(page.locator('#saved')).toHaveText('Saved locally');
+  await page.reload();
+  await expect(page.getByRole('button',{name:'▶ Run',exact:true})).toBeEnabled({timeout:90000});
+  await openLibraryFile(page,path);
+  await expect(page.getByLabel('Modelica source')).toHaveValue(edited);
+  expect(await page.evaluate(()=>(window as any).__slamLab.project.physics))
+    .toContain('Control.Multirotor.LogLinear.Controller controller');
+});
+
 test('model selection executes the chosen example and preserves independent source edits',async({page})=>{
   await page.goto('/');
   await expect(page.getByRole('button',{name:'▶ Run',exact:true})).toBeEnabled({timeout:90000});

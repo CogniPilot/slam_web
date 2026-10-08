@@ -1,0 +1,12 @@
+symmetrize
+quadraticForm
+quadraticFormDerivative
+contractionResidual
+solve
+solveSPD
+josephUpdate
+transformCovariance
+covarianceRoot
+factorPSD
+solveLower
+solveCovarianceRoot

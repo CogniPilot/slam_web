@@ -3,6 +3,7 @@ import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {test,expect} from '@playwright/test';
 import {readFileSync,appendFileSync} from 'node:fs';
 import {defaultGraph} from '../../src/graph';
+import {readModelicaModelsLibrary} from '../../scripts/modelica-models-library.mjs';
 const progress=(phase:string)=>{if(process.env.SLAM_WORKSPACE_PROGRESS)
   appendFileSync(process.env.SLAM_WORKSPACE_PROGRESS,`${new Date().toISOString()} ${phase}\n`);};
 
@@ -25,6 +26,7 @@ test('full Modelica source workspace edits, diagnostics, download and local relo
     environment:'warehouse',seed:7,sceneDetail:'low',depthCloudEnabled:false,carsEnabled:false,peopleEnabled:false,
     algorithm:readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8'),algorithmPreset:'Modelica inertial propagation',
     physics:readFileSync('models/Vehicles/LabQuadrotor.mo','utf8'),
+    modelicaSources:readModelicaModelsLibrary(),
     detector:['D435ImageProfile','FastNativeFrame','D435FastFeatures'].map(name=>readFileSync(modelicaSourcePath(name),'utf8')).join('\n'),detectorPreset:'Modelica FAST · integration pending',
     detectorLanguage:'modelica',runtime:'modelica',graph:defaultGraph()};
   await page.goto('/__workspace_seed__.txt');

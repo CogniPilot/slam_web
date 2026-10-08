@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {createServer} from 'node:http';
 import {build} from 'esbuild';
 import {chromium} from '@playwright/test';
+import {readModelicaModelsLibrary} from '../scripts/modelica-models-library.mjs';
 
 const [baselineArgument,candidateArgument,outputArgument]=process.argv.slice(2);
 if(!baselineArgument||!candidateArgument||!outputArgument)
@@ -15,6 +16,8 @@ const output=path.resolve(outputArgument),source=await fs.readFile('models/Vehic
 await fs.mkdir(output,{recursive:true});
 const sha=data=>createHash('sha256').update(data).digest('hex');
 const files=new Map([['/source.mo',source]]),artifacts={};
+const workspaceSources=Buffer.from(JSON.stringify(readModelicaModelsLibrary()));
+files.set('/workspace.json',workspaceSources);
 for(const [name,directory] of [['baseline',baselineArgument],['candidate',candidateArgument]]){
   const js=await fs.readFile(path.join(directory,'rumoca_bind_wasm.js'));
   const wasm=await fs.readFile(path.join(directory,'rumoca_bind_wasm_bg.wasm'));
@@ -34,9 +37,12 @@ let browser;
 const workerBody=async(base,candidatePolicy)=>{
   const {SensorClock,QUALITY_SENSOR_RATES,readPhysicsSnapshot}=await import(base+'/glue.js');
   const compilers={};
+  const workspaceSources=await(await fetch(base+'/workspace.json')).text();
   for(const name of ['baseline','candidate']){
     compilers[name]=await import(`${base}/${name}.js`);
     await compilers[name].default({module_or_path:`${base}/${name}.wasm`});
+    const loaded=JSON.parse(compilers[name].sync_workspace_sources(workspaceSources));
+    if(loaded.error_count)throw Error('Could not load the local physics library');
   }
   const source=await(await fetch(base+'/source.mo')).text();
   const check=(condition,message)=>{if(!condition)throw new Error(message);};
@@ -109,6 +115,7 @@ try{
   await page.waitForFunction(()=>window.comparisonReply!==null,{},{timeout:170000});
   const reply=await page.evaluate(()=>window.comparisonReply);if(reply.error)throw new Error(reply.error);
   const report={status:reply.result.parityPassed?'ACTUAL_CHROMIUM_INTERLEAVED_COMPILER_PARITY_PASS':'ACTUAL_CHROMIUM_INTERLEAVED_COMPILER_PARITY_FAILED',recordedAt:new Date().toISOString(),browser:browser.version(),artifacts,sourceSha256:sha(source),probeSha256:sha(await fs.readFile(import.meta.filename)),...reply.result,counterObservationEnabled:false,productionPinChanged:false,physicsStepsSkipped:0,hostPhysicsFallback:false,scope:'Public default execution for the baseline and the recorded explicit policy for the candidate, with constructors recorded per run. Same worker and baseline/candidate/candidate/baseline order. Same unchanged full plant, recorded high-quality sensor rates, adaptive solver and tolerances. Advance timings include cold first30 frames and exclude preparation, snapshot extraction, sensors, rendering and all SLAM algorithms. Compiler artifacts contain multiple changes, so differences cannot be attributed to one patch. Shared-host load is not controlled by this probe. Failed parity precludes performance acceptance.'};
+  report.workspaceSourcesSha256=sha(workspaceSources);
   await fs.writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify(report));
   if(!reply.result.parityPassed)process.exitCode=1;

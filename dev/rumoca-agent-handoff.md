@@ -7069,3 +7069,126 @@ programs on a fresh retry. No worker remains after either operation. Five unit
 transport checks and TypeScript checking pass under Nix. This is bounded build
 UX, not full SLAM execution or a numerical fallback. Exact receipts and executed
 sources: dev/artifacts/slam-build-deadline-2026-10-07/.
+
+### Actual browser ordered-fault baseline for PR399 (application)
+
+ConditionalCallFaultOrder now compiles and executes on official browser compiler
+42729cb4f520 (WASM 2fa706579c6f6fe4fb947e764f1eb953ddfa00d39422d605b3aab180469266b7).
+Source tests/compiler-probes/fixtures/ConditionalCallFaultOrder.mo SHA256
+33db14e0f639adece9869df620a1f19c590e2b1f916050110d8532ffe9148b9b;
+3136-byte issued module 656c8dee0c4d7ed413e65be709226d1e8a5d578f3d79ae5d0963d1200351be30.
+Ten actual browser execution cases pass, including early/late loop faults,
+complete published-Y rollback, readonly P and typed input lanes, disabled
+faulting calls, and recovery on the same instance without reset. Both-invalid
+indexes preserve the first direct-read provenance (byte408..414) rather than
+helper-read byte112..118, on both iterations. Source identity remains a string.
+
+Reusable checker: dev/check-conditional-call-faults-browser.mjs SOURCE
+ISSUANCE_DIRECTORY NEW_REPORT [REFERENCE_REPORT]. Original issuance and execution:
+$HOME/scratch/slam_web/tmp/conditional-call-fault-order-42729-2026-10-07/.
+Please qualify PR399/composed stack against execution.json as reference; numeric
+status and owner IDs may change, source provenance and fault kind must not.
+This baseline does not observe a PR399 regression; reviewed artifact remains
+unavailable. Lazy elseif guards are still a separate required compiler check.
+
+The user has additionally requested using modelica_models' actual position
+controller in the flight model. Application-side integration starts now with
+pinned upstream control sources; no compiler tree changes are being made here.
+
+### Periodic controller clock stops at one second on both released/candidate WASM
+
+The requested upstream position controller is now wired through the local
+modelica_models library (currently GitHub main e0ca8ed6457149610313e10a26e4d014d8425719;
+user has announced another push). It tracks {2,-1,2.5} with actual motors/plant,
+but its sample(0,0.01) integral stops changing after t=1 s. No workaround applied.
+
+Minimal source: tests/compiler-probes/fixtures/PeriodicControllerClock.mo.
+Strict regression: tests/compiler-probes/modelica-periodic-clock.test.ts.
+Actual WasmSimulationSession.withInteractiveOptions, dt0.005/rk-like, no inputs:
+ ticks at t={0,.1,.5,1,1.1,2,3} are {1,11,51,101,101,101,101};
+ expected {1,11,51,101,111,201,301}.
+Both production0.10.0/e1e7783f1fb4 and official candidate0.10.2/42729cb4f520
+reproduce this in roughly1.2 s per owned process. Raw logs:
+$HOME/scratch/slam_web/tmp/position-controller/periodic-clock-pinned.log
+$HOME/scratch/slam_web/tmp/position-controller/periodic-clock-candidate.log
+
+Please extend periodic event scheduling as an interactive session advances
+beyond its initial preparation horizon, preserving tick identity, exact-once
+sample execution, pre/reset semantics, and partition-independent stepping.
+This is an observed compiler/runtime defect, not a request to move the control
+math or clock into JavaScript. The new upstream position/attitude/rate/allocation
+math also needs the reusable native execution optimizations: a12 s flight on
+production WASM currently takes ~13 s excluding ~2.76 s construction, with all
+controller/plant math in Modelica. No10x or efficient-runtime claim.
+
+### New upstream library push integrated and browser controller tracking checked
+
+The announced modelica_models push is now visible and the local app copy is
+pinned to ea5c4750b271392d4940e8619751b112f9669ee3 (608 unmodified Modelica
+files, package.order/license/notice retained). User projects save these sources;
+physics/state/LSP receive the same workspace. No namespace rewrite or subset
+of copied controller functions remains. Old duplicate rigid-body/math sources
+are removed; LabQuadrotor calls Control.Multirotor.LogLinear.Controller,
+RateLoop.bodyMoment and Allocation.rotorCommands directly.
+
+Actual production physics-worker Chromium execution on the new library passes
+24sim seconds over two position targets, final errors0.07304m/0.07552m, physical
+rotor motion and reset. Whole-app default unit suite224/224 and static build pass.
+The strict periodic-clock test also ran on42729cb4f520 and fails at1.1s:
+expected111 ticks, observed101. Do not interpret the position tracking pass as
+acceptance of sampled integral correctness or throughput. The exact request and
+minimal fixture in the previous section remain required.
+
+Raw current browser receipt:
+$HOME/scratch/slam_web/tmp/position-controller/browser-flight-ea5c475.json
+Library source map SHA25654a1197db596487f0e7c86bb85719a110339fbec7d9db5d99afc482adca47e86;
+Lab source SHA256f0b5477092eaf8e7df98ad44b7f19183fcfcfb8c856aa3b7dd5ccf163e1e777c.
+All math stays in Modelica; the app only copies source text into Rumoca and
+passes sensor/control data. No compiler branch was edited here.
+
+### Follow-up upstream push 93c5bca and current controller CPU profile
+
+The user's next modelica_models push arrived: local library now pins
+93c5bca1439d7d43506ab63f7f2d5e4f23637605, replacing ea5c475. It contains641
+unmodified Modelica sources; Control, RigidBody and LieGroups are unchanged
+between these commits. Production browser position tracking again passes both
+12s targets (errors0.07304m/0.07552m), physical rotor motion and reset. Default
+unit suite224/224 and TypeScript/static build pass. No compiler pin changed.
+The periodic-clock defect above is still required; this library update does
+not resolve it or qualify full SLAM.
+
+New exact source-map SHA256:
+e0f3f2b886fb04334bab119182ff04efb9bd0ef629f4b93d5b3f41123b8a8d09.
+Lab source and compiler hashes remain those in the previous receipt.
+Frozen receipt/source closure:
+ dev/artifacts/modelica-position-control-93c5bca-2026-10-07/
+ (ignored durable local evidence, manifest.json verifies every retained file).
+
+Actual production-compiler Node CPU/perf run on that closure:
+ $HOME/scratch/slam_web/profiles/position-control-93c5bca/
+ report.json, baseline.cpuprofile, delta-input-transport.cpuprofile,
+ cpu-summary.json and native.perf.data.
+90camera frames at60Hz, 180held sensor endpoints; dt0.005/rk-like unchanged.
+Baseline measured total10.832s: advance_to9.878s (91.2%), state_json0.745s
+(6.9%), setters0.180s (1.7%). Skipping identical input batches remains only a
+parity diagnostic: all25 public values bit-identical, no demonstrated speedup.
+No steps skipped and no host-side controller math. These are profiled, isolated
+CPU-session timings under shared host load, not end-to-end throughput.
+perf collected1847samples/no lost samples; symbols are unresolved JIT addresses.
+V8 reports unnamed functions in the pinned compiler module; do not assign these
+to Rust passes without a matching symbolized artifact. The measured API boundary
+places the dominant cost inside advance_to, not JS encoding/decoding. Please
+retain the connected controller/plant model when qualifying native RHS execution
+and fix interactive periodic scheduling as a reusable compiler/runtime change.
+
+The PR399 fault-order baseline is also frozen locally:
+ dev/artifacts/conditional-call-fault-order-42729-2026-10-07/.
+It does not qualify PR399 until the new artifact is executed against it.
+
+Both supported browser smoke shards on the exact93c5bca static build pass:
+21tests passed, one candidate-only compiler check skipped. Desktop/phone initial
+Run, all four editor diagnostics, library edit persistence and full-SLAM source
+workspace are covered. The strict conditional-fault checker now also refuses a
+source-order mismatch without requiring a reference; its re-execution passes
+all10cases and matches the original baseline semantics. Frozen execution-strict.json
+and both executed checker versions are retained with the fault evidence above.

@@ -2,9 +2,11 @@ import {it,expect} from 'vitest';
 import {readFileSync} from 'node:fs';
 import init,* as rumoca from '@cognipilot/rumoca';
 import {readPhysicsSnapshot} from '../src/physics-snapshot';
+import {modelicaModelsSources} from '../src/modelica-models-library';
 
 it('the editable Modelica flight tour drives the plant with held lockstep commands and preserves manual control',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
+  expect(JSON.parse(rumoca.sync_workspace_sources(JSON.stringify(modelicaModelsSources))).error_count).toBe(0);
   const source=readFileSync('models/Vehicles/LabQuadrotor.mo','utf8');
   const make=()=>rumoca.WasmSimulationSession.withInteractiveOptions(source,'LabQuadrotor',.005,'rk-like',1e-10,1e-8,'[["forward",0],["left",0],["up",0],["yaw",0]]');
   const automatic=make(),manual=make();

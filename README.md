@@ -47,6 +47,8 @@ Choose a model from **Run model**. The default is `Examples.InertialOnly`;
 the responsive and smoothed variants demonstrate the IMU filter tradeoff.
 Use **Files** to browse and edit the Modelica library. The viewer and editor
 can each collapse or fill the screen without losing your work.
+The app includes a pinned local copy of [CogniPilot Modelica Models](models/Libraries/README.md),
+including the position, attitude and body-rate controllers that drive the drone's motors.
 
 Use **WASD** to move the viewer, **Q/E** to turn, and **R/F** to change altitude.
 Hold **Shift** to move faster. On a phone, scroll below the viewer for controls

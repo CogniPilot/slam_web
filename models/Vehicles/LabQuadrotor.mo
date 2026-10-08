@@ -1,114 +1,5 @@
-// Apache-2.0 sources pinned in models/upstream/quadrotor/provenance.json.
-// Self-contained dependency closure; physical equations are unchanged.
-package LieGroups
-  package SO3
-    package Quat
-      function kinematics "Quaternion kinematics: q_dot = 0.5 * q * [0, omega]"
-        input Real q[4] "Unit quaternion {w,x,y,z}";
-        input Real omega[3] "Body-frame angular velocity {p,q,r}";
-        output Real q_dot[4] "Time derivative of quaternion";
-      algorithm
-        q_dot[1] := 0.5 * (-q[2]*omega[1] - q[3]*omega[2] - q[4]*omega[3]);
-        q_dot[2] := 0.5 * ( q[1]*omega[1] - q[4]*omega[2] + q[3]*omega[3]);
-        q_dot[3] := 0.5 * ( q[4]*omega[1] + q[1]*omega[2] - q[2]*omega[3]);
-        q_dot[4] := 0.5 * (-q[3]*omega[1] + q[2]*omega[2] + q[1]*omega[3]);
-      end kinematics;
-      
-      function to_DCM "Convert unit quaternion to 3x3 rotation matrix (DCM)"
-        input Real q[4] "{w,x,y,z}";
-        output Real R[3,3] "Rotation matrix (body to world)";
-      protected
-        Real a, b, c, d;
-        Real aa, ab, ac, ad, bb, bc, bd, cc, cd, dd;
-      algorithm
-        a := q[1]; b := q[2]; c := q[3]; d := q[4];
-        aa := a*a; ab := a*b; ac := a*c; ad := a*d;
-        bb := b*b; bc := b*c; bd := b*d;
-        cc := c*c; cd := c*d;
-        dd := d*d;
-      
-        R[1,1] := aa + bb - cc - dd;
-        R[1,2] := 2*(bc - ad);
-        R[1,3] := 2*(bd + ac);
-        R[2,1] := 2*(bc + ad);
-        R[2,2] := aa - bb + cc - dd;
-        R[2,3] := 2*(cd - ab);
-        R[3,1] := 2*(bd - ac);
-        R[3,2] := 2*(cd + ab);
-        R[3,3] := aa - bb - cc + dd;
-      end to_DCM;
-      
-    end Quat;
-  end SO3;
-end LieGroups;
-
-package RigidBody
-  partial model RigidBody6DOF
-    parameter Real mass = 1.0 "Mass [kg]";
-    parameter Real g = 9.8 "Gravity [m/s^2]";
-    parameter Real ixx = 1.0 "Body inertia matrix xx entry [kg*m^2]";
-    parameter Real iyy = 1.0 "Body inertia matrix yy entry [kg*m^2]";
-    parameter Real izz = 1.0 "Body inertia matrix zz entry [kg*m^2]";
-    parameter Real ixy = 0.0 "Body inertia matrix xy entry [kg*m^2]";
-    parameter Real ixz = 0.0 "Body inertia matrix xz entry [kg*m^2]";
-    parameter Real iyz = 0.0 "Body inertia matrix yz entry [kg*m^2]";
-    parameter Real J[3, 3] = [
-      ixx, ixy, ixz;
-      ixy, iyy, iyz;
-      ixz, iyz, izz
-    ] "Body inertia matrix [kg*m^2]";
-    parameter Real p_start[3] = {0, 0, 0} "Initial world position";
-    parameter Real v_b_start[3] = {0, 0, 0} "Initial body velocity";
-    parameter Real q_start[4] = {1, 0, 0, 0} "Initial quaternion w,x,y,z";
-    parameter Real omega_start[3] = {0, 0, 0} "Initial body angular velocity";
-    parameter Real qnorm_gain = 1.0 "Quaternion renormalization gain";
-
-    Real F_b[3] "Total non-gravity force in body frame [N]";
-    Real M_b[3] "Total moment in body frame [N*m]";
-    output Real p[3](start = p_start, each fixed = true) "World position [m]";
-    output Real v_b[3](start = v_b_start, each fixed = true) "Body velocity [m/s]";
-    output Real q[4](start = q_start, each fixed = true) "Quaternion w,x,y,z";
-    output Real omega[3](start = omega_start, each fixed = true) "Body angular velocity [rad/s]";
-    output Real R[3, 3](start = [
-      1, 0, 0;
-      0, 1, 0;
-      0, 0, 1
-    ]) "Direction cosine matrix, body to world";
-    output Real v_w[3](start = v_b_start) "World velocity [m/s]";
-    output Real a_b[3](start = {0, 0, 0}) "Body specific force [m/s^2]";
-
-  protected
-    Real q_dot_raw[4] "Unnormalized quaternion derivative";
-    Real q_norm_err(start = 0) "Quaternion norm error";
-    Real gravity_w[3] "Gravity in world frame [m/s^2]";
-    Real gravity_b[3] "Gravity in body frame [m/s^2]";
-    Real H_b[3] "Angular momentum in body frame [kg*m^2/s]";
-    Real M_gyro[3] "Gyroscopic inertia moment in body frame [N*m]";
-    Real M_body[3] "Rigid-body angular acceleration moment [N*m]";
-
-  equation
-    q_norm_err = q[1] * q[1] + q[2] * q[2] + q[3] * q[3] + q[4] * q[4] - 1;
-    q_dot_raw = LieGroups.SO3.Quat.kinematics(q, omega);
-    for i in 1:4 loop
-      der(q[i]) = q_dot_raw[i] - qnorm_gain * q_norm_err * q[i];
-    end for;
-    R = LieGroups.SO3.Quat.to_DCM(q);
-
-    v_w = R * v_b;
-    gravity_w = {0, 0, -g};
-    gravity_b = transpose(R) * gravity_w;
-    a_b = F_b / mass;
-
-    der(p) = v_w;
-    der(v_b) = a_b + gravity_b - cross(omega, v_b);
-
-    H_b = J * omega;
-    M_gyro = cross(omega, H_b);
-    M_body = M_b - M_gyro;
-    J * der(omega) = M_body;
-  end RigidBody6DOF;
-end RigidBody;
-
+// Quadrotor plant pinned in models/upstream/quadrotor/provenance.json.
+// Control and rigid-body dependencies: models/Libraries/CogniPilot.
 // 6-DOF quadrotor SIL plant model.
 //
 // Inputs:  4 motor angular velocities [rad/s]
@@ -302,8 +193,7 @@ equation
 
 end QuadrotorSIL;
 
-// Application controller and ENU/FLU interface. The plant above retains the
-// Rumoca example's NWU world, FLU body, actuator, drag and landing equations.
+// Application references and ENU/FLU interface around the upstream controllers.
 model LabQuadrotor
   constant Integer motorCount = 4;
   constant Real frameHalf = 0.7071067811865476;
@@ -318,11 +208,10 @@ model LabQuadrotor
   parameter Real k_thrust = 8.54858e-6;
   parameter Real k_torque = 0.016;
   parameter Real initialHeight = 1.5;
-  parameter Real velocityGain = 1.8;
-  parameter Real attitudeGain = 25.0;
-  parameter Real attitudeDamping = 9.0;
-  parameter Real verticalGain = 3.0;
-  parameter Real yawGain = 5.0;
+  parameter Real controlPeriod = 0.01 "Position integral sample period s";
+  parameter Real rateGain[3] = {20,20,10};
+  parameter Real maximumMoment[3] = {2.6,2.6,0.30};
+  parameter Real maximumMotorSpeed = 1100 "Rotor speed at full command rad/s";
   input Real forward(start=0) "Body forward velocity setpoint m/s";
   input Real left(start=0) "Body left velocity setpoint m/s";
   input Real up(start=0) "World vertical velocity setpoint m/s";
@@ -330,6 +219,11 @@ model LabQuadrotor
   input Real autopilot = 0.0;
   input Real indoorTour = 0.0;
   input Real commandTime = 0.0 "Held start-of-frame simulation timestamp";
+  input Real positionMode = 0.0 "1 selects an explicit trajectory reference";
+  input Real targetPosition[3] = {0,0,initialHeight} "World ENU position m";
+  input Real targetVelocity[3] = zeros(3) "World ENU velocity m/s";
+  input Real targetAcceleration[3] = zeros(3) "World ENU acceleration m/s2";
+  input Real targetHeading = 0.0 "World ENU heading rad";
   output Real forwardSetpoint; output Real leftSetpoint;
   output Real upSetpoint; output Real yawSetpoint;
   output Real x; output Real y; output Real z;
@@ -340,6 +234,10 @@ model LabQuadrotor
   output Real omega_m[motorCount] "Actual plant rotor speeds rad/s";
   output Real propellerAngles[motorCount](each start=0.0,each fixed=true)
     "Unwrapped actual rotor angle; CCW motors 1/2 positive, CW motors 3/4 negative";
+  output Real positionSetpoint[3];
+  output Real velocitySetpoint[3];
+  output Real angularVelocitySetpoint[3];
+  output Real motorCommand[motorCount] "Normalized allocated motor commands";
 protected
   QuadrotorSIL vehicle(
     vehicle_mass=mass,vehicle_ixx=Ix,vehicle_iyy=Iy,vehicle_izz=Iz,g=gravity,
@@ -348,15 +246,19 @@ protected
     q_start={frameHalf,0,0,-frameHalf});
   Real command[4];
   Real position[3]; Real velocity[3]; Real quaternion[4]; Real orientation[3,3];
-  Real heading; Real roll; Real pitch;
-  Real desiredAcceleration[2]; Real desiredAttitude[2]; Real desiredMoment[3];
-  Real desiredThrust; Real desiredMotorThrust[motorCount];
+  Control.Multirotor.LogLinear.Controller controller(
+    samplePeriod=controlPeriod,mass=mass,gravity=gravity,thrustTrim=mass*gravity);
+  Real pathPosition[3](start={0,0,initialHeight},each fixed=true);
+  Real pathHeading(start=0, fixed=true);
+  Real pathVelocity[3];
+  Real headingSetpoint;
+  Real unboundedMoment[3]; Real desiredMoment[3];
   parameter Real momentArm = arm*0.7071067811865476;
-  parameter Real thrustMixer[motorCount,3] = {
-    {-1/(4*momentArm),-1/(4*momentArm),-1/(4*k_torque)},
-    { 1/(4*momentArm), 1/(4*momentArm),-1/(4*k_torque)},
-    { 1/(4*momentArm),-1/(4*momentArm), 1/(4*k_torque)},
-    {-1/(4*momentArm), 1/(4*momentArm), 1/(4*k_torque)}};
+  parameter Real wrenchToRotorThrust[motorCount,4] = {
+    {0.25,-1/(4*momentArm),-1/(4*momentArm),-1/(4*k_torque)},
+    {0.25, 1/(4*momentArm), 1/(4*momentArm),-1/(4*k_torque)},
+    {0.25, 1/(4*momentArm),-1/(4*momentArm), 1/(4*k_torque)},
+    {0.25,-1/(4*momentArm), 1/(4*momentArm), 1/(4*k_torque)}};
 equation
   // Modelica owns both tours. commandTime is held for a complete lockstep
   // interval, preserving the acquisition-boundary command timing.
@@ -385,22 +287,32 @@ equation
   imu_ax=vehicle.a_b[1]; imu_ay=vehicle.a_b[2]; imu_az=vehicle.a_b[3];
   omega_m=vehicle.omega_m;
 
-  heading=atan2(orientation[2,1],orientation[1,1]);
-  roll=atan2(orientation[3,2],orientation[3,3]);
-  pitch=asin(min(1.0,max(-1.0,-orientation[3,1])));
-  desiredAcceleration = velocityGain*{
-    cos(heading)*command[1]-sin(heading)*command[2]-velocity[1],
-    sin(heading)*command[1]+cos(heading)*command[2]-velocity[2]};
-  desiredAttitude = {
-    min(0.3,max(-0.3,(desiredAcceleration[1]*sin(heading)-desiredAcceleration[2]*cos(heading))/gravity)),
-    min(0.3,max(-0.3,(desiredAcceleration[1]*cos(heading)+desiredAcceleration[2]*sin(heading))/gravity))};
-  desiredThrust=max(0.0,mass*(gravity+verticalGain*(command[3]-velocity[3]))/max(0.5,orientation[3,3]));
-  desiredMoment={Ix*(attitudeGain*(desiredAttitude[1]-roll)-attitudeDamping*vehicle.omega[1]),
-    Iy*(attitudeGain*(desiredAttitude[2]-pitch)-attitudeDamping*vehicle.omega[2]),
-    Iz*yawGain*(command[4]-vehicle.omega[3])};
-  desiredMotorThrust=fill(desiredThrust/4,motorCount)+thrustMixer*desiredMoment;
+  pathVelocity = {
+    cos(pathHeading)*command[1]-sin(pathHeading)*command[2],
+    sin(pathHeading)*command[1]+cos(pathHeading)*command[2],command[3]};
+  der(pathPosition) = pathVelocity;
+  der(pathHeading) = command[4];
+  positionSetpoint = if noEvent(positionMode > 0.5) then targetPosition else pathPosition;
+  velocitySetpoint = if noEvent(positionMode > 0.5) then targetVelocity else pathVelocity;
+  headingSetpoint = if noEvent(positionMode > 0.5) then targetHeading else pathHeading;
+
+  controller.positionWorld = position;
+  controller.velocityWorld = velocity;
+  controller.quaternionWorldBody = quaternion;
+  controller.positionReferenceWorld = positionSetpoint;
+  controller.velocityReferenceWorld = velocitySetpoint;
+  controller.accelerationReferenceWorld = if noEvent(positionMode > 0.5) then targetAcceleration else zeros(3);
+  controller.headingQuaternionReference = {cos(headingSetpoint/2),0,0,sin(headingSetpoint/2)};
+  controller.resetIntegral = false;
+  angularVelocitySetpoint = controller.angularVelocitySetpoint;
+  unboundedMoment = Control.Multirotor.RateLoop.bodyMoment(
+    angularVelocitySetpoint,vehicle.omega,{Ix,Iy,Iz},rateGain);
+  desiredMoment = {min(maximumMoment[axis],max(-maximumMoment[axis],unboundedMoment[axis])) for axis in 1:3};
+  motorCommand = Control.Multirotor.Allocation.rotorCommands(
+    motorCount,controller.thrust,desiredMoment,wrenchToRotorThrust,
+    fill(k_thrust,motorCount),fill(maximumMotorSpeed,motorCount));
+  vehicle.omega_cmd = maximumMotorSpeed*motorCommand;
   for motor in 1:motorCount loop
-    vehicle.omega_cmd[motor]=sqrt(max(0.0,desiredMotorThrust[motor])/k_thrust);
     der(propellerAngles[motor])=spinDirection[motor]*vehicle.omega_m[motor];
   end for;
 end LabQuadrotor;

@@ -2,6 +2,7 @@ import {it,expect} from 'vitest';
 import {readFileSync} from 'node:fs';
 import init,* as rumoca from '@cognipilot/rumoca';
 import {readPhysicsSnapshot} from '../src/physics-snapshot';
+import {modelicaModelsSources} from '../src/modelica-models-library';
 
 const legacy=(session:rumoca.WasmSimulationSession)=>({time:session.time(),x:session.get('x'),y:session.get('y'),z:session.get('z'),
   quaternion:['qw','qx','qy','qz'].map(name=>session.get(name)),velocity:['vx','vy','vz'].map(name=>session.get(name)),
@@ -10,6 +11,7 @@ const legacy=(session:rumoca.WasmSimulationSession)=>({time:session.time(),x:ses
 
 it('one Rumoca snapshot preserves every truth/IMU field, exact time, reset, and model interface checks',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
+  expect(JSON.parse(rumoca.sync_workspace_sources(JSON.stringify(modelicaModelsSources))).error_count).toBe(0);
   const source=readFileSync('models/Vehicles/LabQuadrotor.mo','utf8');
   const create=(text:string)=>rumoca.WasmSimulationSession.withInteractiveOptions(text,'LabQuadrotor',.005,'rk-like',1e-8,1e-6,
     '[["forward",0],["left",0],["up",0],["yaw",0]]');

@@ -5,6 +5,7 @@ import {readFileSync,appendFileSync} from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {defaultGraph} from '../../src/graph';
+import {readModelicaModelsLibrary} from '../../scripts/modelica-models-library.mjs';
 import {rgbdSlamNativeSourceManifest as manifest} from '../../src/modelica-slam-source-manifest.mjs';
 
 const candidate=process.env.SLAM_BUILD_CANDIDATE;
@@ -17,6 +18,7 @@ async function openWorkspace(page:Page){
     sceneDetail:'low',depthCloudEnabled:false,carsEnabled:false,peopleEnabled:false,
     algorithm:readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8'),algorithmPreset:'Modelica inertial propagation',
     physics:readFileSync('models/Vehicles/LabQuadrotor.mo','utf8'),detector:['D435ImageProfile','FastNativeFrame','D435FastFeatures'].map(name=>readFileSync(modelicaSourcePath(name),'utf8')).join('\n'),
+    modelicaSources:readModelicaModelsLibrary(),
     detectorPreset:'Modelica FAST · integration pending',detectorLanguage:'modelica',runtime:'modelica',graph:defaultGraph()};
   // Seed storage on the actual origin without starting a disposable city and
   // compiler session through the static server's index fallback.

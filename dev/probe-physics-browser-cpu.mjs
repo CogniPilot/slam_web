@@ -6,6 +6,7 @@ import {createServer} from 'node:http';
 import {build} from 'esbuild';
 import {chromium} from '@playwright/test';
 import {analyzePhysicsCpuProfile} from './analyze-physics-cpu-profile.mjs';
+import {readModelicaModelsLibrary} from '../scripts/modelica-models-library.mjs';
 
 const output=path.resolve(process.argv[2]??path.join(process.env.HOME,'scratch/slam_web/tmp/physics-browser-cpu'));
 const compilerDirectory=path.resolve(process.argv[3]??'public/vendor/rumoca');
@@ -13,11 +14,13 @@ const executionPolicy=process.argv[4]??'legacy';
 if(!['legacy','auto','interpreter'].includes(executionPolicy))throw new Error('Policy must be legacy, auto or interpreter');
 await fs.mkdir(output,{recursive:true});
 const source=await fs.readFile('models/Vehicles/LabQuadrotor.mo');
+const workspaceSources=Buffer.from(JSON.stringify(readModelicaModelsLibrary()));
 const compiler=await fs.readFile(path.join(compilerDirectory,'rumoca_bind_wasm.js'));
 const wasm=await fs.readFile(path.join(compilerDirectory,'rumoca_bind_wasm_bg.wasm'));
 const sha=data=>createHash('sha256').update(data).digest('hex');
 const glue=(await build({stdin:{contents:"export {SensorClock,QUALITY_SENSOR_RATES} from './src/sensor-clock.ts'; export {readPhysicsSnapshot} from './src/physics-snapshot.ts';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'browser',write:false})).outputFiles[0].contents;
 const files=new Map([['/source.mo',source],['/compiler.js',compiler],['/compiler.wasm',wasm],['/glue.js',glue]]);
+files.set('/workspace.json',workspaceSources);
 const server=createServer((request,response)=>{
   response.setHeader('Content-Type',request.url.endsWith('.js')?'text/javascript':request.url.endsWith('.wasm')?'application/wasm':'text/html');
   response.end(files.get(request.url)??'<!doctype html><title>Modelica physics CPU review</title>');
@@ -28,6 +31,8 @@ const workerBody=async(base,executionPolicy)=>{
   const compiler=await import(base+'/compiler.js');
   const {SensorClock,QUALITY_SENSOR_RATES,readPhysicsSnapshot}=await import(base+'/glue.js');
   await compiler.default({module_or_path:base+'/compiler.wasm'});
+  const loaded=JSON.parse(compiler.sync_workspace_sources(await(await fetch(base+'/workspace.json')).text()));
+  if(loaded.error_count)throw Error('Could not load the local physics library');
   const source=await(await fetch(base+'/source.mo')).text(),start=performance.now();
   const initialInputs=[['forward',0],['left',0],['up',0],['yaw',0]];
   const session=executionPolicy==='legacy'
@@ -79,5 +84,6 @@ try{
   if(result.error)throw new Error(result.error);
   const analysis=analyzePhysicsCpuProfile(profile);
   const report={status:executionPolicy==='legacy'?'ACTUAL_PINNED_CHROMIUM_WORKER_PHYSICS_PROFILE_PASS':'ACTUAL_REVIEW_CHROMIUM_WORKER_PHYSICS_PROFILE_PASS',executionPolicy,recordedAt:new Date().toISOString(),browser:browser.version(),sourceSha256:sha(source),compilerWasmSha256:sha(wasm),probeSha256:sha(await fs.readFile(import.meta.filename)),analyzerSha256:sha(await fs.readFile(new URL('./analyze-physics-cpu-profile.mjs',import.meta.url))),...result.result,scope:'Unmodified full Modelica plant in an isolated dedicated worker. Same high sensor-clock endpoints, solver tolerances and held commands; no GPU, rendering, RPC or whole-pipeline throughput.',productionPinChanged:false,physicsStepsSkipped:0,hostMathFallback:false,profileSamples:profile.samples.length,...analysis};
+  report.workspaceSourcesSha256=sha(workspaceSources);
   await fs.writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
 }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}

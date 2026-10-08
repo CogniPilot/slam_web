@@ -17,7 +17,7 @@ export interface RGBDSlamSourceComposition {
 
 // Vite creates lazy raw-text loaders. Only the manifest's authored files are
 // requested; no Modelica text is loaded by merely importing this module.
-const loaders=import.meta.glob<string>('../models/**/*.mo',{query:'?raw',import:'default'});
+const loaders=import.meta.glob<string>(['../models/**/*.mo','!../models/Libraries/**'],{query:'?raw',import:'default'});
 const knownPaths=new Set(rgbdSlamNativeSourceManifest.paths);
 
 /** Load one exact manifest path on demand, preserving its authored text. */

@@ -4,18 +4,23 @@ import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import init,* as pinned from '@cognipilot/rumoca';
+import {modelicaModelsSources} from '../../src/modelica-models-library';
 const source=readFileSync('models/Vehicles/LabQuadrotor.mo','utf8');
 const sha=(s:string|Uint8Array)=>createHash('sha256').update(s).digest('hex');
 const value=(v:Record<string,number>,name:string)=>{expect(Number.isFinite(v[name]),name).toBe(true);return v[name];};
 const near=(a:number,b:number,label:string,tolerance=1e-7)=>expect(Math.abs(a-b),label).toBeLessThanOrEqual(tolerance*Math.max(1,Math.abs(b)));
 
-it('self-contained source retains the exact pinned plant and rigid-body equations with only quaternion package relocation',()=>{
+it('retains the pinned plant and loads the unmodified upstream control library',()=>{
   const directory='models/upstream/quadrotor';
-  for(const file of ['QuadrotorSIL.mo','RigidBody.mo','LieGroups.mo'])expect(source).toContain(readFileSync(`${directory}/${file}`,'utf8'));
+  expect(source).toContain(readFileSync(`${directory}/QuadrotorSIL.mo`,'utf8'));
   const provenance=JSON.parse(readFileSync(`${directory}/provenance.json`,'utf8'));
   for(const [file,digest] of Object.entries(provenance.vendored))expect(sha(readFileSync(`${directory}/${file}`)),file).toBe(digest);
   expect(source).toContain('der(propellerAngles[motor])=spinDirection[motor]*vehicle.omega_m[motor]');
   expect(source).toContain('spinDirection[motorCount] = {1,1,-1,-1}');
+  expect(source).toContain('Control.Multirotor.LogLinear.Controller controller');
+  const library='models/Libraries/CogniPilot';
+  const manifest=JSON.parse(readFileSync(`${library}/provenance.json`,'utf8'));
+  for(const [file,digest]of Object.entries(manifest.sources))expect(sha(readFileSync(`${library}/${file}`)),file).toBe(digest);
 });
 
 it('actual WASM genuine plant preserves coherent ENU/FLU outputs and actual signed rotor integration, reset and source editing',async()=>{
@@ -23,6 +28,7 @@ it('actual WASM genuine plant preserves coherent ENU/FLU outputs and actual sign
   const compiler:typeof pinned=directory?await import(/* @vite-ignore */ pathToFileURL(resolve(directory,'rumoca_bind_wasm.js')).href):pinned;
   const wasm=readFileSync(directory?resolve(directory,'rumoca_bind_wasm_bg.wasm'):'public/vendor/rumoca/rumoca_bind_wasm_bg.wasm');
   await (directory?compiler.default:init)({module_or_path:wasm});
+  expect(JSON.parse(compiler.sync_workspace_sources(JSON.stringify(modelicaModelsSources))).error_count).toBe(0);
   const report:Record<string,unknown>={status:'RUNNING',phase:'initialization',sourceSha256:sha(source),compilerWasmSha256:sha(wasm),
     compiler:{version:compiler.get_version(),revision:compiler.get_git_commit()},propellerDirection:[1,1,-1,-1],samples:0};
   const save=()=>{if(process.env.RUMOCA_QUADROTOR_REPORT)writeFileSync(process.env.RUMOCA_QUADROTOR_REPORT,JSON.stringify(report,null,2)+'\n');};

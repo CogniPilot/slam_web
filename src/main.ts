@@ -238,7 +238,7 @@ function selectNode(node:GraphNode,showEditor=true) {
   presets.value=node.kind==='detector'?project.detectorPreset:node.kind==='slam'?project.algorithmPreset:'custom';
   if(!presets.value)presets.value='custom';presets.disabled=compiling||viewingSlamFile()||!['slam','detector'].includes(node.kind);
   document.querySelector<HTMLElement>('.editor-selects')!.hidden=viewingSlamFile()||node.kind!=='detector';
-  const library=selected.kind==='slam'?{...project.modelicaSources,[project.mainSourcePath??'models/Main.mo']:project.algorithm}:undefined;
+  const library={...project.modelicaSources,[project.mainSourcePath??'models/Main.mo']:project.algorithm};
   sourceEditor.setWorkspaceSources(viewingSlamFile()?project.slamWorkspace!.sources:library,
     viewingSlamFile()?activeSlamFile:viewingLibraryFile()?activeLibraryFile:project.mainSourcePath??'models/Main.mo');
   sourceEditor.setLanguage(code.readOnly?'plaintext':'modelica');

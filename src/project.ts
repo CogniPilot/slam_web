@@ -16,6 +16,7 @@ import evaluationEquations from '../models/Evaluation/RuntimeEvaluation.mo?raw';
 import type { Environment,SceneDetail } from './types';
 import { defaultGraph, type Graph } from './graph';
 import type {InertialSessionMetadata} from './modelica-inertial-session';
+import {modelicaModelsSources} from './modelica-models-library';
 import {validateSensorRates,type SensorRates} from './sensor-clock';
 import {checkedRGBDSlamWorkspace,type RGBDSlamWorkspace} from './modelica-slam-workspace';
 const modelicaHarris=`${imageProfile}\n${harrisNative}\n${harrisProfile}`;
@@ -25,6 +26,7 @@ export function visibleDetectorPresets(_project:Pick<Project,'detectorPreset'|'d
 }
 export const algorithms: Record<string,string> = { 'Modelica inertial propagation':inertialExample };
 const defaultModelicaSources = {
+  ...modelicaModelsSources,
   'models/Examples/package.mo':exampleModels,
   'models/Examples/ResponsiveInertial.mo':responsiveExample,
   'models/Examples/SmoothedInertial.mo':smoothedExample,

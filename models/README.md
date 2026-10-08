@@ -18,6 +18,7 @@ The source tree follows the responsibilities of a robotics library. Start with t
 | SLAM | Public reset, initialization and step entrypoints |
 | Scene | Deterministic actor motion |
 | Evaluation | Teaching metrics |
+| Libraries/CogniPilot | Pinned upstream control, estimation, planning and dynamics packages |
 | upstream | Exact vendored sources, licenses and provenance |
 
 `Examples/package.mo` is a Modelica package: choose `Examples.InertialOnly`, `Examples.ResponsiveInertial`, or `Examples.SmoothedInertial` as the entry point. Compose components and wire their arrays in Modelica; the host provides sensor inputs and displays outputs. These examples currently implement inertial navigation. The full RGB-D SLAM lifecycle is staged separately.
