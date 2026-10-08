@@ -8,15 +8,31 @@ const [directory, output] = process.argv.slice(2);
 if (!output) throw Error('PROFILE_DIRECTORY REPORT required');
 const read = name => fs.readFileSync(path.join(directory, name));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const receipt = JSON.parse(read('admission.json'));
 const command = JSON.parse(read('command.json'));
-assert.equal(receipt.status, 'REFUSED');
-assert.match(receipt.refusal, /unreachable/);
+const stoppedLowering = command.phase?.event === 'start' && command.phase?.phase === 'lower';
+let receipt;
+if (stoppedLowering) {
+  const events = read('phase.log').toString().trim().split('\n').map(line=>JSON.parse(line));
+  assert.equal(events.length,1,'Lowering ended before the observation stop');
+  assert.deepEqual(events[0],command.phase);
+  assert.equal(command.phase.pid,command.pid);
+  assert.deepEqual(command.terminal,{code:null,signal:'SIGTERM'});
+  assert.ok(Number.isFinite(command.stopRequested) && command.stopRequested > command.phase.monotonicSeconds);
+  assert.ok(Number.isFinite(command.end) && command.end >= command.stopRequested);
+  receipt = {sourceSha256:command.phase.sourceSha256,compilerWasmSha256:command.phase.compilerSha256,
+    compiler:{revision:command.phase.compilerRevision},
+    prepareMonotonicStartSeconds:command.phase.monotonicSeconds,
+    prepareMonotonicEndSeconds:command.stopRequested};
+} else {
+  receipt = JSON.parse(read('admission.json'));
+  assert.equal(receipt.status, 'REFUSED');
+  assert.match(receipt.refusal, /unreachable/);
+  assert.equal(command.phase.sourceSha256, receipt.sourceSha256);
+  assert.equal(command.phase.compilerWasmSha256, receipt.compilerWasmSha256);
+  assert.deepEqual(command.phase.compiler, receipt.compiler);
+  assert.equal(command.phase.prepareMonotonicStartSeconds, receipt.prepareMonotonicStartSeconds);
+}
 assert.match(read('compiler.perf.header.txt').toString(), /# clockid: monotonic \(1\)/);
-assert.equal(command.phase.sourceSha256, receipt.sourceSha256);
-assert.equal(command.phase.compilerWasmSha256, receipt.compilerWasmSha256);
-assert.deepEqual(command.phase.compiler, receipt.compiler);
-assert.equal(command.phase.prepareMonotonicStartSeconds, receipt.prepareMonotonicStartSeconds);
 
 const groups = new Map(), threads = new Map();
 let samples = 0, period = 0, first = Infinity, last = -Infinity, unknown = 0;
@@ -43,19 +59,21 @@ const lost = [...dump.matchAll(/PERF_RECORD_LOST(?:_SAMPLES)?\b/g)].length;
 assert.equal(lost, 0, 'Lost perf records');
 assert.ok(samples > 100 && period > 0, 'Insufficient samples');
 const percent = row => ({...row, percent: row.period / period * 100});
-const report = {status: 'ORIGINAL_COMPILER_PREPARATION_WINDOW_VERIFIED', pid: command.pid,
+const report = {status: stoppedLowering ? 'ORIGINAL_COMPILER_LOWERING_WINDOW_VERIFIED'
+    : 'ORIGINAL_COMPILER_PREPARATION_WINDOW_VERIFIED', pid: command.pid,
   samples, period, lost, unknown, first, last,
   prepareStart: receipt.prepareMonotonicStartSeconds, prepareEnd: receipt.prepareMonotonicEndSeconds,
   compiler: receipt.compiler, compilerWasmSha256: receipt.compilerWasmSha256,
   sourceSha256: receipt.sourceSha256, threads: [...threads.values()].map(percent),
   leaves: [...groups.values()].sort((a, b) => b.period - a.period).map(percent),
-  inputs: Object.fromEntries(['admission.json', 'command.json', 'compiler.perf.data',
+  inputs: Object.fromEntries([...(stoppedLowering ? ['phase.log'] : ['admission.json']), 'command.json', 'compiler.perf.data',
     'compiler.perf.txt', 'compiler.perf.dump.txt', 'compiler.perf.header.txt',
-    'probe-native-program.mjs', 'capture.mjs'].map(name => {
+    stoppedLowering ? 'rumoca-phase-probe.mjs' : 'probe-native-program.mjs', 'capture.mjs'].map(name => {
       const bytes = read(name); return [name, {bytes: bytes.length, sha256: sha(bytes)}];
     })),
   analyzerSha256: sha(fs.readFileSync(import.meta.filename)),
   scope: 'Sampled cycles during one preparation window, including V8 workers and unknown leaves. '
+    + (stoppedLowering ? 'The owned process was deliberately stopped after observation, not a compiler trap. ' : '')
     + 'Not whole-compilation cost, CPU utilization or SLAM execution throughput.'};
 fs.writeFileSync(output, JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify({samples, lost, unknown, first, last, threads: report.threads,

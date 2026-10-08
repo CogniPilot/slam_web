@@ -6798,3 +6798,66 @@ full reference checks. Current report: dev/modelica-rendered-kernel-perf-2026-10
 Durable receipts: dev/artifacts/modelica-rendered-kernel-perf-2026-10-07/.
 Raw input/executable/perf: $HOME/scratch/slam_web/tmp/rendered-slam-native-benchmark/.
 No production math, sensor rates or compiler pin changed.
+
+### New smaller Reset constructor owner: current PR391 browser and perf receipts
+
+Rechecked official artifact 11521767605 / run 37709291389 / PR391 f7e3be389.
+Actual compiler merge 51e9876d699e (parents 0195b6720a91 + f7e3be38979b), WASM
+SHA256 5881cda81a2387227f431295560e8230f531535ee6412d3a170b6d0e8b5bc87a.
+This is not the pending scratch-sharing merge or a production pin promotion.
+
+The complete current 59-file source remains SHA256 5d485ddd965180a6eb5f8ffd7b3fcae6425cc590994966583fd2ef00915282ff.
+Diagnostic roots call the unchanged constructors and retain complete outputs:
+EmptyEstimator admits in an actual browser worker in 3.681 s (8,784-byte module);
+EmptyFrame alone exceeds the 60 s browser issuance bound. The earlier 079fca
+merge gives the same pass/timeout split. Graph/Map/Catalog roots were not run
+after the frame failure. These are issuance/ABI results, not numerical execution.
+
+A standalone 2,619-byte source preserves the exact RGBDKeyframes constants,
+Frame and EmptyFrame body, without other unreachable owners. Source SHA256:
+0e3bd4f054abc36a2b9cdfbbe58a02397eecb3ba66578186f4cc1cd26552536d.
+Actual browser issuance still exceeds 30 s. Rumoca compile returns balanced DAE
+in 0.424 s (19,587 equations/unknowns); lower_model_to_solve_json produces no
+result before a separate 25 s bound. OMC translateModel succeeds (whole command
+4.544 s, C generation only, so not a matched WASM issuance/runtime comparison).
+
+The DAE has 23 variables, 152 expression nodes and one function whose body has
+one aggregate assignment. The single authored whole-record call becomes ten
+call nodes and 23 field projections across typed outputs. Please inspect
+constant/no-argument aggregate folding, scalar/register expansion and repeated
+field projection after DAE compilation. This inventory does not establish an
+actual fold/call count; add per-owner counts and preserve typed source identity,
+compact zero/fill ranges and readonly/atomicity semantics rather than editing
+the application's constructor or reducing its capacities.
+
+Fresh original-compiler Solve-lowering perf: 1,292 samples, zero lost, 40 unknown
+leaves retained, main-thread weighted cycles 79.58%. Top WASM function numbers
+3417/3342/6421/8012/7045 are 22.48/9.67/6.63/6.06/5.00% of all sampled periods.
+Rust names remain unmapped; please bind these using your exact merge's symbols.
+The process is deliberately stopped after its ten-second sampled observation;
+that is not a trap, whole-compilation percentage or SLAM runtime measurement.
+Original hot WAT bodies, source/phase bounds and all-thread receipts are retained.
+
+Report: dev/modelica-reset-constructor-owners-2026-10-07.md.
+Standalone reproducer: dev/artifacts/rumoca-reset-constructor-owners-2026-10-07/isolated/source.mo.
+Reusable extraction: dev/reduce-reset-frame.mjs NEW_OUTPUT_DIRECTORY.
+Actual browser roots: dev/probe-reset-constructor-owners.mjs COMPILER_DIRECTORY NEW_OUTPUT_DIRECTORY.
+Raw perf/maps/WAT: $HOME/scratch/slam_web/profiles/reset-frame-lowering-f7e3be389-2026-10-07/.
+All prior full-lifecycle and six-workload faster-than-OMC runtime requirements remain.
+
+### Constructor receipts frozen and current upstream state (application)
+
+The standalone reproducer above now exists at the stated evidence path. The
+63-file manifest verifies unchanged authored sources, fixture, compiler and
+profile inputs; original hot WAT bodies and compiler merge provenance are saved.
+Additional controls under controls/ accept both original perf receipts and reject
+ten corrupted ownership, timing, phase and sample receipts under Nix. Re-running
+dev/reduce-reset-frame.mjs reproduces source.mo, binding.json and translate.mos
+byte for byte. No production source, capacities or compiler pin changed.
+
+Confirmed main is d7f16c00e203 after the #395 record-copy fix merged. #391 is now
+06cdfe312114; #396 is 6cafb3dc7a68 and remains open against readable-slices. Their
+Build WASM jobs are live, not qualified artifacts yet. The new constructor
+receipts use the earlier exact 51e9876d699e merge, never these untested revisions.
+Please retain the compact aggregate/register work and provide the reviewed
+scratch-sharing merge artifact for the existing paired runtime gates.
