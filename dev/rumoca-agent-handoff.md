@@ -8026,3 +8026,84 @@ selection, with `compiledHotPathVerified:false` explicit in the report. It is
 opt-in so the default flight test still supports the deployed0.10.0 API.
 Production worker fails an unsupported diagnostic request explicitly and keeps
 ordinary simulation stepping unchanged. No compiler pin or algorithm change.
+
+### Independent PR416 receipt delivery qualification, 2026-10-08
+
+New official run37783084886 / artifact11554331308 delivered. Verified archive
+SHA256f5d95ea465c3f6655a8cac3dd08d533e95ff1efe24107559ff95710b1693b596.
+Actual browser compiler b3f11ab160ba6be9f09bb8f68220053aa61e460b,
+GitHub-confirmed merge parents2aaed750242f +1d6c5179d02f. WASM SHA256
+fa81d4beaa1fd9966edc67ec2ee017c4f75e48722b86a12a59919e065c23ef9f.
+Package `$HOME/scratch/slam_web/downloads/rumoca-pr416-1d6c517/package/release-full-web`;
+reports `$HOME/scratch/slam_web/tmp/pr416-1d6c517-qualification`.
+
+Production physics worker PASS again,24s/two-targets/reset. Initial/first-motion,
+all24 sampled observations, motor/IMU/truth and reset exactly match prior main.
+The new `declined` field survives the production diagnostic RPC unchanged.
+Compiler reports wasm_program/null, but whole-expression declines grow18 at
+initialization →28507 at12s →57023 at24s →57039 after reset. Reason:
+`WASM ME whole expression has unsupported original programs`.
+Three jacobian_expression requests decline directional execution. Assignment
+schedules decline typed-call `UnsupportedOutputKind ... AssertionPredicate`:
+- owner42 output1 SourceId11643697360139376299 BytePos14894..15072;
+- owner9 output3 SourceId1097620477551291667 BytePos15425..15755.
+
+Independently resolved SourceIds using exact main SourceId::from_source_name
+(FNV-1a64), then sliced bytes:
+- `input.mo` is LabQuadrotor.mo; line311 span names
+  `Control.Multirotor.Allocation.rotorCommands(...)`.
+- `models/Libraries/CogniPilot/Control/Multirotor/LogLinear/package.mo`, line347,
+  span names `Control.Multirotor.LogLinear.outerLoop(...)`.
+`assertion-sources.json` retains byte spans, names, excerpts. Preserve these
+function assertions/first-fault order; do not remove them from authored models.
+
+Please investigate repeated compile attempts and failed-cache lifetime:
+main solve_runtime.rs eval_discrete_program_outputs clears failed_discrete_rows
+before compile_discrete_specialization when !had_compiled && !has_lazy_row_plan.
+The compilation method checks that same failure set. This is a concrete candidate,
+not proof that all57023 declines originate there. Other row caches already retain
+failures. Distinguish permanent backend refusals from input/guard-dependent
+specializations; retry only on relevant identity/config/guard changes, retaining
+correct runtime assert execution and reset semantics. Please expose row identity
+and refusal kind, not only one aggregate reason, so the hot retry owner is proven.
+
+Unchanged full D435FastSLAMStep still traps at51296.6ms, exact4GiB linear memory,
+stack18519→17278→6810→1196→1419→619→561. Source hash unchanged5d485ddd...;
+owned RSS5309248KiB, reserve55479272KiB, no monitor stop. This follow-up receipt
+fix improves diagnosis but does not clear the full graph allocation blocker.
+
+Reduced source-bound browser reproducer is now available:
+`tests/compiler-probes/fixtures/AssertionOutputProbe.mo` (500bytes, SHA256
+6c0e2233f77c52b64495ba58bc733a98cc4e99194bffc9c9871890167b1c16b5),
+with `dev/probe-assertion-outputs-browser.mjs COMPILER_DIRECTORY NEW_REPORT`.
+It uses the real browser worker/session, one record-returning function with
+one assert and a scalar ODE. Both policies produce bit-identical observations
+and valid-session reset results, and reject invalid initialization with the
+expected Modelica assertion. Auto receipt declines the assignment schedule:
+owner0 output2 AssertionPredicate, source input.mo BytePos423..444.
+Whole-expression declines grow3→14→107 at t=0,.1,1 despite only100 advances;
+interpreter receipts have zero compile declines. No image/source/capacity
+reduction is proposed for the full graph: this is a cheap compiler regression
+reproducer alongside the unchanged full-root gate, not replacement SLAM.
+
+Please use this to add supported assertion outputs with source/fault-order
+preservation and prove refusal retry/cache behavior. Retain valid-session reset
+and negative-initialization assertions in the fix. Post-fault whole-State
+rollback is a separate full-graph acceptance condition; this probe does not
+claim that a faulted simulation session can be reused.
+
+PR416 independent evidence frozen (21files):
+`dev/artifacts/rumoca-pr416-1d6c517-browser-2026-10-08/manifest.json`, SHA256
+e11cd1fcdb3ab3b13d6cffa7e69b3a22f6e6682d505c5f688f526fdbc5a599d4.
+Includes official artifact metadata, verified GitHub merge parents, original
+full source and source manifest, exact production flight/baseline observations,
+decline receipts, assertion source mapping, full-step4GiB failure/resource/CPU
+summary and the executed portable500byte reproducer plus its driver preimages.
+Large compiler package and raw CPU profile remain in the owned scratch paths.
+
+`dev/check-position-control-browser.mjs ... --execution-receipts` now collects
+any compiler-reported engine and decline list without requiring compiled
+selection. `--require-wasm-receipt` remains a separate selection-only check.
+The deploy/default package and runtime math remain unchanged. Please append
+which fix/branch/build I should retry for the full roots, assertion outputs,
+refusal caching and typed record/raw-image ingress when available.

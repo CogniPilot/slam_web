@@ -9,9 +9,10 @@ import {chromium} from '@playwright/test';
 import {readModelicaModelsLibrary} from '../scripts/modelica-models-library.mjs';
 
 const [output,compilerDirectory='public/vendor/rumoca',...flags]=process.argv.slice(2);
-if(!output)throw Error('NEW_REPORT [COMPILER_DIRECTORY] [--require-wasm-receipt] required');
-if(flags.some(flag=>flag!=='--require-wasm-receipt'))throw Error('Unknown flight probe option');
+if(!output)throw Error('NEW_REPORT [COMPILER_DIRECTORY] [--execution-receipts|--require-wasm-receipt] required');
+if(flags.some(flag=>!['--execution-receipts','--require-wasm-receipt'].includes(flag)))throw Error('Unknown flight probe option');
 const requireWasmReceipt=flags.includes('--require-wasm-receipt');
+const executionReceiptsRequested=requireWasmReceipt||flags.includes('--execution-receipts');
 assert.ok(!fs.existsSync(output),'Choose a fresh report path');
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const source=fs.readFileSync('models/Vehicles/LabQuadrotor.mo','utf8');
@@ -39,7 +40,7 @@ let browser;
 try{
   browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox']});
   const page=await browser.newPage();await page.goto(`http://127.0.0.1:${server.address().port}`);
-  const execution=await page.evaluate(async({source,workspaceSources,requireWasmReceipt})=>{
+  const execution=await page.evaluate(async({source,workspaceSources,requireWasmReceipt,executionReceiptsRequested})=>{
     const worker=new Worker('/physics.js',{type:'module'});
     let id=0;
     const call=message=>new Promise((resolve,reject)=>{
@@ -55,11 +56,11 @@ try{
       near(initial.time,0,0,'initial time');near(initial.z,1.5,1e-10,'initial altitude');
       const receipts=[];
       const receipt=async phase=>{
-        if(!requireWasmReceipt)return;
+        if(!executionReceiptsRequested)return;
         const result=await call({type:'executionReceipt'});
         if(!['interpreter','cranelift','wasm_program'].includes(result.execution?.engine))
           throw Error('Invalid Rumoca execution receipt');
-        if(result.execution.engine!=='wasm_program')
+        if(requireWasmReceipt&&result.execution.engine!=='wasm_program')
           throw Error('Rumoca WASM selection receipt required: '+JSON.stringify(result));
         receipts.push({phase,...result});
       };
@@ -95,11 +96,11 @@ try{
       const reset=await call({type:'reset'});
       for(const key of ['time','x','y','z'])near(reset[key],initial[key],1e-10,'reset '+key);
       await receipt('reset');
-      return {preparationMs,initial,firstMotion,legs,reset,receipts,requireWasmReceipt,compiledHotPathVerified:false,simulatedSeconds:totalTime,
+      return {preparationMs,initial,firstMotion,legs,reset,receipts,executionReceiptsRequested,requireWasmReceipt,compiledHotPathVerified:false,simulatedSeconds:totalTime,
         allCommandsPassedThroughProductionWorker:true,truthFeedback:true,
         estimatorFeedback:false,periodicIntegralQualified:false};
     }finally{worker.terminate();}
-  },{source,workspaceSources,requireWasmReceipt});
+  },{source,workspaceSources,requireWasmReceipt,executionReceiptsRequested});
   const report={status:'ACTUAL_BROWSER_POSITION_TRACKING_PASS',browser:browser.version(),
     sourceSha256:sha(source),libraryRevision:provenance.revision,
     librarySourcesSha256:sha(JSON.stringify(workspaceSources)),libraryFiles:Object.keys(workspaceSources).length,
