@@ -23,7 +23,7 @@ export function mountConfigurationPanel(aside:HTMLElement,options:ConfigurationO
   const camera=options.camera?.()??{...D435_IMAGE,software:false};
   configuration.querySelector('#sensor-rate-help')!.textContent=`${camera.software?'Reduced software preview':'D435 RGB and depth'}: ${camera.width} × ${camera.height}, with separate optics. ${camera.software?'This reduced simulation mode is below real camera resolutions. ':''}Paired capture supports15–${D435_PAIRED_MAX_HZ} Hz in simulation time; RGB is the limiting stream. Physics waits for processing. Viewer presentation remains independent at30 FPS.`;
   configuration.querySelector('.configuration-scene')!.append(document.querySelector('.scene-controls')!,document.getElementById('graphics-budget')!);
-  configuration.querySelector('.configuration-flight')!.append(document.getElementById('tour')!.parentElement!,document.getElementById('tour-mode')!);
+  configuration.querySelector('.configuration-flight')!.append(document.getElementById('tour-mode')!);
   const labels:Record<keyof SensorRates,string>={cameraHz:'RGB + depth rate',lidarHz:'LiDAR rate',imuHz:'Airframe IMU rate',gpsHz:'GPS rate'};
   const controls={} as Record<keyof SensorRates,HTMLSelectElement>;
   const defaults=configuration.querySelector<HTMLButtonElement>('#quality-sensor-defaults')!;

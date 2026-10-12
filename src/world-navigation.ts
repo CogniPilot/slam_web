@@ -2,9 +2,10 @@ import * as THREE from 'three';
 import type {Estimate} from './types';
 import {WorldMaterials} from './world-materials';
 import {covarianceAxes} from './covariance';
+import {TRAINING_ROOF} from './scene-landmarks';
+export {TRAINING_ROOF} from './scene-landmarks';
 
 export interface RoofVolume {minimum:number[];maximum:number[]}
-export const TRAINING_ROOF:RoofVolume={minimum:[35.8,-5.2,0],maximum:[48.2,5.2,3.8]};
 
 /** Demonstration geofence, not an RF propagation or satellite visibility model. */
 export function gpsAvailable(position:number[],volume:RoofVolume=TRAINING_ROOF) {

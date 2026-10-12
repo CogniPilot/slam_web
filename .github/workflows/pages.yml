@@ -12,6 +12,9 @@ on:
         default: false
 permissions:
   contents: read
+  actions: read
+env:
+  GH_TOKEN: ${{ secrets.RUMOCA_ARTIFACT_TOKEN || github.token }}
 concurrency:
   group: pages-${{ github.ref }}
   cancel-in-progress: true
@@ -41,6 +44,11 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ runner.arch }}-npm-
       - name: Check pinned toolchain
         run: nix build --no-update-lock-file --print-build-logs .#checks.x86_64-linux.toolchain
+      - name: Cache pinned Rumoca main package
+        uses: actions/cache@v6.1.0
+        with:
+          path: ~/scratch/slam_web/downloads/rumoca-main-*
+          key: rumoca-main-${{ hashFiles('rumoca-package.json') }}
       - name: Build and verify the Modelica browser application
         run: nix develop --no-update-lock-file .#ci --command bash scripts/verify.sh --build-only
       - name: Report pending full-SLAM compiler admission
@@ -88,6 +96,11 @@ jobs:
         with:
           name: github-pages
           path: ${{ runner.temp }}/pages-artifact
+      - name: Cache pinned Rumoca main package
+        uses: actions/cache@v6.1.0
+        with:
+          path: ~/scratch/slam_web/downloads/rumoca-main-*
+          key: rumoca-main-${{ hashFiles('rumoca-package.json') }}
       - name: Restore the verified static build
         run: |
           mkdir -p dist

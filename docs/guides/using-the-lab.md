@@ -1,7 +1,7 @@
 # Using the lab
 
 1. [Open SLAM Lab](https://cognipilot.github.io/slam_web/) and wait for loading to finish.
-2. Click **Run**. The default example flies the quadrotor and estimates motion from its IMU.
+2. Click **Run**. Manual flight starts with a drone-follow camera and IMU estimation.
 3. Open **Configuration** to change the environment, graphics, lighting or sensor rates.
 
 **Pause** holds simulation time. **Step** processes one camera frame and its due
@@ -10,7 +10,10 @@ the requested simulation speed; processing capacity determines the achieved spee
 
 ## Moving around
 
-The **Keys control** selector chooses between the viewer camera and drone commands.
+Use the toolbar's **Manual flight / Flight tour** button to take control or start
+an automatic tour. In **Configuration → Flight**, **Keys control** chooses drone
+commands or camera movement. **Camera view** selects fixed-heading follow,
+vehicle-heading chase, side, overhead or free view. Press **V** to cycle views.
 
 | Keys | Action |
 | --- | --- |
@@ -18,9 +21,19 @@ The **Keys control** selector chooses between the viewer camera and drone comman
 | Q / E | Turn |
 | R / F | Move up / down |
 | Shift | Move the viewer faster |
+| V | Next camera view |
 
-For manual flight, select **Drone commands**, turn off **Flight tour**, then run.
+Manual drone commands are the default. Camera movement in follow views adjusts
+the camera relative to the drone; free view moves independently.
 Moving the viewer camera leaves the simulated drone and sensor pose unchanged.
+
+**Configuration → Flight → Vehicles** enables a second drone. Each drone runs
+its own Modelica dynamics, sensors and estimator; both wait at the same lockstep
+boundaries. The toolbar's drone selector switches manual control, follow target,
+sensor previews and diagnostics. One drone is the default.
+
+The **Plot** pane shows live telemetry. Use **Add series** to select signals from
+either drone. It can collapse or fill the screen, like the viewer and editor.
 
 ## Scenes and graphics
 
@@ -37,5 +50,7 @@ its CPU, with a reduced camera preview.
 ## Workspace and phones
 
 The viewer and editor can each collapse or fill the screen. On a phone, scroll
-below the viewer to reach the editor and configuration. Low graphics is the mobile
-default. See [Editing Modelica](editing-modelica.md) to keep your work.
+below the viewer to reach the editor and configuration. Low graphics and its
+15 Hz RGB-D rate are the default everywhere so simulation stays close to real
+time; raise them in **Configuration**. See [Editing Modelica](editing-modelica.md)
+to keep your work.

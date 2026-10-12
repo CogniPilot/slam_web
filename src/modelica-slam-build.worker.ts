@@ -23,7 +23,7 @@ self.onmessage=async({data}:MessageEvent<{base:string;source:string;sourceSha256
     announce(progress);
     const compiler:Compiler=await import(/* @vite-ignore */new URL('vendor/rumoca/rumoca_bind_wasm.js',base).href);
     await compiler.default({module_or_path:new URL('vendor/rumoca/rumoca_bind_wasm_bg.wasm',base).href});
-    receipt.compiler={version:compiler.get_version(),revision:compiler.get_git_commit()};
+    receipt.compiler={version:compiler.get_version(),revision:compiler.get_git_commit()??'unknown'};
     if(typeof compiler.prepare_native_program!=='function')
       throw new Error('Installed Rumoca does not expose native WASM program compilation');
     for(const model of manifest.modelNames){
@@ -37,7 +37,11 @@ self.onmessage=async({data}:MessageEvent<{base:string;source:string;sourceSha256
       receipt.programs.push({model,moduleSha256:artifact.module_sha256,profile:artifact.profile,compileMs});
     }
     receipt.status='pass';
-  }catch(error){receipt.failedAt=progress;receipt.error=error instanceof Error?error.message:String(error);}
+  }catch(error){
+    receipt.failedAt=progress;
+    const stage=`${progress.phase}${progress.model?' '+progress.model:''}`;
+    receipt.error=error instanceof WebAssembly.RuntimeError?`Rumoca compiler trapped (${error.message}) while ${stage}`:error instanceof Error?error.message:String(error);
+  }
   receipt.elapsedMs=performance.now()-begin;
   self.postMessage({receipt});
 };

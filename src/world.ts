@@ -1,4 +1,7 @@
 import * as THREE from 'three';
+import {INTERIOR_CAMERAS,SCENE_CAMERAS} from './scene-landmarks';
+import {ViewerCamera,type CameraView} from './viewer-camera';
+import {DronePresentation} from './drone-presentation';
 import {GpuDepthNoise,validateDepthNoise,type DepthNoiseSettings} from './gpu-depth-noise';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { Calibration, Environment, Estimate, Pose, SceneDetail, Truth } from './types';
@@ -86,6 +89,13 @@ export class World {
   private readonly sensorGeometryBatches:SensorGeometryBatches;
   private sensorWorkerEnabled=true;
   private committedTruth?:Truth;
+  private otherTruth?:Truth;
+  private otherVehicle?:DronePresentation;
+  private resizeObserver?:ResizeObserver;
+  cameraVehicle:0|1=0;
+  onVehicleCount:(count:1|2)=>Promise<void>=async()=>{};
+  onOtherPose:(truth:Truth)=>void=()=>{};
+  get truth(){return this.committedTruth;}
   private actorMotion?:ActorMotionFrame;
   onBuild:(environment:Environment,detail:SceneDetail,preservePresentation?:boolean)=>Promise<void>=async()=>{};
   onPose:(truth:Truth)=>void=()=>{};
@@ -98,6 +108,7 @@ export class World {
   private currentQuaternion=new THREE.Quaternion();
   readonly scene = new THREE.Scene();
   readonly view = new THREE.PerspectiveCamera(50, 1, 0.1, 200);
+  readonly viewerCamera=new ViewerCamera();
   readonly robot = new THREE.Group();
   readonly environment = new THREE.Group();
   readonly points = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ color: 0x50e6b2, size: 0.045 }));
@@ -171,12 +182,12 @@ export class World {
     const cameraBody = new THREE.Mesh(new THREE.BoxGeometry(.04, .025, .09), new THREE.MeshStandardMaterial({ color: 0x151e29 }));
     cameraBody.position.set(this.calibration.forward, this.calibration.up, 0); this.robot.add(cameraBody);
     if(offscreen){this.renderer.setSize(offscreen.width,offscreen.height,false);this.view.aspect=offscreen.width/offscreen.height;this.view.updateProjectionMatrix();}
-    else new ResizeObserver(() => {
+    else (this.resizeObserver=new ResizeObserver(() => {
       const element=container as HTMLElement;
       if(element.clientWidth===0||element.clientHeight===0)return;
       this.renderer.setSize(element.clientWidth, element.clientHeight);
       this.view.aspect = element.clientWidth / element.clientHeight; this.view.updateProjectionMatrix();
-    }).observe(container as HTMLElement);
+    })).observe(container as HTMLElement);
     this.build('city');
   }
   private box(x:number,y:number,z:number,w:number,h:number,d:number,material:number|THREE.MeshStandardMaterial) {
@@ -219,18 +230,14 @@ export class World {
     if(kind==='tokyo') {
       if(!this.tokyo){this.tokyo=new TokyoWorld(this.assetBase);this.scene.add(this.tokyo.group);}
       this.tokyo.group.visible=true;this.ready=this.tokyo.ready;
-      this.view.position.set(-10,20,29);this.controls.target.set(16,5,0);
     } else if(kind==='asset-city') {
       if(!this.cityAssets){this.cityAssets=new CityAssets(this.materials,this.assetBase);this.scene.add(this.cityAssets.group);}
       this.cityAssets.build(detail);this.cityAssets.group.visible=true;this.ready=this.cityAssets.ready;
-      this.view.position.set(-10,9,2.7);this.controls.target.set(8,3,0);
     } else if(kind==='big-city') {
       if(!this.bigCity){this.bigCity=new BigCityWorld(this.materials);this.scene.add(this.bigCity.group);}
       this.bigCity.build(detail);this.bigCity.group.visible=true;this.ready=this.bigCity.ready;
-      this.view.position.set(-28,32,37);this.controls.target.set(18,5,0);
     } else if(kind==='city') {
       buildCity(this.box.bind(this),this.crown.bind(this),this.materials,detail);
-      this.view.position.set(-23,5.2,3.8);this.controls.target.set(5,4.1,0);
     } else if(kind==='warehouse') {
       const wall=this.materials.surface('plaster',0xd7d7c9),steel=this.materials.solid(0x536a7d,.6,.4),wood=this.materials.surface('wood',0xc39763);
       this.box(5,8,3,28,6,.2,wall);this.box(5,-8,3,28,6,.2,wall);
@@ -256,7 +263,10 @@ export class World {
       }
     }
     this.instanceEnvironment();
+    const overview=SCENE_CAMERAS[kind];
+    if(overview){const {eye,target}=overview;this.view.position.set(eye[0],eye[2],-eye[1]);this.controls.target.set(target[0],target[2],-target[1]);}
     if(camera){this.view.position.copy(camera.position);this.view.quaternion.copy(camera.quaternion);this.controls.target.copy(camera.target);}
+    else this.viewerCamera.rememberFree(this.view,this.controls.target);
     this.ready=Promise.all([this.ready,this.drone.ready,this.materials.ready,this.lighting.ready,...(['city','asset-city','big-city'].includes(kind)?[this.actors.ready]:[]),this.onBuild(kind,detail,preservePresentation),...(this.sensorRpc?[this.sensorRpc.call('configure',{environment:kind,detail})]:[])]).then(()=>{
       for(const group of [this.environment,this.cityAssets?.group,this.bigCity?.group,this.navigation.group])group?.traverse(object=>{if(object instanceof THREE.Mesh){object.castShadow=true;object.receiveShadow=true;}});
       this.lighting.invalidateShadows();
@@ -296,9 +306,28 @@ export class World {
     this.robot.updateMatrixWorld(true);
     this.onPose(this.committedTruth);
   }
+  async setVehicleCount(count:1|2){
+    if(count!==1&&count!==2)throw new Error('Vehicle count must be one or two');
+    if(count===2&&!this.otherVehicle){this.otherVehicle=new DronePresentation(this.assetBase);this.scene.add(this.otherVehicle.robot);}
+    if(count===2)await this.otherVehicle!.ready;
+    else {if(this.otherVehicle)this.otherVehicle.robot.visible=false;this.otherTruth=undefined;this.cameraVehicle=0;}
+    if(this.sensorRpc)await this.sensorRpc.call('configure',{vehicleCount:count});
+    await this.onVehicleCount(count);
+  }
+  updateOtherVehicle(truth:Truth){
+    if(!this.otherVehicle)throw new Error('Enable the second vehicle before publishing its pose');
+    if(this.otherTruth===truth)return;
+    this.otherTruth=truth;this.otherVehicle.update(truth);this.onOtherPose(truth);
+  }
+  dispose(){
+    this.sensorRpc?.stop();this.resizeObserver?.disconnect();this.controls.dispose?.();
+    this.materials.dispose();this.lighting.dispose();
+    this.scene.traverse(object=>{if(object instanceof THREE.Mesh||object instanceof THREE.Points||object instanceof THREE.Line){object.geometry.dispose();for(const material of Array.isArray(object.material)?object.material:[object.material])material.dispose();}});
+    this.renderer.dispose();this.renderer.forceContextLoss();
+  }
   async enableSensorWorker(){
     const rpc=new WorkerRpc(new Worker(new URL('./sensor-render.worker.ts',import.meta.url),{type:'module'}));
-    try{await rpc.call('init',{base:this.assetBase,sensorProfile:this.sensorProfile,environment:this.currentEnvironment,detail:this.currentDetail,carsEnabled:this.carsEnabled,peopleEnabled:this.peopleEnabled,lightingMode:this.lightingMode,environmentVisible:this.environmentVisible,depthCloudEnabled:this.depthCloudEnabled});this.sensorRpc=rpc;}
+    try{await rpc.call('init',{base:this.assetBase,sensorProfile:this.sensorProfile,environment:this.currentEnvironment,detail:this.currentDetail,carsEnabled:this.carsEnabled,peopleEnabled:this.peopleEnabled,lightingMode:this.lightingMode,environmentVisible:this.environmentVisible,depthCloudEnabled:this.depthCloudEnabled,depthNoise:this.depthNoiseSettings});this.sensorRpc=rpc;}
     catch(error){rpc.stop();throw error;}
   }
   setSensorWorkerEnabled(enabled:boolean){this.sensorWorkerEnabled=enabled;}
@@ -338,7 +367,7 @@ export class World {
     if(this.actorMotion&&this.actorMotion.time!==this.committedTruth?.time)throw new Error('Actor motion and camera must share the committed simulation time');
     if(this.sensorRpc&&this.sensorWorkerEnabled){
       if(!this.committedTruth)throw new Error('No committed simulation pose');
-      const result=await this.sensorRpc.call<any>('capture',{truth:this.committedTruth,actorMotion:this.actorMotion,lidarEnabled,denseCloudReadback:this.denseCloudReadback});
+      const result=await this.sensorRpc.call<any>('capture',{truth:this.committedTruth,otherTruth:this.otherTruth,actorMotion:this.actorMotion,lidarEnabled,denseCloudReadback:this.denseCloudReadback});
       this.captureTimings=result.cameraTimings;this.lidar.timings=result.lidarTimings;this.sensorGpuProfile=result.gpuProfile;
       if(result.scan)this.setLidarScan(result.scan);
       if(result.depthCloud)this.setDepthCloud(result.depthCloud);
@@ -356,7 +385,7 @@ export class World {
     if(!this.committedTruth)throw new Error('No committed simulation pose');
     if(this.actorMotion&&this.actorMotion.time!==this.committedTruth.time)throw new Error('Actor motion and LiDAR must share the committed simulation time');
     if(this.sensorRpc&&this.sensorWorkerEnabled){
-      const result=await this.sensorRpc.call<any>('capture-lidar',{truth:this.committedTruth,actorMotion:this.actorMotion});
+      const result=await this.sensorRpc.call<any>('capture-lidar',{truth:this.committedTruth,otherTruth:this.otherTruth,actorMotion:this.actorMotion});
       this.lidar.timings=result.lidarTimings;this.sensorGpuProfile=result.gpuProfile;this.setLidarScan(result.scan);return result.scan as LidarScan;
     }
     return this.captureLidar(this.committedTruth.time);
@@ -410,7 +439,7 @@ export class World {
     return {...result,...(cloudBytes?{cloud:new Float32Array(result.destination.buffer,offset,cloudBytes/4)}:{}),
       ...(lidarBytes?{lidar:new Float32Array(result.destination.buffer,offset+cloudBytes,lidarBytes/4)}:{})};
   }
-  private exactPose(){this.robot.position.copy(this.currentPosition);this.robot.quaternion.copy(this.currentQuaternion);this.robot.updateMatrixWorld(true);}
+  private exactPose(){this.robot.position.copy(this.currentPosition);this.robot.quaternion.copy(this.currentQuaternion);this.robot.updateMatrixWorld(true);this.otherVehicle?.render(false);}
   setDepthCloudEnabled(enabled:boolean){this.depthCloudEnabled=enabled;this.depthCloudView.visible=enabled&&!!(this.latestDepthCloud||this.latestDepthRaster);if(!enabled){this.latestDepthCloud=undefined;this.latestDepthRaster=undefined;}this.configureSensor({depthCloudEnabled:enabled});}
   setDepthCloud(cloud:DepthCloud){
     this.latestDepthCloud=cloud;this.latestDepthRaster=undefined;
@@ -438,19 +467,18 @@ export class World {
   }
   inspectInterior(id:'overview'|'store'|'apartment'|'conference'){
     if(this.currentEnvironment!=='big-city'||!this.bigCity)throw new Error('Interior views are available in Big city');
-    if(id==='overview'){this.view.position.set(-28,32,37);this.controls.target.set(18,5,0);}
+    if(id==='overview'){const {eye,target}=SCENE_CAMERAS['big-city']!;this.view.position.set(eye[0],eye[2],-eye[1]);this.controls.target.set(target[0],target[2],-target[1]);}
     else {
       // Authored inspection cameras sit beside the sensor's entrance route,
       // so a drone parked on that route cannot obscure the room's furniture.
-      const shots={
-        store:{eye:[18.4,9.4,1.8],target:[21.5,14.2,1.4]},
-        apartment:{eye:[34,-10.5,1.8],target:[30,-11.4,1.1]},
-        conference:{eye:[43.7,9.9,1.8],target:[48,15,1.2]},
-      };
-      const {eye,target}=shots[id];
+      const {eye,target}=INTERIOR_CAMERAS[id];
       this.view.position.set(eye[0],eye[2],-eye[1]);this.controls.target.set(target[0],target[2],-target[1]);
     }
     this.controls.update();
+  }
+  setCameraView(mode:CameraView){
+    this.viewerCamera.select(mode,this.view,this.controls.target);
+    this.controls.enabled=mode==='free';
   }
   setLighting(mode:DaylightMode){this.lightingMode=mode;this.lighting.setMode(mode,this.simulationTime);this.onLighting(mode);this.configureSensor({lightingMode:mode});}
   setEnvironmentVisible(visible:boolean){
@@ -492,7 +520,9 @@ export class World {
     this.drone.render(fraction);
     this.robot.position.lerpVectors(this.previousPosition,this.currentPosition,fraction);this.robot.quaternion.slerpQuaternions(this.previousQuaternion,this.currentQuaternion,fraction);
     this.robot.updateMatrixWorld(true);this.animate(this.previousTime+(this.simulationTime-this.previousTime)*fraction);
-    this.controls.update();this.renderer.setRenderTarget(null);this.renderer.render(this.scene,this.view);
+    this.otherVehicle?.render(interpolate);
+    this.controls.update();this.viewerCamera.update(this.view,this.cameraVehicle===1&&this.otherVehicle?this.otherVehicle.robot:this.robot,this.controls.target);
+    this.renderer.setRenderTarget(null);this.renderer.render(this.scene,this.view);
   }
   private optics(fx: number, fy: number,far=this.calibration.far) {
     this.sensor.near = this.calibration.near; this.sensor.far = far;

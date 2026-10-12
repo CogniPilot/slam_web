@@ -3,7 +3,9 @@ import { WorkerRpc } from './rpc';
 import { ports,portTopic,validateGraph,type PortType } from './graph';
 import {seededRandom,recordedCameraFrame,validateSensorObservation} from './packet';
 import { World } from './world';
-import {defaultSensorModelica,defaultEvaluationModelica,withActorMotion,type Project} from './project';
+import {defaultSensorModelica,defaultEvaluationModelica,withActorMotion,offsetQuadrotorPath,type Project} from './project';
+import offsetQuadrotor from '../models/Vehicles/OffsetQuadrotor.mo?raw';
+import {LockstepBarrier} from './lockstep-barrier';
 import type {ActorMotionFrame} from './modelica-actor-motion';
 import type { Command,Estimate,Pose,RunRecord,SensorFrame,InitialSensorFrame,Truth,SceneDetail } from './types';
 import {validatePose} from './evaluation';
@@ -13,6 +15,7 @@ import type {GpsSample} from './world-navigation';
 import {SensorClock,sensorRates,validateSensorRates,type SensorRates} from './sensor-clock';
 export interface Metrics { time:number; ate:number|null; currentError:number|null; orientationError:number|null; confidence:number; points:number; features:number; rtf:number; frames:number; loops:number; dropped:number }
 export interface FlowTiming {totalMs:number;bufferBytes:number|null}
+export interface VehicleFrame {frame:SensorFrame;estimate:Estimate;truth:Truth|undefined;metrics:Metrics}
 export class Runtime {
   readonly flow=new DataFlow();
   private physics=new WorkerRpc(new Worker(new URL('./physics.worker.ts',import.meta.url),{type:'module'}));
@@ -38,6 +41,13 @@ export class Runtime {
   private imuIntervals:NonNullable<SensorFrame['imuIntervals']>=[];
   private replay?:RunRecord[];
   private externalStep=false;
+  private secondary?:Runtime;
+  private fleetStepping=false;
+  private fleetFailure?:Error;
+  private selectedVehicle:0|1=0;
+  lastFrame?:VehicleFrame;
+  private pendingFrame?:VehicleFrame;
+  private pendingRecord?:RunRecord;
   records:RunRecord[]=[];
   recording=false;
   running=false;
@@ -54,18 +64,39 @@ export class Runtime {
   onStatus:(status:string)=>void=()=>{};
   onSensor:()=>void=()=>{};
   onLidar:()=>void=()=>{};
-  constructor(readonly world:World) {}
+  onVehicleFrame:(vehicle:0|1,data:VehicleFrame)=>void=()=>{};
+  constructor(readonly world:World,readonly vehicleIndex:0|1=0) {}
+  get activeVehicle():Runtime{return this.getVehicle(this.selectedVehicle);}
+  getVehicle(index:0|1):Runtime{
+    if(index!==0&&index!==1)throw new Error('Unknown vehicle');
+    if(index===1&&!this.secondary)throw new Error('The second vehicle is not enabled');
+    return index===1?this.secondary!:this;
+  }
+  get vehicleCount():1|2{return this.secondary?2:1;}
+  get activeVehicleIndex(){return this.selectedVehicle;}
+  selectVehicle(index:0|1){
+    this.getVehicle(index);
+    this.command={forward:0,left:0,up:0,yaw:0};this.selectedVehicle=index;this.world.cameraVehicle=index;
+    const data=this.activeVehicle.lastFrame;
+    if(data)this.onFrame(data.frame,data.estimate,data.truth,data.metrics);
+  }
+  dispose(){
+    this.pause();this.physics.stop();this.modelicaState?.stop();this.modelicaMath?.stop();
+    this.secondary?.dispose();this.secondary=undefined;this.world.dispose();
+  }
   async setGraphicsQuality(detail:SceneDetail) {
-    if(this.running||this.stepping)throw new Error('Pause and finish the current lockstep frame before changing graphics quality');
+    if(this.running||this.busy)throw new Error('Pause and finish the current lockstep frame before changing graphics quality');
     await this.world.setGraphicsQuality(detail);
+    if(this.secondary)await this.secondary.setGraphicsQuality(detail);
     if(this.project)this.project.sceneDetail=detail;
     this.resetSensorClock();
   }
   setSensorRates(rates?:SensorRates){
-    if(this.running||this.stepping)throw new Error('Pause and finish the current lockstep frame before changing sensor rates');
+    if(this.running||this.busy)throw new Error('Pause and finish the current lockstep frame before changing sensor rates');
     if(rates)validateSensorRates(rates);
     if(this.project){if(rates)this.project.sensorRates=structuredClone(rates);else delete this.project.sensorRates;}
     this.resetSensorClock(rates);
+    this.secondary?.setSensorRates(rates);
   }
   private resetSensorClock(rates?:SensorRates){
     const configuration=rates??sensorRates(this.project??{});
@@ -73,7 +104,10 @@ export class Runtime {
   }
   async compile(project:Project) {
     this.pause();
-    if(this.stepping) throw new Error('Wait for the current lockstep frame to finish');
+    if(this.busy) throw new Error('Wait for the current lockstep frame to finish');
+    this.secondary?.dispose();this.secondary=undefined;this.selectedVehicle=0;this.lastFrame=undefined;
+    this.fleetFailure=undefined;this.pendingFrame=undefined;this.pendingRecord=undefined;
+    await this.world.setVehicleCount(1);
     const order=validateGraph(project.graph);
     if(order.some(node=>node.kind==='modelica'))throw new Error('Custom Modelica graph-node execution is pending. Source editing, Rumoca diagnostics and project persistence are available.');
     this.onStatus('Compiling Modelica in Rumoca WASM…');
@@ -84,7 +118,10 @@ export class Runtime {
     this.modelicaState?.stop();this.modelicaState=undefined;
     this.modelicaMath?.stop();this.modelicaMath=undefined;
     this.physics=new WorkerRpc(new Worker(new URL('./physics.worker.ts',import.meta.url),{type:'module'}));
-    const truth=await this.physics.call<Truth>('init',{base,source:project.physics,workspaceSources:project.modelicaSources});
+    const workspaceSources={...project.modelicaSources};
+    const spawnSource=workspaceSources[offsetQuadrotorPath]??offsetQuadrotor;
+    if(this.vehicleIndex===1)delete workspaceSources[offsetQuadrotorPath];
+    const truth=await this.physics.call<Truth>('init',{base,source:this.vehicleIndex===1?project.physics+'\n'+spawnSource:project.physics,modelName:this.vehicleIndex===1?'OffsetQuadrotor':'LabQuadrotor',workspaceSources});
     validatePose(truth);this.origin={x:truth.x,y:truth.y,z:truth.z,quaternion:[...truth.quaternion]};
     this.modelicaMath=new WorkerRpc(new Worker(new URL('./modelica-runtime-math.worker.ts',import.meta.url),{type:'module'}));
     project.sensorModelica=withActorMotion(project.sensorModelica??defaultSensorModelica);
@@ -112,6 +149,21 @@ export class Runtime {
     this.heldImu=(await this.sampleSensors(truth,true,false)).imu;
     this.reference=undefined;this.records=[];this.replay=undefined;
     this.project=structuredClone(project);this.order=order;
+    if(this.vehicleIndex===0&&project.vehicleCount===2){
+      const otherWorld=new World(document.createElement('div'));
+      let candidate:Runtime|undefined;
+      try{
+        const other=candidate=new Runtime(otherWorld,1);
+        other.onStatus=message=>this.onStatus('Drone 2 · '+message);
+        other.onSensor=()=>this.onSensor();other.onLidar=()=>this.onLidar();
+        other.onVehicleFrame=(_index,data)=>this.onVehicleFrame(1,data);
+        other.onFrame=(frame,estimate,truth,metrics)=>{if(this.selectedVehicle===1)this.onFrame(frame,estimate,truth,metrics);};
+        await other.compile({...structuredClone(project),vehicleCount:1,seed:project.seed^0x44524f4e});
+        if(this.world.graphics.acceleration!=='software'&&typeof OffscreenCanvas!=='undefined')await otherWorld.enableSensorWorker();
+        await Promise.all([this.world.setVehicleCount(2),otherWorld.setVehicleCount(2)]);
+        this.secondary=other;this.publishVehiclePoses();
+      }catch(error){if(candidate)candidate.dispose();else otherWorld.dispose();await this.world.setVehicleCount(1);this.project=undefined;throw error;}
+    }
     this.onStatus('Ready · camera + Modelica inertial baseline · native feature detection and SLAM pending');
   }
   /** Optional full-SLAM initialization image. It consumes no physics/sensor tick
@@ -149,7 +201,41 @@ export class Runtime {
     this.lastTransportTimings[port]={totalMs:performance.now()-started,bufferBytes};
     return value;
   }
-  async step() {
+  private publishVehiclePoses(){
+    if(this.secondary&&this.world.truth&&this.secondary.world.truth){
+      this.world.updateOtherVehicle(this.secondary.world.truth);
+      this.secondary.world.updateOtherVehicle(this.world.truth);
+    }
+  }
+  async step(){
+    if(this.fleetFailure)throw this.fleetFailure;
+    if(this.fleetStepping)throw new Error('A fleet lockstep frame is already executing');
+    if(!this.secondary)return this.stepVehicle();
+    if(this.replay)throw new Error('Dataset replay requires one vehicle');
+    this.fleetStepping=true;
+    const other=this.secondary,barrier=new LockstepBarrier(2,()=>this.publishVehiclePoses());
+    other.autopilot=this.autopilot;other.tourMode=this.tourMode;other.speed=this.speed;
+    other.command=this.selectedVehicle===1?{...this.command}:{forward:0,left:0,up:0,yaw:0};
+    const advance=(vehicle:Runtime)=>vehicle.stepVehicle(barrier).catch(error=>{barrier.abort(error instanceof Error?error:new Error(String(error)));throw error;});
+    try{
+      const results=await Promise.allSettled([advance(this),advance(other)]);
+      const failure=results.find(result=>result.status==='rejected');
+      if(failure?.status==='rejected')throw failure.reason;
+      if(this.time!==other.time)throw new Error('Vehicle clocks diverged');
+      if(this.pendingFrame)this.lastFrame=this.pendingFrame;
+      if(other.pendingFrame)other.lastFrame=other.pendingFrame;
+      this.publishFrame();other.publishFrame();
+    }catch(error){
+      this.fleetFailure=new Error('Recompile after the failed fleet frame: '+String(error));throw error;
+    }finally{this.pendingFrame=undefined;other.pendingFrame=undefined;this.pendingRecord=undefined;other.pendingRecord=undefined;this.fleetStepping=false;}
+  }
+  private publishFrame(){
+    const data=this.lastFrame;if(!data)return;
+    if(this.pendingRecord){this.records.push(this.pendingRecord);this.pendingRecord=undefined;}
+    this.onVehicleFrame(this.vehicleIndex,data);
+    if(!this.secondary||this.selectedVehicle===0)this.onFrame(data.frame,data.estimate,data.truth,data.metrics);
+  }
+  private async stepVehicle(barrier?:LockstepBarrier) {
     if(this.stepping) throw new Error('A lockstep frame is already executing');
     if(!this.project) throw new Error('Compile the project first');
     if(this.replay && this.sequence>=this.replay.length) {this.running=false;this.onStatus('Replay finished');return;}
@@ -161,7 +247,7 @@ export class Runtime {
       const values=new Map<string,any>();
       let truth:Truth|undefined,frame!:SensorFrame,estimate!:Estimate;
       let sensorGps:GpsSample|null=null;
-      let command={...this.command};
+      let command=this.secondary&&this.selectedVehicle===1?{forward:0,left:0,up:0,yaw:0}:{...this.command};
       for(const node of this.order) {
         const nodeStart=performance.now();
         const inputs:Record<string,any>={};
@@ -177,6 +263,7 @@ export class Runtime {
                 for(const event of this.sensorClock.nextFrame(this.project.lidarEnabled??false)){
                   truth=await this.physics.call<Truth>('step',{time:event.time,command,autopilot:this.autopilot,indoorTour:this.tourMode==='indoor',commandTime});
                   this.world.update(truth);
+                  if(barrier)await barrier.arrive();
                   // Zero-order hold: an endpoint IMU measurement applies to
                   // the next interval. Numerical integration stays in WASM.
                   if(event.imu||event.camera){
@@ -192,6 +279,7 @@ export class Runtime {
                     this.deliveredLidar(await this.world.captureLidarOnly());
                   }
                   if(event.camera)this.cameraLidar=event.lidar;
+                  if(barrier)await barrier.arrive();
                 }
               }
               if(!truth)throw new Error('Missing committed camera pose');
@@ -263,17 +351,21 @@ export class Runtime {
       const metrics=metricNode?values.get(`${metricNode.id}/metrics`):{ate:null,currentError:null,orientationError:null};
       this.flow.record('lab/slam/odometry');
       if(this.recording) {
-        if(this.records.length<300) this.records.push({frame:recordedCameraFrame(frame),truth,estimate,command});
+        if(this.records.length<300) this.pendingRecord={frame:recordedCameraFrame(frame),truth,estimate,command};
         else { this.recording=false;this.onStatus('Recording stopped at 300 frames; export the dataset'); }
       }
       this.sequence++;
       const wall=(performance.now()-this.startWall)/1000;
-      this.onFrame(frame,estimate,truth,{...metrics,time:frame.time,confidence:estimate.confidence,points:estimate.points.length,features:estimate.features?.length??0,rtf:wall>0?(frame.time-this.startTime)/wall:0,frames:this.sequence,loops:Number(estimate.diagnostics?.loops??0),dropped:0});
+      const completed={...metrics,time:frame.time,confidence:estimate.confidence,points:estimate.points.length,features:estimate.features?.length??0,rtf:wall>0?(frame.time-this.startTime)/wall:0,frames:this.sequence,loops:Number(estimate.diagnostics?.loops??0),dropped:0};
+      const delivered={frame,estimate,truth,metrics:completed};
+      if(barrier)this.pendingFrame=delivered;
+      else{this.lastFrame=delivered;this.publishFrame();}
     } finally {this.stepping=false;this.externalStep=false;}
   }
   play() {
     if(this.running) return;
     this.running=true;this.startWall=performance.now();this.startTime=this.time;
+    if(this.secondary){this.secondary.startWall=this.startWall;this.secondary.startTime=this.secondary.time;}
     const loop=async()=>{
       if(!this.running)return;
       const before=performance.now();
@@ -284,13 +376,14 @@ export class Runtime {
     void loop();
   }
   pause() {this.running=false;}
-  get busy(){return this.stepping;}
+  get busy():boolean{return this.stepping||this.fleetStepping||!!this.secondary?.busy;}
   get evaluationOrigin(){return structuredClone(this.origin);}
   referenceTruth(truth:Pose){
     if(!this.reference||truth.x!==this.reference.truth.x||truth.y!==this.reference.truth.y||truth.z!==this.reference.truth.z||truth.quaternion.some((v,i)=>v!==this.reference!.truth.quaternion[i]))throw new Error('Modelica reference observation is unavailable for this pose');
     return structuredClone(this.reference.pose);
   }
   async loadReplay(records:RunRecord[],origin?:Pose) {
+    if(this.secondary)throw new Error('Set Vehicles to 1 drone before replaying a dataset');
     if(!this.project)throw new Error('Compile before replay');
     if(origin)validatePose(origin);
     await this.compile(this.project);if(origin){this.origin=structuredClone(origin);await this.modelicaMath!.call('origin',{origin:this.origin});}

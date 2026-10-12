@@ -1,4 +1,5 @@
 import physics from '../models/Vehicles/LabQuadrotor.mo?raw';
+import offsetQuadrotor from '../models/Vehicles/OffsetQuadrotor.mo?raw';
 import imageProfile from '../models/Sensors/D435ImageProfile.mo?raw';
 import harrisNative from '../models/Vision/Features/HarrisNativeFrame.mo?raw';
 import harrisProfile from '../models/Vision/Features/D435HarrisFeatures.mo?raw';
@@ -26,6 +27,9 @@ export const algorithms: Record<string,string> = {
 // The editable entry file lives in project.algorithm; keep one owner per source.
 const defaultModelicaSources=Object.fromEntries(Object.entries(modelicaModelsSources)
   .filter(([path])=>path!==inertialExamplePath));
+export const offsetQuadrotorPath='models/Vehicles/OffsetQuadrotor.mo';
+export const offsetQuadrotorSource=offsetQuadrotor;
+defaultModelicaSources[offsetQuadrotorPath]=offsetQuadrotor;
 /** Add the new editable component without replacing a saved sensor model. */
 export function withActorMotion(source:string):string {
   return /\bmodel\s+ActorMotion\b/.test(source)?source:`${source}\n${actorMotion}`;
@@ -56,15 +60,19 @@ export interface Project {
   carsEnabled?:boolean;
   peopleEnabled?:boolean;
   lightingMode?:'day'|'night'|'cycle';
+  vehicleCount?:1|2;
 }
-export const defaultProject = (mobile=false): Project => ({
+export const defaultProject = (_mobile=false): Project => ({
   format:'slam-lab-project',
   version:1,
   name:'My quadrotor SLAM',
   environment:'city',
-  sceneDetail:mobile?'low':'medium',
+  // Economical graphics (15 Hz RGB-D) is the default on every device so the
+  // simulation stays close to real time; phones only change the layout.
+  sceneDetail:'low',
   depthCloudEnabled:false,
   lidarEnabled:false,
+  vehicleCount:1,
   seed:7,
   algorithm:algorithms['Modelica inertial propagation'],
   entryPoint:'SLAM.Examples.InertialOnly',
@@ -95,6 +103,8 @@ export function parseProject(text: string): Project {
   if(p.runtime!=='modelica'||p.detectorLanguage!=='modelica'||p.graph?.nodes?.some((n:any)=>n.kind==='python'))throw new Error('This project uses a retired runtime. Convert its algorithm, detector and custom nodes to Modelica before opening it. Your saved source has not been changed.');
   if(!['city','warehouse','courtyard','tokyo','asset-city','big-city'].includes(p.environment)||!Number.isInteger(p.seed)) throw new Error('Invalid project settings');
   if(p.sceneDetail!==undefined&&!['low','medium','high'].includes(p.sceneDetail))throw new Error('Invalid scene detail level');
+  if(p.vehicleCount!==undefined&&p.vehicleCount!==1&&p.vehicleCount!==2)throw new Error('Vehicle count must be one or two');
+  if(p.vehicleCount===2){p.modelicaSources??={};p.modelicaSources[offsetQuadrotorPath]??=offsetQuadrotor;}
   // Earlier previews offered paired90 Hz despite D435 RGB's60 Hz limit at
   //848×480. Preserve saved sources and the other rates when migrating them.
   if(p.sensorRates?.cameraHz===90)p.sensorRates.cameraHz=60;

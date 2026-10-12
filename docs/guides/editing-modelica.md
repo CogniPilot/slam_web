@@ -34,15 +34,28 @@ for the new source. The running demo continues to use its selected inertial mode
 components. Search for a class, follow related-class links, or choose **Open
 source** to edit it. **Refresh** includes your latest edits.
 
-**Assistant** connects to an OpenAI-compatible API or a local Ollama endpoint.
-Enter its URL, a tool-capable model ID and any required API key. The agent can
-read project files and documentation, inspect diagnostics, check the selected
-model and its library sources, and propose edits. This check excludes the full
-SLAM workspace and other experiment files. Review each diff before accepting it; acceptance uses
-the normal editor and saving behavior. **Stop** cancels a request, and **Forget
-key & conversation** clears the session. Keys are kept only in page memory.
+**Assistant** can read files and documentation, edit Modelica, check compilation,
+and inspect a short simulation. Requested edits apply through the editor with
+an **Undo edit** button; suggested changes appear as diffs for review.
+For example: “Start in the store and fly around inside.” The assistant can look
+up room coordinates, select Big city, and edit the Modelica starting pose and
+trajectory. Physics, controllers and SLAM stay in Modelica. Inspect generated
+missions; camera viewpoints and aisle references are not collision guarantees.
 
-Source requested by the agent is sent to the provider you choose. That provider
-must allow browser requests. Local Ollama needs `OLLAMA_ORIGINS` configured for
-the site's origin. ChatGPT account sign-in and Claude's native API are not
-currently integrated.
+Choose OpenAI (Responses API), a compatible endpoint or local Ollama. Source
+requested by tools is sent to that provider, which must allow browser requests.
+Ollama needs `OLLAMA_ORIGINS` set to the site's origin. Credentials stay in page
+memory; ChatGPT subscriptions do not include API billing.
+
+**WebLLM** runs a small model on this device without API billing. It needs WebGPU
+and about 1–2 GB of GPU memory. The first Send loads the WebLLM runtime from
+the esm.run CDN and downloads and caches weights; inference runs in a worker. Small edits work best. Simulation pauses while the
+assistant works; **Unload local model** releases its worker and GPU resources.
+
+**Stop** cancels a request; an in-flight simulation frame finishes normally.
+Analysis runs stop after at most 30 frames per request and a wall-time budget.
+Requested flight uses normal playback after preparation. Compilation checks
+report their scope: the selected example or a named component, never an
+unaccepted proposal. These tools do not enable the pending full SLAM runtime.
+**Forget key & conversation** clears the session and unloads the local model;
+cached weights and project source remain.

@@ -2,9 +2,9 @@ import './style.css';
 import './diagnostics.css';
 import {poseSnapshot} from './trajectory';
 import { World } from './world';
-import { Runtime } from './runtime';
+import { Runtime,type Metrics } from './runtime';
 import { sourceFor,setSource,nodeRuntimeLabel,type GraphNode } from './graph';
-import { algorithms,detectors,visibleDetectorPresets,defaultProject,loadProject,readSavedProject,saveProject,parseProject,download } from './project';
+import { algorithms,detectors,visibleDetectorPresets,defaultProject,loadProject,readSavedProject,saveProject,parseProject,download,offsetQuadrotorPath,offsetQuadrotorSource } from './project';
 import type { Estimate,Pose,RunRecord,SensorFrame,Truth } from './types';
 import {ComparisonTracker,type TimedPose} from './comparison';
 import {validateSensorFrame} from './packet';
@@ -14,6 +14,7 @@ import {BrowserPerformanceMonitor} from './performance-monitor';
 import {WorkerViewer} from './worker-viewer';
 import {GRAPHICS_DESCRIPTIONS} from './graphics-quality';
 import {ViewerCameraControls,VIEWER_KEYS,isTextEntry} from './viewer-camera-controls';
+import {CAMERA_VIEWS,nextCameraView,type CameraView} from './viewer-camera';
 import {mountConfigurationPanel} from './configuration-panel';
 import {sensorRates,type SensorRates} from './sensor-clock';
 import {createRGBDSlamWorkspace,editRGBDSlamWorkspace,rgbdSlamWorkspaceManifest} from './modelica-slam-workspace';
@@ -25,13 +26,16 @@ import {mountWorkspacePanes} from './workspace-panes';
 import {startupScreen} from './startup-screen';
 import {createModelicaDocs} from './modelica-docs';
 import {createAssistantPanel} from './assistant-panel';
+import {runAssistantSimulation} from './assistant-simulation';
+import {sceneLandmarks} from './scene-landmarks';
+import {mountTelemetryPlot} from './telemetry-plot';
 import './modelica-docs.css';
 import './workspace.css';
 
 const startup=startupScreen();
 document.querySelector('#app')!.innerHTML=`
-<header><a class="brand" href="./"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button></div><a class="powered-by" href="https://github.com/CogniPilot/rumoca" target="_blank" rel="noopener noreferrer" aria-label="Powered by Rumoca" title="Rumoca Modelica compiler"><span>Powered by</span><img src="${import.meta.env.BASE_URL}brand/rumoca.svg" width="28" height="28" alt=""></a></header>
-<main><div class="toolbar"><div class="run-controls"><button id="run" class="primary" disabled>▶ Run</button><button id="step" disabled>Step</button><button id="reset" disabled>↺ Reset</button><select id="speed" aria-label="Simulation speed"><option value="1">1× real time</option><option value="4">4× real time</option><option value="Infinity">As fast as possible</option></select><label class="check"><input id="tour" type="checkbox" checked>Flight tour</label></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option value="city">City blocks</option><option value="warehouse">Warehouse</option><option value="courtyard">Courtyard</option></select><label class="check"><input id="show-map" type="checkbox" checked>Show map</label><button id="help">Lesson guide</button></div></div>
+<header><a class="brand" href="https://github.com/CogniPilot/slam_web" target="_blank" rel="noopener noreferrer" aria-label="SLAM Lab GitHub repository"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button></div><a class="powered-by" href="https://github.com/CogniPilot/rumoca" target="_blank" rel="noopener noreferrer" aria-label="Powered by Rumoca" title="Rumoca Modelica compiler"><span>Powered by</span><img src="${import.meta.env.BASE_URL}brand/rumoca.svg" width="28" height="28" alt=""></a></header>
+<main><div class="toolbar"><div class="run-controls"><button id="run" class="primary" disabled>▶ Run</button><button id="step" disabled>Step</button><button id="reset" disabled>↺ Reset</button><select id="speed" aria-label="Simulation speed"><option value="1">1× real time</option><option value="4">4× real time</option><option value="Infinity">As fast as possible</option></select><button id="flight-control" aria-pressed="true" aria-label="Manual flight">Manual flight</button><select id="active-vehicle" aria-label="Controlled and followed drone" hidden><option value="0">Drone 1</option><option value="1">Drone 2</option></select></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option value="city">City blocks</option><option value="warehouse">Warehouse</option><option value="courtyard">Courtyard</option></select><label class="check"><input id="show-map" type="checkbox" checked>Show map</label><button id="help">Lesson guide</button></div></div>
 <div class="workspace"><section class="visuals"><div class="scene panel"><div class="panel-label"><span class="live-dot"></span>WORLD VIEW<span class="right">Three.js · orbit to explore</span></div><div id="world"></div><div class="scene-overlay"><span>QUADROTOR + D435</span><small id="flight-status">Initializing browser runtimes</small></div><div class="scene-bottom">WASD move · Q/E yaw · R/F altitude <span id="sim-time">t = 0.00 s</span></div></div>
 <div class="sensor-row"><div class="panel sensor"><div class="panel-label">RGB CAMERA<span class="right">features overlay</span></div><canvas id="rgb" width="160" height="90"></canvas><div class="sensor-foot">69° × 42° · RGBA8</div></div><div class="panel sensor"><div class="panel-label">DEPTH CAMERA<span class="right">axial depth, meters</span></div><canvas id="depth" width="160" height="90"></canvas><div class="sensor-foot">87° × 58° · 0.28–10 m</div></div><div class="panel trajectory"><div class="panel-label">TRAJECTORY<span class="right">ENU · meters</span></div><canvas id="trajectory" width="260" height="146"></canvas><div class="legend"><span class="truth-key">Truth</span><span class="estimate-key">Estimate</span><span class="compare-key">External</span></div></div></div>
 <div class="metrics"><div><small>SIM TIME</small><strong id="metric-time">0.00 <em>s</em></strong></div><div><small>TRAJECTORY RMSE</small><strong id="metric-ate">— <em>m</em></strong></div><div><small>FEATURES</small><strong id="metric-features">0</strong></div><div><small>MAP POINTS</small><strong id="metric-points">0</strong></div><div><small>SIM / WALL TIME</small><strong id="metric-rtf">— <em>×</em></strong></div></div></section>
@@ -47,7 +51,7 @@ el('environment').insertAdjacentHTML('beforeend','<option value="tokyo">Littlest
 el('scene-detail').title='Controls viewer resolution, textures, shadows, clouds and scene detail. Appearance also changes sensor imagery. Sensor rates follow quality defaults unless customized.';
 el('environment').insertAdjacentHTML('afterend','<select id="interior-view" aria-label="Inspect Big city" title="Move the viewer camera; simulation and sensor pose stay on the flight path" hidden><option value="overview">City overview</option><option value="store">Corner Market</option><option value="apartment">Daylight Loft</option><option value="conference">Civic Workspace</option></select>');
 el('scene-detail').insertAdjacentHTML('afterend','<span id="sensor-rate-summary" class="badge"></span><label class="check"><input id="lidar-enabled" type="checkbox">64-beam LiDAR</label><label class="check"><input id="show-paths" type="checkbox" checked>3D paths</label>');
-el('tour').parentElement!.insertAdjacentHTML('afterend','<select id="tour-mode" aria-label="Flight tour route"><option value="circuit">Street circuit</option><option value="indoor">Outdoor → indoor → outdoor</option></select>');
+el('flight-control').insertAdjacentHTML('afterend','<select id="tour-mode" aria-label="Flight tour route"><option value="circuit">Street circuit</option><option value="indoor">Outdoor → indoor → outdoor</option></select>');
 el('lidar-enabled').parentElement!.insertAdjacentHTML('afterend','<label class="check"><input id="cars-enabled" type="checkbox" checked>Cars</label><label class="check"><input id="people-enabled" type="checkbox" checked>People</label>');
 el('lidar-enabled').parentElement!.insertAdjacentHTML('afterend','<label class="check"><input id="depth-cloud-enabled" type="checkbox">Raw depth cloud</label>');
 document.querySelector('.scene .panel-label .right')!.innerHTML='<span id="world-fps">— FPS · target 30</span> · Three.js';
@@ -134,11 +138,13 @@ function refreshFiles(){
     ...manifest.paths.map(path=>({id:path,path:'SLAM sources/'+path.slice('models/'.length)}))
   ],viewingSlamFile()?activeSlamFile:viewingLibraryFile()?'library:'+activeLibraryFile:'experiment:'+selected.id);
 }
+const telemetryPlot=mountTelemetryPlot(document.querySelector('.visuals')!);
 mountWorkspacePanes([
   {name:'viewer',panel:document.querySelector('.scene')!,header:document.querySelector('.scene .panel-label')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!},
-  {name:'editor',panel:document.querySelector('aside.editor')!,header:document.querySelector('.configuration-tabs')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!}
+  {name:'editor',panel:document.querySelector('aside.editor')!,header:document.querySelector('.configuration-tabs')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!},
+  {name:'plot',panel:telemetryPlot.panel,header:telemetryPlot.header,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!}
 ],()=>{
-  viewerPresented=!document.querySelector('.scene.pane-collapsed, aside.editor.pane-fullscreen');
+  viewerPresented=!document.querySelector('.scene.pane-collapsed, aside.editor.pane-fullscreen, .telemetry-plot.pane-fullscreen');
   viewer?.presentationVisible(viewerPresented);
 });
 const slamBuildPanel=document.createElement('div');slamBuildPanel.className='slam-source-build';slamBuildPanel.hidden=true;
@@ -212,22 +218,73 @@ const assistant=createAssistantPanel({
       result:await sourceEditor.checkModel(project.algorithm,model,project.modelicaSources??{})};
   },
   searchDocs:query=>documentation.search(query),
-  readDocs:name=>documentation.read(name)
+  readDocs:name=>documentation.read(name),
+  simulation:assistantSimulationStatus,
+  landmarks:environment=>sceneLandmarks(environment??project.environment),
+  checkFile:async(path,model)=>{
+    const sources={...project.modelicaSources,...(Object.hasOwn(project.slamWorkspace?.sources??{},path)?project.slamWorkspace?.sources:{})};delete sources[path];
+    return {scope:'named Modelica component',path,model,result:await sourceEditor.checkModel(projectFiles()[path],model,sources)};
+  },
+  selectEnvironment:async environment=>{
+    if(compiling||assistantSimulation)throw new Error('Wait for the current operation to finish.');
+    pauseForAssistant();project.environment=environment as typeof project.environment;el<HTMLSelectElement>('environment').value=environment;
+    changed();ready=false;disableRun(true);syncApplyButton();
+    return {environment,status:'Selected for the next compilation. Modelica source and flight path are unchanged.'};
+  },
+  startSimulation:async signal=>{
+    const revision=projectRevision;pauseForAssistant();
+    const deadline=performance.now()+15_000;
+    while(runtime.busy||compiling){signal.throwIfAborted();if(performance.now()>deadline)throw new Error('Simulation is busy. Retry when it finishes.');await new Promise(resolve=>setTimeout(resolve,20));}
+    signal.throwIfAborted();if(projectRevision!==revision)throw new Error('Project changed. Start a new request.');
+    if(dirty||!ready)await compile();
+    signal.throwIfAborted();if(projectRevision!==revision||!ready||dirty)throw new Error('Selected example could not be prepared. Read diagnostics before retrying.');
+    runtime.play();el('run').textContent='Ⅱ Pause';return {status:'Playback started',simulation:assistantSimulationStatus()};
+  },
+  pauseSimulation:pauseForAssistant,
+  runSimulation:async(frames,signal)=>{
+    if(assistantSimulation)throw new Error('An assistant simulation is already running.');
+    try{
+      return await runAssistantSimulation({
+        pause:pauseForAssistant,busy:()=>runtime.busy||compiling,
+        revision:()=>projectRevision,
+        prepare:async()=>{
+          if(dirty||!ready)await compile();
+          if(!ready||dirty)throw new Error('Selected example could not be prepared. Read diagnostics before retrying.');
+          assistantSimulation=true;disableRun(true);configuration.setBusy(true);
+        },
+        step:()=>runtime.step(),status:assistantSimulationStatus
+      },frames,signal);
+    }finally{
+      assistantSimulation=false;configuration.setBusy(compiling);disableRun(!ready||compiling);syncApplyButton();
+    }
+  }
 });
 configuration.addPanel('assistant','Assistant',assistant.element);
-window.addEventListener('pagehide',()=>assistant.agent.cancel());
+window.addEventListener('pagehide',()=>assistant.dispose());
 function syncApplyButton(){
   const button=el<HTMLButtonElement>('apply');
   button.disabled=compiling||viewingSlamFile();
   button.textContent=viewingSlamFile()?'Full SLAM execution pending':'Apply & reset';
 }
-let ready=false,dirty=false,compiling=false,localPersistenceBlocked=false;
+let ready=false,dirty=false,compiling=false,localPersistenceBlocked=false,assistantSimulation=false,projectRevision=0;
 let truthPath:Pose[]=[],estimatePath:Pose[]=[];
 const comparisons=new ComparisonTracker();
 let externalLatest:TimedPose|undefined;
 let latest:{frame:SensorFrame;estimate:Estimate;truth?:Truth}|undefined;
+let latestMetrics:Metrics|undefined;
+function pauseForAssistant(){runtime.pause();el('run').textContent='▶ Run';}
+function assistantSimulationStatus(){
+  return {scope:'selected runnable example',model:project.entryPoint??'ModelicaInertial',time:runtime.time,running:runtime.running,busy:runtime.busy,ready,dirty,
+    environment:project.environment,physicsPath:runtime.activeVehicleIndex===1?'models/Vehicles/OffsetQuadrotor.mo':'models/Vehicles/LabQuadrotor.mo',autopilot:runtime.autopilot,tourMode:runtime.tourMode,
+    vehicleCount:runtime.vehicleCount,controlledVehicle:runtime.activeVehicleIndex+1,
+    vehicles:Array.from({length:runtime.vehicleCount},(_,index)=>{const vehicle=runtime.getVehicle(index as 0|1),truth=vehicle.world.truth;return {id:index+1,time:vehicle.time,position:truth?[truth.x,truth.y,truth.z]:null,estimator:project.entryPoint??'ModelicaInertial'};}),
+    sensorRates:sensorRates(project),pending:Object.fromEntries(runtime.pendingNodes),metrics:latestMetrics??null,
+    truth:latest?.truth?{position:[latest.truth.x,latest.truth.y,latest.truth.z],quaternion:latest.truth.quaternion,velocity:latest.truth.velocity}:null,
+    estimate:latest?{position:[latest.estimate.x,latest.estimate.y,latest.estimate.z],quaternion:latest.estimate.quaternion,confidence:latest.estimate.confidence,diagnostics:latest.estimate.diagnostics}:null};
+}
 let autosaveTimer:ReturnType<typeof setTimeout>|undefined;
 function changed(requiresCompilation=true) {
+  projectRevision++;
   runtime.pause();if(requiresCompilation)dirty=true;
   el('run').textContent='▶ Run';
   if(autosaveTimer)clearTimeout(autosaveTimer);
@@ -375,7 +432,7 @@ async function buildProjectScene() {
   world.setDepthCloudEnabled(project.depthCloudEnabled??false);world.setLighting(project.lightingMode??'day');
   syncSceneControls();
 }
-el<HTMLSelectElement>('interior-view').onchange=e=>world.inspectInterior((e.target as HTMLSelectElement).value as 'overview'|'store'|'apartment'|'conference');
+el<HTMLSelectElement>('interior-view').onchange=e=>{setCameraView('free');world.inspectInterior((e.target as HTMLSelectElement).value as 'overview'|'store'|'apartment'|'conference');};
 el<HTMLSelectElement>('scene-detail').onchange=async e=>{
   project.sceneDetail=(e.target as HTMLSelectElement).value as 'low'|'medium'|'high';changed(false);
   configuration.sync(project);
@@ -415,7 +472,7 @@ for(const id of ['cars-enabled','people-enabled'])el<HTMLInputElement>(id).oncha
   changed();
 };
 el<HTMLSelectElement>('speed').onchange=e=>runtime.speed=Number((e.target as HTMLSelectElement).value);
-el<HTMLInputElement>('tour').onchange=e=>runtime.autopilot=(e.target as HTMLInputElement).checked;
+el('flight-control').onclick=()=>setManualFlight(runtime.autopilot);
 el<HTMLSelectElement>('tour-mode').onchange=e=>{runtime.tourMode=(e.target as HTMLSelectElement).value as 'circuit'|'indoor';};
 el<HTMLInputElement>('show-map').onchange=e=>{world.showMap((e.target as HTMLInputElement).checked);syncViewerFlags();};
 el<HTMLInputElement>('show-uncertainty').onchange=()=>{if(latest){world.setEstimate(latest.estimate);world.covariance.visible=!!latest.estimate.uncertainty&&el<HTMLInputElement>('show-uncertainty').checked;}syncViewerFlags();};
@@ -423,10 +480,16 @@ el<HTMLInputElement>('show-graph').onchange=()=>{for(const object of [world.grap
 function syncViewerFlags(){viewer?.visibility({uncertainty:el<HTMLInputElement>('show-uncertainty').checked,graph:el<HTMLInputElement>('show-graph').checked,showMap:el<HTMLInputElement>('show-map').checked,showPaths:el<HTMLInputElement>('show-paths').checked});}
 el<HTMLInputElement>('show-matches').onchange=()=>{if(latest)drawSensors(latest.frame,latest.estimate);};
 el('help').onclick=()=>{el<HTMLDetailsElement>('lesson').open=!el<HTMLDetailsElement>('lesson').open;el('lesson').scrollIntoView({behavior:'smooth'});};
-function disableRun(disabled:boolean){for(const id of ['run','step','reset','apply','record'])el<HTMLButtonElement>(id).disabled=disabled;runModel.disabled=compiling;}
+function disableRun(disabled:boolean){
+  for(const id of ['run','step','reset','apply','record'])el<HTMLButtonElement>(id).disabled=disabled;
+  runModel.disabled=compiling;
+  const count=document.getElementById('vehicle-count') as HTMLSelectElement|null;
+  if(count)count.disabled=compiling||assistantSimulation;
+  el<HTMLSelectElement>('active-vehicle').disabled=compiling||assistantSimulation;
+}
 async function compile() {
   await initializationReady;
-  if(compiling)return;
+  if(compiling||assistantSimulation)return;
   compiling=true;ready=false;disableRun(true);el<HTMLSelectElement>('scene-detail').disabled=true;el<HTMLSelectElement>('preset').disabled=true;runtime.pause();
   configuration.setBusy(true);
   while(runtime.busy)await new Promise(resolve=>setTimeout(resolve,20));
@@ -436,8 +499,12 @@ async function compile() {
     if(JSON.stringify(project)!==revision){dirty=true;status('Source changed during compilation · apply your latest edits');return;}
     project.detectorArtifact=snapshot.detectorArtifact;
     project.algorithmArtifact=snapshot.algorithmArtifact;
-    dirty=false;ready=true;truthPath=[];estimatePath=[];comparisons.clear();externalLatest=undefined;latest=undefined;pendingSensorPreview=undefined;el('run').textContent='▶ Run';drawTrajectory();
-    navigation.reset();
+    dirty=false;ready=true;truthPath=[];estimatePath=[];comparisons.clear();externalLatest=undefined;latest=undefined;latestMetrics=undefined;pendingSensorPreview=undefined;el('run').textContent='▶ Run';drawTrajectory();
+    navigation.reset();telemetryPlot.reset();
+    vehiclePaths[0]={truth:[],estimate:[]};vehiclePaths[1]={truth:[],estimate:[]};
+    telemetryPlot.setVehicleCount(runtime.vehicleCount);
+    el<HTMLSelectElement>('active-vehicle').value='0';el('active-vehicle').hidden=runtime.vehicleCount===1;
+    el<HTMLSelectElement>('vehicle-count').value=String(project.vehicleCount??1);syncFlightHelp();
     syncSceneControls();
     if(!localPersistenceBlocked)try{await saveProject(project);}catch{el('saved').textContent='Cannot save locally · download your project';}
   }
@@ -445,6 +512,9 @@ async function compile() {
   finally {
     compiling=false;configuration.setBusy(false);disableRun(!ready);el<HTMLButtonElement>('apply').disabled=false;el<HTMLButtonElement>('reset').disabled=false;
     el<HTMLButtonElement>('step').disabled=!ready;
+    // A failed fleet build leaves one vehicle; the selector must not offer a second.
+    el('active-vehicle').hidden=runtime.vehicleCount===1;if(runtime.vehicleCount===1)el<HTMLSelectElement>('active-vehicle').value='0';
+    telemetryPlot.setVehicleCount(runtime.vehicleCount);
     el<HTMLSelectElement>('scene-detail').disabled=false;
     el<HTMLSelectElement>('preset').disabled=viewingSlamFile()||!['slam','detector'].includes(selected.kind);
     syncApplyButton();
@@ -452,11 +522,13 @@ async function compile() {
 }
 el('apply').onclick=()=>{if(!viewingSlamFile())void compile();};el('reset').onclick=()=>void compile();
 el('run').onclick=async()=>{
+  if(assistantSimulation)return;
   if(runtime.running){runtime.pause();el('run').textContent='▶ Run';return;}
   if(dirty||!ready)await compile();
   if(ready){runtime.play();el('run').textContent='Ⅱ Pause';}
 };
 el('step').onclick=async()=>{
+  if(assistantSimulation)return;
   runtime.pause();while(runtime.busy)await new Promise(resolve=>setTimeout(resolve,20));
   if(dirty||!ready)await compile();
   if(ready)try{await runtime.step();}catch(error){status(String(error),true);}
@@ -467,10 +539,11 @@ el<HTMLInputElement>('open').onchange=async e=>{
   const file=(e.target as HTMLInputElement).files?.[0];if(!file)return;
   try{project=parseProject(await file.text());localPersistenceBlocked=false;el<HTMLButtonElement>('save').disabled=false;syncProject();changed();await compile();}catch(error){status(String(error),true);}
 };
-el('record').onclick=()=>{runtime.recording=!runtime.recording;el('record').textContent=runtime.recording?'■ Stop recording':'● Record dataset';el<HTMLButtonElement>('export-recording').disabled=runtime.records.length===0;};
+el('record').onclick=()=>{const vehicle=runtime.activeVehicle;vehicle.recording=!vehicle.recording;el('record').textContent=vehicle.recording?'■ Stop recording':'● Record dataset';el<HTMLButtonElement>('export-recording').disabled=vehicle.records.length===0;};
 el('export-recording').onclick=()=>{
-  const records=runtime.records.map(r=>({...r,estimate:{...r.estimate,points:[]},frame:{...r.frame,rgb:Array.from(r.frame.rgb),depth:Array.from(r.frame.depth)}}));
-  download(`${project.name}-dataset.json`,JSON.stringify({format:'slam-lab-dataset',version:2,project,evaluationOrigin:runtime.evaluationOrigin,records}));
+  const vehicle=runtime.activeVehicle;
+  const records=vehicle.records.map(r=>({...r,estimate:{...r.estimate,points:[]},frame:{...r.frame,rgb:Array.from(r.frame.rgb),depth:Array.from(r.frame.depth)}}));
+  download(`${project.name}-drone-${runtime.activeVehicleIndex+1}-dataset.json`,JSON.stringify({format:'slam-lab-dataset',version:2,project,evaluationOrigin:vehicle.evaluationOrigin,records}));
 };
 el<HTMLInputElement>('replay').onchange=async e=>{
   const file=(e.target as HTMLInputElement).files?.[0];if(!file)return;
@@ -491,21 +564,59 @@ el('export-node').onclick=()=>{
 const cameraControls=new ViewerCameraControls(),keys=new Set<string>();
 el('world').tabIndex=0;el('world').setAttribute('aria-label','World camera');
 el('world').addEventListener('pointerdown',()=>el('world').focus({preventScroll:true}));
-document.querySelector('.scene-bottom')!.firstChild!.textContent='Viewer: WASD move · Q/E yaw · R/F altitude · Shift faster ';
-el('world').insertAdjacentHTML('afterend','<label class="camera-mode">Keys control <select id="keyboard-mode" aria-label="Keyboard control"><option value="viewer">Viewer camera</option><option value="drone">Drone commands</option></select></label>');
+const flightSettings=document.querySelector('.configuration-flight')!;
+flightSettings.insertAdjacentHTML('beforeend','<label>Vehicles <select id="vehicle-count" aria-label="Number of drones"><option value="1">1 drone</option><option value="2">2 drones · independent sensors and estimation</option></select></label><label>Camera view <select id="camera-view" aria-label="Camera view"></select></label><label>Keys control <select id="keyboard-mode" aria-label="Keyboard control"><option value="drone">Drone commands</option><option value="viewer">Viewer camera</option></select></label><p id="flight-help"></p>');
+for(const view of CAMERA_VIEWS)el<HTMLSelectElement>('camera-view').add(new Option(view.label,view.id));
 function clearKeys(){keys.clear();cameraControls.clear();updateCommand();}
-function updateCommand(){runtime.command={forward:(+keys.has('w')-+keys.has('s'))*.8,left:(+keys.has('a')-+keys.has('d'))*.8,up:(+keys.has('r')-+keys.has('f'))*.4,yaw:(+keys.has('q')-+keys.has('e'))*.5};}
+function updateCommand(){runtime.command={forward:(+keys.has('w')-+keys.has('s'))*1.6,left:(+keys.has('a')-+keys.has('d'))*1.6,up:(+keys.has('r')-+keys.has('f'))*.8,yaw:(+keys.has('q')-+keys.has('e'))*.5};}
+function syncFlightHelp(){
+  const drone=el<HTMLSelectElement>('keyboard-mode').value==='drone';
+  const mode=(runtime.vehicleCount===2?'Drone '+(runtime.activeVehicleIndex+1)+' · ':'')+(runtime.autopilot?'Flight tour':drone?'Manual flight':'Manual flight · viewer keys');
+  const view=CAMERA_VIEWS.find(view=>view.id===world.viewerCamera.mode)!.label;
+  document.querySelector('.scene-bottom')!.firstChild!.textContent=mode+' · '+view+' · V change view ';
+  el('flight-help').textContent=runtime.autopilot?'Flight tour is flying the drone. Choose Manual flight in the toolbar to take control.':drone?'Click Run, then use WASD to fly, Q/E to yaw and R/F to climb or descend. V changes the camera view.':'WASD moves the camera; Q/E orbit or yaw, R/F altitude, Shift faster. Follow views move relative to the drone. V changes the camera view.';
+}
+function setCameraView(mode:CameraView){
+  world.setCameraView(mode);el<HTMLSelectElement>('camera-view').value=mode;
+  cameraControls.clear();syncFlightHelp();viewer?.camera(true);
+}
+function setManualFlight(manual:boolean){
+  clearKeys();runtime.autopilot=!manual;
+  const button=el<HTMLButtonElement>('flight-control');
+  button.setAttribute('aria-pressed',String(manual));button.textContent=manual?'Manual flight':'Flight tour';
+  button.title=manual?'Switch to flight tour':'Take manual control';
+  el<HTMLSelectElement>('tour-mode').disabled=manual;
+  if(manual)el<HTMLSelectElement>('keyboard-mode').value='drone';
+  syncFlightHelp();
+}
+el('camera-view').onchange=()=>setCameraView(el<HTMLSelectElement>('camera-view').value as CameraView);
 el('keyboard-mode').addEventListener('change',()=>{
-  clearKeys();const drone=el<HTMLSelectElement>('keyboard-mode').value==='drone';
-  document.querySelector('.scene-bottom')!.firstChild!.textContent=drone?'Drone: WASD velocity · Q/E yaw · R/F climb (Run, Flight tour off) ':'Viewer: WASD move · Q/E yaw · R/F altitude · Shift faster ';
-  el('world').focus({preventScroll:true});
+  clearKeys();
+  syncFlightHelp();
 });
+el('vehicle-count').onchange=async()=>{
+  project.vehicleCount=Number(el<HTMLSelectElement>('vehicle-count').value) as 1|2;
+  if(project.vehicleCount===2){project.modelicaSources??={};project.modelicaSources[offsetQuadrotorPath]??=offsetQuadrotorSource;refreshFiles();}
+  changed();await compile();
+};
+el('active-vehicle').onchange=()=>{
+  clearKeys();comparisons.clear();navigation.reset();
+  try{runtime.selectVehicle(Number(el<HTMLSelectElement>('active-vehicle').value) as 0|1);}
+  catch(error){el<HTMLSelectElement>('active-vehicle').value=String(runtime.activeVehicleIndex);status(String(error),true);}
+  syncFlightHelp();viewer?.camera(true);
+};
+setCameraView('follow');setManualFlight(true);
 window.addEventListener('keydown',e=>{
   const key=e.key.toLowerCase();
-  if(document.body.classList.contains('app-loading')||!viewerPresented||isTextEntry(e.target)||e.ctrlKey||e.metaKey||e.altKey||!VIEWER_KEYS.has(key))return;
+  if(document.body.classList.contains('app-loading')||!viewerPresented||isTextEntry(e.target)||e.ctrlKey||e.metaKey||e.altKey)return;
+  if(key==='v'){
+    e.preventDefault();if(!e.repeat)setCameraView(nextCameraView(world.viewerCamera.mode));return;
+  }
+  if(!VIEWER_KEYS.has(key))return;
   e.preventDefault();
-  if(el<HTMLSelectElement>('keyboard-mode').value==='viewer')cameraControls.keys.add(key);
-  else{keys.add(key);updateCommand();}
+  if(el<HTMLSelectElement>('keyboard-mode').value==='viewer'){
+    cameraControls.keys.add(key);
+  }else if(!runtime.autopilot){keys.add(key);updateCommand();}
 });
 window.addEventListener('keyup',e=>{keys.delete(e.key.toLowerCase());cameraControls.keys.delete(e.key.toLowerCase());updateCommand();});
 window.addEventListener('blur',clearKeys);
@@ -551,28 +662,42 @@ function drawTrajectory() {
   el('comparisons').replaceChildren(table);
 }
 runtime.onStatus=message=>{status(message);el('flight-status').textContent=message;};
-runtime.onError=error=>{status(error.message,true);el('run').textContent='▶ Run';};
-runtime.onFrame=(frame,estimate,truth,metrics)=>{
+runtime.onError=error=>{ready=false;dirty=true;status(error.message+' · Run or Reset recompiles the experiment',true);el('run').textContent='▶ Run';};
+const vehiclePaths:{truth:Pose[];estimate:Pose[]}[]=[{truth:[],estimate:[]},{truth:[],estimate:[]}];
+runtime.onVehicleFrame=(index,{frame,estimate,truth})=>{
   performanceMonitor.visionProcessed();
-  latest={frame,estimate,truth};if(truth)truthPath.push(poseSnapshot(runtime.referenceTruth(truth)));estimatePath.push(poseSnapshot(estimate));truthPath=truthPath.slice(-2000);estimatePath=estimatePath.slice(-2000);
+  telemetryPlot.sample(index,frame.time,truth,estimate,frame.imu);
+  const vehicle=runtime.getVehicle(index);
+  const reference=truth?vehicle.referenceTruth(truth):undefined;
+  const paths=vehiclePaths[index];
+  if(reference)paths.truth.push(poseSnapshot(reference));paths.estimate.push(poseSnapshot(estimate));
+  if(paths.truth.length>2000)paths.truth.shift();if(paths.estimate.length>2000)paths.estimate.shift();
+};
+runtime.onFrame=(frame,estimate,truth,metrics)=>{
+  const displayed=runtime.activeVehicle,displayWorld=displayed.world;
+  truthPath=vehiclePaths[runtime.activeVehicleIndex].truth;estimatePath=vehiclePaths[runtime.activeVehicleIndex].estimate;
+
+  latestMetrics=metrics;
+  latest={frame,estimate,truth};
   comparisons.addLocal(frame.time,estimate);
   const paths=[{id:'truth',color:0xc9d7e3,points:truthPath},{id:'slam',color:0x50e6b2,points:estimatePath},...Array.from(comparisons.streams.values()).map((stream,i)=>({id:`external-${i}`,color:Number.parseInt(stream.color.replace('#',''),16),points:comparisons.path(stream)}))];
+  world.setMap(estimate.points,truth?displayed.evaluationOrigin:undefined);world.setEstimate(estimate);
   world.setTrajectories(paths);
-  if(world.latestLidar)viewer?.lidar(world.latestLidar);
-  viewer?.depthCloudEnabled(world.depthCloudEnabled);
-  const depthDisplay=world.latestDepthRaster??world.latestDepthCloud;
+  if(displayWorld.latestLidar)viewer?.lidar(displayWorld.latestLidar,displayWorld);
+  viewer?.depthCloudEnabled(displayWorld.depthCloudEnabled);
+  const depthDisplay=displayWorld.latestDepthRaster??displayWorld.latestDepthCloud;
   if(depthDisplay)viewer?.depthCloud(depthDisplay);
-  viewer?.diagnostics(estimate,truth?runtime.evaluationOrigin:undefined,paths,{uncertainty:el<HTMLInputElement>('show-uncertainty').checked,graph:el<HTMLInputElement>('show-graph').checked,showMap:el<HTMLInputElement>('show-map').checked,showPaths:el<HTMLInputElement>('show-paths').checked});
-  const nav=navigation.update(frame.time,estimate,runtime.gps);
+  viewer?.diagnostics(estimate,truth?displayed.evaluationOrigin:undefined,paths,{uncertainty:el<HTMLInputElement>('show-uncertainty').checked,graph:el<HTMLInputElement>('show-graph').checked,showMap:el<HTMLInputElement>('show-map').checked,showPaths:el<HTMLInputElement>('show-paths').checked});
+  const nav=navigation.update(frame.time,estimate,displayed.gps);
   el('navigation-state').textContent=truth?`Navigation · ${nav.status} · ${nav.reason}${nav.alignment?` · alignment ${nav.alignment.pairs} fixes / ${nav.alignment.rms.toFixed(2)} m RMS`:''}`:'GPS handoff unavailable for this external/replayed dataset';
-  el('lidar-state').textContent=world.latestLidar?`LiDAR · 64 × ${world.latestLidar.columns} samples · raw GPU cloud · t=${world.latestLidar.time.toFixed(3)} s · ${world.lidar.timings?.totalMs.toFixed(1)} ms`:'LiDAR disabled';
+  el('lidar-state').textContent=displayWorld.latestLidar?`LiDAR · 64 × ${displayWorld.latestLidar.columns} samples · raw GPU cloud · t=${displayWorld.latestLidar.time.toFixed(3)} s · ${displayWorld.lidar.timings?.totalMs.toFixed(1)} ms`:'LiDAR disabled';
   pendingSensorPreview={frame,estimate};
   el('sim-time').textContent=`t = ${metrics.time.toFixed(2)} s`;el('metric-time').innerHTML=`${metrics.time.toFixed(2)} <em>s</em>`;
-  el('metric-ate').innerHTML=metrics.ate===null?'Unavailable':`${metrics.ate.toFixed(3)} <em>m</em>`;el('metric-features').textContent=runtime.pendingNodes.size?'Pending':String(metrics.features);
+  el('metric-ate').innerHTML=metrics.ate===null?'Unavailable':`${metrics.ate.toFixed(3)} <em>m</em>`;el('metric-features').textContent=displayed.pendingNodes.size?'Pending':String(metrics.features);
   el('metric-points').textContent=metrics.points.toLocaleString();el('metric-rtf').innerHTML=`${metrics.rtf.toFixed(2)} <em>×</em>`;
   el('metric-time').previousElementSibling!.textContent=truth?'SIM TIME':'SENSOR TIME';
   el('metric-rtf').previousElementSibling!.textContent=truth?'SIM / WALL TIME':'SENSOR / WALL TIME';
-  el('flight-status').textContent=`${truth?'Simulation':'Measured input'} · frame ${frame.sequence} · ${runtime.pendingNodes.size?'Inertial baseline · visual SLAM pending':`${(metrics.confidence*100).toFixed(0)}% tracking · ${metrics.loops} loop matches`}${metrics.dropped?` · ${metrics.dropped} skipped in browser`:''}`;
+  el('flight-status').textContent=`${truth?'Simulation':'Measured input'} · frame ${frame.sequence} · ${displayed.pendingNodes.size?'Inertial baseline · visual SLAM pending':`${(metrics.confidence*100).toFixed(0)}% tracking · ${metrics.loops} loop matches`}${metrics.dropped?` · ${metrics.dropped} skipped in browser`:''}`;
   world.covariance.visible=!!estimate.uncertainty&&el<HTMLInputElement>('show-uncertainty').checked;
   el('tracking-state').textContent=estimate.tracking?`${estimate.tracking.matches.length} proposed feature matches${estimate.tracking.referenceSequence===undefined?'':` to frame ${estimate.tracking.referenceSequence}`} · ${estimate.tracking.reason} · ${estimate.diagnostics?.visualUpdates??0} visual updates / ${estimate.diagnostics?.visualRejected??0} rejected`:'Matching diagnostics unavailable for this node';
   el('uncertainty-state').textContent=estimate.uncertainty?`Position σ trace norm ${Number(estimate.diagnostics?.positionStd??0).toFixed(3)} m · accelerometer bias ${Number(estimate.diagnostics?.accelBiasNorm??0).toFixed(4)} m/s² · gyro bias ${Number(estimate.diagnostics?.gyroBiasNorm??0).toFixed(5)} rad/s`:'Covariance unavailable for this node';
@@ -580,17 +705,21 @@ runtime.onFrame=(frame,estimate,truth,metrics)=>{
   if(estimate.diagnostics?.loopWords!==undefined)el('graph-state').textContent+=` · ${estimate.diagnostics.loopWords} visual words / ${estimate.diagnostics.loopCandidates??0} retrieved candidates`;
   if(estimate.diagnostics?.landmarksConfirmed!==undefined)el('graph-state').textContent+=` · ${estimate.diagnostics.landmarksConfirmed} confirmed / ${estimate.diagnostics.landmarksTentative??0} tentative landmarks · ${estimate.diagnostics.landmarksPruned??0} pruned (${estimate.diagnostics.landmarksFreeSpacePruned??0} free-space contradictions)`;
   if(estimate.diagnostics?.mappingStatus)el('graph-state').textContent+=` · ${estimate.diagnostics.mappingStatus}`;
-  el('frame-timings').textContent=`Frame work: ${Object.entries(runtime.lastTimings).map(([id,ms])=>`${id} ${ms.toFixed(1)} ms`).join(' · ')}`;
-  if(world.captureTimings&&truth)el('frame-timings').textContent+=` · camera submission ${world.captureTimings.renderSubmission.toFixed(1)} ms / readback wait ${world.captureTimings.readback.toFixed(1)} ms`;
-  el('record-state').textContent=`${runtime.records.length} recorded frames${runtime.recording?' · recording':''}`;
-  el<HTMLButtonElement>('export-recording').disabled=runtime.records.length===0;
+  el('frame-timings').textContent=`Frame work: ${Object.entries(displayed.lastTimings).map(([id,ms])=>`${id} ${ms.toFixed(1)} ms`).join(' · ')}`;
+  if(displayWorld.captureTimings&&truth)el('frame-timings').textContent+=` · camera submission ${displayWorld.captureTimings.renderSubmission.toFixed(1)} ms / readback wait ${displayWorld.captureTimings.readback.toFixed(1)} ms`;
+  el('record-state').textContent=`${displayed.records.length} recorded frames${displayed.recording?' · recording':''}`;
+  el('record').textContent=displayed.recording?'■ Stop recording':'● Record dataset';
+  el<HTMLButtonElement>('export-recording').disabled=displayed.records.length===0;
 };
 // A single independently paced overview; simulation awaits every graph node.
 // Correct the deadline phase rather than drawing bursts after a missed slot.
 let cameraWall=performance.now();
 function render(now=0){
   if(performanceMonitor.shouldRender(now)){
-    const started=performance.now();world.controls.update();cameraControls.update(world.view,world.controls,(now-cameraWall)/1000);cameraWall=now;
+    const started=performance.now();world.controls.update();
+    const cameraDt=(now-cameraWall)/1000;cameraWall=now;
+    if(world.viewerCamera.mode==='free')cameraControls.update(world.view,world.controls,cameraDt);
+    else world.viewerCamera.move(cameraControls.keys,cameraDt);
     if(viewerPresented){
       if(viewer){viewer.flushClouds();viewer.camera();viewer.running(runtime.running);}else world.render(runtime.running);
     }
@@ -617,8 +746,8 @@ void (async()=>{
     startup.stage(1,'Preparing the scene and graphics…');
     if(typeof OffscreenCanvas!=='undefined'&&typeof HTMLCanvasElement.prototype.transferControlToOffscreen==='function'){
       const candidate=new WorkerViewer(world,el('world'));
-      try{await candidate.ready;viewer=candidate;candidate.presentationVisible(viewerPresented);world.onBuild=(environment,detail,preservePresentation)=>candidate.configure(environment,detail,project.carsEnabled??true,project.peopleEnabled??true,preservePresentation);world.onPose=truth=>candidate.pose(truth);world.onActors=(cars,people)=>candidate.actors(cars,people);world.onActorMotion=frame=>candidate.actorMotion(frame);world.onEnvironmentVisible=visible=>candidate.sceneVisible(visible);world.onLighting=mode=>candidate.lighting(mode);await world.enableSensorWorker();}
-      catch(error){candidate.worker.terminate();candidate.canvas.remove();viewer=undefined;el('world').appendChild(world.renderer.domElement);world.controls.disconnect();world.controls.connect(world.renderer.domElement);world.onBuild=async()=>{};world.onPose=()=>{};world.onActors=()=>{};world.onActorMotion=()=>{};world.onEnvironmentVisible=()=>{};world.onLighting=()=>{};status(`Rendering worker unavailable: ${error} · using main-thread renderer`);}
+      try{await candidate.ready;viewer=candidate;candidate.presentationVisible(viewerPresented);world.onBuild=(environment,detail,preservePresentation)=>candidate.configure(environment,detail,project.carsEnabled??true,project.peopleEnabled??true,preservePresentation);world.onPose=truth=>candidate.pose(truth);world.onOtherPose=truth=>candidate.otherPose(truth);world.onVehicleCount=count=>candidate.vehicleCount(count);world.onActors=(cars,people)=>candidate.actors(cars,people);world.onActorMotion=frame=>candidate.actorMotion(frame);world.onEnvironmentVisible=visible=>candidate.sceneVisible(visible);world.onLighting=mode=>candidate.lighting(mode);await world.enableSensorWorker();}
+      catch(error){candidate.worker.terminate();candidate.canvas.remove();viewer=undefined;el('world').appendChild(world.renderer.domElement);world.controls.disconnect();world.controls.connect(world.renderer.domElement);world.onBuild=async()=>{};world.onPose=()=>{};world.onOtherPose=()=>{};world.onVehicleCount=async()=>{};world.onActors=()=>{};world.onActorMotion=()=>{};world.onEnvironmentVisible=()=>{};world.onLighting=()=>{};status(`Rendering worker unavailable: ${error} · using main-thread renderer`);}
     }
     await buildProjectScene();
     initialized=true;finishInitialization();

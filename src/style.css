@@ -4,8 +4,6 @@
 .scene-overlay{max-width:calc(100% - 40px);padding:9px 12px;border:1px solid #ffffff24;border-radius:6px;background:#0b1527eb;box-shadow:0 2px 10px #0003}
 .scene-overlay small{color:#e2edf5;text-shadow:none;line-height:1.4}
 .scene-bottom{padding:7px 10px;border-radius:5px;background:#0b1527eb;color:#e2edf5;text-shadow:none;gap:12px}
-.camera-mode{position:absolute;top:48px;right:12px;display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:5px;background:#0b1527eb;color:#d7e1e9;font-size:10px}
-.camera-mode select{font-size:10px;padding:4px 6px}
 #world:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
 .configuration-tabs{display:flex;border-bottom:1px solid var(--line);padding:8px 12px;gap:6px}
 .configuration-tabs button{flex:1;background:transparent;border-color:transparent;color:var(--muted)}
@@ -23,7 +21,7 @@
 .configuration-rates{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .configuration-rates label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--muted)}
 .configuration-rates select{width:100%}
-@media(max-width:760px){.camera-mode{top:128px}.scene-bottom{font-size:9px;left:10px;right:10px}.scene-overlay{left:10px}}
+@media(max-width:760px){.scene-bottom{font-size:9px;left:10px;right:10px}.scene-overlay{left:10px}}
 
 /* Phones keep the world first and the editable workspace in normal page flow. */
 .render-warning{margin:0 0 12px;padding:12px 14px;border:1px solid #b68939;border-radius:8px;background:#342914;color:#ffe3a4;font-size:12px;line-height:1.5;overflow-wrap:anywhere}

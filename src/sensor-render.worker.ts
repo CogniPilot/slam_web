@@ -13,6 +13,7 @@ import type {DepthNoiseSettings} from './gpu-depth-noise';
 import type {CameraImageLayout} from './gpu-realsense-packing';
 
 export interface SensorRenderSettings {
+  vehicleCount?:1|2;
   environment?:Environment;
   detail?:SceneDetail;
   carsEnabled?:boolean;
@@ -39,15 +40,19 @@ export interface SensorRenderResult {
   graphics:GraphicsInfo;
   gpuProfile?:GpuSensorProfile;
 }
-type Message=SensorRenderSettings&{id:number;type:string;base?:string;truth?:Truth;actorMotion?:ActorMotionFrame;lidarEnabled?:boolean;profileGpu?:boolean;sensorProfile?:SensorProfileSelection;denseCloudReadback?:boolean};
+type Message=SensorRenderSettings&{id:number;type:string;base?:string;truth?:Truth;otherTruth?:Truth;actorMotion?:ActorMotionFrame;lidarEnabled?:boolean;profileGpu?:boolean;sensorProfile?:SensorProfileSelection;denseCloudReadback?:boolean};
 const scope=self as unknown as DedicatedWorkerGlobalScope;
 const maximumPending=8;
 let world:World|undefined;
-let settings:Required<Omit<SensorRenderSettings,'depthNoise'>>&Pick<SensorRenderSettings,'depthNoise'>={environment:'city',detail:'high',carsEnabled:true,peopleEnabled:true,environmentVisible:true,lightingMode:'day',readbackMode:'async',depthCloudEnabled:false,geometryBatching:true,packedReadback:true,skeletonSharing:true};
+let settings:Required<Omit<SensorRenderSettings,'depthNoise'>>&Pick<SensorRenderSettings,'depthNoise'>={vehicleCount:1,environment:'city',detail:'high',carsEnabled:true,peopleEnabled:true,environmentVisible:true,lightingMode:'day',readbackMode:'async',depthCloudEnabled:false,geometryBatching:true,packedReadback:true,skeletonSharing:true};
 
 async function configure(message:SensorRenderSettings) {
   if(!world)throw new Error('Sensor renderer is not initialized');
   const candidate={...settings};
+  if(message.vehicleCount!==undefined){
+    if(message.vehicleCount!==1&&message.vehicleCount!==2)throw new Error('Vehicle count must be one or two');
+    await world.setVehicleCount(message.vehicleCount);candidate.vehicleCount=message.vehicleCount;
+  }
   if(message.depthNoise!==undefined){await world.setDepthNoise(message.depthNoise);candidate.depthNoise={...message.depthNoise};}
   if(message.environment!==undefined){
     if(!['city','warehouse','courtyard','tokyo','asset-city','big-city'].includes(message.environment))throw new Error('Unknown sensor environment');
@@ -119,6 +124,10 @@ async function execute(message:Message):Promise<SensorRenderResult|unknown> {
   }
   await world.ready;
   world.update(truth);
+  if(message.otherTruth){
+    if(message.otherTruth.time!==truth.time)throw new Error('Both drones must share the sensor acquisition timestamp');
+    world.updateOtherVehicle(message.otherTruth);
+  }
   if(message.actorMotion)world.setActorMotion(message.actorMotion);
   if(message.profileGpu!==undefined&&typeof message.profileGpu!=='boolean')throw new Error('GPU profiling must be boolean');
   const profiler=message.profileGpu?new GpuSensorProfiler(world):undefined;

@@ -20,8 +20,17 @@ async function execute(data:any){
     case 'configure':world.build(data.environment,data.detail,!!data.preservePresentation);await world.ready;world.actors.setEnabled(data.carsEnabled,data.peopleEnabled);return {};
     case 'present':world.render(running);return {};
     case 'resize':world.renderer.setSize(data.width,data.height,false);world.view.aspect=data.width/data.height;world.view.updateProjectionMatrix();break;
-    case 'camera':world.view.position.fromArray(data.position);world.view.quaternion.fromArray(data.quaternion);break;
+    case 'camera':
+      world.setCameraView(data.mode??'free');
+      world.view.position.fromArray(data.position);world.view.quaternion.fromArray(data.quaternion);
+      if(data.target)world.controls.target.fromArray(data.target);
+      if(data.offset)world.viewerCamera.offset.fromArray(data.offset);
+      if(data.yawOffset!==undefined)world.viewerCamera.yawOffset=data.yawOffset;
+      if(data.vehicle!==undefined)world.cameraVehicle=data.vehicle;
+      break;
     case 'pose':world.update(data.truth);break;
+    case 'vehicle-count':await world.setVehicleCount(data.count);return {};
+    case 'other-pose':world.updateOtherVehicle(data.truth);break;
     case 'running':running=data.running;break;
     case 'visibility':visible=data.visible;deadline.reset();counters.reset(performance.now());lastReport=performance.now();break;
     case 'actors':world.actors.setEnabled(data.cars,data.people);break;

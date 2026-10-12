@@ -2,6 +2,7 @@
 .assistant-panel p {line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
 .assistant-connect {display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .assistant-panel label {display:flex;flex-direction:column;gap:5px;min-width:0}
+.assistant-panel [hidden] {display:none!important}
 .assistant-panel input,.assistant-panel select,.assistant-panel textarea {width:100%;box-sizing:border-box;min-width:0}
 .assistant-panel textarea {font:inherit;resize:vertical;min-height:75px;background:#0d151e;color:inherit;border:1px solid #34505f;border-radius:6px;padding:8px}
 .assistant-log {max-height:280px;overflow:auto;border-block:1px solid #29404a;margin:14px 0}

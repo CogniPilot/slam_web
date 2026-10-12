@@ -54,8 +54,18 @@ export class WorkerViewer {
   }
   private send(type:string,args:Record<string,unknown>={}){this.worker.postMessage({type,...args});}
   async configure(environment:Environment,detail:SceneDetail,cars:boolean,people:boolean,preservePresentation=false){if(!preservePresentation)this.cloudTransfer.reset();await this.ready;await this.call('configure',{environment,detail,carsEnabled:cars,peopleEnabled:people,preservePresentation});this.camera(true);}
-  camera(force=false){this.world.controls.update();const position=this.world.view.position.toArray(),quaternion=this.world.view.quaternion.toArray(),key=JSON.stringify([position,quaternion]);if(force||key!==this.previousCamera){this.previousCamera=key;this.send('camera',{position,quaternion});}}
+  camera(force=false){
+    this.world.controls.update();
+    const position=this.world.view.position.toArray(),quaternion=this.world.view.quaternion.toArray();
+    const target=this.world.controls.target.toArray(),mode=this.world.viewerCamera.mode;
+    const offset=this.world.viewerCamera.offset.toArray(),yawOffset=this.world.viewerCamera.yawOffset;
+    const vehicle=this.world.cameraVehicle;
+    const key=JSON.stringify([position,quaternion,target,mode,offset,yawOffset,vehicle]);
+    if(force||key!==this.previousCamera){this.previousCamera=key;this.send('camera',{position,quaternion,target,mode,offset,yawOffset,vehicle});}
+  }
   pose(truth:Truth){this.send('pose',{truth});}
+  async vehicleCount(count:1|2){await this.ready;await this.call('vehicle-count',{count});}
+  otherPose(truth:Truth){this.send('other-pose',{truth});}
   running(running:boolean){if(running!==this.previousRunning){this.previousRunning=running;this.send('running',{running});}}
   actors(cars:boolean,people:boolean){this.send('actors',{cars,people});}
   actorMotion(frame:ActorMotionFrame){this.send('actor-motion',{frame});}
@@ -70,8 +80,8 @@ export class WorkerViewer {
   visibility(flags:{uncertainty:boolean;graph:boolean;showMap:boolean;showPaths:boolean}){this.send('flags',flags);}
   sceneVisible(visible:boolean){this.send('scene-visible',{visible});}
   lighting(mode:'day'|'night'|'cycle'){this.send('lighting',{mode});}
-  lidar(scan:World['latestLidar']){
-    if(scan)this.cloudTransfer.lidar(scan,()=>({position:this.world.lidarView.position.toArray(),quaternion:this.world.lidarView.quaternion.toArray()}));
+  lidar(scan:World['latestLidar'],source=this.world){
+    if(scan)this.cloudTransfer.lidar(scan,()=>({position:source.lidarView.position.toArray(),quaternion:source.lidarView.quaternion.toArray()}));
   }
   depthCloud(cloud:DepthCloudDisplay){this.cloudTransfer.cloud(cloud);}
   depthCloudEnabled(enabled:boolean){if(enabled!==this.previousDepthCloudEnabled){this.previousDepthCloudEnabled=enabled;if(!enabled)this.cloudTransfer.clearCloud();this.send('depth-cloud-enabled',{enabled});}}

@@ -16,7 +16,7 @@ async function execute(message:any) {
       message.source,modelName,.005,'rk-like',1e-10,1e-8,
       '[["accel[1]",0],["accel[2]",0],["accel[3]",9.81],["gyro[1]",0],["gyro[2]",0],["gyro[3]",0]]'));
     const artifact:InertialSessionMetadata={format:'rumoca-simulation-session',version:1,modelName,
-      sourceSha256:await sourceDigest(message.workspaceSources?JSON.stringify({source:message.source,workspaceSources:message.workspaceSources}):message.source),compilerVersion:compiler.get_version(),compilerCommit:compiler.get_git_commit(),executionPolicy:'auto'};
+      sourceSha256:await sourceDigest(message.workspaceSources?JSON.stringify({source:message.source,workspaceSources:message.workspaceSources}):message.source),compilerVersion:compiler.get_version(),compilerCommit:compiler.get_git_commit()??'unknown',executionPolicy:'auto'};
     session?.free();session=candidate;
     return {runtime:'Modelica nominal INS · Rumoca Solve IR session',artifact};
   }

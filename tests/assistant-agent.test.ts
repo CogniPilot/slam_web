@@ -68,4 +68,39 @@ describe('browser algorithm assistant',()=>{
     await expect(agent.tool('read_docs',{name:'Modelica.Blocks'})).resolves.toEqual({name:'Modelica.Blocks',documentation:'Modelica class docs',components:[]});
   });
   it('supports asynchronous documentation lookup',async()=>{const {agent}=fixture();await expect(agent.tool('search_docs',{query:'connect'})).resolves.toEqual([{title:'connect'}]);});
+  it('applies requested edits only after reading current source and supports undo',async()=>{
+    const {agent,sources}=fixture(),path='models/Main.mo',before=sources[path],source='model Main Real x; end Main;';
+    await expect(agent.tool('edit_file',{path,source,reason:'Requested state'})).rejects.toThrow('Read the current');
+    await agent.tool('read_file',{path});await agent.tool('edit_file',{path,source,reason:'Requested state'});
+    expect(sources[path]).toBe(source);expect(agent.proposals[0].state).toBe('accepted');
+    sources[path]='user edit';expect(()=>agent.undo(agent.proposals[0])).toThrow('Source changed');
+    sources[path]=source;agent.undo(agent.proposals[0]);expect(sources[path]).toBe(before);expect(agent.proposals[0].state).toBe('undone');
+  });
+  it('rejects stale read snapshots and edits after a project switch',async()=>{
+    const {agent,host,sources}=fixture(),path='models/Main.mo';let project={};host.identity=()=>project;
+    await agent.tool('read_file',{path});sources[path]+='\n// manual edit';
+    await expect(agent.tool('edit_file',{path,source:'changed',reason:''})).rejects.toThrow('Read the current');
+    await agent.tool('read_file',{path});project={};
+    await expect(agent.tool('edit_file',{path,source:'changed',reason:''})).rejects.toThrow('Read the current');
+  });
+  it('supports targeted edits without sending or rewriting the whole file',async()=>{
+    const {agent,sources}=fixture(),path='models/Main.mo';sources[path]='model Main\n  parameter Real height = 1.5;\nend Main;';
+    expect(await agent.tool('search_source',{path,query:'height'})).toEqual([{line:2,text:'  parameter Real height = 1.5;'}]);
+    expect(await agent.tool('read_lines',{path,start_line:2,end_line:2})).toMatchObject({text:'  parameter Real height = 1.5;'});
+    await expect(agent.tool('replace_text',{path,old_text:'end Main;',new_text:'oops',reason:''})).rejects.toThrow('Read the current source lines');
+    await agent.tool('replace_text',{path,old_text:'height = 1.5',new_text:'height = 2.0',reason:'Adjust altitude'});
+    expect(sources[path]).toBe('model Main\n  parameter Real height = 2.0;\nend Main;');
+    await expect(agent.tool('replace_text',{path,old_text:'height = 2.0',new_text:'height = 3.0',reason:''})).rejects.toThrow('Read the current');
+  });
+  it('exposes map coordinates and checks a named component',async()=>{
+    const {agent,host}=fixture();host.landmarks=vi.fn(()=>({frame:'ENU',landmarks:[]}));host.checkFile=vi.fn(async(path,model)=>({path,model}));
+    await agent.tool('scene_landmarks',{environment:'big-city'});expect(host.landmarks).toHaveBeenCalledWith('big-city');
+    expect(await agent.tool('check_model',{path:'models/Main.mo',model:'Main'})).toEqual({path:'models/Main.mo',model:'Main'});
+    await expect(agent.tool('check_model',{path:'secret',model:'Main'})).rejects.toThrow('Unknown file');
+  });
+  it('ends inference after starting requested playback',async()=>{
+    const {agent,host}=fixture();host.startSimulation=vi.fn(async()=>({status:'Playback started'}));
+    const fetch=vi.fn(async()=>Response.json({choices:[{message:{role:'assistant',content:'Starting the flight.',tool_calls:[{id:'start',type:'function',function:{name:'start_simulation',arguments:'{}'}}]}}]}));vi.stubGlobal('fetch',fetch);
+    await agent.send('Fly the drone',{endpoint:'https://provider.example/v1',model:'test',key:''});expect(host.startSimulation).toHaveBeenCalledOnce();expect(fetch).toHaveBeenCalledOnce();expect(agent.busy).toBe(false);
+  });
 });

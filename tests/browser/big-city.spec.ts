@@ -2,6 +2,7 @@ import {D435_IMAGE} from "../../src/camera-profile";
 import {test,expect} from '@playwright/test';
 import {openModelicaPropagation} from './reference-project';
 import {openConfiguration,openEditor} from './configuration-pane';
+import {QUALITY_SENSOR_RATES} from '../../src/sensor-clock';
 
 test('graphics quality preserves enterable Big city rooms and synchronized GPU sensor geometry',async({page})=>{
   // Nine full-resolution indoor RGB-D/LiDAR parity captures plus quality
@@ -48,9 +49,9 @@ test('graphics quality preserves enterable Big city rooms and synchronized GPU s
         width:world.renderer.domElement.width,height:world.renderer.domElement.height,shadows:world.renderer.shadowMap.enabled,
         roofs:world.navigationRoofs.length,trainingBuildingVisible:world.navigation.group.visible});
     }
-    return {profiles,dt:runtime.dt};
+    return {profiles,dt:runtime.dt,sceneDetail:lab.project.sceneDetail??'high'};
   });
-  expect(errors).toEqual([]);expect(result.dt).toBe(1/30);
+  expect(errors).toEqual([]);expect(result.dt).toBe(1/QUALITY_SENSOR_RATES[result.sceneDetail as 'low'|'medium'|'high'].cameraHz);
   expect(result.profiles[0].width).toBeLessThan(result.profiles[2].width);
   expect(result.profiles[0].height).toBeLessThan(result.profiles[2].height);
   expect(result.profiles[0].shadows).toBe(false);expect(result.profiles[2].shadows).toBe(true);

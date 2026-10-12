@@ -59,7 +59,10 @@ test('static application requests an exact saved-source WASM build and preserves
   expect(receipt.sourceSha256).toBe(before.sourceSha256);
   expect(receipt.compiler.version).toBe('0.10.2');
   expect(receipt.status).toBe('failed');
-  expect(receipt.error).toContain('does not expose native WASM program compilation');
+  // The pinned main package exposes native compilation but its frontend still
+  // panics on the full SLAM source; the receipt names the model that trapped.
+  expect(receipt.failedAt).toEqual({phase:'compiling',model:'RGBDFastSLAMReset'});
+  expect(receipt.error).toContain('Rumoca compiler trapped (unreachable) while compiling RGBDFastSLAMReset');
   expect(receipt.programs).toEqual([]);
   await expect(page.locator('#slam-build-result')).toContainText('WASM build failed');
   await expect(page.getByRole('button',{name:'Cancel build',exact:true})).toBeHidden();

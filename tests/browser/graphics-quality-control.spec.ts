@@ -52,6 +52,8 @@ test('quality changes bound photographic texture sizes and release disabled GPU 
   const result=await page.evaluate(async()=>{
     const world=(window as any).__slamLab.runtime.world,materials=world.materials;
     const sources=['brick','plaster','asphalt','paving','wood','grass'].map(kind=>materials.surface(kind,0xffffff));
+    // The economical default has no normal maps; start from the balanced tier.
+    await world.setGraphicsQuality('medium');world.render();
     const original=sources.map(m=>({color:m.map,normal:m.normalMap,arm:m.roughnessMap,
       images:[m.map.image,m.normalMap.image,m.roughnessMap.image],repeat:m.map.repeat.toArray()}));
     let normalDisposals=0;
@@ -93,7 +95,8 @@ test('graphics dial works before algorithm integration and preserves a compiled 
   // the startup compilation race to observe an unready application.
   await page.evaluate(()=>(window as any).__slamLab.sourceEditor.editor.setValue('model PendingSLAM\n output Real x;\nequation\n x=0;\nend PendingSLAM;'));
   await page.getByRole('button',{name:'Apply & reset',exact:true}).click();
-  await expect(page.locator('#status')).toHaveClass(/error/);
+  // The physics plant compiles first; software CI hosts need more than the default 5 s.
+  await expect(page.locator('#status')).toHaveClass(/error/,{timeout:90000});
   await openConfiguration(page);
   const dial=page.getByLabel('Graphics quality',{exact:true});
   await expect(dial).toBeEnabled({timeout:90000});

@@ -2,26 +2,11 @@ import * as THREE from 'three';
 import type {SceneDetail} from './types';
 import type {WorldMaterials} from './world-materials';
 import {ROAD_PAINT_THICKNESS,roadPaintCenter} from './world-road';
+import {BIG_CITY_INTERIORS} from './scene-landmarks';
+export {BIG_CITY_INTERIORS,type BigCityInterior} from './scene-landmarks';
 
 type Point=[number,number,number];
-export interface BigCityInterior {
-  id:'store'|'apartment'|'conference';label:string;
-  roofVolume:{minimum:Point;maximum:Point};
-  entrance:{outside:Point;inside:Point;clearWidth:number;clearHeight:number};
-  circulation:Point[];
-}
 export interface BigCityStats {buildings:number;enterableBuildings:number;instances:number;drawCallsPerPass:number;triangles:number}
-export const BIG_CITY_INTERIORS:readonly BigCityInterior[]=[
-  {id:'store',label:'Corner Market',roofVolume:{minimum:[13.9,6.9,0],maximum:[26.1,17.1,3.8]},
-    entrance:{outside:[20,4,1.5],inside:[20,9,1.5],clearWidth:3,clearHeight:2.8},
-    circulation:[[20,9,1.5],[20,15.8,1.5],[18.4,15.8,1.5]]},
-  {id:'apartment',label:'Daylight Loft',roofVolume:{minimum:[27.9,-17.1,0],maximum:[40.1,-6.9,6.8]},
-    entrance:{outside:[34,-4,1.5],inside:[34,-9,1.5],clearWidth:3,clearHeight:2.8},
-    circulation:[[34,-9,1.5],[34,-11.3,1.5],[38.1,-11.3,1.5],[34,-11.3,1.5],[34,-11.3,4.2],[38.1,-11.3,4.2]]},
-  {id:'conference',label:'Civic Workspace',roofVolume:{minimum:[40.9,7.9,0],maximum:[55.1,20.1,3.9]},
-    entrance:{outside:[48,5,1.5],inside:[48,9.7,1.5],clearWidth:3,clearHeight:2.8},
-    circulation:[[48,9.7,1.5],[43.7,9.7,1.5],[43.7,18.7,1.5],[48,18.7,1.5]]},
-];
 
 /** Original static Three.js scenery. All motion/physics stay in Modelica. */
 export class BigCityWorld {

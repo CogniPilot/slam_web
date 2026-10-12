@@ -25,7 +25,9 @@ header .project-actions > button, header .project-actions > .button { white-spac
 .scene > .panel-label .right { font-size: 9px; }
 #world { top: 52px; }
 .scene-overlay { top: 66px; }
-.camera-mode { top: 66px; }
+#flight-control[aria-pressed="true"] { border-color: var(--green); color: var(--green); }
+#active-vehicle[hidden] { display: none !important; }
+.configuration-flight label { display: flex; flex-direction: column; gap: 6px; }
 
 .editor-workbench { display: flex; flex: 1; min-height: 0; position: relative; }
 .source-document { display: flex; flex: 1; flex-direction: column; min-height: 0; overflow: hidden; }
@@ -67,7 +69,7 @@ body.workspace-fullscreen { overflow: hidden; }
 .scene.pane-fullscreen #world { top: calc(52px + env(safe-area-inset-top)); bottom: 60px; }
 .scene.pane-fullscreen > .run-controls { position: absolute; bottom: env(safe-area-inset-bottom); left: 0; right: 0; padding: 8px 12px; background: #111b25; border-top: 1px solid var(--line); }
 .scene.pane-fullscreen .scene-bottom { bottom: 72px; }
-.scene.pane-fullscreen .scene-overlay, .scene.pane-fullscreen .camera-mode { margin-top: env(safe-area-inset-top); }
+.scene.pane-fullscreen .scene-overlay { margin-top: env(safe-area-inset-top); }
 .editor.pane-fullscreen > .run-controls { flex-shrink: 0; padding: 8px 12px; border-top: 1px solid var(--line); }
 
 @media (max-width: 960px) {
@@ -97,7 +99,6 @@ body.workspace-fullscreen { overflow: hidden; }
   .configuration-tabs > button { font-size: 12px; padding: 8px; }
   .pane-actions button { padding: 8px 6px; }
   .scene > .panel-label .right { display: none; }
-  .camera-mode { top: 140px; }
   .scene.pane-fullscreen #world { bottom: calc(164px + env(safe-area-inset-bottom)); }
   .scene.pane-fullscreen .scene-bottom { bottom: 176px; }
   .scene.pane-fullscreen > .run-controls { grid-template-columns: repeat(3, minmax(0, 1fr)); }

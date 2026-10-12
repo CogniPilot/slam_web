@@ -1,0 +1,19 @@
+.telemetry-plot { min-width: 0; display: flex; flex-direction: column; margin-top: 12px; }
+.telemetry-plot > header { display: flex; align-items: center; justify-content: space-between; gap: .5rem; min-height: 52px; padding: 6px 10px; flex-shrink: 0; }
+.telemetry-plot h2 { margin: 0; font-size: 1rem; }
+.telemetry-plot-body { display: flex; flex-direction: column; gap: .6rem; padding: .75rem; min-height: 280px; }
+.telemetry-plot-series { display: flex; flex-wrap: wrap; gap: .5rem; }
+.telemetry-plot-series-row { display: flex; flex-wrap: wrap; gap: .35rem; border-left: 3px solid var(--series-color); padding-left: .4rem; max-width: 100%; }
+.telemetry-plot-series-row select { min-width: 0; max-width: 100%; }
+.telemetry-plot button, .telemetry-plot select { min-height: 32px; }
+.telemetry-plot-body > button { align-self: flex-start; }
+.telemetry-plot canvas { display: block; width: 100%; height: 230px; min-width: 0; background: #111c28; border-radius: 5px; }
+.telemetry-plot-note { font-size: .75rem; color: #aab9c8; }
+.telemetry-plot.pane-collapsed .telemetry-plot-body { display: none; }
+.telemetry-plot.pane-fullscreen { position: fixed; inset: 0; z-index: 1000; width: 100%; height: 100dvh; min-height: 0; max-height: none; margin: 0; border-radius: 0; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+.telemetry-plot.pane-fullscreen .telemetry-plot-body { flex: 1; min-height: 0; overflow-y: auto; }
+.telemetry-plot.pane-fullscreen .telemetry-plot-series { max-height: 28dvh; overflow-y: auto; flex-shrink: 0; }
+.telemetry-plot.pane-fullscreen canvas { height: auto; flex: 1; min-height: 180px; }
+.telemetry-plot.pane-fullscreen > .run-controls { flex-shrink: 0; flex-wrap: wrap; padding: 8px 12px; border-top: 1px solid var(--line); max-height: 25dvh; overflow-y: auto; }
+@media (max-width: 560px) { .telemetry-plot-series-row { width: 100%; } .telemetry-plot-series-row select:nth-child(2) { flex: 1; } }
+@media (max-width: 760px) { .telemetry-plot button, .telemetry-plot select { min-height: 44px; } }

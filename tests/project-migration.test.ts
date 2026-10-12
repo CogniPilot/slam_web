@@ -1,6 +1,14 @@
 import {it,expect} from 'vitest';
 import {defaultProject,parseProject,detectors,algorithms,withActorMotion} from '../src/project';
 
+it('defaults to one drone and preserves the optional fleet and editable spawn model',()=>{
+ const project=defaultProject();expect(project.vehicleCount).toBe(1);
+ const path='models/Vehicles/OffsetQuadrotor.mo';
+ const edited={...project,vehicleCount:2 as const,modelicaSources:{...project.modelicaSources,[path]:project.modelicaSources![path].replace('{0, 2, initialHeight}','{3, 4, initialHeight}')}};
+ expect(parseProject(JSON.stringify(edited))).toEqual(edited);
+ for(const vehicleCount of [0,3,1.5,'2'])expect(()=>parseProject(JSON.stringify({...project,vehicleCount}))).toThrow('one or two');
+});
+
 it('retires app-generated INS binaries while retaining source and compiler-session metadata',()=>{
  const project={...defaultProject(),algorithmPreset:'custom',algorithm:defaultProject().algorithm+'\n// Student INS edit\n'};
  const old={format:'rumoca-state-node',version:1,wasmBase64:'retired app backend'};

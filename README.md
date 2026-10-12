@@ -1,7 +1,7 @@
 # SLAM Lab
 
 An open source UAV lab that runs in your browser. Explore a simulated city, see
-what a drone's sensors see, and edit the math behind its motion—all without
+what a drone's sensors see, and edit the math behind its motion, all without
 installing a robotics stack.
 
 [**Open the browser demo →**](https://cognipilot.github.io/slam_web/) · [Source on GitHub](https://github.com/CogniPilot/slam_web)
@@ -21,7 +21,9 @@ automatic lightweight preview. Hardware rendering keeps the native sensor sizes.
 
 - **Start with a link.** Students and collaborators can open the same lab across
   desktop platforms, without installing Python, containers, or local services.
-  Phones get a compact layout and Low graphics by default.
+  Low (economical) graphics with a 15 Hz RGB-D rate is the default on every
+  device, which keeps the simulation close to real time. Phones also get a
+  compact layout.
 - **See through simulated sensors.** Three.js uses the GPU to render RGB camera
   images, depth images, and an optional 64-beam LiDAR scan. Camera noise and depth
   quantization also run in shaders.
@@ -39,16 +41,30 @@ automatic lightweight preview. Hardware rendering keeps the native sensor sizes.
 
 ## Try it
 
-Start with the city flight tour, or choose **Big city · furnished interiors**
-to explore a market, loft, and conference room. Open **Configuration** to change
-the scene and sensors; open **Editor** to inspect or edit Modelica source.
+Start with manual flight and a drone-follow camera; the toolbar switches to an
+automatic flight tour. Choose camera views with **V** or **Configuration**.
+Enable a second drone there, switch control and follow target in the toolbar,
+and add signals from either drone to the live **Plot** pane. Choose
+**Big city · furnished interiors** to explore a market, loft, and conference room.
+Open **Editor** to inspect or edit Modelica source.
 
 Choose a model from **Run model**. The default is `SLAM.Examples.InertialOnly`;
 the responsive and smoothed variants demonstrate the IMU filter tradeoff.
 Use **Files** to browse and edit the Modelica library. The viewer and editor
 can each collapse or fill the screen without losing your work.
-**Docs** shows Modelica package help and components. **Assistant** connects to
-your OpenAI-compatible provider or local Ollama and proposes edits for review.
+**Docs** shows Modelica package help and components. **Assistant** can find and
+read files, edit Modelica with an undoable diff, check compilation, and run up to
+30 lockstep frames per request to inspect the results. It can read the map's
+room coordinates and edit a flight mission, for example “Start in the store
+and fly around inside”, then start normal playback. Mission math stays in
+Modelica. Choose OpenAI (Responses
+API), a compatible endpoint, local Ollama, or **WebLLM** on your device's GPU.
+WebLLM needs WebGPU and about 1–2 GB of GPU memory; its first use downloads and
+caches model weights. It has no API billing and pauses simulation while working.
+Small local models are best for simple questions and small edits. Remote
+providers receive source only when requested by tools; credentials stay in page
+memory. Requested edits can apply directly with **Undo edit**; suggested changes
+are proposed for review. Generated missions still need inspection and testing.
 The app includes a pinned local copy of [CogniPilot Modelica Models](models/Libraries/README.md),
 including the position, attitude and body-rate controllers that drive the drone's motors.
 
@@ -57,8 +73,8 @@ Hold **Shift** to move faster. On a phone, scroll below the viewer for controls
 and the editor. Performance depends on the device and selected settings.
 
 **Current status:** Quadrotor physics, inertial propagation, GPU sensor rendering,
-and project persistence run in the browser. Full visual SLAM—including connected
-visual corrections, mapping, and loop closure—is still in development. This is a
+and project persistence run in the browser. Full visual SLAM, including connected
+visual corrections, mapping, and loop closure, is still in development. This is a
 prototype for teaching and experimentation.
 
 ## Performance and portable deployment
@@ -90,6 +106,15 @@ npm run dev
 `npm run dev` and `npm run build` initialize the pinned `modelica_models` Git
 submodule automatically. Git and network access are needed on the first build;
 visitors receive the sources in the static site and need neither.
+
+`npm ci` installs the verified Rumoca `main` WASM package pinned in
+[rumoca-package.json](rumoca-package.json). The first install downloads its CI
+artifact with GitHub CLI (`gh auth login`). CI uses its workflow token; if
+cross-repository artifact access is denied, provide a `RUMOCA_ARTIFACT_TOKEN`
+secret with Actions read access to `CogniPilot/rumoca`.
+Packages are cached in `~/scratch/slam_web/downloads` and checked by hash and
+embedded compiler revision before use. Set `RUMOCA_WASM_PACKAGE` to an existing
+copy of that exact package to install without downloading it.
 
 `npm run build` produces a static site. GitHub Actions deploys it to Pages after
 the supported demo's CI checks pass on `main`.

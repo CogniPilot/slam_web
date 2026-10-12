@@ -7,6 +7,10 @@ test('free camera keys move the actual worker view while simulation is paused an
   await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.ready&&lab.compiling===false;}),{timeout:90000}).toBe(true);
   await page.evaluate(()=>{const lab=(window as any).__slamLab;lab.runtime.pause();});
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
+  await page.getByRole('tab',{name:'Configuration',exact:true}).click();
+  await page.getByLabel('Keyboard control',{exact:true}).selectOption('viewer');
+  await page.getByLabel('Camera view',{exact:true}).selectOption('free');
+  await expect(page.getByLabel('Camera view',{exact:true})).toHaveValue('free');
   await page.evaluate(()=>{
     const lab=(window as any).__slamLab,viewer=lab.viewer;
     if(!viewer)throw new Error('Dedicated viewer required');
@@ -49,4 +53,33 @@ test('free camera keys move the actual worker view while simulation is paused an
   await page.waitForTimeout(100);const stopped=await state();await page.waitForTimeout(200);expect((await state()).position).toEqual(stopped.position);
   await page.screenshot({path:'test-results/main-street-camera.png',fullPage:true});
   expect(errors).toEqual([]);
+});
+
+test('follow view defaults, V cycling and manual flight toggle stay in sync',async({page})=>{
+  await openEconomicalPropagation(page,true);
+  await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
+  await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
+  await expect(page.getByRole('button',{name:'Manual flight',exact:true})).toHaveAttribute('aria-pressed','true');
+  await page.getByRole('tab',{name:'Configuration',exact:true}).click();
+  const view=page.getByLabel('Camera view',{exact:true});
+  await expect(view).toHaveValue('follow');
+  await expect(page.getByLabel('Flight tour route')).toBeDisabled();
+  await page.locator('#world').focus();
+  for(const mode of ['chase','side','overhead','free','follow']){
+    await page.keyboard.press('v');await expect(view).toHaveValue(mode);
+  }
+  await page.locator('#name').focus();await page.keyboard.type('vv');await expect(view).toHaveValue('follow');
+  await view.selectOption('overhead');
+  expect(await page.evaluate(()=>(window as any).__slamLab.runtime.world.viewerCamera.mode)).toBe('overhead');
+  await page.getByRole('button',{name:'Manual flight',exact:true}).click();
+  await expect(page.locator('#flight-control')).toHaveText('Flight tour');
+  await expect(page.getByLabel('Flight tour route')).toBeEnabled();
+  expect(await page.evaluate(()=>(window as any).__slamLab.runtime.autopilot)).toBe(true);
+  await page.locator('#world').focus();await page.keyboard.down('w');
+  expect(await page.evaluate(()=>(window as any).__slamLab.runtime.command.forward)).toBe(0);
+  await page.keyboard.up('w');
+  await page.locator('#flight-control').click();
+  await page.locator('#world').focus();await page.keyboard.down('w');
+  expect(await page.evaluate(()=>(window as any).__slamLab.runtime.command.forward)).toBe(1.6);
+  await page.keyboard.up('w');
 });

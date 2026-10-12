@@ -46,14 +46,15 @@ it('validates the entire IMU batch and timestamp continuity before any solver ad
     ]};
     expect(()=>adapter.step(invalid)).toThrow('finite');expect(solver.state_json()).toBe(before);
     expect(()=>adapter.step(frame(3/90))).toThrow('Discontinuous');expect(solver.state_json()).toBe(before);
-    expect(()=>adapter.reset(20)).toThrow('reset_at');expect(solver.state_json()).toBe(before);
     const batch={...frame(3/90,2/90),imuIntervals:[
       {time:2/90,dt:1/90,imu:frame(2/90,1/90,1).imu},
       {time:3/90,dt:1/90,imu:frame(3/90,1/90,2).imu},
     ]};
     adapter.step(batch);expect(solver.time()).toBeCloseTo(3/90,12);
-    adapter.reset();const reset=solver.state_json();
-    expect(()=>adapter.step(frame(20+1/90))).toThrow('reset_at');expect(solver.state_json()).toBe(reset);
+    adapter.reset(20);expect(solver.time()).toBe(20);
+    adapter.step(frame(20+1/90));expect(solver.time()).toBeCloseTo(20+1/90,12);
+    adapter.reset();
+    adapter.step(frame(30+1/90));expect(solver.time()).toBeCloseTo(30+1/90,12);
   }finally{adapter.free();}
 },90_000);
 

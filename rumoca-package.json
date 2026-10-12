@@ -1,0 +1,11 @@
+{
+  "repository": "CogniPilot/rumoca",
+  "revision": "2aaed750242f96d77f39e319f16b24bee82794c1",
+  "runId": 37779138622,
+  "artifact": "wasm-package",
+  "variant": "release-full-web",
+  "files": {
+    "rumoca_bind_wasm.js": "76660528ae217058d442d33f7335e142d8e82c585f1b565bd8322478a69800d5",
+    "rumoca_bind_wasm_bg.wasm": "b1dde538d0af56f4004bb2e14b0b4e9665b7883931d769be9b13c72c1e7b3f59"
+  }
+}
