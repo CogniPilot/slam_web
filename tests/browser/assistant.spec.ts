@@ -93,7 +93,9 @@ test('OpenAI Responses edits Modelica, measures a lockstep run, starts playback 
 
 test('WebLLM controls work on mobile without starting a download on selection',async({page})=>{
   await page.setViewportSize({width:390,height:844});
-  let downloads=0;await page.route('https://esm.run/**',route=>{downloads++;return route.abort();});
+  // Selecting the provider must not start the inference worker or any download.
+  const workers:string[]=[];page.on('worker',worker=>workers.push(worker.url()));
+  let downloads=0;await page.route(/huggingface|mlc\.ai|esm\.run|jsdelivr/,route=>{downloads++;return route.abort();});
   await page.goto('/');await page.getByRole('tab',{name:'Assistant',exact:true}).click({timeout:90000});
   await page.getByLabel('Assistant provider',{exact:true}).selectOption('webllm');
   await expect(page.getByLabel('Assistant local model',{exact:true})).toBeVisible();
@@ -102,4 +104,5 @@ test('WebLLM controls work on mobile without starting a download on selection',a
   await expect(page.getByLabel('Assistant reasoning',{exact:true})).toBeHidden();
   await expect(page.getByRole('button',{name:'Unload local model',exact:true})).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);expect(downloads).toBe(0);
+  expect(workers.filter(url=>url.includes('assistant.worker'))).toEqual([]);
 });

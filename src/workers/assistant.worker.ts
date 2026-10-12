@@ -1,13 +1,14 @@
-// Inference and weight loading stay off the viewer's main thread.
+// Inference and weight loading stay off the viewer's main thread. The runtime
+// is a pinned dependency bundled as a lazy chunk; only model weights come from
+// the network, on first use.
 export {};
-const runtimeUrl='https://esm.run/@mlc-ai/web-llm@0.2.85';
 let engine:any,loadedModel='';
 self.onmessage=async({data})=>{
   try{
     if(data.type!=='complete')throw new Error('Unknown assistant request');
     if(!engine){
       self.postMessage({progress:'Loading WebLLM runtime…'});
-      const runtime=await import(/* @vite-ignore */ runtimeUrl);
+      const runtime=await import('@mlc-ai/web-llm');
       engine=new runtime.MLCEngine({initProgressCallback:(report:{text:string})=>self.postMessage({progress:report.text})});
     }
     if(loadedModel!==data.model){

@@ -48,8 +48,8 @@ Ollama needs `OLLAMA_ORIGINS` set to the site's origin. Credentials stay in page
 memory; ChatGPT subscriptions do not include API billing.
 
 **WebLLM** runs a small model on this device without API billing. It needs WebGPU
-and about 1–2 GB of GPU memory. The first Send loads the WebLLM runtime from
-the esm.run CDN and downloads and caches weights; inference runs in a worker. Small edits work best. Simulation pauses while the
+and about 1–2 GB of GPU memory. The WebLLM runtime ships with the site; the
+first Send downloads and caches model weights, and inference runs in a worker. Small edits work best. Simulation pauses while the
 assistant works; **Unload local model** releases its worker and GPU resources.
 
 **Stop** cancels a request; an in-flight simulation frame finishes normally.

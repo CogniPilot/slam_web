@@ -7,5 +7,6 @@ if(process.env.SLAM_BROWSER_GPU!=='1'){
 }
 
 // All supported browser tests, including native sensor sizes and full scenes.
+// SLAM_BROWSER_ANGLE selects the ANGLE backend (gl by default; vulkan for NVIDIA hosts).
 // Strict experimental compiler admission remains separate.
 export default defineConfig({...base,testMatch:['**/*.spec.ts'],globalTimeout:30*60_000});

@@ -24,6 +24,6 @@ export default defineConfig({
   ],
   testDir:'tests/browser',timeout:120_000,workers:1,reporter:'list',
   globalTimeout:process.env.CI?6*60_000:undefined,
-  use:{baseURL:`http://127.0.0.1:${port}`,headless:true,viewport:{width:1440,height:1000},launchOptions:{executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox',...(process.env.SLAM_BROWSER_GPU==='1'?['--enable-gpu','--use-gl=angle','--use-angle=gl']:['--use-angle=swiftshader','--enable-unsafe-swiftshader'])]}},
+  use:{baseURL:`http://127.0.0.1:${port}`,headless:true,viewport:{width:1440,height:1000},launchOptions:{executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox',...(process.env.SLAM_BROWSER_GPU==='1'?['--enable-gpu','--use-gl=angle',`--use-angle=${process.env.SLAM_BROWSER_ANGLE??'gl'}`]:['--use-angle=swiftshader','--enable-unsafe-swiftshader'])]}},
   webServer:{command:`npm run preview -- --port ${port} --strictPort`,url:`http://127.0.0.1:${port}`,reuseExistingServer:!process.env.CI}
 });
