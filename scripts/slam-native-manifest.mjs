@@ -23,9 +23,10 @@ export function compactLayout(model,layout){
   const realOffset=(name)=>{
     if(settings.has(name))return settings.get(name);
     const base=name.replace(/\[.*$/,''),entry=fromTable.get(base);
-    if(entry&&entry.kind==='Real'&&typeof entry.p_index==='number'){
+    if(entry&&entry.kind==='Real'){
       const index=name===base?0:indexWithin(name,entry);
-      return layout.p_offset+(entry.p_index+index)*8;
+      const first=typeof entry.offset==='number'?entry.offset:layout.p_offset+entry.p_index*8;
+      return first+index*8;
     }
     return undefined;
   };
@@ -41,6 +42,12 @@ export function compactLayout(model,layout){
   if(slots?.depth)inputs.depth={offset:slots.depth[0],count:slots.depth[1],lane:'f64'};
   if(slots?.interval_time!=null)inputs.intervalTime??={offset:slots.interval_time,count:1,lane:'f64'};
   if(slots?.image_epoch!=null)inputs.imageEpoch={offset:slots.image_epoch,count:1,lane:'i64'};
+  // Typed (Integer, Boolean) inputs come only from the compiler's table.
+  for(const entry of layout.model_inputs??[]){
+    if(inputs[entry.name]||typeof entry.offset!=='number')continue;
+    if(entry.lane==='i64'||entry.lane==='u8')inputs[entry.name]={offset:entry.offset,count:entry.count,lane:entry.lane};
+    else if(entry.kind==='Real')inputs[entry.name]={offset:entry.offset,count:entry.count,lane:'f64'};
+  }
   for(const unsourced of layout.unsourced_inputs_zero_filled??[]){
     const base=String(unsourced.name??'').replace(/\[.*$/,'');
     if(unsourced.kind==='Real'&&!inputs[base])inputs[base]={offset:layout.p_offset+unsourced.p_index*8,count:unsourced.count,lane:'f64'};
@@ -53,8 +60,8 @@ export function compactLayout(model,layout){
     state:{count:layout.state.count,previous_hash:layout.state.previous_hash,next_hash:layout.state.next_hash},
     carry:[...layout.carry],inputs,outputs,
     y_names:[...(layout.y_names??[])],
-    model_outputs:layout.model_outputs?[...layout.model_outputs]:[],
-    state_runs:layout.state_runs?[...layout.state_runs]:[],
+    model_outputs:(layout.model_outputs??[]).map(({name,index,count})=>({name,index,count})),
+    state_runs:(layout.state_runs??[]).map(({name,lane,previous,next,count})=>({name,lane,previous,next,count})),
   };
 }
 function elementName(name,index,count){

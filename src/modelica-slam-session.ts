@@ -17,6 +17,8 @@ type CameraInputs=Pick<SlamIntervalFrame,'rgbCalibration'|'depthCalibration'|'de
 export class ModelicaSlamSession {
   private epoch=-1;
   private frames=0;
+  /** End time of the last evaluated interval; the model checks continuity to 1e-12. */
+  private clock=0;
   private constructor(readonly manifest:SlamNativeManifest,private readonly initialize:SlamNativeProgram,private readonly step:SlamNativeProgram){}
 
   static async create(manifest:SlamNativeManifest,fetchFile:SlamNativeFetch,initial:SlamInitialFrame,progress:(text:string)=>void=()=>{}){
@@ -35,7 +37,7 @@ export class ModelicaSlamSession {
     const status=initialize.step(initial.frameTime);
     if(status!==0)throw new Error(`Native SLAM initialization returned status ${status}`);
     initialize.transferTo(step);
-    session.epoch=initial.imageEpoch;
+    session.epoch=initial.imageEpoch;session.clock=initial.frameTime;
     progress(`Native SLAM initialized in ${(performance.now()-started).toFixed(0)} ms`);
     return session;
   }
@@ -48,11 +50,16 @@ export class ModelicaSlamSession {
     this.writeImage(this.step,frame);
     const stepMs:number[]=[];
     for(const interval of frame.intervals){
+      if(!(interval.dt>0&&interval.dt<=.2))throw new Error('Native SLAM accepts IMU intervals of at most 0.2 s');
+      // Feed the model's own continuous clock: previous end plus h, exactly.
+      const end=this.clock+interval.dt;
+      if(Math.abs(end-interval.time)>1e-6)throw new Error(`IMU interval at ${interval.time} s does not continue the native SLAM clock at ${this.clock} s`);
       writeVector(this.step,'accel',interval.imu.accel);writeVector(this.step,'gyro',interval.imu.gyro);
       this.step.real('h')[0]=interval.dt;
-      this.step.real('intervalTime')[0]=interval.time;
+      this.step.real('intervalTime')[0]=end;
       const started=performance.now();
-      const status=this.step.step(interval.time);
+      const status=this.step.step(end);
+      this.clock=end;
       stepMs.push(performance.now()-started);
       if(status!==0)throw new Error(`Native SLAM step returned status ${status} at t=${interval.time.toFixed(4)} s (image epoch ${frame.imageEpoch})`);
     }
@@ -100,26 +107,29 @@ export class ModelicaSlamSession {
     const matchCount=program.output('matchCount')?.[0];
     if(matchCount!==undefined)diagnostics.matchCount=matchCount;
     const accepted=derived.accepted===true||derived.accepted===1;
+    const {points,confidence:mapConfidence}=this.mapPoints(program);
+    const confidence=matchCount!==undefined&&features.length?Math.min(1,matchCount/features.length):mapConfidence;
+    diagnostics.mapPoints=points.length;
     return {x,y,z,quaternion:quaternion?Array.from(quaternion):quaternionFromRotation(rotation as Float64Array),
-      confidence:accepted?1:0,points:this.mapPoints(program),features,diagnostics,
+      confidence,points,features,diagnostics,
       tracking:{matches:current.map((value,index)=>({current:value,previous:previous[index]})),accepted,reason:`publication reason ${diagnostics.publicationReason??'n/a'}`}};
   }
-  /** Confirmed landmark positions from the carried map, when the export names them. */
-  private mapPoints(program:SlamNativeProgram):number[][] {
-    const runs=program.layout.state_runs;
-    const positions=runs.find(run=>run.lane==='f64'&&/\.map\.[A-Za-z]*(positions?|points?)$/i.test(run.name)&&run.count%3===0);
-    if(!positions)return [];
-    const prefix=positions.name.slice(0,positions.name.lastIndexOf('.')+1);
-    const enabled=runs.find(run=>run.lane==='u8'&&run.name.startsWith(prefix)&&/(enabled|occupied|confirmed)$/i.test(run.name)&&run.count===positions.count/3);
-    const values=program.stateRun(positions.name)!.view as Float64Array;
-    const mask=enabled?program.stateRun(enabled.name)!.view as Uint8Array:undefined;
-    const points:number[][]=[];
-    for(let i=0;i<positions.count/3;i++){
-      if(mask&&!mask[i])continue;
-      const point=[values[3*i],values[3*i+1],values[3*i+2]];
-      if(point.every(Number.isFinite))points.push(point);
+  /** Occupied landmark positions of the carried map (estimator.localization.map),
+   * with the mean landmark confidence scaled by the model's maximum. */
+  private mapPoints(program:SlamNativeProgram):{points:number[][];confidence:number} {
+    const point=program.stateRun('estimator.localization.map.point'),occupied=program.stateRun('estimator.localization.map.occupied');
+    const landmarkConfidence=program.stateRun('estimator.localization.map.confidence');
+    if(!point||!occupied||point.lane!=='f64')return {points:[],confidence:0};
+    const values=point.view as Float64Array,mask=occupied.view,count=mask.length;
+    if(values.length!==count*3)throw new Error('Native SLAM map runs disagree on the landmark count');
+    const points:number[][]=[];let total=0;
+    for(let i=0;i<count;i++){
+      if(!Number(mask[i]))continue;
+      const row=[values[3*i],values[3*i+1],values[3*i+2]];
+      if(!row.every(Number.isFinite))throw new Error('Native SLAM map holds a non-finite landmark');
+      points.push(row);total+=landmarkConfidence?Number((landmarkConfidence.view as Float64Array)[i]):0;
     }
-    return points;
+    return {points,confidence:points.length&&landmarkConfidence?Math.min(1,total/points.length/8):0};
   }
 }
 
