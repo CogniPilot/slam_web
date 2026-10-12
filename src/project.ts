@@ -61,6 +61,8 @@ export interface Project {
   peopleEnabled?:boolean;
   lightingMode?:'day'|'night'|'cycle';
   vehicleCount?:1|2;
+  /** Estimator backend: the inertial baseline, or the compiler-exported native SLAM programs. */
+  slamBackend?:'inertial'|'native';
 }
 export const defaultProject = (_mobile=false): Project => ({
   format:'slam-lab-project',
@@ -104,6 +106,7 @@ export function parseProject(text: string): Project {
   if(!['city','warehouse','courtyard','tokyo','asset-city','big-city'].includes(p.environment)||!Number.isInteger(p.seed)) throw new Error('Invalid project settings');
   if(p.sceneDetail!==undefined&&!['low','medium','high'].includes(p.sceneDetail))throw new Error('Invalid scene detail level');
   if(p.vehicleCount!==undefined&&p.vehicleCount!==1&&p.vehicleCount!==2)throw new Error('Vehicle count must be one or two');
+  if(p.slamBackend!==undefined&&!['inertial','native'].includes(p.slamBackend))throw new Error('Invalid estimator backend');
   if(p.vehicleCount===2){p.modelicaSources??={};p.modelicaSources[offsetQuadrotorPath]??=offsetQuadrotor;}
   // Earlier previews offered paired90 Hz despite D435 RGB's60 Hz limit at
   //848×480. Preserve saved sources and the other rates when migrating them.

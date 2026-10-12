@@ -6,6 +6,7 @@ import { World } from './world';
 import {defaultSensorModelica,defaultEvaluationModelica,withActorMotion,offsetQuadrotorPath,type Project} from './project';
 import offsetQuadrotor from '../models/Vehicles/OffsetQuadrotor.mo?raw';
 import {LockstepBarrier} from './lockstep-barrier';
+import {ModelicaSlamClient,type SlamReady} from './modelica-slam-client';
 import type {ActorMotionFrame} from './modelica-actor-motion';
 import type { Command,Estimate,Pose,RunRecord,SensorFrame,InitialSensorFrame,Truth,SceneDetail } from './types';
 import {validatePose} from './evaluation';
@@ -21,6 +22,9 @@ export class Runtime {
   private physics=new WorkerRpc(new Worker(new URL('./physics.worker.ts',import.meta.url),{type:'module'}));
   readonly pendingNodes=new Map<string,string>();
   private modelicaState?:WorkerRpc;
+  private slam?:ModelicaSlamClient;
+  /** Published native SLAM program identity once the session is initialized. */
+  slamProgram?:SlamReady;
   private modelicaMath?:WorkerRpc;
   private project?:Project;
   private order:ReturnType<typeof validateGraph>=[];
@@ -81,7 +85,7 @@ export class Runtime {
     if(data)this.onFrame(data.frame,data.estimate,data.truth,data.metrics);
   }
   dispose(){
-    this.pause();this.physics.stop();this.modelicaState?.stop();this.modelicaMath?.stop();
+    this.pause();this.physics.stop();this.modelicaState?.stop();this.modelicaMath?.stop();this.slam?.close();
     this.secondary?.dispose();this.secondary=undefined;this.world.dispose();
   }
   async setGraphicsQuality(detail:SceneDetail) {
@@ -117,6 +121,7 @@ export class Runtime {
     this.pendingNodes.clear();delete project.detectorArtifact;
     this.modelicaState?.stop();this.modelicaState=undefined;
     this.modelicaMath?.stop();this.modelicaMath=undefined;
+    this.slam?.close();this.slam=undefined;this.slamProgram=undefined;
     this.physics=new WorkerRpc(new Worker(new URL('./physics.worker.ts',import.meta.url),{type:'module'}));
     const workspaceSources={...project.modelicaSources};
     const spawnSource=workspaceSources[offsetQuadrotorPath]??offsetQuadrotor;
@@ -131,7 +136,8 @@ export class Runtime {
     this.onStatus('Compiling selected Modelica model to WASM…');
     for(const node of order) if(['detector','slam'].includes(node.kind)) {
       if(node.kind==='detector'&&project.detectorLanguage==='modelica') {
-        this.pendingNodes.set(node.id,'Rumoca native full-frame feature detection pending');
+        // The native SLAM programs detect features inside the compiled model.
+        if(project.slamBackend!=='native')this.pendingNodes.set(node.id,'Rumoca native full-frame feature detection pending');
       } else if(node.kind==='slam'&&project.runtime==='modelica') {
         this.modelicaState=new WorkerRpc(new Worker(new URL('./modelica-state.worker.ts',import.meta.url),{type:'module'}));
         const result=await this.modelicaState.call<{artifact:InertialSessionMetadata}>('init',{base,source:project.algorithm,workspaceSources:project.modelicaSources,modelName:project.entryPoint??'ModelicaInertial'},180_000);
@@ -149,6 +155,15 @@ export class Runtime {
     this.heldImu=(await this.sampleSensors(truth,true,false)).imu;
     this.reference=undefined;this.records=[];this.replay=undefined;
     this.project=structuredClone(project);this.order=order;
+    if(project.slamBackend==='native'&&order.some(node=>node.kind==='slam')){
+      this.onStatus('Loading native SLAM programs…');
+      const client=new ModelicaSlamClient(text=>this.onStatus(text));
+      try{
+        const initial=await this.captureInitialFrame();
+        this.slamProgram=await client.initialize(base,initial);
+        this.slam=client;
+      }catch(error){client.close();this.project=undefined;throw error;}
+    }
     if(this.vehicleIndex===0&&project.vehicleCount===2){
       const otherWorld=new World(document.createElement('div'));
       let candidate:Runtime|undefined;
@@ -164,7 +179,7 @@ export class Runtime {
         this.secondary=other;this.publishVehiclePoses();
       }catch(error){if(candidate)candidate.dispose();else otherWorld.dispose();await this.world.setVehicleCount(1);this.project=undefined;throw error;}
     }
-    this.onStatus('Ready · camera + Modelica inertial baseline · native feature detection and SLAM pending');
+    this.onStatus(this.slam?`Ready · camera + native Modelica SLAM (${this.slamProgram?.models.step.model}) · inertial baseline retained`:'Ready · camera + Modelica inertial baseline · native feature detection and SLAM pending');
   }
   /** Optional full-SLAM initialization image. It consumes no physics/sensor tick
    * and publishes no estimate. A failed capture leaves the image ID available. */
@@ -325,6 +340,12 @@ export class Runtime {
             // consumes IMU/time only; avoid cloning RGB/depth into that worker.
             // A future visual estimator must declare its own image inputs.
             const frame={time:sample.time,dt:sample.dt,imu:sample.imu,imuIntervals:sample.imuIntervals};
+            if(this.slam){
+              // The native programs consume the full RGB8/Z16 frame with its IMU intervals.
+              const result=await this.slam.step(sample);
+              estimate=result.estimate;this.lastWorkerTimings[node.id]={...this.slam.lastTimings,stepMsTotal:result.stepMs.reduce((a,b)=>a+b,0)};
+              outputs={estimate};break;
+            }
             estimate=await worker.call<Estimate>('step',{nodeId:node.id,kind:node.kind,frame,features:inputs.features});
             this.lastWorkerTimings[node.id]={...worker.lastTimings};outputs={estimate};break;
           }

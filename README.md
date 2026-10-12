@@ -73,9 +73,14 @@ Hold **Shift** to move faster. On a phone, scroll below the viewer for controls
 and the editor. Performance depends on the device and selected settings.
 
 **Current status:** Quadrotor physics, inertial propagation, GPU sensor rendering,
-and project persistence run in the browser. Full visual SLAM, including connected
-visual corrections, mapping, and loop closure, is still in development. This is a
-prototype for teaching and experimentation.
+and project persistence run in the browser. The complete Modelica SLAM model
+(feature detection, mapping and loop closure) runs as compiler-exported native
+WebAssembly programs when **Configuration, Flight, Estimator** is set to
+**Native Modelica SLAM**. It needs a desktop browser with hardware rendering,
+about 1.2 GB of memory per drone, and runs slower than real time; the site must
+also publish the exported programs (see [Deployment](docs/guides/deployment.md)).
+The inertial baseline remains the default. This is a prototype for teaching and
+experimentation.
 
 ## Performance and portable deployment
 

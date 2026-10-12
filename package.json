@@ -11,7 +11,7 @@
     "prebuild": "npm run models:init",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "assets": "node scripts/assets.mjs",
+    "assets": "node scripts/assets.mjs && node scripts/slam-native-assets.mjs",
     "pretest": "npm run models:init",
     "test": "vitest run",
     "test:browser": "playwright test",

@@ -35,6 +35,19 @@ sensor previews and diagnostics. One drone is the default.
 The **Plot** pane shows live telemetry. Use **Add series** to select signals from
 either drone. It can collapse or fill the screen, like the viewer and editor.
 
+## Native Modelica SLAM
+
+**Configuration → Flight → Estimator** switches from the inertial baseline to
+**Native Modelica SLAM**: the complete `D435FastSLAMStep` model, compiled ahead
+of time by Rumoca into WebAssembly programs that the site serves. The first
+camera image initializes the map; afterwards every held IMU interval is one
+evaluation with the current RGB-D image, so a lower IMU rate and the 15 Hz camera
+rate keep the run closest to real time. The programs reserve about 1.2 GB of
+memory, need the native 848 × 480 camera (hardware rendering, not the software
+preview), and are not available on phones. Metrics show the model's own
+feature, map and loop-closure results; the status line reports the program
+identity and any non-zero evaluation status.
+
 ## Scenes and graphics
 
 Choose **Big city · furnished interiors** to explore a market, loft and conference

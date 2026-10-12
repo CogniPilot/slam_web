@@ -40,7 +40,7 @@ document.querySelector('#app')!.innerHTML=`
 <div class="sensor-row"><div class="panel sensor"><div class="panel-label">RGB CAMERA<span class="right">features overlay</span></div><canvas id="rgb" width="160" height="90"></canvas><div class="sensor-foot">69° × 42° · RGBA8</div></div><div class="panel sensor"><div class="panel-label">DEPTH CAMERA<span class="right">axial depth, meters</span></div><canvas id="depth" width="160" height="90"></canvas><div class="sensor-foot">87° × 58° · 0.28–10 m</div></div><div class="panel trajectory"><div class="panel-label">TRAJECTORY<span class="right">ENU · meters</span></div><canvas id="trajectory" width="260" height="146"></canvas><div class="legend"><span class="truth-key">Truth</span><span class="estimate-key">Estimate</span><span class="compare-key">External</span></div></div></div>
 <div class="metrics"><div><small>SIM TIME</small><strong id="metric-time">0.00 <em>s</em></strong></div><div><small>TRAJECTORY RMSE</small><strong id="metric-ate">— <em>m</em></strong></div><div><small>FEATURES</small><strong id="metric-features">0</strong></div><div><small>MAP POINTS</small><strong id="metric-points">0</strong></div><div><small>SIM / WALL TIME</small><strong id="metric-rtf">— <em>×</em></strong></div></div></section>
 <aside class="panel editor"><div class="editor-top"><button id="files-toggle" aria-controls="source-explorer" aria-expanded="false">Files</button><div><small>MODELICA SOURCE</small><h2 id="editor-title">RGB-D / inertial SLAM</h2></div><span id="language" class="badge">Modelica · Rumoca</span></div><div class="editor-selects"><label>Preset <select id="preset" aria-label="Feature detector preset"></select></label></div><p id="editor-description">Estimate a 6-DOF pose from camera images and the airframe IMU.</p><textarea id="code" aria-label="Modelica source" spellcheck="false"></textarea><div class="editor-bottom"><span id="line-count"></span><button id="apply" disabled class="primary">Apply & reset</button></div></aside></div>
-<div class="bottom-row"><section class="panel connection"><h2>Embedded deployment</h2><p>Portable Modelica programs will run in the browser and on embedded hardware. Native deployment and optional ROS 2 / MAVLink adapters are under development.</p><button id="deploy" disabled>Deploy project</button><small id="deploy-state">Modelica embedded host integration pending</small></section><section class="panel recordings"><h2>Experiments</h2><p>Record synchronized sensor frames, then rerun them through edited source.</p><button id="record" disabled>● Record dataset</button><button id="export-recording" disabled>Export dataset</button><label class="button">Replay dataset<input id="replay" type="file" accept=".json" hidden></label><button id="export-node">Export source</button><small id="record-state">Up to 300 RGB-D / IMU frames per recording</small></section></div>
+<div class="bottom-row"><section class="panel connection"><h2>Embedded deployment</h2><p>The SLAM model compiles to an FMI-LS WebAssembly package (FMI 3 co-simulation with a wasm32-wasip2 component) that runs on embedded hosts; ROS 2 / MAVLink adapters are under development.</p><a id="download-fmu" class="button" href="#" download aria-disabled="true">Download SLAM FMU</a><button id="deploy" disabled>Deploy project</button><small id="deploy-state">Checking published packages…</small></section><section class="panel recordings"><h2>Experiments</h2><p>Record synchronized sensor frames, then rerun them through edited source.</p><button id="record" disabled>● Record dataset</button><button id="export-recording" disabled>Export dataset</button><label class="button">Replay dataset<input id="replay" type="file" accept=".json" hidden></label><button id="export-node">Export source</button><small id="record-state">Up to 300 RGB-D / IMU frames per recording</small></section></div>
 <div id="status" role="status">Loading Modelica environment…</div><details id="lesson" class="panel lesson"><summary>Lesson guide · Modelica robotics</summary><ol><li><b>Run the default experiment.</b> Modelica inertial propagation prepares automatically. Phones start in the city with Low graphics; desktops use Balanced graphics. Click Run to start; no initial Apply is needed. Test physics and camera data. Native feature detection is pending. This baseline has no visual localization, map or loop closure; full Modelica SLAM integration is pending.</li><li><b>Edit Modelica.</b> Physics, detector and estimator source use Rumoca diagnostics and highlighting. Apply resets the experiment.</li><li><b>Save your work.</b> Projects save locally and can be downloaded and reopened. Full Modelica SLAM execution integration is pending.</li></ol><p>Select sensor rates in Configuration. RGB and depth share a simulation clock; IMU, GPS and LiDAR use their selected rates. Physics waits for every sensor event before advancing. Three.js presents the world independently at a target of 30 FPS. The camera uses 848×480 pinhole optics with stereo disparity noise; the D435 has no IMU, so IMU measurements belong to the airframe. Traffic, pedestrians and lighting vary the scene. Open the site to use the browser environment.</p></details></main>`;
 
 const el=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id)! as T;
@@ -57,6 +57,22 @@ el('lidar-enabled').parentElement!.insertAdjacentHTML('afterend','<label class="
 document.querySelector('.scene .panel-label .right')!.innerHTML='<span id="world-fps">— FPS · target 30</span> · Three.js';
 document.querySelector('.metrics')!.insertAdjacentHTML('afterend','<details class="panel estimator-diagnostics" open><summary>Estimator diagnostics</summary><div class="diagnostic-controls"><label class="check"><input id="show-uncertainty" type="checkbox" checked>2σ position ellipsoid</label><label class="check"><input id="show-graph" type="checkbox" checked>Keyframes & loop edges</label><label class="check"><input id="show-matches" type="checkbox" checked>Feature matches</label></div><div id="tracking-state">Waiting for observations</div><div id="uncertainty-state">Covariance unavailable</div><div id="graph-state">No keyframes yet · loop edges are orange</div><div id="frame-timings"></div><small>Matches connect reference → current RGB pixels. Covariance comes from the estimator; the visual frontend approximates correlations.</small></details>');
 el('deploy-state').insertAdjacentHTML('afterend','<div id="comparisons"></div><small>External comparison adapters are under development.</small>');
+// The published package list is small; read it once so the download reflects this site.
+void (async()=>{
+  const link=el<HTMLAnchorElement>('download-fmu'),state=el('deploy-state');
+  try{
+    const response=await fetch(new URL('vendor/slam/manifest.json',new URL(import.meta.env.BASE_URL,location.href)));
+    if(!response.ok)throw new Error('unpublished');
+    const manifest=await response.json();
+    const fmu=manifest?.fmu;
+    if(!fmu?.file)throw new Error('unpublished');
+    link.href=new URL(`vendor/slam/${fmu.file}`,new URL(import.meta.env.BASE_URL,location.href)).href;link.download=fmu.name??'D435FastSLAMStep.fmu';link.removeAttribute('aria-disabled');
+    state.textContent=`${fmu.model} · FMI-LS WebAssembly · ${(fmu.bytes/1e6).toFixed(1)} MB · source ${String(manifest.sourceSha256).slice(0,12)} · embedded host integration pending`;
+  }catch{
+    link.setAttribute('aria-disabled','true');link.onclick=event=>event.preventDefault();
+    state.textContent='SLAM FMU not published on this site · embedded host integration pending';
+  }
+})();
 const status=(message:string,error=false)=>{el('status').textContent=message;el('status').classList.toggle('error',error);};
 const mobileDefaults=matchMedia('(max-width:760px)').matches;
 let project=defaultProject(mobileDefaults);
@@ -504,7 +520,7 @@ async function compile() {
     vehiclePaths[0]={truth:[],estimate:[]};vehiclePaths[1]={truth:[],estimate:[]};
     telemetryPlot.setVehicleCount(runtime.vehicleCount);
     el<HTMLSelectElement>('active-vehicle').value='0';el('active-vehicle').hidden=runtime.vehicleCount===1;
-    el<HTMLSelectElement>('vehicle-count').value=String(project.vehicleCount??1);syncFlightHelp();
+    el<HTMLSelectElement>('vehicle-count').value=String(project.vehicleCount??1);el<HTMLSelectElement>('slam-backend').value=project.slamBackend??'inertial';syncFlightHelp();
     syncSceneControls();
     if(!localPersistenceBlocked)try{await saveProject(project);}catch{el('saved').textContent='Cannot save locally · download your project';}
   }
@@ -565,7 +581,7 @@ const cameraControls=new ViewerCameraControls(),keys=new Set<string>();
 el('world').tabIndex=0;el('world').setAttribute('aria-label','World camera');
 el('world').addEventListener('pointerdown',()=>el('world').focus({preventScroll:true}));
 const flightSettings=document.querySelector('.configuration-flight')!;
-flightSettings.insertAdjacentHTML('beforeend','<label>Vehicles <select id="vehicle-count" aria-label="Number of drones"><option value="1">1 drone</option><option value="2">2 drones · independent sensors and estimation</option></select></label><label>Camera view <select id="camera-view" aria-label="Camera view"></select></label><label>Keys control <select id="keyboard-mode" aria-label="Keyboard control"><option value="drone">Drone commands</option><option value="viewer">Viewer camera</option></select></label><p id="flight-help"></p>');
+flightSettings.insertAdjacentHTML('beforeend','<label>Estimator <select id="slam-backend" aria-label="Estimator backend"><option value="inertial">Inertial baseline</option><option value="native">Native Modelica SLAM · desktop, 1.2 GB</option></select></label><label>Vehicles <select id="vehicle-count" aria-label="Number of drones"><option value="1">1 drone</option><option value="2">2 drones · independent sensors and estimation</option></select></label><label>Camera view <select id="camera-view" aria-label="Camera view"></select></label><label>Keys control <select id="keyboard-mode" aria-label="Keyboard control"><option value="drone">Drone commands</option><option value="viewer">Viewer camera</option></select></label><p id="flight-help"></p>');
 for(const view of CAMERA_VIEWS)el<HTMLSelectElement>('camera-view').add(new Option(view.label,view.id));
 function clearKeys(){keys.clear();cameraControls.clear();updateCommand();}
 function updateCommand(){runtime.command={forward:(+keys.has('w')-+keys.has('s'))*1.6,left:(+keys.has('a')-+keys.has('d'))*1.6,up:(+keys.has('r')-+keys.has('f'))*.8,yaw:(+keys.has('q')-+keys.has('e'))*.5};}
@@ -594,6 +610,10 @@ el('keyboard-mode').addEventListener('change',()=>{
   clearKeys();
   syncFlightHelp();
 });
+el('slam-backend').onchange=async()=>{
+  project.slamBackend=el<HTMLSelectElement>('slam-backend').value as 'inertial'|'native';
+  changed();await compile();
+};
 el('vehicle-count').onchange=async()=>{
   project.vehicleCount=Number(el<HTMLSelectElement>('vehicle-count').value) as 1|2;
   if(project.vehicleCount===2){project.modelicaSources??={};project.modelicaSources[offsetQuadrotorPath]??=offsetQuadrotorSource;refreshFiles();}
