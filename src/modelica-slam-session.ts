@@ -48,7 +48,7 @@ export class ModelicaSlamSession {
     if(frame.imageEpoch<=this.epoch)throw new Error('Native SLAM requires a newer camera image epoch for each frame');
     this.writeCamera(this.step,frame);
     this.writeImage(this.step,frame);
-    const stepMs:number[]=[];
+    const stepMs:number[]=[];let imageStatus:Record<string,number|boolean>|undefined;
     for(const interval of frame.intervals){
       if(!(interval.dt>0&&interval.dt<=.2))throw new Error('Native SLAM accepts IMU intervals of at most 0.2 s');
       // Feed the model's own continuous clock: previous end plus h, exactly.
@@ -62,10 +62,12 @@ export class ModelicaSlamSession {
       this.clock=end;
       stepMs.push(performance.now()-started);
       if(status!==0)throw new Error(`Native SLAM step returned status ${status} at t=${interval.time.toFixed(4)} s (image epoch ${frame.imageEpoch})`);
+      // The first interval of a frame carries the new image; its flags describe the image work.
+      imageStatus??=this.step.derived();
     }
     this.epoch=frame.imageEpoch;this.frames++;
-    const status=this.step.derived();
-    return {estimate:this.estimateFrom(this.step,stepMs),stepMs,status};
+    const status={...this.step.derived(),...(imageStatus?{imageCompleted:imageStatus.imageCompleted,mappingAccepted:imageStatus.mappingAccepted,graphCorrectionAccepted:imageStatus.graphCorrectionAccepted,publicationReason:imageStatus.publicationReason}:{})};
+    return {estimate:this.estimateFrom(this.step,stepMs,status),stepMs,status};
   }
 
   private writeCamera(program:SlamNativeProgram,frame:CameraInputs){
@@ -91,13 +93,13 @@ export class ModelicaSlamSession {
     }
     program.integer('imageEpoch')[0]=BigInt(frame.imageEpoch);
   }
-  private estimateFrom(program:SlamNativeProgram,stepMs:number[]):Estimate {
+  private estimateFrom(program:SlamNativeProgram,stepMs:number[],status?:Record<string,number|boolean>):Estimate {
     const position=program.stateRun('estimator.localization.estimator.position')?.view??program.y(0,3);
     const rotation=program.stateRun('estimator.localization.estimator.rotation')?.view??program.y(6,9);
     const [x,y,z]=Array.from(position as Float64Array);
     for(const value of [x,y,z])if(!Number.isFinite(value))throw new Error('Native SLAM produced a non-finite position');
     const quaternion=program.output('nextQuaternion');
-    const derived=program.derived();
+    const derived=status??program.derived();
     const features=selectedRows(program.output('features'),program.output('featureEnabled'),3);
     const mask=program.output('trackingEnabled');
     const current=selectedRows(program.output('trackingCurrentPixel'),mask,2),previous=selectedRows(program.output('trackingReferencePixel'),mask,2);

@@ -42,7 +42,10 @@ either drone. It can collapse or fill the screen, like the viewer and editor.
 of time by Rumoca into WebAssembly programs that the site serves. The first
 camera image initializes the map; afterwards every held IMU interval is one
 evaluation with the current RGB-D image, so a lower IMU rate and the 15 Hz camera
-rate keep the run closest to real time. The programs reserve about 1.2 GB of
+rate keep the run closest to real time. Today an image evaluation takes about
+4 s and an IMU-only interval about 0.25 s on a desktop, so a 15 Hz camera with a
+30 Hz IMU runs roughly 60 times slower than real time; the simulation waits for
+it. The programs reserve about 1.2 GB of
 memory, need the native 848 × 480 camera (hardware rendering, not the software
 preview), and are not available on phones. Metrics show the model's own
 feature, map and loop-closure results; the status line reports the program
