@@ -612,6 +612,11 @@ el('keyboard-mode').addEventListener('change',()=>{
 });
 el('slam-backend').onchange=async()=>{
   project.slamBackend=el<HTMLSelectElement>('slam-backend').value as 'inertial'|'native';
+  if(project.slamBackend==='native'&&!project.sensorRates){
+    // Every held IMU interval is one evaluation of the native programs; start
+    // from the slowest IMU rate unless custom rates were chosen deliberately.
+    project.sensorRates={...sensorRates(project),imuHz:30};configuration.sync(project);
+  }
   changed();await compile();
 };
 el('vehicle-count').onchange=async()=>{
