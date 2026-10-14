@@ -26,6 +26,15 @@ if(values.package){
   if(values.exports||process.env.SLAM_NATIVE_EXPORTS)throw new Error('Choose either --package or local exports');
   await installPublishedNativeAssets(destination,sourceSha256);process.exit(0);
 }
+// Ordinary builds consume the reviewed delivery for this source revision.
+// Local scratch exports may belong to an older checkout; explicit overrides
+// remain available for compiler development and edited Modelica sources.
+if(!values.exports&&!process.env.SLAM_NATIVE_EXPORTS){
+  const pin=JSON.parse(await readFile(new URL('../slam-native-package.json',import.meta.url),'utf8'));
+  if(pin.sourceSha256===sourceSha256){
+    await installPublishedNativeAssets(destination,sourceSha256);process.exit(0);
+  }
+}
 let directories={initialize:join(root,'init-named'),step:join(root,'step-named')};
 let defaultModels={initialize:'D435FastSLAMInitialize',step:'D435FastSLAMStep'};
 let defaultProfile;

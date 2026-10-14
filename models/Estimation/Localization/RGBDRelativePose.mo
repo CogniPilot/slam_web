@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
 // Finite proper rotation gate shared by models and held-IMU functions.
 function RGBDProperRotationValue
   input Real rotation[3,3] = identity(3);

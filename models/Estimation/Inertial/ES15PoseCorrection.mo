@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
 // One complete ES15 pose-observation correction, matching ErrorStateFilter.correct_pose.
 // World-additive p/v, right-local theta, body accel/gyro biases; Hamilton wxyz output.
 // Compile this source together with SPD6Solve.mo for ES15CorrectionSolve below.

@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
 // Raw sensor data and the complete persistent Modelica session owner.
 partial model RGBDFastSLAMInterface
 
@@ -86,4 +86,20 @@ partial model RGBDFastSLAMInterface
   output Integer keyframeRejectionReason;
   output Integer sequentialRejectionReason;
   output Integer frameRejectionDiagnostic;
+  annotation(Documentation(info = "<html>
+    <h4>Session lifecycle</h4>
+<p>This boundary owns the complete persistent visual session. Supply the prior
+session as <code>previous</code>; initialization and step adapters produce
+<code>next</code>. Keep frame epochs, interval time, calibration and requested
+operations consistent with the supplied image and IMU data.</p>
+<p>Use <a href=\"modelica://SLAM.RGBDFastSLAMInitialize\">RGBDFastSLAMInitialize</a>
+for initialization, <a href=\"modelica://SLAM.RGBDFastSLAMStep\">RGBDFastSLAMStep</a>
+for advancement, and <a href=\"modelica://SLAM.RGBDFastSLAMReset\">RGBDFastSLAMReset</a>
+for an explicit reset. Inspect operation-specific acceptance and reason outputs;
+a produced array alone does not mean its update was accepted.</p>
+<p>The browser application handles transport and rendering. Modelica owns image
+processing, geometry, estimator and map state. Export/compiler support of the
+complete graph must be validated separately from the smaller fixed-map visual
+fusion replays.</p>
+    </html>"));
 end RGBDFastSLAMInterface;

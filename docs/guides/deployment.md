@@ -22,19 +22,24 @@ Publish the contents of `dist/` to a static host. This repository deploys to
 GitHub Pages after CI passes on `main`. The deployed site includes the compiler,
 Modelica source and rendering assets.
 
-`npm run assets` also publishes the native SLAM programs when a Rumoca
-`native_step` export of `D435FastSLAMInitialize` and `D435FastSLAMStep` exists
-(`SLAM_NATIVE_EXPORTS`, with `init-named` and `step-named` directories). By default
-the publisher uses `~/scratch/slam_web/build/slam-native-profiles` when its
-424 × 240 profile exists, otherwise the legacy `slam-native-exports` directory.
+`npm run assets` installs the verified native SLAM package pinned in
+`slam-native-package.json` when its source hash matches the checkout. Existing
+local exports from older revisions do not override that delivery.
+
+`SLAM_NATIVE_EXPORTS` or `--exports` selects local Rumoca `native_step` exports
+of `D435FastSLAMInitialize` and `D435FastSLAMStep`, with `init-named` and
+`step-named` directories. When edited sources differ from the package pin,
+the publisher looks for matching exports in
+`~/scratch/slam_web/build/slam-native-profiles` when its 424 × 240 profile exists,
+otherwise the legacy `slam-native-exports` directory.
 The programs are content addressed, gzip compressed and listed in
 `public/vendor/slam/manifest.json` together with the SLAM source hash they were
 compiled from. An explicitly selected missing export directory leaves the
 estimator unpublished, or fails the build with `--require`.
 
-When no local exports exist, `npm run assets` installs the immutable release
-in `slam-native-package.json`, including all five modes. It verifies the archive
-hash, source composition and input dimensions, and caches the download in
+The immutable release in `slam-native-package.json` contains all five modes.
+The installer verifies the archive hash, source composition and input dimensions,
+and caches the download in
 `~/scratch/slam_web/downloads/native-slam`. This also supplies native SLAM to
 the Pages build. Set `SLAM_NATIVE_PACKAGE` to that exact archive for an offline
 install. Explicit `SLAM_NATIVE_EXPORTS` overrides still require local exports;

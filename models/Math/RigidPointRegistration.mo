@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
 // Horn absolute orientation for matched 3D point pairs. No pose truth enters
 // this component. Correspondence production and temporal pose composition are
 // separate frontend/backend responsibilities.
@@ -568,11 +568,11 @@ algorithm
   end for;
   for i in 1:6 loop
     for j in 1:6 loop
+      v := if valid then A[i,j]/scale[i]/scale[j] else 0.0;
+      for k in 1:6 loop
+        v := v-(if k < j then L[i,k]*L[j,k] else 0.0);
+      end for;
       if j <= i then
-        v := if valid then A[i,j]/scale[i]/scale[j] else 0.0;
-        for k in 1:6 loop
-          v := v-(if k < j then L[i,k]*L[j,k] else 0.0);
-        end for;
         if j == i then
           minimumScaledPivot := min(minimumScaledPivot,v);
           valid := valid and v > minimumPivot and v <= 1e100;
@@ -630,16 +630,14 @@ end WeightedInverse6;
           if valid then L[row,column] := sqrt(v); end if;
         elseif valid then L[row,column] := v/L[column,column]; end if;
       end for;
-      if valid then
-        v := residual[row]/scale[row];
-        for k in 1:row-1 loop v := v-L[row,k]*wr[k]; end for;
-        wr[row] := v/L[row,row];
-        for column in 1:6 loop
-          v := jacobian[row,column]/scale[row];
-          for k in 1:row-1 loop v := v-L[row,k]*wj[k,column]; end for;
-          wj[row,column] := v/L[row,row];
-        end for;
-      end if;
+      v := if valid then residual[row]/scale[row] else 0.0;
+      for k in 1:row-1 loop v := v-L[row,k]*wr[k]; end for;
+      if valid then wr[row] := v/L[row,row]; end if;
+      for column in 1:6 loop
+        v := if valid then jacobian[row,column]/scale[row] else 0.0;
+        for k in 1:row-1 loop v := v-L[row,k]*wj[k,column]; end for;
+        if valid then wj[row,column] := v/L[row,row]; end if;
+      end for;
     end for;
   end WeightedWhiten;
 
@@ -685,13 +683,17 @@ end WeightedInverse6;
     (normalValid,cost,H,gradient,rms) := WeightedNormal(sourcePoint,targetPoint,enabled,sourceCovariance,targetCovariance,rotation,translation,minimumPivot);
     (inverseH,inverseValid,pivot) := WeightedInverse6(H,minimumPivot);
     valid := normalValid and inverseValid; running := valid;
+    step := zeros(6); scale := 1.0; accepted := false;
     for iteration in 1:8 loop
       if running then
         step := -inverseH*gradient;
         scale := min(1.0,min(0.5/max(1e-12,sqrt(step[1:3]*step[1:3])),0.1/max(1e-12,sqrt(step[4:6]*step[4:6]))));
         accepted := false;
-        for backtrack in 1:8 loop
-          if not accepted then
+      end if;
+      // Keep the bounded loop outside the conditional so the pinned Rumoca
+      // release can lower this function; guarded updates preserve early stop.
+      for backtrack in 1:8 loop
+          if running and not accepted then
             trialRotation := WeightedExp(scale*step[4:6])*rotation; trialTranslation := translation+scale*step[1:3];
             (trialValid,trialCost,trialH,trialGradient,trialRms) := WeightedNormal(sourcePoint,targetPoint,enabled,sourceCovariance,targetCovariance,trialRotation,trialTranslation,minimumPivot);
             if trialValid and trialCost <= cost then
@@ -699,7 +701,8 @@ end WeightedInverse6;
               H := trialH; gradient := trialGradient; rms := trialRms; accepted := true;
             else scale := scale*0.5; end if;
           end if;
-        end for;
+      end for;
+      if running then
         running := accepted and scale*sqrt(step*step) > 1e-7;
         (inverseH,inverseValid,pivot) := WeightedInverse6(H,minimumPivot);
         valid := valid and inverseValid; running := running and valid;
