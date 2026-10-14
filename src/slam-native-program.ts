@@ -83,6 +83,9 @@ export class SlamNativeProgram {
   integer(name:string):BigInt64Array {
     const slot=this.slot(name,'i64');return new BigInt64Array(this.memory.buffer,slot.offset,slot.count);
   }
+  boolean(name:string):Uint8Array {
+    const slot=this.slot(name,'u8');return new Uint8Array(this.memory.buffer,slot.offset,slot.count);
+  }
   hasInput(name:string){return Object.hasOwn(this.layout.inputs,name);}
   private slot(name:string,lane:'f64'|'i64'|'u8'){
     const slot=this.layout.inputs[name];

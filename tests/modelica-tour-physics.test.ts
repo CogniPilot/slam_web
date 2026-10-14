@@ -12,8 +12,9 @@ it('the editable Modelica flight tour drives the plant with held lockstep comman
   const automatic=make(),manual=make();
   try{
     let sequence=0;
-    for(const indoor of [0,1])for(const t of [0,1.999,2,39.999,40,49.999,50,89.999,90]){
-      const expected={forward:indoor?t<40?1.1:t<50?0:t<90?-1.1:0:.6,left:0,up:indoor?0:.06*Math.sin(t*.3),yaw:indoor||t<2?0:.4};
+    for(const indoor of [0,1])for(const t of [0,1.999,2,11.999,12,17.999,18,27.999,28,33.999,34,44,50,60,66]){
+      const phase=Math.max(0,t-2)%32;
+      const expected={forward:indoor?t<2?0:phase<10?.6:phase<16?0:phase<26?-.6:0:.6,left:0,up:indoor?0:.06*Math.sin(t*.3),yaw:indoor||t<2?0:.4};
       automatic.set_inputs(JSON.stringify([['autopilot',1],['indoorTour',indoor],['commandTime',t]]));
       manual.set_inputs(JSON.stringify(Object.entries(expected)));
       const time=++sequence/90;automatic.advance_to(time);manual.advance_to(time);

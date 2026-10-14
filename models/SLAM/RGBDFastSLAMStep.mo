@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // Public lifecycle adapter; Rumoca compiles the complete Modelica implementation.
 model RGBDFastSLAMStep
 
@@ -10,7 +10,8 @@ equation
     covarianceStatus,graphCostBefore,graphCostAfter,nextQuaternion,
     selectionValid,predictionAccepted,initializationAccepted,observationAccepted,
     captureAccepted,matchCount,features,featureEnabled,
-    trackingCurrentPixel,trackingReferencePixel,trackingEnabled) =
+    trackingCurrentPixel,trackingReferencePixel,trackingEnabled,
+    keyframeDecisionReason,keyframeRejectionReason,sequentialRejectionReason,frameRejectionDiagnostic) =
     AdvanceFastSLAM(
       previous=previous,
       rgb=rgb,
@@ -124,6 +125,10 @@ function AdvanceFastSLAM
   output Real trackingCurrentPixel[featureCapacity,2];
   output Real trackingReferencePixel[featureCapacity,2];
   output Real trackingEnabled[featureCapacity];
+  output Integer keyframeDecisionReason;
+  output Integer keyframeRejectionReason;
+  output Integer sequentialRejectionReason;
+  output Integer frameRejectionDiagnostic;
   input Boolean depthQualifiedSelection = true;
   input Real depthUnits = 1.0 "Meters per depth sample; 1 for metric depth, SDK scale for Z16";
 protected
@@ -357,6 +362,10 @@ algorithm
     voxelWidth,mergeRadius,maximumDistance,tentativeLifetime,confirmedLifetime,
     confirmationObservations,maximumConfidence,maximumTentative,
     minimumMeasuredDescriptors=minimumMeasuredDescriptors,minimumWordDistanceSquared=minimumWordDistanceSquared);
+  keyframeDecisionReason := publication.publication.decision.reason;
+  keyframeRejectionReason := publication.publication.mapDiagnostics.keyframeRejectionReason;
+  sequentialRejectionReason := publication.publication.mapDiagnostics.sequentialRejectionReason;
+  frameRejectionDiagnostic := publication.publication.frameRejectionReason;
   accepted := publication.accepted;
   imageCompleted := publication.publication.imageCompleted;
   mappingAccepted := publication.publication.mappingAccepted;

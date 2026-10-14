@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // Mapping between captures: the retained catalog and raw measured graph hold.
 // Reuses the capture/map owner's noncapture validation and insertion receipts.
 package RGBDCatalogObservation

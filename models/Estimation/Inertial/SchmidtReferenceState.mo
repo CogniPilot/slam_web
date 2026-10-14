@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // MLS 3.5 permits exact Real equality inside functions. This helper preserves
 // IEEE equality: signed zeros compare equal; NaN compares unequal to every value.
 function SLAMExactRealEqual

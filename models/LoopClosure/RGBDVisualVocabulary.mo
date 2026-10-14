@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // Measured appearance bootstrap. Word identities freeze before histogram storage.
 // This is not a loop constraint, geometric observation or scene/truth signature.
 package RGBDVisualVocabulary

@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // Native common D435 stream mode. RGB and depth keep separate optical
 // calibrations; this package specifies array extents, not alignment.
 // RGB supports60 Hz, depth90 Hz; paired acquisitions use at most60 Hz.

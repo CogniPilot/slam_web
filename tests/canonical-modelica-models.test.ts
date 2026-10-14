@@ -9,7 +9,7 @@ it('ships the exact generated snapshots from the pinned canonical Modelica libra
   expect(receipt.generated).toBe(true);
   expect(receipt.license).toBe('Apache-2.0');
   expect(Object.keys(receipt.sources)).toHaveLength(74);
-  expect(receipt.canonical_classes).toHaveLength(179);
+  expect(receipt.canonical_classes).toHaveLength(180);
   for (const [file, expected] of Object.entries(receipt.sources)) {
     expect(file).toMatch(/^models\/[A-Za-z0-9_/]+\.mo$/);
     const bytes = readFileSync(file);

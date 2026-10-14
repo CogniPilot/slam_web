@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // Atomic proposal for the catalog and measured graph owners. Publication,
 // estimator correlation, optimization and map updates remain outer owners.
 package RGBDCatalogGraphCapture
@@ -35,10 +35,11 @@ package RGBDCatalogGraphCapture
     output Result result;
     input Boolean calibratedResiduals = true;
     input Real maximumNormalizedSquared = 9.0;
+    input Boolean poseConsistentLoops = false;
   protected
     RGBDKeyframes.Catalog captured;
     RGBDKeyframes.Frame latest;
-    Boolean stored; Integer slot; Integer evicted;
+    Boolean stored; Integer slot; Integer evicted; Boolean poseConsistent; Real poseSquared;
   algorithm
     result.catalog := previousCatalog; result.graph := previousGraph;
     result.accepted := false; result.rejectionReason := 1;
@@ -47,7 +48,8 @@ package RGBDCatalogGraphCapture
       requested,seeds,maximumWordDistanceSquared,minimumAssignments,minimumSimilarity,minimumAge,trials,refinements,
       minimumInliers,minimumFraction,inlierDistance,maximumRms,descriptorRatio,maximumDescriptorDistance,
       coordinateLimit,rankTolerance,localizationSigma,depthInflation,minimumPivot,
-      calibratedResiduals=calibratedResiduals,maximumNormalizedSquared=maximumNormalizedSquared);
+      calibratedResiduals=calibratedResiduals,maximumNormalizedSquared=maximumNormalizedSquared,
+      poseConsistentLoops=poseConsistentLoops);
     result.sequentialDiagnostics := RGBDLoopVerification.EmptyProposal(sequentialSeed);
     if result.loopDiagnostics.retrievalAccepted and previousCatalog.nextId > 1 then
       latest := RGBDKeyframes.ReadSlot(previousCatalog,mod(previousCatalog.nextId-2,RGBDKeyframes.keyframeCapacity)+1);
@@ -55,6 +57,19 @@ package RGBDCatalogGraphCapture
         sequentialSeed,trials,refinements,minimumInliers,minimumFraction,inlierDistance,maximumRms,0.0,
         descriptorRatio,maximumDescriptorDistance,coordinateLimit,rankTolerance,localizationSigma,depthInflation,minimumPivot,
         calibratedResiduals=calibratedResiduals,maximumNormalizedSquared=maximumNormalizedSquared);
+      // The previous retained keyframe can also be a repeated warehouse bay
+      // after a long capture gap. A false sequential edge is as damaging as
+      // a false retrieved loop, so both use the same production motion screen.
+      if result.sequentialDiagnostics.verified and poseConsistentLoops then
+        (poseConsistent,poseSquared) := RGBDCatalogLoopVerification.PoseConsistent(
+          latest.bodyPosition,measurement.bodyPosition,latest.bodyRotation,
+          latest.poseCovariance,measurement.poseCovariance,
+          result.sequentialDiagnostics.bodyTranslation,result.sequentialDiagnostics.covariance[1:3,1:3],minimumPivot=minimumPivot);
+        if not poseConsistent then
+          result.sequentialDiagnostics.verified := false;
+          result.sequentialDiagnostics.rejectionReason := 11;
+        end if;
+      end if;
     end if;
     (captured,stored,slot,evicted) := RGBDKeyframes.Store(previousCatalog,result.loopDiagnostics.prepared,result.loopDiagnostics.retrievalAccepted);
     result.graphDiagnostics := RGBDGraphMeasurements.Capture(previousCatalog,captured,previousGraph,

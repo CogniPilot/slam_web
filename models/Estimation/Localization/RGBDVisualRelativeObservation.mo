@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // Review composition: full calibrated visual frontend plus its registration
 // noise model. Compile together with RGBDVisualObservation, RGBDFeatureMatching,
 // RigidPointRegistration, RGBDRelativePose and RGBDRegistrationUncertainty.
@@ -168,6 +168,7 @@ algorithm
     RGBDRegistrationSandwich(sourcePoint,targetPoint,pairEnabled,featureCapacity,valid,currentFromReference,
       currentFromReferenceTranslation,referenceBodyRotation,opticalToBody,cameraOriginBody,
       referenceRgbFocal,{rgbCalibration[1],rgbCalibration[2]},referenceNoiseReferenceFx,noiseReferenceFx,
-      baseline,localizationSigma,disparityNoise,depthInflation,uncertaintyCoordinateLimit,uncertaintyMinimumPivot);
+      baseline,localizationSigma,disparityNoise,depthInflation,uncertaintyCoordinateLimit,uncertaintyMinimumPivot,
+      weighted=robustRegistration and calibratedRegistration);
   relativeValid := if valid > 0.5 and uncertaintyValid > 0.5 then 1.0 else 0.0;
 end ObserveRGBDRelativeFrame;

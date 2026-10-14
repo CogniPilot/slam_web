@@ -53,3 +53,46 @@ for(const mode of D435_PAIRED_RESOLUTIONS)test(`native Modelica SLAM initializes
   // smallest raster can have too few features to map the initial city view.
   if(mode.id==='848x480')expect(frames.at(-1)!.points).toBeGreaterThan(0);
 });
+
+test('native Modelica SLAM closes a warehouse loop at 424x240',async({page},testInfo)=>{
+  test.setTimeout(300_000);
+  await page.goto('/');
+  test.skip(!(await servedNativeManifest(page))?.profiles?.['424x240'],'Native 424x240 assets are not published');
+  await page.waitForFunction(()=>{
+    const lab=(window as any).__slamLab;return lab?.initialized&&lab.ready&&!lab.compiling;
+  },{},{timeout:90000});
+  test.skip(await page.evaluate(()=>(window as any).__slamLab.runtime.world.graphics.acceleration==='software'),
+    'The warehouse regression requires the actual hardware camera');
+  const report=await page.evaluate(async()=>{
+    const lab=(window as any).__slamLab,r=lab.runtime;
+    r.pause();while(r.busy)await new Promise(resolve=>setTimeout(resolve,10));
+    const project=structuredClone(lab.project);
+    Object.assign(project,{environment:'warehouse',slamBackend:'native',cameraResolution:'424x240',
+      sceneDetail:'low',lidarEnabled:false,depthCloudEnabled:false,
+      sensorRates:{cameraHz:5,lidarHz:5,imuHz:10,gpsHz:1}});
+    Object.assign(lab.project,project);
+    await r.compile(project);r.autopilot=false;
+    for(let i=0;i<10;i++)await r.step();
+    const rows=[];
+    for(let i=0;i<240;i++){
+      const phase=r.time%24;
+      r.command={forward:phase<6?.5:phase<12?0:phase<18?-.5:0,
+        left:phase<6?0:phase<12?.25:phase<18?0:-.25,up:0,yaw:0};
+      await r.step();
+      const {frame,estimate,truth}=lab.latest,reference=r.referenceTruth(truth);
+      if(frame.imageLayout.color.width!==424||frame.imageLayout.color.height!==240)throw Error('Wrong camera raster');
+      rows.push({time:frame.time,error:Math.hypot(estimate.x-reference.x,estimate.y-reference.y,estimate.z-reference.z),
+        diagnostics:estimate.diagnostics});
+    }
+    return {rows,rmse:Math.sqrt(rows.reduce((sum,row)=>sum+row.error**2,0)/rows.length),
+      maximumError:Math.max(...rows.map(row=>row.error)),
+      loops:Math.max(...rows.map(row=>Number(row.diagnostics.loopEdges))),
+      correctedLoop:rows.some(row=>row.diagnostics.loopEdges>0&&row.diagnostics.graphCorrectionAccepted===1)};
+  });
+  await testInfo.attach('warehouse-loop.json',{body:JSON.stringify(report,null,2),contentType:'application/json'});
+  expect(report.rmse).toBeLessThan(.6);
+  expect(report.maximumError).toBeLessThan(1.2);
+  expect(report.loops).toBeGreaterThan(0);
+  expect(report.correctedLoop).toBe(true);
+  await expect(page.locator('#graph-state')).toContainText(`${report.loops} verified loops`);
+});

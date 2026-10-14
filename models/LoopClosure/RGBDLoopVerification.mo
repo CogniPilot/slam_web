@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // Geometric verification of a retrieved keyframe. A verified measurement is a
 // proposal: graph identity/eviction and shared-image correlation policies must
 // still admit it before any optimizer or estimator state can change.
@@ -86,7 +86,7 @@ package RGBDLoopVerification
     input Real maximumNormalizedSquared = 9.0;
     input Real minimumPivot = 1e-10;
   protected
-    Boolean configuration; Boolean payload; Boolean eligible; Boolean stable;
+    Boolean configuration; Boolean payload; Boolean eligible; Boolean stable; Boolean weightedValid;
     Boolean covarianceValid;
     Integer slots[size(sourcePoint,1)]; Integer first; Integer second; Integer third;
     Integer chosen[dimension]; Integer state; Integer count; Integer bestCount;
@@ -177,6 +177,12 @@ package RGBDLoopVerification
                   rank,fitCost,fitRms,gap,sourceCentroid,targetCentroid) := FitRigidPointPairs(
                     sourcePoint,targetPoint,workingMask,size(sourcePoint,1),coordinateLimit,rankTolerance,
                     if calibratedResiduals then 1e6 else maximumRms);
+                if fitAccepted == 1.0 and calibratedResiduals then
+                  (weightedValid,candidateRotation,candidateTranslation,fitRms) := RegistrationWeighted.WeightedRefine(
+                    sourcePoint,targetPoint,workingMask,sourceCovariance,targetCovariance,
+                    candidateRotation,candidateTranslation,minimumPivot);
+                  if not weightedValid then fitAccepted := 0.0; end if;
+                end if;
                 eligible := fitAccepted == 1.0;
                 if not eligible then rejectionReason := 5; end if;
                 if eligible then
@@ -334,7 +340,7 @@ package RGBDLoopVerification
                       mask,featureCapacity,1.0,C,t,reference.bodyRotation,reference.opticalToBody,
                       reference.cameraOriginBody,reference.rgbCalibration[1:2],current.rgbCalibration[1:2],
                       reference.noiseReferenceFx,current.noiseReferenceFx,reference.baseline,localizationSigma,
-                      reference.disparityNoise,depthInflation,coordinateLimit,minimumPivot);
+                      reference.disparityNoise,depthInflation,coordinateLimit,minimumPivot,weighted=calibratedResiduals);
                   result.rejectionReason := 8;
                   if uncertaintyValid == 1.0 then
                     (D,u,J,edgeCovariance,information,edgeValid,edgeReason,pivot) := RGBDOpticalToBodyEdge(C,t,

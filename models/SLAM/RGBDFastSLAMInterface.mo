@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // Raw sensor data and the complete persistent Modelica session owner.
 partial model RGBDFastSLAMInterface
 
@@ -36,7 +36,8 @@ partial model RGBDFastSLAMInterface
   parameter Integer minimumMeasuredDescriptors = 8;
   parameter Real minimumWordDistanceSquared = 0.04;
   parameter Real selectedFeatureLimit = featureCapacity;
-  parameter Real absoluteThreshold = 18.0;
+  parameter Real absoluteThreshold = max(8.0,18.0*min(1.0,imageWidth/848.0))
+    "Retain lower-contrast corners in reduced rasters; keep the full-raster threshold";
   parameter Boolean depthQualifiedSelection = true;
   parameter Real minimumInterval = 0.5;
   parameter Real maximumInterval = 2.0;
@@ -81,4 +82,8 @@ partial model RGBDFastSLAMInterface
   output Real trackingCurrentPixel[featureCapacity,2];
   output Real trackingReferencePixel[featureCapacity,2];
   output Real trackingEnabled[featureCapacity];
+  output Integer keyframeDecisionReason;
+  output Integer keyframeRejectionReason;
+  output Integer sequentialRejectionReason;
+  output Integer frameRejectionDiagnostic;
 end RGBDFastSLAMInterface;

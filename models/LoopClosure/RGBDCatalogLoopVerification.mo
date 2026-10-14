@@ -1,7 +1,32 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // Geometric proposals use the same immutable catalog snapshot as retrieval.
 // Graph admission and shared-image correlation remain separate owners.
 package RGBDCatalogLoopVerification
+
+  function PoseConsistent
+    input Real referencePosition[3]; input Real currentPosition[3];
+    input Real referenceRotation[3,3];
+    input Real referenceCovariance[6,6]; input Real currentCovariance[6,6];
+    input Real measuredTranslation[3]; input Real measuredCovariance[3,3];
+    input Real maximumSquared = 9.0; input Real minimumPivot = 1e-10;
+    input Real maximumTranslationInnovation = 2.0 "Motion disagreement limit; explicit relocalization policy may enlarge it";
+    output Boolean accepted; output Real squared;
+  protected
+    Real residual[3]; Real arm[3,3]; Real covariance[3,3]; Boolean valid;
+  algorithm
+    residual := currentPosition-referencePosition-referenceRotation*measuredTranslation;
+    arm := referenceRotation*RGBDUncertaintySkew(measuredTranslation);
+    // A conservative screening bound, not an independent measurement update.
+    // Four times the marginal sum bounds arbitrary correlations among the
+    // two positions, retained-reference angle and measured translation.
+    covariance := 4.0*(referenceCovariance[1:3,1:3]+currentCovariance[1:3,1:3]
+      +referenceRotation*measuredCovariance*transpose(referenceRotation)
+      +arm*referenceCovariance[4:6,4:6]*transpose(arm));
+    (valid,squared) := RegistrationWhitenedResidual3(residual,covariance,minimumPivot);
+    accepted := valid and maximumSquared > 0.0 and squared <= maximumSquared
+      and maximumTranslationInnovation > 0.0
+      and residual*residual <= maximumTranslationInnovation*maximumTranslationInnovation;
+  end PoseConsistent;
 
   function VerifyCandidate
     input RGBDKeyframes.Catalog catalog;
@@ -18,9 +43,10 @@ package RGBDCatalogLoopVerification
     output RGBDLoopVerification.Proposal proposal;
     input Boolean calibratedResiduals = true;
     input Real maximumNormalizedSquared = 9.0;
+    input Boolean poseConsistentLoops = false;
   protected
     RGBDKeyframes.Frame reference;
-    Boolean bound;
+    Boolean bound; Boolean poseConsistent; Real poseSquared;
   algorithm
     proposal := RGBDLoopVerification.EmptyProposal(seed);
     if requested then
@@ -46,6 +72,14 @@ package RGBDCatalogLoopVerification
             minimumInliers,minimumFraction,inlierDistance,maximumRms,minimumAge,descriptorRatio,
             maximumDescriptorDistance,coordinateLimit,rankTolerance,localizationSigma,depthInflation,minimumPivot,
             calibratedResiduals=calibratedResiduals,maximumNormalizedSquared=maximumNormalizedSquared);
+          if proposal.verified and poseConsistentLoops then
+            (poseConsistent,poseSquared) := PoseConsistent(reference.bodyPosition,current.bodyPosition,
+              reference.bodyRotation,reference.poseCovariance,current.poseCovariance,
+              proposal.bodyTranslation,proposal.covariance[1:3,1:3],minimumPivot=minimumPivot);
+            if not poseConsistent then
+              proposal.verified := false; proposal.rejectionReason := 11;
+            end if;
+          end if;
         end if;
       end if;
     end if;
@@ -82,6 +116,7 @@ package RGBDCatalogLoopVerification
     output Batch result;
     input Boolean calibratedResiduals = true;
     input Real maximumNormalizedSquared = 9.0;
+    input Boolean poseConsistentLoops = false;
   algorithm
     (result.prepared,result.retrievalAccepted,result.retrievalRejectionReason,result.wordIndex,result.candidateId,result.candidateSlot,result.candidateScore,
       result.candidateCount,result.assignmentCount) := RGBDKeyframeRetrieval.PrepareCapture(catalog,measurement,
@@ -92,7 +127,8 @@ package RGBDCatalogLoopVerification
         result.retrievalAccepted and rank <= result.candidateCount,seeds[rank],trials,refinements,minimumInliers,
         minimumFraction,inlierDistance,maximumRms,minimumAge,minimumSimilarity,descriptorRatio,
         maximumDescriptorDistance,coordinateLimit,rankTolerance,localizationSigma,depthInflation,minimumPivot,
-        calibratedResiduals=calibratedResiduals,maximumNormalizedSquared=maximumNormalizedSquared);
+        calibratedResiduals=calibratedResiduals,maximumNormalizedSquared=maximumNormalizedSquared,
+        poseConsistentLoops=poseConsistentLoops);
       result.nextSeeds[rank] := result.proposals[rank].nextSeed;
       result.verifiedCount := result.verifiedCount+(if result.proposals[rank].verified then 1 else 0);
     end for;

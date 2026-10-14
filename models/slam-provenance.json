@@ -1,84 +1,84 @@
 {
   "repository": "https://github.com/CogniPilot/modelica_models",
-  "revision": "cb132c87a9e00289bbac11642110976248734878",
+  "revision": "782a268bd05735e541e61efdf22c5ddf7dab55ff",
   "license": "Apache-2.0",
   "generated": true,
   "packaging": "Compatibility snapshots assembled from canonical package classes; within/import adaptation restores the existing browser's flat-name interface. Do not edit these generated copies.",
   "sources": {
-    "models/Estimation/Inertial/ES15CovariancePrediction.mo": "4be42ea6a8c148f79b2fa66cb76667874490dd0c50b301b58c0488e7c54a8136",
-    "models/Estimation/Inertial/ES15Dynamics.mo": "116499acba245a07c85896cefc56eafc6db659e5df954ee39c4350d3367535f2",
-    "models/Estimation/Inertial/ES15NominalPrediction.mo": "7a27d2558042afe0f599029ccc43c7d8b1a23bffbb4910a44206b60b288c983a",
-    "models/Estimation/Inertial/ES15PoseCorrection.mo": "7a6191265554aa0e830ba960e44f76749a469e8b5a08c81a43a7a67146b378ba",
-    "models/Estimation/Inertial/ModelicaInertial.mo": "85d6e3ff5a5b2821874f98c12b301733f4476a541c9c94b0c8e546c949d45886",
-    "models/Estimation/Inertial/SchmidtGraphPoseCorrection.mo": "6c96fac308bd9318e72bd9711615a01ea1ec72689d6b6887332378105d87078c",
-    "models/Estimation/Inertial/SchmidtReferenceState.mo": "a33a24bedbb2c4b233eff5ddac7681688c81a8a08a16d3ad88774dfe0d68925d",
-    "models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo": "05a41e48d4943235d6290b20310c113078370d943d8267521024eb3f14d47fd9",
-    "models/Estimation/Localization/RGBDFastInertialLocalizationInitialize.mo": "86c0479d7e3d09bac3e3d8de73b57a06470f08af2bcde5bb762b5fec9e26c080",
-    "models/Estimation/Localization/RGBDFastInertialLocalizationStep.mo": "d64162ecb6a893358ad7aee4e98cb10ba5b8c4198cf66cdabc7c54e0127516d2",
-    "models/Estimation/Localization/RGBDInertialLocalizationInitialize.mo": "c4beb21824640be096b7c47087ef75b6ef7c790f13828b8d2f4af748ee8bd124",
-    "models/Estimation/Localization/RGBDInertialLocalizationStep.mo": "b6dfea92e2a30db1e0bab015f965edcdd44f5f8999aefe949570412f1a1db2c9",
-    "models/Estimation/Localization/RGBDLocalizationCatalog.mo": "bd8d95a201fa0106589cc921b739951afa2a2d4734813f2a94d59c6bd0601031",
-    "models/Estimation/Localization/RGBDLocalizationFrame.mo": "33319a4c5b73d83dca24c76de9357fe59f6f2c8c9032c8a986d719b5226b413e",
-    "models/Estimation/Localization/RGBDLocalizationProcessing.mo": "acad9f651eca22da407fb95d2e8aba1dbcd98caa4152ea063c1fe655d90b171c",
-    "models/Estimation/Localization/RGBDRegistrationUncertainty.mo": "04aa9dedf57f7c3e889b7eca9dacbecccd6113631654b59dec3faf10832d6483",
-    "models/Estimation/Localization/RGBDRelativePose.mo": "cf34e9ef66616fef0105b4ec30a8cda7c4805869bc53138b3c0e3b18c81ce18c",
-    "models/Estimation/Localization/RGBDVisualObservation.mo": "42cff528a107f0c7f0ccd0eb1ebab09b6a26cfa0e32df16addc8e86056b7803d",
-    "models/Estimation/Localization/RGBDVisualRelativeObservation.mo": "1cae8f78539820c0a92d65867e8f762b00794373d707337b88507a954ced74b3",
-    "models/Evaluation/RuntimeEvaluation.mo": "42955187ccf1e8d97d55a943f1a5870c4c0e244a04217ecafbe1ca8a7bbf986e",
-    "models/Examples/InertialOnly.mo": "ec2deed2f0d25e3b4e3892b75e36d01331229dc5c84eda3bf7ed1cd29665f7f2",
-    "models/Examples/ResponsiveInertial.mo": "1feb3dec7fc3195d0add50b6c770601b264b5e87a626fdd34e0bd058f4439b63",
-    "models/Examples/SmoothedInertial.mo": "9fb8d77f742171d4788e4ec6d50c6f8f4918748963d8f5ae3e097138b3597915",
-    "models/LoopClosure/RGBDBagOfWords.mo": "b8f03e829130eae48e78ad5cfb8dc64da85cfaaf44ab69d9a3912e112bf5f79d",
-    "models/LoopClosure/RGBDBodyRelativeEdge.mo": "d5703ac0f57d6cb30f745d8b5bc25a1c5c295cd4c2273d9472809f79066f0eca",
-    "models/LoopClosure/RGBDCatalogLoopVerification.mo": "04ab5aae1ba41bda911ed180144697f4f86a23afac5ebbe12d363bb8994b2d3d",
-    "models/LoopClosure/RGBDKeyframePolicy.mo": "36ac3e18f6e5cfa090899ce7d54d3a0b0484ca9cf73afcfb6dcd80dd752a0ba8",
-    "models/LoopClosure/RGBDKeyframeRetrieval.mo": "3327623ad573b458a8f7395b31b44f2c9271b2e11ab1cb0f2fcdcfbafa687da0",
-    "models/LoopClosure/RGBDKeyframes.mo": "350ee6bf783f2fe0f84065b4e07a1e652f261923bc6d5f6b3288c2ec210c769f",
-    "models/LoopClosure/RGBDLoopVerification.mo": "602fcf8694364adfbdec932b4c435523d8aca0e890bf493e4726edfef85f6bae",
-    "models/LoopClosure/RGBDVisualVocabulary.mo": "aea47818f7af0d1daddd45e07db3fc46c667a742adfeacf9ad8f04ddd01d2f74",
-    "models/Mapping/RGBDAnchoredLandmarkMap.mo": "77ee000ea9f14fe77a9f26a3cc94f1daeb52d49fbd3794164ac138405007d65b",
-    "models/Mapping/RGBDCatalogFrame.mo": "41020136e0c239d53827444001a1c38828f224598d6d726e18e531cc4f0a3e04",
-    "models/Mapping/RGBDCatalogMapping.mo": "ee5f466f69b632e10967337006434e0c313b0f20406d6782cbed2ce6b930d102",
-    "models/Mapping/RGBDCatalogObservation.mo": "fe6f9681cb1a1b6eb7fb51381de0fa41524b5956756f87ef677a15f5a658eed4",
-    "models/Mapping/RGBDCatalogPoseMapping.mo": "21c797adbf0c3c69a35efbf117ba39a63406af4ab5ed93eb0600ed1c106097e6",
-    "models/Mapping/RGBDKeyframeLandmarks.mo": "fb836542eed62de3926ffaedaa521294ec8ee6155628b4dec808b8ea3788a24a",
-    "models/Mapping/RGBDLandmarkCatalog.mo": "45037814260de464e06882e7b645fa1b7f9d51d6a6aec28811878660cc988cc0",
-    "models/Mapping/RGBDLandmarkMap.mo": "4c41b1b30e26e72605d9a199ea94d47f8f4dad5b0525162ec453c9a7a4a5dc42",
-    "models/Mapping/RGBDLandmarkProjection.mo": "8421d363751c30bf2c8e681680535b9a64f363e9f0c773b45a9ca3d9d7d7a42f",
-    "models/Mapping/RGBDMapAnchorAssignment.mo": "efcd992af8ae3625b8ad1c46427d659a3cdc03658bf70d04a9edc6047e4be0c0",
-    "models/Mapping/RGBDMapAnchorUncertainty.mo": "3aefead77d37f9ace69058b765fc763535856a5e5517d063dfdbf5c02cbfc6e2",
-    "models/Mapping/RGBDMapAnchors.mo": "6cb5d8c3d21f53c21494c9fcff4d40cdadea2ceb25fa2572a0052c3497d68f8d",
-    "models/Mapping/RGBDSpatialIndex.mo": "864458e88f8f07a1369ccedb677c374df37627cb2e56fc8b85f7640192986a39",
-    "models/Math/RigidPointRegistration.mo": "d92416f73e117cc369aa6e39c9919d52543eb81daa577317a7b1675d762ebba9",
-    "models/Math/SPD6Solve.mo": "089df5a9124cfef27aea4ab211a12012d0cf6fc705cf6910fe252352561fc8fe",
-    "models/Optimization/GraphGaugeUncertainty.mo": "f4980d6ed3342a900973936f11fd313fedbe94b715a157646a128eb42c80d2d5",
-    "models/Optimization/ModelicaPoseGraph.mo": "fcc349a122e01ee0dcf6c5655518ba174c5ecb24ffe43222e23782877b8b15a8",
-    "models/Optimization/ModelicaPoseGraphCovariance.mo": "01b22733d40e91512ea9e7d3db4026364e98cb0a43d23f9a5bb749b58da861d4",
-    "models/Optimization/RGBDCatalogGraphCapture.mo": "e40f945140c86c808010933a606e13d5912793e805c6c4a902fce9351023d949",
-    "models/Optimization/RGBDGraphAnchorBound.mo": "7dbc3a2820dd8d1e66945c2e2a9f5952fd7cab3429f0cf621c01218b2cd1aff1",
-    "models/Optimization/RGBDGraphCaptureLedger.mo": "b70037e38f7477769d28b738e328b4dd2dd508fb660d6da14ae9637b80d80254",
-    "models/Optimization/RGBDGraphEstimatorCommit.mo": "c6a559cb9526eaee6a9d145cf2da3a0f178056a1bd514ff0583da25d4beb8418",
-    "models/Optimization/RGBDGraphMeasurements.mo": "44a3c1fd167f330928718e09641a30ab7f0f583c9de5a2411819dddd74109a17",
-    "models/Optimization/RGBDGraphProcessing.mo": "97ada77019d652eec2579c1062798b330a00fc60c7646349c82790c80d56e692",
-    "models/Optimization/RGBDGraphSelectedGauge.mo": "13bfc2ea8b47eb0620f81d7c0a7c75ace51e902356448f8dab98907b7ca80dca",
-    "models/SLAM/D435FastSLAM.mo": "67e6195915d85fee971fd7f6fd1732890ce3b75378e65db4649a9bc548427be2",
-    "models/SLAM/RGBDFastSLAMInitialize.mo": "9d290c08fb5b74c526e7e99064d379b5aff79357104e1e38a1ce1da90aafeb72",
-    "models/SLAM/RGBDFastSLAMInterface.mo": "1a9571bee88484d727f93003fdac2e16d3ec0decce35b9c6d2d4916921ee154c",
-    "models/SLAM/RGBDFastSLAMIntervals.mo": "99d53d932ce4d734bca175481b8b06987b0ce10f99ca8c9f4b80faf9100e6be4",
-    "models/SLAM/RGBDFastSLAMReset.mo": "1a6c043b86e0bbca300b1697a1b50ca8b4e9fd832b2c2a34b1fe7472f4045498",
-    "models/SLAM/RGBDFastSLAMStep.mo": "d36a8dc0b703deb4fea0c1ce45336dc3ce2025d3063c27721990870501f67acb",
-    "models/Scene/ActorMotion.mo": "dc66a55b34980e5d6fe8d2c7bc869f2a5830bc8e3eed9211194674b5a8a92859",
-    "models/Sensors/D435ImageProfile.mo": "871de130da324ed2be55ccd6de975ac0d53b5d9ace318635db348d6e18112ccb",
-    "models/Sensors/SensorAvailability.mo": "7611e36c4a9087be73c9069b1a95043f898f41e49822f51ec0416ad9c17a89a9",
-    "models/Sensors/SensorObservations.mo": "3ae0de8dba0f0186bc3a2886a52b3ff9828efacbf8f072512454c39920f338a7",
-    "models/Vehicles/LabQuadrotor.mo": "1f68182340b3222ef50f4865ed13182e976d704cee45dfeb04673c9ec3982b5b",
-    "models/Vision/Features/D435FastFeatures.mo": "50a4314f3088572d2e0b075c7bce3309d12252cb12407cd40bfd9a7553eee9f5",
-    "models/Vision/Features/D435HarrisFeatures.mo": "41f4b5094ecd0e6c5e3a7b5a140ae766bea83aef3252df1cf53da36f2b66bcd1",
-    "models/Vision/Features/FastNativeFrame.mo": "b766bc3e56d1681e2b99f4c796a1829259649eeaeca2a886e26d87660298a768",
-    "models/Vision/Features/FeatureSelection.mo": "72021e848317cce2ba291740fc90c9832e132fdd08858c3b5132b04ee88e5884",
-    "models/Vision/Features/HarrisNativeFrame.mo": "116e0db1bcc6eb3f5902ff9f08cae535ce93ab34c531a5850daba3429eaa462a",
-    "models/Vision/Matching/RGBDFeatureMatching.mo": "e59126e861d9bc071b43259b432c74547d1333d305443727bdc4f4ddc6c4c910",
-    "models/Vision/Matching/RGBDPatchTracking.mo": "066eff41f95d4fb3b5808e56338bd9e13e5275c7e44636e5d681f50ebd9eb060"
+    "models/Estimation/Inertial/ES15CovariancePrediction.mo": "9311178ced2a9f78a826ae12c8043162d87a88432b599282ddf540c128df3ec5",
+    "models/Estimation/Inertial/ES15Dynamics.mo": "b50c5556c206cbd8941383266f027fc72cd31838163f3d605aed5228ba3a1a68",
+    "models/Estimation/Inertial/ES15NominalPrediction.mo": "e7f804aec907e8a1d17daece62a5477cbb8182a45f48f6ded524033f93afef5d",
+    "models/Estimation/Inertial/ES15PoseCorrection.mo": "d8a7808e4945686a5cfb57b52d90910fd6f315626d3ef5f9b6678b6401a3cae1",
+    "models/Estimation/Inertial/ModelicaInertial.mo": "22617787b8d59ed394652b691fdac70d6be0c4b18c8d34d406bc2c463c2d9307",
+    "models/Estimation/Inertial/SchmidtGraphPoseCorrection.mo": "2af2f5f82299d1f3ba82943d9a039de75c27db8d878f7b1d896bf309d4c55e74",
+    "models/Estimation/Inertial/SchmidtReferenceState.mo": "30c8743b493b773492283c77a6a51985d25a5d39ca9b1936b50cc8338084825f",
+    "models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo": "ca3118c5006876f5cfcbe270f7ad89655c741effd854eae02f4eaeff10d03f23",
+    "models/Estimation/Localization/RGBDFastInertialLocalizationInitialize.mo": "24665af9b3c60d552fa5b85967c4f7a29ce8d250b2a27bbb362bf12e64890444",
+    "models/Estimation/Localization/RGBDFastInertialLocalizationStep.mo": "7a1cf3ea339f3fbe7cbcd409415f2ca2821820be3f19ee8c8d222e99556f3139",
+    "models/Estimation/Localization/RGBDInertialLocalizationInitialize.mo": "c2791bd2854df5d3b89a6a81a565fc62cc17a7ce63f20bbe18cdbf9a5ff55463",
+    "models/Estimation/Localization/RGBDInertialLocalizationStep.mo": "b31e73085a97970bccca5deb0b7161420fecbadf02e858d888f661e58b5738a9",
+    "models/Estimation/Localization/RGBDLocalizationCatalog.mo": "83d652f60b08c7130a3afa4e285b4699268cb3ff27a43d0f3b65fc02277bed06",
+    "models/Estimation/Localization/RGBDLocalizationFrame.mo": "edd085e273d12566b4af05b1b37f69a40f2aa00acb73cab050b07ec99c0cc3cd",
+    "models/Estimation/Localization/RGBDLocalizationProcessing.mo": "4a968ccb02c0a4b3476be56940d76b10a046c50e17714349c969acf541578d5f",
+    "models/Estimation/Localization/RGBDRegistrationUncertainty.mo": "5af870c0cf2226cbea7ad4f3ac4517da0ee252bb602bd25b61ce02d868474074",
+    "models/Estimation/Localization/RGBDRelativePose.mo": "287e415a4571d7b9bb26b47d715fc1aa8168993047821deb90b7617f885c09c7",
+    "models/Estimation/Localization/RGBDVisualObservation.mo": "8e829643273f68b3160c44164e085e32d784980e612fd2a0402eded15cb0a4bd",
+    "models/Estimation/Localization/RGBDVisualRelativeObservation.mo": "e0700b3d1013fa73545b68bb9b9edf08b756a734670e407578e855c3a3f862f0",
+    "models/Evaluation/RuntimeEvaluation.mo": "1d3288477affcda354a3bedcae8d891737d414bb0c7a6a35de7e21230a25e095",
+    "models/Examples/InertialOnly.mo": "884c31b369f5fe4fec5711f01ce841b32be94ad152a5ea8815654daf348ab8a4",
+    "models/Examples/ResponsiveInertial.mo": "e6968bcdc9a0369adf107584739d6d62b275a4eeb95179efe901c329a088cc96",
+    "models/Examples/SmoothedInertial.mo": "2742f73f710dacb85b95a2a207f68a409d3b28160e6f050f18a001912b639588",
+    "models/LoopClosure/RGBDBagOfWords.mo": "47a7efcdede889f6191cc9bbd57298a86e93e2102c002ee330df528807ffd51f",
+    "models/LoopClosure/RGBDBodyRelativeEdge.mo": "6a8d358e218a9578bd66e42c7e98ee0e8a1965a43efe64aa2a3212d04d10178a",
+    "models/LoopClosure/RGBDCatalogLoopVerification.mo": "96faf1980980c1107e4def4b72edda036ff99006b4e22f441ff5e0589c73f790",
+    "models/LoopClosure/RGBDKeyframePolicy.mo": "420b836a3354ade80e214b92f3d6a8ea83a24f56aa497b0ee8d7235d37515d69",
+    "models/LoopClosure/RGBDKeyframeRetrieval.mo": "e350c3638f5cfdc50a1c6f913cca5d4392f4a39ec501bf9b246ecd7240957516",
+    "models/LoopClosure/RGBDKeyframes.mo": "6eda90981d31c01ef75a032d16df3283d955559fe804bd548c2a1602b04bc4d4",
+    "models/LoopClosure/RGBDLoopVerification.mo": "10447cd265b42c3e6b0589c03d7f59422298f4ff6955ca77f4de4a0d2724e165",
+    "models/LoopClosure/RGBDVisualVocabulary.mo": "c7ed1764738b75cef2e439699b974adb1e95213350f123a982ef64db74ee7c1e",
+    "models/Mapping/RGBDAnchoredLandmarkMap.mo": "5d8b49658a86d5caa81804218a459458b18b66ace365647e4bea8e70dae5347a",
+    "models/Mapping/RGBDCatalogFrame.mo": "ef80ba219860db8ea384d1da685b571bcef422035859d6a9d5d65eee24f5ad0c",
+    "models/Mapping/RGBDCatalogMapping.mo": "0ff56654b6f4190abe1bb6f698b9bde944bcb80bc6d5988797219d76bebe1f46",
+    "models/Mapping/RGBDCatalogObservation.mo": "02275b982c610f40b6c906743212c42a91935a31d7a7553dd5f32863e0c633f2",
+    "models/Mapping/RGBDCatalogPoseMapping.mo": "7fc78b4fd4f0aac6423ab0fe5f09dee0f280668770385f81a1774ac45c237784",
+    "models/Mapping/RGBDKeyframeLandmarks.mo": "6aadd23b7c448a6911eeacc86df2c081da354b8bf71a02647403ef130805771a",
+    "models/Mapping/RGBDLandmarkCatalog.mo": "a0107adad078e537f41350c7fa31465858183a1fc17e190ad7a206614fac2af3",
+    "models/Mapping/RGBDLandmarkMap.mo": "616a0294e47502575d5dc61fd1222d17e9d93bae6879408df3b4974861f76216",
+    "models/Mapping/RGBDLandmarkProjection.mo": "608aaa1fe4326d848ea32bc013b70480eb0e1f793f006865ba778e1782f0dcdc",
+    "models/Mapping/RGBDMapAnchorAssignment.mo": "d9aab2c0c4fd09f44843199b249b7de452e869027b1502fa0272e3d4a73e01e6",
+    "models/Mapping/RGBDMapAnchorUncertainty.mo": "e0bdf55f4c80d4dfd9662864900a5c1e6669c3d16dff90a702ae5cbf01febf47",
+    "models/Mapping/RGBDMapAnchors.mo": "a3de5cac0a78019555f7c1dee211c39896c6897005a533a97615af7ac69fefa9",
+    "models/Mapping/RGBDSpatialIndex.mo": "566a60c4e159edc05f0b3c13fd80c23235980825d0b93a1d17006d2bc85e8840",
+    "models/Math/RigidPointRegistration.mo": "61bc0413b8eb608514a6e39986f5172d49e82a3a3143f76b377c99baaa343b89",
+    "models/Math/SPD6Solve.mo": "5a46d70636f30ce4c4ea9275cc6612f4ddc0ecf457622dcb2264696f49a3ff9b",
+    "models/Optimization/GraphGaugeUncertainty.mo": "ef43aaafbfa6f0b2edb412c22941c5b14b77e45a352212d7e2dbe72d780f4b30",
+    "models/Optimization/ModelicaPoseGraph.mo": "5ef413b7b4dd4c122038529d34a4d68a18025f65fb7c1285195a541a97f113bd",
+    "models/Optimization/ModelicaPoseGraphCovariance.mo": "1eeb42e8fc9971a4c87468a9697ceb309229984fc8682df66864286e96206dfe",
+    "models/Optimization/RGBDCatalogGraphCapture.mo": "500bf32dc73b3fa5dd45a07711938597cd3b9f129f3ec0960d9f92ca82ff5ccf",
+    "models/Optimization/RGBDGraphAnchorBound.mo": "a0cdbcf7c461f0b445a99ee09bfeb05712611073664b1d4ab72e79d0b8e097cf",
+    "models/Optimization/RGBDGraphCaptureLedger.mo": "4479b1256866a75847b6a2a0d58d784c9fb82eefc2094599d8df2d3e66780359",
+    "models/Optimization/RGBDGraphEstimatorCommit.mo": "9d2b2c7b53f9460b387a741a5afc63037941dd2627a327e16fdade3e104dab55",
+    "models/Optimization/RGBDGraphMeasurements.mo": "9e5630acd25348d30bb23bb2dc2de4540e3eb53ec0216f1bd9a20ae1ddab4149",
+    "models/Optimization/RGBDGraphProcessing.mo": "5ad9679ded681271790e8cbbe1ccfcef5f8a6af1d48d16c52ddc9720faf7e364",
+    "models/Optimization/RGBDGraphSelectedGauge.mo": "fc7cb36550edf1282a07e09e7fe71adce47dd5fa578670985bddcd5d244ecb89",
+    "models/SLAM/D435FastSLAM.mo": "fe168df56777c47dbed63a01fe9e71ffb4f250187f373a6725a79f610fe895ee",
+    "models/SLAM/RGBDFastSLAMInitialize.mo": "175bb2a1cd082d9fefe0129481c487dd50bec1b875b6ff43bb1f8dc246f951c1",
+    "models/SLAM/RGBDFastSLAMInterface.mo": "0e850d0c073362197f6c21c7baaf779d57cb56d42c159ac7787e61b4468e89e0",
+    "models/SLAM/RGBDFastSLAMIntervals.mo": "9ae7b4ce7f98c63504afc08b3f7983c9998eb4cf53c37267e44413dc0180321a",
+    "models/SLAM/RGBDFastSLAMReset.mo": "b037b970019832f1924442defad2d66536220aa003ba4b5e131f870e93d59fcb",
+    "models/SLAM/RGBDFastSLAMStep.mo": "888e2580ae2e16bbda28dae0dbc3b9101166aafb8528ac9bec6edfe90305be59",
+    "models/Scene/ActorMotion.mo": "8a23de37faddb221d1f39d003314da2f9fc9bb88600344b5c6081d179e90f41d",
+    "models/Sensors/D435ImageProfile.mo": "316c41fd994915f8bdb821feb7e0c5c925c83dd358e7639dd2a4724d9d0c1101",
+    "models/Sensors/SensorAvailability.mo": "617b474c5b6a5fa13ab2ba845526dd5c6afca6f52ccc07b7d265ea013ac18531",
+    "models/Sensors/SensorObservations.mo": "1958ff94f32041409f27638bb07d27d8abe372fff3622fc5dac9324a420b82ae",
+    "models/Vehicles/LabQuadrotor.mo": "6530809bb9b0a147b7173fe59b280741ed9292001af3ec9990d2aa62fbd2a9b7",
+    "models/Vision/Features/D435FastFeatures.mo": "47b9ee814d7409992b97d479fe2b5d2d1e8fc8fd5bbf81b98d731ecbf7cc5825",
+    "models/Vision/Features/D435HarrisFeatures.mo": "5bdda0afaa687aafe1591287c1479e01405553b51364a6180c480ed31ece9b3b",
+    "models/Vision/Features/FastNativeFrame.mo": "2a9fca44e9bf3ccd749f55109fd661f63609da827050f82850c9e2851ba2f96e",
+    "models/Vision/Features/FeatureSelection.mo": "8e1e10fb89537e0d5c108cecf53223f510d6f2221c520344a82a308b6525d873",
+    "models/Vision/Features/HarrisNativeFrame.mo": "a96e01c251e39ef32894bc04298c6ef51c47c72954265ba4a757183deec99230",
+    "models/Vision/Matching/RGBDFeatureMatching.mo": "05c661ffff37c629a19077868d9e4091202ee4d144e85940af51533aee7c93d8",
+    "models/Vision/Matching/RGBDPatchTracking.mo": "1a2e0a06a4e7182139bdd8097d8c668dc1cc8ad72a318eb61c24138f966ddf17"
   },
   "canonical_classes": [
     {
@@ -415,7 +415,7 @@
       "destination": "SLAM/Localization/RGBDUncertaintySkew.mo",
       "qualified_name": "SLAM.Localization.RGBDUncertaintySkew",
       "original_class_sha256": "b681087c78b0aa6542af7344d197148760d09cd13fba37208d73a85062d0ac8d",
-      "destination_sha256": "760debac91018796a40ad729a961ac79416948e4d634dc75d0b80f5f0f46f26b"
+      "destination_sha256": "9e7712820334c3aeaed1f7821e9d5db8e58e1274f111c8bf47cdb0a415444e5c"
     },
     {
       "source": "models/Estimation/Localization/RGBDRegistrationUncertainty.mo",
@@ -447,7 +447,7 @@
       "destination": "SLAM/Localization/RGBDRegistrationSandwich.mo",
       "qualified_name": "SLAM.Localization.RGBDRegistrationSandwich",
       "original_class_sha256": "ac2988c5dd1cf1a0520f1852d56802d0a5d0699b93d3fc57bc8551da77bb1ecd",
-      "destination_sha256": "75979b7579ff6800ef9f43be3025c17f69fc6af52424e5705746e5cd5ee79622"
+      "destination_sha256": "bddf7b52d8a1f2d90b2355de2dca88d2ede17a9ca64c2c38249f71c0c95251c8"
     },
     {
       "source": "models/Estimation/Localization/RGBDRegistrationUncertainty.mo",
@@ -511,7 +511,7 @@
       "destination": "SLAM/Localization/ObserveRGBDRelativeFrame.mo",
       "qualified_name": "SLAM.Localization.ObserveRGBDRelativeFrame",
       "original_class_sha256": "f5f08ebc9598ced3f64bbf28d46f7de9b5fd1ee2505ce12d281de7d54cc58591",
-      "destination_sha256": "e801f81d4789af296b8ddc21d39980a9cdcb38ab39db87e6d6a4803c38b48c3b"
+      "destination_sha256": "f563867f303fb4066790063efaba4a1588c36e9d2d463dc937ad916247099894"
     },
     {
       "source": "models/Evaluation/RuntimeEvaluation.mo",
@@ -591,7 +591,7 @@
       "destination": "SLAM/LoopClosure/RGBDCatalogLoopVerification.mo",
       "qualified_name": "SLAM.LoopClosure.RGBDCatalogLoopVerification",
       "original_class_sha256": "cfd60ae452d1d87a717b62ebc2511598ca472a46d14a49b1873c31e6a63859f4",
-      "destination_sha256": "37720086b6df0c84f4cdb831e93b24c4105c894b5e08e4f49205f976b783cfad"
+      "destination_sha256": "e3a8c6c8617dd5fbac4a37f9be622e6029a7daeddc2f2506e3a16cc4592d6546"
     },
     {
       "source": "models/LoopClosure/RGBDKeyframePolicy.mo",
@@ -623,7 +623,7 @@
       "destination": "SLAM/LoopClosure/RGBDLoopVerification.mo",
       "qualified_name": "SLAM.LoopClosure.RGBDLoopVerification",
       "original_class_sha256": "4316d2016d6a754a78cb8edca74cd1860d0e33ef995476b574a6fc28e10db7ae",
-      "destination_sha256": "f81f9c8b3edcda7a5f99782a57b12913afcf3f5c3a2a122f192943abe48d77e5"
+      "destination_sha256": "1782bb043913f1404d4c9fe1fac3564b5b65fcc5fb094015950e8c9516a42ab6"
     },
     {
       "source": "models/LoopClosure/RGBDVisualVocabulary.mo",
@@ -655,7 +655,7 @@
       "destination": "SLAM/Mapping/RGBDCatalogFrame.mo",
       "qualified_name": "SLAM.Mapping.RGBDCatalogFrame",
       "original_class_sha256": "d50ff0185bd3129b257a0e4005a35ae610a4d158c24fde4797367ba41f3f9f00",
-      "destination_sha256": "8039acf4ddae3df9a837dafbd48e8ef15eca5a5693436223912ba9f0956c0d29"
+      "destination_sha256": "f3dd9b34b360400b9093ad065624e859dd7857b3a18418cc784ca202edd65b07"
     },
     {
       "source": "models/Mapping/RGBDCatalogMapping.mo",
@@ -855,7 +855,7 @@
       "destination": "Vision/Registration/FitRigidPointPairsRobust.mo",
       "qualified_name": "Vision.Registration.FitRigidPointPairsRobust",
       "original_class_sha256": "7dfd2e944d4c4edacfabb0ff74c8473ac2b2ae1823c43f1c07648351f3578366",
-      "destination_sha256": "2657182b056fe6e5e56575f1273f18f530180c4ba102d81f23d8c1fd2f5fad00"
+      "destination_sha256": "a5c35f000897d6807eaa8857391a3a81cec7e311e51cf50ec037d677f90fae7e"
     },
     {
       "source": "models/Math/SPD6Solve.mo",
@@ -1087,7 +1087,7 @@
       "destination": "SLAM/PoseGraph/RGBDCatalogGraphCapture.mo",
       "qualified_name": "SLAM.PoseGraph.RGBDCatalogGraphCapture",
       "original_class_sha256": "623f5de96c90fcd5c16cb2632c306eecfe74bf9e7b476aeddea2bba962102298",
-      "destination_sha256": "4adc8721bcbd5459fe4b90c6cbea551e0c53067e7d946149bf9b06784fe4ad93"
+      "destination_sha256": "6470ec0f0ba5f501c8cc182d01663a0fbf0140383bbf3651eaf675495c2222bb"
     },
     {
       "source": "models/Optimization/RGBDGraphAnchorBound.mo",
@@ -1167,7 +1167,7 @@
       "destination": "SLAM/RGBDFastSLAMInitialize.mo",
       "qualified_name": "SLAM.RGBDFastSLAMInitialize",
       "original_class_sha256": "9abb4ecdf6cc80e3b4033c616bed569eb19ec752a4b1e322b3186cc41477be2f",
-      "destination_sha256": "e1752870f35f4d02c0ad70bf2615ffdca62bcadc2eebf61f6bdd574609886be2"
+      "destination_sha256": "deee57817b0882502dd2e1255affba99e3c9813abb20b07697c780c1c8d467f1"
     },
     {
       "source": "models/SLAM/RGBDFastSLAMInitialize.mo",
@@ -1175,7 +1175,7 @@
       "destination": "SLAM/InitializeFastSLAM.mo",
       "qualified_name": "SLAM.InitializeFastSLAM",
       "original_class_sha256": "b2971b5ef4749a50db884123f8bd78cfa05e5273262de7ce8fade30fb1f91699",
-      "destination_sha256": "8eae66786eacdf3c2e955242ce89d817f840c5b3c5b0917c5c9afa24954194ab"
+      "destination_sha256": "4d0d6d376a992da8b078ed2ad83d9f109ba46cf264c592c64635a328baa0d365"
     },
     {
       "source": "models/SLAM/RGBDFastSLAMInterface.mo",
@@ -1183,7 +1183,7 @@
       "destination": "SLAM/RGBDFastSLAMInterface.mo",
       "qualified_name": "SLAM.RGBDFastSLAMInterface",
       "original_class_sha256": "6877f3062fa6200a11fa9befdfb9112926a109a784a8fb2a764c6bafd6dccd9a",
-      "destination_sha256": "681b72713231f50e8d1c960b939d46a1be4eab50214235e694dd6ba9807602fc"
+      "destination_sha256": "f021f2a9b9e345eb165ef79c8dc9654638d7ef865ac3d1bd816274a9e985e962"
     },
     {
       "source": "models/SLAM/RGBDFastSLAMIntervals.mo",
@@ -1215,7 +1215,7 @@
       "destination": "SLAM/RGBDFastSLAMStep.mo",
       "qualified_name": "SLAM.RGBDFastSLAMStep",
       "original_class_sha256": "be27c4a01ad36c11dc7c4532a58c8e950d2e1f5bd4d77113fa736ad1396e3130",
-      "destination_sha256": "7f91087b0419a95d9b2c2acaae211627a5a278b8bfb42c65c9d6e46fa8e9ee3e"
+      "destination_sha256": "014163f8ebad63feeb63b13cc4c759a716aa48061a893c2a3739ec19062bd95b"
     },
     {
       "source": "models/SLAM/RGBDFastSLAMStep.mo",
@@ -1223,7 +1223,7 @@
       "destination": "SLAM/AdvanceFastSLAM.mo",
       "qualified_name": "SLAM.AdvanceFastSLAM",
       "original_class_sha256": "dae00b37039f32c35396da14f3bbba82549ccd3a31cc0ba99ab7761d8f39dce3",
-      "destination_sha256": "90889d8c7c40f568b8a4e74095834795feaa3c386c7f28ea3448a82012c0fb42"
+      "destination_sha256": "1f782530cb17b5579b7e06cf15b76d084db08a5c16aa530477262bc535f99df4"
     },
     {
       "source": "models/Scene/ActorMotion.mo",
@@ -1271,7 +1271,7 @@
       "destination": "SLAM/Examples/Vehicles/LabQuadrotor.mo",
       "qualified_name": "SLAM.Examples.Vehicles.LabQuadrotor",
       "original_class_sha256": "4d3a8221abaa708b4a98f76ef0f62976a2db939d3f1e08f0741c3cb7446eb6b7",
-      "destination_sha256": "a6f5cb403c3f3fe6833f0a85d9a9580cf81db146e440e6ecb0676cc22231389c"
+      "destination_sha256": "e1238569cd8cfbaa08d3e4542f3f6cdc448d8093a79bda7cd65a6e8fb291e12c"
     },
     {
       "source": "models/Vision/Features/D435FastFeatures.mo",
@@ -1512,6 +1512,14 @@
       "qualified_name": "Vision.Matching.RGBDPatchTracking",
       "original_class_sha256": "d48b598782529dd63ceba9574ed45cb34b51e312871bcbf3d70a4bbf47a05d4d",
       "destination_sha256": "1fa8ee7582a81de8999edd49cb962b5a0ebd63c7f2001f55c09296d493f052f5"
+    },
+    {
+      "source": "models/Math/RigidPointRegistration.mo",
+      "original_name": "RegistrationWeighted",
+      "destination": "Vision/Registration/RegistrationWeighted.mo",
+      "qualified_name": "Vision.Registration.RegistrationWeighted",
+      "original_class_sha256": "18e367f70bae8f58f11ce7c663de79b4c836f9344ac0804ef276bc352b1cad21",
+      "destination_sha256": "57029f891db803aac877ba800ce16310b002d50bcaf951c7a66f9f4f3ad621ae"
     }
   ]
 }

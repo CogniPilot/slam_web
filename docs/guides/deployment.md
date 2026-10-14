@@ -98,6 +98,42 @@ An uninstrumented production build with the existing browser compiler pin,
 6.5 ms sensors. Realtime is not yet achieved; the lower raster trades away
 visual features, and this throughput check does not qualify localization accuracy.
 
+## Warehouse tracking regression
+
+The native camera image is consumed at its capture boundary, after every
+preceding held IMU interval. Calibrated RGB-D registration refines the geometric
+seed using each point's covariance and reports uncertainty from the same
+weighted normal matrix. Reduced rasters retain lower-contrast FAST corners;
+the correspondence, inlier and geometric verification requirements remain.
+
+Production keyframe admission screens consecutive edges and retrieved loops
+against estimated motion. It combines retained pose and measurement uncertainty
+conservatively and defaults to a 2 m translation-disagreement limit. This
+prevents a repeated warehouse shelf bay from pulling the map into another bay.
+The stateless geometric verifier remains independent of estimated poses;
+explicit relocalization callers can change the admission policy. Native
+keyframes, verified loop edges and covariance now appear in the viewer.
+
+The hardware browser regression runs a fixed-heading warehouse circuit with
+424 × 240 RGB-D at 5 Hz and an IMU at 10 Hz. It requires a corrected loop,
+position RMSE below 0.6 m and maximum position error below 1.2 m. The longer
+64-second indoor out-and-back validation measured 0.37 m RMSE, 1.04 m maximum
+error and five loop edges. These are synthetic warehouse checks, not a general
+accuracy qualification for real camera data or every scene.
+
+The indoor Modelica tour waits two seconds for settling, then repeats a 6 m
+out-and-back route inside the enclosure. Start a new project to load updated
+physics sources; saved projects retain their editable source.
+
+```sh
+SLAM_PROFILE_ENVIRONMENT=warehouse SLAM_PROFILE_TOUR=indoor \
+  SLAM_PROFILE_FRAMES=320 node scripts/profile-native-slam.mjs
+```
+
+The report includes position error against the Modelica evaluation reference,
+keyframe/loop counts and runtime diagnostics. `SLAM_PROFILE_TOUR=warehouse-loop`
+selects the smaller circuit used by the browser regression.
+
 ## Running on a robot
 
 The Modelica library is maintained independently in

@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cb132c87a9e00289bbac11642110976248734878; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 782a268bd05735e541e61efdf22c5ddf7dab55ff; edit the canonical packages there.
 // The keyframe catalog owns nodes. This owner retains measured body edges,
 // never poses inferred from them. All results are proposals for an outer
 // estimator/reference/catalog/map transaction; callers must publish together.

@@ -4,7 +4,7 @@ import type {Estimate} from './types';
 
 export interface SlamNativeResult {
   estimate:Estimate;
-  /** Wall time of every entry call in this frame; the first call of a new image epoch processes the image. */
+  /** Wall time of each held interval; the final call processes the captured image. */
   stepMs:number[];
   status:Record<string,number|boolean>;
 }
@@ -18,6 +18,7 @@ interface ImageObservation {features:number[][];current:number[][];previous:numb
 export class ModelicaSlamSession {
   private epoch=-1;
   private frames=0;
+  private visualUpdates=0;
   /** End time of the last evaluated interval; the model checks continuity to 1e-12. */
   private clock=0;
   private initial!:Estimate;
@@ -52,7 +53,8 @@ export class ModelicaSlamSession {
     this.writeCamera(this.step,frame);
     this.writeImage(this.step,frame);
     const stepMs:number[]=[];let imageStatus:Record<string,number|boolean>|undefined,image:ImageObservation|undefined;
-    for(const interval of frame.intervals){
+    if(!this.step.hasInput('imageRequested'))throw new Error('Native SLAM must expose the imageRequested acquisition gate');
+    for(const [index,interval] of frame.intervals.entries()){
       if(!(interval.dt>0&&interval.dt<=.2))throw new Error('Native SLAM accepts IMU intervals of at most 0.2 s');
       // Feed the model's own continuous clock: previous end plus h, exactly.
       const end=this.clock+interval.dt;
@@ -60,16 +62,27 @@ export class ModelicaSlamSession {
       writeVector(this.step,'accel',interval.imu.accel);writeVector(this.step,'gyro',interval.imu.gyro);
       this.step.real('h')[0]=interval.dt;
       this.step.real('intervalTime')[0]=end;
+      // This raster was captured at frameTime, after the final held IMU
+      // interval. Earlier intervals predict only; they cannot consume a
+      // camera measurement from their future.
+      const imageOn=index===frame.intervals.length-1;
+      if(imageOn&&Math.abs(end-frame.frameTime)>1e-6)throw new Error('Camera capture does not coincide with the final IMU interval');
+      this.step.boolean('imageRequested')[0]=imageOn?1:0;
       const started=performance.now();
       const status=this.step.step(end);
       this.clock=end;
       stepMs.push(performance.now()-started);
       if(status!==0)throw new Error(`Native SLAM step returned status ${status} at t=${interval.time.toFixed(4)} s (image epoch ${frame.imageEpoch})`);
-      // The first interval of a frame carries the new image; its flags describe the image work.
-      if(!imageStatus){imageStatus=this.step.derived();image=this.imageFrom(this.step);}
+      if(imageOn){
+        imageStatus=this.step.derived();image=this.imageFrom(this.step);
+        for(const name of ['selectionValid','predictionAccepted','observationAccepted','captureAccepted']){
+          const value=this.step.output(name)?.[0];if(value!==undefined)imageStatus[name]=value;
+        }
+      }
     }
     this.epoch=frame.imageEpoch;this.frames++;
-    const status={...this.step.derived(),...(imageStatus?{imageCompleted:imageStatus.imageCompleted,mappingAccepted:imageStatus.mappingAccepted,graphCorrectionAccepted:imageStatus.graphCorrectionAccepted,publicationReason:imageStatus.publicationReason}:{})};
+    if(imageStatus?.observationAccepted===1)this.visualUpdates++;
+    const status={...this.step.derived(),...imageStatus};
     return {estimate:this.estimateFrom(this.step,stepMs,status,image),stepMs,status};
   }
 
@@ -110,13 +123,43 @@ export class ModelicaSlamSession {
       stepCalls:stepMs.length,stepMsMax:stepMs.length?Math.max(...stepMs):0,stepMsTotal:stepMs.reduce((a,b)=>a+b,0)};
     for(const [name,value] of Object.entries(derived))diagnostics[name]=typeof value==='boolean'?(value?1:0):value;
     if(matchCount!==undefined)diagnostics.matchCount=matchCount;
-    const accepted=derived.accepted===true||derived.accepted===1;
+    const accepted=derived.observationAccepted===true||derived.observationAccepted===1;
     const {points,confidence:mapConfidence}=this.mapPoints(program);
     const confidence=matchCount!==undefined&&features.length?Math.min(1,matchCount/features.length):mapConfidence;
     diagnostics.mapPoints=points.length;
+    const poseGraph=this.poseGraph(program);
+    diagnostics.keyframes=poseGraph.keyframes.length;
+    diagnostics.loopEdges=poseGraph.edges.filter(edge=>edge.kind==='loop').length;
+    diagnostics.loops=diagnostics.loopEdges;
+    diagnostics.visualUpdates=this.visualUpdates;
+    diagnostics.odometryEdges=poseGraph.edges.filter(edge=>edge.kind==='odometry').length;
+    const covariance=program.stateRun('estimator.localization.estimator.covariance')?.view;
+    const block=(start:number)=>Array.from({length:9},(_,index)=>Number(covariance![(start+Math.floor(index/3))*15+start+index%3]));
+    const uncertainty=covariance?.length===225?{positionCovariance:block(0),attitudeCovariance:block(6)}:undefined;
     return {x,y,z,quaternion:quaternion?Array.from(quaternion):quaternionFromRotation(rotation as Float64Array),
-      confidence,points,features,diagnostics,
-      tracking:{matches:current.map((value,index)=>({current:value,previous:previous[index]})),accepted,reason:`publication reason ${diagnostics.publicationReason??'n/a'}`}};
+      confidence,points,features,diagnostics,poseGraph,uncertainty,
+      tracking:{matches:current.map((value,index)=>({current:value,previous:previous[index]})),accepted,
+        reason:accepted?'visual observation accepted':derived.captureAccepted===1?'visual reference captured':`visual observation refused; publication reason ${diagnostics.publicationReason??'n/a'}`}};
+  }
+  private poseGraph(program:SlamNativeProgram):NonNullable<Estimate['poseGraph']> {
+    const run=(name:string)=>program.stateRun(name)?.view;
+    const enabled=run('estimator.poses.enabled'),ids=run('estimator.poses.ids');
+    const positions=run('estimator.poses.positions'),rotations=run('estimator.poses.rotations');
+    const keyframes:NonNullable<Estimate['poseGraph']>['keyframes']=[],edges:NonNullable<Estimate['poseGraph']>['edges']=[];
+    const index=new Map<number,number>();
+    if(!enabled||!ids||!positions||!rotations)return {keyframes,edges};
+    for(let slot=0;slot<enabled.length;slot++)if(Number(enabled[slot])){
+      index.set(Number(ids[slot]),keyframes.length);
+      keyframes.push({position:Array.from(positions.slice(slot*3,slot*3+3),Number),
+        quaternion:quaternionFromRotation(Array.from(rotations.slice(slot*9,slot*9+9),Number))});
+    }
+    const prefix='estimator.localization.graph.edges.';
+    const active=run(prefix+'enabled'),kinds=run(prefix+'kind'),references=run(prefix+'referenceId'),currents=run(prefix+'currentId');
+    if(active&&kinds&&references&&currents)for(let slot=0;slot<active.length;slot++)if(Number(active[slot])){
+      const from=index.get(Number(references[slot])),to=index.get(Number(currents[slot])),kind=Number(kinds[slot]);
+      if(from!==undefined&&to!==undefined&&(kind===1||kind===2))edges.push({from,to,kind:kind===2?'loop':'odometry'});
+    }
+    return {keyframes,edges};
   }
   /** Occupied landmark positions of the carried map (estimator.localization.map),
    * with the mean landmark confidence scaled by the model's maximum. */
