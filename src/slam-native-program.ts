@@ -18,7 +18,10 @@ export interface SlamNativeLayout {
   state_runs:{name:string;lane:'f64'|'i64'|'u8';previous:number;next:number;count:number}[];
   files:Record<string,{file:string;sha256:string;bytes:number;encoding:'gzip'|'identity'}>;
 }
-export interface SlamNativeManifest {schemaVersion:1;sourceSha256:string;models:Record<string,SlamNativeLayout>}
+export interface SlamNativeManifest {
+  schemaVersion:1;sourceSha256:string;models:Record<string,SlamNativeLayout>;
+  profiles?:Record<string,{sourceSha256:string;models:Record<string,SlamNativeLayout>}>;
+}
 export type SlamNativeFetch=(file:string,encoding:'gzip'|'identity')=>Promise<Uint8Array>;
 
 const MATH=['abs','sin','cos','tan','asin','acos','atan','sinh','cosh','tanh','exp','log','log10','pow','atan2'] as const;
@@ -159,12 +162,22 @@ export async function fetchNativeAsset(base:URL,file:string,encoding:'gzip'|'ide
   }
   return bytes;
 }
-export async function fetchNativeManifest(base:URL):Promise<SlamNativeManifest> {
+export async function fetchNativeManifest(base:URL,resolution?:string):Promise<SlamNativeManifest> {
   const url=new URL('vendor/slam/manifest.json',base);
   if(url.origin!==base.origin)throw new Error('Native SLAM assets must be same origin');
   const response=await fetch(url);
   if(!response.ok)throw new Error('Native SLAM programs are not published on this site; build the assets from a compiler export first');
   const manifest=await response.json();
   if(manifest?.schemaVersion!==1||!manifest.models?.initialize||!manifest.models?.step)throw new Error('Unsupported native SLAM manifest');
+  if(resolution){
+    const profile=manifest.profiles?.[resolution];
+    if(profile){
+      if(!profile.models?.initialize||!profile.models?.step||typeof profile.sourceSha256!=='string')throw new Error('Unsupported native SLAM resolution profile');
+      return {schemaVersion:1,...profile};
+    }
+    const [width,height]=resolution.split('x').map(Number);
+    if(manifest.models.step.inputs?.rgb?.count!==width*height*3||manifest.models.step.inputs?.depth?.count!==width*height)
+      throw new Error(`Native SLAM programs for ${resolution} are not published on this site; export that camera profile first`);
+  }
   return manifest;
 }

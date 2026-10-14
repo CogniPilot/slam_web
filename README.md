@@ -21,9 +21,8 @@ automatic lightweight preview. Hardware rendering keeps the native sensor sizes.
 
 - **Start with a link.** Students and collaborators can open the same lab across
   desktop platforms, without installing Python, containers, or local services.
-  Low (economical) graphics with a 15 Hz RGB-D rate is the default on every
-  device, which keeps the simulation close to real time. Phones also get a
-  compact layout.
+  Economical graphics with 424 × 240 RGB-D at 5 Hz and airframe IMU at 10 Hz
+  is the default on every device. Phones also get a compact layout.
 - **See through simulated sensors.** Three.js uses the GPU to render RGB camera
   images, depth images, and an optional 64-beam LiDAR scan. Camera noise and depth
   quantization also run in shaders.
@@ -33,7 +32,7 @@ automatic lightweight preview. Hardware rendering keeps the native sensor sizes.
   vision, feature matching, Kalman filtering, mapping, loop closure, and physics
   in one workspace. Students can follow how the pieces fit together and compare
   algorithms as the full SLAM runtime is integrated.
-- **Control the experiment.** Adjust sensor rates, lighting, graphics quality,
+- **Control the experiment.** Adjust camera resolution, sensor rates, lighting, graphics quality,
   cars, and pedestrians. Lockstep timing keeps physics and sensor processing
   synchronized even when an experiment runs slower than real time.
 - **Keep your work.** Save projects locally, export them to a file, and reload
@@ -77,7 +76,7 @@ and project persistence run in the browser. The complete Modelica SLAM model
 (feature detection, mapping and loop closure) runs as compiler-exported native
 WebAssembly programs when **Configuration, Flight, Estimator** is set to
 **Native Modelica SLAM**. It needs a desktop browser with hardware rendering,
-about 1.2 GB of memory per drone, and runs slower than real time; the site must
+hundreds of MB of memory per drone, and can run slower than real time; the site must
 also publish the exported programs (see [Deployment](docs/guides/deployment.md)).
 The inertial baseline remains the default. This is a prototype for teaching and
 experimentation.

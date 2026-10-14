@@ -30,7 +30,8 @@ test('a fresh visitor sees progress until the inertial experiment is ready, then
     return {software:lab.runtime.world.graphics.acceleration==='software',width:frame.calibration.width,height:frame.calibration.height,rgb:frame.rgb.length,depth:frame.depth.length,profile:frame.capture.sensorProfile};
   });
   expect(sensor.rgb).toBe(sensor.width*sensor.height*3);expect(sensor.depth).toBe(sensor.width*sensor.height);
-  expect([sensor.width,sensor.height]).toEqual(sensor.software?[160,90]:[848,480]);
+  expect([sensor.width,sensor.height]).toEqual(sensor.software?[160,90]:[424,240]);
+  await expect(page.locator('#sensor-rate-summary')).toContainText(`${sensor.width} × ${sensor.height}`);
   if(sensor.software){await expect(page.locator('#render-warning')).toBeVisible();await expect(page.locator('#render-warning')).toContainText('CPU');expect(sensor.profile).toBe('software');}
   else await expect(page.locator('#render-warning')).toBeHidden();
 });

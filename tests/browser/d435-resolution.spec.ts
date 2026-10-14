@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {D435_IMAGE} from '../../src/camera-profile';
+import {D435_IMAGE,D435_PAIRED_RESOLUTIONS} from '../../src/camera-profile';
 import {openEconomicalPropagation} from './reference-project';
 
 test('native D435 images preserve GPU readback and lockstep timing with vision explicitly pending',async({page})=>{
@@ -45,4 +45,40 @@ test('native D435 images preserve GPU readback and lockstep timing with vision e
   await expect(page.locator('#rgb + .sensor-foot')).toContainText('848 × 480');
   await expect(page.locator('#depth + .sensor-foot')).toContainText('848 × 480');
   console.log('NATIVE D435 PROFILE',JSON.stringify(result));
+});
+
+test('resolution selection resets the run and resizes packed RGB-D and depth clouds in the sensor worker',async({page})=>{
+  test.setTimeout(240_000);
+  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.goto('/');
+  await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab?.ready),{timeout:90_000}).toBe(true);
+  test.skip(await page.evaluate(()=>(window as any).__slamLab.runtime.world.sensorProfile==='software'),'Hardware RGB-D modes require GPU rendering');
+  await page.getByRole('tab',{name:'Configuration',exact:true}).click();
+  for(const mode of [...D435_PAIRED_RESOLUTIONS,D435_PAIRED_RESOLUTIONS[0]]){
+    await page.getByLabel('RGB + depth resolution',{exact:true}).selectOption(mode.id);
+    await expect(page.getByLabel('RGB + depth resolution',{exact:true})).toBeEnabled({timeout:90_000});
+    const result=await page.evaluate(async()=>{
+      const lab=(window as any).__slamLab,r=lab.runtime,w=r.world;
+      await r.step();const frame=lab.latest.frame;
+      w.setDepthCloudEnabled(true);await w.captureSensors(false);
+      const raster=w.latestDepthRaster;
+      w.setDepthCloudEnabled(false);
+      return {ready:lab.ready,time:r.time,dt:frame.dt,resolution:lab.project.cameraResolution,
+        calibration:frame.calibration,rgbBytes:frame.rgb.byteLength,depthBytes:frame.depth.byteLength,
+        layout:frame.imageLayout,validDepth:Array.from(frame.depth).some(z=>Number(z)>0),
+        targets:[w.rgbTarget.width,w.rgbTarget.height,w.depthTarget.width,w.depthTarget.height],
+        cloud:raster?{width:raster.width,height:raster.height,bytes:raster.samples.byteLength}:undefined,
+        glError:w.renderer.getContext().getError()};
+    });
+    expect(result.ready).toBe(true);expect(result.resolution).toBe(mode.id);
+    expect(result.time).toBeCloseTo(result.dt,10);
+    expect([result.calibration.width,result.calibration.height]).toEqual([mode.width,mode.height]);
+    expect(result.targets).toEqual([mode.width,mode.height,mode.width,mode.height]);
+    expect(result.rgbBytes).toBe(mode.width*mode.height*3);expect(result.depthBytes).toBe(mode.width*mode.height*2);
+    expect(result.layout.color.width).toBe(mode.width);expect(result.layout.depth.height).toBe(mode.height);
+    expect(result.validDepth).toBe(true);expect(result.glError).toBe(0);
+    expect(result.cloud).toEqual({width:mode.width,height:mode.height,bytes:mode.width*mode.height*2});
+    await expect(page.locator('#sensor-rate-summary')).toContainText(`${mode.width} × ${mode.height}`);
+  }
+  expect(errors).toEqual([]);
 });

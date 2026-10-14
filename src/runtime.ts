@@ -103,7 +103,7 @@ export class Runtime {
     this.secondary?.setSensorRates(rates);
   }
   private resetSensorClock(rates?:SensorRates){
-    const configuration=rates??sensorRates(this.project??{});
+    const configuration=sensorRates({...this.project,...(rates?{sensorRates:rates}:{})});
     this.sensorClock=new SensorClock(configuration,this.time);this.dt=1/configuration.cameraHz;
   }
   async compile(project:Project) {
@@ -113,6 +113,7 @@ export class Runtime {
     this.fleetFailure=undefined;this.pendingFrame=undefined;this.pendingRecord=undefined;
     await this.world.setVehicleCount(1);
     const order=validateGraph(project.graph);
+    await this.world.setCameraResolution(project.cameraResolution??'848x480');
     if(order.some(node=>node.kind==='modelica'))throw new Error('Custom Modelica graph-node execution is pending. Source editing, Rumoca diagnostics and project persistence are available.');
     this.onStatus('Compiling Modelica in Rumoca WASM…');
     const base=new URL(import.meta.env.BASE_URL,location.href).href;

@@ -1,11 +1,12 @@
 import {SENSOR_RATE_OPTIONS,sensorRates,type SensorRates} from './sensor-clock';
 import type {SceneDetail} from './types';
-import {D435_IMAGE,D435_PAIRED_MAX_HZ} from './camera-profile';
+import {D435_PAIRED_RESOLUTIONS,type CameraResolution} from './camera-profile';
 
-interface ConfigurationProject {sceneDetail?:SceneDetail;sensorRates?:SensorRates}
+interface ConfigurationProject {sceneDetail?:SceneDetail;sensorRates?:SensorRates;cameraResolution?:CameraResolution}
 interface ConfigurationOptions {
   project:()=>ConfigurationProject;
   onRatesChange:(rates:SensorRates|undefined)=>Promise<void>;
+  onResolutionChange?:(resolution:CameraResolution)=>Promise<void>;
   camera?:()=>{width:number;height:number;software:boolean};
 }
 
@@ -20,25 +21,40 @@ export function mountConfigurationPanel(aside:HTMLElement,options:ConfigurationO
   const configuration=document.createElement('div');configuration.id='configuration-view';configuration.className='configuration-view';configuration.hidden=true;
   configuration.setAttribute('role','tabpanel');configuration.setAttribute('aria-labelledby','configuration-tab');
   configuration.innerHTML='<section><h2>Scene & display</h2><p>Appearance changes camera imagery as well as the viewer.</p><div class="configuration-scene"></div></section><section><h2>Flight</h2><div class="configuration-flight"></div></section><section><h2>Sensor rates</h2><p id="sensor-rate-help">Rates use simulation time. RGB and depth share one capture; physics waits for each sensor event. Viewer presentation remains independent.</p><div class="configuration-rates"></div><p id="sensor-rate-policy"></p><button id="quality-sensor-defaults">Use quality defaults</button></section>';
-  const camera=options.camera?.()??{...D435_IMAGE,software:false};
-  configuration.querySelector('#sensor-rate-help')!.textContent=`${camera.software?'Reduced software preview':'D435 RGB and depth'}: ${camera.width} × ${camera.height}, with separate optics. ${camera.software?'This reduced simulation mode is below real camera resolutions. ':''}Paired capture supports15–${D435_PAIRED_MAX_HZ} Hz in simulation time; RGB is the limiting stream. Physics waits for processing. Viewer presentation remains independent at30 FPS.`;
   configuration.querySelector('.configuration-scene')!.append(document.querySelector('.scene-controls')!,document.getElementById('graphics-budget')!);
   configuration.querySelector('.configuration-flight')!.append(document.getElementById('tour-mode')!);
   const labels:Record<keyof SensorRates,string>={cameraHz:'RGB + depth rate',lidarHz:'LiDAR rate',imuHz:'Airframe IMU rate',gpsHz:'GPS rate'};
   const controls={} as Record<keyof SensorRates,HTMLSelectElement>;
   const defaults=configuration.querySelector<HTMLButtonElement>('#quality-sensor-defaults')!;
+  const resolution=document.createElement('select');resolution.setAttribute('aria-label','RGB + depth resolution');
+  const resolutionLabel=document.createElement('label');resolutionLabel.textContent='RGB + depth resolution';resolutionLabel.append(resolution);
+  for(const mode of D435_PAIRED_RESOLUTIONS)resolution.add(new Option(`${mode.width} × ${mode.height}`,mode.id));
+  configuration.querySelector('.configuration-rates')!.append(resolutionLabel);
   let pending=false,externalBusy=false;
   function setBusy(busy:boolean) {
     externalBusy=busy;defaults.disabled=pending||externalBusy;
+    resolution.disabled=pending||externalBusy;
     Object.values(controls).forEach(control=>{control.disabled=pending||externalBusy;});
   }
   function sync(project:ConfigurationProject) {
     const rates=sensorRates(project);
+    resolution.value=project.cameraResolution??'848x480';
+    const mode=D435_PAIRED_RESOLUTIONS.find(mode=>mode.id===resolution.value)!;
+    const cameraNow=options.camera?.()??{...mode,software:false};
+    const maxHz=mode.maxHz;
+    for(const option of Array.from(controls.cameraHz.options))option.disabled=Number(option.value)>maxHz;
+    configuration.querySelector('#sensor-rate-help')!.textContent=`${cameraNow.software?'Software preview':'D435 RGB and depth'}: ${cameraNow.width} × ${cameraNow.height}, with separate optics. Selected hardware mode supports up to ${maxHz} Hz. Lower simulated rates reduce processing. Viewer presentation remains independent at 30 FPS.`;
     for(const key of Object.keys(controls) as (keyof SensorRates)[])controls[key].value=String(rates[key]);
     configuration.querySelector('#sensor-rate-policy')!.textContent=project.sensorRates?'Custom rates · retained when graphics quality changes':`Following ${(project.sceneDetail??'high')} quality defaults`;
     const summary=document.getElementById('sensor-rate-summary');
-    if(summary)summary.textContent=`RGB + depth · ${camera.width} × ${camera.height} · ${rates.cameraHz} Hz sim time${camera.software?' · software preview':''}`;
+    if(summary)summary.textContent=`RGB + depth · ${cameraNow.width} × ${cameraNow.height} · ${rates.cameraHz} Hz sim time${cameraNow.software?' · software preview':''}`;
   }
+  resolution.onchange=async()=>{
+    if(pending||externalBusy)return;
+    pending=true;setBusy(externalBusy);
+    try{await options.onResolutionChange?.(resolution.value as CameraResolution);}
+    finally{pending=false;setBusy(externalBusy);sync(options.project());}
+  };
   async function change(rates:SensorRates|undefined) {
     if(pending||externalBusy)return;
     pending=true;setBusy(externalBusy);

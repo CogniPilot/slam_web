@@ -61,8 +61,22 @@ export function compactLayout(model,layout){
     carry:[...layout.carry],inputs,outputs,
     y_names:[...(layout.y_names??[])],
     model_outputs:(layout.model_outputs??[]).map(({name,index,count})=>({name,index,count})),
-    state_runs:(layout.state_runs??[]).map(({name,lane,previous,next,count})=>({name,lane,previous,next,count})),
+    state_runs:(layout.state_runs??[]).map(({name,lane,previous,next,count})=>({name,lane,previous,
+      next:publishedStateOffset(next,count*(lane==='u8'?1:8),layout),count})),
   };
+}
+// In-place programs publish carried outputs in their input cells. The export's
+// declaration table still names the original output slots; its carry aliases
+// are the compiler's authoritative mapping to the current value.
+function publishedStateOffset(offset,bytes,layout){
+  for(const aliases of [layout.carried??[],layout.carried_lanes??[]]){
+    for(let i=0;i<aliases.length;i+=3){
+      const [from,to,size]=aliases.slice(i,i+3);
+      if(offset>=from&&offset+bytes<=from+size)return to+offset-from;
+      if(offset<from+size&&offset+bytes>from)throw new Error('Native carried state splits a named state run');
+    }
+  }
+  return offset;
 }
 function elementName(name,index,count){
   if(count===9)return `${name}[${Math.floor(index/3)+1},${index%3+1}]`;

@@ -1,0 +1,9 @@
+{
+  "repository": "CogniPilot/slam_web",
+  "tag": "native-slam-d435-20261014",
+  "asset": "native-slam-d435-profiles.tar",
+  "bytes": 84131840,
+  "sha256": "73c2cec5fb81479b103536aa2b50fd0c997f3c4736703a5eb42f9eae0cf8b9f4",
+  "sourceSha256": "2ef533e0834a75e774328fe5ff351469f9a0a2a8d0b47238f518d59180270a97",
+  "rumocaRevision": "9f507597dd0a462b767a9761a53f4c3e3ffdfbd8"
+}

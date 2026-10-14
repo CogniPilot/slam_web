@@ -9,7 +9,8 @@ async function execute(message:SlamRequest){
   if(message.type==='init'){
     const base=new URL(message.base,self.location.href);
     if(base.origin!==self.location.origin)throw new Error('Native SLAM assets must be same origin');
-    const manifest=await fetchNativeManifest(base);
+    const {width,height}=message.frame.imageLayout.color;
+    const manifest=await fetchNativeManifest(base,`${width}x${height}`);
     session=await ModelicaSlamSession.create(manifest,(file,encoding)=>fetchNativeAsset(base,file,encoding),message.frame,
       progress=>self.postMessage({progress}));
     return {estimate:session.initialEstimate,sourceSha256:manifest.sourceSha256,models:Object.fromEntries(Object.entries(manifest.models).map(([key,layout])=>[key,{model:layout.model,pages:layout.pages}]))};

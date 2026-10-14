@@ -5,7 +5,7 @@ import {DronePresentation} from './drone-presentation';
 import {GpuDepthNoise,validateDepthNoise,type DepthNoiseSettings} from './gpu-depth-noise';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { Calibration, Environment, Estimate, Pose, SceneDetail, Truth } from './types';
-import {D435,SOFTWARE_CAMERA,resolveSensorProfile,type SensorProfile,type SensorProfileSelection} from './camera-profile';
+import {D435,SOFTWARE_CAMERA,d435Calibration,resolveSensorProfile,type CameraResolution,type SensorProfile,type SensorProfileSelection} from './camera-profile';
 export {D435} from './camera-profile';
 import {covarianceAxes} from './covariance';
 import { seededRandom } from './packet';
@@ -125,7 +125,7 @@ export class World {
   private depthTarget:THREE.WebGLRenderTarget;
   private depthNoise=new GpuDepthNoise();
   private depthNoiseSettings?:DepthNoiseSettings;
-  private readonly depthCloudGpu:GpuDepthCloud;
+  private depthCloudGpu:GpuDepthCloud;
   private readonly materials:WorldMaterials;
   private readonly assetBase:string;
   private readonly deviceRatio:number;
@@ -147,7 +147,7 @@ export class World {
     this.renderer = new THREE.WebGLRenderer({ antialias: true,powerPreference:'high-performance',...(offscreen?{canvas:offscreen.canvas}:{}) });
     this.graphics=graphicsInfo(this.renderer.getContext());
     this.sensorProfile=resolveSensorProfile(this.graphics.acceleration,offscreen?.sensorProfile);
-    this.calibration=this.sensorProfile==='software'?SOFTWARE_CAMERA:D435;
+    this.calibration={...(this.sensorProfile==='software'?SOFTWARE_CAMERA:D435)};
     this.rgbTarget=new THREE.WebGLRenderTarget(this.calibration.width,this.calibration.height,{depthBuffer:true,type:THREE.UnsignedByteType,colorSpace:THREE.SRGBColorSpace});
     this.depthTarget=new THREE.WebGLRenderTarget(this.calibration.width,this.calibration.height,{depthBuffer:true,type:THREE.UnsignedByteType,colorSpace:THREE.NoColorSpace});
     this.depthCloudGpu=new GpuDepthCloud(this.depthTarget.texture,this.calibration);
@@ -203,6 +203,16 @@ export class World {
     if(this.asyncCapture)throw new Error('Wait for the current sensor capture before changing graphics quality');
     this.build(this.currentEnvironment,detail,true);
     await this.ready;
+  }
+  async setCameraResolution(resolution:CameraResolution){
+    if(this.asyncCapture)throw new Error('Wait for the current camera capture before changing resolution');
+    const next=this.sensorProfile==='software'?SOFTWARE_CAMERA:d435Calibration(resolution);
+    if(next.width===this.calibration.width&&next.height===this.calibration.height)return;
+    Object.assign(this.calibration,next);
+    this.rgbTarget.setSize(next.width,next.height);this.depthTarget.setSize(next.width,next.height);
+    this.depthCloudGpu.dispose();this.depthCloudGpu=new GpuDepthCloud(this.depthTarget.texture,this.calibration);
+    this.latestDepthCloud=undefined;this.latestDepthRaster=undefined;this.depthCloudView.visible=false;
+    if(this.sensorRpc)await this.sensorRpc.call('configure',{cameraResolution:resolution});
   }
   build(kind:Environment,detail:SceneDetail='high',preservePresentation=false) {
     const camera=preservePresentation?{position:this.view.position.clone(),quaternion:this.view.quaternion.clone(),target:this.controls.target.clone()}:undefined;
@@ -327,7 +337,7 @@ export class World {
   }
   async enableSensorWorker(){
     const rpc=new WorkerRpc(new Worker(new URL('./sensor-render.worker.ts',import.meta.url),{type:'module'}));
-    try{await rpc.call('init',{base:this.assetBase,sensorProfile:this.sensorProfile,environment:this.currentEnvironment,detail:this.currentDetail,carsEnabled:this.carsEnabled,peopleEnabled:this.peopleEnabled,lightingMode:this.lightingMode,environmentVisible:this.environmentVisible,depthCloudEnabled:this.depthCloudEnabled,depthNoise:this.depthNoiseSettings});this.sensorRpc=rpc;}
+    try{await rpc.call('init',{base:this.assetBase,sensorProfile:this.sensorProfile,cameraResolution:`${this.calibration.width}x${this.calibration.height}`,environment:this.currentEnvironment,detail:this.currentDetail,carsEnabled:this.carsEnabled,peopleEnabled:this.peopleEnabled,lightingMode:this.lightingMode,environmentVisible:this.environmentVisible,depthCloudEnabled:this.depthCloudEnabled,depthNoise:this.depthNoiseSettings});this.sensorRpc=rpc;}
     catch(error){rpc.stop();throw error;}
   }
   setSensorWorkerEnabled(enabled:boolean){this.sensorWorkerEnabled=enabled;}

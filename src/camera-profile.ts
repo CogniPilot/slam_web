@@ -1,4 +1,7 @@
 import type {Calibration} from './types';
+import {D435_PAIRED_RESOLUTIONS,type CameraResolution} from './camera-resolutions.mjs';
+export {D435_PAIRED_RESOLUTIONS};
+export type {CameraResolution};
 
 /** Native D435 mode supported by both sensors, without image upscaling.
  * RGB supports up to60 Hz here; depth supports up to90 Hz. Our paired
@@ -21,6 +24,15 @@ export const D435:Calibration=Object.freeze({
   depthNoiseReferenceFx:width/(2*Math.tan(87*Math.PI/360)),
   depthEncoding:'axial-f32-le-rgba8',
 });
+
+export function d435Calibration(resolution:CameraResolution):Calibration {
+  const mode=D435_PAIRED_RESOLUTIONS.find(mode=>mode.id===resolution);
+  if(!mode)throw new Error('Unsupported D435 paired resolution');
+  const {width,height}=mode;
+  return {...D435,width,height,fx:D435.fx*width/D435.width,fy:D435.fy*height/D435.height,
+    rgbFx:D435.rgbFx*width/D435.width,rgbFy:D435.rgbFy*height/D435.height,
+    cx:(width-1)/2,cy:(height-1)/2,depthNoiseReferenceFx:D435.fx*width/D435.width};
+}
 
 /** CPU-backed WebGL sampling preserves physical optics and native disparity noise. */
 export const SOFTWARE_CAMERA:Calibration=Object.freeze({

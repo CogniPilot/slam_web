@@ -9,7 +9,7 @@ import type {InitialSensorFrame,SensorFrame} from '../src/types';
 
 // Actual compiler-exported programs on actual captured D435 frames. Both come
 // from local deliveries, so the check runs only where they exist.
-// Opt in explicitly: the real programs take minutes per frame in V8.
+// Opt in explicitly: compiler deliveries and captured frames are local assets.
 const exportsRoot=process.env.SLAM_NATIVE_EXPORTS??'';
 const flight=process.env.SLAM_NATIVE_FLIGHT??'dev/artifacts/modelica-rendered-flight-frames/flight-FOUpJK';
 const available=!!exportsRoot&&existsSync(join(exportsRoot,'init-named/layout.json'))&&existsSync(join(exportsRoot,'step-named/layout.json'))&&existsSync(join(flight,'manifest.json'));
@@ -54,6 +54,9 @@ describe.skipIf(!available)('native SLAM programs on captured flight frames',()=
         features:result.estimate.features?.length,points:result.estimate.points.length,status:result.status});
       expect(result.estimate.quaternion).toHaveLength(4);
       expect(Math.abs(Math.hypot(...result.estimate.quaternion)-1)).toBeLessThan(1e-6);
+      expect(result.estimate.features!.length).toBeGreaterThan(0);
+      expect(result.estimate.points.length).toBeGreaterThan(0);
+      expect(Math.hypot(result.estimate.x,result.estimate.y,result.estimate.z)).toBeGreaterThan(0);
     }
     console.log(JSON.stringify({scope:'Actual Rumoca native_step exports on actual captured flight frames',initMs:Math.round(initMs),log,models:Object.fromEntries(Object.entries(manifest.models).map(([k,v])=>[k,{model:v.model,pages:v.pages,inputs:Object.keys(v.inputs),outputs:v.outputs.map(o=>o.name),namedOutputs:v.model_outputs.length,stateRuns:v.state_runs.length}])),results},null,1));
   },900_000);

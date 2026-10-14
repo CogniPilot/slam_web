@@ -39,6 +39,20 @@ it('publishes content-addressed gzip blobs shared between models',()=>{
   expect(manifest.models.step.files.y).toMatchObject({bytes:16,encoding:'gzip'});
 });
 
+it('reads carried Real, Integer and Boolean state from the compiler-published input cells',()=>{
+  const runs=[
+    {name:'position',lane:'f64',previous:64,next:0,count:3},
+    {name:'epoch',lane:'i64',previous:1040,next:1104,count:1},
+    {name:'occupied',lane:'u8',previous:1060,next:1120,count:4},
+    {name:'uncarried',lane:'f64',previous:160,next:48,count:1},
+  ];
+  const compact=compactLayout('in-place',{...layout,state_runs:runs,
+    carried:[0,64,24],carried_lanes:[1104,1040,8,1120,1060,4]});
+  expect(compact.state_runs.map(run=>run.next)).toEqual([64,1040,1060,48]);
+  expect(compactLayout('copy',{...layout,state_runs:runs}).state_runs).toEqual(runs);
+  expect(()=>compactLayout('split',{...layout,state_runs:runs,carried:[0,64,16]})).toThrow('splits a named state run');
+});
+
 it('converts rotation matrices to unit quaternions',()=>{
   expect(quaternionFromRotation([1,0,0,0,1,0,0,0,1])).toEqual([1,0,0,0]);
   const q=quaternionFromRotation([0,-1,0,1,0,0,0,0,1]);

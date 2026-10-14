@@ -11,9 +11,9 @@ export async function openModelicaPropagation(page:Page,packedReadback?:boolean,
  if(packedReadback!==undefined)await page.evaluate(enabled=>(window as any).__slamLab.runtime.world.setSensorPackedReadback(enabled),packedReadback);
  if(readback!==undefined)await page.evaluate(mode=>(window as any).__slamLab.runtime.world.setSensorReadback(mode),readback);
  const source=readFileSync('models/Estimation/Inertial/ModelicaInertial.mo','utf8');
- const prepared=await page.evaluate(source=>{const lab=(window as any).__slamLab;return lab.ready&&lab.project.runtime==='modelica'&&lab.project.algorithm===source;},source);
+ const prepared=await page.evaluate(source=>{const lab=(window as any).__slamLab;return lab.ready&&lab.project.runtime==='modelica'&&lab.project.algorithm===source&&lab.project.cameraResolution==='848x480';},source);
  if(!prepared){
- const project=await page.evaluate(source=>{const project=structuredClone((window as any).__slamLab.project);project.name='Reference Modelica propagation';project.algorithm=source;project.algorithmPreset='Modelica inertial propagation';project.runtime='modelica';delete project.algorithmArtifact;delete project.entryPoint;project.modelicaSources=Object.fromEntries(Object.entries(project.modelicaSources??{}).filter(([path])=>path.startsWith('models/Libraries/CogniPilot/')));delete project.mainSourcePath;return project;},source);
+ const project=await page.evaluate(source=>{const project=structuredClone((window as any).__slamLab.project);project.name='Reference Modelica propagation';project.cameraResolution='848x480';project.algorithm=source;project.algorithmPreset='Modelica inertial propagation';project.runtime='modelica';delete project.algorithmArtifact;delete project.entryPoint;project.modelicaSources=Object.fromEntries(Object.entries(project.modelicaSources??{}).filter(([path])=>path.startsWith('models/Libraries/CogniPilot/')));delete project.mainSourcePath;return project;},source);
  await page.locator('#open').setInputFiles({name:'modelica-propagation.slam.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(project))});
  await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.project.name==='Reference Modelica propagation'&&lab.ready;}),{timeout:90000}).toBe(true);
  }

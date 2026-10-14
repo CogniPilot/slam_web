@@ -14,6 +14,7 @@ import { defaultGraph, type Graph } from './graph';
 import type {InertialSessionMetadata} from './modelica-inertial-session';
 import {modelicaModelsSources} from './modelica-models-library';
 import {validateSensorRates,type SensorRates} from './sensor-clock';
+import {D435_PAIRED_RESOLUTIONS,type CameraResolution} from './camera-profile';
 import {checkedRGBDSlamWorkspace,type RGBDSlamWorkspace} from './modelica-slam-workspace';
 const modelicaHarris=`${imageProfile}\n${harrisNative}\n${harrisProfile}`;
 export const detectors: Record<string,string> = { 'Modelica Harris · integration pending':modelicaHarris, 'Modelica FAST · integration pending':`${imageProfile}\n${fastNative}\n${fastProfile}` };
@@ -55,6 +56,7 @@ export interface Project {
   detectorArtifact?:unknown;
   sceneDetail?:SceneDetail;
   sensorRates?:SensorRates;
+  cameraResolution?:CameraResolution;
   lidarEnabled?:boolean;
   depthCloudEnabled?:boolean;
   carsEnabled?:boolean;
@@ -69,9 +71,10 @@ export const defaultProject = (_mobile=false): Project => ({
   version:1,
   name:'My quadrotor SLAM',
   environment:'city',
-  // Economical graphics (15 Hz RGB-D) is the default on every device so the
-  // simulation stays close to real time; phones only change the layout.
+  // Economical graphics and the smallest paired D435 mode reduce processing;
+  // phones only change the layout.
   sceneDetail:'low',
+  cameraResolution:'424x240',
   depthCloudEnabled:false,
   lidarEnabled:false,
   vehicleCount:1,
@@ -105,6 +108,7 @@ export function parseProject(text: string): Project {
   if(p.runtime!=='modelica'||p.detectorLanguage!=='modelica'||p.graph?.nodes?.some((n:any)=>n.kind==='python'))throw new Error('This project uses a retired runtime. Convert its algorithm, detector and custom nodes to Modelica before opening it. Your saved source has not been changed.');
   if(!['city','warehouse','courtyard','tokyo','asset-city','big-city'].includes(p.environment)||!Number.isInteger(p.seed)) throw new Error('Invalid project settings');
   if(p.sceneDetail!==undefined&&!['low','medium','high'].includes(p.sceneDetail))throw new Error('Invalid scene detail level');
+  if(p.cameraResolution!==undefined&&!D435_PAIRED_RESOLUTIONS.some(mode=>mode.id===p.cameraResolution))throw new Error('Invalid D435 camera resolution');
   if(p.vehicleCount!==undefined&&p.vehicleCount!==1&&p.vehicleCount!==2)throw new Error('Vehicle count must be one or two');
   if(p.slamBackend!==undefined&&!['inertial','native'].includes(p.slamBackend))throw new Error('Invalid estimator backend');
   if(p.vehicleCount===2){p.modelicaSources??={};p.modelicaSources[offsetQuadrotorPath]??=offsetQuadrotor;}

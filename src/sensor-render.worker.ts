@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 import {World,D435} from './world';
-import {SOFTWARE_CAMERA,type SensorProfileSelection} from './camera-profile';
+import {SOFTWARE_CAMERA,type CameraResolution,type SensorProfileSelection} from './camera-profile';
 import type {Calibration,Environment,SceneDetail,Truth} from './types';
 import type {LidarScan,LidarTimings} from './lidar';
 import type {DepthCloud} from './depth-cloud';
@@ -40,14 +40,15 @@ export interface SensorRenderResult {
   graphics:GraphicsInfo;
   gpuProfile?:GpuSensorProfile;
 }
-type Message=SensorRenderSettings&{id:number;type:string;base?:string;truth?:Truth;otherTruth?:Truth;actorMotion?:ActorMotionFrame;lidarEnabled?:boolean;profileGpu?:boolean;sensorProfile?:SensorProfileSelection;denseCloudReadback?:boolean};
+type Message=SensorRenderSettings&{id:number;type:string;base?:string;truth?:Truth;otherTruth?:Truth;actorMotion?:ActorMotionFrame;lidarEnabled?:boolean;profileGpu?:boolean;sensorProfile?:SensorProfileSelection;cameraResolution?:CameraResolution;denseCloudReadback?:boolean};
 const scope=self as unknown as DedicatedWorkerGlobalScope;
 const maximumPending=8;
 let world:World|undefined;
 let settings:Required<Omit<SensorRenderSettings,'depthNoise'>>&Pick<SensorRenderSettings,'depthNoise'>={vehicleCount:1,environment:'city',detail:'high',carsEnabled:true,peopleEnabled:true,environmentVisible:true,lightingMode:'day',readbackMode:'async',depthCloudEnabled:false,geometryBatching:true,packedReadback:true,skeletonSharing:true};
 
-async function configure(message:SensorRenderSettings) {
+async function configure(message:Message) {
   if(!world)throw new Error('Sensor renderer is not initialized');
+  if(message.cameraResolution&&message.sensorProfile!=='software')await world.setCameraResolution(message.cameraResolution);
   const candidate={...settings};
   if(message.vehicleCount!==undefined){
     if(message.vehicleCount!==1&&message.vehicleCount!==2)throw new Error('Vehicle count must be one or two');

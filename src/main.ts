@@ -41,7 +41,7 @@ document.querySelector('#app')!.innerHTML=`
 <div class="metrics"><div><small>SIM TIME</small><strong id="metric-time">0.00 <em>s</em></strong></div><div><small>TRAJECTORY RMSE</small><strong id="metric-ate">— <em>m</em></strong></div><div><small>FEATURES</small><strong id="metric-features">0</strong></div><div><small>MAP POINTS</small><strong id="metric-points">0</strong></div><div><small>SIM / WALL TIME</small><strong id="metric-rtf">— <em>×</em></strong></div></div></section>
 <aside class="panel editor"><div class="editor-top"><button id="files-toggle" aria-controls="source-explorer" aria-expanded="false">Files</button><div><small>MODELICA SOURCE</small><h2 id="editor-title">RGB-D / inertial SLAM</h2></div><span id="language" class="badge">Modelica · Rumoca</span></div><div class="editor-selects"><label>Preset <select id="preset" aria-label="Feature detector preset"></select></label></div><p id="editor-description">Estimate a 6-DOF pose from camera images and the airframe IMU.</p><textarea id="code" aria-label="Modelica source" spellcheck="false"></textarea><div class="editor-bottom"><span id="line-count"></span><button id="apply" disabled class="primary">Apply & reset</button></div></aside></div>
 <div class="bottom-row"><section class="panel connection"><h2>Embedded deployment</h2><p>The SLAM model compiles to an FMI-LS WebAssembly package (FMI 3 co-simulation with a wasm32-wasip2 component) that runs on embedded hosts; ROS 2 / MAVLink adapters are under development.</p><a id="download-fmu" class="button" href="#" download aria-disabled="true">Download SLAM FMU</a><button id="deploy" disabled>Deploy project</button><small id="deploy-state">Checking published packages…</small></section><section class="panel recordings"><h2>Experiments</h2><p>Record synchronized sensor frames, then rerun them through edited source.</p><button id="record" disabled>● Record dataset</button><button id="export-recording" disabled>Export dataset</button><label class="button">Replay dataset<input id="replay" type="file" accept=".json" hidden></label><button id="export-node">Export source</button><small id="record-state">Up to 300 RGB-D / IMU frames per recording</small></section></div>
-<div id="status" role="status">Loading Modelica environment…</div><details id="lesson" class="panel lesson"><summary>Lesson guide · Modelica robotics</summary><ol><li><b>Run the default experiment.</b> Modelica inertial propagation prepares automatically. Phones start in the city with Low graphics; desktops use Balanced graphics. Click Run to start; no initial Apply is needed. Test physics and camera data. Native feature detection is pending. This baseline has no visual localization, map or loop closure; full Modelica SLAM integration is pending.</li><li><b>Edit Modelica.</b> Physics, detector and estimator source use Rumoca diagnostics and highlighting. Apply resets the experiment.</li><li><b>Save your work.</b> Projects save locally and can be downloaded and reopened. Full Modelica SLAM execution integration is pending.</li></ol><p>Select sensor rates in Configuration. RGB and depth share a simulation clock; IMU, GPS and LiDAR use their selected rates. Physics waits for every sensor event before advancing. Three.js presents the world independently at a target of 30 FPS. The camera uses 848×480 pinhole optics with stereo disparity noise; the D435 has no IMU, so IMU measurements belong to the airframe. Traffic, pedestrians and lighting vary the scene. Open the site to use the browser environment.</p></details></main>`;
+<div id="status" role="status">Loading Modelica environment…</div><details id="lesson" class="panel lesson"><summary>Lesson guide · Modelica robotics</summary><ol><li><b>Run the default experiment.</b> Modelica inertial propagation prepares automatically. New projects start in the city with Economical graphics and 424×240 RGB-D. Click Run to start; no initial Apply is needed. Test physics and camera data. Native feature detection is pending. This baseline has no visual localization, map or loop closure; full Modelica SLAM integration is pending.</li><li><b>Edit Modelica.</b> Physics, detector and estimator source use Rumoca diagnostics and highlighting. Apply resets the experiment.</li><li><b>Save your work.</b> Projects save locally and can be downloaded and reopened. Full Modelica SLAM execution integration is pending.</li></ol><p>Select sensor rates in Configuration. RGB and depth share a simulation clock; IMU, GPS and LiDAR use their selected rates. Physics waits for every sensor event before advancing. Three.js presents the world independently at a target of 30 FPS. Select a paired D435 resolution in Configuration. The camera uses pinhole optics with stereo disparity noise; the D435 has no IMU, so IMU measurements belong to the airframe. Traffic, pedestrians and lighting vary the scene. Open the site to use the browser environment.</p></details></main>`;
 
 const el=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id)! as T;
 el('environment').insertAdjacentHTML('afterend','<select id="scene-detail" aria-label="Graphics quality" aria-describedby="graphics-budget"><option value="low">Low · economical</option><option value="medium">Medium · balanced</option><option value="high">High · showcase</option></select>');
@@ -107,7 +107,7 @@ const performanceMonitor=new BrowserPerformanceMonitor({targetFps:30,onUpdate:s=
 }});
 runtime.onSensor=()=>performanceMonitor.captured();runtime.onLidar=()=>performanceMonitor.lidarCaptured();
 const code=el<HTMLTextAreaElement>('code');
-const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
+const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,onResolutionChange:changeCameraResolution,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
 const sourceEditor=createSourceEditor(code);
 const runModelLabel=document.createElement('label');runModelLabel.className='run-model';runModelLabel.textContent='Run model';
 const runModel=document.createElement('select');runModel.id='run-model';runModel.setAttribute('aria-label','Run model');
@@ -466,6 +466,12 @@ el<HTMLSelectElement>('scene-detail').onchange=async e=>{
     compiling=false;configuration.setBusy(false);disableRun(!ready);syncApplyButton();el<HTMLButtonElement>('reset').disabled=false;el<HTMLSelectElement>('scene-detail').disabled=false;
   }
 };
+async function changeCameraResolution(resolution:NonNullable<typeof project.cameraResolution>) {
+  project.cameraResolution=resolution;
+  changed();
+  await compile();
+  configuration.sync(project);
+}
 async function changeSensorRates(rates:SensorRates|undefined) {
   if(rates)project.sensorRates={...rates};else delete project.sensorRates;
   changed(false);configuration.sync(project);
@@ -526,6 +532,7 @@ async function compile() {
   }
   catch(error){ready=false;status(String(error),true);}
   finally {
+    configuration.sync(project);
     compiling=false;configuration.setBusy(false);disableRun(!ready);el<HTMLButtonElement>('apply').disabled=false;el<HTMLButtonElement>('reset').disabled=false;
     el<HTMLButtonElement>('step').disabled=!ready;
     // A failed fleet build leaves one vehicle; the selector must not offer a second.
@@ -612,11 +619,6 @@ el('keyboard-mode').addEventListener('change',()=>{
 });
 el('slam-backend').onchange=async()=>{
   project.slamBackend=el<HTMLSelectElement>('slam-backend').value as 'inertial'|'native';
-  if(project.slamBackend==='native'&&!project.sensorRates){
-    // Every held IMU interval is one evaluation of the native programs; start
-    // from the slowest IMU rate unless custom rates were chosen deliberately.
-    project.sensorRates={...sensorRates(project),imuHz:30};configuration.sync(project);
-  }
   changed();await compile();
 };
 el('vehicle-count').onchange=async()=>{

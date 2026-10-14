@@ -9,7 +9,9 @@ async function execute(message: any) {
     await module.default({ module_or_path: `${message.base}vendor/rumoca/rumoca_bind_wasm_bg.wasm` });
     const loaded=JSON.parse(module.sync_workspace_sources(JSON.stringify(message.workspaceSources??{})));
     if(loaded.error_count)throw new Error('Rumoca could not load the flight library: '+loaded.skipped_files.join(', '));
-    const candidate = module.WasmSimulationSession.withInteractiveOptions(message.source, message.modelName??'LabQuadrotor', 0.005, 'rk-like', 1e-8, 1e-6, '[["forward",0],["left",0],["up",0],["yaw",0]]');
+    // This is the adaptive solver's initial step hint, not the sensor clock or
+    // a fixed integration step. Keep its error tolerances unchanged.
+    const candidate = module.WasmSimulationSession.withInteractiveOptions(message.source, message.modelName??'LabQuadrotor', 0.01, 'rk-like', 1e-8, 1e-6, '[["forward",0],["left",0],["up",0],["yaw",0]]');
     // Validate the teaching model's interface before replacing the current session.
     let initial;
     try {initial=readPhysicsSnapshot(candidate,true);} catch(error){candidate.free();throw error;}

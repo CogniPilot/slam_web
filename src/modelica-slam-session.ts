@@ -9,6 +9,7 @@ export interface SlamNativeResult {
   status:Record<string,number|boolean>;
 }
 type CameraInputs=Pick<SlamIntervalFrame,'rgbCalibration'|'depthCalibration'|'depthUnits'|'opticalToBody'|'cameraOriginBody'|'disparityNoise'|'noiseReferenceFx'|'baseline'>;
+interface ImageObservation {features:number[][];current:number[][];previous:number[][];matchCount:number|undefined}
 
 /** Drives the compiler-exported D435FastSLAMInitialize and D435FastSLAMStep
  * programs: one Initialize evaluation on the time-zero image, then one Step
@@ -19,14 +20,15 @@ export class ModelicaSlamSession {
   private frames=0;
   /** End time of the last evaluated interval; the model checks continuity to 1e-12. */
   private clock=0;
-  private constructor(readonly manifest:SlamNativeManifest,private readonly initialize:SlamNativeProgram,private readonly step:SlamNativeProgram){}
+  private initial!:Estimate;
+  private constructor(readonly manifest:SlamNativeManifest,private readonly step:SlamNativeProgram){}
 
   static async create(manifest:SlamNativeManifest,fetchFile:SlamNativeFetch,initial:SlamInitialFrame,progress:(text:string)=>void=()=>{}){
     progress('Loading native SLAM initialization program');
     const initialize=await SlamNativeProgram.load(manifest.models.initialize,fetchFile);
     progress('Loading native SLAM step program');
     const step=await SlamNativeProgram.load(manifest.models.step,fetchFile);
-    const session=new ModelicaSlamSession(manifest,initialize,step);
+    const session=new ModelicaSlamSession(manifest,step);
     progress('Initializing native SLAM on the first camera image');
     session.writeCamera(initialize,initial);
     session.writeImage(initialize,initial);
@@ -38,17 +40,18 @@ export class ModelicaSlamSession {
     if(status!==0)throw new Error(`Native SLAM initialization returned status ${status}`);
     initialize.transferTo(step);
     session.epoch=initial.imageEpoch;session.clock=initial.frameTime;
+    session.initial=session.estimateFrom(initialize,[]);
     progress(`Native SLAM initialized in ${(performance.now()-started).toFixed(0)} ms`);
     return session;
   }
 
-  get initialEstimate():Estimate {return this.estimateFrom(this.initialize,[]);}
+  get initialEstimate():Estimate {return structuredClone(this.initial);}
 
   advance(frame:SlamIntervalFrame):SlamNativeResult {
     if(frame.imageEpoch<=this.epoch)throw new Error('Native SLAM requires a newer camera image epoch for each frame');
     this.writeCamera(this.step,frame);
     this.writeImage(this.step,frame);
-    const stepMs:number[]=[];let imageStatus:Record<string,number|boolean>|undefined;
+    const stepMs:number[]=[];let imageStatus:Record<string,number|boolean>|undefined,image:ImageObservation|undefined;
     for(const interval of frame.intervals){
       if(!(interval.dt>0&&interval.dt<=.2))throw new Error('Native SLAM accepts IMU intervals of at most 0.2 s');
       // Feed the model's own continuous clock: previous end plus h, exactly.
@@ -63,11 +66,11 @@ export class ModelicaSlamSession {
       stepMs.push(performance.now()-started);
       if(status!==0)throw new Error(`Native SLAM step returned status ${status} at t=${interval.time.toFixed(4)} s (image epoch ${frame.imageEpoch})`);
       // The first interval of a frame carries the new image; its flags describe the image work.
-      imageStatus??=this.step.derived();
+      if(!imageStatus){imageStatus=this.step.derived();image=this.imageFrom(this.step);}
     }
     this.epoch=frame.imageEpoch;this.frames++;
     const status={...this.step.derived(),...(imageStatus?{imageCompleted:imageStatus.imageCompleted,mappingAccepted:imageStatus.mappingAccepted,graphCorrectionAccepted:imageStatus.graphCorrectionAccepted,publicationReason:imageStatus.publicationReason}:{})};
-    return {estimate:this.estimateFrom(this.step,stepMs,status),stepMs,status};
+    return {estimate:this.estimateFrom(this.step,stepMs,status,image),stepMs,status};
   }
 
   private writeCamera(program:SlamNativeProgram,frame:CameraInputs){
@@ -82,31 +85,30 @@ export class ModelicaSlamSession {
     if(rgb.length!==color.width*color.height*3||z.length!==depth.width*depth.height)
       throw new Error(`Native SLAM program expects ${rgb.length/3} RGB and ${z.length} depth samples; the camera delivers ${color.width}×${color.height} and ${depth.width}×${depth.height}`);
     const rowBytes=color.width*3;
-    for(let row=0;row<color.height;row++){
-      const source=row*color.strideBytes,target=row*rowBytes;
-      for(let i=0;i<rowBytes;i++)rgb[target+i]=frame.rgb[source+i];
-    }
+    if(color.strideBytes===rowBytes)rgb.set(frame.rgb.subarray(0,rgb.length));
+    else for(let row=0;row<color.height;row++)rgb.set(frame.rgb.subarray(row*color.strideBytes,row*color.strideBytes+rowBytes),row*rowBytes);
     const stride=depth.strideBytes/2;
-    for(let row=0;row<depth.height;row++){
-      const source=row*stride,target=row*depth.width;
-      for(let i=0;i<depth.width;i++)z[target+i]=frame.depth[source+i];
-    }
+    if(stride===depth.width)z.set(frame.depth.subarray(0,z.length));
+    else for(let row=0;row<depth.height;row++)z.set(frame.depth.subarray(row*stride,row*stride+depth.width),row*depth.width);
     program.integer('imageEpoch')[0]=BigInt(frame.imageEpoch);
   }
-  private estimateFrom(program:SlamNativeProgram,stepMs:number[],status?:Record<string,number|boolean>):Estimate {
+  private imageFrom(program:SlamNativeProgram):ImageObservation {
+    const mask=program.output('trackingEnabled');
+    return {features:selectedRows(program.output('features'),program.output('featureEnabled'),3),
+      current:selectedRows(program.output('trackingCurrentPixel'),mask,2),previous:selectedRows(program.output('trackingReferencePixel'),mask,2),
+      matchCount:program.output('matchCount')?.[0]};
+  }
+  private estimateFrom(program:SlamNativeProgram,stepMs:number[],status?:Record<string,number|boolean>,image=this.imageFrom(program)):Estimate {
     const position=program.stateRun('estimator.localization.estimator.position')?.view??program.y(0,3);
     const rotation=program.stateRun('estimator.localization.estimator.rotation')?.view??program.y(6,9);
     const [x,y,z]=Array.from(position as Float64Array);
     for(const value of [x,y,z])if(!Number.isFinite(value))throw new Error('Native SLAM produced a non-finite position');
     const quaternion=program.output('nextQuaternion');
     const derived=status??program.derived();
-    const features=selectedRows(program.output('features'),program.output('featureEnabled'),3);
-    const mask=program.output('trackingEnabled');
-    const current=selectedRows(program.output('trackingCurrentPixel'),mask,2),previous=selectedRows(program.output('trackingReferencePixel'),mask,2);
+    const {features,current,previous,matchCount}=image;
     const diagnostics:Record<string,number|string>={runtime:'Rumoca native SLAM program',model:program.layout.model,imageEpoch:this.epoch,frames:this.frames,
       stepCalls:stepMs.length,stepMsMax:stepMs.length?Math.max(...stepMs):0,stepMsTotal:stepMs.reduce((a,b)=>a+b,0)};
     for(const [name,value] of Object.entries(derived))diagnostics[name]=typeof value==='boolean'?(value?1:0):value;
-    const matchCount=program.output('matchCount')?.[0];
     if(matchCount!==undefined)diagnostics.matchCount=matchCount;
     const accepted=derived.accepted===true||derived.accepted===1;
     const {points,confidence:mapConfidence}=this.mapPoints(program);
