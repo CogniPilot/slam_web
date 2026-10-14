@@ -89,6 +89,14 @@ into WASM, JavaScript (including TypeScript, libraries and generated glue), GC
 and native/unattributed time, with the hottest functions per worker. Idle time
 is excluded; these percentages do not measure GPU utilization or wall time.
 
+`SLAM_PROFILE_SESSION_TIMING=1` records `session-timing.json`, separating actual
+Rumoca API calls (`advance_to`, input updates and state serialization), worker
+receive-to-send time and RPC wall time. These intervals overlap; do not add them.
+`SLAM_PROFILE_EXECUTION_RECEIPT=1` records the physics compiler revision and its
+execution receipt before and after measurement. To compare another browser
+compiler without changing deployed files, set `SLAM_PROFILE_COMPILER_DIR` to a
+directory containing its paired JS/WASM bindings; their hashes are recorded.
+
 A sampled run on an RTX 3090 with Chromium 154 (15 Hz camera, 90 Hz IMU,
 848 × 480; ten warmup frames and sixty measured frames) attributed 85.2% of
 active self samples to WASM, 6.8% to JavaScript, 0.8% to GC and 7.2% to browser
@@ -102,6 +110,49 @@ An uninstrumented production build with the existing browser compiler pin,
 (0.88× realtime). Mean frame work was 175 ms physics, 45 ms native SLAM and
 6.5 ms sensors. Realtime is not yet achieved; the lower raster trades away
 visual features, and this throughput check does not qualify localization accuracy.
+
+A follow-up profile of app `559a0ff`, Modelica `d2ebf66` and the deployed browser
+compiler `2aaed750` on October 14, 2026 measured the following warehouse circuit.
+The shared host used a Ryzen 9 5950X, RTX 3090 and Chromium 154. All runs used
+424 × 240, Economical graphics, one drone, a 5 Hz camera, no LiDAR or depth-cloud
+display, ten warmup frames, and sequential unpaced steps with CPU sampling off.
+The 30 Hz run also enabled API timing; host contention makes these measurements
+comparisons rather than guaranteed throughput.
+
+| IMU rate | Real-time factor | Frame work | Physics | Native SLAM | Camera capture |
+| --- | --- | --- | --- | --- | --- |
+| 10 Hz | 0.63× | 319 ms | 237 ms | 74 ms | 5.8 ms |
+| 30 Hz | 0.51× | 394 ms | 255 ms | 132 ms | 5.2 ms |
+| 90 Hz | 0.30× | 662 ms | 332 ms | 323 ms | 5.2 ms |
+
+A separate 180-frame CPU profile at 10 Hz IMU attributed 90.7% of active self
+samples to WASM and 3.6% to all JavaScript. API timing over 90 frames measured
+19.73 seconds in physics `advance_to`, 0.47 seconds updating physics inputs,
+and 0.18 seconds serializing physics state, across 27.26 wall seconds. Physics
+worker receive-to-send time was 20.41 seconds versus 20.45 seconds for its RPCs.
+The primary optimization target is physics execution; messaging and TypeScript
+are small. Prediction-only native SLAM calls cost about 16 ms per IMU interval,
+so high IMU rates also impose a substantial processing floor.
+
+A longer 320-frame run covered 64 simulated seconds at 0.66×, including three
+loop edges. Its first and last 60 frames averaged 301 and 305 ms respectively;
+the measured slowdown did not grow substantially as the map developed. Mean
+work was 227 ms physics, 69 ms native SLAM and 5.2 ms camera capture. This
+particular circuit measured 0.33 m position RMSE and 0.73 m maximum error.
+
+Comparing browser compiler `9f507597` with the same app, models and native SLAM
+assets measured 0.59×. Its physics receipt reported 33,662 additional declined
+whole-expression executions during the measured window, and assignment-schedule
+declines for unsupported assertion-predicate outputs, including calls in
+`Control.Multirotor.LogLinear`. A compiled engine receipt does not establish
+that every physics expression uses compiled execution. This comparison does not
+justify upgrading the deployed compiler for speed by itself.
+
+Economical graphics retains explicitly selected sensor rates. In Configuration,
+**Use quality defaults** restores 5 Hz camera and 10 Hz IMU while Economical is
+selected; camera resolution remains independently selectable. The measurements
+above remain below real time at those defaults. Raw profiles are stored under
+`$HOME/scratch/slam_web/profiles/current-warehouse-424-*` on the profiling host.
 
 ## Warehouse tracking regression
 

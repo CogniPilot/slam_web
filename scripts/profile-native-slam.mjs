@@ -1,9 +1,11 @@
 import {chromium} from '@playwright/test';
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,writeFile,readFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
 import {join} from 'node:path';
 import {homedir} from 'node:os';
 import {D435_PAIRED_RESOLUTIONS} from '../src/camera-resolutions.mjs';
 import {summarizeCpuProfiles} from './browser-profile-summary.mjs';
+import {startSessionTiming,startRpcTiming} from '../dev/profile-session-instrumentation.mjs';
 const output=process.argv[2]??join(homedir(),'scratch/slam_web/profiles/browser-native-slam');
 const url=process.env.SLAM_PROFILE_URL??'http://127.0.0.1:4173';
 const cameraHz=Number(process.env.SLAM_PROFILE_CAMERA_HZ??5);
@@ -21,6 +23,21 @@ const browser=await chromium.launch({headless:true,executablePath:process.env.CH
 const errors=[];
 try{
   const page=await browser.newPage({viewport:{width:1440,height:1000}});
+  // Review another compiler in this browser only; keep served assets and native
+  // SLAM programs unchanged, and record the exact compared compiler bytes.
+  const compilerDirectory=process.env.SLAM_PROFILE_COMPILER_DIR;
+  if(compilerDirectory){
+    const files=new Map(),manifest=[];
+    for(const name of ['rumoca_bind_wasm.js','rumoca_bind_wasm_bg.wasm']){
+      const bytes=await readFile(join(compilerDirectory,name));files.set(name,bytes);
+      manifest.push({file:name,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
+    }
+    await page.route('**/vendor/rumoca/rumoca_bind_wasm*',route=>{
+      const name=new URL(route.request().url()).pathname.split('/').at(-1),bytes=files.get(name);
+      return bytes?route.fulfill({body:bytes,contentType:name.endsWith('.wasm')?'application/wasm':'text/javascript'}):route.continue();
+    });
+    await writeFile(join(output,'compiler-comparison.json'),JSON.stringify(manifest,null,2));
+  }
   page.on('pageerror',e=>errors.push(e.message));
   page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   await page.goto(url);
@@ -64,6 +81,12 @@ try{
       workers.push({sessionId,url:target.url});
     }
   }
+  const sessionTiming=process.env.SLAM_PROFILE_SESSION_TIMING==='1'
+    ?await startSessionTiming(root,call,new URL('.',url).href):undefined;
+  if(sessionTiming)await page.evaluate(startRpcTiming);
+  const executionReceipt=()=>page.evaluate(()=>window.__slamLab.runtime.physics.call('executionReceipt'));
+  const executionBefore=process.env.SLAM_PROFILE_EXECUTION_RECEIPT==='1'?await executionReceipt():undefined;
+  const cpuBefore=(await root.send('SystemInfo.getProcessInfo')).processInfo;
   const report=await page.evaluate(async({count,cameraHz,tour})=>{
     const lab=window.__slamLab,r=lab.runtime,rows=[];
     const step=r.slam.step.bind(r.slam);let stepMs=[];
@@ -86,6 +109,8 @@ try{
       const reference=lab.latest.truth?r.referenceTruth(lab.latest.truth):undefined;
       rows.push({sequence:frame.sequence,time:frame.time,wallMs:performance.now()-started,
         nodeMs:{...r.lastTimings},workerMs:structuredClone(r.lastWorkerTimings),
+        transport:structuredClone(r.lastTransportTimings),camera:{...r.world.captureTimings},
+        display:lab.viewer?.latest??lab.performanceMonitor.latest,
         stepMs:stepMs.slice(),position:[estimate.x,estimate.y,estimate.z],truth:structuredClone(lab.latest.truth),
         features:estimate.features?.length,points:estimate.points.length,
         diagnostics:{...estimate.diagnostics},tracking:estimate.tracking?.accepted,
@@ -95,6 +120,12 @@ try{
     return {elapsedMs,simulationSeconds,rtf:simulationSeconds/(elapsedMs/1000),rows,
       pendingNodes:Array.from(r.pendingNodes),final:rows.at(-1)};
   },{count,cameraHz,tour});
+  const cpuAfter=(await root.send('SystemInfo.getProcessInfo')).processInfo;
+  const executionAfter=executionBefore?await executionReceipt():undefined;
+  const previousCpu=new Map(cpuBefore.map(info=>[info.id,info.cpuTime]));
+  const cpuSeconds=cpuAfter.reduce((sum,info)=>sum+Math.max(0,info.cpuTime-(previousCpu.get(info.id)??info.cpuTime)),0);
+  if(sessionTiming)await writeFile(join(output,'session-timing.json'),JSON.stringify({
+    ...await sessionTiming.finish(),rpc:await page.evaluate(()=>window.__profileRpcTiming.finish())},null,2));
   const profiles=[];
   if(cpuProfiling){
     const profile=(await main.send('Profiler.stop')).profile;
@@ -111,6 +142,8 @@ try{
   const mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
   const sorted=report.rows.map(r=>r.wallMs).sort((a,b)=>a-b);
   const summary={recordedAt:new Date().toISOString(),browser:browser.version(),environment,tour,resolution,cameraHz,imuHz,frames:count,cpuProfiling,preparation,
+    sessionTiming:!!sessionTiming,browserCpu:{seconds:cpuSeconds,meanActiveCores:cpuSeconds/(report.elapsedMs/1000)},
+    ...(executionBefore?{physicsExecution:{before:executionBefore,after:executionAfter}}:{}),
     meanFrameMs:mean(sorted),p50FrameMs:sorted[Math.floor(sorted.length*.5)],p95FrameMs:sorted[Math.floor(sorted.length*.95)],
     meanNativeMs:mean(report.rows.map(r=>r.diagnostics.stepMsTotal)),
     meanImageStepMs:mean(report.rows.map(r=>r.stepMs.at(-1))),
