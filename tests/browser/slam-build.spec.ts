@@ -9,7 +9,8 @@ import {readModelicaModelsLibrary} from '../../scripts/modelica-models-library.m
 import {rgbdSlamNativeSourceManifest as manifest} from '../../src/modelica-slam-source-manifest.mjs';
 
 const candidate=process.env.SLAM_BUILD_CANDIDATE;
-test.setTimeout(120000);
+// Startup may take 90 s; the compiler's own deadline is another 60 s.
+test.setTimeout(180000);
 const sha=(text:string)=>createHash('sha256').update(text).digest('hex');
 const progress=(message:string)=>{if(process.env.SLAM_WORKSPACE_PROGRESS)appendFileSync(process.env.SLAM_WORKSPACE_PROGRESS,`${new Date().toISOString()} build: ${message}\n`);};
 async function openWorkspace(page:Page){
@@ -36,6 +37,9 @@ async function openWorkspace(page:Page){
   }),fixture);
   await page.goto('/');
   await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.initialized&&lab.ready;}),{timeout:90000}).toBe(true);
+  // This gate checks compiler ownership/recovery. Avoid competing software
+  // viewer rendering while the full source compiles on a small CI runner.
+  await page.evaluate(()=>(window as any).__slamLab.viewer?.presentationVisible(false));
   await page.getByRole('button',{name:'▶ Run',exact:true}).click();
   progress('baseline ready');
   await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
@@ -59,10 +63,14 @@ test('static application requests an exact saved-source WASM build and preserves
   expect(receipt.sourceSha256).toBe(before.sourceSha256);
   expect(receipt.compiler.version).toBe('0.10.2');
   expect(receipt.status).toBe('failed');
-  // The pinned main package exposes native compilation but its frontend still
-  // panics on the full SLAM source; the receipt names the model that trapped.
+  // The pinned frontend can trap or reach the app's bounded build deadline on
+  // a slower runner. Both must name the exact model and release the worker.
   expect(receipt.failedAt).toEqual({phase:'compiling',model:'RGBDFastSLAMReset'});
-  expect(receipt.error).toContain('Rumoca compiler trapped (unreachable) while compiling RGBDFastSLAMReset');
+  if(receipt.timedOut){
+    expect(receipt.error).toBe('Rumoca compiling RGBDFastSLAMReset timed out after 60000 ms; build worker stopped.');
+    expect(receipt.elapsedMs).toBeGreaterThanOrEqual(60000);
+  }else expect(receipt.error).toContain('Rumoca compiler trapped (unreachable) while compiling RGBDFastSLAMReset');
+  await expect.poll(()=>page.workers().some(worker=>worker.url().includes('modelica-slam-build.worker'))).toBe(false);
   expect(receipt.programs).toEqual([]);
   await expect(page.locator('#slam-build-result')).toContainText('WASM build failed');
   await expect(page.getByRole('button',{name:'Cancel build',exact:true})).toBeHidden();
@@ -72,6 +80,9 @@ test('static application requests an exact saved-source WASM build and preserves
     return {algorithm:project.algorithm,physics:project.physics,workspace:project.slamWorkspace};
   });
   expect(after).toEqual({algorithm:before.algorithm,physics:before.physics,workspace:before.workspace});
+  const sequence=await page.evaluate(()=>(window as any).__slamLab.latest?.frame.sequence??-1);
+  await page.getByRole('button',{name:'Step',exact:true}).click();
+  await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.latest?.frame.sequence??-1)).toBeGreaterThan(sequence);
   await testInfo.attach('installed-compiler-build.json',{body:JSON.stringify(receipt,null,2),contentType:'application/json'});
   await testInfo.attach('installed-build-status.png',{body:await page.locator('.slam-source-build').screenshot(),contentType:'image/png'});
   progress('installed compiler refusal verified');

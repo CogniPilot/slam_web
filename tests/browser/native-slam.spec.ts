@@ -1,5 +1,5 @@
 import {expect,test} from '@playwright/test';
-import {existsSync,readFileSync} from 'node:fs';
+import {servedNativeManifest} from './served-native-assets';
 
 // The native programs need a paired D435 size, which software rendering does
 // not provide. The selector must refuse clearly and the inertial baseline must
@@ -7,9 +7,9 @@ import {existsSync,readFileSync} from 'node:fs';
 test('native SLAM estimator refuses the software camera profile and the inertial baseline recovers',async({page})=>{
   await page.goto('/');
   await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.initialized&&lab.ready&&lab.compiling===false;}),{timeout:90000}).toBe(true);
-  const manifestPath='public/vendor/slam/manifest.json';
-  const published=existsSync(manifestPath);
-  const fmu=published&&!!JSON.parse(readFileSync(manifestPath,'utf8')).fmu;
+  const manifest=await servedNativeManifest(page);
+  const published=!!manifest;
+  const fmu=!!manifest?.fmu;
   const state=page.locator('#deploy-state');
   await expect(state).toContainText(fmu?'FMI-LS WebAssembly':'not published',{timeout:15000});
   const link=page.locator('#download-fmu');

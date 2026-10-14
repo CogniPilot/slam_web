@@ -1,13 +1,13 @@
 import {expect,test} from '@playwright/test';
-import {existsSync} from 'node:fs';
+import {servedNativeManifest} from './served-native-assets';
 import {D435_PAIRED_RESOLUTIONS} from '../../src/camera-profile';
 
 // Hardware rendering only. The run measures real in-browser evaluation cost.
 for(const mode of D435_PAIRED_RESOLUTIONS)test(`native Modelica SLAM initializes and steps live ${mode.id} RGB-D`,async({page},testInfo)=>{
-  test.skip(!existsSync('public/vendor/slam/manifest.json'),'Native SLAM assets are not published');
   test.setTimeout(900_000);
   const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto('/');
+  test.skip(!(await servedNativeManifest(page))?.profiles?.[mode.id],`Native SLAM ${mode.id} assets are not published`);
   await expect.poll(()=>page.evaluate(()=>{const lab=(window as any).__slamLab;return lab?.initialized&&lab.ready&&lab.compiling===false;}),{timeout:90000}).toBe(true);
   const profile=await page.evaluate(()=>{const w=(window as any).__slamLab.runtime.world;return {acceleration:w.graphics.acceleration,renderer:w.graphics.renderer,sensorProfile:w.sensorProfile};});
   test.skip(profile.acceleration==='software','Software rendering serves the reduced camera');
