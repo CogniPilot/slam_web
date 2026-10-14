@@ -362,7 +362,7 @@ function selectNode(node:GraphNode,showEditor=true) {
   document.querySelector<HTMLElement>('.editor-selects')!.hidden=viewingSlamFile()||node.kind!=='detector';
   const library={...estimatorModelicaSources(project),[project.mainSourcePath??'models/Main.mo']:project.algorithm};
   sourceEditor.setWorkspaceSources(viewingSlamFile()?project.slamWorkspace!.sources:library,
-    viewingSlamFile()?activeSlamFile:viewingLibraryFile()?activeLibraryFile:project.mainSourcePath??'models/Main.mo');
+    viewingSlamFile()?activeSlamFile:viewingLibraryFile()?activeLibraryFile:experimentPath(node));
   sourceEditor.setLanguage(code.readOnly?'plaintext':'modelica');
   sourceEditor.syncFromTextarea();
   el<HTMLButtonElement>('export-node').disabled=!['physics','sensor','detector','slam','evaluation','modelica'].includes(node.kind);
