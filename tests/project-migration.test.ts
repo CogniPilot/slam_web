@@ -1,5 +1,5 @@
 import {it,expect} from 'vitest';
-import {defaultProject,parseProject,detectors,algorithms,withActorMotion} from '../src/project';
+import {defaultProject,parseProject,detectors,algorithms,withActorMotion,withDefaultModels,estimatorModelicaSources} from '../src/project';
 
 it('defaults to one drone and preserves the optional fleet and editable spawn model',()=>{
  const project=defaultProject();expect(project.vehicleCount).toBe(1);
@@ -41,4 +41,27 @@ it('adds editable actor motion to old sensor sources and retains all saved custo
  const edited=restored.sensorModelica!.replace('animationRate = 0.85','animationRate = 0.52');
  expect(withActorMotion(edited)).toBe(edited);
  expect(parseProject(JSON.stringify({...restored,sensorModelica:edited})).sensorModelica).toBe(edited);
+});
+
+it('recovers current models while retaining valid settings independently of saved source',()=>{
+ const original={...defaultProject(),version:99,runtime:'retired',name:'Warehouse experiment',environment:'warehouse',seed:42,
+  cameraResolution:'640x360',sceneDetail:'medium',sensorRates:{cameraHz:90,lidarHz:10,imuHz:90,gpsHz:5},
+  lidarEnabled:true,carsEnabled:false,peopleEnabled:false,lightingMode:'night',vehicleCount:2,slamBackend:'native',
+  algorithm:'broken source',physics:'old physics',modelicaSources:{'models/Broken.mo':'bad'},graph:{nodes:[],edges:[]}};
+ const snapshot=structuredClone(original),recovered=withDefaultModels(original);
+ expect(original).toEqual(snapshot);
+ expect(recovered).toMatchObject({name:original.name,environment:'warehouse',seed:42,cameraResolution:'640x360',sceneDetail:'medium',
+  sensorRates:{cameraHz:60,lidarHz:10,imuHz:90,gpsHz:5},lidarEnabled:true,carsEnabled:false,peopleEnabled:false,lightingMode:'night',vehicleCount:2,slamBackend:'native'});
+ const defaults=defaultProject();
+ for(const field of ['algorithm','physics','detector','modelicaSources','graph','sensorModelica','evaluationModelica'] as const)expect(recovered[field]).toEqual(defaults[field]);
+ expect(withDefaultModels({...original,seed:'invalid',cameraResolution:'1x1',sensorRates:null})).toMatchObject({seed:defaults.seed,cameraResolution:defaults.cameraResolution,environment:'warehouse'});
+ expect(withDefaultModels(null)).toEqual(defaults);
+});
+it('supplies the active editable quadrotor base to estimator compilation without stale duplicates',()=>{
+ const project=defaultProject();project.physics+='\n// custom vehicle';
+ project.modelicaSources!['models/Vehicles/LabQuadrotor.mo']='stale duplicate';
+ const sources=estimatorModelicaSources(project);
+ expect(sources['models/Vehicles/LabQuadrotor.mo']).toBe(project.physics);
+ expect(sources[project.mainSourcePath!]).toBeUndefined();
+ expect(project.modelicaSources!['models/Vehicles/LabQuadrotor.mo']).toBe('stale duplicate');
 });

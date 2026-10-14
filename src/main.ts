@@ -4,7 +4,7 @@ import {poseSnapshot} from './trajectory';
 import { World } from './world';
 import { Runtime,type Metrics } from './runtime';
 import { sourceFor,setSource,nodeRuntimeLabel,type GraphNode } from './graph';
-import { algorithms,detectors,visibleDetectorPresets,defaultProject,loadProject,readSavedProject,saveProject,parseProject,download,offsetQuadrotorPath,offsetQuadrotorSource } from './project';
+import { algorithms,detectors,visibleDetectorPresets,defaultProject,readSavedProjectText,readProjectRecovery,saveProjectRecovery,withDefaultModels,estimatorModelicaSources,type ProjectRecoveryBackup,saveProject,parseProject,download,offsetQuadrotorPath,offsetQuadrotorSource } from './project';
 import type { Estimate,Pose,RunRecord,SensorFrame,Truth } from './types';
 import {ComparisonTracker,type TimedPose} from './comparison';
 import {validateSensorFrame} from './packet';
@@ -34,7 +34,7 @@ import './workspace.css';
 
 const startup=startupScreen();
 document.querySelector('#app')!.innerHTML=`
-<header><a class="brand" href="https://github.com/CogniPilot/slam_web" target="_blank" rel="noopener noreferrer" aria-label="SLAM Lab GitHub repository"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button></div><a class="powered-by" href="https://github.com/CogniPilot/rumoca" target="_blank" rel="noopener noreferrer" aria-label="Powered by Rumoca" title="Rumoca Modelica compiler"><span>Powered by</span><img src="${import.meta.env.BASE_URL}brand/rumoca.svg" width="28" height="28" alt=""></a></header>
+<header><a class="brand" href="https://github.com/CogniPilot/slam_web" target="_blank" rel="noopener noreferrer" aria-label="SLAM Lab GitHub repository"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button><button id="default-models" title="Keep settings and back up source before loading current default models">Load default models</button></div><a class="powered-by" href="https://github.com/CogniPilot/rumoca" target="_blank" rel="noopener noreferrer" aria-label="Powered by Rumoca" title="Rumoca Modelica compiler"><span>Powered by</span><img src="${import.meta.env.BASE_URL}brand/rumoca.svg" width="28" height="28" alt=""></a></header>
 <main><div class="toolbar"><div class="run-controls"><button id="run" class="primary" disabled>▶ Run</button><button id="step" disabled>Step</button><button id="reset" disabled>↺ Reset</button><select id="speed" aria-label="Simulation speed"><option value="1">1× real time</option><option value="4">4× real time</option><option value="Infinity">As fast as possible</option></select><button id="flight-control" aria-pressed="true" aria-label="Manual flight">Manual flight</button><select id="active-vehicle" aria-label="Controlled and followed drone" hidden><option value="0">Drone 1</option><option value="1">Drone 2</option></select></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option value="city">City blocks</option><option value="warehouse">Warehouse</option><option value="courtyard">Courtyard</option></select><label class="check"><input id="show-map" type="checkbox" checked>Show map</label><button id="help">Lesson guide</button></div></div>
 <div class="workspace"><section class="visuals"><div class="scene panel"><div class="panel-label"><span class="live-dot"></span>WORLD VIEW<span class="right">Three.js · orbit to explore</span></div><div id="world"></div><div class="scene-overlay"><span>QUADROTOR + D435</span><small id="flight-status">Initializing browser runtimes</small></div><div class="scene-bottom">WASD move · Q/E yaw · R/F altitude <span id="sim-time">t = 0.00 s</span></div></div>
 <div class="sensor-row"><div class="panel sensor"><div class="panel-label">RGB CAMERA<span class="right">features overlay</span></div><canvas id="rgb" width="160" height="90"></canvas><div class="sensor-foot">69° × 42° · RGBA8</div></div><div class="panel sensor"><div class="panel-label">DEPTH CAMERA<span class="right">axial depth, meters</span></div><canvas id="depth" width="160" height="90"></canvas><div class="sensor-foot">87° × 58° · 0.28–10 m</div></div><div class="panel trajectory"><div class="panel-label">TRAJECTORY<span class="right">ENU · meters</span></div><canvas id="trajectory" width="260" height="146"></canvas><div class="legend"><span class="truth-key">Truth</span><span class="estimate-key">Estimate</span><span class="compare-key">External</span></div></div></div>
@@ -119,7 +119,7 @@ async function refreshRunModels(){
   if(!Array.from(runModel.options).some(option=>option.value===entryPoint))runModel.add(new Option(entryPoint,entryPoint));
   runModel.value=entryPoint;
   try{
-    const models=await sourceEditor.simulationModels(source,entryPoint,companions);
+    const models=await sourceEditor.simulationModels(source,entryPoint,estimatorModelicaSources(project));
     if(token!==modelDiscovery||owner!==project||source!==project.algorithm||companions!==project.modelicaSources)return;
     runModel.replaceChildren(...models.map(name=>new Option(name,name)));
     if(!models.includes(entryPoint)){
@@ -231,14 +231,14 @@ const assistant=createAssistantPanel({
     const model=project.entryPoint??'ModelicaInertial',path=project.mainSourcePath??'models/Main.mo';
     return {scope:'selected runnable example',model,path,
       excluded:'Full SLAM workspace and other experiment sources are not checked.',
-      result:await sourceEditor.checkModel(project.algorithm,model,project.modelicaSources??{})};
+      result:await sourceEditor.checkModel(project.algorithm,model,estimatorModelicaSources(project))};
   },
   searchDocs:query=>documentation.search(query),
   readDocs:name=>documentation.read(name),
   simulation:assistantSimulationStatus,
   landmarks:environment=>sceneLandmarks(environment??project.environment),
   checkFile:async(path,model)=>{
-    const sources={...project.modelicaSources,...(Object.hasOwn(project.slamWorkspace?.sources??{},path)?project.slamWorkspace?.sources:{})};delete sources[path];
+    const sources={...estimatorModelicaSources(project),...(Object.hasOwn(project.slamWorkspace?.sources??{},path)?project.slamWorkspace?.sources:{})};delete sources[path];
     return {scope:'named Modelica component',path,model,result:await sourceEditor.checkModel(projectFiles()[path],model,sources)};
   },
   selectEnvironment:async environment=>{
@@ -360,7 +360,7 @@ function selectNode(node:GraphNode,showEditor=true) {
   presets.value=node.kind==='detector'?project.detectorPreset:node.kind==='slam'?project.algorithmPreset:'custom';
   if(!presets.value)presets.value='custom';presets.disabled=compiling||viewingSlamFile()||!['slam','detector'].includes(node.kind);
   document.querySelector<HTMLElement>('.editor-selects')!.hidden=viewingSlamFile()||node.kind!=='detector';
-  const library={...project.modelicaSources,[project.mainSourcePath??'models/Main.mo']:project.algorithm};
+  const library={...estimatorModelicaSources(project),[project.mainSourcePath??'models/Main.mo']:project.algorithm};
   sourceEditor.setWorkspaceSources(viewingSlamFile()?project.slamWorkspace!.sources:library,
     viewingSlamFile()?activeSlamFile:viewingLibraryFile()?activeLibraryFile:project.mainSourcePath??'models/Main.mo');
   sourceEditor.setLanguage(code.readOnly?'plaintext':'modelica');
@@ -509,10 +509,50 @@ function disableRun(disabled:boolean){
   if(count)count.disabled=compiling||assistantSimulation;
   el<HTMLSelectElement>('active-vehicle').disabled=compiling||assistantSimulation;
 }
+let compilationError:unknown,recovering=false;
+function defaultModelsFromText(text:string){
+  let saved:unknown;try{saved=JSON.parse(text);}catch{/* Invalid JSON cannot supply settings. */}
+  return withDefaultModels(saved,mobileDefaults);
+}
+function showRecoveryBackup(backup:ProjectRecoveryBackup,message:string){
+  let notice=document.getElementById('model-recovery');
+  if(!notice){notice=document.createElement('div');notice.id='model-recovery';notice.setAttribute('role','status');el('status').after(notice);}
+  const summary=document.createElement('p');summary.textContent=message;
+  const details=document.createElement('details'),label=document.createElement('summary'),reason=document.createElement('pre');
+  label.textContent='Recovery details';reason.textContent=backup.reason;details.append(label,reason);
+  const downloadBackup=document.createElement('button');downloadBackup.textContent='Download previous model';
+  downloadBackup.onclick=()=>download('previous-model.slam.json',backup.text);
+  notice.replaceChildren(summary,downloadBackup,details);
+}
+async function recoverDefaultModels(text:string,reason:unknown){
+  if(compiling||recovering||assistantSimulation)return;
+  recovering=true;localPersistenceBlocked=true;el<HTMLButtonElement>('save').disabled=true;
+  el<HTMLButtonElement>('default-models').disabled=true;el<HTMLInputElement>('open').disabled=true;
+  if(autosaveTimer)clearTimeout(autosaveTimer);autosaveTimer=undefined;
+  runtime.pause();ready=false;disableRun(true);
+  const backup:ProjectRecoveryBackup={id:crypto.randomUUID(),text,reason:String(reason),createdAt:new Date().toISOString()};
+  let backedUp=false;
+  showRecoveryBackup(backup,'Preparing current default models. Your original source is available below.');
+  try{
+    try{await saveProjectRecovery(backup);backedUp=true;}catch{/* Keep the saved project intact if durable backup is unavailable. */}
+    while(runtime.busy)await new Promise(resolve=>setTimeout(resolve,20));
+    project=defaultModelsFromText(text);projectRevision++;dirty=true;
+    await syncProject();await buildProjectScene();await compile();
+    if(ready&&backedUp){
+      try{await saveProject(project);localPersistenceBlocked=false;el<HTMLButtonElement>('save').disabled=false;}
+      catch{/* Keep recovery temporary when persistence fails. */}
+    }
+    const message=ready?'Loaded current default models; valid scene, camera and simulation settings were retained.':'Current default models also failed to prepare. Your original source is available below.';
+    showRecoveryBackup(backup,message+(localPersistenceBlocked?' Automatic saving is disabled; download your project to keep changes.':''));
+    el('saved').textContent=localPersistenceBlocked?'Original saved project preserved':'Defaults saved · original source backed up';
+    if(ready)status('Ready · current default models loaded');
+  }catch(error){status(String(error),true);showRecoveryBackup(backup,'Recovery failed. Your original source is available below. Automatic saving is disabled.');}
+  finally{recovering=false;el<HTMLButtonElement>('default-models').disabled=false;el<HTMLInputElement>('open').disabled=false;}
+}
 async function compile() {
   await initializationReady;
   if(compiling||assistantSimulation)return;
-  compiling=true;ready=false;disableRun(true);el<HTMLSelectElement>('scene-detail').disabled=true;el<HTMLSelectElement>('preset').disabled=true;runtime.pause();
+  compilationError=undefined;compiling=true;ready=false;disableRun(true);el<HTMLSelectElement>('scene-detail').disabled=true;el<HTMLSelectElement>('preset').disabled=true;runtime.pause();
   configuration.setBusy(true);
   while(runtime.busy)await new Promise(resolve=>setTimeout(resolve,20));
   const snapshot=structuredClone(project),revision=JSON.stringify(project);
@@ -530,7 +570,7 @@ async function compile() {
     syncSceneControls();
     if(!localPersistenceBlocked)try{await saveProject(project);}catch{el('saved').textContent='Cannot save locally · download your project';}
   }
-  catch(error){ready=false;status(String(error),true);}
+  catch(error){compilationError=error;ready=false;status(String(error),true);}
   finally {
     configuration.sync(project);
     compiling=false;configuration.setBusy(false);disableRun(!ready);el<HTMLButtonElement>('apply').disabled=false;el<HTMLButtonElement>('reset').disabled=false;
@@ -556,11 +596,27 @@ el('step').onclick=async()=>{
   if(dirty||!ready)await compile();
   if(ready)try{await runtime.step();}catch(error){status(String(error),true);}
 };
-el('save').onclick=async()=>{if(autosaveTimer)clearTimeout(autosaveTimer);autosaveTimer=undefined;try{await saveProject(project);status('Project saved in this browser');el('saved').textContent='Saved locally';}catch(error){status(String(error),true);}};
+el('save').onclick=async()=>{if(localPersistenceBlocked)return;if(autosaveTimer)clearTimeout(autosaveTimer);autosaveTimer=undefined;try{await saveProject(project);status('Project saved in this browser');el('saved').textContent='Saved locally';}catch(error){status(String(error),true);}};
 el('download').onclick=()=>download(`${project.name.replace(/[^a-z0-9_-]/gi,'_')}.slam.json`,JSON.stringify(project,null,2));
+el('default-models').onclick=()=>void recoverDefaultModels(JSON.stringify(project,null,2),'Current default models requested');
 el<HTMLInputElement>('open').onchange=async e=>{
-  const file=(e.target as HTMLInputElement).files?.[0];if(!file)return;
-  try{project=parseProject(await file.text());localPersistenceBlocked=false;el<HTMLButtonElement>('save').disabled=false;syncProject();changed();await compile();}catch(error){status(String(error),true);}
+  const input=e.target as HTMLInputElement,file=input.files?.[0];if(!file||compiling||recovering||assistantSimulation)return;
+  const text=await file.text();input.value='';
+  try{
+    // Do not autosave an imported project until it has compiled successfully.
+    if(autosaveTimer)clearTimeout(autosaveTimer);autosaveTimer=undefined;
+    const opened=parseProject(text);
+    runtime.pause();ready=false;disableRun(true);
+    while(runtime.busy)await new Promise(resolve=>setTimeout(resolve,20));
+    project=opened;projectRevision++;dirty=true;
+    localPersistenceBlocked=true;el<HTMLButtonElement>('save').disabled=true;
+    await syncProject();await buildProjectScene();await compile();
+    if(ready){
+      try{await saveProject(project);localPersistenceBlocked=false;el<HTMLButtonElement>('save').disabled=false;el('saved').textContent='Saved locally';}
+      catch{el('saved').textContent='Cannot save locally · download your project';status('Project loaded · cannot save locally; download your project to keep changes');}
+    }
+    else if(compilationError!==undefined)await recoverDefaultModels(text,compilationError);
+  }catch(error){await recoverDefaultModels(text,error);}
 };
 el('record').onclick=()=>{const vehicle=runtime.activeVehicle;vehicle.recording=!vehicle.recording;el('record').textContent=vehicle.recording?'■ Stop recording':'● Record dataset';el<HTMLButtonElement>('export-recording').disabled=vehicle.records.length===0;};
 el('export-recording').onclick=()=>{
@@ -759,14 +815,20 @@ function render(now=0){
 (window as any).__slamLab={runtime,comparisons,sourceEditor,performanceMonitor,get initialized(){return initialized;},get viewer(){return viewer;},get project(){return project;},get slamBuildReceipt(){return slamBuildReceipt;},get latest(){return latest;},get ready(){return ready;},get compiling(){return compiling;},get externalSamples(){return Array.from(comparisons.streams.values()).reduce((sum,s)=>sum+s.samples,0);},get externalLatest(){return externalLatest;}};
 void (async()=>{
   startup.stage(0,'Opening your project…');
-  try{project=await loadProject(mobileDefaults);selected=project.graph.nodes.find(n=>n.kind==='slam')!;}
-  catch(error){
-    localPersistenceBlocked=true;el<HTMLButtonElement>('save').disabled=true;
-    el<HTMLButtonElement>('apply').disabled=false;el<HTMLButtonElement>('reset').disabled=false;
-    el('saved').textContent='Saved project preserved · migration required';
-    const notice=document.createElement('div');notice.id='migration-notice';notice.textContent=`${error}. Automatic saving is disabled until you open a converted Modelica project.`;
-    const backup=document.createElement('button');backup.textContent='Download saved project';backup.onclick=async()=>{try{const saved=await readSavedProject();if(saved)download('saved-project-for-migration.slam.json',JSON.stringify(saved,null,2));}catch(error){status(String(error),true);}};
-    notice.append(backup);el('status').after(notice);status(String(error),true);
+  let savedText:string|undefined,openingError:unknown;
+  try{
+    const backup=await readProjectRecovery();if(backup)showRecoveryBackup(backup,'Previous model backup available.');
+    savedText=await readSavedProjectText();
+    project=savedText===undefined?defaultProject(mobileDefaults):parseProject(savedText);
+    selected=project.graph.nodes.find(n=>n.kind==='slam')??selected;
+  }catch(error){
+    openingError=error;
+    if(savedText!==undefined)project=defaultModelsFromText(savedText);
+    else{
+      localPersistenceBlocked=true;el<HTMLButtonElement>('save').disabled=true;
+      el('saved').textContent='Cannot read local project · automatic saving disabled';
+      status(String(error),true);
+    }
   }
   try{
     const modelsReady=syncProject();
@@ -779,9 +841,14 @@ void (async()=>{
     await buildProjectScene();
     initialized=true;finishInitialization();
     startup.stage(2,'Compiling your Modelica model…');
-    if(!localPersistenceBlocked){await compile();if(ready)status('Ready · click Run to start the Modelica inertial experiment');}
+    if(openingError&&savedText!==undefined)await recoverDefaultModels(savedText,openingError);
+    else if(!localPersistenceBlocked){
+      await compile();
+      if(!ready&&savedText!==undefined&&compilationError!==undefined)await recoverDefaultModels(savedText,compilationError);
+      else if(ready)status('Ready · click Run to start the Modelica inertial experiment');
+    }
     else{el<HTMLButtonElement>('apply').disabled=false;el<HTMLButtonElement>('reset').disabled=false;}
-    if(!ready&&!localPersistenceBlocked){startup.fail(el('status').textContent);return;}
+    if(!ready&&(!localPersistenceBlocked||savedText!==undefined)){startup.fail(el('status').textContent);return;}
     startup.stage(3,'Preparing the editor and first view…');
     await modelsReady;
     if(viewer)await viewer.present();else world.render();

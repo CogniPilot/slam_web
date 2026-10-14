@@ -58,3 +58,5 @@
   #sim-time{visibility:visible;margin-left:auto}
   #status{overflow-wrap:anywhere}
 }
+
+#model-recovery{margin-top:12px;padding:12px 15px;border:1px solid var(--line);border-radius:6px;background:#111b25}#model-recovery p{margin:0 0 10px}#model-recovery details{margin-top:10px}#model-recovery pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:160px;overflow:auto}

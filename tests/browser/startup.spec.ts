@@ -36,30 +36,47 @@ test('a fresh visitor sees progress until the inertial experiment is ready, then
   else await expect(page.locator('#render-warning')).toBeHidden();
 });
 
-test('failed initial compilation offers source recovery instead of an endless loading screen',async({page})=>{
+test('recovers a failed saved model with current defaults and keeps an exact downloadable backup',async({page})=>{
   await page.goto('/');
   await expect(page.locator('#startup-screen')).toBeHidden({timeout:90_000});
-  await page.evaluate(async()=>{
-    const lab=(window as any).__slamLab;
-    lab.project.algorithm='within Examples; model InertialOnly Real x; equation x=; end InertialOnly;';
+  const original=await page.evaluate(async()=>{
+    const project=structuredClone((window as any).__slamLab.project);
+    project.algorithm='within Examples; model InertialOnly Real x; equation x=; end InertialOnly;';
+    project.name='Warehouse saved experiment';project.environment='warehouse';project.cameraResolution='640x360';project.carsEnabled=false;
     await new Promise<void>((resolve,reject)=>{
       const request=indexedDB.open('slam-lab-projects',1);
       request.onerror=()=>reject(request.error);
       request.onsuccess=()=>{
         const db=request.result,tx=db.transaction('projects','readwrite');
-        tx.objectStore('projects').put(lab.project,'slam-lab.project.v1');
+        tx.objectStore('projects').put(project,'slam-lab.project.v1');
         tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>reject(tx.error);
       };
-    });
+    });return project;
   });
   await page.reload();
-  await expect(page.locator('#startup-message')).toContainText('Unable to prepare SLAM Lab',{timeout:90_000});
-  await expect(page.getByRole('progressbar')).toBeHidden();
-  await page.getByRole('button',{name:'Open workspace',exact:true}).click();
-  await expect(page.locator('#startup-screen')).toBeHidden();
-  await expect(page.locator('.monaco-editor')).toBeVisible();
-  expect(await page.getByLabel('Modelica source').inputValue()).toContain('equation x=;');
-  await expect(page.locator('#status')).toHaveClass(/error/);
+  await expect(page.getByRole('button',{name:'▶ Run',exact:true})).toBeEnabled({timeout:90_000});
+  await expect(page.locator('#model-recovery')).toContainText('Loaded current default models');
+  const recovered=await page.evaluate(()=>(window as any).__slamLab.project);
+  expect(recovered).toMatchObject({name:original.name,environment:'warehouse',cameraResolution:'640x360',carsEnabled:false});
+  expect(recovered.algorithm).not.toBe(original.algorithm);
+  const backup=await page.evaluate(()=>new Promise<any>((resolve,reject)=>{
+    const request=indexedDB.open('slam-lab-projects',1);
+    request.onsuccess=()=>{
+      const db=request.result,store=db.transaction('projects','readonly').objectStore('projects');
+      const latest=store.get('slam-lab.project.v1.recovery');latest.onsuccess=()=>{
+        const saved=store.get('slam-lab.project.v1.recovery.'+latest.result);
+        saved.onsuccess=()=>{resolve(saved.result);db.close();};saved.onerror=()=>reject(saved.error);
+      };latest.onerror=()=>reject(latest.error);
+    };request.onerror=()=>reject(request.error);
+  }));
+  expect(JSON.parse(backup.text)).toEqual(original);
+  expect(backup.reason).toContain('Error');
+  const download=page.waitForEvent('download');
+  await page.getByRole('button',{name:'Download previous model',exact:true}).click();
+  expect((await download).suggestedFilename()).toBe('previous-model.slam.json');
+  await page.reload();
+  await expect(page.getByRole('button',{name:'▶ Run',exact:true})).toBeEnabled({timeout:90_000});
+  await expect(page.locator('#model-recovery')).toContainText('Previous model backup available');
 });
 
 test.describe('phone layout',()=>{

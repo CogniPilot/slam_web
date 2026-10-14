@@ -3,7 +3,7 @@ import { WorkerRpc } from './rpc';
 import { ports,portTopic,validateGraph,type PortType } from './graph';
 import {seededRandom,recordedCameraFrame,validateSensorObservation} from './packet';
 import { World } from './world';
-import {defaultSensorModelica,defaultEvaluationModelica,withActorMotion,offsetQuadrotorPath,type Project} from './project';
+import {defaultSensorModelica,defaultEvaluationModelica,withActorMotion,offsetQuadrotorPath,estimatorModelicaSources,type Project} from './project';
 import offsetQuadrotor from '../models/Vehicles/OffsetQuadrotor.mo?raw';
 import {LockstepBarrier} from './lockstep-barrier';
 import {ModelicaSlamClient,type SlamReady} from './modelica-slam-client';
@@ -125,6 +125,7 @@ export class Runtime {
     this.slam?.close();this.slam=undefined;this.slamProgram=undefined;
     this.physics=new WorkerRpc(new Worker(new URL('./physics.worker.ts',import.meta.url),{type:'module'}));
     const workspaceSources={...project.modelicaSources};
+    delete workspaceSources['models/Vehicles/LabQuadrotor.mo'];
     const spawnSource=workspaceSources[offsetQuadrotorPath]??offsetQuadrotor;
     if(this.vehicleIndex===1)delete workspaceSources[offsetQuadrotorPath];
     const truth=await this.physics.call<Truth>('init',{base,source:this.vehicleIndex===1?project.physics+'\n'+spawnSource:project.physics,modelName:this.vehicleIndex===1?'OffsetQuadrotor':'LabQuadrotor',workspaceSources});
@@ -141,7 +142,7 @@ export class Runtime {
         if(project.slamBackend!=='native')this.pendingNodes.set(node.id,'Rumoca native full-frame feature detection pending');
       } else if(node.kind==='slam'&&project.runtime==='modelica') {
         this.modelicaState=new WorkerRpc(new Worker(new URL('./modelica-state.worker.ts',import.meta.url),{type:'module'}));
-        const result=await this.modelicaState.call<{artifact:InertialSessionMetadata}>('init',{base,source:project.algorithm,workspaceSources:project.modelicaSources,modelName:project.entryPoint??'ModelicaInertial'},180_000);
+        const result=await this.modelicaState.call<{artifact:InertialSessionMetadata}>('init',{base,source:project.algorithm,workspaceSources:estimatorModelicaSources(project),modelName:project.entryPoint??'ModelicaInertial'},180_000);
         project.algorithmArtifact=result.artifact;
       }
     }

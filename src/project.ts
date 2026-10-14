@@ -93,6 +93,25 @@ export const defaultProject = (_mobile=false): Project => ({
   evaluationModelica:defaultEvaluationModelica,
   graph:defaultGraph(),
 });
+/** Compiler companions include the editable base class of OffsetQuadrotor. */
+export function estimatorModelicaSources(project:Project):Record<string,string> {
+  const sources:Record<string,string>={...project.modelicaSources,'models/Vehicles/LabQuadrotor.mo':project.physics};
+  if(project.mainSourcePath)delete sources[project.mainSourcePath];
+  return sources;
+}
+/** Replace executable source with this release's defaults, retaining only valid settings. */
+export function withDefaultModels(saved:unknown,mobile=false):Project {
+  let project=defaultProject(mobile);
+  if(!saved||typeof saved!=='object'||Array.isArray(saved))return project;
+  const settings=saved as Record<string,unknown>;
+  for(const key of ['name','environment','seed','sceneDetail','sensorRates','cameraResolution','lidarEnabled','depthCloudEnabled','carsEnabled','peopleEnabled','lightingMode','vehicleCount','slamBackend'] as const){
+    if(settings[key]===undefined)continue;
+    // Validate each setting independently: one invalid value must not discard
+    // the remaining settings, or reintroduce incompatible saved sources.
+    try{project=parseProject(JSON.stringify({...project,[key]:settings[key]}));}catch{/* Use the current default for this setting. */}
+  }
+  return project;
+}
 export function parseProject(text: string): Project {
   const p=JSON.parse(text);
   if(p.format!=='slam-lab-project'||p.version!==1) throw new Error('Unsupported project version');
@@ -135,6 +154,8 @@ export function parseProject(text: string): Project {
   return p;
 }
 const KEY='slam-lab.project.v1';
+const RECOVERY_KEY=KEY+'.recovery';
+export interface ProjectRecoveryBackup {id:string;text:string;reason:string;createdAt:string}
 const DB='slam-lab-projects';
 let database:Promise<IDBDatabase>|undefined;
 function openDatabase() {
@@ -155,16 +176,40 @@ export async function saveProject(project:Project) {
     tx.oncomplete=()=>resolve();tx.onabort=()=>reject(tx.error??new Error('Project save aborted'));tx.onerror=()=>reject(tx.error);
   });
 }
-/** Read without interpreting source so retired projects remain downloadable. */
-export async function readSavedProject():Promise<unknown> {
+/** Read without parsing so even invalid JSON remains downloadable. */
+export async function readSavedProjectText():Promise<string|undefined> {
   const db=await openDatabase();
   const saved=await new Promise<unknown>((resolve,reject)=>{
     const tx=db.transaction('projects','readonly'),request=tx.objectStore('projects').get(KEY);
     request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);
   });
-  if(saved)return saved;
+  if(saved!==undefined)return JSON.stringify(saved,null,2);
   const legacy=localStorage.getItem(KEY);
-  return legacy?JSON.parse(legacy):undefined;
+  return legacy??undefined;
+}
+export async function readSavedProject():Promise<unknown> {
+  const text=await readSavedProjectText();return text===undefined?undefined:JSON.parse(text);
+}
+/** Keep every recovered source, with a pointer to the latest downloadable backup. */
+export async function saveProjectRecovery(backup:ProjectRecoveryBackup):Promise<void> {
+  const snapshot=structuredClone(backup),db=await openDatabase();
+  await new Promise<void>((resolve,reject)=>{
+    const tx=db.transaction('projects','readwrite'),store=tx.objectStore('projects');
+    store.put(snapshot,RECOVERY_KEY+'.'+snapshot.id);store.put(snapshot.id,RECOVERY_KEY);
+    tx.oncomplete=()=>resolve();tx.onabort=()=>reject(tx.error??new Error('Project backup aborted'));tx.onerror=()=>reject(tx.error);
+  });
+}
+export async function readProjectRecovery():Promise<ProjectRecoveryBackup|undefined> {
+  const db=await openDatabase();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction('projects','readonly'),store=tx.objectStore('projects'),request=store.get(RECOVERY_KEY);
+    request.onsuccess=()=>{
+      if(typeof request.result!=='string'){resolve(undefined);return;}
+      const backup=store.get(RECOVERY_KEY+'.'+request.result);
+      backup.onsuccess=()=>resolve(backup.result);backup.onerror=()=>reject(backup.error);
+    };
+    request.onerror=()=>reject(request.error);
+  });
 }
 export async function loadProject(mobile=false):Promise<Project> {
   const saved=await readSavedProject();

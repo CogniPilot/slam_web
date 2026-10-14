@@ -3,6 +3,20 @@ import {readFileSync} from 'node:fs';
 import init,* as rumoca from '@cognipilot/rumoca';
 import {readPhysicsSnapshot} from '../src/physics-snapshot';
 import {modelicaModelsSources} from '../src/modelica-models-library';
+import {defaultProject,estimatorModelicaSources,offsetQuadrotorPath} from '../src/project';
+
+it('compiles OffsetQuadrotor with its editable base in the estimator workspace',async()=>{
+  await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});
+  const project=defaultProject(),source=project.modelicaSources![offsetQuadrotorPath];
+  const missingBase={...project.modelicaSources};delete missingBase[offsetQuadrotorPath];
+  rumoca.sync_workspace_sources(JSON.stringify(missingBase));
+  expect(()=>rumoca.WasmSimulationSession.withInteractiveOptions(source,'OffsetQuadrotor',.01,'rk-like',1e-8,1e-6,'[["forward",0],["left",0],["up",0],["yaw",0]]')).toThrow(/LabQuadrotor/);
+  project.physics=project.physics.replace('initialHeight = 1.5','initialHeight = 2.0');
+  const sources=estimatorModelicaSources(project);delete sources[offsetQuadrotorPath];
+  expect(JSON.parse(rumoca.sync_workspace_sources(JSON.stringify(sources))).error_count).toBe(0);
+  const session=rumoca.WasmSimulationSession.withInteractiveOptions(source,'OffsetQuadrotor',.01,'rk-like',1e-8,1e-6,'[["forward",0],["left",0],["up",0],["yaw",0]]');
+  try{expect(readPhysicsSnapshot(session).y).toBeCloseTo(2);expect(readPhysicsSnapshot(session).z).toBeCloseTo(2);}finally{session.free();}
+},60000);
 
 it('the editable Modelica flight tour drives the plant with held lockstep commands and preserves manual control',async()=>{
   await init({module_or_path:readFileSync('public/vendor/rumoca/rumoca_bind_wasm_bg.wasm')});

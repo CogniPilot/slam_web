@@ -14,7 +14,13 @@ The initial project is prepared automatically; a new visitor only needs **Run**.
 Edits and settings are saved in this browser. **Save project** saves immediately.
 **Download** exports a project file; **Open project** restores it on this or another
 computer. Export a project before clearing browser storage or switching devices.
-Saved source is retained when the website's defaults change.
+Compatible saved source stays active when the website's defaults change. If a
+saved or imported project cannot load or compile, the app tries the current
+default models once, retaining valid scene, camera and simulation settings.
+**Download previous model** retrieves the original source backup, which remains
+available after reloading. **Load default models** performs this recovery manually.
+Errors from **Apply & reset** leave your edits in place for correction. If a backup
+cannot be saved locally, automatic saving is disabled to preserve the saved source.
 
 ## Exploring SLAM
 
