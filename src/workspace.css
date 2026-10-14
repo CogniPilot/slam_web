@@ -6,7 +6,7 @@
 .run-model select { min-width: 0; max-width: 320px; }
 .run-controls { flex-wrap: wrap; }
 .editor-selects[hidden] { display: none; }
-header { gap:16px; min-height:76px; padding:12px 24px; }
+header { gap:16px; min-height:76px; padding:12px 24px; flex-wrap:wrap; }
 header .brand { min-width:180px; gap:10px; font-size:20px; }
 header .brand small { letter-spacing:.8px; font-size:9px; }
 header .project-name { min-width:130px; }

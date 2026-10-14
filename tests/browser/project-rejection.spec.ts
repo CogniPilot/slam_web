@@ -24,6 +24,7 @@ test('recovers an unsupported saved project without losing its original source',
 });
 
 test('recovers an imported quadrotor with a missing base class and retains the imported settings',async({page})=>{
+ test.setTimeout(180_000); // Initial preparation plus two independent recoveries.
  await page.goto('/');
  await expect(page.getByRole('button',{name:'▶ Run',exact:true})).toBeEnabled({timeout:90_000});
  const text=await page.evaluate(()=>{

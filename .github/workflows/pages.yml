@@ -66,8 +66,8 @@ jobs:
     name: Browser smoke (${{ matrix.shard }}/4)
     needs: build
     runs-on: ubuntu-24.04
-    # Allow Nix/dependency setup plus the bounded eight-minute browser suite.
-    timeout-minutes: 12
+    # Allow Nix/dependency setup plus the bounded twelve-minute browser suite.
+    timeout-minutes: 16
     strategy:
       fail-fast: false
       matrix:

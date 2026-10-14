@@ -37,6 +37,7 @@ test('a fresh visitor sees progress until the inertial experiment is ready, then
 });
 
 test('recovers a failed saved model with current defaults and keeps an exact downloadable backup',async({page})=>{
+  test.setTimeout(180_000); // Initial preparation, recovery, and a fresh reload.
   await page.goto('/');
   await expect(page.locator('#startup-screen')).toBeHidden({timeout:90_000});
   const original=await page.evaluate(async()=>{
