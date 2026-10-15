@@ -33,6 +33,7 @@ import {LoopClosureHistory} from './loop-closure-history';
 import {mountLoopClosurePanel} from './loop-closure-panel';
 import {useNativeDefault,supportsWasmSimd} from './estimator-default';
 import {fetchNativeManifest} from './slam-native-program';
+import {nativeManifestUrl} from './native-assets';
 import './loop-closure.css';
 import './modelica-docs.css';
 import './workspace.css';
@@ -66,7 +67,7 @@ el('deploy-state').insertAdjacentHTML('afterend','<div id="comparisons"></div><s
 void (async()=>{
   const link=el<HTMLAnchorElement>('download-fmu'),state=el('deploy-state');
   try{
-    const response=await fetch(new URL('vendor/slam/manifest.json',new URL(import.meta.env.BASE_URL,location.href)));
+    const response=await fetch(nativeManifestUrl(new URL(import.meta.env.BASE_URL,location.href)));
     if(!response.ok)throw new Error('unpublished');
     const manifest=await response.json();
     const fmu=manifest?.fmu;

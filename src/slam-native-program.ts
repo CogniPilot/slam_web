@@ -1,3 +1,4 @@
+import {nativeManifestUrl} from './native-assets';
 /** Host for one compiler-exported native Modelica program (Rumoca native_step
  * export). The module owns the algorithm: it imports one linear memory holding
  * Y, P, scratch and typed lanes, exports `eval_assignments`, and declares its
@@ -166,7 +167,7 @@ export async function fetchNativeAsset(base:URL,file:string,encoding:'gzip'|'ide
   return bytes;
 }
 export async function fetchNativeManifest(base:URL,resolution?:string):Promise<SlamNativeManifest> {
-  const url=new URL('vendor/slam/manifest.json',base);
+  const url=nativeManifestUrl(base);
   if(url.origin!==base.origin)throw new Error('Native SLAM assets must be same origin');
   const response=await fetch(url);
   if(!response.ok)throw new Error('Native SLAM programs are not published on this site; build the assets from a compiler export first');

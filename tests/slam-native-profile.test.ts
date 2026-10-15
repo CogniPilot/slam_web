@@ -1,5 +1,6 @@
 import {afterEach,expect,it,vi} from 'vitest';
 import {fetchNativeManifest} from '../src/slam-native-program';
+import {readFileSync} from 'node:fs';
 
 afterEach(()=>vi.unstubAllGlobals());
 const models=(width:number,height:number)=>Object.fromEntries(['initialize','step'].map(key=>[key,{model:key,inputs:{rgb:{count:width*height*3},depth:{count:width*height}}}]));
@@ -10,4 +11,7 @@ it('selects the compiler-exported raster profile and rejects missing sizes witho
   const small=await fetchNativeManifest(base,'424x240');expect(small.sourceSha256).toBe('small');expect(small.models.step.inputs.rgb.count).toBe(424*240*3);
   expect((await fetchNativeManifest(base,'848x480')).sourceSha256).toBe('legacy');
   await expect(fetchNativeManifest(base,'640x360')).rejects.toThrow('not published');
+  const url=vi.mocked(fetch).mock.calls[0][0] as URL;
+  expect(url.pathname).toBe('/app/vendor/slam/manifest.json');
+  expect(url.searchParams.get('delivery')).toBe(JSON.parse(readFileSync('slam-native-package.json','utf8')).sha256);
 });
