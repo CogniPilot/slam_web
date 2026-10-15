@@ -1,0 +1,97 @@
+{
+  "module_sha256": "cead2d1d556eeb1f413cfd190d40e30d76ded42de8c694dafa7540d22ecfba07",
+  "source_sha256": "aabb72b1fbd024aef62f2e5197f190a78fcf4a51160cfd41269824640b75cd6e",
+  "map_export_revision": "383d0f6da6cc0734bc4fa65ea57efbd6c71da0c1",
+  "camera_frames": 30,
+  "camera_hz": 5,
+  "imu_hz": 10,
+  "resolution": "424x240",
+  "scope": "Opt-in function-clock measurement of the exact published module. Inclusive times overlap; selected-exclusive times exclude only other instrumented descendants. Byte spans refer to the generated profile source. Host shared.",
+  "functions": [
+    {
+      "function": 472,
+      "owner": 462,
+      "kind": "owner_entry",
+      "name": "RGBDLocalizationProcessing.Publish(previous,proposed,measurement,\n    producerPr",
+      "source_span": {
+        "start": 740622,
+        "end": 741284
+      },
+      "calls": 60,
+      "inclusive_ms_per_camera_frame": 42.21666663487752,
+      "selected_exclusive_ms_per_camera_frame": 42.21666663487752
+    },
+    {
+      "function": 582,
+      "owner": 571,
+      "kind": "owner_entry",
+      "name": "SelectRasterFeatures",
+      "source_span": {
+        "start": 248798,
+        "end": 248818
+      },
+      "calls": 60,
+      "inclusive_ms_per_camera_frame": 3.4199999968210855,
+      "selected_exclusive_ms_per_camera_frame": 3.4199999968210855
+    },
+    {
+      "function": 588,
+      "owner": 577,
+      "kind": "owner_entry",
+      "name": "FastFrameScores(rgb,imageOn,FastSelectionScoreFloor(absoluteThreshold,1e8))",
+      "source_span": {
+        "start": 248448,
+        "end": 248523
+      },
+      "calls": 60,
+      "inclusive_ms_per_camera_frame": 7.613333344459534,
+      "selected_exclusive_ms_per_camera_frame": 7.613333344459534
+    },
+    {
+      "function": 591,
+      "owner": 580,
+      "kind": "owner_entry",
+      "name": "AdvanceFastRGBDLocalization",
+      "source_span": {
+        "start": 735373,
+        "end": 735400
+      },
+      "calls": 60,
+      "inclusive_ms_per_camera_frame": 19.319999996821085,
+      "selected_exclusive_ms_per_camera_frame": 8.286666655540467
+    },
+    {
+      "function": 613,
+      "owner": 602,
+      "kind": "owner_entry",
+      "name": "AdvanceFastSLAM(\n      previous=previous,\n      rgb=rgb,\n      depth=depth,\n    ",
+      "source_span": {
+        "start": 724532,
+        "end": 726048
+      },
+      "calls": 60,
+      "inclusive_ms_per_camera_frame": 62.733333349227905,
+      "selected_exclusive_ms_per_camera_frame": 1.1966667175292969
+    },
+    {
+      "function": 614,
+      "owner": null,
+      "kind": "unmapped",
+      "name": "unmapped calling owners {602}",
+      "source_span": null,
+      "calls": 60,
+      "inclusive_ms_per_camera_frame": 70.7900000333786,
+      "selected_exclusive_ms_per_camera_frame": 8.056666684150695
+    },
+    {
+      "function": 615,
+      "owner": null,
+      "kind": "stage_group",
+      "name": "stage_group calling owners {}",
+      "source_span": null,
+      "calls": 60,
+      "inclusive_ms_per_camera_frame": 77.26666668256124,
+      "selected_exclusive_ms_per_camera_frame": 6.476666649182637
+    }
+  ]
+}

@@ -154,6 +154,22 @@ selected; camera resolution remains independently selectable. The measurements
 above remain below real time at those defaults. Raw profiles are stored under
 `$HOME/scratch/slam_web/profiles/current-warehouse-424-*` on the profiling host.
 
+The compiler pin now uses the official PR #436 CI artifact from run
+`38657199115`, built at merge revision `5c68a1c67524` (head `383d0f6da6cc` merged
+with `ad00214a2294`). The actual browser warehouse run with that exact package
+measured **2.04× realtime** over 90 frames at the same 424 × 240 / 5 Hz camera /
+10 Hz IMU settings. Physics receipts before and after reported `wasm_program`,
+no refusal and zero declined executions. Estimated positions matched the old
+compiler exactly. Camera work averaged 9.4 ms and the remaining native SLAM tail
+58.6 ms; native SLAM is now the principal throughput limit.
+
+API timing of the equivalent locally built head package measured physics RPCs
+at 15.3 ms per camera frame, including 11.0 ms in `advance_to`, 0.7 ms updating
+inputs and 0.9 ms serializing state. The graph's physics node also waits for
+overlapped IMU prediction, so its wall time must not be described as solver CPU
+time. The new pin exceeds realtime on this host; these measurements do not
+establish 10× operation or equivalent performance on other computers.
+
 Playback batches completed simulation frames within an 8 ms wall-time budget,
 then yields; the 10× selector requests that pace but does not guarantee it.
 Every configured sensor event and estimator update still runs. Overview poses,
@@ -196,8 +212,13 @@ For module `cead2d1d556eeb1f` at 424 × 240, instrumenting IDs
 582 and 588 accounted for 3.4 and 7.6 ms. Outer functions 614 and 615 added
 14.5 ms outside the other instrumented functions. All ran twice per frame,
 including IMU-only calls. A compiler symbol map is needed to establish source
-names; identifying 582/588 as selection/FAST from code structure remains an
-inference. Instrumented and original modules produced identical positions.
+names. Re-exporting at PR #436 produced byte-identical modules and recovered the
+exact map: 472 is `RGBDLocalizationProcessing.Publish`, 582 is
+`SelectRasterFeatures`, and 588 is `FastFrameScores`. Their combined detection
+and selection cost is 11.0 ms per camera frame; publication costs 42.2 ms over
+two interval calls, not 42.2 ms per call. The named timing evidence is retained in
+[native-slam-424-hotspots.json](../profiles/native-slam-424-hotspots.json).
+Instrumented and original modules produced identical positions.
 
 An October 14 shared-host experiment on the existing 424 × 240 native Step
 module with Binaryen 129 `wasm-opt -O3 --all-features` produced identical truth
