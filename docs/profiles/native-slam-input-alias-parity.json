@@ -755,5 +755,151 @@
     },
     "overlapBytes": 1800,
     "finding": "Inner Catalog.Publish returns a valid covariance buffer. Outer LocalizationProcessing.Publish retains that pointer while a later descriptor copy overwrites its entire range. The optimized alias outlives its safe storage lifetime; graph validation subsequently rejects the zero covariance. These addresses and WAT function/site IDs belong only to the pinned experimental module."
+  },
+  "diagnosticCovarianceFallback": {
+    "diagnosticOnly": true,
+    "sourceFixImplemented": false,
+    "moduleSha256": "5e6e14d0c5d4240131b1db3980cf8bee60b88bab3cdb3c809544f70f56a13945",
+    "method": "WAT-only experiment removes alias fast path for two1800-byte covariance publication blocks, retaining existing copy fallback. Every other original candidate optimization remains. No generic lifetime proof or production approval.",
+    "singleCallReceiptSha256": "db5059b7a23593f3b84c11c7d0d3ba8edfe16311934ee74ecf74ddd8174ceec2",
+    "singleCallReplay": {
+      "moduleSha256": "5e6e14d0c5d4240131b1db3980cf8bee60b88bab3cdb3c809544f70f56a13945",
+      "baselinePreSha256": "c44d38a71a30d4e6018827f6a0ae1406fbc2accb66efc421b8a1656e4cfe1858",
+      "args": [
+        0,
+        20596816,
+        0.8,
+        48445440,
+        352357688
+      ],
+      "status": 0,
+      "elapsedMs": 302.7793849999998,
+      "scope": "Captured accepted live call; scratch is private and reinitialized, compared every host Y/P byte and typed-lane byte to owner post image. Cold elapsedMs is not a steady benchmark.",
+      "comparisons": [
+        {
+          "region": "all host Y and P",
+          "bytes": 48445440,
+          "actualSha256": "5d0a0a50b0c0b320c513d67aa50640034f4e7cf48aac1f1963483d5eb8904f03",
+          "expectedSha256": "5d0a0a50b0c0b320c513d67aa50640034f4e7cf48aac1f1963483d5eb8904f03",
+          "equal": true
+        },
+        {
+          "region": "all typed lanes",
+          "bytes": 2045591,
+          "actualSha256": "f540218c557cefeda4b023bca3ba16369fcd045aba163d9ca349d60a09339298",
+          "expectedSha256": "f540218c557cefeda4b023bca3ba16369fcd045aba163d9ca349d60a09339298",
+          "equal": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "selectionValid",
+          "value": 1
+        },
+        {
+          "name": "predictionAccepted",
+          "value": 1
+        },
+        {
+          "name": "observationAccepted",
+          "value": 0
+        },
+        {
+          "name": "captureAccepted",
+          "value": 1
+        }
+      ],
+      "copyBytes": 0,
+      "copies": [],
+      "fullMemorySha256": "2adc263536171c48dc806fe5fc5b065d841fa340ec5e8e3ffda061e708a6f49f"
+    },
+    "browserReportSha256": "d3720055357fef7c91598c08426ba53b3c2f4abf4d8aef555568aa081305600d",
+    "overrideReceiptSha256": "a127c9d646a0f9c7fc0f73a70f102b8d6f7454d32f60d90f23f7d1c939b14e1b",
+    "parity": {
+      "diagnosticOnly": true,
+      "rowsCompared": 240,
+      "rowCountsEqual": true,
+      "differenceCount": 0,
+      "firstDifferences": [],
+      "canonicalCarriedStateExact": true,
+      "baselineState": {
+        "sha256": "94023a2b71ede56d6bb89796f8d04cd84027d90c473cf96255f183f2ec9ef444",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "diagnosticState": {
+        "sha256": "94023a2b71ede56d6bb89796f8d04cd84027d90c473cf96255f183f2ec9ef444",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "baseline": {
+        "rtf": 2.2529288074345577,
+        "meanNativeMs": 69.30083333154519,
+        "meanImageStepMs": 53.68166666527589,
+        "meanImuStepMs": 15.619166666269303,
+        "maximumLoopEdges": 3,
+        "maximumKeyframes": 7,
+        "positionRmseM": 0.3441402750461108,
+        "errors": []
+      },
+      "diagnostic": {
+        "rtf": 3.4393069796553526,
+        "meanNativeMs": 42.36291666030884,
+        "meanImageStepMs": 38.43125000099341,
+        "meanImuStepMs": 3.931666659315427,
+        "maximumLoopEdges": 3,
+        "maximumKeyframes": 7,
+        "positionRmseM": 0.3441402750461108,
+        "errors": []
+      },
+      "parityPassed": true
+    },
+    "browserRun": {
+      "recordedAt": "2026-10-15T03:50:20.245Z",
+      "rtf": 3.4393069796553526,
+      "meanNativeMs": 42.36291666030884,
+      "meanImageStepMs": 38.43125000099341,
+      "meanImuStepMs": 3.931666659315427,
+      "maximumLoopEdges": 3,
+      "maximumKeyframes": 7,
+      "positionRmseM": 0.3441402750461108,
+      "errors": []
+    },
+    "freshBaselineControl": {
+      "label": "input-alias-baseline-after-diagnostic-240",
+      "reportSha256": "8eff36768359a437d375faad5dc9c043dfb8f5d1145ba6abf2dbfecc3a67a97e",
+      "overrideReceiptSha256": "d1959c94cbd382d52fcbd73dcb7da8a47a4249200faa3cd1b559871a58290c34",
+      "allPriorObservableRowsAndStateExact": true,
+      "recordedAt": "2026-10-15T03:52:14.517Z",
+      "rtf": 2.623954518121686,
+      "meanNativeMs": 60.792500005165735,
+      "meanImageStepMs": 47.612916669249536,
+      "meanImuStepMs": 13.1795833359162,
+      "maximumLoopEdges": 3,
+      "maximumKeyframes": 7,
+      "positionRmseM": 0.3441402750461108,
+      "errors": []
+    },
+    "interpretation": "Diagnostic exact-parity run3.44x versus immediately following baseline control2.62x on shared host; earlier baseline2.25x illustrates load variation. This validates the direction for this lifecycle, not a production compiler fix or guaranteed speedup."
+  },
+  "publishedDeliveryAtExperiment": {
+    "packagePin": {
+      "repository": "CogniPilot/slam_web",
+      "tag": "native-slam-modelica-main-20261014",
+      "asset": "native-slam-d435-profiles.tar",
+      "bytes": 75212800,
+      "sha256": "c7af2165b66e4b650e261feb8873f7ace62d235b714a408994a6a4d3b38cfefb",
+      "sourceSha256": "5cbcf9c7562efc857c3928ccc9d6767450e2014cad8e6b47846aece07bfc275e",
+      "rumocaRevision": "9f507597dd0a462b767a9761a53f4c3e3ffdfbd8",
+      "modelicaRevision": "d2ebf66d3a65164dfdd20e890a7c196330d1b8dd"
+    },
+    "stepModuleSha256": "cead2d1d556eeb1f413cfd190d40e30d76ded42de8c694dafa7540d22ecfba07",
+    "note": "Published native delivery remains9f507597/cead. Compiler278 is an explicitly selected browser profiling baseline, not the published package; previous conversational wording calling278 published was inaccurate. Production assets unchanged throughout."
   }
 }

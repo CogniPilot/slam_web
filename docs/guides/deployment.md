@@ -131,6 +131,13 @@ different covariance and correction results afterward. Its apparent 9.31× rate
 included rejected work and is invalid as a speedup. See the complete artifact
 hashes, program combinations and call captures in
 [`native-slam-input-alias-parity.json`](../profiles/native-slam-input-alias-parity.json).
+Restoring the existing copy fallback for just two covariance outputs in a
+diagnostic WAT module recovered exact parity across 240 frames and all carried
+state, retaining three loop closures. That experiment measured 3.44× realtime;
+the immediately following baseline control measured 2.62× on the shared host.
+This is evidence for fixing compiler lifetime analysis, not a production fix.
+Compiler 278 is the profiling baseline; the published native package remains
+pinned to `9f507597` in `slam-native-package.json`.
 
 A sampled run on an RTX 3090 with Chromium 154 (15 Hz camera, 90 Hz IMU,
 848 × 480; ten warmup frames and sixty measured frames) attributed 85.2% of
