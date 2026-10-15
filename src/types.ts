@@ -21,7 +21,8 @@ export interface Estimate extends Pose {
   points: number[][];confidence: number;features?: number[][];diagnostics?: Record<string,number|string>;
   uncertainty?:{positionCovariance:number[];attitudeCovariance:number[]};
   tracking?:{matches:{current:number[];previous:number[]}[];accepted:boolean;reason:string;referenceSequence?:number};
-  poseGraph?:{keyframes:{position:number[];quaternion:number[]}[];edges:{from:number;to:number;kind:'loop'|'odometry'}[]};
+  poseGraph?:{keyframes:{position:number[];quaternion:number[];id?:number;time?:number;imageEpoch?:number}[];
+    edges:{from:number;to:number;kind:'loop'|'odometry';id?:number;similarity?:number}[]};
 }
 export interface RunRecord { frame: SensorFrame; truth?: Truth; command: Command; estimate: Estimate }
 export type Environment = 'city' | 'warehouse' | 'courtyard' | 'tokyo' | 'asset-city' | 'big-city';

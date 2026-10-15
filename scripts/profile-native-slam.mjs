@@ -149,7 +149,11 @@ try{
         reference,positionErrorM:reference?Math.hypot(estimate.x-reference.x,estimate.y-reference.y,estimate.z-reference.z):null});
     }
     const elapsedMs=performance.now()-start,simulationSeconds=r.time-timeBefore;
-    return {elapsedMs,simulationSeconds,rtf:simulationSeconds/(elapsedMs/1000),rows,
+    const loops=lab.loopHistories?.[0];
+    const loopClosureView=loops?{accepted:loops.acceptedCount,candidates:loops.candidateCount,snapshots:loops.images.size,
+      history:loops.closures.map(({edgeId,referenceId,currentId,time,reference,current,similarity})=>({edgeId,referenceId,currentId,time,
+        referenceImage:reference?.imageEpoch,currentImage:current?.imageEpoch,similarity}))}:undefined;
+    return {elapsedMs,simulationSeconds,rtf:simulationSeconds/(elapsedMs/1000),rows,loopClosureView,
       pendingNodes:Array.from(r.pendingNodes),final:rows.at(-1)};
   },{count,cameraHz,tour});
   const cpuAfter=(await root.send('SystemInfo.getProcessInfo')).processInfo;
@@ -194,11 +198,12 @@ try{
     maximumPositionErrorM:Math.max(...report.rows.map(row=>row.positionErrorM??0)),
     maximumKeyframes:Math.max(...report.rows.map(row=>Number(row.diagnostics.keyframes??0))),
     maximumLoopEdges:Math.max(...report.rows.map(row=>Number(row.diagnostics.loopEdges??0))),
-    final:report.final,pendingNodes:report.pendingNodes,errors,
+    final:report.final,loopClosureView:report.loopClosureView,pendingNodes:report.pendingNodes,errors,
     scope:`Actual built SLAM Web: live ${resolution} GPU RGB-D captures, physics, sensor model, native full SLAM worker, visible viewer; low graphics, no LiDAR or depth-cloud display. Ten warmup frames; unpaced sequential runtime.step calls; CPU sampling ${cpuProfiling?'enabled':'disabled'}. Shared host.`};
   await writeFile(join(output,'report.json'),JSON.stringify({summary,rows:report.rows},null,2));
   if(nativeDirectory)await writeFile(join(output,'native-comparison.json'),JSON.stringify([...nativeOverrides.values()],null,2));
   await page.screenshot({path:join(output,'world.png'),fullPage:true});
+  if(await page.locator('.loop-closure-panel').count())await page.locator('.loop-closure-panel').screenshot({path:join(output,'loop-closures.png')});
   console.log(JSON.stringify(summary,null,2));
   if(errors.length)process.exitCode=1;
 }catch(error){await writeFile(join(output,'failure.json'),JSON.stringify({error:String(error.stack||error),errors},null,2));throw error;}

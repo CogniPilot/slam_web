@@ -29,19 +29,24 @@ import {createAssistantPanel} from './assistant-panel';
 import {runAssistantSimulation} from './assistant-simulation';
 import {sceneLandmarks} from './scene-landmarks';
 import {mountTelemetryPlot} from './telemetry-plot';
+import {LoopClosureHistory} from './loop-closure-history';
+import {mountLoopClosurePanel} from './loop-closure-panel';
+import {useNativeDefault,supportsWasmSimd} from './estimator-default';
+import {fetchNativeManifest} from './slam-native-program';
+import './loop-closure.css';
 import './modelica-docs.css';
 import './workspace.css';
 
 const startup=startupScreen();
 document.querySelector('#app')!.innerHTML=`
 <header><a class="brand" href="https://github.com/CogniPilot/slam_web" target="_blank" rel="noopener noreferrer" aria-label="SLAM Lab GitHub repository"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button><button id="default-models" title="Keep settings and back up source before loading current default models">Load default models</button></div><a class="powered-by" href="https://github.com/CogniPilot/rumoca" target="_blank" rel="noopener noreferrer" aria-label="Powered by Rumoca" title="Rumoca Modelica compiler"><span>Powered by</span><img src="${import.meta.env.BASE_URL}brand/rumoca.svg" width="28" height="28" alt=""></a></header>
-<main><div class="toolbar"><div class="run-controls"><button id="run" class="primary" disabled>▶ Run</button><button id="step" disabled>Step</button><button id="reset" disabled>↺ Reset</button><select id="speed" aria-label="Simulation speed"><option value="1">1× real time</option><option value="4">4× real time</option><option value="10">10× real time</option><option value="Infinity">As fast as possible</option></select><button id="flight-control" aria-pressed="true" aria-label="Manual flight">Manual flight</button><select id="active-vehicle" aria-label="Controlled and followed drone" hidden><option value="0">Drone 1</option><option value="1">Drone 2</option></select></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option value="city">City blocks</option><option value="warehouse">Warehouse</option><option value="courtyard">Courtyard</option></select><label class="check"><input id="show-map" type="checkbox" checked>Show map</label><button id="help">Lesson guide</button></div></div>
+<main><div class="toolbar"><div class="run-controls"><button id="run" class="primary" disabled>▶ Run</button><button id="step" disabled>Step</button><button id="reset" disabled>↺ Reset</button><select id="speed" aria-label="Simulation speed"><option value="1">1× real time</option><option value="4">4× real time</option><option value="10">10× real time</option><option value="Infinity">As fast as possible</option></select><span id="estimator-mode" class="estimator-mode" role="status">Estimator: preparing</span><button id="flight-control" aria-pressed="true" aria-label="Manual flight">Manual flight</button><select id="active-vehicle" aria-label="Controlled and followed drone" hidden><option value="0">Drone 1</option><option value="1">Drone 2</option></select></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option value="city">City blocks</option><option value="warehouse">Warehouse</option><option value="courtyard">Courtyard</option></select><label class="check"><input id="show-map" type="checkbox" checked>Show map</label><button id="help">Lesson guide</button></div></div>
 <div class="workspace"><section class="visuals"><div class="scene panel"><div class="panel-label"><span class="live-dot"></span>WORLD VIEW<span class="right">Three.js · orbit to explore</span></div><div id="world"></div><div class="scene-overlay"><span>QUADROTOR + D435</span><small id="flight-status">Initializing browser runtimes</small></div><div class="scene-bottom">WASD move · Q/E yaw · R/F altitude <span id="sim-time">t = 0.00 s</span></div></div>
 <div class="sensor-row"><div class="panel sensor"><div class="panel-label">RGB CAMERA<span class="right">features overlay</span></div><canvas id="rgb" width="160" height="90"></canvas><div class="sensor-foot">69° × 42° · RGBA8</div></div><div class="panel sensor"><div class="panel-label">DEPTH CAMERA<span class="right">axial depth, meters</span></div><canvas id="depth" width="160" height="90"></canvas><div class="sensor-foot">87° × 58° · 0.28–10 m</div></div><div class="panel trajectory"><div class="panel-label">TRAJECTORY<span class="right">ENU · meters</span></div><canvas id="trajectory" width="260" height="146"></canvas><div class="legend"><span class="truth-key">Truth</span><span class="estimate-key">Estimate</span><span class="compare-key">External</span></div></div></div>
 <div class="metrics"><div><small>SIM TIME</small><strong id="metric-time">0.00 <em>s</em></strong></div><div><small>TRAJECTORY RMSE</small><strong id="metric-ate">— <em>m</em></strong></div><div><small>FEATURES</small><strong id="metric-features">0</strong></div><div><small>MAP POINTS</small><strong id="metric-points">0</strong></div><div><small>SIM / WALL TIME</small><strong id="metric-rtf">— <em>×</em></strong></div></div></section>
 <aside class="panel editor"><div class="editor-top"><button id="files-toggle" aria-controls="source-explorer" aria-expanded="false">Files</button><div><small>MODELICA SOURCE</small><h2 id="editor-title">RGB-D / inertial SLAM</h2></div><span id="language" class="badge">Modelica · Rumoca</span></div><div class="editor-selects"><label>Preset <select id="preset" aria-label="Feature detector preset"></select></label></div><p id="editor-description">Estimate a 6-DOF pose from camera images and the airframe IMU.</p><textarea id="code" aria-label="Modelica source" spellcheck="false"></textarea><div class="editor-bottom"><span id="line-count"></span><button id="apply" disabled class="primary">Apply & reset</button></div></aside></div>
 <div class="bottom-row"><section class="panel connection"><h2>Embedded deployment</h2><p>The SLAM model compiles to an FMI-LS WebAssembly package (FMI 3 co-simulation with a wasm32-wasip2 component) that runs on embedded hosts; ROS 2 / MAVLink adapters are under development.</p><a id="download-fmu" class="button" href="#" download aria-disabled="true">Download SLAM FMU</a><button id="deploy" disabled>Deploy project</button><small id="deploy-state">Checking published packages…</small></section><section class="panel recordings"><h2>Experiments</h2><p>Record synchronized sensor frames, then rerun them through edited source.</p><button id="record" disabled>● Record dataset</button><button id="export-recording" disabled>Export dataset</button><label class="button">Replay dataset<input id="replay" type="file" accept=".json" hidden></label><button id="export-node">Export source</button><small id="record-state">Up to 300 RGB-D / IMU frames per recording</small></section></div>
-<div id="status" role="status">Loading Modelica environment…</div><details id="lesson" class="panel lesson"><summary>Lesson guide · Modelica robotics</summary><ol><li><b>Run the default experiment.</b> Modelica inertial propagation prepares automatically. New projects start in the city with Economical graphics and 424×240 RGB-D. Click Run to start; no initial Apply is needed. Test physics and camera data. Native feature detection is pending. This baseline has no visual localization, map or loop closure; full Modelica SLAM integration is pending.</li><li><b>Edit Modelica.</b> Physics, detector and estimator source use Rumoca diagnostics and highlighting. Apply resets the experiment.</li><li><b>Save your work.</b> Projects save locally and can be downloaded and reopened. Full Modelica SLAM execution integration is pending.</li></ol><p>Select sensor rates in Configuration. RGB and depth share a simulation clock; IMU, GPS and LiDAR use their selected rates. Physics waits for every sensor event before advancing. Three.js presents the world independently at a target of 30 FPS. Select a paired D435 resolution in Configuration. The camera uses pinhole optics with stereo disparity noise; the D435 has no IMU, so IMU measurements belong to the airframe. Traffic, pedestrians and lighting vary the scene. Open the site to use the browser environment.</p></details></main>`;
+<div id="status" role="status">Loading Modelica environment…</div><details id="lesson" class="panel lesson"><summary>Lesson guide · Modelica robotics</summary><ol><li><b>Run the default experiment.</b> Modelica inertial propagation prepares automatically. New projects start in the city with Economical graphics and 424×240 RGB-D. Click Run to start; no initial Apply is needed. Test physics and camera data. This inertial baseline has no visual localization, map or loop closure. For RGB-D mapping on a desktop, open Configuration and select Native Modelica SLAM under Estimator. The Loop closures panel shows matched keyframe images when a geometrically verified loop is accepted.</li><li><b>Edit Modelica.</b> Physics, detector and estimator source use Rumoca diagnostics and highlighting. Apply resets the experiment.</li><li><b>Save your work.</b> Projects save locally and can be downloaded and reopened. The estimator backend and sensor settings are saved with the project.</li></ol><p>Select sensor rates in Configuration. RGB and depth share a simulation clock; IMU, GPS and LiDAR use their selected rates. Physics waits for every sensor event before advancing. Three.js presents the world independently at a target of 30 FPS. Select a paired D435 resolution in Configuration. The camera uses pinhole optics with stereo disparity noise; the D435 has no IMU, so IMU measurements belong to the airframe. Traffic, pedestrians and lighting vary the scene. Open the site to use the browser environment.</p></details></main>`;
 
 const el=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id)! as T;
 el('environment').insertAdjacentHTML('afterend','<select id="scene-detail" aria-label="Graphics quality" aria-describedby="graphics-budget"><option value="low">Low · economical</option><option value="medium">Medium · balanced</option><option value="high">High · showcase</option></select>');
@@ -90,6 +95,10 @@ el('graphics-state').textContent=`Renderer: ${world.graphics.api} · ${world.gra
 el('graphics-state').insertAdjacentHTML('afterend','<small id="scene-credit"></small>');
 el('scene-credit').insertAdjacentHTML('afterend','<div id="navigation-state">Navigation · GPS roof geofence demonstration</div><div id="lidar-state">LiDAR disabled</div>');
 const runtime=new Runtime(world);
+const loopHistories=[new LoopClosureHistory(),new LoopClosureHistory()];
+const loopPanel=mountLoopClosurePanel(document.querySelector<HTMLElement>('.visuals')!);
+loopPanel.render(loopHistories[0]);
+runtime.onInitialFrame=(index,frame,estimate)=>{loopHistories[index].reset();loopHistories[index].observe(frame,estimate);};
 const depthPreview=new DepthPreview(el<HTMLCanvasElement>('depth'));
 const colorPreview=new ColorPreview();
 let pendingSensorPreview:{frame:SensorFrame;estimate:Estimate}|undefined;
@@ -101,11 +110,24 @@ let viewer:WorkerViewer|undefined;
 let viewerPresented=true;
 el('graphics-state').insertAdjacentHTML('afterend','<div id="performance-state"></div>');
 const performanceMonitor=new BrowserPerformanceMonitor({targetFps:30,onUpdate:s=>{
+  syncEstimatorMode();
   const display=viewer?.latest??s;
   el('world-fps').textContent=`${display.fps.toFixed(0)} FPS · target 30${viewer?' · worker':''}`;
   el('performance-state').textContent=`RGB-D input ${s.captureHz.toFixed(1)} Hz real time · Estimation ${s.visionHz.toFixed(1)} Hz real time · LiDAR ${s.lidarHz.toFixed(1)} Hz real time · lockstep cameras ${sensorRates(project).cameraHz} Hz sim time · render submission ${display.meanRenderSubmitMs?.toFixed(1)??'—'} ms · display interval p95 ${display.p95FrameIntervalMs?.toFixed(1)??'—'} ms${s.longTasks?` · main-thread stalls ${s.longTasks.count} / ${s.longTasks.blockedMs.toFixed(0)} ms`:''}`;
 }});
 runtime.onSensor=()=>performanceMonitor.captured();runtime.onLidar=()=>performanceMonitor.lidarCaptured();
+function syncEstimatorMode(){
+  const backend=compiling||!initialized?'preparing':!ready?'unavailable':runtime.activeVehicle.slamProgram?'native':'inertial';
+  const chip=el('estimator-mode');
+  if(chip.dataset.backend===backend)return;
+  chip.dataset.backend=backend;
+  chip.textContent=backend==='native'?'Estimator: RGB-D SLAM':backend==='inertial'?'Estimator: inertial baseline':`Estimator: ${backend}`;
+  chip.title=backend==='native'?'Visual odometry, mapping and loop closure enabled':'Choose Native Modelica SLAM in Configuration for visual mapping and loop closure';
+  const initial=runtime.activeVehicle.slamProgram?.estimate.diagnostics;
+  loopPanel.render(loopHistories[runtime.activeVehicleIndex],Number(initial?.loopVocabularyReady),
+    typeof initial?.loopWords==='number'?initial.loopWords:undefined,backend==='native');
+}
+
 const code=el<HTMLTextAreaElement>('code');
 const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,onResolutionChange:changeCameraResolution,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
 const sourceEditor=createSourceEditor(code);
@@ -555,6 +577,8 @@ async function compile() {
   compilationError=undefined;compiling=true;ready=false;disableRun(true);el<HTMLSelectElement>('scene-detail').disabled=true;el<HTMLSelectElement>('preset').disabled=true;runtime.pause();
   configuration.setBusy(true);
   while(runtime.busy)await new Promise(resolve=>setTimeout(resolve,20));
+  loopHistories.forEach(history=>history.reset());pendingPresentation=undefined;
+  loopPanel.render(loopHistories[0]);
   const snapshot=structuredClone(project),revision=JSON.stringify(project);
   try {
     await runtime.compile(snapshot);
@@ -580,7 +604,7 @@ async function compile() {
     telemetryPlot.setVehicleCount(runtime.vehicleCount);
     el<HTMLSelectElement>('scene-detail').disabled=false;
     el<HTMLSelectElement>('preset').disabled=viewingSlamFile()||!['slam','detector'].includes(selected.kind);
-    syncApplyButton();
+    syncApplyButton();syncEstimatorMode();
   }
 }
 el('apply').onclick=()=>{if(!viewingSlamFile())void compile();};el('reset').onclick=()=>void compile();
@@ -749,6 +773,7 @@ runtime.onError=error=>{ready=false;dirty=true;status(error.message+' · Run or 
 const vehiclePaths:{truth:Pose[];estimate:Pose[]}[]=[{truth:[],estimate:[]},{truth:[],estimate:[]}];
 runtime.onVehicleFrame=(index,{frame,estimate,truth})=>{
   performanceMonitor.visionProcessed();
+  loopHistories[index].observe(frame,estimate);
   telemetryPlot.sample(index,frame.time,truth,estimate,frame.imu);
   const vehicle=runtime.getVehicle(index);
   const reference=truth?vehicle.referenceTruth(truth):undefined;
@@ -766,6 +791,9 @@ runtime.onFrame=(frame,estimate,truth,metrics)=>{
   // viewer diagnostics consume only the newest completed frame at 30 Hz.
   const nav=navigation.update(frame.time,estimate,displayed.gps);
   pendingPresentation=()=>{
+  loopPanel.render(loopHistories[runtime.activeVehicleIndex],Number(estimate.diagnostics?.loopVocabularyReady),
+    typeof estimate.diagnostics?.loopWords==='number'?estimate.diagnostics.loopWords:undefined,
+    estimate.diagnostics?.runtime==='Rumoca native SLAM program');
   truthPath=vehiclePaths[runtime.activeVehicleIndex].truth;estimatePath=vehiclePaths[runtime.activeVehicleIndex].estimate;
   const paths=[{id:'truth',color:0xc9d7e3,points:truthPath},{id:'slam',color:0x50e6b2,points:estimatePath},...Array.from(comparisons.streams.values()).map((stream,i)=>({id:`external-${i}`,color:Number.parseInt(stream.color.replace('#',''),16),points:comparisons.path(stream)}))];
   world.setMap(estimate.points,truth?displayed.evaluationOrigin:undefined);world.setEstimate(estimate);
@@ -817,10 +845,10 @@ function render(now=0){
   requestAnimationFrame(render);
 }requestAnimationFrame(render);
 // Exposed state supports browser integration checks without privileged access.
-(window as any).__slamLab={runtime,comparisons,sourceEditor,performanceMonitor,get initialized(){return initialized;},get viewer(){return viewer;},get project(){return project;},get slamBuildReceipt(){return slamBuildReceipt;},get latest(){return latest;},get ready(){return ready;},get compiling(){return compiling;},get externalSamples(){return Array.from(comparisons.streams.values()).reduce((sum,s)=>sum+s.samples,0);},get externalLatest(){return externalLatest;}};
+(window as any).__slamLab={runtime,comparisons,sourceEditor,performanceMonitor,loopHistories,get initialized(){return initialized;},get viewer(){return viewer;},get project(){return project;},get slamBuildReceipt(){return slamBuildReceipt;},get latest(){return latest;},get ready(){return ready;},get compiling(){return compiling;},get externalSamples(){return Array.from(comparisons.streams.values()).reduce((sum,s)=>sum+s.samples,0);},get externalLatest(){return externalLatest;}};
 void (async()=>{
   startup.stage(0,'Opening your project…');
-  let savedText:string|undefined,openingError:unknown;
+  let savedText:string|undefined,openingError:unknown,selectedNativeDefault=false,nativeDefaultFailed=false;
   try{
     const backup=await readProjectRecovery();if(backup)showRecoveryBackup(backup,'Previous model backup available.');
     savedText=await readSavedProjectText();
@@ -833,6 +861,17 @@ void (async()=>{
       localPersistenceBlocked=true;el<HTMLButtonElement>('save').disabled=true;
       el('saved').textContent='Cannot read local project · automatic saving disabled';
       status(String(error),true);
+    }
+  }
+  if(savedText===undefined&&!openingError){
+    const device=navigator as Navigator&{deviceMemory?:number;userAgentData?:{mobile:boolean}};
+    if(useNativeDefault({hardwareRenderer:world.graphics.acceleration==='hardware-reported',
+      mobile:device.userAgentData?.mobile===true||/Android|iPhone|iPad|iPod/i.test(device.userAgent),
+      simd:supportsWasmSimd(),memoryGB:device.deviceMemory,logicalCores:device.hardwareConcurrency})){
+      try{
+        await fetchNativeManifest(new URL(import.meta.env.BASE_URL,location.href),project.cameraResolution??'424x240');
+        project.slamBackend='native';selectedNativeDefault=true;
+      }catch{/* Unpublished native programs keep the inertial startup path. */}
     }
   }
   try{
@@ -849,8 +888,10 @@ void (async()=>{
     if(openingError&&savedText!==undefined)await recoverDefaultModels(savedText,openingError);
     else if(!localPersistenceBlocked){
       await compile();
+      if(!ready&&selectedNativeDefault){project.slamBackend='inertial';nativeDefaultFailed=true;await compile();}
       if(!ready&&savedText!==undefined&&compilationError!==undefined)await recoverDefaultModels(savedText,compilationError);
-      else if(ready)status('Ready · click Run to start the Modelica inertial experiment');
+      else if(ready)status(nativeDefaultFailed?'Ready · native SLAM could not start; inertial baseline selected':
+        runtime.activeVehicle.slamProgram?'Ready · click Run to start RGB-D SLAM':'Ready · click Run to start the Modelica inertial experiment');
     }
     else{el<HTMLButtonElement>('apply').disabled=false;el<HTMLButtonElement>('reset').disabled=false;}
     if(!ready&&(!localPersistenceBlocked||savedText!==undefined)){startup.fail(el('status').textContent);return;}

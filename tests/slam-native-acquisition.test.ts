@@ -39,16 +39,23 @@ it('draws retained measured loop edges by keyframe identity after the catalog ri
     'estimator.poses.ids':new BigInt64Array([129n,0n,128n]),
     'estimator.poses.positions':new Float64Array([1,2,3,0,0,0,4,5,6]),
     'estimator.poses.rotations':new Float64Array([1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1]),
+    'estimator.localization.catalog.occupied':new Uint8Array([1,0,1]),
+    'estimator.localization.catalog.ids':new BigInt64Array([129n,0n,128n]),
+    'estimator.localization.catalog.imageTimes':new Float64Array([43,0,42]),
+    'estimator.localization.catalog.epochs':new BigInt64Array([215n,0n,210n]),
     'estimator.localization.graph.edges.enabled':new Uint8Array([1,1,1]),
     'estimator.localization.graph.edges.kind':new BigInt64Array([2n,1n,2n]),
     'estimator.localization.graph.edges.referenceId':new BigInt64Array([128n,128n,1n]),
     'estimator.localization.graph.edges.currentId':new BigInt64Array([129n,129n,129n]),
+    'estimator.localization.graph.edges.id':new BigInt64Array([300n,299n,1n]),
   };
   const program={stateRun:(name:string)=>values[name]?{view:values[name]}:undefined} as unknown as SlamNativeProgram;
   const session=Reflect.construct(ModelicaSlamSession,[{},program]) as ModelicaSlamSession;
   const graph=session['poseGraph'](program);
   expect(graph.keyframes.map(frame=>frame.position)).toEqual([[1,2,3],[4,5,6]]);
-  expect(graph.edges).toEqual([{from:1,to:0,kind:'loop'},{from:1,to:0,kind:'odometry'}]);
+  expect(graph.keyframes[0]).toMatchObject({id:129,time:43,imageEpoch:215});
+  expect(graph.keyframes[1]).toMatchObject({id:128,time:42,imageEpoch:210});
+  expect(graph.edges).toEqual([{from:1,to:0,kind:'loop',id:300},{from:1,to:0,kind:'odometry',id:299}]);
 });
 
 it('streams predictions without images and consumes their exact prefix only once',()=>{

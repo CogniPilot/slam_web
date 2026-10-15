@@ -72,6 +72,7 @@ export class Runtime {
   onSensor:()=>void=()=>{};
   onLidar:()=>void=()=>{};
   onVehicleFrame:(vehicle:0|1,data:VehicleFrame)=>void=()=>{};
+  onInitialFrame:(vehicle:0|1,frame:InitialSensorFrame,estimate:Estimate)=>void=()=>{};
   constructor(readonly world:World,readonly vehicleIndex:0|1=0) {}
   get activeVehicle():Runtime{return this.getVehicle(this.selectedVehicle);}
   getVehicle(index:0|1):Runtime{
@@ -167,6 +168,7 @@ export class Runtime {
         const initial=await this.captureInitialFrame();
         this.slamProgram=await client.initialize(base,initial);
         this.slam=client;
+        this.onInitialFrame(this.vehicleIndex,initial,this.slamProgram.estimate);
       }catch(error){client.close();this.project=undefined;throw error;}
     }
     if(this.vehicleIndex===0&&project.vehicleCount===2){
@@ -177,6 +179,7 @@ export class Runtime {
         other.onStatus=message=>this.onStatus('Drone 2 · '+message);
         other.onSensor=()=>this.onSensor();other.onLidar=()=>this.onLidar();
         other.onVehicleFrame=(_index,data)=>this.onVehicleFrame(1,data);
+        other.onInitialFrame=(_index,frame,estimate)=>this.onInitialFrame(1,frame,estimate);
         other.onFrame=(frame,estimate,truth,metrics)=>{if(this.selectedVehicle===1)this.onFrame(frame,estimate,truth,metrics);};
         await other.compile({...structuredClone(project),vehicleCount:1,seed:project.seed^0x44524f4e});
         if(this.world.graphics.acceleration!=='software'&&typeof OffscreenCanvas!=='undefined')await otherWorld.enableSensorWorker();

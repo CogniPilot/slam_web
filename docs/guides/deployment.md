@@ -207,6 +207,36 @@ does not establish a speedup. The optimizer experiment is not deployed.
 
 ## Warehouse tracking regression
 
+The toolbar shows the active estimator. New projects currently start with the
+inertial baseline, which performs no visual mapping or loop search. For the
+desktop RGB-D demonstration, choose **Configuration → Estimator → Native
+Modelica SLAM**, select the warehouse and 424 × 240, and run a returning path.
+The independent overview targets 30 FPS even when simulation runs slower.
+
+The Loop closures panel retains small copies of actual keyframe RGB samples,
+including initialization at time zero. It associates images through the model's
+stable keyframe IDs and image epochs, keeps at most 128 thumbnails and six
+closure cards, and shows matched/current timestamps. Orange edges on the map
+are verified loop constraints. Unreported retrieval counts and similarity scores
+are displayed as unavailable; a best retrieval score is not substituted for the
+score of a geometrically accepted edge.
+
+A 50-second warehouse circuit produced three verified edges at 43.8, 45.8 and
+48.2 simulated seconds, matching retained keyframe 3 at 22.0 seconds with
+keyframes 5, 6 and 7. All estimated positions matched the earlier serial circuit
+exactly. Under host load it measured 0.49× with a 30 FPS overview and no browser
+errors; it does not qualify 10× realtime simulation.
+
+![Verified warehouse loops and their matched keyframe images](../images/warehouse-loop-closures.png)
+
+`DESKTOP_NATIVE_DEFAULT` in `src/estimator-default.ts` is prepared but disabled.
+When enabled, it considers only fresh projects with hardware graphics, a
+non-mobile browser, SIMD, at least 8 GB reported device memory and eight logical
+cores, and a published native camera profile. Missing capabilities, unknown
+memory, unpublished assets or failure of this automatic startup retain/fall back
+to inertial. Saved estimator choices remain explicit. This backend does not
+require shared-memory threads or cross-origin isolation.
+
 The native camera image is consumed at its capture boundary, after every
 preceding held IMU interval. Calibrated RGB-D registration refines the geometric
 seed using each point's covariance and reports uncertainty from the same

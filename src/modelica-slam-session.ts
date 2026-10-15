@@ -168,6 +168,9 @@ export class ModelicaSlamSession {
     diagnostics.loops=diagnostics.loopEdges;
     diagnostics.visualUpdates=this.visualUpdates;
     diagnostics.odometryEdges=poseGraph.edges.filter(edge=>edge.kind==='odometry').length;
+    const words=program.stateRun('vocabulary.count')?.view,ready=program.stateRun('vocabulary.ready')?.view;
+    if(words)diagnostics.loopWords=Number(words[0]);
+    if(ready)diagnostics.loopVocabularyReady=Number(ready[0]);
     const covariance=program.stateRun('estimator.localization.estimator.covariance')?.view;
     const block=(start:number)=>Array.from({length:9},(_,index)=>Number(covariance![(start+Math.floor(index/3))*15+start+index%3]));
     const uncertainty=covariance?.length===225?{positionCovariance:block(0),attitudeCovariance:block(6)}:undefined;
@@ -180,19 +183,28 @@ export class ModelicaSlamSession {
     const run=(name:string)=>program.stateRun(name)?.view;
     const enabled=run('estimator.poses.enabled'),ids=run('estimator.poses.ids');
     const positions=run('estimator.poses.positions'),rotations=run('estimator.poses.rotations');
+    const catalog='estimator.localization.catalog.';
+    const occupied=run(catalog+'occupied'),catalogIds=run(catalog+'ids'),times=run(catalog+'imageTimes'),epochs=run(catalog+'epochs');
+    const images=new Map<number,{time:number;imageEpoch:number}>();
+    if(occupied&&catalogIds&&times&&epochs)for(let slot=0;slot<occupied.length;slot++)if(Number(occupied[slot])){
+      const id=Number(catalogIds[slot]),time=Number(times[slot]),imageEpoch=Number(epochs[slot]);
+      if(Number.isSafeInteger(id)&&id>0&&Number.isFinite(time)&&time>=0&&Number.isSafeInteger(imageEpoch)&&imageEpoch>=0)
+        images.set(id,{time,imageEpoch});
+    }
     const keyframes:NonNullable<Estimate['poseGraph']>['keyframes']=[],edges:NonNullable<Estimate['poseGraph']>['edges']=[];
     const index=new Map<number,number>();
     if(!enabled||!ids||!positions||!rotations)return {keyframes,edges};
     for(let slot=0;slot<enabled.length;slot++)if(Number(enabled[slot])){
       index.set(Number(ids[slot]),keyframes.length);
-      keyframes.push({position:Array.from(positions.slice(slot*3,slot*3+3),Number),
+      keyframes.push({id:Number(ids[slot]),...images.get(Number(ids[slot])),position:Array.from(positions.slice(slot*3,slot*3+3),Number),
         quaternion:quaternionFromRotation(Array.from(rotations.slice(slot*9,slot*9+9),Number))});
     }
     const prefix='estimator.localization.graph.edges.';
     const active=run(prefix+'enabled'),kinds=run(prefix+'kind'),references=run(prefix+'referenceId'),currents=run(prefix+'currentId');
+    const edgeIds=run(prefix+'id');
     if(active&&kinds&&references&&currents)for(let slot=0;slot<active.length;slot++)if(Number(active[slot])){
       const from=index.get(Number(references[slot])),to=index.get(Number(currents[slot])),kind=Number(kinds[slot]);
-      if(from!==undefined&&to!==undefined&&(kind===1||kind===2))edges.push({from,to,kind:kind===2?'loop':'odometry'});
+      if(from!==undefined&&to!==undefined&&(kind===1||kind===2))edges.push({from,to,kind:kind===2?'loop':'odometry',...(edgeIds?{id:Number(edgeIds[slot])}:{})});
     }
     return {keyframes,edges};
   }
