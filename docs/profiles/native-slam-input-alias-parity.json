@@ -718,5 +718,42 @@
     "inputDifferences": [],
     "inputsCompared": 43
   },
-  "finding": "Candidate Initialize with baseline Step matches all16startup frames and full final carried state. Baseline Initialize with candidate Step reproduces failure. Before the isolated0.8s IMAGE call, all160carried previous-state runs and all declared inputs match bit-for-bit. After the call43named next-state runs diverge; candidate estimator covariance is zero and graph correction is rejected. Each original module independently reproduces its own full post-memory hash from the supplied pre-memory."
+  "finding": "Candidate Initialize with baseline Step matches all16startup frames and full final carried state. Baseline Initialize with candidate Step reproduces failure. Before the isolated0.8s IMAGE call, all160carried previous-state runs and all declared inputs match bit-for-bit. After the call43named next-state runs diverge; candidate estimator covariance is zero and graph correction is rejected. Each original module independently reproduces its own full post-memory hash from the supplied pre-memory.",
+  "overwriteTrace": {
+    "artifactLabel": "candidate/covariance-write-trace.json",
+    "artifactSha256": "8f18aef6ee2480570500ca8e0920a49adc6e7e2934bfb18d09c4576ff8c5d951",
+    "moduleSha256": "2d1fab02244b3949374a31fdc27e93a5f25aa0d2e58428caf4104797980acb83",
+    "originalPostSha256": "eba3fef6b0b9eb858496354ced456cd73647d56c9379a73ae8e33bacaca0db7c",
+    "instrumentedPostSha256": "eba3fef6b0b9eb858496354ced456cd73647d56c9379a73ae8e33bacaca0db7c",
+    "instrumentationPreservesAllMemory": true,
+    "liveCovariance": {
+      "offset": 120823432,
+      "bytes": 1800,
+      "doubles": 225
+    },
+    "lastGoodWrite": {
+      "id": 5427,
+      "functionName": "f482",
+      "line": 1309562,
+      "kind": "copy",
+      "dst": 120823432,
+      "src": 120858800,
+      "bytes": 1800,
+      "first": 0.33830473673062217,
+      "nonzero": 177
+    },
+    "overwritingDescriptorCopy": {
+      "id": 5209,
+      "functionName": "f471",
+      "line": 1232212,
+      "kind": "copy",
+      "dst": 119843968,
+      "src": 164353712,
+      "bytes": 17561600,
+      "first": 0,
+      "nonzero": 0
+    },
+    "overlapBytes": 1800,
+    "finding": "Inner Catalog.Publish returns a valid covariance buffer. Outer LocalizationProcessing.Publish retains that pointer while a later descriptor copy overwrites its entire range. The optimized alias outlives its safe storage lifetime; graph validation subsequently rejects the zero covariance. These addresses and WAT function/site IDs belong only to the pinned experimental module."
+  }
 }
