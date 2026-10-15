@@ -11,12 +11,15 @@ import {parseArgs} from 'node:util';
 import {D435_PAIRED_RESOLUTIONS} from '../src/camera-resolutions.mjs';
 import {rgbdSlamNativeSourceManifest as native} from '../src/modelica-slam-source-manifest.mjs';
 
-const {values}=parseArgs({options:{binary:{type:'string'},reset:{type:'string'},output:{type:'string'},resolution:{type:'string'},revision:{type:'string'},'private-bytes':{type:'string'}}});
-if(!values.binary||!values.reset)throw new Error('Supply --binary PATH_TO_NATIVE_STEP --reset RESET_STATE.csv; optional --resolution WIDTHxHEIGHT');
+const {values}=parseArgs({options:{binary:{type:'string'},reset:{type:'string'},'reset-bin':{type:'string'},'state-hash':{type:'string'},output:{type:'string'},resolution:{type:'string'},revision:{type:'string'},'private-bytes':{type:'string'}}});
+if(!values.binary||!!values.reset===!!values['reset-bin'])throw new Error('Supply --binary PATH_TO_NATIVE_STEP and exactly one of --reset RESET_STATE.csv or --reset-bin STATE_INIT.bin --state-hash NAMES_HASH');
+if(values['reset-bin']&&!/^[a-f0-9]{16}$/i.test(values['state-hash']??''))throw new Error('--reset-bin requires the exact 16-digit state-name hash');
+if(values.reset&&values['state-hash'])throw new Error('--state-hash applies only to --reset-bin');
 const root=resolve(values.output??join(homedir(),'scratch/slam_web/build/slam-native-profiles'));
 const modes=D435_PAIRED_RESOLUTIONS.filter(mode=>!values.resolution||mode.id===values.resolution);
 if(!modes.length)throw new Error('Unsupported paired D435 resolution');
-await access(values.reset);await mkdir(root,{recursive:true});
+const reset=resolve(values.reset??values['reset-bin']);
+await access(reset);await mkdir(root,{recursive:true});
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const binary=resolve(values.binary),binarySha256=sha(await readFile(binary));
 const base=(await Promise.all(native.paths.map(path=>readFile(new URL(`../${path}`,import.meta.url),'utf8')))).join(native.separator);
@@ -29,7 +32,7 @@ for(const mode of modes){
   const commands=[];
   for(const [key,model] of Object.entries(models)){
     const args=[sourcePath,model,'1',values['private-bytes']??'134217728','1171914752',join(directory,key==='initialize'?'init-named':'step-named'),'--carried-state'];
-    if(key==='initialize')args.push('--state-csv',resolve(values.reset));
+    if(key==='initialize')args.push(...(values.reset?['--state-csv',reset]:['--state-bin',reset,values['state-hash'].toLowerCase()]));
     commands.push({binary,args});console.log(`Exporting ${mode.id} ${key}`);
     const log=createWriteStream(join(directory,`${key}.log`));
     try{await new Promise((accept,reject)=>{

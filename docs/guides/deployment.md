@@ -62,6 +62,11 @@ node scripts/export-slam-profiles.mjs --binary /path/to/native_step --reset /pat
 node scripts/slam-native-assets.mjs --require
 ```
 
+Exporters with binary Reset support can instead use `--reset-bin state_init.bin
+--state-hash NAMES_HASH`. The binary must contain source-owned Reset values in
+the compiler's sorted state-name order. The exporter verifies the name hash and
+exact scalar count before using it, avoiding a large intermediate CSV.
+
 `--output` changes the scratch export directory; `--resolution 424x240` exports
 one mode. Each profile records the executable hash, exact source, compiler
 revision supplied by the caller and export commands. The wrappers change image
