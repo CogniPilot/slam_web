@@ -3,7 +3,7 @@ import {ModelicaSlamSession} from './modelica-slam-session';
 import {fetchNativeAsset,fetchNativeManifest} from './slam-native-program';
 import type {SlamInitialFrame,SlamIntervalFrame} from './modelica-slam-frame';
 
-export type SlamRequest={id:number}&({type:'init';base:string;frame:SlamInitialFrame}|{type:'step';frame:SlamIntervalFrame});
+export type SlamRequest={id:number}&({type:'init';base:string;frame:SlamInitialFrame}|{type:'step';frame:SlamIntervalFrame}|{type:'predict';imageEpoch:number;interval:SlamIntervalFrame['intervals'][number]});
 let session:ModelicaSlamSession|undefined;
 async function execute(message:SlamRequest){
   if(message.type==='init'){
@@ -16,6 +16,7 @@ async function execute(message:SlamRequest){
     return {estimate:session.initialEstimate,sourceSha256:manifest.sourceSha256,models:Object.fromEntries(Object.entries(manifest.models).map(([key,layout])=>[key,{model:layout.model,pages:layout.pages}]))};
   }
   if(!session)throw new Error('Initialize native SLAM first');
+  if(message.type==='predict'){session.predict(message.imageEpoch,message.interval);return {};}
   return session.advance(message.frame);
 }
 self.onmessage=async({data}:MessageEvent<SlamRequest>)=>{

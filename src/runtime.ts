@@ -57,6 +57,8 @@ export class Runtime {
   recording=false;
   running=false;
   speed=1;
+  /** Diagnostic switch for matched serial/overlapped browser measurements. */
+  overlapSlamPrediction=true;
   dt=1/90;
   time=0;
   lastTimings:Record<string,number>={};
@@ -261,6 +263,8 @@ export class Runtime {
     this.lastWorkerTimings={};this.lastTransportTimings={};
     this.externalStep=!!this.replay&&!this.replay[this.sequence]?.truth;
     this.world.setEnvironmentVisible(!this.externalStep);
+    let prediction:Promise<unknown>|undefined;
+    const overlap=this.overlapSlamPrediction&&this.slam&&!this.replay&&!barrier;
     try {
       const values=new Map<string,any>();
       let truth:Truth|undefined,frame!:SensorFrame,estimate!:Estimate;
@@ -298,7 +302,17 @@ export class Runtime {
                   }
                   if(event.camera)this.cameraLidar=event.lidar;
                   if(barrier)await barrier.arrive();
+                  if(overlap&&event.imu&&!event.camera){
+                    // Keep at most one prediction in flight. The next physics
+                    // interval can run on its own worker in the meantime.
+                    if(prediction)await prediction;
+                    prediction=this.slam!.predict(this.cameraSequence,this.imuIntervals.at(-1)!);
+                    // Observe rejection immediately, then propagate it before
+                    // publishing the frame; never leave an unhandled promise.
+                    void prediction.catch(()=>{});
+                  }
                 }
+                if(prediction)await prediction;
               }
               if(!truth)throw new Error('Missing committed camera pose');
               command=truth.command??command;
@@ -384,7 +398,7 @@ export class Runtime {
       const delivered={frame,estimate,truth,metrics:completed};
       if(barrier)this.pendingFrame=delivered;
       else{this.lastFrame=delivered;this.publishFrame();}
-    } finally {this.stepping=false;this.externalStep=false;}
+    } finally {if(prediction)await prediction.catch(()=>{});this.stepping=false;this.externalStep=false;}
   }
   play() {
     if(this.running) return;
@@ -400,7 +414,11 @@ export class Runtime {
       do{
         const before=performance.now();
         try {await this.step();}
-        catch(error){if(active()){this.running=false;this.onError(error instanceof Error?error:new Error(String(error)));}return;}
+        catch(error){
+          // An older epoch still owns the same solver state. Its failure must
+          // also stop a resumed run before that state is stepped again.
+          this.pause();this.onError(error instanceof Error?error:new Error(String(error)));return;
+        }
         if(!active())return;
         const delay=this.speed===Infinity?0:Math.max(0,this.dt*1000/this.speed-(performance.now()-before));
         // Worker replies already yield to the event loop. Batch completed

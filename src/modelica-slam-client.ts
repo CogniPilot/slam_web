@@ -47,6 +47,9 @@ export class ModelicaSlamClient {
     const interval=owned(slamIntervalFrameFromSensor(frame));
     return this.call<SlamNativeResult>({type:'step',frame:interval},transferable(interval),300_000);
   }
+  predict(imageEpoch:number,interval:SlamIntervalFrame['intervals'][number]){
+    return this.call({type:'predict',imageEpoch,interval},[],300_000);
+  }
   private fail(error:Error){
     if(this.closed)return;this.closed=true;this.worker.terminate();
     if(this.pending){clearTimeout(this.pending.timer);this.pending.reject(error);this.pending=undefined;}

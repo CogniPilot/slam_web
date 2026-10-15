@@ -34,3 +34,14 @@ it('waits for an in-flight frame after resume and propagates current errors once
   expect(r.step).toHaveBeenCalledTimes(1);expect(r.onError).toHaveBeenCalledExactlyOnceWith(error);
   expect(r.running).toBe(false);expect(vi.getTimerCount()).toBe(0);
 });
+
+it('stops a resumed run and reports a failure from its earlier in-flight frame',async()=>{
+  vi.useFakeTimers();const r=runtime(),error=new Error('Earlier solver failed');
+  let fail!:(error:Error)=>void;
+  const pending=new Promise<void>((_resolve,reject)=>{fail=reject;});
+  r.step=vi.fn(async()=>{r.stepping=true;try{await pending;}finally{r.stepping=false;}});
+  r.play();r.pause();r.play();
+  fail(error);await flush();await vi.runOnlyPendingTimersAsync();
+  expect(r.step).toHaveBeenCalledTimes(1);expect(r.onError).toHaveBeenCalledExactlyOnceWith(error);
+  expect(r.running).toBe(false);expect(vi.getTimerCount()).toBe(0);
+});

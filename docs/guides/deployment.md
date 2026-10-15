@@ -160,12 +160,44 @@ Every configured sensor event and estimator update still runs. Overview poses,
 diagnostic geometry, and DOM updates coalesce at the independent 30 Hz display
 deadline; navigation, telemetry, recordings, and comparison samples retain every
 measurement. Pause/resume invalidates callbacks from earlier playback runs.
+Background tabs suspend display updates with RAF; sensor processing can continue.
+
+For one live drone, held-IMU SLAM predictions now run concurrently with the next
+physics interval of the same camera frame. Every prediction is awaited before
+camera publication, and the frame's complete IMU prefix is checked against the
+already predicted intervals. Replay and paired-drone barriers retain serial
+execution. `SLAM_PROFILE_OVERLAP=0` selects serial execution for comparisons.
+
+A sequential 30-frame warehouse comparison at 90 Hz IMU measured 0.212× serial
+and 0.319× streamed prediction under host load. Physics means were 501 and
+547 ms per camera frame; the serial SLAM tail fell from 431 to 71 ms while total
+native SLAM work remained 428–469 ms. Every recorded truth field, estimated
+position, and non-timing diagnostic matched exactly. These are shared-host
+observations, not a 10× throughput qualification.
 
 For browser-only native-program experiments, `SLAM_PROFILE_NATIVE_DIR` can point
 to a directory containing replacement published asset filenames. Files absent
 there use the served delivery. The profiler records overridden file hashes in
 `native-comparison.json`, plus separate overview and UI submission means in the
 report. Keep the compiler and native-program overrides independent.
+
+To clock selected functions inside a stripped native Step module, first rewrite
+a diagnostic copy with `scripts/instrument-native-slam.mjs --out DIRECTORY
+--functions ID,ID,...`, then run the browser profiler with
+`SLAM_PROFILE_NATIVE_DIR=DIRECTORY SLAM_PROFILE_NATIVE_TRACE=1`. Function IDs must
+come from that exact module. The tool records original and instrumented hashes;
+the profiler emits `native-function-timing.json`. The injected timers are never
+part of a normal app build. Inclusive times overlap; selected-exclusive times
+exclude only the other instrumented descendants.
+
+For module `cead2d1d556eeb1f` at 424 × 240, instrumenting IDs
+`472,582,588,591,613,614,615` over 30 warehouse frames with 10 Hz IMU measured
+77.5 ms total native work per camera frame. Function 472 accounted for 42.2 ms;
+582 and 588 accounted for 3.4 and 7.6 ms. Outer functions 614 and 615 added
+14.5 ms outside the other instrumented functions. All ran twice per frame,
+including IMU-only calls. A compiler symbol map is needed to establish source
+names; identifying 582/588 as selection/FAST from code structure remains an
+inference. Instrumented and original modules produced identical positions.
 
 An October 14 shared-host experiment on the existing 424 × 240 native Step
 module with Binaryen 129 `wasm-opt -O3 --all-features` produced identical truth

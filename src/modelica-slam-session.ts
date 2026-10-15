@@ -10,6 +10,7 @@ export interface SlamNativeResult {
 }
 type CameraInputs=Pick<SlamIntervalFrame,'rgbCalibration'|'depthCalibration'|'depthUnits'|'opticalToBody'|'cameraOriginBody'|'disparityNoise'|'noiseReferenceFx'|'baseline'>;
 interface ImageObservation {features:number[][];current:number[][];previous:number[][];matchCount:number|undefined}
+type ImuInterval=SlamIntervalFrame['intervals'][number];
 
 /** Drives the compiler-exported D435FastSLAMInitialize and D435FastSLAMStep
  * programs: one Initialize evaluation on the time-zero image, then one Step
@@ -21,6 +22,7 @@ export class ModelicaSlamSession {
   private visualUpdates=0;
   /** End time of the last evaluated interval; the model checks continuity to 1e-12. */
   private clock=0;
+  private predicted:{epoch:number;intervals:ImuInterval[];stepMs:number[]}={epoch:-1,intervals:[],stepMs:[]};
   private initial!:Estimate;
   private constructor(readonly manifest:SlamNativeManifest,private readonly step:SlamNativeProgram){}
 
@@ -48,20 +50,52 @@ export class ModelicaSlamSession {
 
   get initialEstimate():Estimate {return structuredClone(this.initial);}
 
+  /** Overlap a held-IMU prediction with the next physics interval. Images are
+   * never consumed here: only the final camera call requests observation. */
+  predict(imageEpoch:number,interval:ImuInterval){
+    if(imageEpoch<=this.epoch||this.predicted.intervals.length&&imageEpoch!==this.predicted.epoch)
+      throw new Error('Native SLAM prediction image epoch does not continue the pending frame');
+    if(!this.step.hasInput('imageRequested'))throw new Error('Native SLAM must expose the imageRequested acquisition gate');
+    const end=this.writeInterval(interval);
+    this.step.integer('imageEpoch')[0]=BigInt(imageEpoch);
+    this.step.boolean('imageRequested')[0]=0;
+    const started=performance.now(),status=this.step.step(end),elapsed=performance.now()-started;
+    this.clock=end;
+    if(status!==0)throw new Error(`Native SLAM prediction returned status ${status} at t=${end.toFixed(4)} s`);
+    this.predicted.epoch=imageEpoch;this.predicted.intervals.push(structuredClone(interval));this.predicted.stepMs.push(elapsed);
+  }
+
+  private writeInterval(interval:ImuInterval){
+    if(!(interval.dt>0&&interval.dt<=.2))throw new Error('Native SLAM accepts IMU intervals of at most 0.2 s');
+    const end=this.clock+interval.dt;
+    if(Math.abs(end-interval.time)>1e-6)throw new Error(`IMU interval at ${interval.time} s does not continue the native SLAM clock at ${this.clock} s`);
+    writeVector(this.step,'accel',interval.imu.accel);writeVector(this.step,'gyro',interval.imu.gyro);
+    this.step.real('h')[0]=interval.dt;this.step.real('intervalTime')[0]=end;
+    return end;
+  }
+
   advance(frame:SlamIntervalFrame):SlamNativeResult {
     if(frame.imageEpoch<=this.epoch)throw new Error('Native SLAM requires a newer camera image epoch for each frame');
+    const predicted=this.predicted;
+    if(predicted.intervals.length){
+      if(predicted.epoch!==frame.imageEpoch||predicted.intervals.length>=frame.intervals.length)
+        throw new Error('Native SLAM camera frame does not complete its pending predictions');
+      for(const [index,interval] of predicted.intervals.entries()){
+        const sample=frame.intervals[index];
+        if(interval.time!==sample.time||interval.dt!==sample.dt||
+          interval.imu.accel.some((value,i)=>value!==sample.imu.accel[i])||
+          interval.imu.gyro.some((value,i)=>value!==sample.imu.gyro[i]))
+          throw new Error('Native SLAM camera frame does not match its predicted IMU prefix');
+      }
+    }
     this.writeCamera(this.step,frame);
     this.writeImage(this.step,frame);
-    const stepMs:number[]=[];let imageStatus:Record<string,number|boolean>|undefined,image:ImageObservation|undefined;
+    const stepMs:number[]=predicted.stepMs.slice();let imageStatus:Record<string,number|boolean>|undefined,image:ImageObservation|undefined;
     if(!this.step.hasInput('imageRequested'))throw new Error('Native SLAM must expose the imageRequested acquisition gate');
     for(const [index,interval] of frame.intervals.entries()){
-      if(!(interval.dt>0&&interval.dt<=.2))throw new Error('Native SLAM accepts IMU intervals of at most 0.2 s');
+      if(index<predicted.intervals.length)continue;
       // Feed the model's own continuous clock: previous end plus h, exactly.
-      const end=this.clock+interval.dt;
-      if(Math.abs(end-interval.time)>1e-6)throw new Error(`IMU interval at ${interval.time} s does not continue the native SLAM clock at ${this.clock} s`);
-      writeVector(this.step,'accel',interval.imu.accel);writeVector(this.step,'gyro',interval.imu.gyro);
-      this.step.real('h')[0]=interval.dt;
-      this.step.real('intervalTime')[0]=end;
+      const end=this.writeInterval(interval);
       // This raster was captured at frameTime, after the final held IMU
       // interval. Earlier intervals predict only; they cannot consume a
       // camera measurement from their future.
@@ -81,6 +115,7 @@ export class ModelicaSlamSession {
       }
     }
     this.epoch=frame.imageEpoch;this.frames++;
+    this.predicted={epoch:-1,intervals:[],stepMs:[]};
     if(imageStatus?.observationAccepted===1)this.visualUpdates++;
     const status={...this.step.derived(),...imageStatus};
     return {estimate:this.estimateFrom(this.step,stepMs,status,image),stepMs,status};

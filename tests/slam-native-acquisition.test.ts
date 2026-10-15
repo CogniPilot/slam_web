@@ -50,3 +50,34 @@ it('draws retained measured loop edges by keyframe identity after the catalog ri
   expect(graph.keyframes.map(frame=>frame.position)).toEqual([[1,2,3],[4,5,6]]);
   expect(graph.edges).toEqual([{from:1,to:0,kind:'loop'},{from:1,to:0,kind:'odometry'}]);
 });
+
+it('streams predictions without images and consumes their exact prefix only once',()=>{
+  const cells=new Map<string,Float64Array>();
+  const real=(name:string)=>{
+    if(!cells.has(name))cells.set(name,new Float64Array(['accel','gyro'].includes(name)?3:name==='rgb'?6:name==='depth'?2:1));
+    return cells.get(name)!;
+  };
+  const requested=new Uint8Array(1),epoch=new BigInt64Array(1),calls:unknown[]=[];
+  const program={layout:{model:'streamed'},hasInput:(name:string)=>['imageRequested','accel','gyro'].includes(name),real,
+    integer:()=>epoch,boolean:()=>requested,
+    step:(time:number)=>{calls.push({time,image:requested[0]===1,accel:Array.from(real('accel')),rgb:Array.from(real('rgb'))});return 0;},
+    derived:()=>({imageCompleted:requested[0]===1}),stateRun:()=>undefined,y:()=>new Float64Array(3),
+    output:(name:string)=>name==='nextQuaternion'?new Float64Array([1,0,0,0]):undefined};
+  const session=Reflect.construct(ModelicaSlamSession,[{},program]) as ModelicaSlamSession;
+  const intervals=[.1,.2].map(time=>({time,dt:.1,imu:{accel:[time,0,9.81],gyro:[0,0,0]}}));
+  session.predict(1,intervals[0]);
+  // The prediction used the previous raster; the future camera is unavailable.
+  expect(calls).toEqual([{time:.1,image:false,accel:[.1,0,9.81],rgb:[0,0,0,0,0,0]}]);
+  const frame={imageEpoch:1,frameTime:.2,rgb:new Uint8Array([1,2,3,4,5,6]),depth:new Uint16Array(2),
+    imageLayout:{color:{width:2,height:1,strideBytes:6},depth:{width:2,height:1,strideBytes:4}},intervals} as SlamIntervalFrame;
+  expect(()=>session.advance({...frame,imageEpoch:2})).toThrow('pending predictions');
+  const changed=structuredClone(frame);changed.intervals[0].imu.accel[0]=42;
+  expect(()=>session.advance(changed)).toThrow('predicted IMU prefix');
+  const result=session.advance(frame);
+  expect(calls).toHaveLength(2);
+  expect(calls[1]).toEqual({time:.2,image:true,accel:[.2,0,9.81],rgb:[1,2,3,4,5,6]});
+  expect(result.stepMs).toHaveLength(2);
+  // The next frame continues the clock and receives its own prediction prefix.
+  session.predict(2,{...intervals[0],time:.3});
+  expect(()=>session.predict(3,{...intervals[0],time:.4})).toThrow('pending frame');
+});

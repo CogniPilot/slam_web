@@ -6,6 +6,7 @@ import {homedir} from 'node:os';
 import {D435_PAIRED_RESOLUTIONS} from '../src/camera-resolutions.mjs';
 import {summarizeCpuProfiles} from './browser-profile-summary.mjs';
 import {startSessionTiming,startRpcTiming} from '../dev/profile-session-instrumentation.mjs';
+import {installNativeFunctionTiming} from './native-function-instrumentation.mjs';
 const output=process.argv[2]??join(homedir(),'scratch/slam_web/profiles/browser-native-slam');
 const url=process.env.SLAM_PROFILE_URL??'http://127.0.0.1:4173';
 const cameraHz=Number(process.env.SLAM_PROFILE_CAMERA_HZ??5);
@@ -41,6 +42,14 @@ try{
   // Optional, explicitly selected native-program experiment. Missing files
   // fall through to the published delivery; record every overridden byte.
   const nativeDirectory=process.env.SLAM_PROFILE_NATIVE_DIR;
+  const nativeFunctionTiming=process.env.SLAM_PROFILE_NATIVE_TRACE==='1';
+  if(nativeFunctionTiming){
+    if(!nativeDirectory)throw Error('Native function timing requires an explicitly instrumented SLAM_PROFILE_NATIVE_DIR');
+    await page.route('**/assets/modelica-slam.worker-*.js',async route=>{
+      const response=await route.fetch();
+      await route.fulfill({body:`(${installNativeFunctionTiming.toString()})();\n${await response.text()}`,contentType:'text/javascript'});
+    });
+  }
   const nativeOverrides=new Map();
   if(nativeDirectory)await page.route('**/vendor/slam/*',async route=>{
     const name=new URL(route.request().url()).pathname.split('/').at(-1);
@@ -55,7 +64,8 @@ try{
   await page.goto(url);
   await page.waitForFunction(()=>window.__slamLab?.initialized&&window.__slamLab.ready,{},{timeout:120000});
   console.log('Baseline ready');
-  const preparation=await page.evaluate(async({cameraHz,imuHz,resolution,environment,tour})=>{
+  const overlapSlamPrediction=process.env.SLAM_PROFILE_OVERLAP!=='0';
+  const preparation=await page.evaluate(async({cameraHz,imuHz,resolution,environment,tour,overlapSlamPrediction})=>{
     const lab=window.__slamLab,r=lab.runtime;
     r.pause();while(r.busy)await new Promise(resolve=>setTimeout(resolve,10));
     const p=structuredClone(lab.project);
@@ -65,10 +75,11 @@ try{
     const progress=[],originalStatus=r.onStatus;
     r.onStatus=text=>{progress.push(text);originalStatus(text);};
     const started=performance.now();await r.compile(p);r.onStatus=originalStatus;
+    r.overlapSlamPrediction=overlapSlamPrediction;
     r.autopilot=tour==='indoor'||tour==='circuit';r.tourMode=tour==='indoor'?'indoor':'circuit';
     return {prepareMs:performance.now()-started,program:r.slamProgram,graphics:r.world.graphics,
       camera:r.world.calibration,rates:r.sensorClock.rates,origin:r.evaluationOrigin,progress};
-  },{cameraHz,imuHz,resolution,environment,tour});
+  },{cameraHz,imuHz,resolution,environment,tour,overlapSlamPrediction});
   console.log(JSON.stringify({preparation}));
   if(process.env.SLAM_PROFILE_SOURCE_SHA&&preparation.program.sourceSha256!==process.env.SLAM_PROFILE_SOURCE_SHA)
     throw new Error(`The served native source is ${preparation.program.sourceSha256}, expected ${process.env.SLAM_PROFILE_SOURCE_SHA}`);
@@ -96,6 +107,14 @@ try{
   const sessionTiming=process.env.SLAM_PROFILE_SESSION_TIMING==='1'
     ?await startSessionTiming(root,call,new URL('.',url).href):undefined;
   if(sessionTiming)await page.evaluate(startRpcTiming);
+  let nativeTimingSession;
+  if(nativeFunctionTiming){
+    const target=(await root.send('Target.getTargets')).targetInfos.find(t=>t.type==='worker'&&t.url.includes('/modelica-slam.worker-'));
+    if(!target)throw Error('Native SLAM worker is unavailable');
+    nativeTimingSession=(await root.send('Target.attachToTarget',{targetId:target.targetId,flatten:false})).sessionId;
+    const result=await call(nativeTimingSession,'Runtime.evaluate',{expression:'globalThis.__nativeFunctionTiming.active=true',returnByValue:true});
+    if(result.exceptionDetails||result.result?.value!==true)throw Error('Native function timing installation failed');
+  }
   const executionReceipt=()=>page.evaluate(()=>window.__slamLab.runtime.physics.call('executionReceipt'));
   const executionBefore=process.env.SLAM_PROFILE_EXECUTION_RECEIPT==='1'?await executionReceipt():undefined;
   const cpuBefore=(await root.send('SystemInfo.getProcessInfo')).processInfo;
@@ -139,6 +158,12 @@ try{
   const cpuSeconds=cpuAfter.reduce((sum,info)=>sum+Math.max(0,info.cpuTime-(previousCpu.get(info.id)??info.cpuTime)),0);
   if(sessionTiming)await writeFile(join(output,'session-timing.json'),JSON.stringify({
     ...await sessionTiming.finish(),rpc:await page.evaluate(()=>window.__profileRpcTiming.finish())},null,2));
+  if(nativeTimingSession){
+    const result=await call(nativeTimingSession,'Runtime.evaluate',{expression:'globalThis.__nativeFunctionTiming.finish()',returnByValue:true});
+    if(result.exceptionDetails||!result.result?.value)throw Error('Native function timing extraction failed');
+    await writeFile(join(output,'native-function-timing.json'),JSON.stringify(result.result.value,null,2));
+    await root.send('Target.detachFromTarget',{sessionId:nativeTimingSession});
+  }
   const profiles=[];
   if(cpuProfiling){
     const profile=(await main.send('Profiler.stop')).profile;
@@ -154,8 +179,8 @@ try{
   }
   const mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
   const sorted=report.rows.map(r=>r.wallMs).sort((a,b)=>a-b);
-  const summary={recordedAt:new Date().toISOString(),browser:browser.version(),environment,tour,resolution,cameraHz,imuHz,frames:count,cpuProfiling,preparation,
-    sessionTiming:!!sessionTiming,browserCpu:{seconds:cpuSeconds,meanActiveCores:cpuSeconds/(report.elapsedMs/1000)},
+  const summary={recordedAt:new Date().toISOString(),browser:browser.version(),environment,tour,resolution,cameraHz,imuHz,frames:count,cpuProfiling,overlapSlamPrediction,preparation,
+    sessionTiming:!!sessionTiming,nativeFunctionTiming,browserCpu:{seconds:cpuSeconds,meanActiveCores:cpuSeconds/(report.elapsedMs/1000)},
     ...(executionBefore?{physicsExecution:{before:executionBefore,after:executionAfter}}:{}),
     meanFrameMs:mean(sorted),p50FrameMs:sorted[Math.floor(sorted.length*.5)],p95FrameMs:sorted[Math.floor(sorted.length*.95)],
     meanNativeMs:mean(report.rows.map(r=>r.diagnostics.stepMsTotal)),
