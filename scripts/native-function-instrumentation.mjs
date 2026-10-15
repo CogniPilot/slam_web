@@ -30,10 +30,10 @@ export async function instrumentNativeFunctions(bytes,ids){
 }
 
 export function installNativeFunctionTiming(){
-  const rows={},stack=[];
+  const rows={},edges={},stack=[];
   const trace=globalThis.__nativeFunctionTiming={active:false,rows,finish(){
     this.active=false;if(stack.length)throw Error('Native function timing stack is incomplete');
-    return {rows,scope:'Instrumented function wall times. totalMs is inclusive; selfMs excludes only instrumented descendants, not all calls. Overlapping functions must not be summed. IDs require the exact original module hash and source mapping.'};
+    return {rows,edges,scope:'Instrumented function wall times. totalMs is inclusive; selfMs excludes only instrumented descendants, not all calls. Edges group calls by nearest instrumented parent (root means none). Overlapping functions must not be summed. IDs require the exact original module hash and source mapping.'};
   }};
   // The instrumented module imports this otherwise unused math symbol. The
   // normal native program has no log10 import and is left unchanged.
@@ -45,6 +45,8 @@ export function installNativeFunctionTiming(){
       const elapsed=performance.now()-call.started,row=rows[call.id]??={calls:0,totalMs:0,selfMs:0,samplesMs:[]};
       row.calls++;row.totalMs+=elapsed;row.selfMs+=elapsed-call.children;
       if(row.samplesMs.length<4096)row.samplesMs.push(elapsed);
+      const key=`${stack.at(-1)?.id??'root'}/${call.id}`,edge=edges[key]??={calls:0,totalMs:0,selfMs:0};
+      edge.calls++;edge.totalMs+=elapsed;edge.selfMs+=elapsed-call.children;
       if(stack.length)stack.at(-1).children+=elapsed;
     }
     return 0;

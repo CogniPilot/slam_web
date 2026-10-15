@@ -19,6 +19,7 @@ it('preserves native arguments, return values, and call targets while clocking w
       const result=trace.finish();
       expect(result.rows[1].calls).toBe(1);expect(result.rows[1].totalMs).toBeGreaterThanOrEqual(0);
       expect(result.rows[1].samplesMs).toHaveLength(1);
+      expect(result.edges['root/1'].calls).toBe(1);
     }finally{Math.log10=log10;delete (globalThis as any).__nativeFunctionTiming;}
   }finally{module.destroy();}
 });
