@@ -108,6 +108,17 @@ execution receipt before and after measurement. To compare another browser
 compiler without changing deployed files, set `SLAM_PROFILE_COMPILER_DIR` to a
 directory containing its paired JS/WASM bindings; their hashes are recorded.
 
+To hand a live accepted IMU call to the compiler profiler, run
+`node scripts/capture-native-precall.mjs OUTPUT_DIRECTORY` with
+`SLAM_PROFILE_NATIVE_DIR` pointing at an explicit 424 × 240 native delivery.
+`CHROMIUM_PATH` and `SLAM_PROFILE_URL` select the browser and production preview.
+After ten warehouse camera frames, the diagnostic saves compressed full memory
+immediately before and after one accepted prediction, its five entry arguments,
+declared inputs, asset hashes and layout. The snapshot includes the host's carry
+and input writes: replay `eval_assignments` directly, without another carry.
+An independent Node replay must reproduce the entire post-call memory hash.
+Capture copies invalidate timing; measure latency separately from the saved input.
+
 A sampled run on an RTX 3090 with Chromium 154 (15 Hz camera, 90 Hz IMU,
 848 × 480; ten warmup frames and sixty measured frames) attributed 85.2% of
 active self samples to WASM, 6.8% to JavaScript, 0.8% to GC and 7.2% to browser

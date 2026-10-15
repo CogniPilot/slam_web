@@ -1,0 +1,68 @@
+{
+  "scope": "Accepted live warehouse IMU prediction after ten camera frames. Full memory immediately before eval_assignments, AFTER host carry and input writes; after memory immediately upon return, BEFORE next carry. Original WASM module unchanged. args are [y,p,time,scratch,typed]; replay eval_assignments once directly, without another host carry. Diagnostic copying invalidates timing.",
+  "sourceSha256": "aabb72b1fbd024aef62f2e5197f190a78fcf4a51160cfd41269824640b75cd6e",
+  "compilerBinarySha256": "63819b0b9e467a1170f9210e5c78abff113dd0b116445335c3866867f6422f07",
+  "layoutSha256": "5f43671c2262a2d82756d9680d1ae59fda99d786cb306d358185fca972367abd",
+  "args": [
+    0,
+    20596816,
+    2.1,
+    48445440,
+    352212088
+  ],
+  "status": 0,
+  "inputs": {
+    "h": [
+      0.10000000000000009
+    ],
+    "intervalTime": [
+      2.1
+    ],
+    "imageEpoch": [
+      11
+    ],
+    "requested": [
+      1
+    ],
+    "imageRequested": [
+      0
+    ],
+    "localCaptureRequested": [
+      1
+    ],
+    "graphCorrectionRequested": [
+      1
+    ]
+  },
+  "outputs": {
+    "predictionAccepted": 1,
+    "accepted": 1
+  },
+  "files": {
+    "before": {
+      "bytes": 354287616,
+      "sha256": "c73cdb9fa118fe0b217f163f8fc7eedc11db9fd21b84ef8570a711f5e311920b",
+      "gzipBytes": 1485678,
+      "gzipSha256": "2811eb9077c848a5fd2bcbb5184d0a8434b48fcab34bfd96430842d63687c027"
+    },
+    "after": {
+      "bytes": 354287616,
+      "sha256": "20905ac8c94a8c5853467992f110218a74ce5453c1d536ad81d2a9c08a08fe24",
+      "gzipBytes": 1472896,
+      "gzipSha256": "235a8fb38db30160cb4f58e16b53190bd7d2b4a3c027eb1069f762e060bf5c3d"
+    }
+  },
+  "verification": {
+    "status": 0,
+    "initializedBefore": 1,
+    "moduleSha256": "9dd5aaac5ad4aafd8368c449385cc71f8379576a82cab990b8479a3b4946be3d",
+    "postSha256": "20905ac8c94a8c5853467992f110218a74ce5453c1d536ad81d2a9c08a08fe24",
+    "expectedPostSha256": "20905ac8c94a8c5853467992f110218a74ce5453c1d536ad81d2a9c08a08fe24",
+    "exact": true
+  },
+  "repeatedCaptureIdentical": true,
+  "artifactLabels": [
+    "accepted-imu-precall",
+    "accepted-imu-precall-verified"
+  ]
+}
