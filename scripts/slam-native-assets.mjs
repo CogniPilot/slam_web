@@ -12,8 +12,10 @@ import {rgbdSlamNativeSourceManifest as native} from '../src/modelica-slam-sourc
 import {D435_PAIRED_RESOLUTIONS} from '../src/camera-resolutions.mjs';
 import {installPublishedNativeAssets} from './install-slam-native-package.mjs';
 
-const {values}=parseArgs({options:{exports:{type:'string'},destination:{type:'string'},require:{type:'boolean'},package:{type:'boolean'}}});
-const source=await Promise.all(native.paths.map(file=>readFile(file,'utf8')));
+const {values}=parseArgs({options:{exports:{type:'string'},'source-root':{type:'string'},destination:{type:'string'},require:{type:'boolean'},package:{type:'boolean'}}});
+if(values['source-root']&&!values.exports)throw Error('--source-root requires explicit --exports');
+const sourceRoot=resolve(values['source-root']??'.');
+const source=await Promise.all(native.paths.map(file=>readFile(join(sourceRoot,file),'utf8')));
 const sourceSha256=createHash('sha256').update(source.join(native.separator)).digest('hex');
 const defaultRoot=join(homedir(),'scratch/slam_web/build/slam-native-profiles');
 let root=resolve(values.exports??process.env.SLAM_NATIVE_EXPORTS??defaultRoot);

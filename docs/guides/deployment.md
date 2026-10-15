@@ -73,6 +73,12 @@ revision supplied by the caller and export commands. The wrappers change image
 dimensions only; feature, keyframe and map capacities remain unchanged. Changing
 resolution resets the experiment and loads its matching programs. Missing
 profiles produce an explicit error instead of resizing captured images.
+For a candidate canonical export, pass `--source-root SNAPSHOT_DIRECTORY` to
+both scripts. The directory must contain the exported `models/` tree; this lets
+an experiment use a revision-bound snapshot without replacing checked-in models.
+The asset publisher requires explicit `--exports` with this option and still
+verifies the source hashes and raster dimensions. Profiles also record the
+snapshot's Modelica revision when its provenance receipt is available.
 SLAM's raw arrays and FAST loops derive their bounds from the selected image
 dimensions; keyframes retain the actual `rgbSize` and `depthSize`. The legacy
 848 × 480 entrypoints are defaults only. The host writes resolution-specific

@@ -11,7 +11,7 @@ import {parseArgs} from 'node:util';
 import {D435_PAIRED_RESOLUTIONS} from '../src/camera-resolutions.mjs';
 import {rgbdSlamNativeSourceManifest as native} from '../src/modelica-slam-source-manifest.mjs';
 
-const {values}=parseArgs({options:{binary:{type:'string'},reset:{type:'string'},'reset-bin':{type:'string'},'state-hash':{type:'string'},output:{type:'string'},resolution:{type:'string'},revision:{type:'string'},'private-bytes':{type:'string'}}});
+const {values}=parseArgs({options:{binary:{type:'string'},reset:{type:'string'},'reset-bin':{type:'string'},'state-hash':{type:'string'},'source-root':{type:'string'},output:{type:'string'},resolution:{type:'string'},revision:{type:'string'},'private-bytes':{type:'string'}}});
 if(!values.binary||!!values.reset===!!values['reset-bin'])throw new Error('Supply --binary PATH_TO_NATIVE_STEP and exactly one of --reset RESET_STATE.csv or --reset-bin STATE_INIT.bin --state-hash NAMES_HASH');
 if(values['reset-bin']&&!/^[a-f0-9]{16}$/i.test(values['state-hash']??''))throw new Error('--reset-bin requires the exact 16-digit state-name hash');
 if(values.reset&&values['state-hash'])throw new Error('--state-hash applies only to --reset-bin');
@@ -23,7 +23,13 @@ await access(reset);await mkdir(root,{recursive:true});
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const binary=resolve(values.binary),binarySha256=sha(await readFile(binary));
 const resetSha256=sha(await readFile(reset));
-const base=(await Promise.all(native.paths.map(path=>readFile(new URL(`../${path}`,import.meta.url),'utf8')))).join(native.separator);
+const sourceRoot=resolve(values['source-root']??join(import.meta.dirname,'..'));
+const base=(await Promise.all(native.paths.map(path=>readFile(join(sourceRoot,path),'utf8')))).join(native.separator);
+let sourceProvenance;
+for(const file of ['models/slam-provenance.json','slam-provenance.json']){
+  try{sourceProvenance=JSON.parse(await readFile(join(sourceRoot,file),'utf8'));break;}
+  catch(error){if(error.code!=='ENOENT')throw error;}
+}
 for(const mode of modes){
   const directory=join(root,'profiles',mode.id);await mkdir(directory,{recursive:true});
   const models={initialize:`D435_${mode.id}Initialize`,step:`D435_${mode.id}Step`};
@@ -42,6 +48,6 @@ for(const mode of modes){
       child.on('error',reject);child.on('close',code=>code===0?accept():reject(new Error(`${model} export failed (${code}); see ${directory}/${key}.log`)));
     });}finally{log.end();}
   }
-  await writeFile(join(directory,'profile.json'),JSON.stringify({resolution:mode.id,sourceSha256,baseSourceSha256:sha(base),binarySha256,resetSha256,revision:values.revision,models,commands},null,2)+'\n');
+  await writeFile(join(directory,'profile.json'),JSON.stringify({resolution:mode.id,sourceSha256,baseSourceSha256:sha(base),binarySha256,resetSha256,revision:values.revision,modelicaRevision:sourceProvenance?.revision,models,commands},null,2)+'\n');
   console.log(`Exported ${mode.id}, source ${sourceSha256.slice(0,12)}`);
 }
