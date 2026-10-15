@@ -45,12 +45,14 @@ it('retains typed loop-pair identities without publishing unrelated flattened ar
     {name:'loopReferenceId[1]',lane:'i64',offset:32},
     {name:'loopCurrentId[1]',lane:'i64',offset:40},
     {name:'next.loopReferenceId[1]',lane:'i64',offset:48},
+    {name:'loopScore[1]',lane:'f64',offset:56},
   ]});
   expect(compact.outputs).toEqual([
     {name:'accepted',lane:'u8',offset:1024},
     {name:'loopCandidateCount',lane:'i64',offset:1048},
     {name:'loopReferenceId[1]',lane:'i64',offset:1056},
     {name:'loopCurrentId[1]',lane:'i64',offset:1064},
+    {name:'loopScore[1]',lane:'f64',offset:1080},
   ]);
 });
 

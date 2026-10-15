@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+import {compilerAsset} from './compiler-assets';
 import {ModelicaLocalizationSession,type LocalizationFrame,type LocalizationInitial,type LocalizationModel,type LocalizationSnapshot} from './modelica-localization-session';
 import type {NativeProgramArtifact} from './modelica-native-program';
 
@@ -14,8 +15,8 @@ async function execute(message:LocalizationRequest){
     let artifact=message.artifact;
     if(!artifact){
       if(!compiler){
-        const loaded:Compiler=await import(/* @vite-ignore */new URL('vendor/rumoca/rumoca_bind_wasm.js',base).href);
-        await loaded.default({module_or_path:new URL('vendor/rumoca/rumoca_bind_wasm_bg.wasm',base).href});compiler=loaded;
+        const loaded:Compiler=await import(/* @vite-ignore */compilerAsset(base,'js'));
+        await loaded.default({module_or_path:compilerAsset(base,'wasm')});compiler=loaded;
       }
       if(!compiler.prepare_native_program)throw new Error('Installed Rumoca lacks prepare_native_program; localization remains unavailable');
       artifact=JSON.parse(compiler.prepare_native_program(message.source,message.model)) as NativeProgramArtifact;

@@ -2,7 +2,12 @@
 // numerical workers; never supply a solver, output cache or alternative math.
 async function installWorkerTiming(base){
   if(globalThis.__rumocaSessionTiming)throw Error('Session timing already installed');
-  const compiler=await import(new URL('vendor/rumoca/rumoca_bind_wasm.js',base).href);
+  // Import the exact module already used by this worker, including its pinned
+  // revision query. Importing the unversioned URL creates a different prototype.
+  const loaded=performance.getEntriesByType('resource').find(entry=>{
+    try{return new URL(entry.name).pathname.endsWith('/vendor/rumoca/rumoca_bind_wasm.js');}catch{return false;}
+  });
+  const compiler=await import(loaded?.name??new URL('vendor/rumoca/rumoca_bind_wasm.js',base).href);
   const prototype=compiler.WasmSimulationSession.prototype,originals=new Map(),sessions=new WeakMap(),rows=[];
   const requests=new Map(),messages={},originalPost=self.postMessage,originalMessage=self.onmessage;
   if(typeof originalMessage!=='function')throw Error('Numerical worker message handler is unavailable');

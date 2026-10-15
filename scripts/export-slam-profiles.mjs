@@ -22,6 +22,7 @@ const reset=resolve(values.reset??values['reset-bin']);
 await access(reset);await mkdir(root,{recursive:true});
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const binary=resolve(values.binary),binarySha256=sha(await readFile(binary));
+const resetSha256=sha(await readFile(reset));
 const base=(await Promise.all(native.paths.map(path=>readFile(new URL(`../${path}`,import.meta.url),'utf8')))).join(native.separator);
 for(const mode of modes){
   const directory=join(root,'profiles',mode.id);await mkdir(directory,{recursive:true});
@@ -41,6 +42,6 @@ for(const mode of modes){
       child.on('error',reject);child.on('close',code=>code===0?accept():reject(new Error(`${model} export failed (${code}); see ${directory}/${key}.log`)));
     });}finally{log.end();}
   }
-  await writeFile(join(directory,'profile.json'),JSON.stringify({resolution:mode.id,sourceSha256,baseSourceSha256:sha(base),binarySha256,revision:values.revision,models,commands},null,2)+'\n');
+  await writeFile(join(directory,'profile.json'),JSON.stringify({resolution:mode.id,sourceSha256,baseSourceSha256:sha(base),binarySha256,resetSha256,revision:values.revision,models,commands},null,2)+'\n');
   console.log(`Exported ${mode.id}, source ${sourceSha256.slice(0,12)}`);
 }

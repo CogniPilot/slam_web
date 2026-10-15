@@ -175,6 +175,10 @@ overlapped IMU prediction, so its wall time must not be described as solver CPU
 time. The new pin exceeds realtime on this host; these measurements do not
 establish 10× operation or equivalent performance on other computers.
 
+All browser compiler loaders request the JavaScript and WASM pair with the exact
+pinned revision in their URLs. Updating the pin also changes the worker bundles,
+so a newly loaded app bypasses cached compiler files from the previous deployment.
+
 Playback batches completed simulation frames within an 8 ms wall-time budget,
 then yields; the 10× selector requests that pace but does not guarantee it.
 Every configured sensor event and estimator update still runs. Overview poses,

@@ -63,6 +63,10 @@ it('draws retained measured loop edges by keyframe identity after the catalog ri
     'loopReferenceId[2]':128,'loopCurrentId[2]':129,
   });
   expect(scored.edges).toEqual([{from:1,to:0,kind:'loop',id:300,similarity:.91},{from:1,to:0,kind:'odometry',id:299}]);
+  program.output=()=>undefined;
+  expect(session['poseGraph'](program,{
+    'loopReferenceId[1]':128,'loopCurrentId[1]':129,'loopScore[1]':.87,
+  }).edges).toEqual([{from:1,to:0,kind:'loop',id:300,similarity:.87},{from:1,to:0,kind:'odometry',id:299}]);
 });
 
 it('streams predictions without images and consumes their exact prefix only once',()=>{

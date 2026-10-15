@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+import {compilerAsset} from './compiler-assets';
 /** Browser JSON-RPC/LSP transport over Rumoca's actual language-service APIs. */
 type RpcId=number|string|null;
 type Message={jsonrpc:'2.0';id?:RpcId;method?:string;params?:any;result?:any;error?:{code:number;message:string}};
@@ -74,8 +75,8 @@ export class RumocaLanguageServer {
       const site=new URL(this.base??'../',self.location.href);
       if(site.origin!==self.location.origin)throw new RpcError(-32602,'Rumoca language-service assets must use the same origin');
       if(!site.pathname.endsWith('/'))site.pathname+='/';
-      const module=await import(/* @vite-ignore */ new URL('vendor/rumoca/rumoca_bind_wasm.js',site).href) as typeof import('@cognipilot/rumoca');
-      await module.default({module_or_path:new URL('vendor/rumoca/rumoca_bind_wasm_bg.wasm',site).href});
+      const module=await import(/* @vite-ignore */ compilerAsset(site,'js')) as typeof import('@cognipilot/rumoca');
+      await module.default({module_or_path:compilerAsset(site,'wasm')});
       return module;
     })();
     return this.compiler;

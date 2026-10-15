@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+import {compilerAsset} from './compiler-assets';
 import {ModelicaRuntimeMath,type ActorRouteConfiguration} from './modelica-runtime-math';
 let compiler:typeof import('@cognipilot/rumoca');
 let math:ModelicaRuntimeMath|undefined;
@@ -7,8 +8,8 @@ async function execute(message:any){
   if(message.type==='init'){
     actorRoute=message.actorRoute;
     math?.free();math=undefined;
-    compiler??=await import(/* @vite-ignore */ `${message.base}vendor/rumoca/rumoca_bind_wasm.js`);
-    await compiler.default({module_or_path:`${message.base}vendor/rumoca/rumoca_bind_wasm_bg.wasm`});
+    compiler??=await import(/* @vite-ignore */ compilerAsset(message.base,'js'));
+    await compiler.default({module_or_path:compilerAsset(message.base,'wasm')});
     math=new ModelicaRuntimeMath((source,model)=>compiler.WasmSimulationSession.withInteractiveOptions(source,model,1/90,'rk-like',1e-12,1e-12,'[]'),message.sensorSource,message.evaluationSource,message.origin,message.sensorSource);
     return {runtime:'Modelica IMU/GPS, evaluation and actor motion'};
   }

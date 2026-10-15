@@ -3,7 +3,7 @@ import {test,expect} from '@playwright/test';
 test('a fresh visitor sees progress until the inertial experiment is ready, then starts with Run alone',async({page,context})=>{
   let releaseCompiler!:()=>void;
   const compilerAllowed=new Promise<void>(resolve=>{releaseCompiler=resolve;});
-  await context.route('**/vendor/rumoca/rumoca_bind_wasm_bg.wasm',async route=>{
+  await context.route('**/vendor/rumoca/rumoca_bind_wasm_bg.wasm*',async route=>{
     await compilerAllowed;await route.continue();
   });
   await page.goto('/');

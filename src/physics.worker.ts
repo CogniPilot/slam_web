@@ -1,12 +1,13 @@
 /// <reference lib="webworker" />
+import {compilerAsset} from './compiler-assets';
 import type { WasmSimulationSession } from '@cognipilot/rumoca';
 import {readPhysicsSnapshot} from './physics-snapshot';
 let module: typeof import('@cognipilot/rumoca');
 let session: WasmSimulationSession | undefined;
 async function execute(message: any) {
   if (message.type === 'init') {
-    module ??= await import(/* @vite-ignore */ `${message.base}vendor/rumoca/rumoca_bind_wasm.js`);
-    await module.default({ module_or_path: `${message.base}vendor/rumoca/rumoca_bind_wasm_bg.wasm` });
+    module ??= await import(/* @vite-ignore */ compilerAsset(message.base,'js'));
+    await module.default({ module_or_path: compilerAsset(message.base,'wasm') });
     const loaded=JSON.parse(module.sync_workspace_sources(JSON.stringify(message.workspaceSources??{})));
     if(loaded.error_count)throw new Error('Rumoca could not load the flight library: '+loaded.skipped_files.join(', '));
     // This is the adaptive solver's initial step hint, not the sensor clock or

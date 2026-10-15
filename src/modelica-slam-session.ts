@@ -210,11 +210,13 @@ export class ModelicaSlamSession {
       const from=index.get(Number(references[slot])),to=index.get(Number(currents[slot])),kind=Number(kinds[slot]);
       if(from!==undefined&&to!==undefined&&(kind===1||kind===2)){
         let similarity:number|undefined;
-        if(kind===2&&scores)for(let rank=0;rank<scores.length;rank++){
+        // Four retained verified pairs; exporters may use y runs or typed cells.
+        if(kind===2)for(let rank=0;rank<(scores?.length??4);rank++){
           const reference=referenceIds?.[rank]??diagnostics[`loopReferenceId[${rank+1}]`];
           const current=currentIds?.[rank]??diagnostics[`loopCurrentId[${rank+1}]`];
+          const score=scores?.[rank]??diagnostics[`loopScore[${rank+1}]`];
           if(reference===Number(references[slot])&&current===Number(currents[slot])&&
-            Number.isFinite(scores[rank])&&scores[rank]>=0&&scores[rank]<=1)similarity=scores[rank];
+            typeof score==='number'&&Number.isFinite(score)&&score>=0&&score<=1)similarity=score;
         }
         edges.push({from,to,kind:kind===2?'loop':'odometry',...(edgeIds?{id:Number(edgeIds[slot])}:{}),...(similarity===undefined?{}:{similarity})});
       }

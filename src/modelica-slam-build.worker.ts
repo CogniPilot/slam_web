@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+import {compilerAsset} from './compiler-assets';
 import {NativeProgram,type NativeProgramArtifact} from './modelica-native-program';
 import {rgbdSlamManifest} from './modelica-slam-source-manifest.mjs';
 import {sourceDigest} from './source-digest';
@@ -21,8 +22,8 @@ self.onmessage=async({data}:MessageEvent<{base:string;source:string;sourceSha256
     const base=new URL(data.base,self.location.href);
     if(base.origin!==self.location.origin)throw new Error('SLAM compiler assets must be same origin');
     announce(progress);
-    const compiler:Compiler=await import(/* @vite-ignore */new URL('vendor/rumoca/rumoca_bind_wasm.js',base).href);
-    await compiler.default({module_or_path:new URL('vendor/rumoca/rumoca_bind_wasm_bg.wasm',base).href});
+    const compiler:Compiler=await import(/* @vite-ignore */compilerAsset(base,'js'));
+    await compiler.default({module_or_path:compilerAsset(base,'wasm')});
     receipt.compiler={version:compiler.get_version(),revision:compiler.get_git_commit()??'unknown'};
     if(typeof compiler.prepare_native_program!=='function')
       throw new Error('Installed Rumoca does not expose native WASM program compilation');

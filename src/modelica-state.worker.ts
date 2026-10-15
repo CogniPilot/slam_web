@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+import {compilerAsset} from './compiler-assets';
 import type {SensorFrame} from './types';
 import {sourceDigest} from './source-digest';
 import {ModelicaInertialSession,type InertialSessionMetadata} from './modelica-inertial-session';
@@ -7,8 +8,8 @@ let session:ModelicaInertialSession|undefined;
 async function execute(message:any) {
   if(message.type==='init') {
     const modelName=message.modelName??'ModelicaInertial';
-    compiler??=await import(/* @vite-ignore */ `${message.base}vendor/rumoca/rumoca_bind_wasm.js`);
-    await compiler.default({module_or_path:`${message.base}vendor/rumoca/rumoca_bind_wasm_bg.wasm`});
+    compiler??=await import(/* @vite-ignore */ compilerAsset(message.base,'js'));
+    await compiler.default({module_or_path:compilerAsset(message.base,'wasm')});
     const sources=JSON.stringify(message.workspaceSources??{});
     const loaded=JSON.parse(compiler.sync_workspace_sources(sources));
     if(loaded.error_count)throw new Error('Rumoca could not load Modelica library: '+loaded.skipped_files.join(', '));
