@@ -1,17 +1,21 @@
 // Diagnostic hooks injected only into the native worker by the profiling CLI.
 export function installNativeStateCapture(){
   const original=WebAssembly.instantiate;
+  const memories=globalThis.__nativeStateMemories=[];
   WebAssembly.instantiate=function(...args){
     // Initialize is loaded first, Step last. Retain its imported memory without
     // changing the program, its arguments, or the instantiate return value.
-    if(args[1]?.env?.memory)globalThis.__nativeStateMemory=args[1].env.memory;
+    if(args[1]?.env?.memory)memories.push(args[1].env.memory);
     return original.apply(this,args);
   };
 }
 
 export async function captureNativeState(layout){
-  const memory=globalThis.__nativeStateMemory;
-  if(!memory)throw Error('Native Step memory was not captured');
+  const memories=globalThis.__nativeStateMemories;
+  if(memories?.length!==2)throw Error('Native state capture requires exactly Initialize and Step instantiations');
+  const memory=memories[1];
+  if(memory.buffer.byteLength!==layout.pages*65536)throw Error('Captured memory size does not match the native Step layout');
+  if(!globalThis.crypto?.subtle)throw Error('Native state hashing requires a secure context: use HTTPS or localhost');
   const runs=[...layout.state_runs].sort((a,b)=>a.name<b.name?-1:a.name>b.name?1:0);
   const cells=runs.reduce((sum,run)=>sum+run.count,0);
   if(cells!==layout.state.count)throw Error('Named runs do not cover every native state cell');
