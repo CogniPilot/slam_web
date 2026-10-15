@@ -3,6 +3,7 @@ import {modelicaSourcePath} from '../../src/modelica-source-locations.mjs';
 import {test,expect,type Page} from '@playwright/test';
 import {readFileSync,appendFileSync} from 'node:fs';
 import path from 'node:path';
+import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import {defaultGraph} from '../../src/graph';
 import {readModelicaModelsLibrary} from '../../scripts/modelica-models-library.mjs';
@@ -13,6 +14,11 @@ const candidate=process.env.SLAM_BUILD_CANDIDATE;
 test.setTimeout(180000);
 const sha=(text:string)=>createHash('sha256').update(text).digest('hex');
 const progress=(message:string)=>{if(process.env.SLAM_WORKSPACE_PROGRESS)appendFileSync(process.env.SLAM_WORKSPACE_PROGRESS,`${new Date().toISOString()} build: ${message}\n`);};
+async function compilerIdentity(directory:string){
+  const compiler=await import(pathToFileURL(path.resolve(directory,'rumoca_bind_wasm.js')).href);
+  await compiler.default({module_or_path:readFileSync(path.join(directory,'rumoca_bind_wasm_bg.wasm'))});
+  return {version:compiler.get_version(),revision:compiler.get_git_commit()};
+}
 async function openWorkspace(page:Page){
   progress('seed');
   const fixture={format:'slam-lab-project',version:1,name:'Browser WASM build check',environment:'warehouse',seed:7,
@@ -61,15 +67,18 @@ test('static application requests an exact saved-source WASM build and preserves
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.slamBuildReceipt),{timeout:75000}).toBeTruthy();
   const receipt=await page.evaluate(()=>(window as any).__slamLab.slamBuildReceipt);
   expect(receipt.sourceSha256).toBe(before.sourceSha256);
-  expect(receipt.compiler.version).toBe('0.10.2');
+  expect(receipt.compiler).toEqual(await compilerIdentity('node_modules/@cognipilot/rumoca'));
   expect(receipt.status).toBe('failed');
-  // The pinned frontend can trap or reach the app's bounded build deadline on
-  // a slower runner. Both must name the exact model and release the worker.
+  // The current frontend refuses this algebraic constructor explicitly.
+  // Legacy traps/deadlines still release the worker on constrained runners.
   expect(receipt.failedAt).toEqual({phase:'compiling',model:'RGBDFastSLAMReset'});
   if(receipt.timedOut){
     expect(receipt.error).toBe('Rumoca compiling RGBDFastSLAMReset timed out after 60000 ms; build worker stopped.');
     expect(receipt.elapsedMs).toBeGreaterThanOrEqual(60000);
-  }else expect(receipt.error).toContain('Rumoca compiler trapped (unreachable) while compiling RGBDFastSLAMReset');
+  }else expect([
+    'compiler did not issue a complete native direct-assignment schedule: native evaluation has no event actions',
+    'Rumoca compiler trapped (unreachable) while compiling RGBDFastSLAMReset',
+  ]).toContain(receipt.error);
   await expect.poll(()=>page.workers().some(worker=>worker.url().includes('modelica-slam-build.worker'))).toBe(false);
   expect(receipt.programs).toEqual([]);
   await expect(page.locator('#slam-build-result')).toContainText('WASM build failed');
@@ -116,8 +125,8 @@ test('actual CI compiler refusal is visible and a synchronous WASM build can be 
   expect(receipt.sourceSha256).toBe(before.sourceSha256);
   expect(receipt.status).toBe('failed');
   expect(receipt.failedAt).toEqual({phase:'compiling',model:'RGBDFastSLAMReset'});
-  expect(receipt.error).toContain('function assignment target');
-  expect(receipt.compiler.version).toBe('0.10.2');
+  expect(receipt.error).toMatch(/function assignment target|compiler did not issue a complete native direct-assignment schedule: native evaluation has no event actions/);
+  expect(receipt.compiler).toEqual(await compilerIdentity(candidate!));
   await expect(page.locator('#slam-build-result')).toContainText('RGBDFastSLAMReset');
   await expect(page.locator('#slam-build-result')).toContainText('Source changed during this build');
   const editedWorkspace=await page.evaluate(()=>(window as any).__slamLab.project.slamWorkspace);
