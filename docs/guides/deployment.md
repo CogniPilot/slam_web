@@ -206,6 +206,12 @@ there use the served delivery. The profiler records overridden file hashes in
 `native-comparison.json`, plus separate overview and UI submission means in the
 report. Keep the compiler and native-program overrides independent.
 
+Set `SLAM_PROFILE_STATE_HASH=1` to hash every carried SLAM state cell after the
+timed window. `native-state.json` records a SHA-256 over canonical named runs,
+including their names, lane types and counts. Compare it between compiler-only
+exports with the same model, inputs and frame count to check exact final state
+equality. The capture only observes the actual native worker's imported memory.
+
 To clock selected functions inside a stripped native Step module, first rewrite
 a diagnostic copy with `scripts/instrument-native-slam.mjs --out DIRECTORY
 --functions ID,ID,...`, then run the browser profiler with

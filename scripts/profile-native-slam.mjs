@@ -7,6 +7,7 @@ import {D435_PAIRED_RESOLUTIONS} from '../src/camera-resolutions.mjs';
 import {summarizeCpuProfiles} from './browser-profile-summary.mjs';
 import {startSessionTiming,startRpcTiming} from '../dev/profile-session-instrumentation.mjs';
 import {installNativeFunctionTiming} from './native-function-instrumentation.mjs';
+import {installNativeStateCapture,captureNativeState} from './native-state-profile.mjs';
 const output=process.argv[2]??join(homedir(),'scratch/slam_web/profiles/browser-native-slam');
 const url=process.env.SLAM_PROFILE_URL??'http://127.0.0.1:4173';
 const cameraHz=Number(process.env.SLAM_PROFILE_CAMERA_HZ??5);
@@ -43,11 +44,13 @@ try{
   // fall through to the published delivery; record every overridden byte.
   const nativeDirectory=process.env.SLAM_PROFILE_NATIVE_DIR;
   const nativeFunctionTiming=process.env.SLAM_PROFILE_NATIVE_TRACE==='1';
-  if(nativeFunctionTiming){
-    if(!nativeDirectory)throw Error('Native function timing requires an explicitly instrumented SLAM_PROFILE_NATIVE_DIR');
+  const nativeStateHash=process.env.SLAM_PROFILE_STATE_HASH==='1';
+  if(nativeFunctionTiming&&!nativeDirectory)throw Error('Native function timing requires an explicitly instrumented SLAM_PROFILE_NATIVE_DIR');
+  if(nativeFunctionTiming||nativeStateHash){
     await page.route('**/assets/modelica-slam.worker-*.js',async route=>{
       const response=await route.fetch();
-      await route.fulfill({body:`(${installNativeFunctionTiming.toString()})();\n${await response.text()}`,contentType:'text/javascript'});
+      const hooks=[...(nativeFunctionTiming?[installNativeFunctionTiming]:[]),...(nativeStateHash?[installNativeStateCapture]:[])];
+      await route.fulfill({body:hooks.map(fn=>`(${fn.toString()})();\n`).join('')+await response.text(),contentType:'text/javascript'});
     });
   }
   const nativeOverrides=new Map();
@@ -157,6 +160,22 @@ try{
       pendingNodes:Array.from(r.pendingNodes),final:rows.at(-1)};
   },{count,cameraHz,tour});
   const cpuAfter=(await root.send('SystemInfo.getProcessInfo')).processInfo;
+  if(nativeStateHash){
+    let bytes;
+    try{if(nativeDirectory)bytes=await readFile(join(nativeDirectory,'manifest.json'));}
+    catch(error){if(error.code!=='ENOENT')throw error;}
+    const manifest=JSON.parse(bytes??await(await fetch(new URL('vendor/slam/manifest.json',url))).text());
+    const layout=manifest.profiles?.[resolution]?.models.step;
+    if(!layout)throw Error('Native state capture requires the selected profile layout');
+    const targets=(await root.send('Target.getTargets')).targetInfos.filter(t=>t.type==='worker'&&/\/modelica-slam\.worker[-.]/.test(t.url));
+    if(targets.length!==1)throw Error('Native state capture requires one SLAM worker');
+    const {sessionId}=await root.send('Target.attachToTarget',{targetId:targets[0].targetId,flatten:false});
+    try{
+      const reply=await call(sessionId,'Runtime.evaluate',{expression:`(${captureNativeState.toString()})(${JSON.stringify(layout)})`,awaitPromise:true,returnByValue:true});
+      if(reply.exceptionDetails||!reply.result?.value)throw Error('Native state capture failed: '+JSON.stringify(reply));
+      await writeFile(join(output,'native-state.json'),JSON.stringify(reply.result.value,null,2));
+    }finally{await root.send('Target.detachFromTarget',{sessionId});}
+  }
   const executionAfter=executionBefore?await executionReceipt():undefined;
   const previousCpu=new Map(cpuBefore.map(info=>[info.id,info.cpuTime]));
   const cpuSeconds=cpuAfter.reduce((sum,info)=>sum+Math.max(0,info.cpuTime-(previousCpu.get(info.id)??info.cpuTime)),0);

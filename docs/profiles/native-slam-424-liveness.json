@@ -1,0 +1,64 @@
+{
+  "environment": "warehouse",
+  "tour": "warehouse-loop",
+  "resolution": "424x240",
+  "cameraHz": 5,
+  "imuHz": 10,
+  "warmupFrames": 10,
+  "measuredFrames": 90,
+  "beforeModuleSha256": "cead2d1d556eeb1f413cfd190d40e30d76ded42de8c694dafa7540d22ecfba07",
+  "afterModuleSha256": "a35dfdb7f9879af7602ad3b6732f0bee2a0c83bc800d513e7a9f3fd328106d91",
+  "allCarriedStateExact": true,
+  "observableRowsExact": true,
+  "runs": [
+    {
+      "profile": "tonight-liveness-before",
+      "recordedAt": "2026-10-15T01:25:06.259Z",
+      "rtf": 2.0524515393386547,
+      "meanNativeMs": 76.88888887564342,
+      "meanImageStepMs": 56.92777777247959,
+      "meanImuStepMs": 19.961111103163827,
+      "meanCameraMs": 9.352222209506564,
+      "meanRenderSubmitMs": 1.0114074137919309,
+      "compiler": {
+        "version": "0.10.3",
+        "revision": "5c68a1c67524"
+      },
+      "declines": [],
+      "state": {
+        "sha256": "9a488eb9c644fff9b0e5bf5f82a658748ebdfd1d96149071bf65aad9d486904d",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "errors": []
+    },
+    {
+      "profile": "tonight-liveness-after",
+      "recordedAt": "2026-10-15T01:25:51.303Z",
+      "rtf": 1.9753519967619801,
+      "meanNativeMs": 78.78777777353922,
+      "meanImageStepMs": 59.69777777459886,
+      "meanImuStepMs": 19.08999999894036,
+      "meanCameraMs": 9.644444436497158,
+      "meanRenderSubmitMs": 1.092616482433309,
+      "compiler": {
+        "version": "0.10.3",
+        "revision": "5c68a1c67524"
+      },
+      "declines": [],
+      "state": {
+        "sha256": "9a488eb9c644fff9b0e5bf5f82a658748ebdfd1d96149071bf65aad9d486904d",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "errors": []
+    }
+  ],
+  "scope": "Sequential actual browser runs on a shared host with concurrent Rust suites. Identical model source and input sequence. No demonstrated overall browser speed improvement; native_step timing improvements do not establish a browser win. State captures occur after timed windows. Raw reports in $HOME/scratch/slam_web/profiles/<profile>."
+}
