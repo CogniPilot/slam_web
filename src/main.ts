@@ -35,7 +35,7 @@ import './workspace.css';
 const startup=startupScreen();
 document.querySelector('#app')!.innerHTML=`
 <header><a class="brand" href="https://github.com/CogniPilot/slam_web" target="_blank" rel="noopener noreferrer" aria-label="SLAM Lab GitHub repository"><span class="brand-mark">⌘</span><span>SLAM<span class="brand-light">LAB</span><small>UAV robotics · in your browser</small></span></a><div class="project-name"><input id="name" aria-label="Project name"><span id="saved">Local project</span></div><div class="project-actions"><button id="save">Save project</button><label class="button">Open project<input id="open" type="file" accept=".json,.slam.json" hidden></label><button id="download">Download</button><button id="default-models" title="Keep settings and back up source before loading current default models">Load default models</button></div><a class="powered-by" href="https://github.com/CogniPilot/rumoca" target="_blank" rel="noopener noreferrer" aria-label="Powered by Rumoca" title="Rumoca Modelica compiler"><span>Powered by</span><img src="${import.meta.env.BASE_URL}brand/rumoca.svg" width="28" height="28" alt=""></a></header>
-<main><div class="toolbar"><div class="run-controls"><button id="run" class="primary" disabled>▶ Run</button><button id="step" disabled>Step</button><button id="reset" disabled>↺ Reset</button><select id="speed" aria-label="Simulation speed"><option value="1">1× real time</option><option value="4">4× real time</option><option value="Infinity">As fast as possible</option></select><button id="flight-control" aria-pressed="true" aria-label="Manual flight">Manual flight</button><select id="active-vehicle" aria-label="Controlled and followed drone" hidden><option value="0">Drone 1</option><option value="1">Drone 2</option></select></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option value="city">City blocks</option><option value="warehouse">Warehouse</option><option value="courtyard">Courtyard</option></select><label class="check"><input id="show-map" type="checkbox" checked>Show map</label><button id="help">Lesson guide</button></div></div>
+<main><div class="toolbar"><div class="run-controls"><button id="run" class="primary" disabled>▶ Run</button><button id="step" disabled>Step</button><button id="reset" disabled>↺ Reset</button><select id="speed" aria-label="Simulation speed"><option value="1">1× real time</option><option value="4">4× real time</option><option value="10">10× real time</option><option value="Infinity">As fast as possible</option></select><button id="flight-control" aria-pressed="true" aria-label="Manual flight">Manual flight</button><select id="active-vehicle" aria-label="Controlled and followed drone" hidden><option value="0">Drone 1</option><option value="1">Drone 2</option></select></div><div class="scene-controls"><select id="environment" aria-label="Environment"><option value="city">City blocks</option><option value="warehouse">Warehouse</option><option value="courtyard">Courtyard</option></select><label class="check"><input id="show-map" type="checkbox" checked>Show map</label><button id="help">Lesson guide</button></div></div>
 <div class="workspace"><section class="visuals"><div class="scene panel"><div class="panel-label"><span class="live-dot"></span>WORLD VIEW<span class="right">Three.js · orbit to explore</span></div><div id="world"></div><div class="scene-overlay"><span>QUADROTOR + D435</span><small id="flight-status">Initializing browser runtimes</small></div><div class="scene-bottom">WASD move · Q/E yaw · R/F altitude <span id="sim-time">t = 0.00 s</span></div></div>
 <div class="sensor-row"><div class="panel sensor"><div class="panel-label">RGB CAMERA<span class="right">features overlay</span></div><canvas id="rgb" width="160" height="90"></canvas><div class="sensor-foot">69° × 42° · RGBA8</div></div><div class="panel sensor"><div class="panel-label">DEPTH CAMERA<span class="right">axial depth, meters</span></div><canvas id="depth" width="160" height="90"></canvas><div class="sensor-foot">87° × 58° · 0.28–10 m</div></div><div class="panel trajectory"><div class="panel-label">TRAJECTORY<span class="right">ENU · meters</span></div><canvas id="trajectory" width="260" height="146"></canvas><div class="legend"><span class="truth-key">Truth</span><span class="estimate-key">Estimate</span><span class="compare-key">External</span></div></div></div>
 <div class="metrics"><div><small>SIM TIME</small><strong id="metric-time">0.00 <em>s</em></strong></div><div><small>TRAJECTORY RMSE</small><strong id="metric-ate">— <em>m</em></strong></div><div><small>FEATURES</small><strong id="metric-features">0</strong></div><div><small>MAP POINTS</small><strong id="metric-points">0</strong></div><div><small>SIM / WALL TIME</small><strong id="metric-rtf">— <em>×</em></strong></div></div></section>
@@ -756,13 +756,17 @@ runtime.onVehicleFrame=(index,{frame,estimate,truth})=>{
   if(reference)paths.truth.push(poseSnapshot(reference));paths.estimate.push(poseSnapshot(estimate));
   if(paths.truth.length>2000)paths.truth.shift();if(paths.estimate.length>2000)paths.estimate.shift();
 };
+let pendingPresentation:(()=>void)|undefined;
 runtime.onFrame=(frame,estimate,truth,metrics)=>{
   const displayed=runtime.activeVehicle,displayWorld=displayed.world;
-  truthPath=vehiclePaths[runtime.activeVehicleIndex].truth;estimatePath=vehiclePaths[runtime.activeVehicleIndex].estimate;
-
   latestMetrics=metrics;
   latest={frame,estimate,truth};
   comparisons.addLocal(frame.time,estimate);
+  // Navigation and telemetry consume every measurement. Geometry, DOM and
+  // viewer diagnostics consume only the newest completed frame at 30 Hz.
+  const nav=navigation.update(frame.time,estimate,displayed.gps);
+  pendingPresentation=()=>{
+  truthPath=vehiclePaths[runtime.activeVehicleIndex].truth;estimatePath=vehiclePaths[runtime.activeVehicleIndex].estimate;
   const paths=[{id:'truth',color:0xc9d7e3,points:truthPath},{id:'slam',color:0x50e6b2,points:estimatePath},...Array.from(comparisons.streams.values()).map((stream,i)=>({id:`external-${i}`,color:Number.parseInt(stream.color.replace('#',''),16),points:comparisons.path(stream)}))];
   world.setMap(estimate.points,truth?displayed.evaluationOrigin:undefined);world.setEstimate(estimate);
   world.setTrajectories(paths);
@@ -771,7 +775,6 @@ runtime.onFrame=(frame,estimate,truth,metrics)=>{
   const depthDisplay=displayWorld.latestDepthRaster??displayWorld.latestDepthCloud;
   if(depthDisplay)viewer?.depthCloud(depthDisplay);
   viewer?.diagnostics(estimate,truth?displayed.evaluationOrigin:undefined,paths,{uncertainty:el<HTMLInputElement>('show-uncertainty').checked,graph:el<HTMLInputElement>('show-graph').checked,showMap:el<HTMLInputElement>('show-map').checked,showPaths:el<HTMLInputElement>('show-paths').checked});
-  const nav=navigation.update(frame.time,estimate,displayed.gps);
   el('navigation-state').textContent=truth?`Navigation · ${nav.status} · ${nav.reason}${nav.alignment?` · alignment ${nav.alignment.pairs} fixes / ${nav.alignment.rms.toFixed(2)} m RMS`:''}`:'GPS handoff unavailable for this external/replayed dataset';
   el('lidar-state').textContent=displayWorld.latestLidar?`LiDAR · 64 × ${displayWorld.latestLidar.columns} samples · raw GPU cloud · t=${displayWorld.latestLidar.time.toFixed(3)} s · ${displayWorld.lidar.timings?.totalMs.toFixed(1)} ms`:'LiDAR disabled';
   pendingSensorPreview={frame,estimate};
@@ -793,6 +796,7 @@ runtime.onFrame=(frame,estimate,truth,metrics)=>{
   el('record-state').textContent=`${displayed.records.length} recorded frames${displayed.recording?' · recording':''}`;
   el('record').textContent=displayed.recording?'■ Stop recording':'● Record dataset';
   el<HTMLButtonElement>('export-recording').disabled=displayed.records.length===0;
+  };
 };
 // A single independently paced overview; simulation awaits every graph node.
 // Correct the deadline phase rather than drawing bursts after a missed slot.
@@ -800,11 +804,12 @@ let cameraWall=performance.now();
 function render(now=0){
   if(performanceMonitor.shouldRender(now)){
     const started=performance.now();world.controls.update();
+    const present=pendingPresentation;pendingPresentation=undefined;present?.();
     const cameraDt=(now-cameraWall)/1000;cameraWall=now;
     if(world.viewerCamera.mode==='free')cameraControls.update(world.view,world.controls,cameraDt);
     else world.viewerCamera.move(cameraControls.keys,cameraDt);
     if(viewerPresented){
-      if(viewer){viewer.flushClouds();viewer.camera();viewer.running(runtime.running);}else world.render(runtime.running);
+      if(viewer){viewer.flushPoses();viewer.flushClouds();viewer.camera();viewer.running(runtime.running);}else world.render(runtime.running);
     }
     if(pendingSensorPreview){const {frame,estimate}=pendingSensorPreview;pendingSensorPreview=undefined;drawSensors(frame,estimate);drawTrajectory();}
     performanceMonitor.rendered(performance.now()-started);

@@ -35,6 +35,7 @@ export class Runtime {
   private sequence=0;
   private cameraSequence=0;
   private stepping=false;
+  private playbackEpoch=0;
   private reference?:{truth:Truth;pose:Pose};
   private origin:Pose={x:0,y:0,z:1.5,quaternion:[1,0,0,0]};
   private startWall=0;
@@ -388,17 +389,29 @@ export class Runtime {
   play() {
     if(this.running) return;
     this.running=true;this.startWall=performance.now();this.startTime=this.time;
+    const epoch=++this.playbackEpoch;
+    const active=()=>this.running&&this.playbackEpoch===epoch;
     if(this.secondary){this.secondary.startWall=this.startWall;this.secondary.startTime=this.secondary.time;}
     const loop=async()=>{
-      if(!this.running)return;
-      const before=performance.now();
-      try {await this.step();}
-      catch(error){this.running=false;this.onError(error instanceof Error?error:new Error(String(error)));return;}
-      if(this.running)setTimeout(loop,this.speed===Infinity?0:Math.max(0,this.dt*1000/this.speed-(performance.now()-before)));
+      if(!active())return;
+      // A pause/resume can leave an earlier epoch finishing its last frame.
+      if(this.busy){setTimeout(loop,0);return;}
+      const deadline=performance.now()+8;
+      do{
+        const before=performance.now();
+        try {await this.step();}
+        catch(error){if(active()){this.running=false;this.onError(error instanceof Error?error:new Error(String(error)));}return;}
+        if(!active())return;
+        const delay=this.speed===Infinity?0:Math.max(0,this.dt*1000/this.speed-(performance.now()-before));
+        // Worker replies already yield to the event loop. Batch completed
+        // frames for at most 8 ms instead of adding a clamped timer per frame.
+        // Every acquisition/estimator event is still awaited by step().
+        if(delay>0||performance.now()>=deadline){setTimeout(loop,delay);return;}
+      }while(active());
     };
     void loop();
   }
-  pause() {this.running=false;}
+  pause() {this.running=false;this.playbackEpoch++;}
   get busy():boolean{return this.stepping||this.fleetStepping||!!this.secondary?.busy;}
   get evaluationOrigin(){return structuredClone(this.origin);}
   referenceTruth(truth:Pose){

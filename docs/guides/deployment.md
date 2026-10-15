@@ -154,6 +154,25 @@ selected; camera resolution remains independently selectable. The measurements
 above remain below real time at those defaults. Raw profiles are stored under
 `$HOME/scratch/slam_web/profiles/current-warehouse-424-*` on the profiling host.
 
+Playback batches completed simulation frames within an 8 ms wall-time budget,
+then yields; the 10× selector requests that pace but does not guarantee it.
+Every configured sensor event and estimator update still runs. Overview poses,
+diagnostic geometry, and DOM updates coalesce at the independent 30 Hz display
+deadline; navigation, telemetry, recordings, and comparison samples retain every
+measurement. Pause/resume invalidates callbacks from earlier playback runs.
+
+For browser-only native-program experiments, `SLAM_PROFILE_NATIVE_DIR` can point
+to a directory containing replacement published asset filenames. Files absent
+there use the served delivery. The profiler records overridden file hashes in
+`native-comparison.json`, plus separate overview and UI submission means in the
+report. Keep the compiler and native-program overrides independent.
+
+An October 14 shared-host experiment on the existing 424 × 240 native Step
+module with Binaryen 129 `wasm-opt -O3 --all-features` produced identical truth
+and estimate positions over 30 warehouse frames. Native SLAM means changed
+from 76.5 to 72.2 ms, while unchanged physics varied from 264 to 250 ms; this
+does not establish a speedup. The optimizer experiment is not deployed.
+
 ## Warehouse tracking regression
 
 The native camera image is consumed at its capture boundary, after every

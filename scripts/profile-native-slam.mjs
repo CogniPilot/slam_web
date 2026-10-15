@@ -38,6 +38,18 @@ try{
     });
     await writeFile(join(output,'compiler-comparison.json'),JSON.stringify(manifest,null,2));
   }
+  // Optional, explicitly selected native-program experiment. Missing files
+  // fall through to the published delivery; record every overridden byte.
+  const nativeDirectory=process.env.SLAM_PROFILE_NATIVE_DIR;
+  const nativeOverrides=new Map();
+  if(nativeDirectory)await page.route('**/vendor/slam/*',async route=>{
+    const name=new URL(route.request().url()).pathname.split('/').at(-1);
+    let bytes;
+    try{bytes=await readFile(join(nativeDirectory,name));}
+    catch(error){if(error.code==='ENOENT')return route.continue();throw error;}
+    nativeOverrides.set(name,{file:name,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
+    return route.fulfill({body:bytes,contentType:name.endsWith('.json')?'application/json':name.endsWith('.wasm')?'application/wasm':'application/octet-stream'});
+  });
   page.on('pageerror',e=>errors.push(e.message));
   page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   await page.goto(url);
@@ -111,6 +123,7 @@ try{
         nodeMs:{...r.lastTimings},workerMs:structuredClone(r.lastWorkerTimings),
         transport:structuredClone(r.lastTransportTimings),camera:{...r.world.captureTimings},
         display:lab.viewer?.latest??lab.performanceMonitor.latest,
+        uiDisplay:lab.performanceMonitor.latest,
         stepMs:stepMs.slice(),position:[estimate.x,estimate.y,estimate.z],truth:structuredClone(lab.latest.truth),
         features:estimate.features?.length,points:estimate.points.length,
         diagnostics:{...estimate.diagnostics},tracking:estimate.tracking?.accepted,
@@ -148,6 +161,8 @@ try{
     meanNativeMs:mean(report.rows.map(r=>r.diagnostics.stepMsTotal)),
     meanImageStepMs:mean(report.rows.map(r=>r.stepMs.at(-1))),
     meanImuStepMs:mean(report.rows.flatMap(r=>r.stepMs.slice(0,-1))),
+    meanDisplaySubmitMs:mean(report.rows.map(r=>r.display?.meanRenderSubmitMs).filter(Number.isFinite)),
+    meanUiSubmitMs:mean(report.rows.map(r=>r.uiDisplay?.meanRenderSubmitMs).filter(Number.isFinite)),
     meanNodeMs:Object.fromEntries(Object.keys(report.rows[0].nodeMs).map(k=>[k,mean(report.rows.map(r=>r.nodeMs[k]))])),
     elapsedMs:report.elapsedMs,simulationSeconds:report.simulationSeconds,rtf:report.rtf,
     positionRmseM:Math.sqrt(mean(report.rows.filter(row=>row.positionErrorM!==null).map(row=>row.positionErrorM**2))),
@@ -157,6 +172,7 @@ try{
     final:report.final,pendingNodes:report.pendingNodes,errors,
     scope:`Actual built SLAM Web: live ${resolution} GPU RGB-D captures, physics, sensor model, native full SLAM worker, visible viewer; low graphics, no LiDAR or depth-cloud display. Ten warmup frames; unpaced sequential runtime.step calls; CPU sampling ${cpuProfiling?'enabled':'disabled'}. Shared host.`};
   await writeFile(join(output,'report.json'),JSON.stringify({summary,rows:report.rows},null,2));
+  if(nativeDirectory)await writeFile(join(output,'native-comparison.json'),JSON.stringify([...nativeOverrides.values()],null,2));
   await page.screenshot({path:join(output,'world.png'),fullPage:true});
   console.log(JSON.stringify(summary,null,2));
   if(errors.length)process.exitCode=1;

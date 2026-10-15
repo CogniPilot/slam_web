@@ -26,6 +26,9 @@ export class WorkerViewer {
   private previousMapVersion=-1;
   readonly cloudTransfer=new ViewerCloudTransfer();
   private previousDepthCloudEnabled?:boolean;
+  private pendingPose?:Truth;
+  private pendingOtherPose?:Truth;
+  private pendingActorMotion?:ActorMotionFrame;
   private presented=true;
   constructor(private readonly world:World,private readonly container:HTMLElement){
     this.canvas.style.width='100%';this.canvas.style.height='100%';
@@ -48,7 +51,7 @@ export class WorkerViewer {
   }
   private syncPresentation(){this.send('visibility',{visible:this.presented&&!document.hidden&&this.container.clientWidth>0&&this.container.clientHeight>0});}
   presentationVisible(visible:boolean){this.presented=visible;this.syncPresentation();}
-  async present(){await this.ready;this.camera(true);await this.call('present',{});}
+  async present(){await this.ready;this.flushPoses();this.camera(true);await this.call('present',{});}
   private call(type:string,args:Record<string,unknown>,transfer:Transferable[]=[]):Promise<any>{
     const id=++this.sequence;return new Promise((resolve,reject)=>{this.requests.set(id,{resolve,reject});this.worker.postMessage({id,type,...args},transfer);});
   }
@@ -63,12 +66,19 @@ export class WorkerViewer {
     const key=JSON.stringify([position,quaternion,target,mode,offset,yawOffset,vehicle]);
     if(force||key!==this.previousCamera){this.previousCamera=key;this.send('camera',{position,quaternion,target,mode,offset,yawOffset,vehicle});}
   }
-  pose(truth:Truth){this.send('pose',{truth});}
+  pose(truth:Truth){this.pendingPose=truth;}
   async vehicleCount(count:1|2){await this.ready;await this.call('vehicle-count',{count});}
-  otherPose(truth:Truth){this.send('other-pose',{truth});}
+  otherPose(truth:Truth){this.pendingOtherPose=truth;}
   running(running:boolean){if(running!==this.previousRunning){this.previousRunning=running;this.send('running',{running});}}
   actors(cars:boolean,people:boolean){this.send('actors',{cars,people});}
-  actorMotion(frame:ActorMotionFrame){this.send('actor-motion',{frame});}
+  actorMotion(frame:ActorMotionFrame){this.pendingActorMotion=frame;}
+  /** Coalesce presentation traffic only; sensor renderers receive every epoch
+   * independently through the lockstep capture request. */
+  flushPoses(){
+    if(this.pendingPose){this.send('pose',{truth:this.pendingPose});this.pendingPose=undefined;}
+    if(this.pendingOtherPose){this.send('other-pose',{truth:this.pendingOtherPose});this.pendingOtherPose=undefined;}
+    if(this.pendingActorMotion){this.send('actor-motion',{frame:this.pendingActorMotion});this.pendingActorMotion=undefined;}
+  }
   diagnostics(estimate:Estimate,origin:Pose|undefined,paths:TrajectoryPath[],flags:{uncertainty:boolean;graph:boolean;showMap:boolean;showPaths:boolean}){
     const attribute=this.world.points.geometry.getAttribute('position') as BufferAttribute|undefined;
     const changed=attribute!==this.previousMapAttribute||(attribute?.version??0)!==this.previousMapVersion;
