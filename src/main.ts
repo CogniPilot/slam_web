@@ -4,7 +4,8 @@ import {poseSnapshot} from './trajectory';
 import { World } from './world';
 import { Runtime,type Metrics } from './runtime';
 import { sourceFor,setSource,nodeRuntimeLabel,type GraphNode } from './graph';
-import { algorithms,detectors,visibleDetectorPresets,defaultProject,readSavedProjectText,readProjectRecovery,saveProjectRecovery,withDefaultModels,estimatorModelicaSources,type ProjectRecoveryBackup,saveProject,parseProject,download,offsetQuadrotorPath,offsetQuadrotorSource } from './project';
+import { algorithms,detectors,visibleDetectorPresets,defaultProject,readSavedProjectText,readProjectRecovery,saveProjectRecovery,withDefaultModels,estimatorModelicaSources,estimatorExampleSources,type ProjectRecoveryBackup,saveProject,parseProject,download,offsetQuadrotorPath,offsetQuadrotorSource } from './project';
+import type {LoopClosureSettings} from './loop-closure-settings';
 import type { Estimate,Pose,RunRecord,SensorFrame,Truth } from './types';
 import {ComparisonTracker,type TimedPose} from './comparison';
 import {validateSensorFrame} from './packet';
@@ -47,7 +48,7 @@ document.querySelector('#app')!.innerHTML=`
 <div class="metrics"><div><small>SIM TIME</small><strong id="metric-time">0.00 <em>s</em></strong></div><div><small>TRAJECTORY RMSE</small><strong id="metric-ate">— <em>m</em></strong></div><div><small>FEATURES</small><strong id="metric-features">0</strong></div><div><small>MAP POINTS</small><strong id="metric-points">0</strong></div><div><small>SIM / WALL TIME</small><strong id="metric-rtf">— <em>×</em></strong></div></div></section>
 <aside class="panel editor"><div class="editor-top"><button id="files-toggle" aria-controls="source-explorer" aria-expanded="false">Files</button><div><small>MODELICA SOURCE</small><h2 id="editor-title">RGB-D / inertial SLAM</h2></div><span id="language" class="badge">Modelica · Rumoca</span></div><div class="editor-selects"><label>Preset <select id="preset" aria-label="Feature detector preset"></select></label></div><p id="editor-description">Estimate a 6-DOF pose from camera images and the airframe IMU.</p><textarea id="code" aria-label="Modelica source" spellcheck="false"></textarea><div class="editor-bottom"><span id="line-count"></span><button id="apply" disabled class="primary">Apply & reset</button></div></aside></div>
 <div class="bottom-row"><section class="panel connection"><h2>Embedded deployment</h2><p>The SLAM model compiles to an FMI-LS WebAssembly package (FMI 3 co-simulation with a wasm32-wasip2 component) that runs on embedded hosts; ROS 2 / MAVLink adapters are under development.</p><a id="download-fmu" class="button" href="#" download aria-disabled="true">Download SLAM FMU</a><button id="deploy" disabled>Deploy project</button><small id="deploy-state">Checking published packages…</small></section><section class="panel recordings"><h2>Experiments</h2><p>Record synchronized sensor frames, then rerun them through edited source.</p><button id="record" disabled>● Record dataset</button><button id="export-recording" disabled>Export dataset</button><label class="button">Replay dataset<input id="replay" type="file" accept=".json" hidden></label><button id="export-node">Export source</button><small id="record-state">Up to 300 RGB-D / IMU frames per recording</small></section></div>
-<div id="status" role="status">Loading Modelica environment…</div><details id="lesson" class="panel lesson"><summary>Lesson guide · Modelica robotics</summary><ol><li><b>Run the default experiment.</b> Modelica inertial propagation prepares automatically. New projects start in the city with Economical graphics and 424×240 RGB-D. Click Run to start; no initial Apply is needed. Test physics and camera data. This inertial baseline has no visual localization, map or loop closure. For RGB-D mapping on a desktop, open Configuration and select Native Modelica SLAM under Estimator. The Loop closures panel shows matched keyframe images when a geometrically verified loop is accepted.</li><li><b>Edit Modelica.</b> Physics, detector and estimator source use Rumoca diagnostics and highlighting. Apply resets the experiment.</li><li><b>Save your work.</b> Projects save locally and can be downloaded and reopened. The estimator backend and sensor settings are saved with the project.</li></ol><p>Select sensor rates in Configuration. RGB and depth share a simulation clock; IMU, GPS and LiDAR use their selected rates. Physics waits for every sensor event before advancing. Three.js presents the world independently at a target of 30 FPS. Select a paired D435 resolution in Configuration. The camera uses pinhole optics with stereo disparity noise; the D435 has no IMU, so IMU measurements belong to the airframe. Traffic, pedestrians and lighting vary the scene. Open the site to use the browser environment.</p></details></main>`;
+<div id="status" role="status">Loading Modelica environment…</div><details id="lesson" class="panel lesson"><summary>Lesson guide · Modelica robotics</summary><ol><li><b>Run the default experiment.</b> Modelica inertial propagation prepares automatically. New projects start in the city with Economical graphics and 424×240 RGB-D. Click Run to start; no initial Apply is needed. Test physics and camera data. This inertial baseline has no visual localization, map or loop closure. For RGB-D mapping on a desktop, open Configuration and select Native Modelica SLAM under Estimator. Use Parameters to tune loop retrieval and verification without clearing the map. The Loop closures panel shows committed loops and rejected candidate images with Modelica reasons.</li><li><b>Edit Modelica.</b> Physics, detector and estimator source use Rumoca diagnostics and highlighting. Apply resets the experiment.</li><li><b>Save your work.</b> Projects save locally and can be downloaded and reopened. The estimator backend and sensor settings are saved with the project.</li></ol><p>Select sensor rates in Configuration. RGB and depth share a simulation clock; IMU, GPS and LiDAR use their selected rates. Physics waits for every sensor event before advancing. Three.js presents the world independently at a target of 30 FPS. Select a paired D435 resolution in Configuration. The camera uses pinhole optics with stereo disparity noise; the D435 has no IMU, so IMU measurements belong to the airframe. Traffic, pedestrians and lighting vary the scene. Open the site to use the browser environment.</p></details></main>`;
 
 const el=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id)! as T;
 el('environment').insertAdjacentHTML('afterend','<select id="scene-detail" aria-label="Graphics quality" aria-describedby="graphics-budget"><option value="low">Low · economical</option><option value="medium">Medium · balanced</option><option value="high">High · showcase</option></select>');
@@ -97,7 +98,7 @@ el('graphics-state').insertAdjacentHTML('afterend','<small id="scene-credit"></s
 el('scene-credit').insertAdjacentHTML('afterend','<div id="navigation-state">Navigation · GPS roof geofence demonstration</div><div id="lidar-state">LiDAR disabled</div>');
 const runtime=new Runtime(world);
 const loopHistories=[new LoopClosureHistory(),new LoopClosureHistory()];
-const loopPanel=mountLoopClosurePanel(document.querySelector<HTMLElement>('.visuals')!);
+const loopPanel=mountLoopClosurePanel(document.querySelector<HTMLElement>('.visuals')!,()=>showParameters(true));
 loopPanel.render(loopHistories[0]);
 runtime.onInitialFrame=(index,frame,estimate)=>{loopHistories[index].reset();loopHistories[index].observe(frame,estimate);};
 const depthPreview=new DepthPreview(el<HTMLCanvasElement>('depth'));
@@ -130,11 +131,14 @@ function syncEstimatorMode(){
 }
 
 const code=el<HTMLTextAreaElement>('code');
-const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,onResolutionChange:changeCameraResolution,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
+const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,onResolutionChange:changeCameraResolution,onLoopSettingsChange:changeLoopClosureSettings,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
+const parameterButton=document.createElement('button');parameterButton.id='parameters';parameterButton.textContent='Parameters';parameterButton.onclick=()=>showParameters();
+document.querySelector('.run-controls')!.append(parameterButton);
+function showParameters(loop=false){workspacePanes.reveal('editor');if(loop)configuration.showLoopClosure();else configuration.showConfiguration();}
 const sourceEditor=createSourceEditor(code);
-const runModelLabel=document.createElement('label');runModelLabel.className='run-model';runModelLabel.textContent='Run model';
+const runModelLabel=document.createElement('label');runModelLabel.className='run-model';runModelLabel.textContent='Inertial baseline model';
 const runModel=document.createElement('select');runModel.id='run-model';runModel.setAttribute('aria-label','Run model');
-runModelLabel.append(runModel);document.querySelector('.run-controls')!.append(runModelLabel);
+runModelLabel.append(runModel);document.querySelector('.configuration-flight')!.append(runModelLabel);
 let modelDiscovery=0,modelDiscoveryTimer:ReturnType<typeof setTimeout>|undefined;
 async function refreshRunModels(){
   const token=++modelDiscovery,owner=project,source=project.algorithm,companions=project.modelicaSources;
@@ -142,13 +146,14 @@ async function refreshRunModels(){
   if(!Array.from(runModel.options).some(option=>option.value===entryPoint))runModel.add(new Option(entryPoint,entryPoint));
   runModel.value=entryPoint;
   try{
-    const models=await sourceEditor.simulationModels(source,entryPoint,estimatorModelicaSources(project));
+    const models=await sourceEditor.simulationModels(source,entryPoint,estimatorExampleSources(project));
     if(token!==modelDiscovery||owner!==project||source!==project.algorithm||companions!==project.modelicaSources)return;
-    runModel.replaceChildren(...models.map(name=>new Option(name,name)));
+    const labels:Record<string,string>={'SLAM.Examples.InertialOnly':'Inertial navigation','SLAM.Examples.SmoothedInertial':'Inertial navigation · smoothed IMU','SLAM.Examples.ResponsiveInertial':'Inertial navigation · responsive IMU'};
+    runModel.replaceChildren(...models.map(name=>new Option(labels[name]??name,name)));
     if(!models.includes(entryPoint)){
       const missing=new Option(entryPoint+' · missing from source',entryPoint);missing.disabled=true;runModel.add(missing);
     }
-    runModel.value=entryPoint;runModel.title='Select a top-level Modelica model. Run compiles your saved source.';
+    runModel.value=entryPoint;runModel.title='Inertial estimator examples and models defined in your main source. RGB-D SLAM uses its own native model.';
   }catch(error){if(token===modelDiscovery)runModel.title=String(error);}
 }
 runModel.onchange=()=>{
@@ -178,7 +183,7 @@ function refreshFiles(){
   ],viewingSlamFile()?activeSlamFile:viewingLibraryFile()?'library:'+activeLibraryFile:'experiment:'+selected.id);
 }
 const telemetryPlot=mountTelemetryPlot(document.querySelector('.visuals')!);
-mountWorkspacePanes([
+const workspacePanes=mountWorkspacePanes([
   {name:'viewer',panel:document.querySelector('.scene')!,header:document.querySelector('.scene .panel-label')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!},
   {name:'editor',panel:document.querySelector('aside.editor')!,header:document.querySelector('.configuration-tabs')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!},
   {name:'plot',panel:telemetryPlot.panel,header:telemetryPlot.header,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!}
@@ -372,7 +377,7 @@ function selectNode(node:GraphNode,showEditor=true) {
   slamBuildPanel.hidden=!viewingSlamFile()&&!slamBuildAbort;
   if(viewingSlamFile()){
     el('editor-title').textContent=activeSlamFile.slice('models/'.length);
-    el('editor-description').textContent='Edit the full Modelica SLAM source workspace. All dependency files are saved with this project. Browser execution integration is pending; Run model still selects the active experiment.';
+    el('editor-description').textContent='Edit the full Modelica SLAM source workspace. All dependency files are saved with this project. Browser execution integration is pending; Select the inertial baseline model under Parameters, Flight; Native Modelica SLAM uses the exported model for the chosen camera resolution.';
   }
   const presets=el<HTMLSelectElement>('preset');presets.replaceChildren();
   const collection=node.kind==='detector'?visibleDetectorPresets(project):node.kind==='slam'?algorithms:{};
@@ -495,6 +500,18 @@ async function changeCameraResolution(resolution:NonNullable<typeof project.came
   await compile();
   configuration.sync(project);
 }
+async function changeLoopClosureSettings(settings:LoopClosureSettings){
+  await initializationReady;
+  if(assistantSimulation)throw Error('Finish the current simulation before applying tuning');
+  configuration.setBusy(true);
+  runtime.pause();el('run').textContent='▶ Run';disableRun(true);
+  try{
+    while(runtime.busy||compiling)await new Promise(resolve=>setTimeout(resolve,20));
+    await runtime.configureLoopClosure(settings);
+    project.loopClosureSettings={...settings};changed(false);
+    status(project.slamBackend==='native'?'Loop tuning applied · current map retained · press Run to continue':'Loop tuning saved for Native Modelica SLAM');
+  }finally{configuration.setBusy(compiling);disableRun(!ready||compiling);syncApplyButton();}
+}
 async function changeSensorRates(rates:SensorRates|undefined) {
   if(rates)project.sensorRates={...rates};else delete project.sensorRates;
   changed(false);configuration.sync(project);
@@ -527,7 +544,7 @@ el<HTMLInputElement>('show-matches').onchange=()=>{if(latest)drawSensors(latest.
 el('help').onclick=()=>{el<HTMLDetailsElement>('lesson').open=!el<HTMLDetailsElement>('lesson').open;el('lesson').scrollIntoView({behavior:'smooth'});};
 function disableRun(disabled:boolean){
   for(const id of ['run','step','reset','apply','record'])el<HTMLButtonElement>(id).disabled=disabled;
-  runModel.disabled=compiling;
+  runModel.disabled=compiling||project.slamBackend==='native';
   const count=document.getElementById('vehicle-count') as HTMLSelectElement|null;
   if(count)count.disabled=compiling||assistantSimulation;
   el<HTMLSelectElement>('active-vehicle').disabled=compiling||assistantSimulation;
@@ -670,6 +687,7 @@ el('world').tabIndex=0;el('world').setAttribute('aria-label','World camera');
 el('world').addEventListener('pointerdown',()=>el('world').focus({preventScroll:true}));
 const flightSettings=document.querySelector('.configuration-flight')!;
 flightSettings.insertAdjacentHTML('beforeend','<label>Estimator <select id="slam-backend" aria-label="Estimator backend"><option value="inertial">Inertial baseline</option><option value="native">Native Modelica SLAM · desktop, 1.2 GB</option></select></label><label>Vehicles <select id="vehicle-count" aria-label="Number of drones"><option value="1">1 drone</option><option value="2">2 drones · independent sensors and estimation</option></select></label><label>Camera view <select id="camera-view" aria-label="Camera view"></select></label><label>Keys control <select id="keyboard-mode" aria-label="Keyboard control"><option value="drone">Drone commands</option><option value="viewer">Viewer camera</option></select></label><p id="flight-help"></p>');
+el('slam-backend').closest('label')!.after(runModelLabel);
 for(const view of CAMERA_VIEWS)el<HTMLSelectElement>('camera-view').add(new Option(view.label,view.id));
 function clearKeys(){keys.clear();cameraControls.clear();updateCommand();}
 function updateCommand(){runtime.command={forward:(+keys.has('w')-+keys.has('s'))*1.6,left:(+keys.has('a')-+keys.has('d'))*1.6,up:(+keys.has('r')-+keys.has('f'))*.8,yaw:(+keys.has('q')-+keys.has('e'))*.5};}

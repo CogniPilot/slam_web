@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
 // Raw sensor data and the complete persistent Modelica session owner.
 partial model RGBDFastSLAMInterface
 
@@ -39,10 +39,10 @@ partial model RGBDFastSLAMInterface
   parameter Real absoluteThreshold = max(8.0,18.0*min(1.0,imageWidth/848.0))
     "Retain lower-contrast corners in reduced rasters; keep the full-raster threshold";
   parameter Boolean depthQualifiedSelection = true;
-  parameter Real minimumInterval = 0.5;
-  parameter Real maximumInterval = 2.0;
-  parameter Real translationThreshold = 0.6;
-  parameter Real rotationThreshold = 0.25;
+  input Real minimumInterval(unit="s") = 0.5;
+  input Real maximumInterval(unit="s") = 2.0;
+  input Real translationThreshold(unit="m") = 0.6;
+  input Real rotationThreshold(unit="rad") = 0.25;
   parameter Integer minimumFeatures = 12;
   parameter Real voxelWidth = 0.25;
   parameter Real mergeRadius = 0.15;
@@ -54,6 +54,18 @@ partial model RGBDFastSLAMInterface
   parameter Real maximumTentative = 700.0;
   input Boolean graphCorrectionRequested = true;
   input RGBDGraphProcessing.Policy graphPolicy = RGBDGraphProcessing.DefaultPolicy();
+
+  input Real loopMinimumSimilarity = 0.35;
+  input Real loopMinimumAge(unit="s") = 5.0;
+  input Integer loopMinimumInliers = 12;
+  input Real loopMinimumFraction = 0.5;
+  input Real loopInlierDistance(unit="m") = 0.08;
+  input Real loopMaximumRms(unit="m") = 0.03;
+  input Boolean loopCalibratedResiduals = true;
+  input Real loopMaximumNormalizedSquared = 9.0;
+  input Real loopMaximumPoseInnovation(unit="m") = 2.0;
+  input Real loopPoseConsistencySquared = 9.0;
+  input Boolean loopPoseConsistency = true;
 
   output RGBDGraphProcessing.State next;
   output Boolean accepted;
@@ -86,7 +98,22 @@ partial model RGBDFastSLAMInterface
   output Integer keyframeRejectionReason;
   output Integer sequentialRejectionReason;
   output Integer frameRejectionDiagnostic;
+  output Boolean loopAttempted;
+  output Integer loopRetrievalReason;
+  output Integer loopGraphReason;
+  output Integer loopCandidateCount;
+  output Integer loopCandidateReferenceId[RGBDKeyframeRetrieval.proposalCapacity];
+  output Integer loopCandidateCurrentId[RGBDKeyframeRetrieval.proposalCapacity];
+  output Real loopCandidateScore[RGBDKeyframeRetrieval.proposalCapacity];
+  output Integer loopCandidateReason[RGBDKeyframeRetrieval.proposalCapacity];
+  output Integer loopCandidateMatchedCount[RGBDKeyframeRetrieval.proposalCapacity];
+  output Integer loopCandidateInliers[RGBDKeyframeRetrieval.proposalCapacity];
+  output Real loopCandidateRms[RGBDKeyframeRetrieval.proposalCapacity];
+  output Boolean loopCandidateVerified[RGBDKeyframeRetrieval.proposalCapacity];
   annotation(Documentation(info = "<html>
+    <h4>Runtime loop tuning</h4>
+<p>The loopMinimumSimilarity, loopMinimumAge, loopMinimumInliers, loopMinimumFraction, loopInlierDistance, loopMaximumRms, loopCalibratedResiduals and loopMaximumNormalizedSquared inputs tune retrieved-loop verification. The loopMaximumPoseInnovation, loopPoseConsistencySquared and loopPoseConsistency controls tune retained-pose screening. All loop controls preserve the separate consecutive-frame odometry settings. Calibrated residuals use the squared uncertainty-normalized gate; metric distance and RMS limits apply in metric mode. Keyframe interval, translation and rotation inputs tune capture cadence. Defaults retain the existing behavior.</p>
+<p>loopAttempted marks capture attempts. Per-rank loopCandidate outputs describe the retrieved references and their actual verification outcomes, including rejected proposals. A verified proposal is not a committed loop: inspect graph admission and the published graph separately.</p>
     <h4>Session lifecycle</h4>
 <p>This boundary owns the complete persistent visual session. Supply the prior
 session as <code>previous</code>; initialization and step adapters produce

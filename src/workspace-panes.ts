@@ -105,4 +105,12 @@ export function mountWorkspacePanes(options: readonly PaneOptions[], onChange: (
       }
     }
   });
+  return {reveal(name:string){
+    const pane=options.find(option=>option.name===name);
+    if(!pane)throw new Error(`Unknown workspace pane: ${name}`);
+    exit();pane.panel.classList.remove('pane-collapsed');
+    const button=actions.get(pane.panel)!.collapse;
+    button.textContent='Collapse';button.setAttribute('aria-expanded','true');button.setAttribute('aria-label',`Collapse ${name}`);
+    onChange();
+  }};
 }

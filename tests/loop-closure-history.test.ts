@@ -42,3 +42,30 @@ it('never fabricates a similarity score and counts only fresh reported candidate
   history.observe(frame(1),e);history.observe(frame(1),e);
   expect(history.candidateCount).toBe(3);expect(history.closures[0].similarity).toBeUndefined();
 });
+
+it('retains rejected image pairs and authored reasons without treating them as graph closures',()=>{
+  const history=new LoopClosureHistory();history.observe(frame(0),estimate([1]));
+  const e=estimate([1]);e.loopClosure={attempted:true,retrievalReason:0,graphReason:0,candidateCount:1,candidates:[
+    {referenceId:1,currentId:2,score:.8,reason:11,verified:false,matchedCount:24,inlierCount:20,rms:.01}]};
+  history.observe(frame(1),e);history.observe(frame(1),e);
+  expect(history.acceptedCount).toBe(0);expect(history.rejectedCount).toBe(1);expect(history.attempts).toHaveLength(1);
+  expect(history.attempts[0]).toMatchObject({status:'rejected',reason:'Loop motion disagrees with retained pose uncertainty',reference:{imageEpoch:0},current:{imageEpoch:1}});
+  const accepted=estimate([1,2],9);accepted.loopClosure={...e.loopClosure,candidates:[{...e.loopClosure.candidates[0],reason:0,verified:true}]};
+  history.observe(frame(2),accepted);
+  expect(history.attempts[0].status).toBe('accepted');expect(history.acceptedCount).toBe(1);expect(history.rejectedCount).toBe(1);
+});
+
+it('distinguishes verified geometry from graph admission and bounds candidate snapshots',()=>{
+  const history=new LoopClosureHistory();history.observe(frame(0),estimate([1]));
+  for(let sequence=1;sequence<=40;sequence++){
+    const e=estimate([1]);e.loopClosure={attempted:true,retrievalReason:0,graphReason:4,candidateCount:1,candidates:[{referenceId:1,currentId:2,score:.7,reason:0,verified:true}]};
+    history.observe(frame(sequence),e);
+  }
+  expect(history.attempts).toHaveLength(24);expect(history.acceptedCount).toBe(0);
+  expect(history.attempts[0]).toMatchObject({status:'not-added',reason:'Geometric verification passed; Consecutive-keyframe constraint rejected'});
+  const refused=estimate([1]);refused.diagnostics={publicationReason:6};
+  refused.loopClosure={attempted:true,retrievalReason:0,graphReason:0,candidateCount:1,candidates:[{referenceId:1,currentId:2,score:.7,reason:0,verified:true}]};
+  history.observe(frame(41),refused);
+  expect(history.attempts[0].reason).toContain('Final localization or graph invariant rejected publication');
+  history.observe(frame(0),estimate([1]));expect(history.attempts).toHaveLength(0);expect(history.rejectedCount).toBe(0);
+});

@@ -51,7 +51,9 @@ test('native vision source remains editable while Modelica inertial propagation 
   await expect(page.locator('#metric-features')).toHaveText('Pending');
   await expect(page.locator('#flight-status')).toContainText('visual SLAM pending');
   await openExperimentFile(page,'slam');
+  await page.getByRole('button',{name:'Parameters',exact:true}).click();
   await page.getByLabel('Run model').selectOption('ModelicaInertial');
+  await page.getByRole('tab',{name:'Editor',exact:true}).click();
   await page.getByRole('button',{name:'Apply & reset'}).click();
   await expect(page.getByRole('button',{name:'Step',exact:true})).toBeEnabled({timeout:90_000});
   await page.getByRole('button',{name:'Step',exact:true}).click();

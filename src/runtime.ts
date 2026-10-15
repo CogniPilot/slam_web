@@ -14,6 +14,7 @@ import type {EvaluationResult} from './modelica-runtime-math';
 import type {InertialSessionMetadata} from './modelica-inertial-session';
 import type {GpsSample} from './world-navigation';
 import {SensorClock,sensorRates,validateSensorRates,type SensorRates} from './sensor-clock';
+import {checkedLoopClosureSettings,type LoopClosureSettings} from './loop-closure-settings';
 export interface Metrics { time:number; ate:number|null; currentError:number|null; orientationError:number|null; confidence:number; points:number; features:number; rtf:number; frames:number; loops:number; dropped:number }
 export interface FlowTiming {totalMs:number;bufferBytes:number|null}
 export interface VehicleFrame {frame:SensorFrame;estimate:Estimate;truth:Truth|undefined;metrics:Metrics}
@@ -166,7 +167,7 @@ export class Runtime {
       const client=new ModelicaSlamClient(text=>this.onStatus(text));
       try{
         const initial=await this.captureInitialFrame();
-        this.slamProgram=await client.initialize(base,initial);
+        this.slamProgram=await client.initialize(base,initial,project.loopClosureSettings);
         this.slam=client;
         this.onInitialFrame(this.vehicleIndex,initial,this.slamProgram.estimate);
       }catch(error){client.close();this.project=undefined;throw error;}
@@ -433,6 +434,21 @@ export class Runtime {
     void loop();
   }
   pause() {this.running=false;this.playbackEpoch++;}
+  async configureLoopClosure(settings:LoopClosureSettings){
+    const checked=checkedLoopClosureSettings(settings);
+    if(this.busy||this.secondary?.busy)throw Error('Pause at a completed frame before applying loop tuning');
+    const vehicles=this.secondary?[this,this.secondary]:[this];
+    for(const vehicle of vehicles)if(vehicle.slamProgram&&!vehicle.slamProgram.tuningSupported)
+      throw Error('This SLAM delivery does not expose tuning inputs. Load the current default models before applying tuning.');
+    const previous=vehicles.map(vehicle=>checkedLoopClosureSettings(vehicle.project?.loopClosureSettings));
+    const results=await Promise.allSettled(vehicles.map(vehicle=>vehicle.slam?.configure(checked)));
+    const failure=results.find(result=>result.status==='rejected');
+    if(failure?.status==='rejected'){
+      await Promise.allSettled(vehicles.map((vehicle,index)=>results[index].status==='fulfilled'?vehicle.slam?.configure(previous[index]):undefined));
+      throw failure.reason;
+    }
+    for(const vehicle of vehicles)if(vehicle.project)vehicle.project.loopClosureSettings={...checked};
+  }
   get busy():boolean{return this.stepping||this.fleetStepping||!!this.secondary?.busy;}
   get evaluationOrigin(){return structuredClone(this.origin);}
   referenceTruth(truth:Pose){

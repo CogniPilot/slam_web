@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
 // Ordinary acquisition publication retains the authoritative corrected pose view.
 // This owner never reconstructs a post-correction state from raw captures.
 package RGBDLocalizationProcessing
@@ -49,6 +49,17 @@ package RGBDLocalizationProcessing
     input Real minimumWordDistanceSquared = 0.04;
 
     output Result result;
+    input Real loopMinimumSimilarity = 0.35;
+    input Real loopMinimumAge = 5.0;
+    input Integer loopMinimumInliers = 12;
+    input Real loopMinimumFraction = 0.5;
+    input Real loopInlierDistance = 0.08;
+    input Real loopMaximumRms = 0.03;
+    input Boolean loopCalibratedResiduals = true;
+    input Real loopMaximumNormalizedSquared = 9.0;
+    input Real loopMaximumPoseInnovation = 2.0;
+    input Real loopPoseConsistencySquared = 9.0;
+    input Boolean loopPoseConsistency = true;
   protected
     RGBDGraphProcessing.State candidate;
     RGBDLocalizationCatalog.Result published;
@@ -118,7 +129,9 @@ package RGBDLocalizationProcessing
           tentativeLifetime=tentativeLifetime,confirmedLifetime=confirmedLifetime,
           confirmationObservations=confirmationObservations,maximumConfidence=maximumConfidence,maximumTentative=maximumTentative,
           posePositions=previous.estimator.poses.positions,poseRotations=previous.estimator.poses.rotations,
-          poseRevision=previous.estimator.poses.revision);
+          poseRevision=previous.estimator.poses.revision,
+      loopMinimumSimilarity=loopMinimumSimilarity, loopMinimumAge=loopMinimumAge, loopMinimumInliers=loopMinimumInliers, loopMinimumFraction=loopMinimumFraction, loopInlierDistance=loopInlierDistance, loopMaximumRms=loopMaximumRms, loopCalibratedResiduals=loopCalibratedResiduals, loopMaximumNormalizedSquared=loopMaximumNormalizedSquared,
+      loopMaximumPoseInnovation=loopMaximumPoseInnovation, loopPoseConsistencySquared=loopPoseConsistencySquared, loopPoseConsistency=loopPoseConsistency);
         result.publication := published;
         if published.accepted then
           result.reason := 4;

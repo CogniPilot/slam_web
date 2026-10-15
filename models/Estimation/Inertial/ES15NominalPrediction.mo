@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
 // One held-IMU substep for the existing ES15 filter convention.
 // Rotation maps body FLU into the gravity-aligned map frame. Biases stay body-local.
 // The caller subdivides a frame to h <= 20 ms and |omega|*h <= 0.1 rad.

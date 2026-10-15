@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
 // Local first-order ERROR SECOND-MOMENT bound about a graph anchor mean.
 // Raw capture means/bounds stay immutable; changing gauge never creates a zero
 // absolute bound. Input capture covariance is assumed a valid local error bound.

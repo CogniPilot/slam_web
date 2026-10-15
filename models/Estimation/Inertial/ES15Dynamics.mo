@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
 // Continuous error dynamics for the RGB-D / airframe IMU teaching filter.
 // Error order: world dp, world dv, right-local dtheta, body dba, body dbg.
 // R_true = R * Exp(dtheta); measurements are true body values + bias + noise.

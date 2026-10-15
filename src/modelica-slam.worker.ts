@@ -2,8 +2,9 @@
 import {ModelicaSlamSession} from './modelica-slam-session';
 import {fetchNativeAsset,fetchNativeManifest} from './slam-native-program';
 import type {SlamInitialFrame,SlamIntervalFrame} from './modelica-slam-frame';
+import type {LoopClosureSettings} from './loop-closure-settings';
 
-export type SlamRequest={id:number}&({type:'init';base:string;frame:SlamInitialFrame}|{type:'step';frame:SlamIntervalFrame}|{type:'predict';imageEpoch:number;interval:SlamIntervalFrame['intervals'][number]});
+export type SlamRequest={id:number}&({type:'init';base:string;frame:SlamInitialFrame;settings?:LoopClosureSettings}|{type:'configure';settings:LoopClosureSettings}|{type:'step';frame:SlamIntervalFrame}|{type:'predict';imageEpoch:number;interval:SlamIntervalFrame['intervals'][number]});
 let session:ModelicaSlamSession|undefined;
 async function execute(message:SlamRequest){
   if(message.type==='init'){
@@ -12,10 +13,11 @@ async function execute(message:SlamRequest){
     const {width,height}=message.frame.imageLayout.color;
     const manifest=await fetchNativeManifest(base,`${width}x${height}`);
     session=await ModelicaSlamSession.create(manifest,(file,encoding)=>fetchNativeAsset(base,file,encoding),message.frame,
-      progress=>self.postMessage({progress}));
-    return {estimate:session.initialEstimate,sourceSha256:manifest.sourceSha256,models:Object.fromEntries(Object.entries(manifest.models).map(([key,layout])=>[key,{model:layout.model,pages:layout.pages}]))};
+      progress=>self.postMessage({progress}),message.settings);
+    return {estimate:session.initialEstimate,tuningSupported:session.tuningSupported,sourceSha256:manifest.sourceSha256,models:Object.fromEntries(Object.entries(manifest.models).map(([key,layout])=>[key,{model:layout.model,pages:layout.pages}]))};
   }
   if(!session)throw new Error('Initialize native SLAM first');
+  if(message.type==='configure'){session.configure(message.settings);return {};}
   if(message.type==='predict'){session.predict(message.imageEpoch,message.interval);return {};}
   return session.advance(message.frame);
 }

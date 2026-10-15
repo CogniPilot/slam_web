@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
 // One source-owned publication of localization and optional catalog/map work.
 // The enclosing model binds proposed to the actual localization outputs once.
 // This is not graph correction, independent graph noise, or a complete SLAM preset.
@@ -305,6 +305,17 @@ package RGBDLocalizationCatalog
     input Real poseRotations[RGBDKeyframes.keyframeCapacity,dimension,dimension] = previous.catalog.bodyRotations;
     input Integer poseRevision = previous.map.catalogRevision;
     output Result result;
+    input Real loopMinimumSimilarity = 0.35;
+    input Real loopMinimumAge = 5.0;
+    input Integer loopMinimumInliers = 12;
+    input Real loopMinimumFraction = 0.5;
+    input Real loopInlierDistance = 0.08;
+    input Real loopMaximumRms = 0.03;
+    input Boolean loopCalibratedResiduals = true;
+    input Real loopMaximumNormalizedSquared = 9.0;
+    input Real loopMaximumPoseInnovation = 2.0;
+    input Real loopPoseConsistencySquared = 9.0;
+    input Boolean loopPoseConsistency = true;
   protected
     Boolean valid; Boolean frameBound;
     RGBDCatalogMapping.Result mapped;
@@ -438,7 +449,16 @@ package RGBDLocalizationCatalog
                       voxelWidth=voxelWidth,mergeRadius=mergeRadius,maximumDistance=maximumDistance,
                       tentativeLifetime=tentativeLifetime,confirmedLifetime=confirmedLifetime,
                       confirmationObservations=confirmationObservations,maximumConfidence=maximumConfidence,maximumTentative=maximumTentative,
-                      nodePosition=posePositions,nodeRotation=poseRotations,poseRevision=poseRevision);
+                      nodePosition=posePositions,nodeRotation=poseRotations,poseRevision=poseRevision,
+                      loopMinimumSimilarity=loopMinimumSimilarity,
+                      loopMinimumAge=loopMinimumAge,
+                      loopMinimumInliers=loopMinimumInliers,
+                      loopMinimumFraction=loopMinimumFraction,
+                      loopInlierDistance=loopInlierDistance,
+                      loopMaximumRms=loopMaximumRms,
+                      loopCalibratedResiduals=loopCalibratedResiduals,
+                      loopMaximumNormalizedSquared=loopMaximumNormalizedSquared,
+      loopMaximumPoseInnovation=loopMaximumPoseInnovation, loopPoseConsistencySquared=loopPoseConsistencySquared, loopPoseConsistency=loopPoseConsistency);
                     result.mapDiagnostics := mapped.diagnostics; result.problem := mapped.problem;
                     if mapped.accepted then
                       result.next.catalog := mapped.catalog; result.next.graph := mapped.graph; result.next.map := mapped.map;

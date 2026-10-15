@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
 // Geometric verification of a retrieved keyframe. A verified measurement is a
 // proposal: graph identity/eviction and shared-image correlation policies must
 // still admit it before any optimizer or estimator state can change.
@@ -335,6 +335,8 @@ package RGBDLoopVerification
                   maximumNormalizedSquared=maximumNormalizedSquared,minimumPivot=minimumPivot);
                 result.nextSeed := nextSeed; result.rejectionReason := 7;
                 if consensusValid then
+                  // Preserve measured fit diagnostics even if uncertainty or edge validation rejects it.
+                  result.inlierCount := inliers; result.rms := rms;
                   (uncertaintyValid,uncertaintyReason,uncertaintyCount,uncertaintyInvalid,relativeCovariance,
                     unusedCovariance,normal,noise,J,pivot) := RGBDRegistrationSandwich(sourcePoint,targetPoint,
                       mask,featureCapacity,1.0,C,t,reference.bodyRotation,reference.opticalToBody,

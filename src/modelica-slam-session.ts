@@ -1,6 +1,7 @@
 import {SlamNativeProgram,type SlamNativeFetch,type SlamNativeManifest} from './slam-native-program';
 import type {SlamInitialFrame,SlamIntervalFrame} from './modelica-slam-frame';
 import type {Estimate} from './types';
+import {checkedLoopClosureSettings,LOOP_CLOSURE_PARAMETERS,type LoopClosureSettings} from './loop-closure-settings';
 
 export interface SlamNativeResult {
   estimate:Estimate;
@@ -26,12 +27,15 @@ export class ModelicaSlamSession {
   private initial!:Estimate;
   private constructor(readonly manifest:SlamNativeManifest,private readonly step:SlamNativeProgram){}
 
-  static async create(manifest:SlamNativeManifest,fetchFile:SlamNativeFetch,initial:SlamInitialFrame,progress:(text:string)=>void=()=>{}){
+  static async create(manifest:SlamNativeManifest,fetchFile:SlamNativeFetch,initial:SlamInitialFrame,progress:(text:string)=>void=()=>{},settings?:LoopClosureSettings){
     progress('Loading native SLAM initialization program');
     const initialize=await SlamNativeProgram.load(manifest.models.initialize,fetchFile);
     progress('Loading native SLAM step program');
     const step=await SlamNativeProgram.load(manifest.models.step,fetchFile);
     const session=new ModelicaSlamSession(manifest,step);
+    const tuning=checkedLoopClosureSettings(settings);
+    validateSettings(initialize,tuning);validateSettings(step,tuning);
+    writeSettings(initialize,tuning);writeSettings(step,tuning);
     progress('Initializing native SLAM on the first camera image');
     session.writeCamera(initialize,initial);
     session.writeImage(initialize,initial);
@@ -49,6 +53,8 @@ export class ModelicaSlamSession {
   }
 
   get initialEstimate():Estimate {return structuredClone(this.initial);}
+  get tuningSupported(){return LOOP_CLOSURE_PARAMETERS.every(field=>this.step.hasInput(field.key));}
+  configure(settings:LoopClosureSettings){const checked=checkedLoopClosureSettings(settings);validateSettings(this.step,checked);writeSettings(this.step,checked);}
 
   /** Overlap a held-IMU prediction with the next physics interval. Images are
    * never consumed here: only the final camera call requests observation. */
@@ -177,8 +183,25 @@ export class ModelicaSlamSession {
     const covariance=program.stateRun('estimator.localization.estimator.covariance')?.view;
     const block=(start:number)=>Array.from({length:9},(_,index)=>Number(covariance![(start+Math.floor(index/3))*15+start+index%3]));
     const uncertainty=covariance?.length===225?{positionCovariance:block(0),attitudeCovariance:block(6)}:undefined;
+    const scalar=(name:string)=>derived[name]??program.output(name)?.[0];
+    let loopClosure:Estimate['loopClosure'];
+    if(scalar('loopAttempted')!==undefined&&typeof candidateCount==='number'&&Number.isSafeInteger(candidateCount)&&candidateCount>=0&&candidateCount<=4){
+      const value=(name:string,rank:number)=>program.output(name)?.[rank]??derived[`${name}[${rank+1}]`];
+      const candidates:NonNullable<Estimate['loopClosure']>['candidates']=[];
+      for(let rank=0;rank<candidateCount;rank++){
+        const referenceId=Number(value('loopCandidateReferenceId',rank)),currentId=Number(value('loopCandidateCurrentId',rank));
+        const score=Number(value('loopCandidateScore',rank)),reason=Number(value('loopCandidateReason',rank));
+        if(!Number.isSafeInteger(referenceId)||referenceId<1||!Number.isSafeInteger(currentId)||currentId<1||!Number.isFinite(score)||score<0||score>1||!Number.isSafeInteger(reason))continue;
+        const fitAvailable=[0,8,9,11].includes(reason),matchedCount=Number(value('loopCandidateMatchedCount',rank));
+        const inlierCount=Number(value('loopCandidateInliers',rank)),rms=Number(value('loopCandidateRms',rank));
+        candidates.push({referenceId,currentId,score,reason,verified:Number(value('loopCandidateVerified',rank))===1,
+          ...((reason>=6||reason===0)&&Number.isSafeInteger(matchedCount)&&matchedCount>=0?{matchedCount}:{}),
+          ...(fitAvailable&&Number.isSafeInteger(inlierCount)&&inlierCount>=0&&Number.isFinite(rms)&&rms>=0?{inlierCount,rms}:{})});
+      }
+      loopClosure={attempted:!!scalar('loopAttempted'),retrievalReason:Number(scalar('loopRetrievalReason')),graphReason:Number(scalar('loopGraphReason')),candidateCount,candidates};
+    }
     return {x,y,z,quaternion:quaternion?Array.from(quaternion):quaternionFromRotation(rotation as Float64Array),
-      confidence,points,features,diagnostics,poseGraph,uncertainty,
+      confidence,points,features,diagnostics,poseGraph,uncertainty,loopClosure,
       tracking:{matches:current.map((value,index)=>({current:value,previous:previous[index]})),accepted,
         reason:accepted?'visual observation accepted':derived.captureAccepted===1?'visual reference captured':`visual observation refused; publication reason ${diagnostics.publicationReason??'n/a'}`}};
   }
@@ -205,16 +228,18 @@ export class ModelicaSlamSession {
     const prefix='estimator.localization.graph.edges.';
     const active=run(prefix+'enabled'),kinds=run(prefix+'kind'),references=run(prefix+'referenceId'),currents=run(prefix+'currentId');
     const edgeIds=run(prefix+'id');
-    const scores=program.output('loopScore'),referenceIds=program.output('loopReferenceId'),currentIds=program.output('loopCurrentId');
+    const scores=program.output('loopCandidateScore')??program.output('loopScore');
+    const referenceIds=program.output('loopCandidateReferenceId')??program.output('loopReferenceId');
+    const currentIds=program.output('loopCandidateCurrentId')??program.output('loopCurrentId');
     if(active&&kinds&&references&&currents)for(let slot=0;slot<active.length;slot++)if(Number(active[slot])){
       const from=index.get(Number(references[slot])),to=index.get(Number(currents[slot])),kind=Number(kinds[slot]);
       if(from!==undefined&&to!==undefined&&(kind===1||kind===2)){
         let similarity:number|undefined;
         // Four retained verified pairs; exporters may use y runs or typed cells.
         if(kind===2)for(let rank=0;rank<(scores?.length??4);rank++){
-          const reference=referenceIds?.[rank]??diagnostics[`loopReferenceId[${rank+1}]`];
-          const current=currentIds?.[rank]??diagnostics[`loopCurrentId[${rank+1}]`];
-          const score=scores?.[rank]??diagnostics[`loopScore[${rank+1}]`];
+          const reference=referenceIds?.[rank]??diagnostics[`loopCandidateReferenceId[${rank+1}]`]??diagnostics[`loopReferenceId[${rank+1}]`];
+          const current=currentIds?.[rank]??diagnostics[`loopCandidateCurrentId[${rank+1}]`]??diagnostics[`loopCurrentId[${rank+1}]`];
+          const score=scores?.[rank]??diagnostics[`loopCandidateScore[${rank+1}]`]??diagnostics[`loopScore[${rank+1}]`];
           if(reference===Number(references[slot])&&current===Number(currents[slot])&&
             typeof score==='number'&&Number.isFinite(score)&&score>=0&&score<=1)similarity=score;
         }
@@ -239,6 +264,21 @@ export class ModelicaSlamSession {
       points.push(row);total+=landmarkConfidence?Number((landmarkConfidence.view as Float64Array)[i]):0;
     }
     return {points,confidence:points.length&&landmarkConfidence?Math.min(1,total/points.length/8):0};
+  }
+}
+
+function validateSettings(program:SlamNativeProgram,settings:LoopClosureSettings){
+  for(const field of LOOP_CLOSURE_PARAMETERS){
+    if(!program.hasInput(field.key)){
+      if(settings[field.key]!==field.value)throw Error(`This SLAM build does not expose ${field.label}. Load the current default models to tune it.`);
+    }else if(program.layout.inputs[field.key].lane!==(field.key==='loopMinimumInliers'?'i64':typeof field.value==='boolean'?'u8':'f64'))throw Error(`Unexpected native parameter type: ${field.key}`);
+  }
+}
+function writeSettings(program:SlamNativeProgram,settings:LoopClosureSettings){
+  for(const field of LOOP_CLOSURE_PARAMETERS)if(program.hasInput(field.key)){
+    if(field.key==='loopMinimumInliers')program.integer(field.key)[0]=BigInt(settings[field.key]);
+    else if(typeof field.value==='boolean')program.boolean(field.key)[0]=settings[field.key]===true?1:0;
+    else program.real(field.key)[0]=settings[field.key] as number;
   }
 }
 

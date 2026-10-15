@@ -1,0 +1,205 @@
+{
+  "scope": "Actual built browser, hardware 424x240 RGB-D, warehouse loop, 5 Hz camera and 10 Hz IMU; 10 warmup plus 240 recorded frames. Default tuning compared against the existing clean-278 D2 Modelica baseline. Shared-host timings excluded; this is numerical parity evidence, not a speedup claim.",
+  "modelicaRevision": "748bd0cafe8a201acb9e132b49bac7243a5e5aba",
+  "rumocaRevision": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
+  "exporterSha256": "63819b0b9e467a1170f9210e5c78abff113dd0b116445335c3866867f6422f07",
+  "resetSha256": "611920ce66e1927d0fd8fe2519f53cdff857c80c99d5926800fff5c9be0a2fc1",
+  "baseSourceSha256": "f13ced11cc3f414a164193cfad67cf09f6482622eec6c42898855f85a4a54be4",
+  "sourceSha256": "391680195ed501dfdfc7ff0bba1e9aa674e227a05a5136f473fa5d0ca1beeb86",
+  "modules": {
+    "initialize": "a0354ef3e3d2c9a78640e74809d51b1926f97323f66ab9d378821f80c46ce811",
+    "step": "f47df115a3c4f11832b045bdc8382c5391321875765f6bf9ba37378db1cff48e"
+  },
+  "comparison": {
+    "frames": 240,
+    "differences": 0,
+    "comparedObservableFields": [
+      "sequence",
+      "time",
+      "position",
+      "truth",
+      "features",
+      "points",
+      "tracking",
+      "reference",
+      "positionErrorM"
+    ],
+    "comparedPriorDiagnosticValues": 8160,
+    "excludedDiagnostics": [
+      "stepMsTotal",
+      "stepMsMax"
+    ]
+  },
+  "nativeState": {
+    "sha256": "94023a2b71ede56d6bb89796f8d04cd84027d90c473cf96255f183f2ec9ef444",
+    "cells": 2738927,
+    "runs": 160,
+    "bytes": 21594218,
+    "stateNamesHash": "257ffc5f91755403",
+    "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+  },
+  "result": {
+    "maximumLoopEdges": 3,
+    "maximumKeyframes": 7,
+    "positionRmseM": 0.3441402750461108,
+    "errors": []
+  },
+  "reportSha256": "8b407863106f4d205ddd3e9943588266ca00aa63e4c738d04d770ce20fc3b29e",
+  "runtimeTuning": {
+    "test": "tests/browser/loop-tuning-gpu.spec.ts",
+    "passed": true,
+    "checks": [
+      "All fifteen scalar inputs read back from actual native worker memory",
+      "Apply preserves simulation time, sequence, graph and every canonical carried state byte",
+      "1000-second revisit age prevents retrieval while visual odometry and sequential keyframes continue",
+      "Saved tuning survives a full page reload"
+    ],
+    "receiptSha256": "50163928e69bd60835e302bbb7b267e8726b001fc2fecac4b46b3d1429ffb54b",
+    "stateBeforeApply": "38fce64904677b7d901498a0afc8abd1a1babc4c74d69f3a53d4e6f292dcf575",
+    "stateAfterApply": "38fce64904677b7d901498a0afc8abd1a1babc4c74d69f3a53d4e6f292dcf575",
+    "simulationTimeAtApply": 4,
+    "outcome": {
+      "candidates": 0,
+      "visualUpdates": 29,
+      "loops": 0,
+      "keyframes": 3
+    },
+    "settings": {
+      "loopMinimumSimilarity": 0.35,
+      "loopMinimumAge": 1000,
+      "loopMaximumPoseInnovation": 2,
+      "loopPoseConsistencySquared": 9,
+      "loopPoseConsistency": true,
+      "loopMinimumInliers": 12,
+      "loopMinimumFraction": 0.5,
+      "loopMaximumNormalizedSquared": 9,
+      "loopCalibratedResiduals": true,
+      "loopInlierDistance": 0.08,
+      "loopMaximumRms": 0.03,
+      "minimumInterval": 0.5,
+      "maximumInterval": 2,
+      "translationThreshold": 0.6,
+      "rotationThreshold": 0.25
+    },
+    "scope": "Final pinned delivery, no native asset overrides; includes actual worker input readback after reload."
+  },
+  "delivery": {
+    "package": {
+      "repository": "CogniPilot/slam_web",
+      "tag": "native-slam-loop-tuning-20261015",
+      "asset": "native-slam-d435-profiles.tar",
+      "bytes": 75632640,
+      "sha256": "eea23f3e72dc8413ef77b8f2d971dec45129d43bec5d0d8f9ab2b733437847c1",
+      "sourceSha256": "f13ced11cc3f414a164193cfad67cf09f6482622eec6c42898855f85a4a54be4",
+      "rumocaRevision": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
+      "modelicaRevision": "748bd0cafe8a201acb9e132b49bac7243a5e5aba"
+    },
+    "profiles": {
+      "424x240": {
+        "sourceSha256": "391680195ed501dfdfc7ff0bba1e9aa674e227a05a5136f473fa5d0ca1beeb86",
+        "models": {
+          "initialize": {
+            "moduleSha256": "a0354ef3e3d2c9a78640e74809d51b1926f97323f66ab9d378821f80c46ce811",
+            "pages": 6756,
+            "runtimeTuningInputs": 15
+          },
+          "step": {
+            "moduleSha256": "f47df115a3c4f11832b045bdc8382c5391321875765f6bf9ba37378db1cff48e",
+            "pages": 7730,
+            "runtimeTuningInputs": 15
+          }
+        }
+      },
+      "640x360": {
+        "sourceSha256": "1fcae6df6da51c3816b933626ccb7ef524e9999809fe055f616acc26b7d3da05",
+        "models": {
+          "initialize": {
+            "moduleSha256": "676a615c06efa266734b23b7e7fee6f21b36e5ec57e7ffb2975d67f0d19f08ac",
+            "pages": 6881,
+            "runtimeTuningInputs": 15
+          },
+          "step": {
+            "moduleSha256": "a25fde689fec9c8e51f3ad98907078f4d9b4b66d5a177fc781bba56ad9e7f30c",
+            "pages": 7855,
+            "runtimeTuningInputs": 15
+          }
+        }
+      },
+      "640x480": {
+        "sourceSha256": "607bf34571aed6f154cf72bfd57cf406a6eff332bf093aa2254e759bde44ce39",
+        "models": {
+          "initialize": {
+            "moduleSha256": "2d3524f70579f150644ebf22790faff5b0292e31870b43f8800b4248e001f322",
+            "pages": 6956,
+            "runtimeTuningInputs": 15
+          },
+          "step": {
+            "moduleSha256": "770b2e5baf0de7a1369a4194c317b6da680a6f846bd886698cdbb1f5f2018820",
+            "pages": 7930,
+            "runtimeTuningInputs": 15
+          }
+        }
+      },
+      "848x480": {
+        "sourceSha256": "443874c4aa951bc2719a63047094a17df2c057cef425a36623196dc614480bdc",
+        "models": {
+          "initialize": {
+            "moduleSha256": "5463223b3a3b1dfa57ef3908c936ab4574e53bbc7e3aca782501767b0ced0d16",
+            "pages": 7054,
+            "runtimeTuningInputs": 15
+          },
+          "step": {
+            "moduleSha256": "853a39d5706b836dc1e06b17c83b41d801649b44fe48542947d1b70c909b8827",
+            "pages": 8028,
+            "runtimeTuningInputs": 15
+          }
+        }
+      },
+      "1280x720": {
+        "sourceSha256": "967b873640780aa57af4a9ecd5bb90e4175ae56455543a08d2a40b2971e19b98",
+        "models": {
+          "initialize": {
+            "moduleSha256": "622020b0d5bb889880484005f9d325dbed5c0bfe0aa510c14c3d57a5dc7d7e5f",
+            "pages": 7556,
+            "runtimeTuningInputs": 15
+          },
+          "step": {
+            "moduleSha256": "12b2c9270dc4d362dda5afe6328b93a642d5ba899b45f99943d483bcef66ab30",
+            "pages": 8530,
+            "runtimeTuningInputs": 15
+          }
+        }
+      }
+    }
+  },
+  "artifacts": {
+    "baseline": "replay-main-278-240",
+    "candidate": "loop-tuning-final-default-240",
+    "root": "$HOME/scratch/slam_web/profiles"
+  },
+  "validation": {
+    "unitTests": {
+      "passed": 355,
+      "skipped": 1
+    },
+    "browserSmoke": {
+      "passed": 32,
+      "skipped": 1
+    },
+    "hardwareCameraProfiles": {
+      "passed": 5,
+      "resolutionIds": [
+        "424x240",
+        "640x360",
+        "640x480",
+        "848x480",
+        "1280x720"
+      ]
+    },
+    "hardwareTuning": {
+      "passed": true,
+      "nativeOverrides": false
+    },
+    "modelicaRegressionCI": "https://github.com/CogniPilot/modelica_models/actions/runs/38686191183"
+  }
+}

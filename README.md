@@ -81,6 +81,22 @@ also publish the exported programs (see [Deployment](docs/guides/deployment.md))
 The inertial baseline remains the default. This is a prototype for teaching and
 experimentation.
 
+Open **Parameters → Loop closure tuning** to adjust appearance similarity,
+revisit age, geometric verification, pose consistency and keyframe spacing.
+**Apply tuning** pauses at a completed frame and keeps the current map. Settings
+save with the project; **Restore defaults** prepares a draft until you apply it.
+Loop-specific gates leave consecutive-frame visual odometry unchanged. Calibrated
+residual mode uses the normalized gate; the metric distance/RMS limits apply when
+that mode is disabled. The **Loop closures → Candidate decisions** view shows
+reference/current images, measured match statistics and Modelica rejection
+reasons, with filters for committed and rejected candidates. Passing geometric
+verification alone does not mean a loop edge was committed.
+
+The inertial example selector lives under **Parameters → Flight**. It lists
+estimator examples and models in your main source; vehicle and motor dependencies
+are kept out of that menu. RGB-D SLAM uses the native model selected by its camera
+resolution.
+
 ## Performance and portable deployment
 
 Modelica describes the mathematical problem. Rumoca compiles that description

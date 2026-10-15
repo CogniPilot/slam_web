@@ -16,6 +16,7 @@ import {modelicaModelsSources} from './modelica-models-library';
 import {validateSensorRates,type SensorRates} from './sensor-clock';
 import {D435_PAIRED_RESOLUTIONS,type CameraResolution} from './camera-profile';
 import {checkedRGBDSlamWorkspace,type RGBDSlamWorkspace} from './modelica-slam-workspace';
+import {checkedLoopClosureSettings,type LoopClosureSettings} from './loop-closure-settings';
 const modelicaHarris=`${imageProfile}\n${harrisNative}\n${harrisProfile}`;
 export const detectors: Record<string,string> = { 'Modelica Harris · integration pending':modelicaHarris, 'Modelica FAST · integration pending':`${imageProfile}\n${fastNative}\n${fastProfile}` };
 export function visibleDetectorPresets(_project:Pick<Project,'detectorPreset'|'detectorLanguage'>):Record<string,string> {
@@ -65,6 +66,7 @@ export interface Project {
   vehicleCount?:1|2;
   /** Estimator backend: the inertial baseline, or the compiler-exported native SLAM programs. */
   slamBackend?:'inertial'|'native';
+  loopClosureSettings?:LoopClosureSettings;
 }
 export const defaultProject = (_mobile=false): Project => ({
   format:'slam-lab-project',
@@ -99,12 +101,17 @@ export function estimatorModelicaSources(project:Project):Record<string,string> 
   if(project.mainSourcePath)delete sources[project.mainSourcePath];
   return sources;
 }
+/** The vehicle, sensor and library components are dependencies, not estimator examples. */
+export function estimatorExampleSources(project:Project):Record<string,string>{
+  const examples=['InertialOnly','SmoothedInertial','ResponsiveInertial'].map(name=>`models/Libraries/CogniPilot/SLAM/Examples/${name}.mo`);
+  return Object.fromEntries(Object.entries(project.modelicaSources??{}).filter(([path])=>path!==project.mainSourcePath&&examples.includes(path)));
+}
 /** Replace executable source with this release's defaults, retaining only valid settings. */
 export function withDefaultModels(saved:unknown,mobile=false):Project {
   let project=defaultProject(mobile);
   if(!saved||typeof saved!=='object'||Array.isArray(saved))return project;
   const settings=saved as Record<string,unknown>;
-  for(const key of ['name','environment','seed','sceneDetail','sensorRates','cameraResolution','lidarEnabled','depthCloudEnabled','carsEnabled','peopleEnabled','lightingMode','vehicleCount','slamBackend'] as const){
+  for(const key of ['name','environment','seed','sceneDetail','sensorRates','cameraResolution','lidarEnabled','depthCloudEnabled','carsEnabled','peopleEnabled','lightingMode','vehicleCount','slamBackend','loopClosureSettings'] as const){
     if(settings[key]===undefined)continue;
     // Validate each setting independently: one invalid value must not discard
     // the remaining settings, or reintroduce incompatible saved sources.
@@ -130,6 +137,7 @@ export function parseProject(text: string): Project {
   if(p.cameraResolution!==undefined&&!D435_PAIRED_RESOLUTIONS.some(mode=>mode.id===p.cameraResolution))throw new Error('Invalid D435 camera resolution');
   if(p.vehicleCount!==undefined&&p.vehicleCount!==1&&p.vehicleCount!==2)throw new Error('Vehicle count must be one or two');
   if(p.slamBackend!==undefined&&!['inertial','native'].includes(p.slamBackend))throw new Error('Invalid estimator backend');
+  if(p.loopClosureSettings!==undefined)p.loopClosureSettings=checkedLoopClosureSettings(p.loopClosureSettings);
   if(p.vehicleCount===2){p.modelicaSources??={};p.modelicaSources[offsetQuadrotorPath]??=offsetQuadrotor;}
   // Earlier previews offered paired90 Hz despite D435 RGB's60 Hz limit at
   //848×480. Preserve saved sources and the other rates when migrating them.

@@ -55,7 +55,7 @@ export function compactLayout(model,layout){
   // Keep the small typed loop-pair vectors as well as scalar diagnostics.
   // Other flattened arrays (especially carried State) stay out of the manifest.
   const outputs=layout.outputs.filter(entry=>typeof entry.name==='string'&&!entry.name.startsWith('next.')&&
-    (!entry.name.includes('[')||/^loop(?:ReferenceId|CurrentId|Score)\[\d+\]$/.test(entry.name)))
+    (!entry.name.includes('[')||/^loop(?:ReferenceId|CurrentId|Score|Candidate(?:ReferenceId|CurrentId|Score|Reason|MatchedCount|Inliers|Rms|Verified))\[\d+\]$/.test(entry.name)))
     .map(({name,lane,offset})=>({name,lane,offset:layout.typed_offset+offset}));
   return {
     model,pages:layout.pages,y_bytes:layout.y_bytes,p_offset:layout.p_offset,scratch_offset:layout.scratch_offset,

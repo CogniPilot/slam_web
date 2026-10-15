@@ -21,6 +21,8 @@ export interface Estimate extends Pose {
   points: number[][];confidence: number;features?: number[][];diagnostics?: Record<string,number|string>;
   uncertainty?:{positionCovariance:number[];attitudeCovariance:number[]};
   tracking?:{matches:{current:number[];previous:number[]}[];accepted:boolean;reason:string;referenceSequence?:number};
+  loopClosure?:{attempted:boolean;retrievalReason:number;graphReason:number;candidateCount:number;
+    candidates:{referenceId:number;currentId:number;score:number;reason:number;verified:boolean;matchedCount?:number;inlierCount?:number;rms?:number}[]};
   poseGraph?:{keyframes:{position:number[];quaternion:number[];id?:number;time?:number;imageEpoch?:number}[];
     edges:{from:number;to:number;kind:'loop'|'odometry';id?:number;similarity?:number}[]};
 }

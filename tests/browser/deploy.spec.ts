@@ -17,7 +17,9 @@ for(const detector of ['Modelica FAST · full resolution','Modelica Harris','Mod
     const editor=page.getByLabel('Modelica source');
     await editor.fill((await editor.inputValue()).replace('harris_k = 0.04','harris_k = 0.07'));
   }
-  await openExperimentFile(page,'slam');await page.getByLabel('Run model').selectOption('ModelicaInertial');
+  await openExperimentFile(page,'slam');await page.getByRole('button',{name:'Parameters',exact:true}).click();
+  await page.getByLabel('Run model').selectOption('ModelicaInertial');
+  await page.getByRole('tab',{name:'Editor',exact:true}).click();
   await page.getByRole('button',{name:'Apply & reset'}).click();
   await expect(page.getByRole('button',{name:'Step',exact:true})).toBeEnabled({timeout:90_000});
   await page.getByLabel('External adapter endpoint').fill(process.env.SLAM_COMPANION_ENDPOINT??'ws://127.0.0.1:19979');await page.getByRole('button',{name:'Connect',exact:true}).click();

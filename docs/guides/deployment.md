@@ -136,8 +136,9 @@ diagnostic WAT module recovered exact parity across 240 frames and all carried
 state, retaining three loop closures. That experiment measured 3.44× realtime;
 the immediately following baseline control measured 2.62× on the shared host.
 This is evidence for fixing compiler lifetime analysis, not a production fix.
-Compiler 278 is the profiling baseline; the published native package remains
-pinned to `9f507597` in `slam-native-package.json`.
+Compiler 278 was the profiling baseline; the published package at the time of
+that experiment used `9f507597`. The later runtime-tuning delivery below uses
+clean compiler 278, without the quarantined alias optimization or WAT patches.
 
 A sampled run on an RTX 3090 with Chromium 154 (15 Hz camera, 90 Hz IMU,
 848 × 480; ten warmup frames and sixty measured frames) attributed 85.2% of
@@ -318,6 +319,30 @@ closure cards, and shows matched/current timestamps. Orange edges on the map
 are verified loop constraints. Unreported retrieval counts and similarity scores
 are displayed as unavailable; a best retrieval score is not substituted for the
 score of a geometrically accepted edge.
+
+**Parameters → Loop closure tuning** exposes fifteen runtime inputs, including
+appearance similarity, revisit age, geometric inliers, calibrated/metric residual
+gates, retained-pose consistency and keyframe cadence. Apply pauses at a completed
+frame, validates the inputs, updates both drones when present and preserves the
+current map. Settings persist with the project. Restore defaults edits the draft;
+Apply is required to activate them. Sequential odometry keeps its separate gates.
+
+Candidate decisions retain at most 24 recent attempts with actual reference and
+current RGB thumbnails, scores, match counts, available fit statistics and authored
+Modelica reasons. A geometrically verified candidate without a committed graph
+edge appears as **Not added**. The filters separate these from committed edges.
+The inertial model selector has moved into Parameters, Flight and lists estimator
+examples and the user's main source rather than dependencies such as motors.
+
+The tuning delivery uses Modelica revision `748bd0c` and clean compiler `278475ff`.
+Its default 240-frame warehouse replay matches every prior recorded observable
+and diagnostic value and all 2,738,927 carried state cells, retaining the same
+three loops. A real worker-memory check verifies all fifteen input values, map
+preservation during Apply, persistence across reload and continued visual updates
+with loop retrieval disabled by a 1,000-second revisit age. See
+[`loop-tuning-parity.json`](../profiles/loop-tuning-parity.json) and the hardware
+regression `tests/browser/loop-tuning-gpu.spec.ts`. These are functional checks;
+they do not qualify a throughput improvement.
 
 A 50-second warehouse circuit produced three verified edges at 43.8, 45.8 and
 48.2 simulated seconds, matching retained keyframe 3 at 22.0 seconds with

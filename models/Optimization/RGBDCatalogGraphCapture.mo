@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models d2ebf66d3a65164dfdd20e890a7c196330d1b8dd; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
 // Atomic proposal for the catalog and measured graph owners. Publication,
 // estimator correlation, optimization and map updates remain outer owners.
 package RGBDCatalogGraphCapture
@@ -36,6 +36,17 @@ package RGBDCatalogGraphCapture
     input Boolean calibratedResiduals = true;
     input Real maximumNormalizedSquared = 9.0;
     input Boolean poseConsistentLoops = false;
+    input Real loopMinimumSimilarity = minimumSimilarity;
+    input Real loopMinimumAge = minimumAge;
+    input Integer loopMinimumInliers = minimumInliers;
+    input Real loopMinimumFraction = minimumFraction;
+    input Real loopInlierDistance = inlierDistance;
+    input Real loopMaximumRms = maximumRms;
+    input Boolean loopCalibratedResiduals = calibratedResiduals;
+    input Real loopMaximumNormalizedSquared = maximumNormalizedSquared;
+    input Real loopMaximumPoseInnovation = 2.0;
+    input Real loopPoseConsistencySquared = 9.0;
+    input Boolean loopPoseConsistency = poseConsistentLoops;
   protected
     RGBDKeyframes.Catalog captured;
     RGBDKeyframes.Frame latest;
@@ -45,11 +56,11 @@ package RGBDCatalogGraphCapture
     result.accepted := false; result.rejectionReason := 1;
     result.storedSlot := 0; result.evictedId := 0;
     result.loopDiagnostics := RGBDCatalogLoopVerification.ProposeCapture(previousCatalog,measurement,vocabulary,vocabularyEnabled,
-      requested,seeds,maximumWordDistanceSquared,minimumAssignments,minimumSimilarity,minimumAge,trials,refinements,
-      minimumInliers,minimumFraction,inlierDistance,maximumRms,descriptorRatio,maximumDescriptorDistance,
+      requested,seeds,maximumWordDistanceSquared,minimumAssignments,loopMinimumSimilarity,loopMinimumAge,trials,refinements,
+      loopMinimumInliers,loopMinimumFraction,loopInlierDistance,loopMaximumRms,descriptorRatio,maximumDescriptorDistance,
       coordinateLimit,rankTolerance,localizationSigma,depthInflation,minimumPivot,
-      calibratedResiduals=calibratedResiduals,maximumNormalizedSquared=maximumNormalizedSquared,
-      poseConsistentLoops=poseConsistentLoops);
+      calibratedResiduals=loopCalibratedResiduals,maximumNormalizedSquared=loopMaximumNormalizedSquared,
+      poseConsistentLoops=loopPoseConsistency,maximumPoseInnovation=loopMaximumPoseInnovation,poseConsistencySquared=loopPoseConsistencySquared);
     result.sequentialDiagnostics := RGBDLoopVerification.EmptyProposal(sequentialSeed);
     if result.loopDiagnostics.retrievalAccepted and previousCatalog.nextId > 1 then
       latest := RGBDKeyframes.ReadSlot(previousCatalog,mod(previousCatalog.nextId-2,RGBDKeyframes.keyframeCapacity)+1);
@@ -75,7 +86,8 @@ package RGBDCatalogGraphCapture
     result.graphDiagnostics := RGBDGraphMeasurements.Capture(previousCatalog,captured,previousGraph,
       result.sequentialDiagnostics,result.loopDiagnostics.proposals,stored,false,inlierDistance,maximumRms,
       calibratedResiduals=calibratedResiduals,maximumNormalizedSquared=maximumNormalizedSquared,
-      localizationSigma=localizationSigma,depthInflation=depthInflation,minimumPivot=minimumPivot);
+      localizationSigma=localizationSigma,depthInflation=depthInflation,minimumPivot=minimumPivot,
+      loopInlierDistance=loopInlierDistance, loopMaximumRms=loopMaximumRms, loopCalibratedResiduals=loopCalibratedResiduals, loopMaximumNormalizedSquared=loopMaximumNormalizedSquared);
     result.problem := RGBDGraphMeasurements.EmptyProblem();
     if result.graphDiagnostics.accepted then
       result.problem := RGBDGraphMeasurements.PrepareProblem(captured,result.graphDiagnostics.state,true);
