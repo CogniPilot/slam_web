@@ -178,6 +178,8 @@ establish 10× operation or equivalent performance on other computers.
 All browser compiler loaders request the JavaScript and WASM pair with the exact
 pinned revision in their URLs. Updating the pin also changes the worker bundles,
 so a newly loaded app bypasses cached compiler files from the previous deployment.
+The native SLAM manifest URL includes its pinned delivery hash; its program and
+state blobs already have content-addressed filenames.
 
 Playback batches completed simulation frames within an 8 ms wall-time budget,
 then yields; the 10× selector requests that pace but does not guarantee it.

@@ -1,0 +1,197 @@
+{
+  "recordedAt": "2026-10-15T01:30:30.262Z",
+  "provenance": {
+    "resolution": "424x240",
+    "file": "a35dfdb7f9879af7-module.wasm.gz",
+    "functionIds": [
+      471,
+      470,
+      249,
+      248,
+      247,
+      246,
+      245,
+      244,
+      243,
+      242,
+      237,
+      236,
+      235,
+      228,
+      467,
+      466,
+      253,
+      469,
+      468,
+      408,
+      612,
+      613,
+      614
+    ],
+    "originalSha256": "a35dfdb7f9879af7602ad3b6732f0bee2a0c83bc800d513e7a9f3fd328106d91",
+    "instrumentedSha256": "8451c564c3faadad5dc67f15a5b70a4ad6dec326612d9c471f1c6ae76d9749b3",
+    "scope": "Diagnostic function-clock wrappers; original input/output arithmetic and calls retained. Requires SLAM_PROFILE_NATIVE_TRACE=1."
+  },
+  "modelicaRevision": "d2ebf66d3a65164dfdd20e890a7c196330d1b8dd",
+  "modelicaPR18": false,
+  "sourceSha256": "aabb72b1fbd024aef62f2e5197f190a78fcf4a51160cfd41269824640b75cd6e",
+  "frames": 30,
+  "rtf": 2.453686664260827,
+  "meanNativeMs": 63.82000002861023,
+  "state": {
+    "sha256": "5d8915ae11ac539f09c8b58905082d79081ffc6e14bba42e5a38c6b5dd02bb93",
+    "cells": 2738927,
+    "runs": 160,
+    "bytes": 21594218,
+    "stateNamesHash": "257ffc5f91755403",
+    "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+  },
+  "functions": [
+    {
+      "id": 249,
+      "name": "RGBDGraphProcessing.Valid(previous)",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.10333329836527506,
+      "selectedExclusiveMsPerFrame": 0.10333329836527506
+    },
+    {
+      "id": 253,
+      "name": "RGBDGraphCaptureLedger.Advance",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.03666665554046631,
+      "selectedExclusiveMsPerFrame": 0.03666665554046631
+    },
+    {
+      "id": 408,
+      "name": "RGBDCatalogFrame.Advance",
+      "calls": 30,
+      "inclusiveMsPerFrame": 19.910000014305115,
+      "selectedExclusiveMsPerFrame": 19.910000014305115
+    },
+    {
+      "id": 466,
+      "name": "RGBDLocalizationCatalog.Publish(previous.estimator.localization,proposed,measure",
+      "calls": 60,
+      "inclusiveMsPerFrame": 20.32333335081736,
+      "selectedExclusiveMsPerFrame": 0.41333333651224774
+    },
+    {
+      "id": 468,
+      "name": "RGBDGraphProcessing.Valid(candidate)",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.08999998569488525,
+      "selectedExclusiveMsPerFrame": 0.08999998569488525
+    },
+    {
+      "id": 469,
+      "name": "RGBDGraphEstimatorCommit.ValidView(candidate.estimator.localization.catalog,\n   ",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.010000006357828776,
+      "selectedExclusiveMsPerFrame": 0.010000006357828776
+    },
+    {
+      "id": 470,
+      "name": "RGBDLocalizationCatalog.Publish(previous.estimator.localization,proposed,measure",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.23333337306976318,
+      "selectedExclusiveMsPerFrame": 0.23333337306976318
+    },
+    {
+      "id": 471,
+      "name": "RGBDLocalizationProcessing.Publish(previous,proposed,measurement,\n    producerPr",
+      "calls": 60,
+      "inclusiveMsPerFrame": 33,
+      "selectedExclusiveMsPerFrame": 12.203333330154418
+    },
+    {
+      "id": 612,
+      "name": "AdvanceFastSLAM(\n      previous=previous,\n      rgb=rgb,\n      depth=depth,\n    ",
+      "calls": 60,
+      "inclusiveMsPerFrame": 50.566666642824806,
+      "selectedExclusiveMsPerFrame": 17.56666664282481
+    },
+    {
+      "id": 613,
+      "name": "unmapped calling owners {602}",
+      "calls": 60,
+      "inclusiveMsPerFrame": 57.709999982515974,
+      "selectedExclusiveMsPerFrame": 7.1433333396911625
+    },
+    {
+      "id": 614,
+      "name": "stage_group calling owners {}",
+      "calls": 60,
+      "inclusiveMsPerFrame": 63.59000001748403,
+      "selectedExclusiveMsPerFrame": 5.880000034968059
+    }
+  ],
+  "edges": [
+    {
+      "key": "471/470",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.23333337306976318,
+      "selectedExclusiveMsPerFrame": 0.23333337306976318
+    },
+    {
+      "key": "471/249",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.10333329836527506,
+      "selectedExclusiveMsPerFrame": 0.10333329836527506
+    },
+    {
+      "key": "471/466",
+      "calls": 60,
+      "inclusiveMsPerFrame": 20.32333335081736,
+      "selectedExclusiveMsPerFrame": 0.41333333651224774
+    },
+    {
+      "key": "471/253",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.03666665554046631,
+      "selectedExclusiveMsPerFrame": 0.03666665554046631
+    },
+    {
+      "key": "471/469",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.010000006357828776,
+      "selectedExclusiveMsPerFrame": 0.010000006357828776
+    },
+    {
+      "key": "471/468",
+      "calls": 60,
+      "inclusiveMsPerFrame": 0.08999998569488525,
+      "selectedExclusiveMsPerFrame": 0.08999998569488525
+    },
+    {
+      "key": "612/471",
+      "calls": 60,
+      "inclusiveMsPerFrame": 33,
+      "selectedExclusiveMsPerFrame": 12.203333330154418
+    },
+    {
+      "key": "613/612",
+      "calls": 60,
+      "inclusiveMsPerFrame": 50.566666642824806,
+      "selectedExclusiveMsPerFrame": 17.56666664282481
+    },
+    {
+      "key": "614/613",
+      "calls": 60,
+      "inclusiveMsPerFrame": 57.709999982515974,
+      "selectedExclusiveMsPerFrame": 7.1433333396911625
+    },
+    {
+      "key": "root/614",
+      "calls": 60,
+      "inclusiveMsPerFrame": 63.59000001748403,
+      "selectedExclusiveMsPerFrame": 5.880000034968059
+    },
+    {
+      "key": "466/408",
+      "calls": 30,
+      "inclusiveMsPerFrame": 19.910000014305115,
+      "selectedExclusiveMsPerFrame": 19.910000014305115
+    }
+  ],
+  "scope": "Instrumented function wall times. totalMs is inclusive; selfMs excludes only instrumented descendants, not all calls. Edges group calls by nearest instrumented parent (root means none). Overlapping functions must not be summed. IDs require the exact original module hash and source mapping."
+}
