@@ -52,7 +52,10 @@ export function compactLayout(model,layout){
     const base=String(unsourced.name??'').replace(/\[.*$/,'');
     if(unsourced.kind==='Real'&&!inputs[base])inputs[base]={offset:layout.p_offset+unsourced.p_index*8,count:unsourced.count,lane:'f64'};
   }
-  const outputs=layout.outputs.filter(entry=>typeof entry.name==='string'&&!entry.name.startsWith('next.')&&!entry.name.includes('['))
+  // Keep the small typed loop-identity vectors as well as scalar diagnostics.
+  // Other flattened arrays (especially carried State) stay out of the manifest.
+  const outputs=layout.outputs.filter(entry=>typeof entry.name==='string'&&!entry.name.startsWith('next.')&&
+    (!entry.name.includes('[')||/^loop(?:ReferenceId|CurrentId)\[\d+\]$/.test(entry.name)))
     .map(({name,lane,offset})=>({name,lane,offset:layout.typed_offset+offset}));
   return {
     model,pages:layout.pages,y_bytes:layout.y_bytes,p_offset:layout.p_offset,scratch_offset:layout.scratch_offset,

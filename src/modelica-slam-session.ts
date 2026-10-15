@@ -157,12 +157,15 @@ export class ModelicaSlamSession {
     const diagnostics:Record<string,number|string>={runtime:'Rumoca native SLAM program',model:program.layout.model,imageEpoch:this.epoch,frames:this.frames,
       stepCalls:stepMs.length,stepMsMax:stepMs.length?Math.max(...stepMs):0,stepMsTotal:stepMs.reduce((a,b)=>a+b,0)};
     for(const [name,value] of Object.entries(derived))diagnostics[name]=typeof value==='boolean'?(value?1:0):value;
+    const candidateCount=derived.loopCandidateCount??program.output('loopCandidateCount')?.[0];
+    if(typeof candidateCount==='number'&&Number.isSafeInteger(candidateCount)&&candidateCount>=0)
+      diagnostics.loopCandidates=candidateCount;
     if(matchCount!==undefined)diagnostics.matchCount=matchCount;
     const accepted=derived.observationAccepted===true||derived.observationAccepted===1;
     const {points,confidence:mapConfidence}=this.mapPoints(program);
     const confidence=matchCount!==undefined&&features.length?Math.min(1,matchCount/features.length):mapConfidence;
     diagnostics.mapPoints=points.length;
-    const poseGraph=this.poseGraph(program);
+    const poseGraph=this.poseGraph(program,derived);
     diagnostics.keyframes=poseGraph.keyframes.length;
     diagnostics.loopEdges=poseGraph.edges.filter(edge=>edge.kind==='loop').length;
     diagnostics.loops=diagnostics.loopEdges;
@@ -179,7 +182,7 @@ export class ModelicaSlamSession {
       tracking:{matches:current.map((value,index)=>({current:value,previous:previous[index]})),accepted,
         reason:accepted?'visual observation accepted':derived.captureAccepted===1?'visual reference captured':`visual observation refused; publication reason ${diagnostics.publicationReason??'n/a'}`}};
   }
-  private poseGraph(program:SlamNativeProgram):NonNullable<Estimate['poseGraph']> {
+  private poseGraph(program:SlamNativeProgram,diagnostics:Record<string,number|boolean>={}):NonNullable<Estimate['poseGraph']> {
     const run=(name:string)=>program.stateRun(name)?.view;
     const enabled=run('estimator.poses.enabled'),ids=run('estimator.poses.ids');
     const positions=run('estimator.poses.positions'),rotations=run('estimator.poses.rotations');
@@ -202,9 +205,19 @@ export class ModelicaSlamSession {
     const prefix='estimator.localization.graph.edges.';
     const active=run(prefix+'enabled'),kinds=run(prefix+'kind'),references=run(prefix+'referenceId'),currents=run(prefix+'currentId');
     const edgeIds=run(prefix+'id');
+    const scores=program.output('loopScore'),referenceIds=program.output('loopReferenceId'),currentIds=program.output('loopCurrentId');
     if(active&&kinds&&references&&currents)for(let slot=0;slot<active.length;slot++)if(Number(active[slot])){
       const from=index.get(Number(references[slot])),to=index.get(Number(currents[slot])),kind=Number(kinds[slot]);
-      if(from!==undefined&&to!==undefined&&(kind===1||kind===2))edges.push({from,to,kind:kind===2?'loop':'odometry',...(edgeIds?{id:Number(edgeIds[slot])}:{})});
+      if(from!==undefined&&to!==undefined&&(kind===1||kind===2)){
+        let similarity:number|undefined;
+        if(kind===2&&scores)for(let rank=0;rank<scores.length;rank++){
+          const reference=referenceIds?.[rank]??diagnostics[`loopReferenceId[${rank+1}]`];
+          const current=currentIds?.[rank]??diagnostics[`loopCurrentId[${rank+1}]`];
+          if(reference===Number(references[slot])&&current===Number(currents[slot])&&
+            Number.isFinite(scores[rank])&&scores[rank]>=0&&scores[rank]<=1)similarity=scores[rank];
+        }
+        edges.push({from,to,kind:kind===2?'loop':'odometry',...(edgeIds?{id:Number(edgeIds[slot])}:{}),...(similarity===undefined?{}:{similarity})});
+      }
     }
     return {keyframes,edges};
   }

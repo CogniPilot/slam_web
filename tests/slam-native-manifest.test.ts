@@ -39,6 +39,21 @@ it('publishes content-addressed gzip blobs shared between models',()=>{
   expect(manifest.models.step.files.y).toMatchObject({bytes:16,encoding:'gzip'});
 });
 
+it('retains typed loop-pair identities without publishing unrelated flattened arrays',()=>{
+  const compact=compactLayout('loops',{...layout,typed_bytes:128,outputs:[...layout.outputs,
+    {name:'loopCandidateCount',lane:'i64',offset:24},
+    {name:'loopReferenceId[1]',lane:'i64',offset:32},
+    {name:'loopCurrentId[1]',lane:'i64',offset:40},
+    {name:'next.loopReferenceId[1]',lane:'i64',offset:48},
+  ]});
+  expect(compact.outputs).toEqual([
+    {name:'accepted',lane:'u8',offset:1024},
+    {name:'loopCandidateCount',lane:'i64',offset:1048},
+    {name:'loopReferenceId[1]',lane:'i64',offset:1056},
+    {name:'loopCurrentId[1]',lane:'i64',offset:1064},
+  ]);
+});
+
 it('reads carried Real, Integer and Boolean state from the compiler-published input cells',()=>{
   const runs=[
     {name:'position',lane:'f64',previous:64,next:0,count:3},
