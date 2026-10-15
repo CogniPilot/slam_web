@@ -45,7 +45,7 @@ test('model selection executes the chosen example and preserves independent sour
   await page.goto('/');
   await expect(page.getByRole('button',{name:'▶ Run',exact:true})).toBeEnabled({timeout:90000});
   const selector=page.getByLabel('Run model');
-  await page.getByRole('button',{name:'Parameters',exact:true}).click();
+  await page.getByRole('tab',{name:'Configuration',exact:true}).click();
   await expect(selector).toHaveValue('SLAM.Examples.InertialOnly');
   await expect(selector.locator('option[value="SLAM.Examples.SmoothedInertial"]')).toHaveCount(1);
   await expect(selector.locator('option')).toHaveCount(3);
@@ -81,7 +81,7 @@ test('late model discovery preserves a newer selection',async({page})=>{
   await page.goto('/');
   await expect(page.getByRole('button',{name:'▶ Run',exact:true})).toBeEnabled({timeout:90000});
   const selector=page.getByLabel('Run model');
-  await page.getByRole('button',{name:'Parameters',exact:true}).click();
+  await page.getByRole('tab',{name:'Configuration',exact:true}).click();
   await expect(selector.locator('option[value="SLAM.Examples.ResponsiveInertial"]')).toHaveCount(1);
   await page.evaluate(()=>{
     const editor=(window as any).__slamLab.sourceEditor;

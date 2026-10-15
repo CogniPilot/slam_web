@@ -2,6 +2,7 @@ import {SlamNativeProgram,type SlamNativeFetch,type SlamNativeManifest} from './
 import type {SlamInitialFrame,SlamIntervalFrame} from './modelica-slam-frame';
 import type {Estimate} from './types';
 import {checkedLoopClosureSettings,LOOP_CLOSURE_PARAMETERS,type LoopClosureSettings} from './loop-closure-settings';
+import {checkedParameterValues,type ParameterValues} from './model-parameters';
 
 export interface SlamNativeResult {
   estimate:Estimate;
@@ -27,7 +28,7 @@ export class ModelicaSlamSession {
   private initial!:Estimate;
   private constructor(readonly manifest:SlamNativeManifest,private readonly step:SlamNativeProgram){}
 
-  static async create(manifest:SlamNativeManifest,fetchFile:SlamNativeFetch,initial:SlamInitialFrame,progress:(text:string)=>void=()=>{},settings?:LoopClosureSettings){
+  static async create(manifest:SlamNativeManifest,fetchFile:SlamNativeFetch,initial:SlamInitialFrame,progress:(text:string)=>void=()=>{},settings?:LoopClosureSettings,parameters?:ParameterValues){
     progress('Loading native SLAM initialization program');
     const initialize=await SlamNativeProgram.load(manifest.models.initialize,fetchFile);
     progress('Loading native SLAM step program');
@@ -36,6 +37,7 @@ export class ModelicaSlamSession {
     const tuning=checkedLoopClosureSettings(settings);
     validateSettings(initialize,tuning);validateSettings(step,tuning);
     writeSettings(initialize,tuning);writeSettings(step,tuning);
+    if(parameters){writeModelParameters(initialize,parameters);writeModelParameters(step,parameters);}
     progress('Initializing native SLAM on the first camera image');
     session.writeCamera(initialize,initial);
     session.writeImage(initialize,initial);
@@ -55,6 +57,7 @@ export class ModelicaSlamSession {
   get initialEstimate():Estimate {return structuredClone(this.initial);}
   get tuningSupported(){return LOOP_CLOSURE_PARAMETERS.every(field=>this.step.hasInput(field.key));}
   configure(settings:LoopClosureSettings){const checked=checkedLoopClosureSettings(settings);validateSettings(this.step,checked);writeSettings(this.step,checked);}
+  configureParameters(values:ParameterValues){writeModelParameters(this.step,values);}
 
   /** Overlap a held-IMU prediction with the next physics interval. Images are
    * never consumed here: only the final camera call requests observation. */
@@ -265,6 +268,20 @@ export class ModelicaSlamSession {
     }
     return {points,confidence:points.length&&landmarkConfidence?Math.min(1,total/points.length/8):0};
   }
+}
+
+function writeModelParameters(program:SlamNativeProgram,overrides:ParameterValues){
+  const fields=program.layout.parameters;
+  if(!fields){if(!Object.keys(overrides).length)return;throw Error('This native delivery has no Modelica parameter metadata');}
+  const values={...Object.fromEntries(fields.map(field=>[field.name,field.defaultValue])),...overrides} as ParameterValues;
+  checkedParameterValues(fields,values);
+  const writes=fields.map(field=>{
+    const slot=field.slot??field.name,index=field.index??0;
+    const view=field.type==='Boolean'?program.boolean(slot):field.type==='Integer'?program.integer(slot):program.real(slot);
+    if(!Number.isSafeInteger(index)||index<0||index>=view.length)throw Error(`Invalid native parameter slot: ${field.name}`);
+    return {view,index,value:values[field.name],integer:field.type==='Integer'};
+  });
+  for(const {view,index,value,integer}of writes){if(integer)(view as BigInt64Array)[index]=BigInt(value);else (view as Float64Array|Uint8Array)[index]=Number(value);}
 }
 
 function validateSettings(program:SlamNativeProgram,settings:LoopClosureSettings){

@@ -81,18 +81,25 @@ also publish the exported programs (see [Deployment](docs/guides/deployment.md))
 The inertial baseline remains the default. This is a prototype for teaching and
 experimentation.
 
-Open **Parameters → Loop closure tuning** to adjust appearance similarity,
-revisit age, geometric verification, pose consistency and keyframe spacing.
-**Apply tuning** pauses at a completed frame and keeps the current map. Settings
-save with the project; **Restore defaults** prepares a draft until you apply it.
-Loop-specific gates leave consecutive-frame visual odometry unchanged. Calibrated
-residual mode uses the normalized gate; the metric distance/RMS limits apply when
-that mode is disabled. The **Loop closures → Candidate decisions** view shows
-reference/current images, measured match statistics and Modelica rejection
-reasons, with filters for committed and rejected candidates. Passing geometric
-verification alone does not mean a loop edge was committed.
+Open **Parameters** for the **Model parameters** inspector. Choose a model, then
+expand component groups or search names and descriptions. It includes vehicle and
+controller gains, inertial estimation, sensors, scene actors, evaluation and RGB-D
+SLAM settings. Controls use Modelica types, units, limits and source defaults;
+arrays and record fields appear individually. **Modified only** finds your edits,
+and **Restore model defaults** prepares a draft until you apply it. Final and
+unsupported structural expressions link back to the Modelica source.
 
-The inertial example selector lives under **Parameters → Flight**. It lists
+**Apply & reset** recompiles ordinary models so dependent parameters and equations
+are updated. For RGB-D SLAM, **Apply parameters** pauses at a completed frame and
+retains the current map. Settings save with the project. The SLAM groups include
+loop retrieval, geometric verification, pose consistency, keyframe capture and map
+maintenance. Calibrated residual mode uses the normalized gate; metric distance/RMS
+limits apply when that mode is disabled. The **Loop closures → Candidate decisions**
+view shows reference/current images, measured match statistics and Modelica
+rejection reasons, with filters for committed and rejected candidates. Passing
+geometric verification alone does not mean a loop edge was committed.
+
+The inertial example selector lives under **Configuration → Flight**. It lists
 estimator examples and models in your main source; vehicle and motor dependencies
 are kept out of that menu. RGB-D SLAM uses the native model selected by its camera
 resolution.

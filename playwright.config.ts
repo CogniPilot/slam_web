@@ -12,6 +12,7 @@ export default defineConfig({
     '**/viewer-cloud-transfer.spec.ts',
     '**/configuration-panel.spec.ts',
     '**/loop-tuning.spec.ts',
+    '**/model-parameters.spec.ts',
     '**/modelica-docs.spec.ts',
     '**/assistant.spec.ts',
     '**/workspace-panes.spec.ts',

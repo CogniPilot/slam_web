@@ -1,11 +1,13 @@
 /// <reference lib="webworker" />
 import {compilerAsset} from './compiler-assets';
+import {reflectedParameters} from './modelica-parameters';
+import {inspectModelParameters} from './modelica-parameter-inspection';
 /** Browser JSON-RPC/LSP transport over Rumoca's actual language-service APIs. */
 type RpcId=number|string|null;
 type Message={jsonrpc:'2.0';id?:RpcId;method?:string;params?:any;result?:any;error?:{code:number;message:string}};
 type Position={line:number;character:number};
 type Document={text:string;version:number};
-type Rumoca=Pick<typeof import('@cognipilot/rumoca'),'get_version'|'get_git_commit'|'sync_workspace_sources'|'lsp_diagnostics'|'lsp_completion'|'lsp_hover'|'lsp_definition'|'lsp_document_symbols'|'lsp_semantic_tokens'|'lsp_semantic_token_legend'|'lsp_code_actions'> & Partial<Pick<typeof import('@cognipilot/rumoca'),'get_simulation_models'|'list_classes'|'get_class_info'|'compile_check_with_source_roots'>>;
+type Rumoca=Pick<typeof import('@cognipilot/rumoca'),'get_version'|'get_git_commit'|'sync_workspace_sources'|'lsp_diagnostics'|'lsp_completion'|'lsp_hover'|'lsp_definition'|'lsp_document_symbols'|'lsp_semantic_tokens'|'lsp_semantic_token_legend'|'lsp_code_actions'> & Partial<Pick<typeof import('@cognipilot/rumoca'),'get_simulation_models'|'list_classes'|'get_class_info'|'compile_check_with_source_roots'|'model_parameter_metadata_with_workspace_sources'>>;
 class RpcError extends Error {constructor(readonly code:number,message:string){super(message);}}
 const position=(value:any):Position=>{
   if(!Number.isInteger(value?.line)||!Number.isInteger(value?.character)||value.line<0||value.character<0||value.line>0xffffffff||value.character>0xffffffff)throw new RpcError(-32602,'Expected a zero-based UTF-16 LSP position');
@@ -142,6 +144,16 @@ export class RumocaLanguageServer {
         if(!this.initialized)throw new RpcError(-32002,'Language server is not initialized');
         if(this.shuttingDown&&message.method!=='exit')throw new RpcError(-32600,'Language server is shutting down');
         switch(message.method) {
+          case 'modelica/parameters': {
+            if(this.documents.size)throw new RpcError(-32602,'Parameter inspection requires its own workspace worker');
+            if(typeof params.source!=='string'||typeof params.model!=='string')throw new RpcError(-32602,'Parameter inspection requires model and source');
+            const api=await this.api();
+            if(!api.model_parameter_metadata_with_workspace_sources||!api.get_class_info)throw new RpcError(-32601,'Rumoca parameter metadata is unavailable');
+            const sources=workspaceSources({modelica:{workspaceSources:params.sources}});this.syncedWorkspace=undefined;
+            const metadata=api.model_parameter_metadata_with_workspace_sources;
+            const raw=inspectModelParameters({...api,get_class_info:api.get_class_info},params.source,params.model,(source,model)=>metadata(source,model,sources),JSON.parse(sources));
+            result=reflectedParameters({...api,get_class_info:api.get_class_info},params.model,params.source,raw);break;
+          }
           case 'initialized':case '$/cancelRequest':case '$/setTrace':break;
           case 'modelica/checkModel': {
             if(typeof params.source!=='string'||typeof params.model!=='string'||!params.model)

@@ -5,7 +5,9 @@ import { World } from './world';
 import { Runtime,type Metrics } from './runtime';
 import { sourceFor,setSource,nodeRuntimeLabel,type GraphNode } from './graph';
 import { algorithms,detectors,visibleDetectorPresets,defaultProject,readSavedProjectText,readProjectRecovery,saveProjectRecovery,withDefaultModels,estimatorModelicaSources,estimatorExampleSources,type ProjectRecoveryBackup,saveProject,parseProject,download,offsetQuadrotorPath,offsetQuadrotorSource } from './project';
-import type {LoopClosureSettings} from './loop-closure-settings';
+import {mountModelParameters} from './model-parameters-panel';
+import {modelParameterTargets,parameterTargetVersion} from './model-parameter-targets';
+import {nativeParametersFor,NATIVE_SLAM_PARAMETERS,type ParameterValues} from './model-parameters';
 import type { Estimate,Pose,RunRecord,SensorFrame,Truth } from './types';
 import {ComparisonTracker,type TimedPose} from './comparison';
 import {validateSensorFrame} from './packet';
@@ -98,7 +100,7 @@ el('graphics-state').insertAdjacentHTML('afterend','<small id="scene-credit"></s
 el('scene-credit').insertAdjacentHTML('afterend','<div id="navigation-state">Navigation · GPS roof geofence demonstration</div><div id="lidar-state">LiDAR disabled</div>');
 const runtime=new Runtime(world);
 const loopHistories=[new LoopClosureHistory(),new LoopClosureHistory()];
-const loopPanel=mountLoopClosurePanel(document.querySelector<HTMLElement>('.visuals')!,()=>showParameters(true));
+const loopPanel=mountLoopClosurePanel(document.querySelector<HTMLElement>('.visuals')!);
 loopPanel.render(loopHistories[0]);
 runtime.onInitialFrame=(index,frame,estimate)=>{loopHistories[index].reset();loopHistories[index].observe(frame,estimate);};
 const depthPreview=new DepthPreview(el<HTMLCanvasElement>('depth'));
@@ -131,11 +133,34 @@ function syncEstimatorMode(){
 }
 
 const code=el<HTMLTextAreaElement>('code');
-const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,onResolutionChange:changeCameraResolution,onLoopSettingsChange:changeLoopClosureSettings,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
+const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,onResolutionChange:changeCameraResolution,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
 const parameterButton=document.createElement('button');parameterButton.id='parameters';parameterButton.textContent='Parameters';parameterButton.onclick=()=>showParameters();
 document.querySelector('.run-controls')!.append(parameterButton);
-function showParameters(loop=false){workspacePanes.reveal('editor');if(loop)configuration.showLoopClosure();else configuration.showConfiguration();}
+function showParameters(){workspacePanes.reveal('editor');parameterView.show();}
 const sourceEditor=createSourceEditor(code);
+const parameterPanel=mountModelParameters({
+  targets:()=>modelParameterTargets(project),
+  values:id=>id===NATIVE_SLAM_PARAMETERS?nativeParametersFor(project):project.modelParameters?.[id]??{},
+  load:async id=>{
+    const target=modelParameterTargets(project).find(target=>target.id===id);if(!target)throw Error('Unknown parameter model');
+    const version=parameterTargetVersion(project,id);
+    if(target.native){
+      const manifest=await fetchNativeManifest(new URL(import.meta.env.BASE_URL,location.href),project.cameraResolution??'848x480');
+      const fields=manifest.models.step.parameters;
+      if(!fields?.length)throw Error('This native SLAM delivery has no model parameter catalog. Load the latest app to inspect its parameters.');
+      return {fields,version};
+    }
+    return {fields:await sourceEditor.parameters(target.source,target.model,target.sources),version};
+  },
+  apply:changeModelParameters,
+  source:id=>{
+    if(id===NATIVE_SLAM_PARAMETERS){void openSource('library:models/Libraries/CogniPilot/SLAM/RGBDFastSLAMInterface.mo');return;}
+    const kind=id==='LabQuadrotor'?'physics':id==='RuntimeEvaluation'?'evaluation':['SensorObservations','SensorAvailability','ActorMotion'].includes(id)?'sensor':'slam';
+    configuration.showEditor();selectNode(project.graph.nodes.find(node=>node.kind===kind)!);
+  }
+});
+const parameterView=configuration.addPanel('parameters','Model parameters',parameterPanel.element);
+parameterPanel.element.addEventListener('workspace:show',()=>{void parameterPanel.show();});
 const runModelLabel=document.createElement('label');runModelLabel.className='run-model';runModelLabel.textContent='Inertial baseline model';
 const runModel=document.createElement('select');runModel.id='run-model';runModel.setAttribute('aria-label','Run model');
 runModelLabel.append(runModel);document.querySelector('.configuration-flight')!.append(runModelLabel);
@@ -348,6 +373,7 @@ function syncProject() {
   el<HTMLInputElement>('people-enabled').checked=project.peopleEnabled??true;
   el<HTMLSelectElement>('lighting-mode').value=project.lightingMode??'day';
   configuration.sync(project);
+  parameterPanel.sync();
   selectNode(project.graph.nodes.find(n=>n.id===selected?.id)??project.graph.nodes.find(n=>n.kind==='slam')!,false);
   return refreshRunModels();
 }
@@ -500,17 +526,29 @@ async function changeCameraResolution(resolution:NonNullable<typeof project.came
   await compile();
   configuration.sync(project);
 }
-async function changeLoopClosureSettings(settings:LoopClosureSettings){
+async function changeModelParameters(id:string,values:ParameterValues,version:string){
   await initializationReady;
-  if(assistantSimulation)throw Error('Finish the current simulation before applying tuning');
-  configuration.setBusy(true);
+  if(assistantSimulation)throw Error('Finish the current simulation before changing parameters');
+  if(version!==parameterTargetVersion(project,id))throw Error('The model source changed. Refresh its parameters before applying edits.');
+  configuration.setBusy(true);parameterPanel.setBusy(true);
   runtime.pause();el('run').textContent='▶ Run';disableRun(true);
   try{
     while(runtime.busy||compiling)await new Promise(resolve=>setTimeout(resolve,20));
-    await runtime.configureLoopClosure(settings);
-    project.loopClosureSettings={...settings};changed(false);
-    status(project.slamBackend==='native'?'Loop tuning applied · current map retained · press Run to continue':'Loop tuning saved for Native Modelica SLAM');
-  }finally{configuration.setBusy(compiling);disableRun(!ready||compiling);syncApplyButton();}
+    const previous=project.modelParameters;
+    if(id===NATIVE_SLAM_PARAMETERS){
+      await runtime.configureNativeParameters(values);
+      project.modelParameters={...previous,[id]:{...values}};changed(false);
+      const message=project.slamBackend==='native'?'Model parameters applied · current map retained · press Run to continue':'Parameters saved for RGB-D SLAM';status(message);return message;
+    }
+    project.modelParameters={...previous,[id]:{...values}};dirty=true;
+    await compile();
+    if(!ready){
+      const error=String(compilationError??'Model initialization failed');
+      if(previous)project.modelParameters=previous;else delete project.modelParameters;
+      dirty=true;await compile();throw Error(`${error}. Previous parameter settings restored.`);
+    }
+    changed(false);return 'Model parameters applied · simulation reset · press Run to continue';
+  }finally{configuration.setBusy(compiling);parameterPanel.setBusy(compiling);disableRun(!ready||compiling);syncApplyButton();}
 }
 async function changeSensorRates(rates:SensorRates|undefined) {
   if(rates)project.sensorRates={...rates};else delete project.sensorRates;
@@ -543,6 +581,7 @@ function syncViewerFlags(){viewer?.visibility({uncertainty:el<HTMLInputElement>(
 el<HTMLInputElement>('show-matches').onchange=()=>{if(latest)drawSensors(latest.frame,latest.estimate);};
 el('help').onclick=()=>{el<HTMLDetailsElement>('lesson').open=!el<HTMLDetailsElement>('lesson').open;el('lesson').scrollIntoView({behavior:'smooth'});};
 function disableRun(disabled:boolean){
+  parameterPanel.setBusy(compiling||assistantSimulation);
   for(const id of ['run','step','reset','apply','record'])el<HTMLButtonElement>(id).disabled=disabled;
   runModel.disabled=compiling||project.slamBackend==='native';
   const count=document.getElementById('vehicle-count') as HTMLSelectElement|null;

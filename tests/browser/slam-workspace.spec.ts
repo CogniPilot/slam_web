@@ -55,7 +55,7 @@ test('full Modelica source workspace edits, diagnostics, download and local relo
   await expect(page.getByRole('button',{name:'Full SLAM execution pending',exact:true})).toBeDisabled();
   const original=await page.getByLabel('Modelica source').inputValue();
   expect(original).toBe(readFileSync(path,'utf8'));
-  const edited=original.replace('minimumMeasuredDescriptors = 8;','minimumMeasuredDescriptors = 12;');
+  const edited=original.replace('input Integer minimumMeasuredDescriptors = 8','input Integer minimumMeasuredDescriptors = 12');
   expect(edited).not.toBe(original);
   // The actual Rumoca worker diagnoses this file through the existing editor.
   await page.evaluate(()=>(window as any).__slamLab.sourceEditor.editor.setValue('model Broken\n equation\n x = ;\nend Broken;'));
@@ -64,7 +64,7 @@ test('full Modelica source workspace edits, diagnostics, download and local relo
   await page.evaluate(source=>(window as any).__slamLab.sourceEditor.editor.setValue(source),edited);
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.sourceEditor.getDiagnostics().filter((d:any)=>d.severity===1).length),{timeout:30000}).toBe(0);
   progress('valid source diagnostics cleared');
-  const lines=edited.split('\n'),declaration=lines.findIndex(line=>line.includes('parameter Integer minimumMeasuredDescriptors'));
+  const lines=edited.split('\n'),declaration=lines.findIndex(line=>line.includes('input Integer minimumMeasuredDescriptors'));
   const position={line:declaration,character:lines[declaration].indexOf('minimumMeasuredDescriptors')+5};
   const hover=await page.evaluate(at=>(window as any).__slamLab.sourceEditor.requestHover(at),position);
   expect(hover).not.toBeNull();

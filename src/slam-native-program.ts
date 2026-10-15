@@ -1,4 +1,5 @@
 import {nativeManifestUrl} from './native-assets';
+import type {ModelParameter} from './model-parameters';
 /** Host for one compiler-exported native Modelica program (Rumoca native_step
  * export). The module owns the algorithm: it imports one linear memory holding
  * Y, P, scratch and typed lanes, exports `eval_assignments`, and declares its
@@ -6,6 +7,7 @@ import {nativeManifestUrl} from './native-assets';
  * calls the entry, moves next state into previous state and reads outputs. */
 export interface SlamNativeSlot {offset:number;count:number;lane:'f64'|'i64'|'u8'}
 export interface SlamNativeLayout {
+  parameters?:ModelParameter[];
   model:string;pages:number;y_bytes:number;p_offset:number;scratch_offset:number;typed_offset:number;typed_bytes:number;
   y_count:number;p_count:number;
   state:{count:number;previous_hash:string;next_hash:string};

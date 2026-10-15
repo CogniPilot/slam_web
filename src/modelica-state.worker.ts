@@ -3,6 +3,7 @@ import {compilerAsset} from './compiler-assets';
 import type {SensorFrame} from './types';
 import {sourceDigest} from './source-digest';
 import {ModelicaInertialSession,type InertialSessionMetadata} from './modelica-inertial-session';
+import {configuredModelicaSession} from './modelica-session-parameters';
 let compiler:typeof import('@cognipilot/rumoca');
 let session:ModelicaInertialSession|undefined;
 async function execute(message:any) {
@@ -13,9 +14,9 @@ async function execute(message:any) {
     const sources=JSON.stringify(message.workspaceSources??{});
     const loaded=JSON.parse(compiler.sync_workspace_sources(sources));
     if(loaded.error_count)throw new Error('Rumoca could not load Modelica library: '+loaded.skipped_files.join(', '));
-    const candidate=new ModelicaInertialSession(compiler.WasmSimulationSession.withInteractiveOptions(
+    const candidate=new ModelicaInertialSession(configuredModelicaSession(compiler,
       message.source,modelName,.005,'rk-like',1e-10,1e-8,
-      '[["accel[1]",0],["accel[2]",0],["accel[3]",9.81],["gyro[1]",0],["gyro[2]",0],["gyro[3]",0]]'));
+      '[["accel[1]",0],["accel[2]",0],["accel[3]",9.81],["gyro[1]",0],["gyro[2]",0],["gyro[3]",0]]',message.parameters,message.workspaceSources));
     const artifact:InertialSessionMetadata={format:'rumoca-simulation-session',version:1,modelName,
       sourceSha256:await sourceDigest(message.workspaceSources?JSON.stringify({source:message.source,workspaceSources:message.workspaceSources}):message.source),compilerVersion:compiler.get_version(),compilerCommit:compiler.get_git_commit()??'unknown',executionPolicy:'auto'};
     session?.free();session=candidate;

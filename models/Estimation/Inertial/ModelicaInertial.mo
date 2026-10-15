@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
 // Nominal INS without visual corrections. Body FLU inputs; world ENU outputs.
 // Quaternion [w,x,y,z] rotates body to world. Rumoca integrates held IMU samples.
 model ModelicaInertial

@@ -1,0 +1,44 @@
+import {test,expect} from '@playwright/test';
+
+test('model parameters come from the real model, affect its solver and persist without source edits',async({page},testInfo)=>{
+  test.setTimeout(240_000);
+  await page.goto('/');
+  await page.waitForFunction(()=>{const lab=(window as any).__slamLab;return lab?.initialized&&lab.ready&&!lab.compiling;},{},{timeout:90_000});
+  const original=await page.evaluate(()=>(window as any).__slamLab.project.algorithm);
+  await page.getByRole('button',{name:'Parameters',exact:true}).click();
+  await expect(page.getByRole('tab',{name:'Model parameters',exact:true})).toHaveAttribute('aria-selected','true');
+  const panel=page.locator('.model-parameters');
+  await expect(panel.getByLabel('accelTimeConstant',{exact:true})).toHaveValue('0.03',{timeout:30_000});
+  await panel.getByLabel('accelTimeConstant',{exact:true}).fill('.15');
+  await panel.getByRole('button',{name:'Apply & reset',exact:true}).click();
+  await expect(panel.getByRole('status')).toContainText('Model parameters applied',{timeout:90_000});
+  expect(await page.evaluate(()=>(window as any).__slamLab.project.algorithm)).toBe(original);
+  const result=await page.evaluate(async()=>{
+    const lab=(window as any).__slamLab;
+    const estimate=await lab.runtime.modelicaState.call('step',{frame:{time:.1,dt:.1,imu:{accel:[1,0,9.81],gyro:[0,0,0]}}});
+    return {estimate,parameters:lab.project.modelParameters};
+  });
+  const expected=.1*.1/2-.15*.1+.15*.15*(1-Math.exp(-.1/.15));
+  expect(result.estimate.x).toBeCloseTo(expected,8);
+  expect(result.parameters['SLAM.Examples.InertialOnly'].accelTimeConstant).toBe(.15);
+  await page.reload();
+  await page.waitForFunction(()=>{const lab=(window as any).__slamLab;return lab?.initialized&&lab.ready&&!lab.compiling;},{},{timeout:90_000});
+  await page.getByRole('button',{name:'Parameters',exact:true}).click();
+  await expect(panel.getByLabel('accelTimeConstant',{exact:true})).toHaveValue('0.15',{timeout:30_000});
+  await panel.getByLabel('Parameter model',{exact:true}).selectOption('LabQuadrotor');
+  await expect(panel.getByRole('status')).toContainText('Applying Modelica parameters recompiles',{timeout:30_000});
+  await panel.getByLabel('Find a parameter',{exact:true}).fill('controller.attitudeGain');
+  await expect(panel.getByLabel('controller.attitudeGain[1]',{exact:true})).toHaveValue('2');
+  await expect(panel.getByLabel('controller.attitudeGain[2]',{exact:true})).toHaveValue('2');
+  await panel.getByLabel('controller.attitudeGain[1]',{exact:true}).fill('2.5');
+  await panel.getByRole('button',{name:'Apply & reset',exact:true}).click();
+  await expect(panel.getByRole('status')).toContainText('Model parameters applied',{timeout:90_000});
+  expect(await page.evaluate(()=>(window as any).__slamLab.project.modelParameters.LabQuadrotor['controller.attitudeGain[1]'])).toBe(2.5);
+  await panel.getByLabel('Find a parameter',{exact:true}).fill('no such parameter');
+  await expect(panel).toContainText('No matching parameters');
+  await panel.getByLabel('Find a parameter',{exact:true}).fill('controller.attitudeGain');
+  await panel.getByRole('button',{name:'Restore model defaults',exact:true}).click();
+  await expect(panel.getByLabel('controller.attitudeGain[1]',{exact:true})).toHaveValue('2');
+  expect(await page.evaluate(()=>(window as any).__slamLab.project.modelParameters.LabQuadrotor['controller.attitudeGain[1]'])).toBe(2.5);
+  await page.screenshot({path:testInfo.outputPath('model-parameters.png'),fullPage:true});
+});

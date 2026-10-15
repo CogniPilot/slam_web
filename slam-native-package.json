@@ -1,10 +1,10 @@
 {
   "repository": "CogniPilot/slam_web",
-  "tag": "native-slam-loop-tuning-20261015",
+  "tag": "native-slam-model-parameters-20261015",
   "asset": "native-slam-d435-profiles.tar",
-  "bytes": 75632640,
-  "sha256": "eea23f3e72dc8413ef77b8f2d971dec45129d43bec5d0d8f9ab2b733437847c1",
-  "sourceSha256": "f13ced11cc3f414a164193cfad67cf09f6482622eec6c42898855f85a4a54be4",
+  "bytes": 75919360,
+  "sha256": "c8ad6e8e89bbbf037e878a577d9bf17fa633938c52b01c5003c43c5faef21052",
+  "sourceSha256": "0d619aba4079482d4e79992a0a3957d642f9f95b241982d5796b64b46b624648",
   "rumocaRevision": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
-  "modelicaRevision": "748bd0cafe8a201acb9e132b49bac7243a5e5aba"
+  "modelicaRevision": "cc000556df5fbf9fea001957453a4dfc63780e7e"
 }

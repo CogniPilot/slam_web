@@ -320,29 +320,42 @@ are verified loop constraints. Unreported retrieval counts and similarity scores
 are displayed as unavailable; a best retrieval score is not substituted for the
 score of a geometrically accepted edge.
 
-**Parameters → Loop closure tuning** exposes fifteen runtime inputs, including
-appearance similarity, revisit age, geometric inliers, calibrated/metric residual
-gates, retained-pose consistency and keyframe cadence. Apply pauses at a completed
-frame, validates the inputs, updates both drones when present and preserves the
-current map. Settings persist with the project. Restore defaults edits the draft;
-Apply is required to activate them. Sequential odometry keeps its separate gates.
+**Parameters → Model parameters** reads the actual model catalog. It groups nested
+components and source-authored Dialog annotations, supports search and modified-only
+filtering, and displays scalar, Boolean, String, array and record fields with their
+units, limits and defaults. The vehicle/controller catalog currently contains 207
+fields; the native SLAM catalog contains 68 declared input scalars. Sensor, actor,
+evaluation and selected inertial models have their own catalogs. Final parameters
+and structural expressions whose evaluated defaults are unavailable remain visible
+with an explanation and a source shortcut.
+
+Ordinary parameter edits rebuild and reset the solver, with numeric overrides
+resolved before dependent bindings. Structural scalar and String changes use legal
+Modelica class modifications and a full frontend compile. Source files are preserved.
+Native SLAM edits validate metadata against declared typed input slots, pause at a
+completed frame, update both drones when present and retain the map. No baked module
+constants or arbitrary parameter-memory addresses are patched. Settings persist with
+the project; Restore model defaults edits the draft until Apply.
 
 Candidate decisions retain at most 24 recent attempts with actual reference and
 current RGB thumbnails, scores, match counts, available fit statistics and authored
 Modelica reasons. A geometrically verified candidate without a committed graph
 edge appears as **Not added**. The filters separate these from committed edges.
-The inertial model selector has moved into Parameters, Flight and lists estimator
+The inertial model selector lives in Configuration, Flight and lists estimator
 examples and the user's main source rather than dependencies such as motors.
 
-The tuning delivery uses Modelica revision `748bd0c` and clean compiler `278475ff`.
-Its default 240-frame warehouse replay matches every prior recorded observable
-and diagnostic value and all 2,738,927 carried state cells, retaining the same
-three loops. A real worker-memory check verifies all fifteen input values, map
-preservation during Apply, persistence across reload and continued visual updates
-with loop retrieval disabled by a 1,000-second revisit age. See
-[`loop-tuning-parity.json`](../profiles/loop-tuning-parity.json) and the hardware
-regression `tests/browser/loop-tuning-gpu.spec.ts`. These are functional checks;
-they do not qualify a throughput improvement.
+The model-parameter delivery uses Modelica revision `cc000556` and clean compiler
+`278475ff`. Its default 240-frame warehouse replay matches every prior recorded
+observable and diagnostic value and all 2,738,927 carried state cells, retaining the
+same three loops. A real worker-memory check verifies all 68 native input values,
+map preservation during Apply, persistence across reload and continued visual updates
+with loop retrieval disabled by a 1,000-second revisit age. Browser checks also change
+an inertial time constant, verify the solver trajectory, and rebuild a vehicle
+controller gain array. See [`model-parameters.json`](../profiles/model-parameters.json),
+`tests/browser/model-parameters.spec.ts` and `tests/browser/loop-tuning-gpu.spec.ts`.
+The earlier fifteen-control delivery is recorded separately in
+[`loop-tuning-parity.json`](../profiles/loop-tuning-parity.json). These are functional
+checks; they do not qualify a throughput improvement.
 
 A 50-second warehouse circuit produced three verified edges at 43.8, 45.8 and
 48.2 simulated seconds, matching retained keyframe 3 at 22.0 seconds with

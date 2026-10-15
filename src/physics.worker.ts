@@ -2,6 +2,7 @@
 import {compilerAsset} from './compiler-assets';
 import type { WasmSimulationSession } from '@cognipilot/rumoca';
 import {readPhysicsSnapshot} from './physics-snapshot';
+import {configuredModelicaSession} from './modelica-session-parameters';
 let module: typeof import('@cognipilot/rumoca');
 let session: WasmSimulationSession | undefined;
 async function execute(message: any) {
@@ -12,7 +13,7 @@ async function execute(message: any) {
     if(loaded.error_count)throw new Error('Rumoca could not load the flight library: '+loaded.skipped_files.join(', '));
     // This is the adaptive solver's initial step hint, not the sensor clock or
     // a fixed integration step. Keep its error tolerances unchanged.
-    const candidate = module.WasmSimulationSession.withInteractiveOptions(message.source, message.modelName??'LabQuadrotor', 0.01, 'rk-like', 1e-8, 1e-6, '[["forward",0],["left",0],["up",0],["yaw",0]]');
+    const candidate = configuredModelicaSession(module,message.source, message.modelName??'LabQuadrotor', 0.01, 'rk-like', 1e-8, 1e-6, '[["forward",0],["left",0],["up",0],["yaw",0]]',message.parameters,message.workspaceSources);
     // Validate the teaching model's interface before replacing the current session.
     let initial;
     try {initial=readPhysicsSnapshot(candidate,true);} catch(error){candidate.free();throw error;}

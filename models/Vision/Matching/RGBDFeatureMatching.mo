@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
 // Pinhole intrinsics from image size and horizontal/vertical field of view.
 function RGBDNominalCalibration
   input Integer imageSize[2] "Height, width";

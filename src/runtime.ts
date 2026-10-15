@@ -15,6 +15,7 @@ import type {InertialSessionMetadata} from './modelica-inertial-session';
 import type {GpsSample} from './world-navigation';
 import {SensorClock,sensorRates,validateSensorRates,type SensorRates} from './sensor-clock';
 import {checkedLoopClosureSettings,type LoopClosureSettings} from './loop-closure-settings';
+import {nativeParametersFor,NATIVE_SLAM_PARAMETERS,type ParameterValues} from './model-parameters';
 export interface Metrics { time:number; ate:number|null; currentError:number|null; orientationError:number|null; confidence:number; points:number; features:number; rtf:number; frames:number; loops:number; dropped:number }
 export interface FlowTiming {totalMs:number;bufferBytes:number|null}
 export interface VehicleFrame {frame:SensorFrame;estimate:Estimate;truth:Truth|undefined;metrics:Metrics}
@@ -133,13 +134,13 @@ export class Runtime {
     delete workspaceSources['models/Vehicles/LabQuadrotor.mo'];
     const spawnSource=workspaceSources[offsetQuadrotorPath]??offsetQuadrotor;
     if(this.vehicleIndex===1)delete workspaceSources[offsetQuadrotorPath];
-    const truth=await this.physics.call<Truth>('init',{base,source:this.vehicleIndex===1?project.physics+'\n'+spawnSource:project.physics,modelName:this.vehicleIndex===1?'OffsetQuadrotor':'LabQuadrotor',workspaceSources});
+    const truth=await this.physics.call<Truth>('init',{base,source:this.vehicleIndex===1?project.physics+'\n'+spawnSource:project.physics,modelName:this.vehicleIndex===1?'OffsetQuadrotor':'LabQuadrotor',workspaceSources,parameters:project.modelParameters?.LabQuadrotor});
     validatePose(truth);this.origin={x:truth.x,y:truth.y,z:truth.z,quaternion:[...truth.quaternion]};
     this.modelicaMath=new WorkerRpc(new Worker(new URL('./modelica-runtime-math.worker.ts',import.meta.url),{type:'module'}));
     project.sensorModelica=withActorMotion(project.sensorModelica??defaultSensorModelica);
     // Recycle beyond the storefront block and before the training enclosure.
     const actorRoute=project.environment==='city'?{pedestrianRadius:7.1,carRadius:1.65,pedestrianCrossings:true,streetCars:true,carStreetHalfLength:33}:project.environment==='big-city'?{pedestrianRadius:5.8,carRadius:1.65}:undefined;
-    await this.modelicaMath.call('init',{base,sensorSource:project.sensorModelica??defaultSensorModelica,evaluationSource:project.evaluationModelica??defaultEvaluationModelica,origin:this.origin,actorRoute},180_000);
+    await this.modelicaMath.call('init',{base,sensorSource:project.sensorModelica??defaultSensorModelica,evaluationSource:project.evaluationModelica??defaultEvaluationModelica,origin:this.origin,actorRoute,parameters:project.modelParameters},180_000);
     this.onStatus('Compiling selected Modelica model to WASM…');
     for(const node of order) if(['detector','slam'].includes(node.kind)) {
       if(node.kind==='detector'&&project.detectorLanguage==='modelica') {
@@ -147,7 +148,7 @@ export class Runtime {
         if(project.slamBackend!=='native')this.pendingNodes.set(node.id,'Rumoca native full-frame feature detection pending');
       } else if(node.kind==='slam'&&project.runtime==='modelica') {
         this.modelicaState=new WorkerRpc(new Worker(new URL('./modelica-state.worker.ts',import.meta.url),{type:'module'}));
-        const result=await this.modelicaState.call<{artifact:InertialSessionMetadata}>('init',{base,source:project.algorithm,workspaceSources:estimatorModelicaSources(project),modelName:project.entryPoint??'ModelicaInertial'},180_000);
+        const result=await this.modelicaState.call<{artifact:InertialSessionMetadata}>('init',{base,source:project.algorithm,workspaceSources:estimatorModelicaSources(project),modelName:project.entryPoint??'ModelicaInertial',parameters:project.modelParameters?.[project.entryPoint??'ModelicaInertial']},180_000);
         project.algorithmArtifact=result.artifact;
       }
     }
@@ -167,7 +168,7 @@ export class Runtime {
       const client=new ModelicaSlamClient(text=>this.onStatus(text));
       try{
         const initial=await this.captureInitialFrame();
-        this.slamProgram=await client.initialize(base,initial,project.loopClosureSettings);
+        this.slamProgram=await client.initialize(base,initial,project.loopClosureSettings,nativeParametersFor(project));
         this.slam=client;
         this.onInitialFrame(this.vehicleIndex,initial,this.slamProgram.estimate);
       }catch(error){client.close();this.project=undefined;throw error;}
@@ -434,6 +435,17 @@ export class Runtime {
     void loop();
   }
   pause() {this.running=false;this.playbackEpoch++;}
+  async configureNativeParameters(values:ParameterValues){
+    if(this.running||this.busy)throw Error('Pause at a completed frame before changing model parameters');
+    const vehicles=this.secondary?[this,this.secondary]:[this];
+    const previous=vehicles.map(vehicle=>nativeParametersFor(vehicle.project??{}));
+    const results=await Promise.allSettled(vehicles.map(vehicle=>vehicle.slam?.configureParameters(values)));
+    const failed=results.find(result=>result.status==='rejected');
+    if(failed?.status==='rejected'){
+      await Promise.allSettled(vehicles.map((vehicle,index)=>results[index].status==='fulfilled'?vehicle.slam?.configureParameters(previous[index]):undefined));throw failed.reason;
+    }
+    for(const vehicle of vehicles)if(vehicle.project){vehicle.project.modelParameters??={};vehicle.project.modelParameters[NATIVE_SLAM_PARAMETERS]={...values};}
+  }
   async configureLoopClosure(settings:LoopClosureSettings){
     const checked=checkedLoopClosureSettings(settings);
     if(this.busy||this.secondary?.busy)throw Error('Pause at a completed frame before applying loop tuning');

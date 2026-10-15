@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
 // Persistent keyframe ownership, independent of the current single-reference
 // filter. A saved histogram and its calibrated geometry share one record/slot.
 // These functions are not yet connected to the browser SLAM estimator.

@@ -1,6 +1,6 @@
 import type {LoopClosureHistory,KeyframeImage,ClosureImage,LoopCandidateDecision} from './loop-closure-history';
 
-export function mountLoopClosurePanel(container:HTMLElement,onTune?:()=>void){
+export function mountLoopClosurePanel(container:HTMLElement){
   const panel=document.createElement('details');panel.className='panel loop-closure-panel';panel.open=true;
   const title=document.createElement('summary');title.textContent='Loop closures';
   const state=document.createElement('div');state.id='loop-closure-state';state.setAttribute('aria-live','polite');
@@ -13,7 +13,6 @@ export function mountLoopClosurePanel(container:HTMLElement,onTune?:()=>void){
   const attempts=document.createElement('div');attempts.className='loop-closure-history loop-candidate-history';
   const note=document.createElement('small');note.textContent='Appearance retrieval, geometric verification and graph admission are separate stages. Reasons and fit statistics come from the Modelica estimator; missing measurements are not estimated by the viewer.';
   panel.append(title,state,acceptedTitle,history,decisionsTitle,decisionState,filter,attempts,note);container.append(panel);
-  if(onTune){const tune=document.createElement('button');tune.textContent='Tune loop closure';tune.onclick=onTune;state.after(tune);}
   let previous:LoopClosureHistory|undefined,revision=-1;
   const closureCards=new Map<ClosureImage,HTMLElement>(),candidateCards=new Map<LoopCandidateDecision,HTMLElement>();
   const image=(snapshot:KeyframeImage|undefined,label:string,id:number,keyframe=true)=>{

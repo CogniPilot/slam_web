@@ -9,7 +9,7 @@ test.fixme('edited stateful Modelica deploys identical persistent WASM and reloa
   await page.getByRole('button',{name:'Ⅱ Pause'}).click();
   await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
   await openExperimentFile(page,'slam');
-  await page.getByRole('button',{name:'Parameters',exact:true}).click();
+  await page.getByRole('tab',{name:'Configuration',exact:true}).click();
   await page.getByLabel('Run model').selectOption('ModelicaInertial');
   await page.getByRole('tab',{name:'Editor',exact:true}).click();
   const editor=page.getByLabel('Modelica source');await editor.fill((await editor.inputValue()).replace('accel_tau = 0.03','accel_tau = 0.06'));

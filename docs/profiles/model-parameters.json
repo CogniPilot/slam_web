@@ -1,0 +1,184 @@
+{
+  "scope": "Compiler-derived model parameter inspector: all nonfinal parameters exposed by the interactive compiler; native SLAM inputs grouped by source-owned Dialog annotations, from correlated Initialize/Step exports. No baked constant patching. Default live warehouse replay: 10 warmup +240 recorded frames at 5Hz RGB-D /10Hz IMU.",
+  "modelicaRevision": "cc000556df5fbf9fea001957453a4dfc63780e7e",
+  "rumocaRevision": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
+  "exporterSha256": "63819b0b9e467a1170f9210e5c78abff113dd0b116445335c3866867f6422f07",
+  "resetSha256": "611920ce66e1927d0fd8fe2519f53cdff857c80c99d5926800fff5c9be0a2fc1",
+  "baseSourceSha256": "0d619aba4079482d4e79992a0a3957d642f9f95b241982d5796b64b46b624648",
+  "profileSourceSha256": "8d701164fb6287a41204cb552cace04c7e0c08dee8d6486e3399a76cf86d4950",
+  "defaultReplay": {
+    "frames": 240,
+    "differencesInPriorObservablesAndDiagnostics": 0,
+    "nativeState": {
+      "sha256": "94023a2b71ede56d6bb89796f8d04cd84027d90c473cf96255f183f2ec9ef444",
+      "cells": 2738927,
+      "runs": 160,
+      "bytes": 21594218,
+      "stateNamesHash": "257ffc5f91755403",
+      "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+    },
+    "loops": 3,
+    "positionRmseM": 0.3441402750461108,
+    "reportSha256": "7a0e091f76635dbb21b6fc8711222e7198bfc6024f54e3306d0a600d6f18311d"
+  },
+  "changedParametersTest": {
+    "test": "tests/browser/loop-tuning-gpu.spec.ts",
+    "passed": true,
+    "allNativeParameterInputsReadBack": 68,
+    "overrides": {
+      "loopMinimumAge": 1000,
+      "voxelWidth": 0.3,
+      "density[1]": 0.08,
+      "graphPolicy.maximumIterations": 4
+    },
+    "mapStateUnchangedAtApply": true,
+    "persistedAndReadBackInWorkerAfterReload": true
+  },
+  "interactiveCompilerTest": {
+    "test": "tests/model-parameters.test.ts",
+    "checks": [
+      "Resolved Boolean, Integer, String, array and nested-component types",
+      "Read-only final parameters",
+      "Modelica Dialog group, units and limits",
+      "Typed source bindings for structural scalar and String overrides",
+      "Nested numeric array override propagates through dependent parameters",
+      "Actual InertialOnly time-constant override changes filtered IMU values",
+      "Inherited SmoothedInertial and ResponsiveInertial metadata and solver overrides",
+      "Sensor and actor catalogs; constants remain read-only; parameterless evaluation catalog"
+    ]
+  },
+  "browserTest": {
+    "test": "tests/browser/model-parameters.spec.ts",
+    "passed": true,
+    "checks": [
+      "Inertial time constant changes actual solver trajectory without source edits",
+      "Settings persist across reload",
+      "207 vehicle/controller parameters inspected",
+      "Controller gain array edited and rebuilt",
+      "Search and draft default restoration"
+    ]
+  },
+  "artifactsRoot": "$HOME/scratch/slam_web",
+  "defaultReplayArtifact": "profiles/model-parameters-default-240",
+  "delivery": {
+    "package": {
+      "repository": "CogniPilot/slam_web",
+      "tag": "native-slam-model-parameters-20261015",
+      "asset": "native-slam-d435-profiles.tar",
+      "bytes": 75919360,
+      "sha256": "c8ad6e8e89bbbf037e878a577d9bf17fa633938c52b01c5003c43c5faef21052",
+      "sourceSha256": "0d619aba4079482d4e79992a0a3957d642f9f95b241982d5796b64b46b624648",
+      "rumocaRevision": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
+      "modelicaRevision": "cc000556df5fbf9fea001957453a4dfc63780e7e"
+    },
+    "profiles": {
+      "424x240": {
+        "sourceSha256": "8d701164fb6287a41204cb552cace04c7e0c08dee8d6486e3399a76cf86d4950",
+        "models": {
+          "initialize": {
+            "moduleSha256": "ae0ed82032c73934c7737c9627d290dff9fd52f1405bfeaaad9778c9a2480d41",
+            "pages": 6756,
+            "parameters": 68
+          },
+          "step": {
+            "moduleSha256": "3e342685fdbdd14ee76833193c3807b577ca36b427cdbe6cb3c9e7a3530482c3",
+            "pages": 7730,
+            "parameters": 68
+          }
+        }
+      },
+      "640x360": {
+        "sourceSha256": "ffd8371e775dd8e92167e32779a123e9c9b69fafa52320d37cf5ec7981f744a8",
+        "models": {
+          "initialize": {
+            "moduleSha256": "e13939c5a429ef3d45a769f5e5b3f01b932152d924bcbbf6c9e5bcabe0f25ede",
+            "pages": 6881,
+            "parameters": 68
+          },
+          "step": {
+            "moduleSha256": "8640afbfc8d42fe0da725c00dc53e78b939fe4e28ccd07378dbcb9ca9dd4f1eb",
+            "pages": 7855,
+            "parameters": 68
+          }
+        }
+      },
+      "640x480": {
+        "sourceSha256": "b6eec5bc16ae4be8cfadef2445d263efeb4c3943f1c41bf5f67d51d426963089",
+        "models": {
+          "initialize": {
+            "moduleSha256": "d9979d21baf983c212e6d05f8b6b1e23248c812b225d22489d42a939bbc16f4e",
+            "pages": 6956,
+            "parameters": 68
+          },
+          "step": {
+            "moduleSha256": "c9d70b4914f3ba7886ca5fdba06c153d75cfe3dd316de7f26439ed6e96d93b0f",
+            "pages": 7930,
+            "parameters": 68
+          }
+        }
+      },
+      "848x480": {
+        "sourceSha256": "bd6fcc8eceec00ac19bb5a9f400391bad486dd800c74b27ce479819b1c017efa",
+        "models": {
+          "initialize": {
+            "moduleSha256": "828096c2884bb8a83a13280b8a706e3a864c340cb8eff25cc12bffb077bc4f13",
+            "pages": 7054,
+            "parameters": 68
+          },
+          "step": {
+            "moduleSha256": "289f4081e4530e10b188913e6d9dbc3abba8a89895b30b01459bd927d655024a",
+            "pages": 8028,
+            "parameters": 68
+          }
+        }
+      },
+      "1280x720": {
+        "sourceSha256": "00c43b4d494d8161261bbdbac5d53ebaed1da1da4d6fb4d1b3c19f91140c6f97",
+        "models": {
+          "initialize": {
+            "moduleSha256": "f591f0f6eba6e03767d29204124a0f8a1fda26c9dc80e52d99486a09f06c5127",
+            "pages": 7556,
+            "parameters": 68
+          },
+          "step": {
+            "moduleSha256": "413db3b02bddce4e5aa505d325ef1a649db0e837a7c3b237b5a7af4ea488e896",
+            "pages": 8530,
+            "parameters": 68
+          }
+        }
+      }
+    },
+    "reproducedAssetFiles": 49,
+    "publishedArchiveDownloadedAndVerified": true
+  },
+  "validation": {
+    "unitTests": {
+      "passed": 360,
+      "skipped": 1
+    },
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "nativeHardwareBrowser": {
+      "passed": 6,
+      "cameraModes": [
+        "424x240",
+        "640x360",
+        "640x480",
+        "848x480",
+        "1280x720"
+      ],
+      "liveStepsPerMode": 3,
+      "parameterApplyAndReload": true
+    },
+    "finalUiBrowser": {
+      "passed": 2
+    },
+    "smokeBrowser": {
+      "passed": 32,
+      "skipped": 1,
+      "suitePassed": 31,
+      "updatedSourceWorkspaceFixtureRerunPassed": 1,
+      "note": "The source-edit fixture was updated for the new declared input and Dialog annotation; its final-version rerun passed. The optional compiler-admission smoke remains skipped."
+    }
+  }
+}

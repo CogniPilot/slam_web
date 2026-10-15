@@ -11,6 +11,8 @@ import {publishedAssets,readExport} from './slam-native-manifest.mjs';
 import {rgbdSlamNativeSourceManifest as native} from '../src/modelica-slam-source-manifest.mjs';
 import {D435_PAIRED_RESOLUTIONS} from '../src/camera-resolutions.mjs';
 import {installPublishedNativeAssets} from './install-slam-native-package.mjs';
+import {modelParameterDeclarations} from '../src/modelica-parameter-declarations.mjs';
+import {nativeParameterMetadata} from './native-parameter-metadata.mjs';
 
 const {values}=parseArgs({options:{exports:{type:'string'},'source-root':{type:'string'},destination:{type:'string'},require:{type:'boolean'},package:{type:'boolean'}}});
 if(values['source-root']&&!values.exports)throw Error('--source-root requires explicit --exports');
@@ -69,6 +71,12 @@ const exports={
   initialize:await readExport(defaultModels.initialize,directories.initialize),
   step:await readExport(defaultModels.step,directories.step),
 };
+const parser=await import('../public/vendor/rumoca/rumoca_bind_wasm.js');
+await parser.default({module_or_path:await readFile(new URL('../public/vendor/rumoca/rumoca_bind_wasm_bg.wasm',import.meta.url))});
+const interfaceSource=await readFile(join(sourceRoot,'models/SLAM/RGBDFastSLAMInterface.mo'),'utf8');
+const declarations=modelParameterDeclarations(interfaceSource,JSON.parse(parser.lsp_document_symbols(interfaceSource)));
+const annotate=exports=>{for(const item of Object.values(exports))item.layout.parameters=nativeParameterMetadata(declarations,item.layout,item.files);return exports;};
+annotate(exports);
 const {manifest,blobs}=publishedAssets(exports,{sourceSha256:defaultProfile?.sourceSha256??sourceSha256,baseSourceSha256:sourceSha256,exportedFrom:'rumoca native_step'});
 for(const mode of D435_PAIRED_RESOLUTIONS){
   const directory=join(root,'profiles',mode.id);
@@ -77,10 +85,10 @@ for(const mode of D435_PAIRED_RESOLUTIONS){
   catch(error){if(error.code==='ENOENT')continue;throw error;}
   const actualSha=createHash('sha256').update(await readFile(join(directory,'source.mo'))).digest('hex');
   if(profile.resolution!==mode.id||profile.sourceSha256!==actualSha||profile.baseSourceSha256!==sourceSha256)throw new Error(`Stale native SLAM profile ${mode.id}; export the current source first`);
-  const result=publishedAssets({
+  const result=publishedAssets(annotate({
     initialize:await readExport(profile.models.initialize,join(directory,'init-named')),
     step:await readExport(profile.models.step,join(directory,'step-named')),
-  },{sourceSha256:profile.sourceSha256});
+  }),{sourceSha256:profile.sourceSha256});
   for(const layout of Object.values(result.manifest.models))
     if(layout.inputs.rgb?.count!==mode.width*mode.height*3||layout.inputs.depth?.count!==mode.width*mode.height)throw new Error(`Native profile ${mode.id} has mismatched image dimensions`);
   manifest.profiles??={};manifest.profiles[mode.id]={sourceSha256:profile.sourceSha256,models:result.manifest.models};

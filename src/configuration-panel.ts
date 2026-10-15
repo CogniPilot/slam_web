@@ -1,16 +1,13 @@
 import {SENSOR_RATE_OPTIONS,sensorRates,type SensorRates} from './sensor-clock';
 import type {SceneDetail} from './types';
 import {D435_PAIRED_RESOLUTIONS,type CameraResolution} from './camera-profile';
-import {mountLoopClosureSettings} from './loop-closure-settings-panel';
-import type {LoopClosureSettings} from './loop-closure-settings';
 
-interface ConfigurationProject {sceneDetail?:SceneDetail;sensorRates?:SensorRates;cameraResolution?:CameraResolution;loopClosureSettings?:LoopClosureSettings}
+interface ConfigurationProject {sceneDetail?:SceneDetail;sensorRates?:SensorRates;cameraResolution?:CameraResolution}
 interface ConfigurationOptions {
   project:()=>ConfigurationProject;
   onRatesChange:(rates:SensorRates|undefined)=>Promise<void>;
   onResolutionChange?:(resolution:CameraResolution)=>Promise<void>;
   camera?:()=>{width:number;height:number;software:boolean};
-  onLoopSettingsChange?:(settings:LoopClosureSettings)=>Promise<void>;
 }
 
 /** Move existing controls intact so their labels, state and event handlers survive. */
@@ -34,15 +31,12 @@ export function mountConfigurationPanel(aside:HTMLElement,options:ConfigurationO
   for(const mode of D435_PAIRED_RESOLUTIONS)resolution.add(new Option(`${mode.width} × ${mode.height}`,mode.id));
   configuration.querySelector('.configuration-rates')!.append(resolutionLabel);
   let pending=false,externalBusy=false;
-  const loopSettings=options.onLoopSettingsChange?mountLoopClosureSettings(configuration,{settings:()=>options.project().loopClosureSettings,onApply:options.onLoopSettingsChange}):undefined;
   function setBusy(busy:boolean) {
     externalBusy=busy;defaults.disabled=pending||externalBusy;
     resolution.disabled=pending||externalBusy;
     Object.values(controls).forEach(control=>{control.disabled=pending||externalBusy;});
-    loopSettings?.setBusy(pending||externalBusy);
   }
   function sync(project:ConfigurationProject) {
-    loopSettings?.sync();
     const rates=sensorRates(project);
     resolution.value=project.cameraResolution??'848x480';
     const mode=D435_PAIRED_RESOLUTIONS.find(mode=>mode.id===resolution.value)!;
@@ -103,5 +97,5 @@ export function mountConfigurationPanel(aside:HTMLElement,options:ConfigurationO
     return {show:()=>show(index)};
   }
   sync(options.project());
-  return {sync,setBusy,addPanel,showEditor:()=>show(0),showConfiguration:()=>show(1),showLoopClosure:()=>{show(1);loopSettings?.focus();}};
+  return {sync,setBusy,addPanel,showEditor:()=>show(0),showConfiguration:()=>show(1)};
 }

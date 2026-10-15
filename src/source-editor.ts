@@ -2,6 +2,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js';
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker.js?worker';
 import './editor.css';
 import {LspClient,type LspDiagnostic,type LspPosition,type LspCompletion,type LspRange} from './lsp-client';
+import type {ModelParameter} from './model-parameters';
 
 export type SourceLanguage='modelica'|'plaintext';
 export type LanguageServerFactory=()=>Worker;
@@ -52,6 +53,7 @@ export interface SourceEditor {
   simulationModels(source:string,defaultModel:string,workspaceSources?:Readonly<Record<string,string>>):Promise<string[]>;
   documentation<T>(sources:Readonly<Record<string,string>>,name?:string):Promise<T>;
   checkModel(source:string,model:string,sources:Readonly<Record<string,string>>):Promise<unknown>;
+  parameters(source:string,model:string,sources:Readonly<Record<string,string>>):Promise<ModelParameter[]>;
   dispose():void;
 }
 
@@ -69,6 +71,7 @@ export function createSourceEditor(textarea:HTMLTextAreaElement,onChange?:()=>vo
   const editor=monaco.editor.create(container,{model,theme:'slam-lab',automaticLayout:true,readOnly:textarea.readOnly,fontSize:12,lineHeight:20,fontFamily:'"DejaVu Sans Mono",ui-monospace,monospace',minimap:{enabled:false},scrollBeyondLastLine:false,wordWrap:'off',tabSize:4,ariaLabel:'Highlighted source editor',padding:{top:12,bottom:12},renderValidationDecorations:'on'});
   let client:LspClient|undefined,opened=false,lastSentVersion=0,ready:Promise<void>=Promise.resolve(),mutating=false,generation=0,diagnostics:LspDiagnostic[]=[],status='',changeTimer:ReturnType<typeof setTimeout>|undefined,semantic:monaco.IDisposable|undefined;
   let documentationClient:LspClient|undefined,documentationReady:Promise<unknown>|undefined;
+  let parameterClient:LspClient|undefined,parameterReady:Promise<unknown>|undefined;
   let workspaceSources:Record<string,string>={};
   let workspaceGeneration=0;
   const updateStatus=(message:string)=>{status=message;statusElement.textContent=message;onStatus?.(message);};
@@ -122,6 +125,11 @@ export function createSourceEditor(textarea:HTMLTextAreaElement,onChange?:()=>vo
     displayProblems();
   }
   const api:SourceEditor={
+    async parameters(source,model,sources){
+      if(!parameterClient){parameterClient=new LspClient(new Worker(new URL('./modelica-lsp.worker.ts',import.meta.url),{type:'module'}));parameterReady=parameterClient.initialize({base:new URL(import.meta.env.BASE_URL,location.href).pathname});}
+      await parameterReady;
+      return parameterClient.request<ModelParameter[]>('modelica/parameters',{source,model,sources});
+    },
     setWorkspaceSources(sources,activePath){
       // The compiler's current document owns the active file; companions must
       // exclude it so the same class is not declared twice in its workspace.
@@ -175,7 +183,7 @@ export function createSourceEditor(textarea:HTMLTextAreaElement,onChange?:()=>vo
       const result=await client?.request('textDocument/hover',{textDocument:{uri:model.uri.toString()},position:p});
       return current()?result??null:null;
     },
-    dispose(){generation++;if(changeTimer)clearTimeout(changeTimer);client?.dispose();documentationClient?.dispose();semantic?.dispose();content.dispose();textarea.removeEventListener('input',input);activeEditors.delete(model.uri.toString());model.dispose();editor.dispose();shell.before(textarea);shell.remove();textarea.classList.remove('source-editor-compat');textarea.tabIndex=originalTabIndex;}
+    dispose(){generation++;if(changeTimer)clearTimeout(changeTimer);client?.dispose();documentationClient?.dispose();parameterClient?.dispose();semantic?.dispose();content.dispose();textarea.removeEventListener('input',input);activeEditors.delete(model.uri.toString());model.dispose();editor.dispose();shell.before(textarea);shell.remove();textarea.classList.remove('source-editor-compat');textarea.tabIndex=originalTabIndex;}
   };
   activeEditors.set(model.uri.toString(),api);api.setLanguage('modelica');return api;
 }

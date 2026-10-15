@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {readFile,writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
-import {DEFAULT_LOOP_CLOSURE_SETTINGS} from '../../src/loop-closure-settings';
+import {NATIVE_SLAM_PARAMETERS} from '../../src/model-parameters';
 import {installNativeStateCapture,captureNativeState} from '../../scripts/native-state-profile.mjs';
 
 // Runs against real native programs and the hardware RGB-D camera. Optional
@@ -31,7 +31,7 @@ test('loop tuning reaches native inputs, preserves the map and survives reload',
       sensorRates:{cameraHz:5,lidarHz:5,imuHz:10,gpsHz:1}});
     Object.assign(lab.project,p);r.autopilot=false;
   });
-  await page.getByRole('button',{name:'Parameters',exact:true}).click();
+  await page.getByRole('tab',{name:'Configuration',exact:true}).click();
   await page.getByLabel('Estimator backend',{exact:true}).selectOption('native');
   await page.waitForFunction(()=>{const lab=(window as any).__slamLab;return lab.ready&&!lab.compiling&&lab.runtime.slamProgram?.tuningSupported;},{},{timeout:120_000});
   await page.evaluate(async()=>{for(let i=0;i<20;i++)await (window as any).__slamLab.runtime.step();});
@@ -40,18 +40,25 @@ test('loop tuning reaches native inputs, preserves the map and survives reload',
   const beforeState=await worker.evaluate(captureNativeState,layout);
   const before=await page.evaluate(()=>{const l=(window as any).__slamLab;return {time:l.runtime.time,sequence:l.latest.frame.sequence,graph:l.latest.estimate.poseGraph};});
   await page.getByRole('button',{name:'Parameters',exact:true}).click();
-  await expect(page.getByLabel('Run model',{exact:true})).toBeDisabled();
-  await page.getByLabel('Minimum revisit age (s)',{exact:true}).fill('1000');
-  await page.getByRole('button',{name:'Apply tuning',exact:true}).click();
+  await page.getByLabel('Parameter model',{exact:true}).selectOption(NATIVE_SLAM_PARAMETERS);
+  const overrides={loopMinimumAge:1000,voxelWidth:.3,'density[1]':.08,'graphPolicy.maximumIterations':4};
+  for(const [name,value] of Object.entries(overrides)){
+    await page.getByLabel('Find a parameter',{exact:true}).fill(name);
+    await page.getByLabel(name,{exact:true}).fill(String(value));
+  }
+  await page.getByRole('button',{name:'Apply parameters',exact:true}).click();
   await expect(page.locator('#status')).toContainText('current map retained');
   const afterState=await worker.evaluate(captureNativeState,layout);
   const after=await page.evaluate(()=>{const l=(window as any).__slamLab;return {time:l.runtime.time,sequence:l.latest.frame.sequence,graph:l.latest.estimate.poseGraph};});
   expect(after).toEqual(before);expect(afterState.sha256).toBe(beforeState.sha256);
-  const settings={...DEFAULT_LOOP_CLOSURE_SETTINGS,loopMinimumAge:1000};
-  const readInputs=async(target=worker)=>target.evaluate(inputs=>{
+  const settings={...Object.fromEntries(layout.parameters.map((field:any)=>[field.name,field.defaultValue])),...overrides};
+  const readInputs=async(target=worker)=>target.evaluate(({fields,inputs}:any)=>{
     const view=new DataView((globalThis as any).__nativeStateMemories[1].buffer);
-    return Object.fromEntries(Object.entries(inputs).map(([name,slot]:[string,any])=>[name,slot.lane==='i64'?Number(view.getBigInt64(slot.offset,true)):slot.lane==='u8'?!!view.getUint8(slot.offset):view.getFloat64(slot.offset,true)]));
-  },Object.fromEntries(Object.keys(settings).map(key=>[key,layout.inputs[key]])));
+    return Object.fromEntries(fields.map((field:any)=>{
+      const slot=inputs[field.slot],at=slot.offset+field.index*(slot.lane==='u8'?1:8);
+      return [field.name,slot.lane==='i64'?Number(view.getBigInt64(at,true)):slot.lane==='u8'?view.getUint8(at):view.getFloat64(at,true)];
+    }));
+  },{fields:layout.parameters,inputs:layout.inputs});
   expect(await readInputs()).toEqual(settings);
   const outcome=await page.evaluate(async()=>{
     const lab=(window as any).__slamLab,r=lab.runtime;let candidates=0,visualUpdates=0;
@@ -67,10 +74,12 @@ test('loop tuning reaches native inputs, preserves the map and survives reload',
   await page.screenshot({path:testInfo.outputPath('loop-tuning.png'),fullPage:true});
   await page.reload();
   await page.waitForFunction(()=>{const lab=(window as any).__slamLab;return lab?.initialized&&lab.ready&&!lab.compiling;},{},{timeout:120_000});
-  expect(await page.evaluate(()=>(window as any).__slamLab.project.loopClosureSettings)).toEqual(settings);
+  expect(await page.evaluate(id=>(window as any).__slamLab.project.modelParameters[id],NATIVE_SLAM_PARAMETERS)).toEqual(overrides);
   expect(await readInputs(page.workers().find(worker=>worker.url().includes('modelica-slam.worker-'))!)).toEqual(settings);
   await page.getByRole('button',{name:'Parameters',exact:true}).click();
-  await expect(page.getByLabel('Minimum revisit age (s)',{exact:true})).toHaveValue('1000');
+  await page.getByLabel('Parameter model',{exact:true}).selectOption(NATIVE_SLAM_PARAMETERS);
+  await page.getByLabel('Find a parameter',{exact:true}).fill('loopMinimumAge');
+  await expect(page.getByLabel('loopMinimumAge',{exact:true})).toHaveValue('1000');
   const receipt=testInfo.outputPath('loop-tuning.json');
   await writeFile(receipt,JSON.stringify({before,after,beforeState,afterState,settings,outcome},null,2));
   await testInfo.attach('loop-tuning.json',{path:receipt,contentType:'application/json'});

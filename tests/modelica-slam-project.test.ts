@@ -7,7 +7,7 @@ it('downloads and reopens all SLAM dependency sources without changing the activ
   const project=defaultProject(),path='models/SLAM/RGBDFastSLAMInterface.mo';
   const original=await createRGBDSlamWorkspace();
   const edited='// Student policy edit λ\r\n'+original.sources[path].replace(
-    'parameter Integer minimumMeasuredDescriptors = 8;','parameter Integer minimumMeasuredDescriptors = 12;');
+    'input Integer minimumMeasuredDescriptors = 8','input Integer minimumMeasuredDescriptors = 12');
   project.slamWorkspace=editRGBDSlamWorkspace(original,path,edited);
   const reopened=parseProject(JSON.stringify(project));
   expect(reopened.slamWorkspace).toEqual(project.slamWorkspace);
@@ -17,8 +17,9 @@ it('downloads and reopens all SLAM dependency sources without changing the activ
   expect(composition.sources).toHaveLength(56);
   expect(composition.sources.every(file=>file.overridden)).toBe(true);
   expect(composition.source).toContain(edited);
-  expect(composition.source).not.toContain('parameter Integer minimumMeasuredDescriptors = 8;');
-  expect(original.sources[path]).toContain('minimumMeasuredDescriptors = 8;');
+  expect(edited).toContain('input Integer minimumMeasuredDescriptors = 12');
+  expect(composition.source).not.toContain(original.sources[path]);
+  expect(original.sources[path]).toContain('minimumMeasuredDescriptors = 8');
 });
 
 it('refuses a saved workspace with missing or unknown dependencies instead of silently substituting current sources',async()=>{

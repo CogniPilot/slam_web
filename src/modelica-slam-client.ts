@@ -3,8 +3,9 @@ import type {SlamNativeResult} from './modelica-slam-session';
 import type {SlamRequest} from './modelica-slam.worker';
 import type {Estimate,InitialSensorFrame,SensorFrame} from './types';
 import type {LoopClosureSettings} from './loop-closure-settings';
+import type {ModelParameter,ParameterValues} from './model-parameters';
 
-export interface SlamReady {estimate:Estimate;sourceSha256:string;tuningSupported?:boolean;models:Record<string,{model:string;pages:number}>}
+export interface SlamReady {estimate:Estimate;sourceSha256:string;tuningSupported?:boolean;parameters?:ModelParameter[];models:Record<string,{model:string;pages:number}>}
 type Pending={resolve:(value:unknown)=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>;started:number};
 
 /** One native SLAM worker per vehicle. Requests are strictly sequential: the
@@ -39,12 +40,13 @@ export class ModelicaSlamClient {
       catch(error){clearTimeout(timer);this.pending=undefined;reject(error instanceof Error?error:new Error(String(error)));}
     });
   }
-  initialize(base:string,frame:InitialSensorFrame,settings?:LoopClosureSettings){
+  initialize(base:string,frame:InitialSensorFrame,settings?:LoopClosureSettings,parameters?:ParameterValues){
     // Copy the images: the sensor buffers stay with the viewer and recorder.
     const initial=owned(slamInitialFrameFromSensor(frame));
-    return this.call<SlamReady>({type:'init',base,frame:initial,settings},transferable(initial),600_000);
+    return this.call<SlamReady>({type:'init',base,frame:initial,settings,parameters},transferable(initial),600_000);
   }
   configure(settings:LoopClosureSettings){return this.call({type:'configure',settings},[],30_000);}
+  configureParameters(values:ParameterValues){return this.call({type:'configureParameters',values},[],30_000);}
   step(frame:SensorFrame){
     const interval=owned(slamIntervalFrameFromSensor(frame));
     return this.call<SlamNativeResult>({type:'step',frame:interval},transferable(interval),300_000);

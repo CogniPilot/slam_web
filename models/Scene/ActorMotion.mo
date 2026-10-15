@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
 // Six authored actors, ordered as three pedestrians then three traffic cars.
 // The rendering scene maps ENU (east,north) to (east,0,-north).
 model ActorMotion

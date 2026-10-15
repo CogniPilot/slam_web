@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 748bd0cafe8a201acb9e132b49bac7243a5e5aba; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
 // Durable capture birth identities. Catalog ID, camera epoch and accepted
 // processing-step sequence are separate clocks; none is inferred from another.
 package RGBDGraphCaptureLedger
