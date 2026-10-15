@@ -13,11 +13,12 @@ const url=process.env.SLAM_PROFILE_URL??'http://127.0.0.1:4173';
 const cameraHz=Number(process.env.SLAM_PROFILE_CAMERA_HZ??5);
 const imuHz=Number(process.env.SLAM_PROFILE_IMU_HZ??10);
 const count=Number(process.env.SLAM_PROFILE_FRAMES??90);
+const warmupFrames=Number(process.env.SLAM_PROFILE_WARMUP_FRAMES??10);
 const resolution=process.env.SLAM_PROFILE_RESOLUTION??'424x240';
 const environment=process.env.SLAM_PROFILE_ENVIRONMENT??'city';
 const tour=process.env.SLAM_PROFILE_TOUR??'hover';
 const mode=D435_PAIRED_RESOLUTIONS.find(mode=>mode.id===resolution);
-if(!mode||!Number.isInteger(count)||count<1||!Number.isFinite(cameraHz)||cameraHz<=0||cameraHz>mode.maxHz||!Number.isFinite(imuHz)||imuHz<=0)throw new Error('Invalid profile resolution, frame count or rates');
+if(!mode||!Number.isInteger(count)||count<1||!Number.isInteger(warmupFrames)||warmupFrames<0||!Number.isFinite(cameraHz)||cameraHz<=0||cameraHz>mode.maxHz||!Number.isFinite(imuHz)||imuHz<=0)throw new Error('Invalid profile resolution, frame count, warmup count or rates');
 const cpuProfiling=process.env.SLAM_PROFILE_CPU_PROFILING==='1';
 await mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,
@@ -86,7 +87,7 @@ try{
   console.log(JSON.stringify({preparation}));
   if(process.env.SLAM_PROFILE_SOURCE_SHA&&preparation.program.sourceSha256!==process.env.SLAM_PROFILE_SOURCE_SHA)
     throw new Error(`The served native source is ${preparation.program.sourceSha256}, expected ${process.env.SLAM_PROFILE_SOURCE_SHA}`);
-  for(let i=0;i<10;i++)await page.evaluate(()=>window.__slamLab.runtime.step());
+  for(let i=0;i<warmupFrames;i++)await page.evaluate(()=>window.__slamLab.runtime.step());
   const main=await page.context().newCDPSession(page),root=await browser.newBrowserCDPSession();
   const pending=new Map();let sequence=0;
   root.on('Target.receivedMessageFromTarget',event=>{
@@ -125,7 +126,7 @@ try{
     const lab=window.__slamLab,r=lab.runtime,rows=[];
     const step=r.slam.step.bind(r.slam);let stepMs=[];
     r.slam.step=async frame=>{const result=await step(frame);stepMs=result.stepMs;return result;};
-    const timeBefore=r.time,sequenceBefore=lab.latest.frame.sequence,start=performance.now();
+    const timeBefore=r.time,sequenceBefore=lab.latest?.frame.sequence??0,start=performance.now();
     for(let i=0;i<count;i++){
       if(tour==='warehouse-loop'){
         // A small fixed-heading circuit stays inside the warehouse aisle.
@@ -202,7 +203,7 @@ try{
   }
   const mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
   const sorted=report.rows.map(r=>r.wallMs).sort((a,b)=>a-b);
-  const summary={recordedAt:new Date().toISOString(),browser:browser.version(),environment,tour,resolution,cameraHz,imuHz,frames:count,cpuProfiling,overlapSlamPrediction,preparation,
+  const summary={recordedAt:new Date().toISOString(),browser:browser.version(),environment,tour,resolution,cameraHz,imuHz,frames:count,warmupFrames,cpuProfiling,overlapSlamPrediction,preparation,
     sessionTiming:!!sessionTiming,nativeFunctionTiming,browserCpu:{seconds:cpuSeconds,meanActiveCores:cpuSeconds/(report.elapsedMs/1000)},
     ...(executionBefore?{physicsExecution:{before:executionBefore,after:executionAfter}}:{}),
     meanFrameMs:mean(sorted),p50FrameMs:sorted[Math.floor(sorted.length*.5)],p95FrameMs:sorted[Math.floor(sorted.length*.95)],
@@ -218,7 +219,7 @@ try{
     maximumKeyframes:Math.max(...report.rows.map(row=>Number(row.diagnostics.keyframes??0))),
     maximumLoopEdges:Math.max(...report.rows.map(row=>Number(row.diagnostics.loopEdges??0))),
     final:report.final,loopClosureView:report.loopClosureView,pendingNodes:report.pendingNodes,errors,
-    scope:`Actual built SLAM Web: live ${resolution} GPU RGB-D captures, physics, sensor model, native full SLAM worker, visible viewer; low graphics, no LiDAR or depth-cloud display. Ten warmup frames; unpaced sequential runtime.step calls; CPU sampling ${cpuProfiling?'enabled':'disabled'}. Shared host.`};
+    scope:`Actual built SLAM Web: live ${resolution} GPU RGB-D captures, physics, sensor model, native full SLAM worker, visible viewer; low graphics, no LiDAR or depth-cloud display. ${warmupFrames} warmup frames; unpaced sequential runtime.step calls; CPU sampling ${cpuProfiling?'enabled':'disabled'}. Shared host.`};
   await writeFile(join(output,'report.json'),JSON.stringify({summary,rows:report.rows},null,2));
   if(nativeDirectory)await writeFile(join(output,'native-comparison.json'),JSON.stringify([...nativeOverrides.values()],null,2));
   await page.screenshot({path:join(output,'world.png'),fullPage:true});

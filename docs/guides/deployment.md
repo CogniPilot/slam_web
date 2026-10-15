@@ -93,6 +93,8 @@ To measure the complete native run, serve a production build and run
 `~/scratch/slam_web/profiles/browser-native-slam`. Set `CHROMIUM_PATH` if needed;
 `SLAM_PROFILE_URL`, `SLAM_PROFILE_RESOLUTION`, `SLAM_PROFILE_CAMERA_HZ`,
 `SLAM_PROFILE_IMU_HZ` and `SLAM_PROFILE_FRAMES` select the experiment.
+`SLAM_PROFILE_WARMUP_FRAMES` defaults to ten; set it to zero to record startup
+and locate the first differing frame while retaining sequence and clock checks.
 `SLAM_PROFILE_CPU_PROFILING=1` also records Chrome CPU profiles for the main
 thread and every worker. Profile sampling adds overhead; measure throughput
 separately with it disabled. `attribution.json` groups weighted self samples
@@ -118,6 +120,17 @@ declared inputs, asset hashes and layout. The snapshot includes the host's carry
 and input writes: replay `eval_assignments` directly, without another carry.
 An independent Node replay must reproduce the entire post-call memory hash.
 Capture copies invalidate timing; measure latency separately from the saved input.
+`SLAM_CAPTURE_IMAGE=1` selects an image call instead of the default IMU-only call.
+`SLAM_CAPTURE_WARMUP_FRAMES` selects how many prior camera frames to run (ten
+by default). `SLAM_CAPTURE_TOUR=warehouse-loop` drives the same circuit commands
+during those frames and the captured frame; the default holds hover commands.
+An experimental compiler that removed copies from one accepted IMU call still
+failed the full browser replay at graph correction. The first isolated image
+call had identical carried state and declared inputs before evaluation, but
+different covariance and correction results afterward. Its apparent 9.31× rate
+included rejected work and is invalid as a speedup. See the complete artifact
+hashes, program combinations and call captures in
+[`native-slam-input-alias-parity.json`](../profiles/native-slam-input-alias-parity.json).
 
 A sampled run on an RTX 3090 with Chromium 154 (15 Hz camera, 90 Hz IMU,
 848 × 480; ten warmup frames and sixty measured frames) attributed 85.2% of

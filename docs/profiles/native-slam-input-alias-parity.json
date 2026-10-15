@@ -1,0 +1,722 @@
+{
+  "decision": "QUARANTINED: full browser parity fails. Candidate apparent 9.31x factor is INVALID as a speedup because graph correction diverges and later work is rejected. Baseline remains published; no candidate deploy or merge.",
+  "scope": "Unchanged Modelica d2ebf66, same physics/compiler pin and 424x240 warehouse inputs. Paired full runs: 10 neutral warmup +240 warehouse-loop frames,5Hz camera/10Hz IMU. Shared host, sampling off. Separate startup isolation: zero warmup,16frames with warehouse-loop commands from time zero; these have a different command history from full runs.",
+  "modelicaRevision": "d2ebf66d3a65164dfdd20e890a7c196330d1b8dd",
+  "candidateProvenance": {
+    "base": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
+    "binarySha256": "8ccf5c19f2760289e520be756bce931c953b00542c70e9be24450ff7472c2eb4",
+    "sourceReceiptSha256": "f450939c57e9df378d30a6489630f48aab9c6bc74b152dc3de42a0e1f73830f7",
+    "stagedPatchSha256": "0cd7b00c6a5f559ac87d2a50175eba7c08781a4c3cc330d967dc3b5c7d1c06c7",
+    "status": "Experimental source-hashed candidate; signed commit pending GPG lock."
+  },
+  "candidateSourceManifest": {
+    "base": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
+    "files": [
+      {
+        "file": "crates/rumoca-exec-wasm/src/typed_call/calls.rs",
+        "sha256": "a70eddc0b1363e1905cb707ff527bae60cea1f399c7f2d5dc41b714cdb75d44e"
+      },
+      {
+        "file": "crates/rumoca-exec-wasm/src/typed_call/control.rs",
+        "sha256": "d885352857e85b731a1dcb17ff52566b6f4624cd86b6588e60e667352e05c25a"
+      },
+      {
+        "file": "crates/rumoca-exec-wasm/src/typed_call/emit.rs",
+        "sha256": "34f598d94dc5f5012c3b76e29bde03bab94f056069563f0d8c9fe040b55a2d15"
+      },
+      {
+        "file": "crates/rumoca-exec-wasm/src/typed_call/emit/tests.rs",
+        "sha256": "03372cabc946cdde81830bf34bd829788ce8f0a832c0445b68806af729a75591"
+      },
+      {
+        "file": "crates/rumoca-exec-wasm/src/typed_call/layout/calls.rs",
+        "sha256": "36147b8917464d7497a9c40ee38b6159a719d4105c1fac9a468b88e1fdcf527d"
+      },
+      {
+        "file": "crates/rumoca-exec-wasm/src/typed_call/program/tests.rs",
+        "sha256": "52de5ae7185f89be3cfa4f15584ff5c1b43985deae9ae0d4f030a219efde5a10"
+      },
+      {
+        "file": "spec/SPEC_0040_IR_STAGE_CONTRACT_CATALOG.md",
+        "sha256": "1b0775b06f6714f7bfb8e278ad6f2c4ac6a7215b7d3176b3f87299fe63da40f5"
+      },
+      {
+        "file": "crates/rumoca-exec-wasm/src/typed_call/program/tests/input_return_aliases.rs",
+        "sha256": "0af8049338b9e12d2d60159216dbcf6a22ab548b341d35d58fd3ec98366a435e"
+      }
+    ]
+  },
+  "fullRuns": [
+    {
+      "label": "input-alias-baseline-before-240",
+      "reportSha256": "fed000b3b6cfb790612f574add503c636709eb0a031d3d83156b02b301ea391a",
+      "overrideReceiptSha256": "6b4b8a91774d93ba3b3910df2e1b587bab455f19fafa3e2ce0ad0cbc411a7604",
+      "state": {
+        "sha256": "94023a2b71ede56d6bb89796f8d04cd84027d90c473cf96255f183f2ec9ef444",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "recordedAt": "2026-10-15T03:30:12.416Z",
+      "rtf": 2.2529288074345577,
+      "meanNativeMs": 69.30083333154519,
+      "meanImageStepMs": 53.68166666527589,
+      "meanImuStepMs": 15.619166666269303,
+      "maximumLoopEdges": 3,
+      "maximumKeyframes": 7,
+      "positionRmseM": 0.3441402750461108,
+      "errors": []
+    },
+    {
+      "label": "input-alias-candidate-240",
+      "reportSha256": "7e68e6d823572edc356aa5789b21ca3d16e8fa28be938e45aa3784050a4495dd",
+      "overrideReceiptSha256": "77aa2993cc0673a905d02dac200b5127d463c7fe57c049c85ebe35f71bf54363",
+      "state": {
+        "sha256": "e7fd71f3e3d19f9aa8e5a13eb662236fd1e07c0acc772708c7603169811078b2",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "recordedAt": "2026-10-15T03:30:38.825Z",
+      "rtf": 9.313335532143,
+      "meanNativeMs": 5.004999990264575,
+      "meanImageStepMs": 2.5220833192269008,
+      "meanImuStepMs": 2.4829166710376738,
+      "maximumLoopEdges": 0,
+      "maximumKeyframes": 2,
+      "positionRmseM": 1.6922204787897765,
+      "errors": []
+    }
+  ],
+  "firstMeasuredFullRunDifference": {
+    "frame": 1,
+    "time": 2.2,
+    "differences": {
+      "position": [
+        [
+          0.022836221016378673,
+          -0.025577653652335643,
+          -0.11090123356383887
+        ],
+        [
+          0.02696068627584488,
+          -0.004985080669276666,
+          -0.05889011982061409
+        ]
+      ],
+      "features": [
+        85,
+        0
+      ],
+      "points": [
+        191,
+        188
+      ],
+      "tracking": [
+        true,
+        false
+      ],
+      "positionErrorM": [
+        0.10142151786004236,
+        0.05093957077920483
+      ],
+      "diagnostics": {
+        "accepted": [
+          1,
+          0
+        ],
+        "imageCompleted": [
+          1,
+          0
+        ],
+        "mappingAccepted": [
+          1,
+          0
+        ],
+        "publicationReason": [
+          0,
+          1
+        ],
+        "ledgerReason": [
+          0,
+          1
+        ],
+        "vocabularyReason": [
+          3,
+          0
+        ],
+        "keyframeDecisionReason": [
+          6,
+          1
+        ],
+        "frameRejectionDiagnostic": [
+          0,
+          1
+        ],
+        "predictionAccepted": [
+          1,
+          0
+        ],
+        "observationAccepted": [
+          1,
+          0
+        ],
+        "matchCount": [
+          38,
+          0
+        ],
+        "mapPoints": [
+          191,
+          188
+        ],
+        "visualUpdates": [
+          5,
+          4
+        ]
+      }
+    }
+  },
+  "startupIsolation": [
+    {
+      "label": "input-alias-start-baseline-retry",
+      "frames": 16,
+      "warmupFrames": 0,
+      "reportSha256": "2bdffbaa1108cc0e5a7063ba098209f4cf6b185298b558e47cb36baaa55eec06",
+      "overrideReceiptSha256": "a2ae511741357a1152aa607eb6fc170deb2e2fd5c1ed8b38cf70a9b6f880adee",
+      "state": {
+        "sha256": "17829f579c707a6737887f8ef7cc7dbc7af414f465efbaa795ba9e36a463b5b7",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "firstDifferenceFromStartupBaseline": null
+    },
+    {
+      "label": "input-alias-start-candidate",
+      "frames": 16,
+      "warmupFrames": 0,
+      "reportSha256": "1549dfc7dd1a5ab52a98bdbe231bec12bd9ea1257c2f0e117e774a899f615b3f",
+      "overrideReceiptSha256": "ea6d8050bd94691ede3bdf5b45b3c7c0d41567e6ce289f004101d10d0398665d",
+      "state": {
+        "sha256": "d5c3985792753ec596df4982540c1040859ad1d48bb8ed949198937d2f58fcc4",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "firstDifferenceFromStartupBaseline": {
+        "frame": 4,
+        "time": 0.8,
+        "differences": {
+          "position": [
+            [
+              0.11766104779395531,
+              -0.0006967166830712411,
+              -0.4328008767948919
+            ],
+            [
+              0.09974243781029059,
+              -0.00282871720195981,
+              -0.6496384895231228
+            ]
+          ],
+          "positionErrorM": [
+            0.38693376013238234,
+            0.6040018934909694
+          ],
+          "diagnostics": {
+            "graphCorrectionAccepted": [
+              1,
+              0
+            ],
+            "graphReason": [
+              0,
+              2
+            ],
+            "covarianceStatus": [
+              1,
+              0
+            ]
+          }
+        }
+      }
+    },
+    {
+      "label": "input-alias-start-baseline-init",
+      "frames": 16,
+      "warmupFrames": 0,
+      "reportSha256": "8eba5b31e24469ed7ab182a16a7152835b01ef5f6664245f58cd06c3a214221e",
+      "overrideReceiptSha256": "6a3c547a4068f13ab9ec067245ba5d5cd3f5305b6088ec6ff89c824da15a6982",
+      "state": {
+        "sha256": "d5c3985792753ec596df4982540c1040859ad1d48bb8ed949198937d2f58fcc4",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "firstDifferenceFromStartupBaseline": {
+        "frame": 4,
+        "time": 0.8,
+        "differences": {
+          "position": [
+            [
+              0.11766104779395531,
+              -0.0006967166830712411,
+              -0.4328008767948919
+            ],
+            [
+              0.09974243781029059,
+              -0.00282871720195981,
+              -0.6496384895231228
+            ]
+          ],
+          "positionErrorM": [
+            0.38693376013238234,
+            0.6040018934909694
+          ],
+          "diagnostics": {
+            "graphCorrectionAccepted": [
+              1,
+              0
+            ],
+            "graphReason": [
+              0,
+              2
+            ],
+            "covarianceStatus": [
+              1,
+              0
+            ]
+          }
+        }
+      }
+    },
+    {
+      "label": "input-alias-start-baseline-step",
+      "frames": 16,
+      "warmupFrames": 0,
+      "reportSha256": "5d169b921fc9c251759abb578cd021995ee85e16ffe36c40b175be507657a230",
+      "overrideReceiptSha256": "17dbb55ecab5cca644e7a059d418946d042a5f31218335e0e2d7f530c614e11d",
+      "state": {
+        "sha256": "17829f579c707a6737887f8ef7cc7dbc7af414f465efbaa795ba9e36a463b5b7",
+        "cells": 2738927,
+        "runs": 160,
+        "bytes": 21594218,
+        "stateNamesHash": "257ffc5f91755403",
+        "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+      },
+      "firstDifferenceFromStartupBaseline": null
+    }
+  ],
+  "singleCallCaptures": [
+    {
+      "label": "input-alias-first-graph-correction",
+      "captureSha256": "7c16f3c92da5b44e02762302deab14caee8077d46df8c92f502f69921bd279fb",
+      "layoutSha256": "5f43671c2262a2d82756d9680d1ae59fda99d786cb306d358185fca972367abd",
+      "args": [
+        0,
+        20596816,
+        0.8,
+        48445440,
+        352212088
+      ],
+      "outputs": {
+        "predictionAccepted": 1,
+        "accepted": 1,
+        "graphCorrectionAccepted": 1,
+        "graphReason": 0,
+        "covarianceStatus": 1
+      },
+      "files": {
+        "before": {
+          "bytes": 354287616,
+          "sha256": "c44d38a71a30d4e6018827f6a0ae1406fbc2accb66efc421b8a1656e4cfe1858",
+          "gzipBytes": 1089901,
+          "gzipSha256": "cd2a1404079c308a53bbe688043aa90432291dd0d4c38428d3d3f2e77638113a"
+        },
+        "after": {
+          "bytes": 354287616,
+          "sha256": "503995455d4989e9285eae1d8168a7b3a9f9536ed6b614c305d35a41c5f26836",
+          "gzipBytes": 1576642,
+          "gzipSha256": "c7f986485650d4cff56dabe38c877a2793f0b743bb1587a5e695c6993f732bff"
+        }
+      },
+      "replayVerification": {
+        "status": 0,
+        "initializedBefore": 1,
+        "moduleSha256": "9dd5aaac5ad4aafd8368c449385cc71f8379576a82cab990b8479a3b4946be3d",
+        "postSha256": "503995455d4989e9285eae1d8168a7b3a9f9536ed6b614c305d35a41c5f26836",
+        "expectedPostSha256": "503995455d4989e9285eae1d8168a7b3a9f9536ed6b614c305d35a41c5f26836",
+        "exact": true
+      }
+    },
+    {
+      "label": "input-alias-first-graph-correction-candidate",
+      "captureSha256": "dc95cce7eccb77044df06987c26cbe1f7a9315c8f9565341b2df9c24371a7ffc",
+      "layoutSha256": "72337d4087eeb7dfe3b32d0968b338c1436453aeb782b98aecfd8926791c3eb0",
+      "args": [
+        0,
+        20596816,
+        0.8,
+        48445440,
+        352357688
+      ],
+      "outputs": {
+        "predictionAccepted": 1,
+        "accepted": 1,
+        "graphCorrectionAccepted": 0,
+        "graphReason": 2,
+        "covarianceStatus": 0
+      },
+      "files": {
+        "before": {
+          "bytes": 354418688,
+          "sha256": "c81c9a244bab3767f16f4d7184f183769733071a8a6cf13891647e5e5cf3a78e",
+          "gzipBytes": 943804,
+          "gzipSha256": "e5f5739aae5d83cf4c564ebfb0d05fa9d6ce5d37f1c61372d039f76204db191e"
+        },
+        "after": {
+          "bytes": 354418688,
+          "sha256": "eba3fef6b0b9eb858496354ced456cd73647d56c9379a73ae8e33bacaca0db7c",
+          "gzipBytes": 1433335,
+          "gzipSha256": "7c19e585bef53e211f1fa5d8b8907b80482459485e61aa644d2ac1d4db015347"
+        }
+      },
+      "replayVerification": {
+        "status": 0,
+        "initializedBefore": 1,
+        "moduleSha256": "2d1fab02244b3949374a31fdc27e93a5f25aa0d2e58428caf4104797980acb83",
+        "postSha256": "eba3fef6b0b9eb858496354ced456cd73647d56c9379a73ae8e33bacaca0db7c",
+        "expectedPostSha256": "eba3fef6b0b9eb858496354ced456cd73647d56c9379a73ae8e33bacaca0db7c",
+        "exact": true
+      }
+    }
+  ],
+  "stateComparisonAtImageCall": {
+    "before": {
+      "side": "previous",
+      "differingRuns": 0,
+      "differences": []
+    },
+    "after": {
+      "side": "next",
+      "differingRuns": 43,
+      "differences": [
+        {
+          "name": "anchor.binding.catalogPoseRevision",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "anchor.binding.epoch",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 0,
+          "candidate": -1
+        },
+        {
+          "name": "anchor.binding.id",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 1,
+          "candidate": 0
+        },
+        {
+          "name": "anchor.binding.provenance",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "anchor.binding.sequence",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 1,
+          "candidate": 0
+        },
+        {
+          "name": "anchor.binding.slot",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 1,
+          "candidate": 0
+        },
+        {
+          "name": "anchor.bound",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.25,
+          "candidate": 0.0
+        },
+        {
+          "name": "attempt.factorProvenance",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "attempt.graphRevision",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "estimator.correctionRevision",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 1,
+          "candidate": 0
+        },
+        {
+          "name": "estimator.graphRevisionUsed",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "estimator.localization.estimator.accelBias",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": -3.2511550186039705e-06,
+          "candidate": 0.0
+        },
+        {
+          "name": "estimator.localization.estimator.covariance",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.38788520603572163,
+          "candidate": 0.0
+        },
+        {
+          "name": "estimator.localization.estimator.crossCovariance",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.38788520603572163,
+          "candidate": 0.33830473673062217
+        },
+        {
+          "name": "estimator.localization.estimator.gyroBias",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 4.8689898854202706e-08,
+          "candidate": 0.0
+        },
+        {
+          "name": "estimator.localization.estimator.position",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.11766104779395531,
+          "candidate": 0.09974243781029059
+        },
+        {
+          "name": "estimator.localization.estimator.referenceCovariance",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.38788520603572163,
+          "candidate": 0.33830473673062217
+        },
+        {
+          "name": "estimator.localization.estimator.referencePosition",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.11766104779395531,
+          "candidate": 0.09974243781029059
+        },
+        {
+          "name": "estimator.localization.estimator.referenceRotation",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.9967399519472778,
+          "candidate": 0.9968860022981223
+        },
+        {
+          "name": "estimator.localization.estimator.rotation",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.9967399519472778,
+          "candidate": 0.9968860022981223
+        },
+        {
+          "name": "estimator.localization.estimator.velocity",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.3878076155748207,
+          "candidate": 0.3732909938345876
+        },
+        {
+          "name": "estimator.localization.map.point",
+          "lane": "f64",
+          "firstCell": 21,
+          "baseline": 7.2142129768742,
+          "candidate": 7.176680995494787
+        },
+        {
+          "name": "estimator.poses.positions",
+          "lane": "f64",
+          "firstCell": 3,
+          "baseline": 0.1418569838520515,
+          "candidate": 0.09974243781029059
+        },
+        {
+          "name": "estimator.poses.revision",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 3,
+          "candidate": 2
+        },
+        {
+          "name": "estimator.poses.rotations",
+          "lane": "f64",
+          "firstCell": 9,
+          "baseline": 0.9966847798359679,
+          "candidate": 0.9968860022981223
+        },
+        {
+          "name": "selected.binding.anchorBoundProvenance",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.anchorCaptureSequence",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 1,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.anchorEpoch",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 0,
+          "candidate": -1
+        },
+        {
+          "name": "selected.binding.anchorId",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 1,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.catalogPoseRevision",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.currentCaptureSequence",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 9,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.currentEpoch",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 4,
+          "candidate": -1
+        },
+        {
+          "name": "selected.binding.currentId",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.currentTime",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.8,
+          "candidate": 0.0
+        },
+        {
+          "name": "selected.binding.factorProvenance",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.graphRevision",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.referenceCaptureSequence",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 9,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.referenceEpoch",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 4,
+          "candidate": -1
+        },
+        {
+          "name": "selected.binding.referenceId",
+          "lane": "i64",
+          "firstCell": 0,
+          "baseline": 2,
+          "candidate": 0
+        },
+        {
+          "name": "selected.binding.referenceTime",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.8,
+          "candidate": 0.0
+        },
+        {
+          "name": "selected.covariance",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.5001282637442679,
+          "candidate": 0.0
+        },
+        {
+          "name": "selected.positions",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.1418569838520515,
+          "candidate": 0.0
+        },
+        {
+          "name": "selected.rotations",
+          "lane": "f64",
+          "firstCell": 0,
+          "baseline": 0.9966847798359679,
+          "candidate": 1.0
+        }
+      ]
+    }
+  },
+  "declaredInputComparisonAtImageCall": {
+    "inputDifferences": [],
+    "inputsCompared": 43
+  },
+  "finding": "Candidate Initialize with baseline Step matches all16startup frames and full final carried state. Baseline Initialize with candidate Step reproduces failure. Before the isolated0.8s IMAGE call, all160carried previous-state runs and all declared inputs match bit-for-bit. After the call43named next-state runs diverge; candidate estimator covariance is zero and graph correction is rejected. Each original module independently reproduces its own full post-memory hash from the supplied pre-memory."
+}
