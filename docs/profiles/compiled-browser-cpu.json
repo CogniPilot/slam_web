@@ -1,0 +1,119 @@
+{
+  "recordedAt": "2026-10-15T01:34:21.129Z",
+  "compiler": {
+    "version": "0.10.3",
+    "revision": "5c68a1c67524"
+  },
+  "physicsDeclines": [],
+  "environment": "warehouse",
+  "resolution": "424x240",
+  "cameraHz": 5,
+  "imuHz": 10,
+  "frames": 30,
+  "cpuProfiling": true,
+  "aggregatePercent": {
+    "wasm": 64.22698441526374,
+    "javascript": 9.14616857619799,
+    "gc": 2.643859778976335,
+    "native_or_unattributed": 23.98298722956195
+  },
+  "threads": [
+    {
+      "role": "main",
+      "activeMs": 1080.616,
+      "groupsMs": {
+        "idle": 3989.315999999998,
+        "wasm": 0,
+        "javascript": 175.85900000000004,
+        "gc": 50.90600000000002,
+        "native_or_unattributed": 853.851
+      },
+      "jsPercentOfActive": 16.273958556971213
+    },
+    {
+      "role": "modelica-lsp.worker-BJycbc_6.js",
+      "activeMs": 12.875000000000002,
+      "groupsMs": {
+        "idle": 4837.416000000006,
+        "wasm": 0,
+        "javascript": 0,
+        "gc": 12.875000000000002,
+        "native_or_unattributed": 0
+      },
+      "jsPercentOfActive": 0
+    },
+    {
+      "role": "modelica-state.worker-pVqXkF0K.js",
+      "activeMs": 0,
+      "groupsMs": {
+        "idle": 4816.013999999991,
+        "wasm": 0,
+        "javascript": 0,
+        "gc": 0,
+        "native_or_unattributed": 0
+      },
+      "jsPercentOfActive": 0
+    },
+    {
+      "role": "sensor-render.worker-C2G7BG6C.js",
+      "activeMs": 313.40499999999986,
+      "groupsMs": {
+        "idle": 4464.160000000015,
+        "wasm": 0,
+        "javascript": 55.283,
+        "gc": 31.654999999999994,
+        "native_or_unattributed": 226.46699999999987
+      },
+      "jsPercentOfActive": 17.639476077280204
+    },
+    {
+      "role": "modelica-slam.worker-8UIFe3ai.js",
+      "activeMs": 3343.681000000003,
+      "groupsMs": {
+        "idle": 1327.6780000000015,
+        "wasm": 3270.5760000000037,
+        "javascript": 54.162,
+        "gc": 2.12,
+        "native_or_unattributed": 16.822999999999997
+      },
+      "jsPercentOfActive": 1.6198315568979202
+    },
+    {
+      "role": "modelica-runtime-math.worker--nklmvTA.js",
+      "activeMs": 100.49399999999999,
+      "groupsMs": {
+        "idle": 4573.475000000012,
+        "wasm": 44.442999999999984,
+        "javascript": 40.579,
+        "gc": 5.437,
+        "native_or_unattributed": 10.035
+      },
+      "jsPercentOfActive": 40.37952514577985
+    },
+    {
+      "role": "physics.worker-DRvg7CAN.js",
+      "activeMs": 671.0259999999998,
+      "groupsMs": {
+        "idle": 3983.5740000000064,
+        "wasm": 529.0629999999999,
+        "javascript": 64.873,
+        "gc": 7.4590000000000005,
+        "native_or_unattributed": 69.631
+      },
+      "jsPercentOfActive": 9.667732695901503
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "activeMs": 463.05400000000014,
+      "groupsMs": {
+        "idle": 4198.581000000003,
+        "wasm": 0,
+        "javascript": 156.65599999999998,
+        "gc": 47.787,
+        "native_or_unattributed": 258.61100000000016
+      },
+      "jsPercentOfActive": 33.8310434636133
+    }
+  ],
+  "scope": "Leaf CPU samples weighted by timeDelta, across all recorded threads. Idle excluded. JavaScript includes TypeScript, dependencies and generated glue. Native/unattributed includes browser bindings; this does not measure GPU utilization. Shared host. Instrumentation perturbs throughput. These proportions include libraries and glue, and cannot be interpreted as TypeScript-only wall cost or GPU utilization."
+}

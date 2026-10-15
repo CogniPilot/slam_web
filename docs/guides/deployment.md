@@ -175,6 +175,14 @@ overlapped IMU prediction, so its wall time must not be described as solver CPU
 time. The new pin exceeds realtime on this host; these measurements do not
 establish 10× operation or equivalent performance on other computers.
 
+A fresh 30-frame CPU profile with that compiled physics pin attributed 64.2% of
+active samples to WASM, 9.1% to all JavaScript, 2.6% to GC and 24.0% to browser
+bindings/unattributed execution. JavaScript includes libraries and generated
+glue; inside the native SLAM worker it accounted for 1.6%. No individual app
+JavaScript function dominated. See `docs/profiles/compiled-browser-cpu.json`.
+Sampling changes throughput, and these are CPU proportions across threads,
+not TypeScript wall time or a predicted speedup.
+
 All browser compiler loaders request the JavaScript and WASM pair with the exact
 pinned revision in their URLs. Updating the pin also changes the worker bundles,
 so a newly loaded app bypasses cached compiler files from the previous deployment.
