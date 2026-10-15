@@ -1,0 +1,223 @@
+{
+  "scope": "Actual built browser, 424x240 GPU RGB-D, warehouse-loop, 5 Hz camera / 10 Hz IMU, 10 warmup + 240 measured frames (48 simulated seconds), physics + native full SLAM + visible viewer, sampling off. Shared host; timings are observations, not a controlled speedup guarantee. Candidate only overrides this browser; published delivery unchanged.",
+  "baselineDelivery": {
+    "sourceSha256": "aabb72b1fbd024aef62f2e5197f190a78fcf4a51160cfd41269824640b75cd6e",
+    "baseSourceSha256": "5cbcf9c7562efc857c3928ccc9d6767450e2014cad8e6b47846aece07bfc275e",
+    "binarySha256": "63819b0b9e467a1170f9210e5c78abff113dd0b116445335c3866867f6422f07",
+    "resetSha256": "611920ce66e1927d0fd8fe2519f53cdff857c80c99d5926800fff5c9be0a2fc1",
+    "revision": "local-exporter-sha256",
+    "modelicaRevision": "d2ebf66d3a65164dfdd20e890a7c196330d1b8dd",
+    "stepMemoryPages": 5406,
+    "stepMemoryBytes": 354287616,
+    "modules": {
+      "initialize": {
+        "module.wasm": "f68b9b394af98ec6304edcebcf3264ac5c9731a3b9bb2d6b9e7e9f2f51372934",
+        "layout.json": "11c5589d348dcbc9f95a88dcd5ba56a66155100c8cf4a92d91e4798f6a4d96d4"
+      },
+      "step": {
+        "module.wasm": "9dd5aaac5ad4aafd8368c449385cc71f8379576a82cab990b8479a3b4946be3d",
+        "layout.json": "2a550a7469d1b31e331219c42be9ad20000a45a8f6f9802d60948cb99764fa49"
+      }
+    }
+  },
+  "candidateDelivery": {
+    "sourceSha256": "72169e9b5e6196990f2aef89c20d2847d1695185acb4f632bc8e0fff1db24b03",
+    "baseSourceSha256": "3e222dd131d12a6b549d6759adc59f54adbe12d2220197bf4567c9eb30ff6fb9",
+    "binarySha256": "63819b0b9e467a1170f9210e5c78abff113dd0b116445335c3866867f6422f07",
+    "resetSha256": "611920ce66e1927d0fd8fe2519f53cdff857c80c99d5926800fff5c9be0a2fc1",
+    "revision": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
+    "modelicaRevision": "df1bbe8ad39dad0ade48ae7f366174556ab66fe7",
+    "stepMemoryPages": 7395,
+    "stepMemoryBytes": 484638720,
+    "modules": {
+      "initialize": {
+        "module.wasm": "b1e809e72a24c78eb98bb2953266be9bbb822872149b78b463e29c168cd95996",
+        "layout.json": "9ec8eae45d05c1350bd66c21a7ddf22b94da2ddd091d411a1ac82ed4d97d7fca"
+      },
+      "step": {
+        "module.wasm": "cacfff28b5af6c964c92b1baa71abf7e9f46b56f167ce9416405f0146d513ec7",
+        "layout.json": "50afd2561523af87c82b21475c6f4cb17259a831e28fffe1fcc515ad06bbc079"
+      }
+    }
+  },
+  "runs": [
+    {
+      "artifactLabel": "replay-main-278-240",
+      "reportSha256": "0379ed2426fde90f9c6bc3d064166ced3870160d7eb2fd15c2dfc18cfed3f648",
+      "nativeComparisonSha256": "fceab6c554a97787aa70b30090cd2aba1ba8ee9b2fdef45c7e11d7af6a81ff8f",
+      "recordedAt": "2026-10-15T02:29:20.469Z",
+      "rtf": 2.298982700160432,
+      "meanNativeMs": 69.34916666646798,
+      "meanImageStepMs": 53.24583332737287,
+      "meanImuStepMs": 16.103333339095116,
+      "maximumLoopEdges": 3,
+      "maximumKeyframes": 7,
+      "positionRmseM": 0.3441402750461108,
+      "errors": [],
+      "physicsExecution": {
+        "before": {
+          "compiler": {
+            "version": "0.10.3",
+            "revision": "5c68a1c67524"
+          },
+          "execution": {
+            "engine": "wasm_program",
+            "refusal": null,
+            "declined": []
+          }
+        },
+        "after": {
+          "compiler": {
+            "version": "0.10.3",
+            "revision": "5c68a1c67524"
+          },
+          "execution": {
+            "engine": "wasm_program",
+            "refusal": null,
+            "declined": []
+          }
+        }
+      }
+    },
+    {
+      "artifactLabel": "replay-pr18-df1-278-240",
+      "reportSha256": "dc7dfbfd5d5678df3a8ac7963bdadb89f873b72098da5cca27b376b4760a2ff9",
+      "nativeComparisonSha256": "9fb0b224ccf371d187a927d19f8f25bfb8689773c51151e92712292cc5bfa181",
+      "recordedAt": "2026-10-15T02:53:38.339Z",
+      "rtf": 1.859153620310918,
+      "meanNativeMs": 90.93458334008852,
+      "meanImageStepMs": 78.66458334028721,
+      "meanImuStepMs": 12.269999999801318,
+      "maximumLoopEdges": 3,
+      "maximumKeyframes": 7,
+      "positionRmseM": 0.3441402750461108,
+      "errors": [],
+      "physicsExecution": {
+        "before": {
+          "compiler": {
+            "version": "0.10.3",
+            "revision": "5c68a1c67524"
+          },
+          "execution": {
+            "engine": "wasm_program",
+            "refusal": null,
+            "declined": []
+          }
+        },
+        "after": {
+          "compiler": {
+            "version": "0.10.3",
+            "revision": "5c68a1c67524"
+          },
+          "execution": {
+            "engine": "wasm_program",
+            "refusal": null,
+            "declined": []
+          }
+        }
+      }
+    },
+    {
+      "artifactLabel": "replay-main-278-240-after-df1",
+      "reportSha256": "c302bfde8f2d38def53c99b73857e23cd3b43b6e33da6fc94e4371d52d67de0b",
+      "nativeComparisonSha256": "b92e4c383040d801c9fd96477fb8ba5fe900e01a22efc4e0995fc39d9e0370a6",
+      "recordedAt": "2026-10-15T02:54:41.988Z",
+      "rtf": 2.3594759997050656,
+      "meanNativeMs": 66.95083332061768,
+      "meanImageStepMs": 52.14749999245008,
+      "meanImuStepMs": 14.803333328167598,
+      "maximumLoopEdges": 3,
+      "maximumKeyframes": 7,
+      "positionRmseM": 0.3441402750461108,
+      "errors": [],
+      "physicsExecution": {
+        "before": {
+          "compiler": {
+            "version": "0.10.3",
+            "revision": "5c68a1c67524"
+          },
+          "execution": {
+            "engine": "wasm_program",
+            "refusal": null,
+            "declined": []
+          }
+        },
+        "after": {
+          "compiler": {
+            "version": "0.10.3",
+            "revision": "5c68a1c67524"
+          },
+          "execution": {
+            "engine": "wasm_program",
+            "refusal": null,
+            "declined": []
+          }
+        }
+      }
+    }
+  ],
+  "parity": {
+    "passed": true,
+    "frames": 240,
+    "existingObservableAndDiagnosticDifferences": 0,
+    "excludedTimingDiagnostics": [
+      "stepMsMax",
+      "stepMsTotal"
+    ],
+    "observableFields": [
+      "sequence",
+      "time",
+      "position",
+      "truth",
+      "features",
+      "points",
+      "tracking",
+      "reference",
+      "positionErrorM"
+    ],
+    "allCarriedState": {
+      "sha256": "94023a2b71ede56d6bb89796f8d04cd84027d90c473cf96255f183f2ec9ef444",
+      "cells": 2738927,
+      "runs": 160,
+      "bytes": 21594218,
+      "stateNamesHash": "257ffc5f91755403",
+      "scope": "All carried state bytes in canonical named-run order, including lane/name/count metadata. Captured after the timed window; program and inputs unchanged."
+    },
+    "freshBaselineAlsoExact": true
+  },
+  "newLoopClosureView": {
+    "accepted": 3,
+    "candidates": 492,
+    "snapshots": 7,
+    "history": [
+      {
+        "edgeId": 9,
+        "referenceId": 3,
+        "currentId": 7,
+        "time": 48.2,
+        "referenceImage": 110,
+        "currentImage": 241,
+        "similarity": 0.6026632165960748
+      },
+      {
+        "edgeId": 7,
+        "referenceId": 3,
+        "currentId": 6,
+        "time": 45.8,
+        "referenceImage": 110,
+        "currentImage": 229,
+        "similarity": 0.7053534399276251
+      },
+      {
+        "edgeId": 5,
+        "referenceId": 3,
+        "currentId": 5,
+        "time": 43.8,
+        "referenceImage": 110,
+        "currentImage": 219,
+        "similarity": 0.5372469409420884
+      }
+    ]
+  },
+  "decision": "Semantic parity passes. Candidate is slower overall in these runs and increases Step memory by 130351104 bytes. Keep baseline published; PR19 remains held."
+}
