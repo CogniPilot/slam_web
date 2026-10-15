@@ -115,5 +115,293 @@
       "jsPercentOfActive": 33.8310434636133
     }
   ],
-  "scope": "Leaf CPU samples weighted by timeDelta, across all recorded threads. Idle excluded. JavaScript includes TypeScript, dependencies and generated glue. Native/unattributed includes browser bindings; this does not measure GPU utilization. Shared host. Instrumentation perturbs throughput. These proportions include libraries and glue, and cannot be interpreted as TypeScript-only wall cost or GPU utilization."
+  "scope": "Leaf CPU samples weighted by timeDelta, across all recorded threads. Idle excluded. JavaScript includes TypeScript, dependencies and generated glue. Native/unattributed includes browser bindings; this does not measure GPU utilization. Shared host. Instrumentation perturbs throughput. These proportions include libraries and glue, and cannot be interpreted as TypeScript-only wall cost or GPU utilization.",
+  "nativeDelivery": {
+    "kind": "pinned published delivery",
+    "override": false,
+    "packagePin": {
+      "repository": "CogniPilot/slam_web",
+      "tag": "native-slam-modelica-main-20261014",
+      "asset": "native-slam-d435-profiles.tar",
+      "bytes": 75212800,
+      "sha256": "c7af2165b66e4b650e261feb8873f7ace62d235b714a408994a6a4d3b38cfefb",
+      "sourceSha256": "5cbcf9c7562efc857c3928ccc9d6767450e2014cad8e6b47846aece07bfc275e",
+      "rumocaRevision": "9f507597dd0a462b767a9761a53f4c3e3ffdfbd8",
+      "modelicaRevision": "d2ebf66d3a65164dfdd20e890a7c196330d1b8dd"
+    },
+    "manifestSha256": "f469bd7d444162e6ce7eba879aa65a14ce81b72c512bdf52350fbb50b9f35b45",
+    "profileSourceSha256": "aabb72b1fbd024aef62f2e5197f190a78fcf4a51160cfd41269824640b75cd6e",
+    "initializeModuleSha256": "23e3ae32c2b62a488514577cc598497c09ac7937338b12a32b54f729bdb422fb",
+    "stepModuleSha256": "cead2d1d556eeb1f413cfd190d40e30d76ded42de8c694dafa7540d22ecfba07"
+  },
+  "profileFiles": [
+    {
+      "role": "main",
+      "file": "main.cpuprofile",
+      "sha256": "8d0d5cea650df511ceb69db5a71663b58dafb5b33d57d214f1e29c0feccc31ce"
+    },
+    {
+      "role": "modelica-lsp.worker-BJycbc_6.js",
+      "file": "worker-0.cpuprofile",
+      "sha256": "713c1433afa6c0e52de2814b7883704ef8ea915dfe725d051b32e7816714aabd"
+    },
+    {
+      "role": "modelica-state.worker-pVqXkF0K.js",
+      "file": "worker-1.cpuprofile",
+      "sha256": "a45168b6fdda6b46bd723ebc1b5547ad8a25c7d55fd974bd34497593af1c554f"
+    },
+    {
+      "role": "sensor-render.worker-C2G7BG6C.js",
+      "file": "worker-2.cpuprofile",
+      "sha256": "01d0d840429ce8c1ce59d641a56502b869f95a9290c8314113d2eff70421c5c1"
+    },
+    {
+      "role": "modelica-slam.worker-8UIFe3ai.js",
+      "file": "worker-3.cpuprofile",
+      "sha256": "e9a595472bf87e570f7abde63003d52d7a88bfe1ca7ecbc42722a156fc888990"
+    },
+    {
+      "role": "modelica-runtime-math.worker--nklmvTA.js",
+      "file": "worker-4.cpuprofile",
+      "sha256": "5c8d32dcebc93c585315b3e09ed5e1247259ca79e2c6cb50d421902648144bc3"
+    },
+    {
+      "role": "physics.worker-DRvg7CAN.js",
+      "file": "worker-5.cpuprofile",
+      "sha256": "4901bde4b834eb71bc4f11af07d011aff64a081e4ba187968e0628dd0f8a9754"
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "file": "worker-6.cpuprofile",
+      "sha256": "fbdf0436a542a9a251d0c1342c9c6055f5451e62592a4860e637109491789614"
+    }
+  ],
+  "topJavaScriptFunctions": [
+    {
+      "role": "physics.worker-DRvg7CAN.js",
+      "functionName": "l",
+      "url": "/assets/physics.worker-DRvg7CAN.js",
+      "lineNumber": 11,
+      "columnNumber": 188,
+      "selfMs": 28.147000000000002,
+      "percentOfAllActiveSamples": 0.47028053260477454
+    },
+    {
+      "role": "main",
+      "functionName": "ZB",
+      "url": "/assets/main-ouemkzY5.js",
+      "lineNumber": 59781,
+      "columnNumber": 10419,
+      "selfMs": 23.115000000000002,
+      "percentOfAllActiveSamples": 0.3862057949749303
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "Nh",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 3831,
+      "columnNumber": 36502,
+      "selfMs": 16.404,
+      "percentOfAllActiveSamples": 0.2740782981081011
+    },
+    {
+      "role": "main",
+      "functionName": "hS",
+      "url": "/assets/main-ouemkzY5.js",
+      "lineNumber": 60671,
+      "columnNumber": 19016,
+      "selfMs": 15.975,
+      "percentOfAllActiveSamples": 0.26691055914879996
+    },
+    {
+      "role": "modelica-slam.worker-8UIFe3ai.js",
+      "functionName": "self.onmessage",
+      "url": "/assets/modelica-slam.worker-8UIFe3ai.js",
+      "lineNumber": 10,
+      "columnNumber": 17297,
+      "selfMs": 15.738000000000001,
+      "percentOfAllActiveSamples": 0.2629507593041511
+    },
+    {
+      "role": "main",
+      "functionName": "qH",
+      "url": "/assets/main-ouemkzY5.js",
+      "lineNumber": 60671,
+      "columnNumber": 23548,
+      "selfMs": 15.019999999999998,
+      "percentOfAllActiveSamples": 0.25095440365664945
+    },
+    {
+      "role": "modelica-runtime-math.worker--nklmvTA.js",
+      "functionName": "observe",
+      "url": "/assets/modelica-runtime-math.worker--nklmvTA.js",
+      "lineNumber": 11,
+      "columnNumber": 4456,
+      "selfMs": 12.904,
+      "percentOfAllActiveSamples": 0.21560024133058622
+    },
+    {
+      "role": "modelica-runtime-math.worker--nklmvTA.js",
+      "functionName": "self.onmessage",
+      "url": "/assets/modelica-runtime-math.worker--nklmvTA.js",
+      "lineNumber": 11,
+      "columnNumber": 9989,
+      "selfMs": 12.814,
+      "percentOfAllActiveSamples": 0.214096519870593
+    },
+    {
+      "role": "main",
+      "functionName": "",
+      "url": "/assets/main-ouemkzY5.js",
+      "lineNumber": 3926,
+      "columnNumber": 10813,
+      "selfMs": 11.546,
+      "percentOfAllActiveSamples": 0.19291075530091045
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "cg",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 3728,
+      "columnNumber": 7599,
+      "selfMs": 11.161999999999999,
+      "percentOfAllActiveSamples": 0.18649487707160595
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "updateMatrixWorld",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 0,
+      "columnNumber": 71903,
+      "selfMs": 11.038999999999998,
+      "percentOfAllActiveSamples": 0.18443979107628186
+    },
+    {
+      "role": "modelica-slam.worker-8UIFe3ai.js",
+      "functionName": "writeImage",
+      "url": "/assets/modelica-slam.worker-8UIFe3ai.js",
+      "lineNumber": 10,
+      "columnNumber": 10648,
+      "selfMs": 9.598999999999998,
+      "percentOfAllActiveSamples": 0.16038024771639003
+    },
+    {
+      "role": "main",
+      "functionName": "Cm.e.onmessage",
+      "url": "/assets/main-ouemkzY5.js",
+      "lineNumber": 3926,
+      "columnNumber": 10430,
+      "selfMs": 9.119,
+      "percentOfAllActiveSamples": 0.15236039992975944
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "renderBufferDirect",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 3831,
+      "columnNumber": 25273,
+      "selfMs": 8.766,
+      "percentOfAllActiveSamples": 0.14646247020334152
+    },
+    {
+      "role": "physics.worker-DRvg7CAN.js",
+      "functionName": "",
+      "url": "/vendor/rumoca/rumoca_bind_wasm.js",
+      "lineNumber": 2218,
+      "columnNumber": 78,
+      "selfMs": 8.694,
+      "percentOfAllActiveSamples": 0.14525949303534694
+    },
+    {
+      "role": "physics.worker-DRvg7CAN.js",
+      "functionName": "getDataViewMemory0",
+      "url": "/vendor/rumoca/rumoca_bind_wasm.js",
+      "lineNumber": 2440,
+      "columnNumber": 27,
+      "selfMs": 8.25,
+      "percentOfAllActiveSamples": 0.1378411338327136
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "Uh",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 4195,
+      "columnNumber": 32493,
+      "selfMs": 8.04,
+      "percentOfAllActiveSamples": 0.13433245042606268
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "Tt",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 3728,
+      "columnNumber": 7410,
+      "selfMs": 7.308000000000001,
+      "percentOfAllActiveSamples": 0.12210218255145104
+    },
+    {
+      "role": "main",
+      "functionName": "updateMatrixWorld",
+      "url": "/assets/main-ouemkzY5.js",
+      "lineNumber": 1,
+      "columnNumber": 72222,
+      "selfMs": 7.207,
+      "percentOfAllActiveSamples": 0.12041467291301416
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "Fr",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 3831,
+      "columnNumber": 30338,
+      "selfMs": 6.831,
+      "percentOfAllActiveSamples": 0.11413245881348687
+    },
+    {
+      "role": "modelica-slam.worker-8UIFe3ai.js",
+      "functionName": "advance",
+      "url": "/assets/modelica-slam.worker-8UIFe3ai.js",
+      "lineNumber": 10,
+      "columnNumber": 8496,
+      "selfMs": 5.928999999999999,
+      "percentOfAllActiveSamples": 0.09906182818111017
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "multiplyMatrices",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 0,
+      "columnNumber": 57735,
+      "selfMs": 5.638,
+      "percentOfAllActiveSamples": 0.09419979546046536
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "i",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 3831,
+      "columnNumber": 9412,
+      "selfMs": 5.593,
+      "percentOfAllActiveSamples": 0.09344793473046874
+    },
+    {
+      "role": "main",
+      "functionName": "worker.onmessage",
+      "url": "/assets/main-ouemkzY5.js",
+      "lineNumber": 59781,
+      "columnNumber": 8628,
+      "selfMs": 5.267999999999999,
+      "percentOfAllActiveSamples": 0.08801782945827091
+    },
+    {
+      "role": "viewer.worker-BGeOFgdA.js",
+      "functionName": "render",
+      "url": "/assets/viewer.worker-BGeOFgdA.js",
+      "lineNumber": 4195,
+      "columnNumber": 20313,
+      "selfMs": 5.193,
+      "percentOfAllActiveSamples": 0.0867647282416099
+    }
+  ],
+  "functionScope": "Top 25 JavaScript leaf functions across all recorded threads, including app code, dependencies and generated glue. Lines/columns are zero-based generated bundle coordinates. Raw profile hashes identify the captured samples."
 }

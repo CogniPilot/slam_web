@@ -52,77 +52,135 @@
       "name": "RGBDGraphProcessing.Valid(previous)",
       "calls": 60,
       "inclusiveMsPerFrame": 0.10333329836527506,
-      "selectedExclusiveMsPerFrame": 0.10333329836527506
+      "selectedExclusiveMsPerFrame": 0.10333329836527506,
+      "owner": 242,
+      "kind": "owner_entry",
+      "sourceSpan": {
+        "start": 691195,
+        "end": 691230
+      }
     },
     {
       "id": 253,
       "name": "RGBDGraphCaptureLedger.Advance",
       "calls": 60,
       "inclusiveMsPerFrame": 0.03666665554046631,
-      "selectedExclusiveMsPerFrame": 0.03666665554046631
+      "selectedExclusiveMsPerFrame": 0.03666665554046631,
+      "owner": 246,
+      "kind": "owner_entry",
+      "sourceSpan": {
+        "start": 694435,
+        "end": 694465
+      }
     },
     {
       "id": 408,
       "name": "RGBDCatalogFrame.Advance",
       "calls": 30,
       "inclusiveMsPerFrame": 19.910000014305115,
-      "selectedExclusiveMsPerFrame": 19.910000014305115
+      "selectedExclusiveMsPerFrame": 19.910000014305115,
+      "owner": 399,
+      "kind": "owner_entry",
+      "sourceSpan": {
+        "start": 565557,
+        "end": 565581
+      }
     },
     {
       "id": 466,
-      "name": "RGBDLocalizationCatalog.Publish(previous.estimator.localization,proposed,measure",
+      "name": "RGBDLocalizationCatalog.Publish(previous.estimator.localization,proposed,measurement,\n          producerAccepted,observationAccepted,captureAccepted,imageOn,imageEpoch,imageTime,h,initializing,\n          frameAccepted and dictionary.ready,mappingFrameReason,true,candidatePoint,candidateEnabled,dictionary.words,dictionary.enabled,\n          minimumInterval=minimumInterval,maximumInterval=maximumInterval,\n          translationThreshold=translationThreshold,rotationThreshold=rotationThreshold,minimumFeatures=minimumFeatures,\n          voxelWidth=voxelWidth,mergeRadius=mergeRadius,maximumDistance=maximumDistance,\n          tentativeLifetime=tentativeLifetime,confirmedLifetime=confirmedLifetime,\n          confirmationObservations=confirmationObservations,maximumConfidence=maximumConfidence,maximumTentative=maximumTentative,\n          posePositions=previous.estimator.poses.positions,poseRotations=previous.estimator.poses.rotations,\n          poseRevision=previous.estimator.poses.revision)",
       "calls": 60,
       "inclusiveMsPerFrame": 20.32333335081736,
-      "selectedExclusiveMsPerFrame": 0.41333333651224774
+      "selectedExclusiveMsPerFrame": 0.41333333651224774,
+      "owner": 457,
+      "kind": "owner_entry",
+      "sourceSpan": {
+        "start": 693273,
+        "end": 694270
+      }
     },
     {
       "id": 468,
       "name": "RGBDGraphProcessing.Valid(candidate)",
       "calls": 60,
       "inclusiveMsPerFrame": 0.08999998569488525,
-      "selectedExclusiveMsPerFrame": 0.08999998569488525
+      "selectedExclusiveMsPerFrame": 0.08999998569488525,
+      "owner": 459,
+      "kind": "owner_entry",
+      "sourceSpan": {
+        "start": 696270,
+        "end": 696306
+      }
     },
     {
       "id": 469,
-      "name": "RGBDGraphEstimatorCommit.ValidView(candidate.estimator.localization.catalog,\n   ",
+      "name": "RGBDGraphEstimatorCommit.ValidView(candidate.estimator.localization.catalog,\n                candidate.estimator.poses,candidate.estimator.localization.sourceRevision)",
       "calls": 60,
       "inclusiveMsPerFrame": 0.010000006357828776,
-      "selectedExclusiveMsPerFrame": 0.010000006357828776
+      "selectedExclusiveMsPerFrame": 0.010000006357828776,
+      "owner": 460,
+      "kind": "owner_entry",
+      "sourceSpan": {
+        "start": 695998,
+        "end": 696165
+      }
     },
     {
       "id": 470,
-      "name": "RGBDLocalizationCatalog.Publish(previous.estimator.localization,proposed,measure",
+      "name": "RGBDLocalizationCatalog.Publish(previous.estimator.localization,proposed,measurement,\n      producerAccepted,observationAccepted,captureAccepted,imageOn,imageEpoch,imageTime,h,initializing,\n      frameAccepted,frameRejectionReason,false,candidatePoint,candidateEnabled,dictionary.words,dictionary.enabled)",
       "calls": 60,
       "inclusiveMsPerFrame": 0.23333337306976318,
-      "selectedExclusiveMsPerFrame": 0.23333337306976318
+      "selectedExclusiveMsPerFrame": 0.23333337306976318,
+      "owner": 461,
+      "kind": "owner_entry",
+      "sourceSpan": {
+        "start": 690825,
+        "end": 691130
+      }
     },
     {
       "id": 471,
-      "name": "RGBDLocalizationProcessing.Publish(previous,proposed,measurement,\n    producerPr",
+      "name": "RGBDLocalizationProcessing.Publish(previous,proposed,measurement,\n    producerPredictionAccepted,\n    producerObservationAccepted,producerCaptureAccepted,imageOn,imageEpoch,intervalTime,h,\n    false,frameAccepted,frameRejectionReason,transactionAllowed,\n    producerMapCandidatePoint,producerMapCandidateEnabled,\n    minimumInterval,maximumInterval,translationThreshold,rotationThreshold,minimumFeatures,\n    voxelWidth,mergeRadius,maximumDistance,tentativeLifetime,confirmedLifetime,\n    confirmationObservations,maximumConfidence,maximumTentative,\n    minimumMeasuredDescriptors=minimumMeasuredDescriptors,minimumWordDistanceSquared=minimumWordDistanceSquared)",
       "calls": 60,
       "inclusiveMsPerFrame": 33,
-      "selectedExclusiveMsPerFrame": 12.203333330154418
+      "selectedExclusiveMsPerFrame": 12.203333330154418,
+      "owner": 462,
+      "kind": "owner_entry",
+      "sourceSpan": {
+        "start": 740622,
+        "end": 741284
+      }
     },
     {
       "id": 612,
-      "name": "AdvanceFastSLAM(\n      previous=previous,\n      rgb=rgb,\n      depth=depth,\n    ",
+      "name": "AdvanceFastSLAM(\n      previous=previous,\n      rgb=rgb,\n      depth=depth,\n      rgbCalibration=rgbCalibration,\n      depthCalibration=depthCalibration,\n      disparityNoise=disparityNoise,\n      noiseReferenceFx=noiseReferenceFx,\n      baseline=baseline,\n      opticalToBody=opticalToBody,\n      cameraOriginBody=cameraOriginBody,\n      accel=accel,\n      gyro=gyro,\n      gravity=gravity,\n      density=density,\n      h=h,\n      intervalTime=intervalTime,\n      imageEpoch=imageEpoch,\n      imageRequested=imageRequested,\n      localCaptureRequested=localCaptureRequested,\n      requested=requested,\n      minimumMeasuredDescriptors=minimumMeasuredDescriptors,\n      minimumWordDistanceSquared=minimumWordDistanceSquared,\n      selectedFeatureLimit=selectedFeatureLimit,\n      absoluteThreshold=absoluteThreshold,\n      depthQualifiedSelection=depthQualifiedSelection,\n      minimumInterval=minimumInterval,\n      maximumInterval=maximumInterval,\n      translationThreshold=translationThreshold,\n      rotationThreshold=rotationThreshold,\n      minimumFeatures=minimumFeatures,\n      voxelWidth=voxelWidth,\n      mergeRadius=mergeRadius,\n      maximumDistance=maximumDistance,\n      tentativeLifetime=tentativeLifetime,\n      confirmedLifetime=confirmedLifetime,\n      confirmationObservations=confirmationObservations,\n      maximumConfidence=maximumConfidence,\n      maximumTentative=maximumTentative,\n      graphCorrectionRequested=graphCorrectionRequested,\n      graphPolicy=graphPolicy,depthUnits=depthUnits)",
       "calls": 60,
       "inclusiveMsPerFrame": 50.566666642824806,
-      "selectedExclusiveMsPerFrame": 17.56666664282481
+      "selectedExclusiveMsPerFrame": 17.56666664282481,
+      "owner": 602,
+      "kind": "owner_entry",
+      "sourceSpan": {
+        "start": 724532,
+        "end": 726048
+      }
     },
     {
       "id": 613,
       "name": "unmapped calling owners {602}",
       "calls": 60,
       "inclusiveMsPerFrame": 57.709999982515974,
-      "selectedExclusiveMsPerFrame": 7.1433333396911625
+      "selectedExclusiveMsPerFrame": 7.1433333396911625,
+      "owner": null,
+      "kind": "unmapped"
     },
     {
       "id": 614,
       "name": "stage_group calling owners {}",
       "calls": 60,
       "inclusiveMsPerFrame": 63.59000001748403,
-      "selectedExclusiveMsPerFrame": 5.880000034968059
+      "selectedExclusiveMsPerFrame": 5.880000034968059,
+      "owner": null,
+      "kind": "stage_group"
     }
   ],
   "edges": [
@@ -193,5 +251,85 @@
       "selectedExclusiveMsPerFrame": 19.910000014305115
     }
   ],
-  "scope": "Instrumented function wall times. totalMs is inclusive; selfMs excludes only instrumented descendants, not all calls. Edges group calls by nearest instrumented parent (root means none). Overlapping functions must not be summed. IDs require the exact original module hash and source mapping."
+  "scope": "Instrumented function wall times. totalMs is inclusive; selfMs excludes only instrumented descendants, not all calls. Edges group calls by nearest instrumented parent (root means none). Overlapping functions must not be summed. IDs require the exact original module hash and source mapping.",
+  "delivery": {
+    "kind": "unpublished browser-only override",
+    "overrideDirectory": "$HOME/scratch/slam_web/build/liveness-publish-trace",
+    "exportDirectory": "$HOME/scratch/slam-perf2-exports/liveness",
+    "exportProfile": {
+      "revision": "54a38ac8e9668f17c4ae566fcc6d2cc44adc0b77-liveness",
+      "binarySha256": "8bcfe33415ce632f83c0ed57c9fd02fdbd257e1e7ad875c289a39c047f0f5604",
+      "profileJsonSha256": "6b91daeb1c7132753f02e5cc0fb86b632b2ecc1da85de12e6dd4bc5c707da7a6",
+      "sourceSha256": "aabb72b1fbd024aef62f2e5197f190a78fcf4a51160cfd41269824640b75cd6e",
+      "baseSourceSha256": "5cbcf9c7562efc857c3928ccc9d6767450e2014cad8e6b47846aece07bfc275e",
+      "revisionScope": "Exporter-supplied label for local liveness work; this is not a clean published compiler revision."
+    },
+    "nativeComparison": [
+      {
+        "file": "manifest.json",
+        "bytes": 98472,
+        "sha256": "1b3176450fa74120cfd014556d165cf903b2c353ab629207e78db6dfe9692d5f"
+      },
+      {
+        "file": "f68b9b394af98ec6-module.wasm.gz",
+        "bytes": 397455,
+        "sha256": "5af60f8b88ae9be9fd11a6c0a232e7fa2bc1bdc0b1e3a522c01de0d605c247d8"
+      },
+      {
+        "file": "6fb6181312026337-y.bin.gz",
+        "bytes": 20043,
+        "sha256": "e869d8b36fce33b1b011a5c2a079e8512c3d780ab978ebac38c6ac6a8204f76c"
+      },
+      {
+        "file": "428d80a7768543f8-p.bin.gz",
+        "bytes": 27496,
+        "sha256": "6ed4c4b15521b6358fbb64af489ace4c17da4f70d3473c3ba3e33fecc7c8a13e"
+      },
+      {
+        "file": "f0d57f3362fadbbe-lanes.bin.gz",
+        "bytes": 2060,
+        "sha256": "1eb066f16f03be12cb03cef2eadbe8a1f6205e8ce86bbb7fb634ffda054d268b"
+      },
+      {
+        "file": "bca8d561ca910dfd-state_lane.bin.gz",
+        "bytes": 2817,
+        "sha256": "68e1927679cabd633af0dcb9377e87838ba9f470c3267af2b1fab0c781937ae0"
+      },
+      {
+        "file": "27b59de9b201dd85-state_out.bin.gz",
+        "bytes": 3450027,
+        "sha256": "eb8f19c0973beaeb04712fb7d3817a6ac5aea1cc9d13f945ac8f648e954b68f6"
+      },
+      {
+        "file": "27b59de9b201dd85-state_in.bin.gz",
+        "bytes": 3450027,
+        "sha256": "eb8f19c0973beaeb04712fb7d3817a6ac5aea1cc9d13f945ac8f648e954b68f6"
+      },
+      {
+        "file": "611920ce66e1927d-state_init.bin.gz",
+        "bytes": 22462,
+        "sha256": "0c7a8bbe0c3598ca8e015e1322056c05bad1dd214bab3e61dd1b7e963aa25581"
+      },
+      {
+        "file": "509921391f70c25c-p.bin.gz",
+        "bytes": 27519,
+        "sha256": "418b30af85d501bb23691773dedbdad5da4252017b45058572fdc5a685cea4c2"
+      },
+      {
+        "file": "a35dfdb7f9879af7-module.wasm.gz",
+        "bytes": 668095,
+        "sha256": "084716f60875b567cfc24079093dff200865b467ad352596ea738861c7695405"
+      },
+      {
+        "file": "5a09f22adeef0569-state_out.bin.gz",
+        "bytes": 3450253,
+        "sha256": "e250cbf94bd82bb57d46c851d1cf1736407636b4acad35bc001b919673dcda94"
+      },
+      {
+        "file": "5a09f22adeef0569-state_in.bin.gz",
+        "bytes": 3450253,
+        "sha256": "e250cbf94bd82bb57d46c851d1cf1736407636b4acad35bc001b919673dcda94"
+      }
+    ]
+  }
 }

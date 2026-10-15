@@ -175,11 +175,14 @@ overlapped IMU prediction, so its wall time must not be described as solver CPU
 time. The new pin exceeds realtime on this host; these measurements do not
 establish 10× operation or equivalent performance on other computers.
 
-A fresh 30-frame CPU profile with that compiled physics pin attributed 64.2% of
+A fresh 30-frame CPU profile with that compiled physics pin and published native
+SLAM module `cead2d1d556eeb1f` attributed 64.2% of
 active samples to WASM, 9.1% to all JavaScript, 2.6% to GC and 24.0% to browser
 bindings/unattributed execution. JavaScript includes libraries and generated
-glue; inside the native SLAM worker it accounted for 1.6%. No individual app
-JavaScript function dominated. See `docs/profiles/compiled-browser-cpu.json`.
+glue; inside the native SLAM worker it accounted for 1.6%. The largest JavaScript
+leaf function accounted for 0.47% of all active samples. The top 25 functions,
+raw profile hashes and native delivery identity are recorded in
+[compiled-browser-cpu.json](../profiles/compiled-browser-cpu.json).
 Sampling changes throughput, and these are CPU proportions across threads,
 not TypeScript wall time or a predicted speedup.
 
@@ -244,6 +247,18 @@ and selection cost is 11.0 ms per camera frame; publication costs 42.2 ms over
 two interval calls, not 42.2 ms per call. The named timing evidence is retained in
 [native-slam-424-hotspots.json](../profiles/native-slam-424-hotspots.json).
 Instrumented and original modules produced identical positions.
+
+A separate browser-only override tested the compiler liveness change on the
+same Modelica main source, using exporter revision
+`54a38ac8e9668f17c4ae566fcc6d2cc44adc0b77-liveness` and native module
+`a35dfdb7f9879af7`. This unpublished delivery measured publication at 33.0 ms per
+camera frame, including 20.3 ms in its catalog-publication child and 12.2 ms
+outside the instrumented children. The parent-edge costs, exporter binary hash,
+overridden asset hashes and full source spans are retained in
+[native-slam-424-publish-hotspots.json](../profiles/native-slam-424-publish-hotspots.json).
+These costs describe that experimental override; the pinned delivery above and
+Modelica PR #18 have separate identities. Shared host load prevents treating
+these runs as a controlled speed comparison.
 
 An October 14 shared-host experiment on the existing 424 × 240 native Step
 module with Binaryen 129 `wasm-opt -O3 --all-features` produced identical truth
