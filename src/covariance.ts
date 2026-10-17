@@ -1,3 +1,4 @@
+import type {Estimate} from './types';
 /** Symmetric 3×3 eigensystem, columns of basis correspond to variances. */
 export function covarianceAxes(values:number[]) {
   if(values.length!==9||!values.every(Number.isFinite))throw new Error('Expected finite 3×3 covariance');
@@ -17,4 +18,17 @@ export function covarianceAxes(values:number[]) {
   const variances=[a[0],a[4],a[8]];
   if(variances.some(v=>v < -scale*1e-10))throw new Error('Covariance must be positive semidefinite');
   return {variances:variances.map(v=>Math.max(0,v)),basis};
+}
+
+/** Euclidean norm of a 3-vector state, or undefined when the estimator does not report one. */
+export function vectorNorm(values:ArrayLike<number|bigint>|undefined) {
+  if(values?.length!==3)return undefined;
+  const norm=Math.hypot(...Array.from(values,Number));
+  return Number.isFinite(norm)?norm:undefined;
+}
+const reading=(value:number|string|undefined,digits:number,unit:string)=>typeof value==='number'&&Number.isFinite(value)?`${value.toFixed(digits)} ${unit}`:'n/a';
+export function uncertaintySummary(estimate:Pick<Estimate,'uncertainty'|'diagnostics'>) {
+  const p=estimate.uncertainty?.positionCovariance;
+  const positionStd=p?.length===9?Math.sqrt(Math.max(0,p[0]+p[4]+p[8])):undefined;
+  return `Position σ trace norm ${reading(positionStd,3,'m')} · accelerometer bias ${reading(estimate.diagnostics?.accelBiasNorm,4,'m/s²')} · gyro bias ${reading(estimate.diagnostics?.gyroBiasNorm,5,'rad/s')}`;
 }

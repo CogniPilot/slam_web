@@ -1,6 +1,7 @@
 import {NativeProgram,type NativeProgramArtifact} from './modelica-native-program';
 import {imuIntervals} from './imu-intervals';
 import type {Estimate,SensorFrame} from './types';
+import {vectorNorm} from './covariance';
 
 type Cells=readonly number[]|Float64Array;
 export type LocalizationModel='RGBDInertialLocalizationStep'|'RGBDFastInertialLocalizationStep';
@@ -209,6 +210,9 @@ export class ModelicaLocalizationSession {
     const diagnostics:Record<string,number|string>={runtime:'Modelica native program',...resultFlags,
       matchCount:output('matchCount',1)[0],mapCandidateCount:output('mapCandidateCount',1)[0],
       uncertaintyRejectionReason:output('uncertaintyRejectionReason',1)[0],referenceEpoch:snapshot.state.referenceEpoch[0]};
+    for(const [name,bias] of [['accelBiasNorm',snapshot.state.accelBias],['gyroBiasNorm',snapshot.state.gyroBias]] as const){
+      const norm=vectorNorm(bias);if(norm!==undefined)diagnostics[name]=norm;
+    }
     return {snapshot:structuredClone(snapshot),flags:resultFlags,estimate:{x,y,z,quaternion:output('nextQuaternion',4),confidence,points,features,
       uncertainty:{positionCovariance:output('positionCovariance',9),attitudeCovariance:output('attitudeCovariance',9)},diagnostics,
       tracking:{matches:current.map((value,index)=>({current:value,previous:previous[index]})),accepted:resultFlags.observationAccepted===1,

@@ -44,3 +44,17 @@ test('a compiler that never finishes shows an error instead of a disabled Run bu
   await expect(page.locator('#startup-message')).toContainText('Unable to prepare SLAM Lab');
   await expect(page.locator('#startup-open')).toBeVisible();
 });
+
+test('a phone visitor can copy one line of run stats to report back',async({page})=>{
+  await page.addInitScript(()=>{
+    Object.defineProperty(navigator,'clipboard',{value:{writeText:async(text:string)=>{(window as any).__copied=text;}}});
+  });
+  await page.goto('/');
+  await runsInertialBaseline(page);
+  await page.getByRole('button',{name:'Copy stats',exact:true}).click();
+  await expect(page.locator('#status')).toContainText('Stats copied');
+  const copied:string=await page.evaluate(()=>(window as any).__copied);
+  expect(copied).toContain('sim/wall');
+  expect(copied).toContain('devicePixelRatio');
+  expect(copied).toContain('Frame work:');
+});

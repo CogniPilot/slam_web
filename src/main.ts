@@ -9,6 +9,7 @@ import {mountModelParameters} from './model-parameters-panel';
 import {modelParameterTargets,parameterTargetVersion} from './model-parameter-targets';
 import {nativeParametersFor,NATIVE_SLAM_PARAMETERS,type ParameterValues} from './model-parameters';
 import type { Estimate,Pose,RunRecord,SensorFrame,Truth } from './types';
+import { uncertaintySummary } from './covariance';
 import {ComparisonTracker,type TimedPose} from './comparison';
 import {validateSensorFrame} from './packet';
 import {createSourceEditor} from './source-editor';
@@ -96,6 +97,17 @@ if(world.graphics.acceleration==='software'){
 }
 const graphicsDescription=()=>world.sensorProfile==='software'?'Software fallback · tiny sensor images · reduced viewer resolution · no shadows or normal maps':GRAPHICS_DESCRIPTIONS[project.sceneDetail??'high'];
 el('frame-timings').insertAdjacentHTML('beforebegin','<div id="graphics-state"></div>');
+el('frame-timings').insertAdjacentHTML('afterend','<button id="copy-stats" type="button">Copy stats</button>');
+// One pasteable line so a phone run can report where its frame time goes.
+el('copy-stats').onclick=async()=>{
+  const text=(id:string)=>document.getElementById(id)?.textContent?.trim()??'';
+  const line=[`SLAM Lab ${location.href}`,`sim ${text('metric-time')} · sim/wall ${text('metric-rtf')} · devicePixelRatio ${devicePixelRatio}`,
+    ...['estimator-mode','frame-timings','performance-state','graphics-state','graph-state','uncertainty-state','navigation-state'].map(text),
+    Object.entries(latest?.estimate.diagnostics??{}).filter(([name,value])=>typeof value==='number'&&/keyframe|generation|vocabulary|accepted|rejection/i.test(name))
+      .map(([name,value])=>`${name}=${value}`).join(' ')].filter(Boolean).join(' | ');
+  try{await navigator.clipboard.writeText(line);status('Stats copied');}
+  catch{status(`Copy unavailable; stats: ${line}`);}
+};
 el('graphics-state').textContent=`Renderer: ${world.graphics.api} · ${world.graphics.renderer} · ${world.graphics.acceleration==='software'?'software rendering':world.graphics.acceleration==='hardware-reported'?'hardware driver reported':'driver acceleration unknown'} · Vision: native Modelica integration pending`;
 el('graphics-state').insertAdjacentHTML('afterend','<small id="scene-credit"></small>');
 el('scene-credit').insertAdjacentHTML('afterend','<div id="navigation-state">Navigation · GPS roof geofence demonstration</div><div id="lidar-state">LiDAR disabled</div>');
@@ -873,7 +885,7 @@ runtime.onFrame=(frame,estimate,truth,metrics)=>{
   el('flight-status').textContent=`${truth?'Simulation':'Measured input'} · frame ${frame.sequence} · ${displayed.pendingNodes.size?'Inertial baseline · visual SLAM pending':`${(metrics.confidence*100).toFixed(0)}% tracking · ${metrics.loops} loop matches`}${metrics.dropped?` · ${metrics.dropped} skipped in browser`:''}`;
   world.covariance.visible=!!estimate.uncertainty&&el<HTMLInputElement>('show-uncertainty').checked;
   el('tracking-state').textContent=estimate.tracking?`${estimate.tracking.matches.length} proposed feature matches${estimate.tracking.referenceSequence===undefined?'':` to frame ${estimate.tracking.referenceSequence}`} · ${estimate.tracking.reason}${estimate.diagnostics?.visualUpdates===undefined?'':` · ${estimate.diagnostics.visualUpdates} visual updates`}${estimate.diagnostics?.visualRejected===undefined?'':` / ${estimate.diagnostics.visualRejected} rejected`}`:'Matching diagnostics unavailable for this node';
-  el('uncertainty-state').textContent=estimate.uncertainty?`Position σ trace norm ${Number(estimate.diagnostics?.positionStd??0).toFixed(3)} m · accelerometer bias ${Number(estimate.diagnostics?.accelBiasNorm??0).toFixed(4)} m/s² · gyro bias ${Number(estimate.diagnostics?.gyroBiasNorm??0).toFixed(5)} rad/s`:'Covariance unavailable for this node';
+  el('uncertainty-state').textContent=estimate.uncertainty?uncertaintySummary(estimate):'Covariance unavailable for this node';
   el('graph-state').textContent=estimate.poseGraph?`${estimate.poseGraph.keyframes.length} keyframes · ${estimate.poseGraph.edges.length} constraints · ${metrics.loops} verified loops${estimate.diagnostics?.loopRejections===undefined?'':` · ${estimate.diagnostics.loopRejections} rejected candidates`}`:'Pose graph unavailable for this node';
   if(estimate.diagnostics?.loopWords!==undefined)el('graph-state').textContent+=` · ${estimate.diagnostics.loopWords} visual words / ${estimate.diagnostics.loopCandidates??0} retrieved candidates`;
   if(estimate.diagnostics?.landmarksConfirmed!==undefined)el('graph-state').textContent+=` · ${estimate.diagnostics.landmarksConfirmed} confirmed / ${estimate.diagnostics.landmarksTentative??0} tentative landmarks · ${estimate.diagnostics.landmarksPruned??0} pruned (${estimate.diagnostics.landmarksFreeSpacePruned??0} free-space contradictions)`;

@@ -136,7 +136,7 @@ export class NavigationHandoff {
       for(let i=0;i<3;i++)for(let j=0;j<3;j++)result.positionCovariance[i*3+j]+=(i===j?a.variance:0)+jacobian[i]*jacobian[j]*a.yawStd**2;
       if(result.positionCovariance[0]+result.positionCovariance[4]+result.positionCovariance[8]>9){result.position=null;result.positionCovariance=null;result.reason='Aligned SLAM navigation uncertainty exceeds3m';}
       else{result.source='slam';result.status='slam';result.reason=`${gpsReason}; aligned SLAM position`;} // No pose freezing on loss.
-    } else {result.status=this.relocalizing?'relocalizing':goodSlam?'unaligned':'unavailable';result.reason=this.relocalizing?'SLAM frame correction requires fresh GPS alignment':goodSlam?`${gpsReason}; SLAM has no observable GPS alignment`:`${gpsReason}; SLAM pose invalid or too uncertain`;}
+    } else {result.status=this.relocalizing?'relocalizing':goodSlam?'unaligned':'unavailable';result.reason=this.relocalizing?'Holding SLAM frame; GPS realignment pending after a loop closure or pose jump':goodSlam?`${gpsReason}; SLAM has no observable GPS alignment`:`${gpsReason}; SLAM pose invalid or too uncertain`;}
     if(result.source!=='none'&&goodSlam&&q&&this.alignment){
       const c=Math.cos(this.alignment.yaw/2),s=Math.sin(this.alignment.yaw/2); // Hamilton wxyz: left-compose world yaw.
       result.quaternion=[c*q[0]-s*q[3],c*q[1]-s*q[2],c*q[2]+s*q[1],c*q[3]+s*q[0]];
