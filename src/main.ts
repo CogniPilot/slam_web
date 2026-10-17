@@ -897,12 +897,12 @@ runtime.onFrame=(frame,estimate,truth,metrics)=>{
   if(estimate.diagnostics?.landmarksConfirmed!==undefined)el('graph-state').textContent+=` · ${estimate.diagnostics.landmarksConfirmed} confirmed / ${estimate.diagnostics.landmarksTentative??0} tentative landmarks · ${estimate.diagnostics.landmarksPruned??0} pruned (${estimate.diagnostics.landmarksFreeSpacePruned??0} free-space contradictions)`;
   if(estimate.diagnostics?.mappingStatus)el('graph-state').textContent+=` · ${estimate.diagnostics.mappingStatus}`;
   // Lockstep vehicles run concurrently; the frame waits for the slower one.
-  // Unaccounted is wall time between frames outside that vehicle's nodes.
+  // Frame wall splits into the real-time pacing wait, that vehicle's nodes and other time.
   const work=Array.from({length:runtime.vehicleCount},(_,index)=>{const timings=runtime.getVehicle(index as 0|1).lastTimings;
     return {index,timings,total:Object.values(timings).reduce((sum,ms)=>sum+ms,0)};});
   const clock=runtime.frameClock,slowest=Math.max(...work.map(vehicle=>vehicle.total));
   el('frame-timings').textContent=work.map(({index,timings,total})=>`${work.length>1?`Drone ${index+1} frame`:'Frame'} work: ${Object.entries(timings).map(([id,ms])=>`${id} ${ms.toFixed(1)} ms`).join(' · ')} · total ${total.toFixed(1)} ms`).join(' | ')
-    +(clock.intervalMs>0?` | frame wall ${clock.intervalMs.toFixed(1)} ms (step ${clock.stepMs.toFixed(1)} ms) · unaccounted ${(clock.intervalMs-slowest).toFixed(1)} ms`:'');
+    +(clock.intervalMs>0?` | frame wall ${clock.intervalMs.toFixed(1)} ms (step ${clock.stepMs.toFixed(1)} ms) · paced wait ${clock.pacedMs.toFixed(1)} ms · other ${clock.otherMs(slowest).toFixed(1)} ms`:'');
   if(displayWorld.captureTimings&&truth)el('frame-timings').textContent+=` · camera submission ${displayWorld.captureTimings.renderSubmission.toFixed(1)} ms / readback wait ${displayWorld.captureTimings.readback.toFixed(1)} ms`;
   el('record-state').textContent=`${displayed.records.length} recorded frames${displayed.recording?' · recording':''}`;
   el('record').textContent=displayed.recording?'■ Stop recording':'● Record dataset';

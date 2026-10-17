@@ -28,3 +28,18 @@ it('reset forgets earlier frames',()=>{
   expect(clock.recentRate).toBeUndefined();
   expect([clock.stepMs,clock.intervalMs]).toEqual([0,0]);
 });
+it('a paced frame reports its wait and no other time',()=>{
+  const clock=new FrameClock();
+  // 5 Hz at real time: 100 ms of node work, then the loop sleeps 100 ms.
+  clock.record(0,100,0.2);clock.record(200,300,0.4,100);
+  expect([clock.intervalMs,clock.pacedMs]).toEqual([200,100]);
+  expect(clock.otherMs(100)).toBe(0);
+});
+it('a frame behind real time reports other time and never a negative one',()=>{
+  const clock=new FrameClock();
+  // No pacing wait: the 250 ms frame ran 150 ms of nodes and 100 ms elsewhere.
+  clock.record(0,250,0.2);clock.record(250,500,0.4,0);
+  expect(clock.pacedMs).toBe(0);
+  expect(clock.otherMs(150)).toBe(100);
+  expect(clock.otherMs(260)).toBe(0);
+});
