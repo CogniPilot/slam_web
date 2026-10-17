@@ -67,6 +67,8 @@ export class Runtime {
   lastTimings:Record<string,number>={};
   /** Wall pacing of completed lockstep frames, including both vehicles. */
   readonly frameClock=new FrameClock();
+  private pacingSince?:number;
+  private pacedWaitMs=0;
   lastWorkerTimings:Record<string,Record<string,number>>={};
   lastTransportTimings:Record<string,FlowTiming>={};
   command:Command={forward:0,left:0,up:0,yaw:0};
@@ -236,9 +238,10 @@ export class Runtime {
     }
   }
   async step(){
-    const started=performance.now(),sequence=this.sequence;
+    const started=performance.now(),sequence=this.sequence,paced=this.pacedWaitMs;
+    this.pacedWaitMs=0;
     await this.stepFrame();
-    if(this.sequence!==sequence)this.frameClock.record(started,performance.now(),this.time);
+    if(this.sequence!==sequence)this.frameClock.record(started,performance.now(),this.time,paced);
   }
   private async stepFrame(){
     if(this.fleetFailure)throw this.fleetFailure;
@@ -422,6 +425,7 @@ export class Runtime {
   play() {
     if(this.running) return;
     this.running=true;this.startWall=performance.now();this.startTime=this.time;this.frameClock.reset();
+    this.pacingSince=undefined;this.pacedWaitMs=0;
     const epoch=++this.playbackEpoch;
     const active=()=>this.running&&this.playbackEpoch===epoch;
     if(this.secondary){this.secondary.startWall=this.startWall;this.secondary.startTime=this.secondary.time;}
@@ -429,6 +433,7 @@ export class Runtime {
       if(!active())return;
       // A pause/resume can leave an earlier epoch finishing its last frame.
       if(this.busy){setTimeout(loop,0);return;}
+      if(this.pacingSince!==undefined){this.pacedWaitMs=performance.now()-this.pacingSince;this.pacingSince=undefined;}
       const deadline=performance.now()+8;
       do{
         const before=performance.now();
@@ -443,7 +448,7 @@ export class Runtime {
         // Worker replies already yield to the event loop. Batch completed
         // frames for at most 8 ms instead of adding a clamped timer per frame.
         // Every acquisition/estimator event is still awaited by step().
-        if(delay>0||performance.now()>=deadline){setTimeout(loop,delay);return;}
+        if(delay>0||performance.now()>=deadline){if(delay>0)this.pacingSince=performance.now();setTimeout(loop,delay);return;}
       }while(active());
     };
     void loop();
