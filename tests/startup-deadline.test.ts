@@ -16,6 +16,12 @@ describe('startup deadlines',()=>{
     await checked;
     await expect(result).rejects.toThrow('Rendering worker did not finish within 20 s');
   });
+  it('adds advice to the message when given',async()=>{
+    const result=withDeadline(new Promise<never>(()=>{}),180_000,'Compiling the Modelica model','reloading the page may help');
+    const checked=expect(result).rejects.toThrow('Compiling the Modelica model did not finish within 180 s · reloading the page may help');
+    await vi.advanceTimersByTimeAsync(180_000);
+    await checked;
+  });
   it('passes through failures from the work itself',async()=>{
     await expect(withDeadline(Promise.reject(new Error('out of memory')),1000,'Compiler')).rejects.toThrow('out of memory');
   });

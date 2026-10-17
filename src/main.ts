@@ -947,7 +947,7 @@ void (async()=>{
     if(openingError&&savedText!==undefined)await recoverDefaultModels(savedText,openingError);
     else{
       // Browsers that block site storage still run the defaults; only saving is disabled.
-      await withDeadline(compile(),STARTUP_COMPILE_DEADLINE_MS,'Compiling the Modelica model');
+      await withDeadline(compile(),STARTUP_COMPILE_DEADLINE_MS,'Compiling the Modelica model','a slow phone may need more time, so reloading the page may help');
       if(!ready&&selectedNativeDefault){project.slamBackend='inertial';nativeDefaultFailed=true;await compile();}
       if(!ready&&savedText!==undefined&&compilationError!==undefined)await recoverDefaultModels(savedText,compilationError);
       else if(ready)status(nativeDefaultFailed?'Ready · native SLAM could not start; inertial baseline selected':
