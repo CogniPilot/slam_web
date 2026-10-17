@@ -47,7 +47,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===20&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Full128 catalog / 350x49 descriptors / 256 vocabulary words: catalog-bound query, final feature and vocabulary slots, deterministic rank, pending eviction, age, whole-frame refusal, metadata and history checks',
+  scope:'Full64 catalog / 350x49 descriptors / 256 vocabulary words: catalog-bound query, final feature and vocabulary slots, deterministic rank, pending eviction, age, whole-frame refusal, metadata and history checks',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   loopConstraintsAdmitted:false,fullSlamAccepted:false};

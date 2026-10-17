@@ -201,7 +201,7 @@ package RGBDGraphProcessingTests
   algorithm
     assert(RGBDKeyframes.keyframeCapacity == 64 and RGBDGraphMeasurements.edgeCapacity == 256
       and RGBDKeyframes.featureCapacity == 350 and RGBDCatalogMapping.mapCapacity == 14400,
-      "GraphProcessing tests retain full32/256/350/14400 capacities");
+      "GraphProcessing tests retain full64/256/350/14400 capacities");
     checks := fill(false,checkCount);
     fresh := RGBDGraphProcessing.Empty(RGBDLocalizationCatalog.Empty(RGBDLocalizationCatalog.EmptyEstimator(),1,17));
     checks[1] := RGBDGraphProcessing.Valid(fresh);
