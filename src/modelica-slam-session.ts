@@ -1,6 +1,7 @@
 import {SlamNativeProgram,type SlamNativeFetch,type SlamNativeManifest} from './slam-native-program';
 import type {SlamInitialFrame,SlamIntervalFrame} from './modelica-slam-frame';
 import type {Estimate} from './types';
+import {vectorNorm} from './covariance';
 import {checkedLoopClosureSettings,LOOP_CLOSURE_PARAMETERS,type LoopClosureSettings} from './loop-closure-settings';
 import {checkedParameterValues,type ParameterValues} from './model-parameters';
 
@@ -185,6 +186,10 @@ export class ModelicaSlamSession {
     if(ready)diagnostics.loopVocabularyReady=Number(ready[0]);
     const covariance=program.stateRun('estimator.localization.estimator.covariance')?.view;
     const block=(start:number)=>Array.from({length:9},(_,index)=>Number(covariance![(start+Math.floor(index/3))*15+start+index%3]));
+    for(const [name,state] of [['accelBiasNorm','accelBias'],['gyroBiasNorm','gyroBias']] as const){
+      const norm=vectorNorm(program.stateRun(`estimator.localization.estimator.${state}`)?.view);
+      if(norm!==undefined)diagnostics[name]=norm;
+    }
     const uncertainty=covariance?.length===225?{positionCovariance:block(0),attitudeCovariance:block(6)}:undefined;
     const scalar=(name:string)=>derived[name]??program.output(name)?.[0];
     let loopClosure:Estimate['loopClosure'];
