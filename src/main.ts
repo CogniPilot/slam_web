@@ -27,6 +27,7 @@ import {ColorPreview} from './color-preview';
 import {createSourceExplorer} from './source-explorer';
 import {mountWorkspacePanes} from './workspace-panes';
 import {startupScreen} from './startup-screen';
+import {STARTUP_COMPILE_DEADLINE_MS,VIEWER_READY_DEADLINE_MS,withDeadline} from './startup-deadline';
 import {createModelicaDocs} from './modelica-docs';
 import {createAssistantPanel} from './assistant-panel';
 import {runAssistantSimulation} from './assistant-simulation';
@@ -937,22 +938,24 @@ void (async()=>{
     startup.stage(1,'Preparing the scene and graphics…');
     if(typeof OffscreenCanvas!=='undefined'&&typeof HTMLCanvasElement.prototype.transferControlToOffscreen==='function'){
       const candidate=new WorkerViewer(world,el('world'));
-      try{await candidate.ready;viewer=candidate;candidate.presentationVisible(viewerPresented);world.onBuild=(environment,detail,preservePresentation)=>candidate.configure(environment,detail,project.carsEnabled??true,project.peopleEnabled??true,preservePresentation);world.onPose=truth=>candidate.pose(truth);world.onOtherPose=truth=>candidate.otherPose(truth);world.onVehicleCount=count=>candidate.vehicleCount(count);world.onActors=(cars,people)=>candidate.actors(cars,people);world.onActorMotion=frame=>candidate.actorMotion(frame);world.onEnvironmentVisible=visible=>candidate.sceneVisible(visible);world.onLighting=mode=>candidate.lighting(mode);await world.enableSensorWorker();}
+      try{await withDeadline(candidate.ready,VIEWER_READY_DEADLINE_MS,'Rendering worker');viewer=candidate;candidate.presentationVisible(viewerPresented);world.onBuild=(environment,detail,preservePresentation)=>candidate.configure(environment,detail,project.carsEnabled??true,project.peopleEnabled??true,preservePresentation);world.onPose=truth=>candidate.pose(truth);world.onOtherPose=truth=>candidate.otherPose(truth);world.onVehicleCount=count=>candidate.vehicleCount(count);world.onActors=(cars,people)=>candidate.actors(cars,people);world.onActorMotion=frame=>candidate.actorMotion(frame);world.onEnvironmentVisible=visible=>candidate.sceneVisible(visible);world.onLighting=mode=>candidate.lighting(mode);await world.enableSensorWorker();}
       catch(error){candidate.worker.terminate();candidate.canvas.remove();viewer=undefined;el('world').appendChild(world.renderer.domElement);world.controls.disconnect();world.controls.connect(world.renderer.domElement);world.onBuild=async()=>{};world.onPose=()=>{};world.onOtherPose=()=>{};world.onVehicleCount=async()=>{};world.onActors=()=>{};world.onActorMotion=()=>{};world.onEnvironmentVisible=()=>{};world.onLighting=()=>{};status(`Rendering worker unavailable: ${error} · using main-thread renderer`);}
     }
     await buildProjectScene();
     initialized=true;finishInitialization();
     startup.stage(2,'Compiling your Modelica model…');
     if(openingError&&savedText!==undefined)await recoverDefaultModels(savedText,openingError);
-    else if(!localPersistenceBlocked){
-      await compile();
+    else{
+      // Browsers that block site storage still run the defaults; only saving is disabled.
+      await withDeadline(compile(),STARTUP_COMPILE_DEADLINE_MS,'Compiling the Modelica model');
       if(!ready&&selectedNativeDefault){project.slamBackend='inertial';nativeDefaultFailed=true;await compile();}
       if(!ready&&savedText!==undefined&&compilationError!==undefined)await recoverDefaultModels(savedText,compilationError);
       else if(ready)status(nativeDefaultFailed?'Ready · native SLAM could not start; inertial baseline selected':
-        runtime.activeVehicle.slamProgram?'Ready · click Run to start RGB-D SLAM':'Ready · click Run to start the Modelica inertial experiment');
+        runtime.activeVehicle.slamProgram?'Ready · click Run to start RGB-D SLAM':
+        localPersistenceBlocked?'Ready · click Run to start · this browser blocks site storage, so download your project to keep changes':
+        'Ready · click Run to start the Modelica inertial experiment');
     }
-    else{el<HTMLButtonElement>('apply').disabled=false;el<HTMLButtonElement>('reset').disabled=false;}
-    if(!ready&&(!localPersistenceBlocked||savedText!==undefined)){startup.fail(el('status').textContent);return;}
+    if(!ready){startup.fail(el('status').textContent);return;}
     startup.stage(3,'Preparing the editor and first view…');
     await modelsReady;
     if(viewer)await viewer.present();else world.render();
