@@ -799,7 +799,12 @@ window.addEventListener('keydown',e=>{
 });
 window.addEventListener('keyup',e=>{keys.delete(e.key.toLowerCase());cameraControls.keys.delete(e.key.toLowerCase());updateCommand();});
 window.addEventListener('blur',clearKeys);
-document.addEventListener('visibilitychange',()=>{if(document.hidden)clearKeys();});
+// A hidden page throttles the simulation; that wall time is not counted.
+let hiddenSince:number|undefined;
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){clearKeys();hiddenSince=performance.now();}
+  else if(hiddenSince!==undefined){runtime.excludeHiddenWall(performance.now()-hiddenSince);hiddenSince=undefined;}
+});
 document.addEventListener('focusin',e=>{if(isTextEntry(e.target))clearKeys();});
 function drawSensors(frame:SensorFrame,estimate:Estimate) {
   const rgb=el<HTMLCanvasElement>('rgb'),ctx=rgb.getContext('2d')!;
@@ -880,7 +885,7 @@ runtime.onFrame=(frame,estimate,truth,metrics)=>{
   pendingSensorPreview={frame,estimate};
   el('sim-time').textContent=`t = ${metrics.time.toFixed(2)} s`;el('metric-time').innerHTML=`${metrics.time.toFixed(2)} <em>s</em>`;
   el('metric-ate').innerHTML=metrics.ate===null?'Unavailable':`${metrics.ate.toFixed(3)} <em>m</em>`;el('metric-features').textContent=displayed.pendingNodes.size?'Pending':String(metrics.features);
-  el('metric-points').textContent=metrics.points.toLocaleString();el('metric-rtf').innerHTML=`${metrics.rtf.toFixed(2)} <em>×</em>`;
+  el('metric-points').textContent=metrics.points.toLocaleString();el('metric-rtf').innerHTML=`${metrics.rtf.toFixed(2)} <em>×</em>${runtime.frameClock.recentRate===undefined?'':` <em>· last 10 s ${runtime.frameClock.recentRate.toFixed(2)} ×</em>`}`;
   el('metric-time').previousElementSibling!.textContent=truth?'SIM TIME':'SENSOR TIME';
   el('metric-rtf').previousElementSibling!.textContent=truth?'SIM / WALL TIME':'SENSOR / WALL TIME';
   el('flight-status').textContent=`${truth?'Simulation':'Measured input'} · frame ${frame.sequence} · ${displayed.pendingNodes.size?'Inertial baseline · visual SLAM pending':`${(metrics.confidence*100).toFixed(0)}% tracking · ${metrics.loops} loop matches`}${metrics.dropped?` · ${metrics.dropped} skipped in browser`:''}`;
@@ -888,10 +893,16 @@ runtime.onFrame=(frame,estimate,truth,metrics)=>{
   el('tracking-state').textContent=estimate.tracking?`${estimate.tracking.matches.length} proposed feature matches${estimate.tracking.referenceSequence===undefined?'':` to frame ${estimate.tracking.referenceSequence}`} · ${estimate.tracking.reason}${estimate.diagnostics?.visualUpdates===undefined?'':` · ${estimate.diagnostics.visualUpdates} visual updates`}${estimate.diagnostics?.visualRejected===undefined?'':` / ${estimate.diagnostics.visualRejected} rejected`}`:'Matching diagnostics unavailable for this node';
   el('uncertainty-state').textContent=estimate.uncertainty?uncertaintySummary(estimate):'Covariance unavailable for this node';
   el('graph-state').textContent=estimate.poseGraph?`${estimate.poseGraph.keyframes.length} keyframes · ${estimate.poseGraph.edges.length} constraints · ${metrics.loops} verified loops${estimate.diagnostics?.loopRejections===undefined?'':` · ${estimate.diagnostics.loopRejections} rejected candidates`}`:'Pose graph unavailable for this node';
-  if(estimate.diagnostics?.loopWords!==undefined)el('graph-state').textContent+=` · ${estimate.diagnostics.loopWords} visual words / ${estimate.diagnostics.loopCandidates??0} retrieved candidates`;
+  if(estimate.diagnostics?.loopWords!==undefined)el('graph-state').textContent+=` · ${estimate.diagnostics.loopWords} visual words / ${estimate.diagnostics.loopCandidates??0} candidates this frame`;
   if(estimate.diagnostics?.landmarksConfirmed!==undefined)el('graph-state').textContent+=` · ${estimate.diagnostics.landmarksConfirmed} confirmed / ${estimate.diagnostics.landmarksTentative??0} tentative landmarks · ${estimate.diagnostics.landmarksPruned??0} pruned (${estimate.diagnostics.landmarksFreeSpacePruned??0} free-space contradictions)`;
   if(estimate.diagnostics?.mappingStatus)el('graph-state').textContent+=` · ${estimate.diagnostics.mappingStatus}`;
-  el('frame-timings').textContent=`Frame work: ${Object.entries(displayed.lastTimings).map(([id,ms])=>`${id} ${ms.toFixed(1)} ms`).join(' · ')}`;
+  // Lockstep vehicles run concurrently; the frame waits for the slower one.
+  // Unaccounted is wall time between frames outside that vehicle's nodes.
+  const work=Array.from({length:runtime.vehicleCount},(_,index)=>{const timings=runtime.getVehicle(index as 0|1).lastTimings;
+    return {index,timings,total:Object.values(timings).reduce((sum,ms)=>sum+ms,0)};});
+  const clock=runtime.frameClock,slowest=Math.max(...work.map(vehicle=>vehicle.total));
+  el('frame-timings').textContent=work.map(({index,timings,total})=>`${work.length>1?`Drone ${index+1} frame`:'Frame'} work: ${Object.entries(timings).map(([id,ms])=>`${id} ${ms.toFixed(1)} ms`).join(' · ')} · total ${total.toFixed(1)} ms`).join(' | ')
+    +(clock.intervalMs>0?` | frame wall ${clock.intervalMs.toFixed(1)} ms (step ${clock.stepMs.toFixed(1)} ms) · unaccounted ${(clock.intervalMs-slowest).toFixed(1)} ms`:'');
   if(displayWorld.captureTimings&&truth)el('frame-timings').textContent+=` · camera submission ${displayWorld.captureTimings.renderSubmission.toFixed(1)} ms / readback wait ${displayWorld.captureTimings.readback.toFixed(1)} ms`;
   el('record-state').textContent=`${displayed.records.length} recorded frames${displayed.recording?' · recording':''}`;
   el('record').textContent=displayed.recording?'■ Stop recording':'● Record dataset';

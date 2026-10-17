@@ -57,7 +57,7 @@ export class LoopClosureHistory {
       const loop=estimate.loopClosure,d=estimate.diagnostics??{};
       this.detailsAvailable=!!loop;
       if(loop?.attempted){
-        this.lastDecision=loop.retrievalReason!==0?loopRetrievalReason(loop.retrievalReason):loop.candidateCount?`${loop.candidateCount} retrieved candidates evaluated`:'No eligible loop candidates reported after retrieval filters';
+        this.lastDecision=loop.retrievalReason!==0?loopRetrievalReason(loop.retrievalReason):loop.candidateCount?`${loop.candidateCount} candidates evaluated in the latest retrieval`:'No eligible loop candidates reported after retrieval filters';
         const current=loop.candidates.length?keyframeThumbnail(frame,loop.candidates[0].currentId,frame.time,frame.sequence):undefined;
         for(const candidate of loop.candidates){
           const committed=graph.edges.some(edge=>edge.kind==='loop'&&graph.keyframes[edge.from]?.id===candidate.referenceId&&graph.keyframes[edge.to]?.id===candidate.currentId);
