@@ -16,6 +16,7 @@ import type {GpsSample} from './world-navigation';
 import {SensorClock,sensorRates,validateSensorRates,type SensorRates} from './sensor-clock';
 import {checkedLoopClosureSettings,type LoopClosureSettings} from './loop-closure-settings';
 import {nativeParametersFor,NATIVE_SLAM_PARAMETERS,type ParameterValues} from './model-parameters';
+import {FrameClock} from './frame-clock';
 export interface Metrics { time:number; ate:number|null; currentError:number|null; orientationError:number|null; confidence:number; points:number; features:number; rtf:number; frames:number; loops:number; dropped:number }
 export interface FlowTiming {totalMs:number;bufferBytes:number|null}
 export interface VehicleFrame {frame:SensorFrame;estimate:Estimate;truth:Truth|undefined;metrics:Metrics}
@@ -64,6 +65,8 @@ export class Runtime {
   dt=1/90;
   time=0;
   lastTimings:Record<string,number>={};
+  /** Wall pacing of completed lockstep frames, including both vehicles. */
+  readonly frameClock=new FrameClock();
   lastWorkerTimings:Record<string,Record<string,number>>={};
   lastTransportTimings:Record<string,FlowTiming>={};
   command:Command={forward:0,left:0,up:0,yaw:0};
@@ -233,6 +236,11 @@ export class Runtime {
     }
   }
   async step(){
+    const started=performance.now(),sequence=this.sequence;
+    await this.stepFrame();
+    if(this.sequence!==sequence)this.frameClock.record(started,performance.now(),this.time);
+  }
+  private async stepFrame(){
     if(this.fleetFailure)throw this.fleetFailure;
     if(this.fleetStepping)throw new Error('A fleet lockstep frame is already executing');
     if(!this.secondary)return this.stepVehicle();
@@ -405,9 +413,15 @@ export class Runtime {
       else{this.lastFrame=delivered;this.publishFrame();}
     } finally {if(prediction)await prediction.catch(()=>{});this.stepping=false;this.externalStep=false;}
   }
+  /** Removes wall time spent with the page hidden from the sim/wall rates. */
+  excludeHiddenWall(ms:number){
+    if(!this.running||!(ms>0))return;
+    this.startWall+=ms;if(this.secondary)this.secondary.startWall+=ms;
+    this.frameClock.reset();
+  }
   play() {
     if(this.running) return;
-    this.running=true;this.startWall=performance.now();this.startTime=this.time;
+    this.running=true;this.startWall=performance.now();this.startTime=this.time;this.frameClock.reset();
     const epoch=++this.playbackEpoch;
     const active=()=>this.running&&this.playbackEpoch===epoch;
     if(this.secondary){this.secondary.startWall=this.startWall;this.secondary.startTime=this.secondary.time;}
