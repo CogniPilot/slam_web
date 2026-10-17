@@ -109,7 +109,7 @@ el('copy-stats').onclick=async()=>{
   try{await navigator.clipboard.writeText(line);status('Stats copied');}
   catch{status(`Copy unavailable; stats: ${line}`);}
 };
-el('graphics-state').textContent=`Renderer: ${world.graphics.api} · ${world.graphics.renderer} · ${world.graphics.acceleration==='software'?'software rendering':world.graphics.acceleration==='hardware-reported'?'hardware driver reported':'driver acceleration unknown'} · Vision: native Modelica integration pending`;
+el('graphics-state').textContent=`Renderer: ${world.graphics.api} · ${world.graphics.renderer} · ${world.graphics.acceleration==='software'?'software rendering':world.graphics.acceleration==='hardware-reported'?'hardware driver reported':'driver acceleration unknown'}`;
 el('graphics-state').insertAdjacentHTML('afterend','<small id="scene-credit"></small>');
 el('scene-credit').insertAdjacentHTML('afterend','<div id="navigation-state">Navigation · GPS roof geofence demonstration</div><div id="lidar-state">LiDAR disabled</div>');
 const runtime=new Runtime(world);
