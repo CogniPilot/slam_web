@@ -1,7 +1,7 @@
 // Numerical reference gate only. Production never allocates a dense graph matrix.
 import fs from 'node:fs';import path from 'node:path';import os from 'node:os';
 import {createHash} from 'node:crypto';import {fileURLToPath} from 'node:url';import {spawnSync} from 'node:child_process';
-import {fixture,denseInformation,factor,selectedInverse,eigenvalues,difference,maxAbs} from './graph-covariance-reference.mjs';
+import {nodeCapacity as N,fixture,denseInformation,factor,selectedInverse,eigenvalues,difference,maxAbs} from './graph-covariance-reference.mjs';
 const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const model='ModelicaPoseGraphCovarianceAcceptance',count=19,stopTime=19/8;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});
@@ -56,13 +56,13 @@ if(fs.existsSync(csv)){
    if(success){
     checks.symmetry=maxAbs(difference(upper,upper[0].map((_,c)=>upper.map(r=>r[c]))))<1e-10;
     checks.boundIdentity=maxAbs(difference(upper,lower.map((r,i)=>r.map((v,j)=>v+error[i][j]))))<1e-10;
-    const active=scenario===17?1:scenario===7?96:128;
+    const active=scenario===17?1:scenario===7?3*N/4:N;
     checks.fullTree=get(row,'activeNodes')===active&&get(row,'treeEdges')===active-1;
     if(scenario===17)checks.anchorOnlyZero=maxAbs(upper)===0&&maxAbs(lower)===0&&maxAbs(error)===0;
     else{
      const family=scenario===6?6:scenario===7?7:1;
      if(!denseCache.has(family)){const data=fixture(family),full=denseInformation(data);denseCache.set(family,{data,factor:factor(full),dimension:full.n});}
-     const dense=denseCache.get(family),current=scenario===3?1:scenario===7?95:128,reference=scenario===4?1:scenario===5?128:64;
+     const dense=denseCache.get(family),current=scenario===3?1:scenario===7?3*N/4-1:N,reference=scenario===4?1:scenario===5?N:N/2;
      const exact=selectedInverse(dense.factor,current,reference),scale=Math.max(1,maxAbs(exact)),tolerance=3e-5*scale;
      const lowerGap=Math.min(...eigenvalues(difference(exact,lower))),upperGap=Math.min(...eigenvalues(difference(upper,exact)));
      metrics={...metrics,denseFreeDimension:dense.dimension,all144Compared:true,maxUpperDifference:maxAbs(difference(upper,exact)),minimumLowerGapEigenvalue:lowerGap,minimumUpperGapEigenvalue:upperGap,tolerance};
@@ -88,7 +88,7 @@ if(fs.existsSync(csv)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=processResult.status===0&&bookendsEqual&&csvValid&&cases.length===count&&cases.every(c=>c.pass)&&log.includes('The simulation finished successfully.');
 const report={status:pass?'OMC_MODELICA_NUMERICAL_REFERENCE_PASS':'FAILED_OR_INCOMPLETE',compilerVersion:version.stdout.trim(),sources,bookendsEqual,
- scope:'Full128-node/256-edge source; independent central-difference Jacobians and dense762 solve test only; selected12D full144-cell/tangent/cross/early-error/anchor/refusal checks. Numerical float scope, not directed-rounding certification.',
+ scope:`Full${N}-node/256-edge source; independent central-difference Jacobians and dense${6*(N-1)} solve test only; selected12D full144-cell/tangent/cross/early-error/anchor/refusal checks. Numerical float scope, not directed-rounding certification.`,
  cases,csvReport,processStatus:processResult.status,recheckedOriginalReceipt:recheck?{reportSHA256:sha(fs.readFileSync(path.join(output,'report.json'))),originalSources:original.sources}:null,roundoffCertified:false,rumocaArtifactIssued:false,browserIntegrated:false,fullSlamAccepted:false};
 const reportName=recheck?'recheck-report.json':'report.json';
 fs.writeFileSync(path.join(output,reportName),JSON.stringify(report,null,2)+'\n');

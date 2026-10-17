@@ -1,11 +1,11 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models f367ef4cff7ce8bf2628662a695598106ff7f17c; edit the canonical packages there.
 // Landmark coordinates stay local to stable keyframe identities. A graph
 // correction is a proposal until every persistent owner commits it together.
 package RGBDMapAnchors
   constant Integer imageHeight = 90;
   constant Integer imageWidth = 160;
   constant Integer mapCapacity = imageHeight*imageWidth;
-  constant Integer keyframeCapacity = 128;
+  constant Integer keyframeCapacity = 64;
   constant Integer dimension = 3;
   constant Integer identifierLimit = 1000000000;
 

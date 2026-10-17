@@ -30,6 +30,6 @@ writeFileSync(resolve(output,'source-manifest.json'),JSON.stringify({schemaVersi
   modelNames:['RGBDFastCatalogLocalizationInitialize','RGBDFastCatalogLocalizationStep'],
   sourceSha256:sha(source),composition:'exact authored files joined with one newline, in this order',
   sources:files.map(file=>({path:file.path,sha256:sha(file.source),bytes:Buffer.byteLength(file.source)})),
-  scope:'Full90x160 FAST/350 localization, explicit initialization, frame bridge, image-attempt receipts and conditional128/256/14400 catalog/map publication; graph correction not implemented',
+  scope:'Full90x160 FAST/350 localization, explicit initialization, frame bridge, image-attempt receipts and conditional32/256/14400 catalog/map publication; graph correction not implemented',
   compilerInvoked:false,nativeArtifactIssued:false,browserIntegrated:false,fullSlamAccepted:false},null,2)+'\n');
 console.log(JSON.stringify({directory:output,sourceSha256:sha(source),sourceBytes:Buffer.byteLength(source),files:files.length}));

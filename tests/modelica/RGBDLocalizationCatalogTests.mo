@@ -130,20 +130,20 @@ package RGBDLocalizationCatalogTests
     Real covariance[15,15]; Real vocabulary[256,49]; Real enabled[256]; Real candidates[350,3]; Real mask[350]; Real local[3]; Real world[3];
     Real h; Real timestamp; Real producerAccepted; Real observationAccepted; Real captureAccepted;
     Boolean imageOn; Boolean initializing; Boolean frameAccepted; Boolean requested; Boolean accepts;
-    Integer epoch; Integer expectedReason; Integer frameReason;
+    Integer epoch; Integer expectedReason; Integer frameReason; Integer cap = RGBDKeyframes.keyframeCapacity;
   algorithm
-    assert(trials == 96 and RGBDKeyframes.featureCapacity == 350 and RGBDKeyframes.keyframeCapacity == 128
+    assert(trials == 96 and RGBDKeyframes.featureCapacity == 350 and RGBDKeyframes.keyframeCapacity == 64
       and RGBDGraphMeasurements.edgeCapacity == 256 and RGBDCatalogMapping.mapCapacity == 14400,
-      "Publish controls retain full350/49/15+6/128/256/14400/96 domains");
+      "Publish controls retain full350/49/15+6/64/256/14400/96 domains");
     reference := RGBDLoopVerificationTests.Reference(false);
     for row in 1:15 loop for column in 1:15 loop covariance[row,column] := (if row == column then 0.02*row else 0)+0.0001*row*column; end for; end for;
     priorEstimator := RGBDLocalizationCatalog.EmptyEstimator(reference.bodyPosition,{0.1,0.2,0.3},reference.bodyRotation,{0.01,0.02,0.03},{0.001,0.002,0.003},covariance);
-    reference.epoch := 128; priorEstimator.lastUsedEpoch := 127; priorEstimator := Captured(priorEstimator,reference);
+    reference.epoch := cap; priorEstimator.lastUsedEpoch := cap-1; priorEstimator := Captured(priorEstimator,reference);
     base := RGBDLocalizationCatalog.Empty(priorEstimator,1,17,1,17); base.initialized := true; base.predictionTime := 140; base.steps := 199;
     base.lastProcessedImageEpoch := 199; base.lastProcessedImageTime := 140;
     base.catalog := RGBDCatalogLoopTests.FullCatalog(false); base.graph := RGBDGraphMeasurementTests.FullState();
-    base.map.catalogRevision := 128; base.map.frame := 199; base.map.imageEpoch := 199; base.map.imageTime := 140;
-    base.referenceBirth.epoch := 128; base.referenceBirth.sequence := 1; base.referenceBirth.catalogId := 128;
+    base.map.catalogRevision := cap; base.map.frame := 199; base.map.imageEpoch := 199; base.map.imageTime := 140;
+    base.referenceBirth.epoch := cap; base.referenceBirth.sequence := 1; base.referenceBirth.catalogId := cap;
     predicted := priorEstimator; predicted.position := priorEstimator.position+{0.001,-0.002,0.003}; predicted.velocity := {1,2,3};
     predicted.accelBias := {0.02,0.03,0.04}; predicted.gyroBias := {0.002,0.003,0.004};
     for row in 1:15 loop
@@ -156,22 +156,22 @@ package RGBDLocalizationCatalogTests
       previous := base; proposed := predicted; h := 1.0/90+clock*0.001; timestamp := 140+h; epoch := 200;
       producerAccepted := 1; observationAccepted := 1; captureAccepted := 0; imageOn := true; initializing := false;
       frameAccepted := true; frameReason := 0; requested := true; accepts := true; expectedReason := 0;
-      measurement := reference; measurement.id := 129; measurement.epoch := epoch; measurement.imageTime := timestamp; measurement.histogram := zeros(256);
+      measurement := reference; measurement.id := cap+1; measurement.epoch := epoch; measurement.imageTime := timestamp; measurement.histogram := zeros(256);
       measurement.bodyPosition := proposed.position; measurement.bodyRotation := proposed.rotation;
       for row in 1:6 loop for column in 1:6 loop measurement.poseCovariance[row,column] := proposed.covariance[if row <= 3 then row else row+3,if column <= 3 then column else column+3]; end for; end for;
       if scenario == 2 then observationAccepted := 0;
       elseif scenario == 3 then measurement.poseCovariance[1,4] := measurement.poseCovariance[1,4]+0.1;
       elseif scenario == 4 then
         previous.map.occupied[14400] := 1; previous.map.point[14400,:] := {5,6,7}; previous.map.localPoint[14400,:] := {1,2,3};
-        previous.map.anchorId[14400] := 128; previous.map.anchorSlot[14400] := 128; previous.map.confidence[14400] := 3;
+        previous.map.anchorId[14400] := cap; previous.map.anchorSlot[14400] := cap; previous.map.confidence[14400] := 3;
         previous.map.lastSeen[14400] := 141; previous.map.lastFrame[14400] := 199;
       elseif scenario == 5 then
-        previous.predictionTime := 128; previous.lastProcessedImageTime := 128; previous.map.imageTime := 128;
-        timestamp := 128+h; measurement.imageTime := timestamp; observationAccepted := 0; captureAccepted := 1;
-        proposed.lastUsedEpoch := 127; proposed := Captured(proposed,measurement);
+        previous.predictionTime := cap; previous.lastProcessedImageTime := cap; previous.map.imageTime := cap;
+        timestamp := cap+h; measurement.imageTime := timestamp; observationAccepted := 0; captureAccepted := 1;
+        proposed.lastUsedEpoch := cap-1; proposed := Captured(proposed,measurement);
       elseif scenario == 6 then proposed.lastUsedEpoch := 199; accepts := false; expectedReason := 6;
       elseif scenario == 7 then
-        observationAccepted := 0; captureAccepted := 1; proposed.lastUsedEpoch := 127; proposed := Captured(proposed,measurement);
+        observationAccepted := 0; captureAccepted := 1; proposed.lastUsedEpoch := cap-1; proposed := Captured(proposed,measurement);
         proposed.crossCovariance := zeros(15,6); proposed.referenceCovariance := identity(6); accepts := false; expectedReason := 6;
       elseif scenario == 8 then proposed.referencePosition[1] := proposed.referencePosition[1]+0.1; accepts := false; expectedReason := 6;
       elseif scenario == 9 then proposed.crossCovariance[15,6] := 1000; accepts := false; expectedReason := 5;
@@ -224,7 +224,7 @@ package RGBDLocalizationCatalogTests
         expected.map.frame := previous.map.frame+1; expected.map.imageEpoch := epoch; expected.map.imageTime := timestamp;
         expected.map.occupied[1] := 1; expected.map.point[1,:] := world;
         expected.map.localPoint[1,:] := transpose(reference.bodyRotation)*(world-reference.bodyPosition);
-        expected.map.anchorId[1] := 128; expected.map.anchorSlot[1] := 128; expected.map.confidence[1] := 1;
+        expected.map.anchorId[1] := cap; expected.map.anchorSlot[1] := cap; expected.map.confidence[1] := 1;
         expected.map.lastSeen[1] := timestamp; expected.map.lastFrame[1] := previous.map.frame+1;
         checks[scenario] := result.mappingAccepted and not result.decision.captureRequested and expected.referenceBirth.catalogId == 0;
       else checks[scenario] := not result.mappingAccepted and RGBDCatalogObservationTests.EmptyProblem(result.problem);

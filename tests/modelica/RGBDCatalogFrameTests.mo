@@ -21,24 +21,24 @@ package RGBDCatalogFrameTests
     Real vocabulary[256,49]; Real enabled[256]; Real poisonedVocabulary[256,49]; Real poisonedEnabled[256];
     Real candidates[350,3]; Real mask[350]; Real local[3]; Real world[3];
   algorithm
-    assert(trials == 96 and RGBDKeyframes.keyframeCapacity == 128 and RGBDGraphMeasurements.edgeCapacity == 256
+    assert(trials == 96 and RGBDKeyframes.keyframeCapacity == 64 and RGBDGraphMeasurements.edgeCapacity == 256
       and RGBDKeyframes.featureCapacity == 350 and RGBDCatalogMapping.mapCapacity == 14400,
-      "Frame acceptance retains full128/256/350/14400/96 domains");
+      "Frame acceptance retains full32/256/350/14400/96 domains");
     catalog := RGBDCatalogLoopTests.FullCatalog(false); graph := RGBDGraphMeasurementTests.FullState();
     reference := RGBDLoopVerificationTests.Reference(false); current := reference;
-    current.id := 129; current.epoch := 129; current.imageTime := 128+1.0/90;
+    current.id := RGBDKeyframes.keyframeCapacity+1; current.epoch := 129; current.imageTime := RGBDKeyframes.keyframeCapacity+1.0/90;
     (vocabulary,enabled) := RGBDCatalogLoopTests.Vocabulary(reference);
     poisonedVocabulary := fill(1e101,256,49); poisonedEnabled := fill(0.5,256);
     // Independent fixed RDF->FLU extrinsic and retained body pose geometry.
     local := {reference.opticalPoint[350,3]+0.18,-reference.opticalPoint[350,1],-reference.opticalPoint[350,2]-0.04};
     world := reference.bodyRotation*local+reference.bodyPosition;
     candidates := fill(1e101,350,3); mask := zeros(350); candidates[350,:] := world; mask[350] := 1;
-    base := RGBDCatalogMapping.Empty(1,17); base.catalogRevision := 128;
-    base.imageTime := 128; base.imageEpoch := 128; base.frame := 128;
+    base := RGBDCatalogMapping.Empty(1,17); base.catalogRevision := RGBDKeyframes.keyframeCapacity;
+    base.imageTime := RGBDKeyframes.keyframeCapacity; base.imageEpoch := 128; base.frame := 128;
     checks := fill(false,6);
     for image in 1:2 loop
       previous := if image == 1 then base else first.map;
-      current.epoch := 128+image; current.imageTime := 128+image/90.0;
+      current.epoch := 128+image; current.imageTime := RGBDKeyframes.keyframeCapacity+image/90.0;
       (result,decision) := RGBDCatalogFrame.Advance(catalog,graph,previous,current,poisonedVocabulary,poisonedEnabled,
         candidates,mask,true,1,true,seeds=fill(-7,4),sequentialSeed=-11,
         maximumWordDistanceSquared=-1,minimumAssignments=-1,minimumSimilarity=-1,minimumAge=-1,
@@ -47,7 +47,7 @@ package RGBDCatalogFrameTests
         localizationSigma=-1,depthInflation=-1,minimumPivot=-1);
       expected := base; expected.frame := 128+image; expected.imageEpoch := 128+image; expected.imageTime := current.imageTime;
       expected.occupied[1] := 1; expected.point[1,:] := world; expected.localPoint[1,:] := local;
-      expected.anchorId[1] := 128; expected.anchorSlot[1] := 128; expected.confidence[1] := image;
+      expected.anchorId[1] := RGBDKeyframes.keyframeCapacity; expected.anchorSlot[1] := RGBDKeyframes.keyframeCapacity; expected.confidence[1] := image;
       expected.lastSeen[1] := current.imageTime; expected.lastFrame[1] := 128+image;
       checks[image] := decision.valid and not decision.captureRequested and decision.reason == 6
         and result.accepted and result.rejectionReason == 0
@@ -63,25 +63,25 @@ package RGBDCatalogFrameTests
     assert(visual.accepted and visual.sequentialDiagnostics.verified and visual.loopDiagnostics.verifiedCount == 4,
       "Capture branch requires actual full-capacity96-hypothesis visual/graph proposal");
     (result,decision) := RGBDCatalogFrame.Advance(catalog,graph,base,current,vocabulary,enabled,candidates,mask,true,1,true,trials=trials);
-    expected := RGBDCatalogMapping.Empty(1,17); expected.catalogRevision := 129; expected.frame := 129;
+    expected := RGBDCatalogMapping.Empty(1,17); expected.catalogRevision := RGBDKeyframes.keyframeCapacity+1; expected.frame := 129;
     expected.imageTime := 140; expected.imageEpoch := 200; expected.occupied[1] := 1;
-    expected.point[1,:] := world; expected.localPoint[1,:] := local; expected.anchorId[1] := 129; expected.anchorSlot[1] := 1;
+    expected.point[1,:] := world; expected.localPoint[1,:] := local; expected.anchorId[1] := RGBDKeyframes.keyframeCapacity+1; expected.anchorSlot[1] := 1;
     expected.confidence[1] := 1; expected.lastSeen[1] := 140; expected.lastFrame[1] := 129;
     checks[3] := decision.valid and decision.captureRequested and result.accepted and result.rejectionReason == 0
       and RGBDCatalogGraphTests.EqualCatalog(result.catalog,visual.catalog) and RGBDGraphMeasurementTests.EqualState(result.graph,visual.graph)
       and RGBDCatalogMappingTests.EqualMap(result.map,expected,1e-9) and result.problem.accepted
-      and result.problem.nodeCount == 128 and result.problem.edgeCount == 256
+      and result.problem.nodeCount == RGBDKeyframes.keyframeCapacity and result.problem.edgeCount == 256
       and result.diagnostics.insertedCount == 1 and result.diagnostics.mergedCount == 0 and result.diagnostics.assignedCount == 1;
     previous := base; previous.occupied[14400] := 1; previous.point[14400,:] := world;
-    previous.localPoint[14400,:] := local; previous.anchorId[14400] := 128; previous.anchorSlot[14400] := 128;
-    previous.confidence[14400] := 3; previous.lastSeen[14400] := 129; previous.lastFrame[14400] := 128;
+    previous.localPoint[14400,:] := local; previous.anchorId[14400] := RGBDKeyframes.keyframeCapacity; previous.anchorSlot[14400] := RGBDKeyframes.keyframeCapacity;
+    previous.confidence[14400] := 3; previous.lastSeen[14400] := RGBDKeyframes.keyframeCapacity+1; previous.lastFrame[14400] := 128;
     (result,decision) := RGBDCatalogFrame.Advance(catalog,graph,previous,current,vocabulary,enabled,candidates,mask,true,1,true,trials=trials);
     checks[4] := decision.captureRequested and result.rejectionReason == 5 and result.diagnostics.mapAccepted == 0
       and Hold(result,catalog,graph,previous);
     previous := base; previous.imageEpoch := 200;
     (result,decision) := RGBDCatalogFrame.Advance(catalog,graph,previous,current,vocabulary,enabled,candidates,mask,true,1,true,trials=trials);
     checks[5] := decision.captureRequested and result.rejectionReason == 4 and Hold(result,catalog,graph,previous);
-    previous := base; damagedGraph := graph; damagedGraph.lastCaptureId := 127;
+    previous := base; damagedGraph := graph; damagedGraph.lastCaptureId := RGBDKeyframes.keyframeCapacity-1;
     (result,decision) := RGBDCatalogFrame.Advance(catalog,damagedGraph,previous,current,vocabulary,enabled,candidates,mask,true,1,true,trials=trials);
     checks[6] := decision.captureRequested and result.rejectionReason == 2 and Hold(result,catalog,damagedGraph,previous);
   end Run;

@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models f367ef4cff7ce8bf2628662a695598106ff7f17c; edit the canonical packages there.
 // One source-owned publication of localization and optional catalog/map work.
 // The enclosing model binds proposed to the actual localization outputs once.
 // This is not graph correction, independent graph noise, or a complete SLAM preset.

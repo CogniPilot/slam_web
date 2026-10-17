@@ -1,30 +1,31 @@
-// Full128/256 reference inputs; the independent dense oracle is in the runner.
+// Full nodeCapacity/256 reference inputs; the independent dense oracle is in the runner.
 package ModelicaPoseGraphCovarianceTests
   constant Integer cases=19;
+  constant Integer N=ModelicaPoseGraphCovariance.nodeCapacity;
   function Run
     input Integer scenario;
     output ModelicaPoseGraphCovariance.Result result;
   protected
-    Real p[128,3]; Real R[128,3,3]; Real nodeMask[128]; Real edgeMask[256];
+    Real p[N,3]; Real R[N,3,3]; Real nodeMask[N]; Real edgeMask[256];
     Real source[256]; Real target[256]; Real translation[256,3]; Real measured[256,3,3];
     Real information[256,6,6]; Real weight[6,6]; Real relative[3,3];
     Real inverse[6,6]; Boolean inverseValid; Integer i; Integer j; Integer reverse;
     Integer selectedCurrent; Integer selectedReference; Integer active;
   algorithm
-    p:=zeros(128,3); R:=zeros(128,3,3); nodeMask:=ones(128); edgeMask:=ones(256);
+    p:=zeros(N,3); R:=zeros(N,3,3); nodeMask:=ones(N); edgeMask:=ones(256);
     source:=ones(256); target:=ones(256); translation:=zeros(256,3);
     measured:=zeros(256,3,3); information:=zeros(256,6,6); weight:=zeros(6,6);
     relative:=identity(3); inverse:=zeros(6,6); inverseValid:=false; i:=1; j:=1; reverse:=1;
-    selectedCurrent:=128; selectedReference:=64; active:=if scenario==7 then 96 else 128;
-    for node in 1:128 loop
+    selectedCurrent:=N; selectedReference:=div(N,2); active:=if scenario==7 then div(3*N,4) else N;
+    for node in 1:N loop
       p[node,:]:={0.025*(node-1),0.3*sin(0.07*node),0.15*cos(0.11*node)};
       R[node,:,:]:=PGExp({0.09*sin(0.05*node),-0.12*cos(0.04*node),0.004*node});
       if node>active then nodeMask[node]:=0.0; p[node,:]:=fill(1e100,3); R[node,:,:]:=fill(1e100,3,3); end if;
     end for;
     for edge in 1:256 loop
-      i:=if edge<=127 then edge else mod(17*(edge-128),127)+1;
-      j:=if edge<=127 then edge+1 else mod(i+23+3*(edge-128),128)+1;
-      if i==j then j:=mod(j,128)+1; end if;
+      i:=if edge<N then edge else mod(17*(edge-N),N-1)+1;
+      j:=if edge<N then edge+1 else mod(i+23+3*(edge-N),N)+1;
+      if i==j then j:=mod(j,N)+1; end if;
       if scenario==6 and mod(edge,2)==0 then reverse:=i; i:=j; j:=reverse; end if;
       source[edge]:=i; target[edge]:=j;
       if i<=active and j<=active then
@@ -45,21 +46,21 @@ package ModelicaPoseGraphCovarianceTests
     end for;
     if scenario==3 then selectedCurrent:=1; end if;
     if scenario==4 then selectedReference:=1; end if;
-    if scenario==5 then selectedReference:=128; end if;
-    if scenario==7 then selectedCurrent:=95; end if;
+    if scenario==5 then selectedReference:=N; end if;
+    if scenario==7 then selectedCurrent:=div(3*N,4)-1; end if;
     if scenario==8 then edgeMask:=zeros(256); end if;
     if scenario==9 then information[1,6,:]:=zeros(6); information[1,:,6]:=zeros(6); end if;
     if scenario==10 then information[1,1,2]:=information[1,1,2]+1e-12; end if;
     if scenario==11 then measured[1,:,:]:=transpose(R[1,:,:])*R[2,:,:]*PGExp({3.141492653589793,0,0}); end if;
     if scenario==12 then selectedCurrent:=0; end if;
-    if scenario==13 then nodeMask[128]:=0.5; end if;
+    if scenario==13 then nodeMask[N]:=0.5; end if;
     if scenario==15 then
-      nodeMask:=fill(1e100,128); edgeMask:=fill(1e100,256); selectedCurrent:=0; selectedReference:=0;
-      p:=fill(1e100,128,3); R:=fill(1e100,128,3,3);
+      nodeMask:=fill(1e100,N); edgeMask:=fill(1e100,256); selectedCurrent:=0; selectedReference:=0;
+      p:=fill(1e100,N,3); R:=fill(1e100,N,3,3);
     end if;
     if scenario==16 then information[1,:,:]:=identity(6)*1e-14; end if;
     if scenario==17 then
-      nodeMask:=zeros(128); nodeMask[1]:=1.0; edgeMask:=zeros(256); selectedCurrent:=1; selectedReference:=1;
+      nodeMask:=zeros(N); nodeMask[1]:=1.0; edgeMask:=zeros(256); selectedCurrent:=1; selectedReference:=1;
     end if;
     result:=ModelicaPoseGraphCovariance.Select(p,R,nodeMask,edgeMask,source,target,translation,measured,information,
       selectedCurrent,selectedReference,if scenario==2 then 0 else if scenario==14 then 97 else if scenario==19 then 2 else 96,

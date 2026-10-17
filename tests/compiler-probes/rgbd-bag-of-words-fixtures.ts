@@ -1,5 +1,5 @@
 // Independent test oracle only; production retrieval is editable Modelica.
-export const features = 350, cells = 49, words = 256, frames = 128;
+export const features = 350, cells = 49, words = 256, frames = 64;
 const matrix = (rows: number, columns: number) => Array.from({length: rows}, () => Array(columns).fill(0) as number[]);
 export interface BoWState {
   previousHistogram: number[][]; previousEnabled: number[];

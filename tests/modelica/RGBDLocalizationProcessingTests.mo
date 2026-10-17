@@ -12,7 +12,7 @@ package RGBDLocalizationProcessingTests
     input RGBDGraphCaptureLedger.State a; input RGBDGraphCaptureLedger.State b; output Boolean same;
   algorithm
     same := a.generation == b.generation and a.sourceRevision == b.sourceRevision and a.catalogNextId == b.catalogNextId and a.lastStep == b.lastStep;
-    for slot in 1:128 loop same := same and a.ids[slot] == b.ids[slot] and a.epochs[slot] == b.epochs[slot]
+    for slot in 1:RGBDKeyframes.keyframeCapacity loop same := same and a.ids[slot] == b.ids[slot] and a.epochs[slot] == b.epochs[slot]
       and a.sequences[slot] == b.sequences[slot] and a.times[slot] == b.times[slot]; end for;
   end EqualLedger;
   function EqualCaches
@@ -51,36 +51,37 @@ package RGBDLocalizationProcessingTests
     RGBDGraphEstimatorCommit.Result result; GraphGaugeUncertainty.Binding b;
     SchmidtGraphPoseCorrection.Attempt attempt; SchmidtGraphPoseCorrection.Policy policy;
     Real M[12,12]; Real words[256,49]; Real enabled[256]; Boolean anchorAccepted; Integer anchorReason;
+    Integer cap = RGBDKeyframes.keyframeCapacity; Integer ref = div(cap,2);
   algorithm
     previous := RGBDGraphEstimatorCommitTests.FullState(); proposal.poses := previous.poses; proposal.poses.revision := 1;
-    for node in 2:128 loop
+    for node in 2:cap loop
       proposal.poses.positions[node,:] := previous.poses.positions[node,:]+{0.001*node,-0.0005*node,0.0003*node};
       proposal.poses.rotations[node,:,:] := previous.poses.rotations[node,:,:]*GraphGaugeUncertaintyTests.Rotation({0.0002*node,-0.0001*node,0.00015*node});
     end for;
-    b.generation := 1; b.sourceRevision := 17; b.graphRevision := 128; b.catalogPoseRevision := 0;
+    b.generation := 1; b.sourceRevision := 17; b.graphRevision := cap; b.catalogPoseRevision := 0;
     b.anchorId := 1; b.anchorEpoch := 1; b.anchorCaptureSequence := 1; b.anchorTime := 1;
-    b.currentId := 128; b.currentEpoch := 128; b.currentCaptureSequence := 128; b.currentTime := 128;
-    b.referenceId := 32; b.referenceEpoch := 32; b.referenceCaptureSequence := 32; b.referenceTime := 32;
-    b.chart := 1; b.factorProvenance := 128; b.anchorBoundProvenance := 128;
-    proposal.selected.binding := b; proposal.graphRevision := 128; proposal.optimizerAccepted := true;
-    proposal.selected.positions[1,:] := proposal.poses.positions[128,:]; proposal.selected.rotations[1,:,:] := proposal.poses.rotations[128,:,:];
-    proposal.selected.positions[2,:] := proposal.poses.positions[32,:]; proposal.selected.rotations[2,:,:] := proposal.poses.rotations[32,:,:];
+    b.currentId := cap; b.currentEpoch := cap; b.currentCaptureSequence := cap; b.currentTime := cap;
+    b.referenceId := ref; b.referenceEpoch := ref; b.referenceCaptureSequence := ref; b.referenceTime := ref;
+    b.chart := 1; b.factorProvenance := cap; b.anchorBoundProvenance := cap;
+    proposal.selected.binding := b; proposal.graphRevision := cap; proposal.optimizerAccepted := true;
+    proposal.selected.positions[1,:] := proposal.poses.positions[cap,:]; proposal.selected.rotations[1,:,:] := proposal.poses.rotations[cap,:,:];
+    proposal.selected.positions[2,:] := proposal.poses.positions[ref,:]; proposal.selected.rotations[2,:,:] := proposal.poses.rotations[ref,:,:];
     for i in 1:12 loop for j in 1:12 loop M[i,j] := (if i == j then 0.3 else 0)+0.001*i*j; end for; end for;
     proposal.selected.covariance := M*transpose(M); attempt.generation := 1; attempt.graphRevision := 0; attempt.factorProvenance := 0;
     policy := SchmidtGraphPoseCorrection.DefaultPolicy(); policy.weight := 0.4;
     result := RGBDGraphEstimatorCommit.Commit(previous,proposal,b,attempt,policy,true);
     assert(result.accepted and result.projectedCount == 14400,"Real full-map graph correction precondition must accept");
     state.estimator := result.next; state.attempt := result.nextAttempt; state.selected := proposal.selected;
-    state.captures := RGBDGraphCaptureLedger.Empty(1,17); state.captures.catalogNextId := 129; state.captures.lastStep := 199;
+    state.captures := RGBDGraphCaptureLedger.Empty(1,17); state.captures.catalogNextId := cap+1; state.captures.lastStep := 199;
     state.estimator.localization.steps := 199;
-    for slot in 1:128 loop state.captures.ids[slot] := slot; state.captures.epochs[slot] := slot; state.captures.sequences[slot] := slot; state.captures.times[slot] := slot; end for;
-    (state.anchor,anchorAccepted,anchorReason) := RGBDGraphAnchorBound.FromCapture(RGBDGraphAnchorBound.Empty(1,17),state.estimator.localization.catalog,state.captures,17,199,0,state.estimator.poses.positions[1,:],state.estimator.poses.rotations[1,:,:],128);
+    for slot in 1:cap loop state.captures.ids[slot] := slot; state.captures.epochs[slot] := slot; state.captures.sequences[slot] := slot; state.captures.times[slot] := slot; end for;
+    (state.anchor,anchorAccepted,anchorReason) := RGBDGraphAnchorBound.FromCapture(RGBDGraphAnchorBound.Empty(1,17),state.estimator.localization.catalog,state.captures,17,199,0,state.estimator.poses.positions[1,:],state.estimator.poses.rotations[1,:,:],cap);
     state.vocabulary := RGBDVisualVocabulary.Empty(1,17,1);
     (words,enabled) := RGBDCatalogLoopTests.Vocabulary(RGBDLoopVerificationTests.Reference(false));
     state.vocabulary.words[1:31,:] := words[1:31,:]; state.vocabulary.words[32,:] := words[256,:];
     state.vocabulary.count := 32; state.vocabulary.ready := true; state.vocabulary.enabled[1:32] := fill(1.0,32);
     state.vocabulary.words[256,49] := 1e101;
-    for slot in 1:128 loop
+    for slot in 1:cap loop
       state.estimator.localization.catalog.histograms[slot,32] := state.estimator.localization.catalog.histograms[slot,256];
       state.estimator.localization.catalog.histograms[slot,256] := 0;
     end for;
@@ -104,61 +105,62 @@ package RGBDLocalizationProcessingTests
     RGBDLocalizationCatalog.Estimator proposed; RGBDKeyframes.Frame template; RGBDKeyframes.Frame frame;
     RGBDCatalogGraphCapture.Result visual; RGBDCatalogMapping.State expectedMap;
     Real vocabulary[256,49]; Real enabled[256]; Real candidates[350,3]; Real mask[350]; Real local[3]; Real world[3]; Real h = 1.0/90;
+    Integer cap = RGBDKeyframes.keyframeCapacity;
   algorithm
-    assert(RGBDKeyframes.keyframeCapacity == 128 and RGBDGraphMeasurements.edgeCapacity == 256 and RGBDKeyframes.featureCapacity == 350 and RGBDCatalogMapping.mapCapacity == 14400,"Publication retains all capacities");
+    assert(RGBDKeyframes.keyframeCapacity == 64 and RGBDGraphMeasurements.edgeCapacity == 256 and RGBDKeyframes.featureCapacity == 350 and RGBDCatalogMapping.mapCapacity == 14400,"Publication retains all capacities");
     base := Corrected(); template := RGBDLoopVerificationTests.Reference(false); vocabulary := base.vocabulary.words; enabled := base.vocabulary.enabled;
-    proposed := base.estimator.localization.estimator; proposed.lastUsedEpoch := 129; proposed.referenceUsed := 1;
-    frame := Bind(template,proposed,129,129,128+h); candidates := fill(1e101,350,3); mask := zeros(350);
-    first := RGBDLocalizationProcessing.Publish(base,proposed,frame,1,1,0,true,129,frame.imageTime,h,false,true,0,true,candidates,mask,minimumInterval=0.005,maximumInterval=0.015,minimumMeasuredDescriptors=-1,minimumWordDistanceSquared=-1);
+    proposed := base.estimator.localization.estimator; proposed.lastUsedEpoch := cap+1; proposed.referenceUsed := 1;
+    frame := Bind(template,proposed,cap+1,cap+1,cap+h); candidates := fill(1e101,350,3); mask := zeros(350);
+    first := RGBDLocalizationProcessing.Publish(base,proposed,frame,1,1,0,true,cap+1,frame.imageTime,h,false,true,0,true,candidates,mask,minimumInterval=0.005,maximumInterval=0.015,minimumMeasuredDescriptors=-1,minimumWordDistanceSquared=-1);
     expected := base; expected.estimator.localization.estimator := proposed; expected.estimator.localization.steps := 200; expected.estimator.localization.predictionTime := frame.imageTime;
-    expected.estimator.localization.lastProcessedImageEpoch := 129; expected.estimator.localization.lastProcessedImageTime := frame.imageTime;
-    expected.estimator.localization.map.frame := 129; expected.estimator.localization.map.imageEpoch := 129; expected.estimator.localization.map.imageTime := frame.imageTime;
+    expected.estimator.localization.lastProcessedImageEpoch := cap+1; expected.estimator.localization.lastProcessedImageTime := frame.imageTime;
+    expected.estimator.localization.map.frame := cap+1; expected.estimator.localization.map.imageEpoch := cap+1; expected.estimator.localization.map.imageTime := frame.imageTime;
     expected.captures.lastStep := 200;
     checks[1] := first.accepted and first.vocabularyReason == 3 and first.publication.mappingAccepted and not first.publication.decision.captureRequested and Equal(first.next,expected);
-    proposed := first.next.estimator.localization.estimator; frame := Bind(template,proposed,129,130,128+2*h);
-    proposed := RGBDLocalizationCatalogTests.Captured(proposed,frame); frame := Bind(template,proposed,129,130,128+2*h);
+    proposed := first.next.estimator.localization.estimator; frame := Bind(template,proposed,cap+1,cap+2,cap+2*h);
+    proposed := RGBDLocalizationCatalogTests.Captured(proposed,frame); frame := Bind(template,proposed,cap+1,cap+2,cap+2*h);
     local := {frame.opticalPoint[350,3]+0.18,-frame.opticalPoint[350,1],-frame.opticalPoint[350,2]-0.04};
     world := frame.bodyRotation*local+frame.bodyPosition; candidates[350,:] := world; mask[350] := 1;
     visual := RGBDCatalogGraphCapture.Capture(base.estimator.localization.catalog,frame,vocabulary,enabled,base.estimator.localization.graph,true,trials=96);
     assert(visual.accepted,"Qualified actual96-trial visual capture must accept");
-    capture := RGBDLocalizationProcessing.Publish(first.next,proposed,frame,1,0,1,true,130,frame.imageTime,h,false,true,0,true,candidates,mask,minimumInterval=0.005,maximumInterval=0.015);
+    capture := RGBDLocalizationProcessing.Publish(first.next,proposed,frame,1,0,1,true,cap+2,frame.imageTime,h,false,true,0,true,candidates,mask,minimumInterval=0.005,maximumInterval=0.015);
     expected := first.next; expected.estimator.localization.estimator := proposed; expected.estimator.localization.steps := 201; expected.estimator.localization.predictionTime := frame.imageTime;
-    expected.estimator.localization.lastProcessedImageEpoch := 130; expected.estimator.localization.lastProcessedImageTime := frame.imageTime;
+    expected.estimator.localization.lastProcessedImageEpoch := cap+2; expected.estimator.localization.lastProcessedImageTime := frame.imageTime;
     expected.estimator.localization.catalog := visual.catalog; expected.estimator.localization.graph := visual.graph;
-    expected.estimator.localization.referenceBirth.epoch := 130; expected.estimator.localization.referenceBirth.sequence := 201; expected.estimator.localization.referenceBirth.catalogId := 129;
-    expected.estimator.poses.revision := 2; expected.estimator.poses.catalogNextId := 130; expected.estimator.poses.ids[1] := 129;
+    expected.estimator.localization.referenceBirth.epoch := cap+2; expected.estimator.localization.referenceBirth.sequence := 201; expected.estimator.localization.referenceBirth.catalogId := cap+1;
+    expected.estimator.poses.revision := 2; expected.estimator.poses.catalogNextId := cap+2; expected.estimator.poses.ids[1] := cap+1;
     expected.estimator.poses.positions[1,:] := frame.bodyPosition; expected.estimator.poses.rotations[1,:,:] := frame.bodyRotation;
-    expected.captures.catalogNextId := 130; expected.captures.lastStep := 201; expected.captures.ids[1] := 129; expected.captures.epochs[1] := 130; expected.captures.sequences[1] := 201; expected.captures.times[1] := frame.imageTime;
+    expected.captures.catalogNextId := cap+2; expected.captures.lastStep := 201; expected.captures.ids[1] := cap+1; expected.captures.epochs[1] := cap+2; expected.captures.sequences[1] := 201; expected.captures.times[1] := frame.imageTime;
     expectedMap := first.next.estimator.localization.map;
     for slot in 1:14400 loop if expectedMap.anchorId[slot] == 1 then
       expectedMap.point[slot,:] := zeros(3); expectedMap.localPoint[slot,:] := zeros(3); expectedMap.occupied[slot] := 0; expectedMap.anchorId[slot] := 0; expectedMap.anchorSlot[slot] := 0;
       expectedMap.confidence[slot] := 0; expectedMap.lastSeen[slot] := 0; expectedMap.lastFrame[slot] := 0;
     end if; end for;
-    expectedMap.catalogRevision := 129; expectedMap.frame := 130; expectedMap.imageEpoch := 130; expectedMap.imageTime := frame.imageTime;
-    expectedMap.point[1,:] := world; expectedMap.localPoint[1,:] := local; expectedMap.occupied[1] := 1; expectedMap.anchorId[1] := 129; expectedMap.anchorSlot[1] := 1;
-    expectedMap.confidence[1] := 1; expectedMap.lastSeen[1] := frame.imageTime; expectedMap.lastFrame[1] := 130;
+    expectedMap.catalogRevision := cap+1; expectedMap.frame := cap+2; expectedMap.imageEpoch := cap+2; expectedMap.imageTime := frame.imageTime;
+    expectedMap.point[1,:] := world; expectedMap.localPoint[1,:] := local; expectedMap.occupied[1] := 1; expectedMap.anchorId[1] := cap+1; expectedMap.anchorSlot[1] := 1;
+    expectedMap.confidence[1] := 1; expectedMap.lastSeen[1] := frame.imageTime; expectedMap.lastFrame[1] := cap+2;
     expected.estimator.localization.map := expectedMap;
     checks[2] := capture.accepted and capture.publication.mappingAccepted and capture.publication.decision.captureRequested
-      and capture.publication.mapDiagnostics.evictedCount == 113 and capture.publication.mapDiagnostics.insertedCount == 1 and Equal(capture.next,expected,1e-9);
-    proposed := capture.next.estimator.localization.estimator; proposed.lastUsedEpoch := 131; proposed.referenceUsed := 1;
-    frame := Bind(template,proposed,130,131,128+3*h);
-    next := RGBDLocalizationProcessing.Publish(capture.next,proposed,frame,1,1,0,true,131,frame.imageTime,h,false,true,0,true,candidates,mask,minimumInterval=0.005,maximumInterval=0.015);
+      and capture.publication.mapDiagnostics.evictedCount == div(RGBDCatalogMapping.mapCapacity-1,cap)+1 and capture.publication.mapDiagnostics.insertedCount == 1 and Equal(capture.next,expected,1e-9);
+    proposed := capture.next.estimator.localization.estimator; proposed.lastUsedEpoch := cap+3; proposed.referenceUsed := 1;
+    frame := Bind(template,proposed,cap+2,cap+3,cap+3*h);
+    next := RGBDLocalizationProcessing.Publish(capture.next,proposed,frame,1,1,0,true,cap+3,frame.imageTime,h,false,true,0,true,candidates,mask,minimumInterval=0.005,maximumInterval=0.015);
     expected.estimator.localization.estimator := proposed; expected.estimator.localization.steps := 202; expected.estimator.localization.predictionTime := frame.imageTime;
-    expected.estimator.localization.lastProcessedImageEpoch := 131; expected.estimator.localization.lastProcessedImageTime := frame.imageTime;
-    expected.estimator.localization.map.frame := 131; expected.estimator.localization.map.imageEpoch := 131; expected.estimator.localization.map.imageTime := frame.imageTime;
-    expected.estimator.localization.map.confidence[1] := 2; expected.estimator.localization.map.lastSeen[1] := frame.imageTime; expected.estimator.localization.map.lastFrame[1] := 131; expected.captures.lastStep := 202;
+    expected.estimator.localization.lastProcessedImageEpoch := cap+3; expected.estimator.localization.lastProcessedImageTime := frame.imageTime;
+    expected.estimator.localization.map.frame := cap+3; expected.estimator.localization.map.imageEpoch := cap+3; expected.estimator.localization.map.imageTime := frame.imageTime;
+    expected.estimator.localization.map.confidence[1] := 2; expected.estimator.localization.map.lastSeen[1] := frame.imageTime; expected.estimator.localization.map.lastFrame[1] := cap+3; expected.captures.lastStep := 202;
     checks[3] := next.accepted and next.publication.mappingAccepted and not next.publication.decision.captureRequested and next.publication.mapDiagnostics.mergedCount == 1 and Equal(next.next,expected,1e-9);
     for scenario in 4:12 loop
-      previous := base; proposed := base.estimator.localization.estimator; proposed.lastUsedEpoch := 129; proposed.referenceUsed := 1;
-      frame := Bind(template,proposed,129,129,128+h);
-      if scenario == 4 then previous.captures.sequences[128] := 127;
+      previous := base; proposed := base.estimator.localization.estimator; proposed.lastUsedEpoch := cap+1; proposed.referenceUsed := 1;
+      frame := Bind(template,proposed,cap+1,cap+1,cap+h);
+      if scenario == 4 then previous.captures.sequences[cap] := cap-1;
       elseif scenario == 5 then previous.estimator.poses.sourceRevision := 18;
       elseif scenario == 6 then previous.selected.binding.generation := 2;
       elseif scenario == 7 then previous.estimator.localization.generation := -1; previous.estimator.localization.map.localPoint[14400,:] := fill(-1e101,3);
       elseif scenario == 9 then previous.estimator.localization.steps := RGBDKeyframes.identifierLimit-1; previous.captures.lastStep := previous.estimator.localization.steps;
       elseif scenario == 10 then proposed := RGBDLocalizationCatalogTests.Captured(base.estimator.localization.estimator,frame);
       elseif scenario == 11 then previous := first.next; previous.estimator.localization.map.localPoint[14400,3] := previous.estimator.localization.map.localPoint[14400,3]+1;
-        frame := Bind(template,previous.estimator.localization.estimator,129,130,128+2*h); proposed := RGBDLocalizationCatalogTests.Captured(previous.estimator.localization.estimator,frame);
+        frame := Bind(template,previous.estimator.localization.estimator,cap+1,cap+2,cap+2*h); proposed := RGBDLocalizationCatalogTests.Captured(previous.estimator.localization.estimator,frame);
       elseif scenario == 12 then proposed := base.estimator.localization.estimator;
       end if;
       result := RGBDLocalizationProcessing.Publish(previous,proposed,frame,if scenario == 8 then 0 else 1,

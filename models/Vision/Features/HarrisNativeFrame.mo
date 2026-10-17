@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models f367ef4cff7ce8bf2628662a695598106ff7f17c; edit the canonical packages there.
 // Harris response from central gradients and 5x5 structure tensors.
 // score[y,x] corresponds to image pixel (x+scoreBorder,y+scoreBorder).
 model HarrisNativeFrame

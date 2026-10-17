@@ -23,7 +23,7 @@ export const rgbdSlamSourceManifest=Object.freeze({
   paths:Object.freeze(names.map(name=>modelicaSourcePath(name))),
   separator:'\n',
   composition:'exact generated compatibility files joined with one newline, in this order',
-  scope:'Staged image-parameterized FAST/350 RGB-D + IMU acquisition (historical90x160 model defaults); full128/256/14400 mapping and graph correction with one persistent source-owned State, actual optimizer and typed selected bound. Reference composition gates do not qualify the camera producer, full covariance convergence, actual public model execution, Rumoca WASM admission or browser throughput.'
+  scope:'Staged image-parameterized FAST/350 RGB-D + IMU acquisition (historical90x160 model defaults); full32/256/14400 mapping and graph correction with one persistent source-owned State, actual optimizer and typed selected bound. Reference composition gates do not qualify the camera producer, full covariance convergence, actual public model execution, Rumoca WASM admission or browser throughput.'
 });
 
 // Native camera composition shares every algorithm and State capacity above.

@@ -79,7 +79,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===checkCount&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Noncapture observations over full14400/350/128/256 domains: zero and fewer8 geometry, sparsefinal350/dense350, retained merge/latest insertion, confidenceonce, independent epoch/counter clocks, empty pruning, exact three-owner hold and canonical empty optimizer problem',
+  scope:'Noncapture observations over full14400/350/64/256 domains: zero and fewer8 geometry, sparsefinal350/dense350, retained merge/latest insertion, confidenceonce, independent epoch/counter clocks, empty pruning, exact three-owner hold and canonical empty optimizer problem',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   loopConstraintsAdmitted:false,fullSlamAccepted:false};

@@ -23,8 +23,8 @@ package RGBDVisualVocabularyTests
     RGBDVisualVocabulary.State result; RGBDVisualVocabulary.State learned;
     Real descriptor[350,49]; Real mask[350]; Boolean accepted; Integer reason;
     Real wordIndex[350]; Real histogram[256]; Real ids[4]; Real slots[4]; Real scores[4];
-    Real history[128,256]; Real historyMask[128]; Real historyId[128]; Real historyTime[128];
-    Real nextHistory[128,256]; Real nextMask[128]; Real nextId[128]; Real nextTime[128];
+    Real history[RGBDKeyframes.keyframeCapacity,256]; Real historyMask[RGBDKeyframes.keyframeCapacity]; Real historyId[RGBDKeyframes.keyframeCapacity]; Real historyTime[RGBDKeyframes.keyframeCapacity];
+    Real nextHistory[RGBDKeyframes.keyframeCapacity,256]; Real nextMask[RGBDKeyframes.keyframeCapacity]; Real nextId[RGBDKeyframes.keyframeCapacity]; Real nextTime[RGBDKeyframes.keyframeCapacity];
     Real version; Real nextSlot; Real timeNow; Real configuration; Real vocabularyCount;
     Real assignmentCount; Real retrieval; Real candidates; Real stored; Real invalidHistory;
     Real expected; Boolean normalized; Boolean indices;
@@ -33,7 +33,7 @@ package RGBDVisualVocabularyTests
     descriptor := fill(1e100,350,49); mask := zeros(350);
     accepted := false; reason := 0; normalized := true; indices := true; expected := 0.0;
     wordIndex := zeros(350); histogram := zeros(256); ids := zeros(4); slots := zeros(4); scores := zeros(4);
-    history := zeros(128,256); historyMask := zeros(128); historyId := zeros(128); historyTime := zeros(128);
+    history := zeros(RGBDKeyframes.keyframeCapacity,256); historyMask := zeros(RGBDKeyframes.keyframeCapacity); historyId := zeros(RGBDKeyframes.keyframeCapacity); historyTime := zeros(RGBDKeyframes.keyframeCapacity);
     nextHistory := history; nextMask := historyMask; nextId := historyId; nextTime := historyTime;
     version := 0.0; nextSlot := 1.0; timeNow := 0.0; configuration := 0.0; vocabularyCount := 0.0;
     assignmentCount := 0.0; retrieval := 0.0; candidates := 0.0; stored := 0.0; invalidHistory := 0.0;

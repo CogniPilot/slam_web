@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models f367ef4cff7ce8bf2628662a695598106ff7f17c; edit the canonical packages there.
 // Persistent state is explicit: callers retain only accepted next-state outputs.
 // All coordinates are in one unchanged world ENU frame. Points come from
 // RGBDLandmarkProjection and bodyPosition is estimated, never ground truth.

@@ -1,10 +1,10 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models f367ef4cff7ce8bf2628662a695598106ff7f17c; edit the canonical packages there.
 // Full-capacity selected covariance of the FINAL undamped pose-graph linearization.
 // Exact-real variational/tree bound; ordinary floating evaluation is explicitly
 // not an outward-rounded certificate. No optimizer damping is statistical noise.
 package ModelicaPoseGraphCovariance
 
-  constant Integer nodeCapacity=128;
+  constant Integer nodeCapacity=64;
   constant Integer edgeCapacity=256;
   constant Integer poseDimension=6;
   constant Integer selectedDimension=12;
@@ -320,7 +320,7 @@ package ModelicaPoseGraphCovariance
     end for;
     if not valid then L := zeros(pairDimension,pairDimension); end if;
   end FactorPair;
-  // Principal full-H blocks on free rows (2,3),(4,5),...,(128,padding).
+  // Principal full-H blocks on free rows (2,3),(4,5),...,(nodeCapacity,padding).
   // Every active factor contributes diagonal terms; within-pair factors also
   // contribute both cross blocks. This changes only the numerical preconditioner.
   function BuildPairs

@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models f367ef4cff7ce8bf2628662a695598106ff7f17c; edit the canonical packages there.
 // Source-owned transport from one accepted localization image to the catalog
 // measurement API. This is not another visual update or an independence claim.
 // Dependencies: RGBDKeyframes, RGBDRegistrationUncertainty, SLAMExactRealEqual.

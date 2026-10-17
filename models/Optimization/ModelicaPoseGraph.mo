@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models f367ef4cff7ce8bf2628662a695598106ff7f17c; edit the canonical packages there.
 // Bounded pose-graph numerical component; no loop detection or truth inputs.
 // Body-to-world R, world-additive p and RIGHT-local attitude increments.
 // Residual [Ri'*(pj-pi)-translation, Log(measuredRotation'*Ri'*Rj)].

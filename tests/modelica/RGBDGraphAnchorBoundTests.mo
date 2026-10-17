@@ -1,4 +1,5 @@
 package RGBDGraphAnchorBoundTests
+  constant Integer capacity = RGBDKeyframes.keyframeCapacity;
   function Rotation
     input Real a[3]; output Real R[3,3];
   protected Real cx; Real sx; Real cy; Real sy; Real cz; Real sz;
@@ -41,9 +42,9 @@ package RGBDGraphAnchorBoundTests
   algorithm
     checks:=fill(false,25); epsilon:=1e-6;
     for scenario in 1:25 loop
-      catalog:=RGBDGraphCaptureLedgerTests.Catalog(if scenario==4 then 130 else 129);
+      catalog:=RGBDGraphCaptureLedgerTests.Catalog(if scenario==4 then capacity+2 else capacity+1);
       ledger:=RGBDGraphCaptureLedger.Empty(3,17); ledger.catalogNextId:=catalog.nextId; ledger.lastStep:=400;
-      for k in 1:128 loop
+      for k in 1:capacity loop
         ledger.ids[k]:=catalog.ids[k];ledger.epochs[k]:=catalog.epochs[k];ledger.times[k]:=catalog.imageTimes[k];
         ledger.sequences[k]:=2*catalog.ids[k]+7;
         catalog.bodyPositions[k,:]:={0.02*catalog.ids[k],0.01*catalog.ids[k],-0.015*catalog.ids[k]};
@@ -52,7 +53,7 @@ package RGBDGraphAnchorBoundTests
           catalog.poseCovariances[k,row,column]:=(if row==column then 0.01*row else 0)+0.0002*min(row,column)*max(row,column);
         end for;end for;
       end for;
-      id:=max(1,catalog.nextId-128);slot:=mod(id-1,128)+1;
+      id:=max(1,catalog.nextId-capacity);slot:=mod(id-1,capacity)+1;
       position:=catalog.bodyPositions[slot,:]+{0.15,-0.08,0.04};
       R:=catalog.bodyRotations[slot,:,:]*Rotation({-0.02,0.03,0.01});
       weight:=if scenario==3 then 0.2 else 0.5;maxAngle:=0.35;
