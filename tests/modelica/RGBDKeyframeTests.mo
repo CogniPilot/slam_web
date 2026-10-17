@@ -44,10 +44,11 @@ package RGBDKeyframeTests
     candidate := Measurement(1,0,0.0);
     passed[1] := RGBDKeyframes.ValidCatalog(previous) and RGBDKeyframes.ValidFrame(candidate);
     (next,accepted,slot,evicted) := RGBDKeyframes.Store(previous,candidate,true);
+    // Compare against the candidate, not a literal: i/1000.0 may lower to a 1-ulp-off reciprocal multiply.
     passed[2] := accepted and slot == 1 and evicted == 0 and next.nextId == 2
       and RGBDKeyframes.ValidCatalog(next)
       and next.descriptors[1,RGBDKeyframes.featureCapacity,2] == -1/sqrt(2.0)
-      and next.opticalPoints[1,RGBDKeyframes.featureCapacity,1] == 0.35
+      and next.opticalPoints[1,RGBDKeyframes.featureCapacity,1] == candidate.opticalPoint[RGBDKeyframes.featureCapacity,1]
       and next.pixelCoordinates[1,RGBDKeyframes.featureCapacity,1] == 30
       and next.histograms[1,RGBDKeyframes.wordCapacity] == 0.75
       and next.poseCovariances[1,6,6] == 0.01;
