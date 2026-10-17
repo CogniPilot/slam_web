@@ -102,6 +102,7 @@ el('frame-timings').insertAdjacentHTML('afterend','<button id="copy-stats" type=
 el('copy-stats').onclick=async()=>{
   const text=(id:string)=>document.getElementById(id)?.textContent?.trim()??'';
   const line=[`SLAM Lab ${location.href}`,`sim ${text('metric-time')} · sim/wall ${text('metric-rtf')} · devicePixelRatio ${devicePixelRatio}`,
+    `camera ${world.calibration.width}x${world.calibration.height} · sensor profile ${world.sensorProfile}`,
     ...['estimator-mode','frame-timings','performance-state','graphics-state','graph-state','uncertainty-state','navigation-state'].map(text),
     Object.entries(latest?.estimate.diagnostics??{}).filter(([name,value])=>typeof value==='number'&&/keyframe|generation|vocabulary|accepted|rejection/i.test(name))
       .map(([name,value])=>`${name}=${value}`).join(' ')].filter(Boolean).join(' | ');
