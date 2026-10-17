@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models f367ef4cff7ce8bf2628662a695598106ff7f17c; edit the canonical packages there.
 // Ordinary acquisition publication retains the authoritative corrected pose view.
 // This owner never reconstructs a post-correction state from raw captures.
 package RGBDLocalizationProcessing

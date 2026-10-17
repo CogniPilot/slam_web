@@ -10,6 +10,7 @@ package RGBDGraphProcessingTests
   protected
     RGBDLocalizationCatalog.State fresh;
     Real truthPosition[3]; Real truthRotation[3,3]; Integer owner; Integer source; Integer target;
+    Integer cap = RGBDKeyframes.keyframeCapacity; Integer ref = div(cap,2); Integer gap; Integer start;
   algorithm
     fresh := RGBDLocalizationCatalog.Empty(RGBDLocalizationCatalog.EmptyEstimator(),1,17);
     result := RGBDGraphProcessing.Empty(fresh);
@@ -24,7 +25,7 @@ package RGBDGraphProcessingTests
     result.vocabulary.words[32,:] := result.estimator.localization.catalog.descriptors[1,350,:];
     result.vocabulary.enabled[32] := 1.0; result.vocabulary.count := 32; result.vocabulary.ready := true;
     result.vocabulary.words[256,:] := fill(7e99,49);
-    for node in 1:128 loop
+    for node in 1:cap loop
       result.estimator.localization.catalog.histograms[node,32] := result.estimator.localization.catalog.histograms[node,256];
       result.estimator.localization.catalog.histograms[node,256] := 0.0;
     end for;
@@ -37,7 +38,7 @@ package RGBDGraphProcessingTests
     truthPosition := result.estimator.poses.positions[1,:];
     truthRotation := result.estimator.poses.rotations[1,:,:];
     result.estimator.poses.revision := 7;
-    for node in 1:128 loop
+    for node in 1:cap loop
       result.estimator.localization.catalog.poseCovariances[node,:,:] := 0.01*identity(6);
       if node > 1 then
         result.estimator.poses.positions[node,:] := truthPosition
@@ -49,12 +50,20 @@ package RGBDGraphProcessingTests
     // All256 measured edges are independent of the perturbed warm-start view.
     // The mandatory consecutive chain and distinct loop endpoints satisfy the
     // real graph owner; information still receives its correlation inflation.
+    // Loop edges enumerate distinct pairs by increasing gap: (1,3),(2,4),...
+    assert(div((cap-1)*(cap-2),2) >= RGBDGraphMeasurements.edgeCapacity-(cap-1),
+      "GraphProcessing fixture needs enough distinct loop endpoint pairs");
+    gap := 2; start := 1;
     for edge in 1:256 loop
-      source := if edge <= 127 then edge else if edge <= 253 then 1 else if edge <= 255 then 2 else 3;
-      target := if edge <= 127 then edge+1 else if edge <= 253 then edge-125 else if edge == 254 then 4 else if edge == 255 then 5 else 6;
+      if edge <= cap-1 then
+        source := edge; target := edge+1;
+      else
+        source := start; target := start+gap; start := start+1;
+        if start+gap > cap then gap := gap+1; start := 1; end if;
+      end if;
       result.estimator.localization.graph.edges[edge].enabled := true;
       result.estimator.localization.graph.edges[edge].id := edge;
-      result.estimator.localization.graph.edges[edge].kind := if edge <= 127 then 1 else 2;
+      result.estimator.localization.graph.edges[edge].kind := if edge <= cap-1 then 1 else 2;
       result.estimator.localization.graph.edges[edge].referenceId := source;
       result.estimator.localization.graph.edges[edge].referenceSlot := source;
       result.estimator.localization.graph.edges[edge].referenceEpoch := source;
@@ -71,10 +80,10 @@ package RGBDGraphProcessingTests
       result.estimator.localization.map.point[point,:] := result.estimator.poses.positions[owner,:]
         +result.estimator.poses.rotations[owner,:,:]*result.estimator.localization.map.localPoint[point,:];
     end for;
-    result.estimator.localization.estimator.position := result.estimator.poses.positions[128,:];
-    result.estimator.localization.estimator.rotation := result.estimator.poses.rotations[128,:,:];
-    result.estimator.localization.estimator.referencePosition := result.estimator.poses.positions[32,:];
-    result.estimator.localization.estimator.referenceRotation := result.estimator.poses.rotations[32,:,:];
+    result.estimator.localization.estimator.position := result.estimator.poses.positions[cap,:];
+    result.estimator.localization.estimator.rotation := result.estimator.poses.rotations[cap,:,:];
+    result.estimator.localization.estimator.referencePosition := result.estimator.poses.positions[ref,:];
+    result.estimator.localization.estimator.referenceRotation := result.estimator.poses.rotations[ref,:,:];
   end Fixture;
 
   function PartialFixture
@@ -188,10 +197,11 @@ package RGBDGraphProcessingTests
     RGBDGraphProcessing.State normalized; RGBDGraphProcessing.Policy policy;
     RGBDGraphProcessing.Result result; RGBDGraphProcessing.Result retry;
     Boolean valid; Integer owner; Integer selectedIndex; Integer count;
+    Integer cap = RGBDKeyframes.keyframeCapacity; Integer ref = div(cap,2);
   algorithm
-    assert(RGBDKeyframes.keyframeCapacity == 128 and RGBDGraphMeasurements.edgeCapacity == 256
+    assert(RGBDKeyframes.keyframeCapacity == 64 and RGBDGraphMeasurements.edgeCapacity == 256
       and RGBDKeyframes.featureCapacity == 350 and RGBDCatalogMapping.mapCapacity == 14400,
-      "GraphProcessing tests retain full128/256/350/14400 capacities");
+      "GraphProcessing tests retain full64/256/350/14400 capacities");
     checks := fill(false,checkCount);
     fresh := RGBDGraphProcessing.Empty(RGBDLocalizationCatalog.Empty(RGBDLocalizationCatalog.EmptyEstimator(),1,17));
     checks[1] := RGBDGraphProcessing.Valid(fresh);
@@ -202,8 +212,8 @@ package RGBDGraphProcessingTests
       and result.attempted and result.optimizerStatus == 2 and result.costBefore > 1e-6
       and result.costAfter < 1e-12 and result.acceptedIterations > 0 and not result.roundoffCertified;
     checks[3] := result.next.estimator.poses.revision == 8 and result.next.estimator.correctionRevision == 1
-      and result.next.estimator.graphRevisionUsed == 128 and RGBDGraphProcessing.Valid(result.next);
-    for node in 1:128 loop
+      and result.next.estimator.graphRevisionUsed == cap and RGBDGraphProcessing.Valid(result.next);
+    for node in 1:cap loop
       checks[3] := checks[3] and max(abs(result.next.estimator.poses.positions[node,:]-base.estimator.poses.positions[1,:])) < 1e-5
         and max(abs(result.next.estimator.poses.rotations[node,:,:]-base.estimator.poses.rotations[1,:,:])) < 1e-5;
     end for;
@@ -215,21 +225,21 @@ package RGBDGraphProcessingTests
         -result.next.estimator.poses.rotations[owner,:,:]*result.next.estimator.localization.map.localPoint[point,:])) < 1e-12;
     end for;
     checks[5] := RawHeld(base,result.next);
-    checks[6] := result.next.attempt.graphRevision == 128 and result.next.attempt.factorProvenance == 128
-      and result.next.selected.binding.currentCaptureSequence == 128 and result.next.selected.binding.referenceCaptureSequence == 32
-      and result.next.selected.binding.catalogPoseRevision == 7 and result.next.anchor.binding.provenance == 128
-      and result.next.selected.binding.factorProvenance == 128 and result.next.selected.covariance[1,7] <> 0
+    checks[6] := result.next.attempt.graphRevision == cap and result.next.attempt.factorProvenance == cap
+      and result.next.selected.binding.currentCaptureSequence == cap and result.next.selected.binding.referenceCaptureSequence == ref
+      and result.next.selected.binding.catalogPoseRevision == 7 and result.next.anchor.binding.provenance == cap
+      and result.next.selected.binding.factorProvenance == cap and result.next.selected.covariance[1,7] <> 0
       and SLAMCovariancePSDCheck(result.next.selected.covariance,1e-12) == 1;
     // Raw captures are the exact zero-cost truth in this fixture. A positive
     // costBefore proves that the actual optimizer used the corrected warm start.
     checks[7] := result.costBefore > 1e-6
-      and max(abs(base.estimator.localization.catalog.bodyPositions[128,:]-base.estimator.poses.positions[1,:])) == 0
-      and max(abs(base.estimator.poses.positions[128,:]-base.estimator.localization.catalog.bodyPositions[128,:])) > 1e-4;
+      and max(abs(base.estimator.localization.catalog.bodyPositions[cap,:]-base.estimator.poses.positions[1,:])) == 0
+      and max(abs(base.estimator.poses.positions[cap,:]-base.estimator.localization.catalog.bodyPositions[cap,:])) > 1e-4;
     previous := base;
-    previous.estimator.localization.referenceBirth.catalogId := 128;
-    previous.estimator.localization.referenceBirth.epoch := 128;
-    previous.estimator.localization.referenceBirth.sequence := 128;
-    previous.estimator.localization.estimator.referenceEpoch := 128;
+    previous.estimator.localization.referenceBirth.catalogId := cap;
+    previous.estimator.localization.referenceBirth.epoch := cap;
+    previous.estimator.localization.referenceBirth.sequence := cap;
+    previous.estimator.localization.estimator.referenceEpoch := cap;
     previous.estimator.localization.estimator.referencePosition := previous.estimator.localization.estimator.position;
     previous.estimator.localization.estimator.referenceRotation := previous.estimator.localization.estimator.rotation;
     for row in 1:15 loop for column in 1:6 loop
@@ -250,18 +260,18 @@ package RGBDGraphProcessingTests
     result := RGBDGraphProcessing.Correct(previous,policy,true);
     normalized := result.next; normalized.attempt := previous.attempt;
     checks[9] := not result.accepted and result.reason == 7 and result.commitReason == 6
-      and result.filterReason == 0 and result.attempted and result.next.attempt.graphRevision == 128
+      and result.filterReason == 0 and result.attempted and result.next.attempt.graphRevision == cap
       and Equal(normalized,previous) and result.projectedCount == 0 and result.prunedCount == 0;
     retry := RGBDGraphProcessing.Correct(result.next,policy,true);
     checks[10] := not retry.accepted and not retry.attempted and retry.reason == 2
       and retry.optimizerStatus == 0 and Equal(retry.next,result.next);
     for scenario in 11:19 loop
       previous := base; valid := true; policy := RGBDGraphProcessing.DefaultPolicy();
-      if scenario == 11 then previous.attempt.graphRevision := 128; previous.attempt.factorProvenance := 128;
-      elseif scenario == 12 then previous.captures.sequences[128] := 127;
-      elseif scenario == 13 then previous.estimator.poses.ids[128] := 0;
+      if scenario == 11 then previous.attempt.graphRevision := cap; previous.attempt.factorProvenance := cap;
+      elseif scenario == 12 then previous.captures.sequences[cap] := cap-1;
+      elseif scenario == 13 then previous.estimator.poses.ids[cap] := 0;
       elseif scenario == 14 then previous.estimator.localization.referenceBirth.catalogId := 0;
-      elseif scenario == 15 then previous.estimator.localization.predictionTime := 128.01;
+      elseif scenario == 15 then previous.estimator.localization.predictionTime := cap+0.01;
       elseif scenario == 16 then
         previous.estimator.localization.generation := -77; previous.captures.catalogNextId := -77; valid := false;
       elseif scenario == 17 then policy.maximumIterations := 0;
@@ -279,7 +289,7 @@ package RGBDGraphProcessingTests
     result := RGBDGraphProcessing.Correct(previous,policy,true);
     normalized := result.next; normalized.attempt := previous.attempt;
     checks[20] := not result.accepted and result.reason == 7 and result.commitReason == 5
-      and result.attempted and result.next.attempt.graphRevision == 128 and Equal(normalized,previous);
+      and result.attempted and result.next.attempt.graphRevision == cap and Equal(normalized,previous);
     retry := RGBDGraphProcessing.Correct(result.next,policy,true);
     checks[21] := not retry.accepted and retry.reason == 2 and not retry.attempted and Equal(retry.next,result.next);
     previous := corrected; previous.anchor.binding.slot := 0;
@@ -307,7 +317,7 @@ package RGBDGraphProcessingTests
       and fresh.vocabulary.count == 0 and not fresh.vocabulary.ready;
     // Smaller active prefixes retain the full arrays and opaque inactive poses.
     for scenario in 32:33 loop
-      count := if scenario == 32 then 33 else 127;
+      count := if scenario == 32 then ref+1 else cap-1;
       previous := PartialFixture(clock,count);
       policy := RGBDGraphProcessing.DefaultPolicy();
       result := RGBDGraphProcessing.Correct(previous,policy,true);

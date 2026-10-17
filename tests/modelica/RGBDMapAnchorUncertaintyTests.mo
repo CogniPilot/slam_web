@@ -3,7 +3,7 @@ package RGBDMapAnchorUncertaintyTests
     output RGBDMapAnchorUncertainty.Binding b;
   algorithm
     b.generation := 2; b.sourceRevision := 13; b.landmarkSlot := 14400;
-    b.anchorId := 128; b.anchorSlot := 128; b.anchorEpoch := 200; b.anchorPoseRevision := 7;
+    b.anchorId := RGBDMapAnchorUncertainty.anchorCapacity; b.anchorSlot := RGBDMapAnchorUncertainty.anchorCapacity; b.anchorEpoch := 200; b.anchorPoseRevision := 7;
     b.rawObservationEpoch := 300; b.rawObservationProvenance := 11; b.localBoundProvenance := 12; b.anchorBoundProvenance := 13;
     b.anchorTime := 2; b.observationTime := 3;
   end Binding;
@@ -17,7 +17,7 @@ package RGBDMapAnchorUncertaintyTests
     end for;
   end Equal;
   function Run
-    output Boolean checks[32];
+    output Boolean checks[33];
   protected
     RGBDMapAnchorUncertainty.Binding b; RGBDMapAnchorUncertainty.Binding expected;
     RGBDMapAnchorUncertainty.Estimate previous; RGBDMapAnchorUncertainty.Estimate result;
@@ -27,7 +27,7 @@ package RGBDMapAnchorUncertaintyTests
     Real beta; Real epsilon=1e-6; Real sign;
     Boolean requested; Boolean accepted; Boolean shouldAccept; Integer reason; Integer expectedReason;
   algorithm
-    checks := fill(false,32);
+    checks := fill(false,33);
     for scenario in 1:32 loop
       b := Binding(); expected := b; previous.binding := b;
       previous.worldPoint := {-77,88,-99}; previous.covariance := fill(-1e101,3,3);
@@ -65,7 +65,7 @@ package RGBDMapAnchorUncertaintyTests
       elseif scenario == 29 then Pl[3,3] := 1e101; shouldAccept := false; expectedReason := 5;
       elseif scenario == 30 then b.rawObservationEpoch := b.anchorEpoch; b.observationTime := b.anchorTime; expected := b;
       elseif scenario == 31 then b.anchorSlot := 1; expected := b; shouldAccept := false; expectedReason := 2;
-      elseif scenario == 32 then b.anchorId := b.anchorId+128; shouldAccept := false; expectedReason := 2;
+      elseif scenario == 32 then b.anchorId := b.anchorId+RGBDMapAnchorUncertainty.anchorCapacity; shouldAccept := false; expectedReason := 2;
       end if;
       (result,accepted,reason) := RGBDMapAnchorUncertainty.Transport(previous,b,expected,p,R,Pa,l,Pl,beta,requested);
       checks[scenario] := accepted == shouldAccept and reason == expectedReason;
@@ -91,5 +91,9 @@ package RGBDMapAnchorUncertaintyTests
       else checks[scenario] := checks[scenario] and Equal(result,previous);
       end if;
     end for;
+    // Bindings map anchor ids to map-anchor ring slots; the two capacities
+    // must stay equal so a slot never names a different ring entry.
+    checks[33] := RGBDMapAnchorUncertainty.anchorCapacity == RGBDMapAnchors.keyframeCapacity
+      and RGBDMapAnchorUncertainty.ValidBinding(Binding());
   end Run;
 end RGBDMapAnchorUncertaintyTests;

@@ -79,7 +79,7 @@ const simulationSucceeded=log.includes('The simulation finished successfully.');
 const pass=terminal.status===0&&bookendsEqual&&simulationSucceeded&&checks.length===checkCount&&checks.every(Boolean);
 let resources=null;try{resources=JSON.parse(terminal.stdout);}catch{}
 const report={status:pass?'OMC_CALIBRATED_NOISY_LOOP_GRAPH_REFERENCE_PASS':'FAILED_OR_INCOMPLETE',phase,model,
-  scope:'Controlled full128-keyframe/256-edge/350-feature Modelica noisy loop proposals, BoW retrieval, calibrated consensus and graph revalidation/rollback. No rendered-image, runtime WASM/browser or long-flight accuracy acceptance.',
+  scope:'Controlled full64-keyframe/256-edge/350-feature Modelica noisy loop proposals, BoW retrieval, calibrated consensus and graph revalidation/rollback. No rendered-image, runtime WASM/browser or long-flight accuracy acceptance.',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,result,metrics,generated,
   generatedScratchHomeRelative:path.relative(os.homedir(),output),processStatus:terminal.status,
   simulationSucceeded,resources,noisyLoopGraphReferenceQualified:!!pass,

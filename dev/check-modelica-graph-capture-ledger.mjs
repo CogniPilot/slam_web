@@ -44,7 +44,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(s=>sha(fs.readFileSync(path.join(app,s.path)))===s.sha256);
 const pass=processResult.status===0&&bookendsEqual&&checks.length===count&&checks.every(Boolean)&&modelResult?.simulationSucceeded;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Full128-slot metadata ownership; actual Catalog header admission, capture129/ring reuse with separate camera epoch/acceptedstep, noncapture step, time0firstcapture, malformed/restored metadata and exact disabled/refusal hold. Not raw-frame admission or browser session qualification.',
+  scope:'Full-capacity metadata ownership; actual Catalog header admission, capacity+1 capture/ring reuse with separate camera epoch/acceptedstep, noncapture step, time0firstcapture, malformed/restored metadata and exact disabled/refusal hold. Not raw-frame admission or browser session qualification.',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,processStatus:processResult.status,
   rumocaArtifactIssued:false,browserIntegrated:false,fullSlamAccepted:false};
 fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');

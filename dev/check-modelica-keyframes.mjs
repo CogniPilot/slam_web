@@ -69,7 +69,7 @@ if(mode==='model'){
     const time=columns.indexOf('time');
     const rowsValid=columnsValid&&rows.length>=2&&rows.every(row=>row.length===expected.length&&Number.isFinite(row[time])
       &&checkNames.every(name=>row[columns.indexOf(name)]===0||row[columns.indexOf(name)]===1)
-      &&(scope!=='initialization'||row[columns.indexOf('slotsValidated')]===3*128))
+      &&(scope!=='initialization'||row[columns.indexOf('slotsValidated')]===3*64))
       &&rows[0][time]===0&&rows.at(-1)[time]===0.001;
     if(columnsValid&&rowsValid)controls=checkNames.map(name=>rows.every(row=>row[columns.indexOf(name)]===1));
     modelResult={path:filename,sha256:sha(raw),columnsValid,rowsValid,rows:rows.length,
@@ -80,8 +80,8 @@ const unchanged=sources.every(source=>sha(fs.readFileSync(path.join(app,source.p
 const passed=result.status===0&&unchanged&&controls.length===checkCount&&controls.every(Boolean)
   &&(mode!=='model'||modelResult?.simulationSucceeded===true);
 const report={status:passed?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:scope==='initialization'?'All128 slots and entire350x49 payload against frozen pre-optimization empty-frame contract, three generation/vocabulary configurations'
-    :'full128-slot Modelica catalog and sparse350-feature payload; OMC differential semantics only',
+  scope:scope==='initialization'?'All64 slots and entire350x49 payload against frozen pre-optimization empty-frame contract, three generation/vocabulary configurations'
+    :'full64-slot Modelica catalog and sparse350-feature payload; OMC differential semantics only',
   compilerVersion:version.stdout.trim(),mode,compilerFlags:flags,sources,bookendsEqual:unchanged,flags:controls,modelResult,
   lastPhase:fs.existsSync(path.join(output,'phase.txt'))?fs.readFileSync(path.join(output,'phase.txt'),'utf8'):null,
   processStatus:result.status,signal:result.signal,

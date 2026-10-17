@@ -64,7 +64,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===20&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Full128 catalog /350 feature slots /256 measured edges: raw-field holds, wrap pruning, chain admission, four-loop capacity replacement, duplicate admission, malformed refusal, reset recovery, chronological mapping, E-scaled information, and idle canonical problem before invalid-domain validation',
+  scope:'Full-capacity catalog /350 feature slots /256 measured edges: raw-field holds, wrap pruning, chain admission, four-loop capacity replacement, duplicate admission, malformed refusal, reset recovery, chronological mapping, E-scaled information, and idle canonical problem before invalid-domain validation',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   referenceGraphAdmissionQualified:pass,productionGraphAdmissionIntegrated:false,fullSlamAccepted:false};

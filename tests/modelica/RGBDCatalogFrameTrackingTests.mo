@@ -35,7 +35,7 @@ package RGBDCatalogFrameTrackingTests
       end if;
     end for;
     previous := RGBDCatalogMapping.Empty(1,17);
-    previous.catalogRevision := 128;
+    previous.catalogRevision := RGBDKeyframes.keyframeCapacity;
     previous.frame := 128;
     previous.imageTime := 128;
     previous.imageEpoch := 128;
@@ -61,8 +61,8 @@ package RGBDCatalogFrameTrackingTests
     expected.occupied[1] := 1;
     expected.point[1,:] := candidates[feature,:];
     expected.localPoint[1,:] := localPoint;
-    expected.anchorId[1] := 128;
-    expected.anchorSlot[1] := 128;
+    expected.anchorId[1] := RGBDKeyframes.keyframeCapacity;
+    expected.anchorSlot[1] := RGBDKeyframes.keyframeCapacity;
     expected.confidence[1] := 1;
     expected.lastSeen[1] := measurement.imageTime;
     expected.lastFrame[1] := expected.frame;

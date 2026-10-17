@@ -29,7 +29,7 @@ it('preserves the existing 56-file order and exact complete authored source in b
   // Assert the existing full-domain source remains present, without compiling
   // it, shrinking arrays, or substituting a numerical fixture.
   for(const text of ['imageHeight = 90','imageWidth = 160','featureCapacity = 350',
-    'keyframeCapacity = 128','edgeCapacity = 256','mapCapacity = imageHeight*imageWidth'])
+    'keyframeCapacity = 64','edgeCapacity = 256','mapCapacity = imageHeight*imageWidth'])
     expect(result.source).toContain(text);
   for(const model of result.modelNames)expect(result.source).toContain(`model ${model}`);
 });

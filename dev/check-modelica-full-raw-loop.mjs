@@ -77,7 +77,7 @@ const simulationSucceeded=log.includes('The simulation finished successfully.');
 const pass=terminal.status===0&&bookendsEqual&&simulationSucceeded&&checks.length===checkCount&&checks.every(Boolean);
 let resources=null;try{resources=JSON.parse(terminal.stdout);}catch{}
 const report={status:pass?'OMC_FULL_RAW_LOOP_PASS':'FAILED_OR_INCOMPLETE',model,
-  scope:'Actual raw full90x160/350 initialization then30 full-State carries,6s unique-image chronology,128-keyframe/256-word/256-edge/14400-map capacities; measured BoW retrieval and geometric kind2 loop back to first capture, graph correction and anchored map invariants. Core-dependent filter math; OMC reference only. No Rumoca/browser/WASM/throughput qualification.',
+  scope:'Actual raw full90x160/350 initialization then30 full-State carries,6s unique-image chronology,64-keyframe/256-word/256-edge/14400-map capacities; measured BoW retrieval and geometric kind2 loop back to first capture, graph correction and anchored map invariants. Core-dependent filter math; OMC reference only. No Rumoca/browser/WASM/throughput qualification.',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,result,metrics,generated,
   generatedScratchHomeRelative:path.relative(os.homedir(),output),processStatus:terminal.status,
   simulationSucceeded,resources,rawLoopCompositionQualified:!!pass,

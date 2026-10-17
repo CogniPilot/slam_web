@@ -21,7 +21,7 @@ package RGBDMapAnchorAssignmentTests
   algorithm
     assert(slots == RGBDMapAnchors.mapCapacity and features == 350
       and nodes == RGBDMapAnchors.keyframeCapacity,
-      "Anchor assignment acceptance requires all 14400/350/128 slots");
+      "Anchor assignment acceptance requires all 14400/350/64 slots");
     passed := fill(false,40);
     for scenario in 1:40 loop
       enabled := fill(true,nodes); positions := zeros(nodes,3);

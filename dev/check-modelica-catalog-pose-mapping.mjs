@@ -100,7 +100,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===checkCount&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Actual full128/256/350/14400 Commit to corrected-view observation and visual capture-slot-reuse to subsequent merge, raw captures immutable, corrected means held, separate pose/capture revisions, legacy raw-default refusal, stale/late rollback. Each phase executes its complete original fixed-domain control suite separately. Fixed full domains, no optimizer or runtime SLAM qualification',
+  scope:'Actual full64/256/350/14400 Commit to corrected-view observation and visual capture-slot-reuse to subsequent merge, raw captures immutable, corrected means held, separate pose/capture revisions, legacy raw-default refusal, stale/late rollback. Each phase executes its complete original fixed-domain control suite separately. Fixed full domains, no optimizer or runtime SLAM qualification',
   phase,compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   referenceCatalogPoseMappingQualified:pass&&phase==='mapping',referenceLegacyFrameQualified:pass&&phase==='frame',referenceBootstrapQualified:pass&&phase==='bootstrap',actualLocalizationProducerExecuted:false,publicLocalizationCatalogModelQualified:false,productionLocalizationCatalogIntegrated:false,fullSlamAccepted:false};

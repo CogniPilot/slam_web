@@ -106,7 +106,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===checkCount&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Actual PrepareProblem/durable corrected warm-start/optimizer/captured anchor/typed selected covariance and full21 atomic filter/map composition. Full128/256/350/14400 controlled chain and loop graph, distinct and same-capture cases, immutable raw owners, full-map geometry and late rejection/replay. Default48 covariance iterations on success; explicit zero-PCG conservative tree bound in rollback-isolation cases. Not actual camera producer, full graph convergence gate, Rumoca WASM or browser SLAM.',
+  scope:'Actual PrepareProblem/durable corrected warm-start/optimizer/captured anchor/typed selected covariance and full21 atomic filter/map composition. Full64/256/350/14400 controlled chain and loop graph, distinct and same-capture cases, immutable raw owners, full-map geometry and late rejection/replay. Default48 covariance iterations on success; explicit zero-PCG conservative tree bound in rollback-isolation cases. Not actual camera producer, full graph convergence gate, Rumoca WASM or browser SLAM.',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   referenceGraphProcessingQualified:pass,actualLocalizationProducerExecuted:false,publicLocalizationCatalogModelQualified:false,productionLocalizationCatalogIntegrated:false,fullSlamAccepted:false};
