@@ -1,5 +1,6 @@
 import {expect,it} from 'vitest';
-import {LoopClosureHistory,keyframeThumbnail} from '../src/loop-closure-history';
+import {readFileSync} from 'node:fs';
+import {KEYFRAME_CATALOG_CAPACITY,LoopClosureHistory,keyframeThumbnail} from '../src/loop-closure-history';
 import type {Estimate,SensorFrame} from '../src/types';
 const frame=(sequence:number)=>({sequence,time:sequence*.2,calibration:{width:2,height:1},rgb:new Uint8Array([1,2,3,4,5,6,99,99]),
   imageLayout:{color:{width:2,height:1,strideBytes:8,format:'RGB8'}}}) as SensorFrame;
@@ -26,14 +27,20 @@ it('pairs exact retained keyframe images by identity through catalog ring reuse'
   expect(history.acceptedCount).toBe(2);
 });
 
+it('bounds presentation snapshots by the authored keyframe catalog capacity',()=>{
+  const source=readFileSync(new URL('../models/LoopClosure/RGBDKeyframes.mo',import.meta.url),'utf8');
+  expect(source).toContain(`constant Integer keyframeCapacity = ${KEYFRAME_CATALOG_CAPACITY};`);
+});
+
 it('bounds retained snapshots and closure history and clears them on clock reset',()=>{
   const history=new LoopClosureHistory();
+  const capacity=KEYFRAME_CATALOG_CAPACITY;
   for(let sequence=0;sequence<160;sequence++){
-    const ids=Array.from({length:Math.min(sequence+1,128)},(_,i)=>sequence+2-Math.min(sequence+1,128)+i);
+    const ids=Array.from({length:Math.min(sequence+1,capacity)},(_,i)=>sequence+2-Math.min(sequence+1,capacity)+i);
     const e=estimate(ids);if(sequence)e.poseGraph!.edges=[{id:sequence,from:ids.length-2,to:ids.length-1,kind:'loop'}];
     history.observe(frame(sequence),e);
   }
-  expect(history.images.size).toBeLessThanOrEqual(128);expect(history.closures).toHaveLength(6);expect(history.acceptedCount).toBe(159);
+  expect(history.images.size).toBeLessThanOrEqual(capacity);expect(history.closures).toHaveLength(6);expect(history.acceptedCount).toBe(159);
   history.observe(frame(0),estimate([1]));expect(history.acceptedCount).toBe(0);expect(history.closures).toHaveLength(0);expect(history.images.size).toBe(1);
 });
 

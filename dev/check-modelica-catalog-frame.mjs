@@ -93,7 +93,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===checkCount&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:tracking?'Actual full-capacity Advance after failed rigid consensus: retained catalog/graph, admitted map observation with old anchor, refusal receipts, and corrupted-candidate rollback. No browser/WASM qualification.':'Actual Advance function full128/256/350/14400/96:two noncaptureimages with poisoned capture-only parameters, fullvisualcapture+maponce, late map failure, stale mapepoch and stale graph wholeowner holds. PublicFrameStep projection not qualified',
+  scope:tracking?'Actual full-capacity Advance after failed rigid consensus: retained catalog/graph, admitted map observation with old anchor, refusal receipts, and corrupted-candidate rollback. No browser/WASM qualification.':'Actual Advance function full32/256/350/14400/96:two noncaptureimages with poisoned capture-only parameters, fullvisualcapture+maponce, late map failure, stale mapepoch and stale graph wholeowner holds. PublicFrameStep projection not qualified',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   referenceFrameFunctionQualified:pass,publicFrameStepQualified:false,productionFrameIntegrated:false,fullSlamAccepted:false};

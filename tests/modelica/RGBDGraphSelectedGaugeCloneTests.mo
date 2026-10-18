@@ -1,5 +1,6 @@
 package RGBDGraphSelectedGaugeCloneTests
   constant Integer checkCount = 20;
+  constant Integer capacity = RGBDKeyframes.keyframeCapacity;
 
   function Cholesky6
     input Real A[6,6]; output Real L[6,6];
@@ -21,7 +22,7 @@ package RGBDGraphSelectedGaugeCloneTests
     RGBDGraphSelectedGauge.Context context; RGBDGraphSelectedGauge.Context previousContext;
     RGBDGraphSelectedGauge.Result result; GraphGaugeUncertainty.Binding binding;
     GraphGaugeUncertainty.Estimate previous; ModelicaPoseGraphCovariance.Result selected;
-    Real positions[128,3]; Real rotations[128,3,3]; Real pa[3]; Real Ra[3,3]; Real Pa[6,6];
+    Real positions[capacity,3]; Real rotations[capacity,3,3]; Real pa[3]; Real Ra[3,3]; Real Pa[6,6];
     Real LA[6,6]; Real LR[6,6]; Real t[2,3]; Real Q[2,3,3]; Real JA[12,6]; Real ignored[12,12];
     Real oracle[12,12]; Real shared[12,6]; Real actual[12,12]; Real gapFactor[12,6]; Real gap[12,12];
     Real beta; Real sign; Real scale;
@@ -30,10 +31,10 @@ package RGBDGraphSelectedGaugeCloneTests
   algorithm
     checks := fill(false,checkCount);
     for scenario in 1:checkCount loop
-      count := if scenario == 3 then 4 else 128;
+      count := if scenario == 3 then 4 else capacity;
       (catalog,graph,context,positions,rotations,binding) := RGBDGraphSelectedGaugeTests.Fixture(count,clock);
-      aSlot := mod(binding.anchorId-1,128)+1;
-      node := if scenario == 2 then 1 else count; cSlot := mod((if count == 128 then 133 else 0)+node-1,128)+1;
+      aSlot := mod(binding.anchorId-1,capacity)+1;
+      node := if scenario == 2 then 1 else count; cSlot := mod((if count == capacity then 133 else 0)+node-1,capacity)+1;
       binding.currentId := catalog.ids[cSlot]; binding.currentEpoch := catalog.epochs[cSlot];
       binding.currentTime := catalog.imageTimes[cSlot]; binding.currentCaptureSequence := context.captureSequences[cSlot];
       binding.referenceId := binding.currentId; binding.referenceEpoch := binding.currentEpoch;
@@ -43,7 +44,7 @@ package RGBDGraphSelectedGaugeCloneTests
       ledger.epochs := catalog.epochs; ledger.times := catalog.imageTimes;
       previousContext := context; previousContext.sourceRevision := -77;
       if scenario >= 17 then
-        if scenario == 17 then ledger.ids[cSlot] := ledger.ids[cSlot]-128;
+        if scenario == 17 then ledger.ids[cSlot] := ledger.ids[cSlot]-capacity;
         elseif scenario == 18 then ledger.epochs[cSlot] := ledger.epochs[cSlot]+1;
         elseif scenario == 19 then ledger.times[cSlot] := ledger.times[cSlot]+0.1;
         elseif scenario == 20 then ledger.sequences[cSlot] := 0;
@@ -66,13 +67,13 @@ package RGBDGraphSelectedGaugeCloneTests
         elseif scenario == 8 then binding.referenceTime := binding.referenceTime-0.1; expectedReason := 3;
         elseif scenario == 9 then binding.referenceCaptureSequence := binding.referenceCaptureSequence-1; expectedReason := 3;
         elseif scenario == 10 then binding.referenceId := binding.referenceId-1; expectedReason := 3;
-        elseif scenario == 11 then context.captureIds[cSlot] := context.captureIds[cSlot]-128; expectedReason := 2;
+        elseif scenario == 11 then context.captureIds[cSlot] := context.captureIds[cSlot]-capacity; expectedReason := 2;
         elseif scenario == 12 then context.captureSequences[cSlot] := 0; expectedReason := 2;
         elseif scenario == 13 then context.captureSequences[cSlot] := 1007; expectedReason := 2;
         elseif scenario == 14 then binding.factorProvenance := 8; expectedReason := 3;
         elseif scenario == 15 then
           requested := false; expectedReason := 1; node := -77; catalog.nextId := -77;
-          context.generation := -77; positions := fill(1e100,128,3); Pa := fill(-1e100,6,6);
+          context.generation := -77; positions := fill(1e100,capacity,3); Pa := fill(-1e100,6,6);
         elseif scenario == 16 then rotations[cSlot,1,1] := 2; expectedReason := 4;
         end if;
         result := RGBDGraphSelectedGauge.SelectAndTransport(previous,catalog,graph,context,positions,rotations,
@@ -109,7 +110,7 @@ package RGBDGraphSelectedGaugeCloneTests
               and selected.upper[i,j] == selected.upper[i+6,j] and selected.upper[i,j] == selected.upper[i+6,j+6];
           end for; end for;
           if scenario == 1 then
-            checks[scenario] := checks[scenario] and problem.nodeCount == 128 and problem.edgeCount == 256
+            checks[scenario] := checks[scenario] and problem.nodeCount == capacity and problem.edgeCount == 256
               and problem.catalogSlot[1] <> 1 and result.estimate.covariance[1,7] > 0;
           elseif scenario == 2 then
             checks[scenario] := checks[scenario] and max(abs(selected.upper)) == 0

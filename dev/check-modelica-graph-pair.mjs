@@ -1,6 +1,6 @@
 // Test-only independent dense formula oracle; never imported by application code.
 import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import {createHash} from 'node:crypto';import {fileURLToPath} from 'node:url';import {spawnSync} from 'node:child_process';
-import {fixture,denseInformation,factor} from './graph-covariance-reference.mjs';
+import {nodeCapacity as N,fixture,denseInformation,factor} from './graph-covariance-reference.mjs';
 const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),model='ModelicaPoseGraphPairAcceptance';
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');fs.mkdirSync(root,{recursive:true});const output=fs.mkdtempSync(path.join(root,'graph-pair-semantics-'));
 const sha=b=>createHash('sha256').update(b).digest('hex');const names=['models/Optimization/ModelicaPoseGraph.mo','models/Optimization/ModelicaPoseGraphCovariance.mo','tests/modelica/ModelicaPoseGraphPairAcceptance.mo'];
@@ -13,11 +13,11 @@ fs.writeFileSync(path.join(output,'command.json'),JSON.stringify(command,null,2)
 const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0),solve=({L,n},b)=>{const x=b.slice();for(let i=0;i<n;i++){for(let j=0;j<i;j++)x[i]-=L[i*n+j]*x[j];x[i]/=L[i*n+i];}for(let i=n-1;i>=0;i--){for(let j=i+1;j<n;j++)x[i]-=L[j*n+i]*x[j];x[i]/=L[i*n+i];}return x;};
 function denseOracle(scenario){const data=fixture(scenario===2?6:scenario===3?7:1);
  if(scenario===5||scenario===10)for(const edge of data.edges)edge.W=edge.W.map(row=>row.map(v=>v*1e16));
- if(scenario===6||scenario===10)data.edges=data.edges.filter(e=>e.i!==63&&e.j!==63);
- if(scenario===11){data.p[0]=[0,0,0];data.p[127]=[0,0,0];data.R[127]=[[1,0,0],[0,1,0],[0,0,1]];
+ if(scenario===6||scenario===10)data.edges=data.edges.filter(e=>e.i!==N/2-1&&e.j!==N/2-1);
+ if(scenario===11){data.p[0]=[0,0,0];data.p[N-1]=[0,0,0];data.R[N-1]=[[1,0,0],[0,1,0],[0,0,1]];
   const I=Array.from({length:6},(_,i)=>Array.from({length:6},(_,j)=>+(i===j)));
-  data.edges=[{i:0,j:127,J:[I.map(row=>row.map(v=>-v)),I],W:I.map(row=>row.map(v=>v*1e13))}];}
- const inactive=node=>((scenario===6||scenario===10)&&node===64)||(scenario===11&&node!==128);
+  data.edges=[{i:0,j:N-1,J:[I.map(row=>row.map(v=>-v)),I],W:I.map(row=>row.map(v=>v*1e13))}];}
+ const inactive=node=>((scenario===6||scenario===10)&&node===N/2)||(scenario===11&&node!==N);
  const {H,n}=denseInformation(data),blocks=[];
  for(let base=0;base<n;base+=12){const size=Math.min(12,n-base),D=new Float64Array(144);
   for(let i=0;i<12;i++)for(let j=0;j<12;j++)D[i*12+j]=i<size&&j<size?H[(base+i)*n+base+j]:(i===j?1:0);
@@ -38,10 +38,10 @@ function denseOracle(scenario){const data=fixture(scenario===2?6:scenario===3?7:
 }
 const csv=path.join(output,model+'_res.csv'),cases=[];let csvValid=false,csvSHA256=null;
 if(fs.existsSync(csv)){const raw=fs.readFileSync(csv,'utf8'),lines=raw.trim().split(/\r?\n/),header=lines.shift(),cols=[...header.matchAll(/"([^"]*)"(?:,|$)/g)].map(m=>m[1]);const rows=lines.map(l=>l.split(',').map(Number));
- const expected=['time','scenario','accepted','canonicalRefusal',...['first','second'].flatMap(p=>Array.from({length:128},(_,i)=>Array.from({length:6},(_,j)=>`${p}[${i+1},${j+1}]`)).flat())];
+ const expected=['time','scenario','accepted','canonicalRefusal',...['first','second'].flatMap(p=>Array.from({length:N},(_,i)=>Array.from({length:6},(_,j)=>`${p}[${i+1},${j+1}]`)).flat())];
  csvValid=/^"[^"]*"(?:,"[^"]*")*$/.test(header)&&cols.length===expected.length&&new Set(cols).size===expected.length&&expected.every(p=>cols.includes(p))&&rows.length>=4&&rows.every(r=>r.length===expected.length&&r.every(Number.isFinite))&&lines.every(l=>l.split(',').every(v=>/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(v)))&&rows[0][cols.indexOf('time')]===0&&rows.at(-1)[cols.indexOf('time')]===1.375;csvSHA256=sha(raw);
  if(csvValid)for(let scenario=1;scenario<=11;scenario++){const observed=rows.filter(r=>r[cols.indexOf('scenario')]===scenario),checks={observed:observed.length>0};let metrics={};
- if(observed.length){const row=observed[0],first=Array.from({length:128*6},(_,k)=>row[cols.indexOf(`first[${Math.floor(k/6)+1},${k%6+1}]`)]),second=Array.from({length:128*6},(_,k)=>row[cols.indexOf(`second[${Math.floor(k/6)+1},${k%6+1}]`)]);
+ if(observed.length){const row=observed[0],first=Array.from({length:N*6},(_,k)=>row[cols.indexOf(`first[${Math.floor(k/6)+1},${k%6+1}]`)]),second=Array.from({length:N*6},(_,k)=>row[cols.indexOf(`second[${Math.floor(k/6)+1},${k%6+1}]`)]);
   checks.stableRepeated=observed.every(r=>cols.every((p,i)=>p==='time'||r[i]===row[i]));checks.accepted=row[cols.indexOf('accepted')]===([4,7,8,9].includes(scenario)?0:1);
   if([4,7,8,9].includes(scenario))checks.rankRefusal=row[cols.indexOf('canonicalRefusal')]===1&&[...first,...second].every(v=>v===0);
   else{const o=denseOracle(scenario),a=first.slice(6,6+o.n),b=second.slice(6,6+o.n),scale=Math.max(1e-20,...o.first.map(Math.abs),...o.second.map(Math.abs)),tol=5e-7*scale,maxDifference=Math.max(...a.map((v,i)=>Math.abs(v-o.first[i])),...b.map((v,i)=>Math.abs(v-o.second[i]))),cross=Math.abs(dot(o.f,b)-dot(o.g,a)),crossScale=Math.max(1,Math.abs(dot(o.f,b)),Math.abs(dot(o.g,a)));
@@ -49,4 +49,4 @@ if(fs.existsSync(csv)){const raw=fs.readFileSync(csv,'utf8'),lines=raw.trim().sp
    metrics={denseFreeDimension:o.n,comparedCoordinates:2*o.n,maxDifference,tolerance:tol,crossDifference:cross,firstQuadratic:dot(o.f,a),secondQuadratic:dot(o.g,b)};}}
  cases.push({scenario,checks,metrics,pass:Object.values(checks).every(Boolean)});}}
 const bookendsEqual=sources.every(s=>sha(fs.readFileSync(path.join(app,s.path)))===s.sha256),log=fs.readFileSync(path.join(output,'semantics.log'),'utf8');const pass=result.status===0&&bookendsEqual&&csvValid&&cases.length===11&&cases.every(c=>c.pass)&&log.includes('The simulation finished successfully.');
-const report={status:pass?'OMC_PAIR_FORMULA_REFERENCE_PASS':'FAILED_OR_INCOMPLETE',scope:'Actual full128/256 Modelica paired full-H principal-block construction/balanced apply against independent finite-difference full dense H and direct12block solves, no production dense matrix or covariance acceptance.',sources,bookendsEqual,processStatus:result.status,csvValid,csvSHA256,cases};fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');const durable=path.join(app,'dev/artifacts/modelica-graph-covariance-semantics',path.basename(output));fs.mkdirSync(durable,{recursive:true});for(const p of ['report.json','command.json','resources.json','semantics.log','coarse.mos',model+'_res.csv'])if(fs.existsSync(path.join(output,p)))fs.copyFileSync(path.join(output,p),path.join(durable,p));console.log(JSON.stringify({directory:output,...report}));process.exitCode=pass?0:1;
+const report={status:pass?'OMC_PAIR_FORMULA_REFERENCE_PASS':'FAILED_OR_INCOMPLETE',scope:`Actual full${N}/256 Modelica paired full-H principal-block construction/balanced apply against independent finite-difference full dense H and direct12block solves, no production dense matrix or covariance acceptance.`,sources,bookendsEqual,processStatus:result.status,csvValid,csvSHA256,cases};fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');const durable=path.join(app,'dev/artifacts/modelica-graph-covariance-semantics',path.basename(output));fs.mkdirSync(durable,{recursive:true});for(const p of ['report.json','command.json','resources.json','semantics.log','coarse.mos',model+'_res.csv'])if(fs.existsSync(path.join(output,p)))fs.copyFileSync(path.join(output,p),path.join(durable,p));console.log(JSON.stringify({directory:output,...report}));process.exitCode=pass?0:1;

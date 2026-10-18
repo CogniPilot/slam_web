@@ -138,15 +138,15 @@ package RGBDCatalogGraphTests
       reference := RGBDLoopVerificationTests.Reference(scenario == 10);
       (vocabulary,enabled) := RGBDCatalogLoopTests.Vocabulary(reference);
       current := RGBDLoopVerificationTests.Current(reference,C,t,0,scenario == 10);
-      current.id := 129; current.imageTime := 140;
+      current.id := RGBDKeyframes.keyframeCapacity+1; current.imageTime := 140;
       expected := scenario == 1 or scenario == 9 or scenario == 10;
       if scenario == 2 then graph.nextEdgeId := RGBDKeyframes.identifierLimit;
       elseif scenario == 3 then catalog.bodyPositions[2,1] := 1e101;
-      elseif scenario == 4 then catalog.descriptors[128,:,:] := zeros(350,49);
+      elseif scenario == 4 then catalog.descriptors[RGBDKeyframes.keyframeCapacity,:,:] := zeros(350,49);
       elseif scenario == 5 then current.generation := 2;
       elseif scenario == 6 then current.epoch := catalog.lastEpoch;
       elseif scenario == 7 then current.imageTime := catalog.lastTime;
-      elseif scenario == 8 then graph.edges[127].enabled := false;
+      elseif scenario == 8 then graph.edges[RGBDKeyframes.keyframeCapacity-1].enabled := false;
       elseif scenario == 9 then
         catalog := RGBDKeyframes.Empty(); graph := RGBDGraphMeasurements.Empty();
         current := reference; current.id := 1; current.epoch := 1; current.imageTime := 1;
@@ -164,13 +164,14 @@ package RGBDCatalogGraphTests
             and result.problem.nodeCount == 1 and result.problem.edgeCount == 0;
         else
           checks[scenario] := checks[scenario] and result.sequentialDiagnostics.verified
-            and result.sequentialDiagnostics.referenceId == 128 and result.sequentialDiagnostics.currentId == 129
+            and result.sequentialDiagnostics.referenceId == RGBDKeyframes.keyframeCapacity
+            and result.sequentialDiagnostics.currentId == RGBDKeyframes.keyframeCapacity+1
             and max(abs(result.sequentialDiagnostics.opticalRotation-C)) < 1e-9
             and max(abs(result.sequentialDiagnostics.opticalTranslation-t)) < 1e-9
             and result.loopDiagnostics.verifiedCount == 4 and result.graphDiagnostics.admittedSequential == 1
             and result.graphDiagnostics.admittedLoops == 4 and result.evictedId == 1
-            and result.problem.nodeCount == 128 and result.problem.nodeId[1] == 2
-            and result.problem.nodeId[128] == 129;
+            and result.problem.nodeCount == RGBDKeyframes.keyframeCapacity and result.problem.nodeId[1] == 2
+            and result.problem.nodeId[RGBDKeyframes.keyframeCapacity] == RGBDKeyframes.keyframeCapacity+1;
         end if;
       else
         checks[scenario] := checks[scenario] and EqualCatalog(result.catalog,catalog)

@@ -31,13 +31,13 @@ package RGBDCatalogMappingTests
     Real C[3,3]; Real B[3,3]; Real A[3,3]; Real t[3]; Real p[3]; Real optical[3];
     Integer source; Integer reason; Real width; Real lifetime; Boolean requested; Boolean accepted;
   algorithm
-    assert(trials == 96 and RGBDCatalogMapping.mapCapacity == 14400,"Mapping controls retain full14400/350/128/256/96 domains");
+    assert(trials == 96 and RGBDCatalogMapping.mapCapacity == 14400,"Mapping controls retain full14400/350/64/256/96 domains");
     catalog := RGBDCatalogLoopTests.FullCatalog(false); graph := RGBDGraphMeasurementTests.FullState();
     reference := RGBDLoopVerificationTests.Reference(false);
     C := PGExp({0.03,-0.04,0.12}); t := {0.3,-0.2,0.1};
     B := PGExp({-0.6,0.4,-0.3}); A := PGExp({0.1,0.2,-0.1})*[0,0,1;-1,0,0;0,-1,0]; p := {90,70,10};
     current := RGBDLoopVerificationTests.Current(reference,C,t,0,false);
-    current.id := 129; current.imageTime := 140; current.epoch := 200;
+    current.id := RGBDKeyframes.keyframeCapacity+1; current.imageTime := 140; current.epoch := 200;
     (vocabulary,enabled) := RGBDCatalogLoopTests.Vocabulary(reference);
     visual := RGBDCatalogGraphCapture.Capture(catalog,current,vocabulary,enabled,graph,true,trials=trials);
     assert(visual.accepted and visual.loopDiagnostics.verifiedCount == 4 and visual.sequentialDiagnostics.verified,
@@ -51,12 +51,12 @@ package RGBDCatalogMappingTests
         world[feature,:] := B*local[feature,:]+p;
       end if;
     end for;
-    base := RGBDCatalogMapping.Empty(1,17); base.catalogRevision := 128; base.imageTime := 128; base.frame := 128; base.imageEpoch := 128;
+    base := RGBDCatalogMapping.Empty(1,17); base.catalogRevision := RGBDKeyframes.keyframeCapacity; base.imageTime := 128; base.frame := 128; base.imageEpoch := 128;
     base.occupied[1] := 1; base.confidence[1] := 3; base.lastSeen[1] := 128; base.lastFrame[1] := 128;
     base.anchorId[1] := 1; base.anchorSlot[1] := 1; base.localPoint[1,:] := {1,2,3};
     base.point[1,:] := reference.bodyRotation*base.localPoint[1,:]+reference.bodyPosition;
     base.occupied[14400] := 1; base.confidence[14400] := 3; base.lastSeen[14400] := 128; base.lastFrame[14400] := 128;
-    base.anchorId[14400] := 128; base.anchorSlot[14400] := 128; base.point[14400,:] := world[345,:];
+    base.anchorId[14400] := RGBDKeyframes.keyframeCapacity; base.anchorSlot[14400] := RGBDKeyframes.keyframeCapacity; base.point[14400,:] := world[345,:];
     base.localPoint[14400,:] := transpose(reference.bodyRotation)*(world[345,:]-reference.bodyPosition);
     checks := fill(false,18);
     for scenario in 1:14 loop
@@ -86,21 +86,21 @@ package RGBDCatalogMappingTests
       assert(not accepted or result.accepted,"Expected acceptance scenario="+String(scenario)+" stage="+String(result.rejectionReason)+" catalog="+String(result.diagnostics.catalogRejectionReason)+" update="+String(result.diagnostics.updateRejectionReason)+" map="+String(result.diagnostics.mapRejectionReason)+" anchor="+String(result.diagnostics.anchorRejectionReason));
       checks[scenario] := result.accepted == accepted;
       if accepted then
-        expected := RGBDCatalogMapping.Empty(1,17); expected.catalogRevision := 129; expected.imageTime := 140; expected.frame := 129; expected.imageEpoch := 200;
+        expected := RGBDCatalogMapping.Empty(1,17); expected.catalogRevision := RGBDKeyframes.keyframeCapacity+1; expected.imageTime := 140; expected.frame := 129; expected.imageEpoch := 200;
         if scenario <> 12 then
           expected.occupied[14400] := 1; expected.point[14400,:] := world[345,:];
-          expected.localPoint[14400,:] := base.localPoint[14400,:]; expected.anchorId[14400] := 128; expected.anchorSlot[14400] := 128;
+          expected.localPoint[14400,:] := base.localPoint[14400,:]; expected.anchorId[14400] := RGBDKeyframes.keyframeCapacity; expected.anchorSlot[14400] := RGBDKeyframes.keyframeCapacity;
           expected.confidence[14400] := if scenario == 11 then 3 else if scenario == 13 then 3 else 4;
           expected.lastSeen[14400] := if scenario == 11 then 128 else 140;
           expected.lastFrame[14400] := if scenario == 11 then 128 else 129;
         end if;
         if scenario <> 11 then
           expected.occupied[1] := 1; expected.point[1,:] := world[1,:]; expected.localPoint[1,:] := local[1,:];
-          expected.anchorId[1] := 129; expected.anchorSlot[1] := 1; expected.confidence[1] := 1;
+          expected.anchorId[1] := RGBDKeyframes.keyframeCapacity+1; expected.anchorSlot[1] := 1; expected.confidence[1] := 1;
           expected.lastSeen[1] := 140; expected.lastFrame[1] := 129;
           if scenario == 12 then
             expected.occupied[2] := 1; expected.point[2,:] := world[345,:]; expected.localPoint[2,:] := local[345,:];
-            expected.anchorId[2] := 129; expected.anchorSlot[2] := 1; expected.confidence[2] := 1;
+            expected.anchorId[2] := RGBDKeyframes.keyframeCapacity+1; expected.anchorSlot[2] := 1; expected.confidence[2] := 1;
             expected.lastSeen[2] := 140; expected.lastFrame[2] := 129;
           end if;
         end if;
@@ -137,8 +137,8 @@ package RGBDCatalogMappingTests
       else
         catalog := RGBDCatalogLoopTests.FullCatalog(true); graph := RGBDGraphMeasurementTests.FullState();
         current := RGBDLoopVerificationTests.Current(reference,C,t,0,true);
-        current.id := 129; current.imageTime := 140; current.epoch := 200;
-        previous := RGBDCatalogMapping.Empty(1,17); previous.catalogRevision := 128; previous.imageTime := 128; previous.frame := 128; previous.imageEpoch := 128;
+        current.id := RGBDKeyframes.keyframeCapacity+1; current.imageTime := 140; current.epoch := 200;
+        previous := RGBDCatalogMapping.Empty(1,17); previous.catalogRevision := RGBDKeyframes.keyframeCapacity; previous.imageTime := 128; previous.frame := 128; previous.imageEpoch := 128;
         local[350,:] := A*(C*reference.opticalPoint[1,:]+t)+{-0.08,0.03,0.04};
         world[350,:] := B*local[350,:]+p;
       end if;
@@ -170,7 +170,7 @@ package RGBDCatalogMappingTests
     for slot in 1:14400 loop
       previous.occupied[slot] := 1; previous.point[slot,:] := world[350,:];
       previous.localPoint[slot,:] := transpose(reference.bodyRotation)*(world[350,:]-reference.bodyPosition);
-      previous.anchorId[slot] := 128; previous.anchorSlot[slot] := 128;
+      previous.anchorId[slot] := RGBDKeyframes.keyframeCapacity; previous.anchorSlot[slot] := RGBDKeyframes.keyframeCapacity;
       previous.confidence[slot] := 3; previous.lastSeen[slot] := 128; previous.lastFrame[slot] := 128;
     end for;
     previous.lastSeen[14400] := 129;

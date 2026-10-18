@@ -1,5 +1,6 @@
 package RGBDGraphSelectedGaugeAnchorTests
   constant Integer checkCount = 24;
+  constant Integer capacity = RGBDKeyframes.keyframeCapacity;
 
   function Run
     input Real clock; output Boolean checks[checkCount];
@@ -10,7 +11,7 @@ package RGBDGraphSelectedGaugeAnchorTests
     RGBDGraphAnchorBound.Estimate anchor; RGBDGraphAnchorBound.Estimate emptyAnchor;
     GraphGaugeUncertainty.Binding binding; GraphGaugeUncertainty.Estimate previous;
     ModelicaPoseGraphCovariance.Result selected;
-    Real positions[128,3]; Real rotations[128,3,3]; Real LA[6,6]; Real t[2,3]; Real Q[2,3,3];
+    Real positions[capacity,3]; Real rotations[capacity,3,3]; Real LA[6,6]; Real t[2,3]; Real Q[2,3,3];
     Real JA[12,6]; Real ignored[12,12]; Real oracle[12,12]; Real beta; Real scale;
     Integer count; Integer aSlot; Integer cSlot; Integer rSlot; Integer slot;
     Integer currentNode; Integer referenceNode; Integer expectedReason; Integer anchorReason;
@@ -18,9 +19,9 @@ package RGBDGraphSelectedGaugeAnchorTests
   algorithm
     checks := fill(false,checkCount);
     for scenario in 1:checkCount loop
-      count := if scenario == 4 then 4 else 128;
+      count := if scenario == 4 then 4 else capacity;
       (catalog,graph,context,positions,rotations,binding) := RGBDGraphSelectedGaugeTests.Fixture(count,clock);
-      aSlot := mod(binding.anchorId-1,128)+1; cSlot := mod(binding.currentId-1,128)+1;
+      aSlot := mod(binding.anchorId-1,capacity)+1; cSlot := mod(binding.currentId-1,capacity)+1;
       currentNode := count; referenceNode := integer(count/2);
       if scenario == 3 or scenario == 5 then
         if scenario == 5 then currentNode := 1; cSlot := aSlot;
@@ -30,7 +31,7 @@ package RGBDGraphSelectedGaugeAnchorTests
         referenceNode := currentNode; binding.referenceId := binding.currentId; binding.referenceEpoch := binding.currentEpoch;
         binding.referenceTime := binding.currentTime; binding.referenceCaptureSequence := binding.currentCaptureSequence;
       end if;
-      rSlot := mod(binding.referenceId-1,128)+1;
+      rSlot := mod(binding.referenceId-1,capacity)+1;
       if scenario == 2 then
         positions[aSlot,:] := catalog.bodyPositions[aSlot,:]; rotations[aSlot,:,:] := catalog.bodyRotations[aSlot,:,:];
       end if;
@@ -54,7 +55,7 @@ package RGBDGraphSelectedGaugeAnchorTests
       if scenario == 7 then anchor.binding.generation := 3;
       elseif scenario == 8 then anchor.binding.sourceRevision := 14;
       elseif scenario == 9 then anchor.binding.id := anchor.binding.id+1;
-      elseif scenario == 10 then anchor.binding.slot := mod(aSlot,128)+1;
+      elseif scenario == 10 then anchor.binding.slot := mod(aSlot,capacity)+1;
       elseif scenario == 11 then anchor.binding.epoch := anchor.binding.epoch+1;
       elseif scenario == 12 then anchor.binding.sequence := anchor.binding.sequence+1;
       elseif scenario == 13 then anchor.binding.catalogPoseRevision := 5;
@@ -67,8 +68,8 @@ package RGBDGraphSelectedGaugeAnchorTests
       elseif scenario == 20 then
         requested := false; expectedReason := 1; catalog.nextId := -77; context.generation := -77;
         anchor := emptyAnchor; anchor.bound := fill(-1e100,6,6); currentNode := -77; referenceNode := -77;
-        positions := fill(1e100,128,3);
-      elseif scenario == 21 then context.captureIds[aSlot] := binding.anchorId-128;
+        positions := fill(1e100,capacity,3);
+      elseif scenario == 21 then context.captureIds[aSlot] := binding.anchorId-capacity;
       elseif scenario == 22 then context.captureSequences[aSlot] := binding.anchorCaptureSequence+1;
       elseif scenario == 23 then
         anchor.binding.id := binding.currentId; anchor.binding.slot := cSlot;

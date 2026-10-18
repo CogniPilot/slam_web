@@ -37,7 +37,7 @@ const slotsValidated=visited?Number(visited[1]):null;
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===28&&checks.every(Boolean)&&slotsValidated===28*14400;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Full 14400 landmarks / 350 candidates / 128 keyframes: validate previous ownership, catalog eviction and individual pose correction before indexing, independent map oracle, revisions, reset and whole-state rollback',
+  scope:'Full 14400 landmarks / 350 candidates / 64 keyframes: validate previous ownership, catalog eviction and individual pose correction before indexing, independent map oracle, revisions, reset and whole-state rollback',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,slotsValidated,
   lastPhase:fs.existsSync(path.join(output,'phase.txt'))?fs.readFileSync(path.join(output,'phase.txt'),'utf8'):null,
   processStatus:result.status,signal:result.signal,

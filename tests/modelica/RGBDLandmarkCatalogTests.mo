@@ -27,7 +27,7 @@ package RGBDLandmarkCatalogTests
     Boolean correct; Boolean insertion;
   algorithm
     assert(slots == RGBDMapAnchors.mapCapacity and features == 350 and nodes == RGBDMapAnchors.keyframeCapacity,
-      "Catalog/map acceptance requires all 14400/350/128 slots");
+      "Catalog/map acceptance requires all 14400/350/64 slots");
     passed := fill(false,28); slotsValidated := 0;
     for scenario in 1:28 loop
       oldEnabled := fill(true,nodes); oldPosition := zeros(nodes,3); oldRotation := zeros(nodes,3,3);

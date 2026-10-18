@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 24d4862b3ae263da8c9cc846d4456cc8afedb0d4; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
 // Conditional first-order uncertainty of the UNWEIGHTED point-to-point fit.
 // Optical RDF perturbation: delta y = delta t - skew(R*p_ref)*delta theta.
 // No correspondence changes, reference-pose uncertainty or cross-pair covariance

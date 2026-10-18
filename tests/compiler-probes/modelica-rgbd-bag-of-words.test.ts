@@ -2,7 +2,7 @@ import {it, expect} from 'vitest';
 import {readFileSync, writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NativeProgram, type NativeProgramArtifact} from '../../src/modelica-native-program';
-import {appearanceFixture, bowOracle, copyBoWState, emptyBoWState, type BoWFixture, type BoWResult} from './rgbd-bag-of-words-fixtures';
+import {appearanceFixture, bowOracle, copyBoWState, emptyBoWState, frames, type BoWFixture, type BoWResult} from './rgbd-bag-of-words-fixtures';
 
 const sha = (data: string | Uint8Array) => createHash('sha256').update(data).digest('hex');
 const artifactPath = process.env.RUMOCA_BOW_ARTIFACT, editedPath = process.env.RUMOCA_BOW_EDITED_ARTIFACT;
@@ -38,6 +38,8 @@ it('independent full350 retrieval fixture distinguishes revisits from geometric 
   // Retrieval has no point/pose inputs and emits no accepted-loop/SE3 constraint.
   expect(source).not.toMatch(/input\s+Real\s+(?:position|rotation|truth)/);
   expect(source).toContain('full descriptor matching and geometric registration');
+  // The independent oracle must keep the same keyframe ring as the authored model.
+  expect(source).toContain(`constant Integer keyframeCapacity = ${frames};`);
   expect(Object.keys(retrieved)).not.toContain('loopAccepted');
 });
 
@@ -73,12 +75,12 @@ it('explicit keyframe state survives serialization, bounded FIFO wrap and vocabu
     result = bowOracle(f);
   }
   expect(result.nextEnabled.reduce((a, b) => a+b, 0)).toBe(1); expect(result.nextSlot).toBe(2);
-  for (let id = 2; id <= 130; id++) {
+  for (let id = 2; id <= frames+2; id++) {
     const f = appearanceFixture(JSON.parse(JSON.stringify(copyBoWState(result))));
     f.queryKeyframeId = id; f.timeNow = id+2; result = bowOracle(f);
   }
-  expect(result.nextEnabled.reduce((a, b) => a+b, 0)).toBe(128); expect(result.nextSlot).toBe(3);
-  expect(result.nextKeyframeId.slice(0, 3)).toEqual([129, 130, 3]);
+  expect(result.nextEnabled.reduce((a, b) => a+b, 0)).toBe(frames); expect(result.nextSlot).toBe(3);
+  expect(result.nextKeyframeId.slice(0, 3)).toEqual([frames+1, frames+2, 3]);
   const changed = appearanceFixture(copyBoWState(result)); changed.vocabularyVersion = 2; changed.timeNow = 133; changed.storeKeyframe = 0;
   const reset = bowOracle(changed); expect(reset.nextVersion).toBe(2); expect(reset.candidateCount).toBe(0);
   expect(reset.nextEnabled.every(x => x === 0)).toBe(true);
@@ -117,13 +119,13 @@ function checkOutputs(program: NativeProgram, expected: BoWResult, name: string)
   }
 }
 
-it.skipIf(!artifactPath)('actual issued full350×49/256-word/128-keyframe Modelica retrieval matches independent fixtures', async () => {
+it.skipIf(!artifactPath)(`actual issued full350×49/256-word/${frames}-keyframe Modelica retrieval matches independent fixtures`, async () => {
   const bytes = readFileSync(artifactPath!), artifact: NativeProgramArtifact = JSON.parse(bytes.toString());
   expect(artifact.model_name).toBe('RGBDBagOfWords');
   const program = await NativeProgram.instantiate(artifact, source);
   expect(program.input('descriptor').length).toBe(350*49);
   expect(program.input('vocabulary').length).toBe(256*49);
-  expect(program.input('previousHistogram').length).toBe(128*256);
+  expect(program.input('previousHistogram').length).toBe(frames*256);
   const cases: {name: string; candidates: number; executionMs: number}[] = [];
   const run = (name: string, f: BoWFixture) => {
     setInputs(program, artifact, f);
@@ -137,15 +139,15 @@ it.skipIf(!artifactPath)('actual issued full350×49/256-word/128-keyframe Modeli
   const query = appearanceFixture(JSON.parse(JSON.stringify(copyBoWState(first)))); query.queryKeyframeId = 2; query.timeNow = 4; query.storeKeyframe = 0;
   run('revisit after explicit state JSON persistence', query);
   run('all256 visual word assignments including final slot', appearanceFixture(emptyBoWState(), Array.from({length: 256}, (_, i) => i)));
-  const fullHistory = structuredClone(query); fullHistory.storeKeyframe = 1; fullHistory.previousNextSlot = 128;
-  for (let slot = 1; slot < 128; slot++) {
+  const fullHistory = structuredClone(query); fullHistory.storeKeyframe = 1; fullHistory.previousNextSlot = frames;
+  for (let slot = 1; slot < frames; slot++) {
     fullHistory.previousEnabled[slot] = 1;
     fullHistory.previousHistogram[slot] = [...fullHistory.previousHistogram[0]];
-    fullHistory.previousKeyframeId[slot] = slot === 127 ? 3 : 100+slot;
+    fullHistory.previousKeyframeId[slot] = slot === frames-1 ? 3 : 100+slot;
     fullHistory.previousKeyframeTime[slot] = 1;
   }
-  const wrapped = run('full128 history ranks final slot and wraps FIFO', fullHistory);
-  expect(wrapped.candidateSlot[1]).toBe(128); expect(wrapped.nextSlot).toBe(1);
+  const wrapped = run(`full${frames} history ranks final slot and wraps FIFO`, fullHistory);
+  expect(wrapped.candidateSlot[1]).toBe(frames); expect(wrapped.nextSlot).toBe(1);
   const recent = structuredClone(query); recent.timeNow = 2.9; run('recent frame excluded in simulation time', recent);
   const absent = structuredClone(query); absent.vocabularyEnabled.fill(0); run('no vocabulary', absent);
   const empty = structuredClone(query); empty.descriptorEnabled.fill(0); run('no measured descriptors', empty);

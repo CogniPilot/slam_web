@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 24d4862b3ae263da8c9cc846d4456cc8afedb0d4; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
 // Geometry, observation metadata and keyframe-local anchors share one commit.
 // This owner consumes a coherent catalog proposal; catalog/filter/graph commits
 // must still be coordinated by the enclosing SLAM transaction.
@@ -79,7 +79,7 @@ model RGBDAnchoredLandmarkMap
 
   constant Integer imageHeight = 90; constant Integer imageWidth = 160;
   constant Integer mapCapacity = imageHeight*imageWidth;
-  constant Integer featureCapacity = 350; constant Integer keyframeCapacity = 128;
+  constant Integer featureCapacity = 350; constant Integer keyframeCapacity = 64;
   constant Integer dimension = 3;
   parameter Real coordinateLimit = 1e6; parameter Real voxelWidth = 0.25;
   parameter Real mergeRadius = 0.15; parameter Real maximumDistance = 80.0;

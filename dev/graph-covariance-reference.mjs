@@ -1,4 +1,7 @@
-// Test-only independent full dense762 solve; never imported by the application.
+// Test-only independent full dense 6*(nodeCapacity-1) solve; never imported by the application.
+// Mirrors ModelicaPoseGraphCovariance.nodeCapacity; the Modelica fixtures derive the same N.
+export const nodeCapacity=64;
+const N=nodeCapacity;
 export const transpose=A=>A[0].map((_,j)=>A.map(row=>row[j]));
 export const multiply=(A,B)=>A.map(row=>B[0].map((_,j)=>row.reduce((s,v,k)=>s+v*B[k][j],0)));
 const vector=(A,x)=>A.map(row=>row.reduce((s,v,k)=>s+v*x[k],0));
@@ -13,10 +16,10 @@ function log(R){const t=Math.acos(Math.max(-1,Math.min(1,(R[0][0]+R[1][1]+R[2][2
 function residual(pi,Ri,pj,Rj,t,Z){return [...vector(transpose(Ri),pj.map((v,k)=>v-pi[k])).map((v,k)=>v-t[k]),...log(multiply(multiply(transpose(Z),transpose(Ri)),Rj))];}
 function perturb(p,R,axis,h){if(axis<3){const q=[...p];q[axis]+=h;return[q,R];}
  const a=[0,0,0];a[axis-3]=h;return[p,multiply(R,exp(a))];}
-export function fixture(scenario){const active=scenario===7?96:128,p=Array.from({length:128},(_,n)=>[.025*n,.3*Math.sin(.07*(n+1)),.15*Math.cos(.11*(n+1))]);
+export function fixture(scenario){const active=scenario===7?3*N/4:N,p=Array.from({length:N},(_,n)=>[.025*n,.3*Math.sin(.07*(n+1)),.15*Math.cos(.11*(n+1))]);
  const R=p.map((_,n)=>exp([.09*Math.sin(.05*(n+1)),-.12*Math.cos(.04*(n+1)),.004*(n+1)]));
- const edges=[];for(let e=1;e<=256;e++){let i=e<=127?e:mod(17*(e-128),127)+1,j=e<=127?e+1:mod(i+23+3*(e-128),128)+1;
- if(i===j)j=mod(j,128)+1;if(scenario===6&&e%2===0)[i,j]=[j,i];if(i>active||j>active)continue;i--;j--;
+ const edges=[];for(let e=1;e<=256;e++){let i=e<N?e:mod(17*(e-N),N-1)+1,j=e<N?e+1:mod(i+23+3*(e-N),N)+1;
+ if(i===j)j=mod(j,N)+1;if(scenario===6&&e%2===0)[i,j]=[j,i];if(i>active||j>active)continue;i--;j--;
  const t=vector(transpose(R[i]),p[j].map((v,k)=>v-p[i][k])).map((v,k)=>v+[.001*Math.sin(e),-.001*Math.cos(e),.0005][k]);
  const Z=multiply(multiply(transpose(R[i]),R[j]),exp([.003*Math.sin(.3*e),-.004*Math.cos(.2*e),.002]));
  const W=Array.from({length:6},(_,r)=>Array.from({length:6},(_,c)=>((r===c?1+.2*(r+1):0)+.01*Math.min(r+1,c+1)*Math.max(r+1,c+1))/256));

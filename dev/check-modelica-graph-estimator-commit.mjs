@@ -95,7 +95,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===checkCount&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Original21 plus same-capture9 one6 measurement with full21 cloned prior. Atomic graph PoseView/filter21/full14400 Synchronize publication at full128/256/350 capacities: independent filter oracle, all-map geometry, exact raw capture/edge/snapshot hold, late14400 rollback/durable attempt/replay, covariance-only view revision hold and inactive PoseView hold. Controlled optimizer proposal, no optimizer or end-to-end SLAM execution',
+  scope:'Original21 plus same-capture9 one6 measurement with full21 cloned prior. Atomic graph PoseView/filter21/full14400 Synchronize publication at full32/256/350 capacities: independent filter oracle, all-map geometry, exact raw capture/edge/snapshot hold, late14400 rollback/durable attempt/replay, covariance-only view revision hold and inactive PoseView hold. Controlled optimizer proposal, no optimizer or end-to-end SLAM execution',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   referenceGraphEstimatorCommitQualified:pass,actualLocalizationProducerExecuted:false,publicLocalizationCatalogModelQualified:false,productionLocalizationCatalogIntegrated:false,fullSlamAccepted:false};
