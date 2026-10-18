@@ -1,8 +1,9 @@
 import {afterEach,expect,it,vi} from 'vitest';
 import {Runtime} from '../src/runtime';
+import {FrameClock} from '../src/frame-clock';
 const flush=async()=>{for(let i=0;i<24;i++)await Promise.resolve();};
 const runtime=()=>Object.assign(Object.create(Runtime.prototype),{
-  playbackEpoch:0,running:false,stepping:false,fleetStepping:false,time:0,dt:.01,speed:Infinity,onError:vi.fn(),
+  frameClock:new FrameClock(),playbackEpoch:0,running:false,stepping:false,fleetStepping:false,time:0,dt:.01,speed:Infinity,onError:vi.fn(),
 });
 afterEach(()=>{vi.useRealTimers();vi.restoreAllMocks();});
 
