@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 24d4862b3ae263da8c9cc846d4456cc8afedb0d4; edit the canonical packages there.
 // Source-owned graph correction and persistent session state. These functions
 // compose the actual optimizer, selected bound, gauge transport and atomic
 // filter/map commit; the host supplies neither a solved graph nor a proposal.
@@ -200,6 +200,8 @@ package RGBDGraphProcessing
     Integer referenceSlot;
     Integer currentNode;
     Integer referenceNode;
+    Integer currentRow;
+    Integer referenceRow;
     Integer contextReason;
     Integer slot;
     RGBDGraphMeasurements.Problem problem;
@@ -261,6 +263,10 @@ package RGBDGraphProcessing
           previous.estimator.localization.graph,true);
         valid := problem.accepted;
       end if;
+      if valid and RGBDGraphMeasurements.loopAnchoredCapture then
+        // The gauge is row 1, the oldest node still connected to the newest.
+        oldest := problem.nodeId[1]; anchorSlot := problem.catalogSlot[1];
+      end if;
       if valid then
         // Warm-start from the durable corrected view, not immutable raw
         // captures. The chronological fixed row is mapped by catalogSlot.
@@ -315,7 +321,8 @@ package RGBDGraphProcessing
           previous.estimator.localization.sourceRevision,previous.estimator.localization.steps,
           previous.estimator.poses.revision,proposal.poses.positions[anchorSlot,:],
           proposal.poses.rotations[anchorSlot,:,:],proposal.graphRevision,
-          policy.anchorWeight,policy.anchorPositionLimit,policy.anchorAngleLimit,true);
+          policy.anchorWeight,policy.anchorPositionLimit,policy.anchorAngleLimit,true,
+          gaugeId=if RGBDGraphMeasurements.loopAnchoredCapture then oldest else 0);
         valid := anchorAccepted;
       end if;
       if valid then
@@ -337,6 +344,19 @@ package RGBDGraphProcessing
       if valid then
         currentNode := currentId-oldest+1;
         referenceNode := referenceId-oldest+1;
+        // Loop-anchored rows skip detached nodes; a reference outside the
+        // solve stays 0 and selection refuses it. The search sits outside
+        // the flag branch: this exporter rejects a loop under a constant-false if.
+        currentRow := 0; referenceRow := 0;
+        for node in 1:nodeCapacity loop
+          if node <= problem.nodeCount then
+            if problem.nodeId[node] == currentId then currentRow := node; end if;
+            if problem.nodeId[node] == referenceId then referenceRow := node; end if;
+          end if;
+        end for;
+        if RGBDGraphMeasurements.loopAnchoredCapture then
+          currentNode := currentRow; referenceNode := referenceRow;
+        end if;
         binding.generation := context.generation;
         binding.sourceRevision := context.sourceRevision;
         binding.graphRevision := context.graphRevision;

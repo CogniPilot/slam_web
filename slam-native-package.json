@@ -1,10 +1,10 @@
 {
   "repository": "CogniPilot/slam_web",
-  "tag": "native-slam-model-parameters-20261015",
+  "tag": "native-slam-loop-anchored-capture-20261018",
   "asset": "native-slam-d435-profiles.tar",
-  "bytes": 75919360,
-  "sha256": "c8ad6e8e89bbbf037e878a577d9bf17fa633938c52b01c5003c43c5faef21052",
-  "sourceSha256": "0d619aba4079482d4e79992a0a3957d642f9f95b241982d5796b64b46b624648",
+  "bytes": 75950080,
+  "sha256": "afe8f489a1320eb2d9c14e5e4db9815408a3193763865dc3e418c0faef8bbd9a",
+  "sourceSha256": "21b4e9e9b325bebf46e884f01f79c0caf5a847d00e680cf7c70eda2e732ab2fa",
   "rumocaRevision": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
-  "modelicaRevision": "cc000556df5fbf9fea001957453a4dfc63780e7e"
+  "modelicaRevision": "24d4862b3ae263da8c9cc846d4456cc8afedb0d4"
 }

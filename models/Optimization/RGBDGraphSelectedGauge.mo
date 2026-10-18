@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 24d4862b3ae263da8c9cc846d4456cc8afedb0d4; edit the canonical packages there.
 // Numerical first-order adapter. ContextFromLedger binds capture identities to
 // their durable owner; anchor-bound provenance remains an explicit input.
 package RGBDGraphSelectedGauge
@@ -72,6 +72,9 @@ package RGBDGraphSelectedGauge
         and GraphGaugeUncertainty.ValidBinding(binding);
       if valid then
         id := max(1,catalog.nextId-nodeCapacity); slot := mod(id-1,nodeCapacity)+1;
+        if RGBDGraphMeasurements.loopAnchoredCapture then
+          id := RGBDGraphMeasurements.ActiveOldest(catalog,graph); slot := mod(id-1,nodeCapacity)+1;
+        end if;
         valid := anchor.binding.generation == catalog.generation
           and anchor.binding.generation == context.generation and anchor.binding.generation == binding.generation
           and anchor.binding.sourceRevision == context.sourceRevision and anchor.binding.sourceRevision == binding.sourceRevision

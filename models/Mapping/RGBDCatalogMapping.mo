@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models cc000556df5fbf9fea001957453a4dfc63780e7e; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 24d4862b3ae263da8c9cc846d4456cc8afedb0d4; edit the canonical packages there.
 // Mapping consumes an admitted visual/catalog/graph proposal. Publication is
 // still local until estimator/reference and any graph correction also accept.
 package RGBDCatalogMapping
