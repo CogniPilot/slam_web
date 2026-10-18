@@ -26,6 +26,8 @@ export class WorldActors {
   private time=0;
   private currentMotion?:ActorMotionFrame;
   private previousMotion?:ActorMotionFrame;
+  private commitWall=0;
+  private frameWall=100;
   private readonly previousRotation=new THREE.Quaternion();
   private readonly currentRotation=new THREE.Quaternion();
   private readonly up=new THREE.Vector3(0,1,0);
@@ -164,8 +166,18 @@ export class WorldActors {
   setMotion(frame:ActorMotionFrame) {
     validateActorMotionFrame(frame);
     this.previousMotion=this.currentMotion&&frame.time>this.currentMotion.time?this.currentMotion:frame;
+    const now=performance.now();
+    this.frameWall=Math.max(16,Math.min(1000,now-this.commitWall||100));this.commitWall=now;
     this.currentMotion=frame;
     this.setTime(frame.time);
+  }
+
+  /** The viewer follows actor-sample arrivals, independently of faster drone poses. */
+  render(interpolate=false) {
+    const current=this.currentMotion,previous=this.previousMotion;
+    if(!current||!previous)return;
+    const fraction=interpolate?THREE.MathUtils.clamp((performance.now()-this.commitWall)/this.frameWall,0,1):1;
+    this.setTime(THREE.MathUtils.lerp(previous.time,current.time,fraction));
   }
 
   setTime(time:number) {
@@ -179,13 +191,18 @@ export class WorldActors {
     for(const actor of this.actors){
       if(!actor.root.visible)continue;
       const i=actor.poseSlot;
-      actor.root.position.set(THREE.MathUtils.lerp(previous.east[i],current.east[i],fraction),0,-THREE.MathUtils.lerp(previous.north[i],current.north[i],fraction));
+      // A recycled street car jumps between road ends in the committed model.
+      // Hold until that endpoint instead of drawing a fast sweep through town.
+      const travelled=Math.abs(current.distance[i]-previous.distance[i]);
+      const displacement=Math.hypot(current.east[i]-previous.east[i],current.north[i]-previous.north[i]);
+      const blend=displacement>travelled+1e-6*Math.max(1,travelled)?(fraction<1?0:1):fraction;
+      actor.root.position.set(THREE.MathUtils.lerp(previous.east[i],current.east[i],blend),0,-THREE.MathUtils.lerp(previous.north[i],current.north[i],blend));
       this.previousRotation.setFromAxisAngle(this.up,previous.sceneYaw[i]);
       this.currentRotation.setFromAxisAngle(this.up,current.sceneYaw[i]);
-      actor.root.quaternion.copy(this.previousRotation).slerp(this.currentRotation,fraction);
+      actor.root.quaternion.copy(this.previousRotation).slerp(this.currentRotation,blend);
       // Walk is authored in place. Absolute time keeps pause/seek/replay exact.
-      actor.mixer?.setTime(THREE.MathUtils.lerp(previous.walkTime[i],current.walkTime[i],fraction));
-      const distance=THREE.MathUtils.lerp(previous.distance[i],current.distance[i],fraction);
+      actor.mixer?.setTime(THREE.MathUtils.lerp(previous.walkTime[i],current.walkTime[i],blend));
+      const distance=THREE.MathUtils.lerp(previous.distance[i],current.distance[i],blend);
       for(const wheel of actor.wheels)wheel.pivot.quaternion.setFromAxisAngle(wheel.axis,distance/wheel.radius);
     }
     this.group.updateMatrixWorld(true);
