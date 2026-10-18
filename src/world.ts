@@ -471,8 +471,8 @@ export class World {
     this.depthCloudView.position.add(new THREE.Vector3(cloud.originFlu[0],cloud.originFlu[2],-cloud.originFlu[1]).applyQuaternion(this.depthCloudView.quaternion));
     this.depthCloudView.quaternion.multiply(this.lidarFluToScene);this.depthCloudView.visible=this.depthCloudEnabled;
   }
-  private animate(time:number){
-    this.lighting.setMode(this.lightingMode,time);if(this.currentEnvironment==='tokyo')this.tokyo?.setTime(time);if(this.actors.group.visible)this.actors.setTime(time);
+  private animate(time:number,animateActors=true){
+    this.lighting.setMode(this.lightingMode,time);if(this.currentEnvironment==='tokyo')this.tokyo?.setTime(time);if(animateActors&&this.actors.group.visible)this.actors.setTime(time);
     if(time<this.lastShadowTime||time-this.lastShadowTime>=.05){this.lighting.invalidateShadows();this.lastShadowTime=time;}
   }
   inspectInterior(id:'overview'|'store'|'apartment'|'conference'){
@@ -529,7 +529,8 @@ export class World {
     const fraction=interpolate?Math.min(1,Math.max(0,(performance.now()-this.commitWall)/this.frameWall)):1;
     this.drone.render(fraction);
     this.robot.position.lerpVectors(this.previousPosition,this.currentPosition,fraction);this.robot.quaternion.slerpQuaternions(this.previousQuaternion,this.currentQuaternion,fraction);
-    this.robot.updateMatrixWorld(true);this.animate(this.previousTime+(this.simulationTime-this.previousTime)*fraction);
+    this.robot.updateMatrixWorld(true);this.animate(this.previousTime+(this.simulationTime-this.previousTime)*fraction,false);
+    if(this.actors.group.visible)this.actors.render(interpolate);
     this.otherVehicle?.render(interpolate);
     this.controls.update();this.viewerCamera.update(this.view,this.cameraVehicle===1&&this.otherVehicle?this.otherVehicle.robot:this.robot,this.controls.target);
     this.renderer.setRenderTarget(null);this.renderer.render(this.scene,this.view);
