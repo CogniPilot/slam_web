@@ -13,7 +13,7 @@ package RGBDCatalogFrameBootstrapTests
   algorithm
     assert(trials == 96 and RGBDKeyframes.keyframeCapacity == 64 and RGBDGraphMeasurements.edgeCapacity == 256
       and RGBDKeyframes.featureCapacity == 350 and RGBDCatalogMapping.mapCapacity == 14400,
-      "Bootstrap gate retains full32/256/350/14400/96 domains");
+      "Bootstrap gate retains full64/256/350/14400/96 domains");
     catalog := RGBDKeyframes.Empty(1); graph := RGBDGraphMeasurements.Empty(1); map := RGBDCatalogMapping.Empty(1,17);
     reference := RGBDLoopVerificationTests.Reference(false); current := reference; current.id := 1; current.epoch := 0; current.imageTime := 0;
     (vocabulary,enabled) := RGBDCatalogLoopTests.Vocabulary(reference);
