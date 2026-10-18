@@ -72,7 +72,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===8&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Full128 catalog, flag on: a keyframe anchored by loops from ids 1 and 2 with no consecutive edge; evicting 1 keeps it attached, evicting 2 detaches ids 3-127; the gauge moves to 128, detachedNodes counts 125, the solve holds only the newest component, and five later captures are admitted',
+  scope:'Full 64-slot catalog, flag on: keyframe 64 anchored by loops from ids 1 and 2 with no consecutive edge; evicting 1 keeps it attached, evicting 2 detaches ids 3-63; the gauge moves to 64, detachedNodes counts 61, the solve holds only the newest component, and five later captures are admitted',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   flagOnStaged:true,referenceGraphAdmissionQualified:pass,productionGraphAdmissionIntegrated:false,fullSlamAccepted:false};

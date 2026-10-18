@@ -80,7 +80,7 @@ package RGBDGraphEstimatorCommitTests
     Boolean requested; Boolean accepts; Boolean attempted; Boolean filterAccepted; Boolean changed;
   algorithm
     assert(RGBDKeyframes.keyframeCapacity == 64 and RGBDGraphMeasurements.edgeCapacity == 256 and RGBDKeyframes.featureCapacity == 350
-      and RGBDCatalogMapping.mapCapacity == 14400,"Commit tests retain full32/256/350/14400 capacities");
+      and RGBDCatalogMapping.mapCapacity == 14400,"Commit tests retain full64/256/350/14400 capacities");
     base := FullState(); checks := fill(false,21);
     for scenario in 1:21 loop
       previous := base;

@@ -23,7 +23,7 @@ package RGBDCatalogFrameTests
   algorithm
     assert(trials == 96 and RGBDKeyframes.keyframeCapacity == 64 and RGBDGraphMeasurements.edgeCapacity == 256
       and RGBDKeyframes.featureCapacity == 350 and RGBDCatalogMapping.mapCapacity == 14400,
-      "Frame acceptance retains full32/256/350/14400/96 domains");
+      "Frame acceptance retains full64/256/350/14400/96 domains");
     catalog := RGBDCatalogLoopTests.FullCatalog(false); graph := RGBDGraphMeasurementTests.FullState();
     reference := RGBDLoopVerificationTests.Reference(false); current := reference;
     current.id := RGBDKeyframes.keyframeCapacity+1; current.epoch := 129; current.imageTime := RGBDKeyframes.keyframeCapacity+1.0/90;
