@@ -1,5 +1,6 @@
 import {expect,it,vi} from 'vitest';
 import {Runtime} from '../src/runtime';
+import {FrameClock} from '../src/frame-clock';
 
 function fixture(predict:()=>Promise<unknown>,secondPhysics:()=>void){
   const imu={accel:[0,0,9.81],gyro:[0,0,0]};
@@ -7,7 +8,7 @@ function fixture(predict:()=>Promise<unknown>,secondPhysics:()=>void){
   const estimate={x:0,y:0,z:0,quaternion:[1,0,0,0],confidence:1,points:[]};
   const frame={rgb:new Uint8Array(6),depth:new Uint16Array(2)};
   const r=Object.assign(Object.create(Runtime.prototype),{
-    stepping:false,fleetStepping:false,sequence:0,cameraSequence:1,time:0,dt:.2,startWall:0,startTime:0,
+    frameClock:new FrameClock(),stepping:false,fleetStepping:false,sequence:0,cameraSequence:1,time:0,dt:.2,startWall:0,startTime:0,
     overlapSlamPrediction:true,project:{graph:{edges:[{from:'physics',output:'truth',to:'sensor',input:'truth'},{from:'sensor',output:'frame',to:'slam',input:'frame'}]}},
     order:[{id:'physics',kind:'physics'},{id:'sensor',kind:'sensor'},{id:'slam',kind:'slam'}],
     command:{forward:0,left:0,up:0,yaw:0},sensorClock:{nextFrame:()=>[.1,.2].map(time=>({time,imu:true,camera:time===.2}))},heldImu:imu,
