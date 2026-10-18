@@ -63,7 +63,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===16&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Full14400 map / 350 features / 128 catalog nodes: coupled capture/map commit, sparse final slots, eviction before matching, whole catalog/map rollback, reset, projection/epoch/vocabulary binding and no-capture frames',
+  scope:'Full14400 map / 350 features / 64 catalog nodes: coupled capture/map commit, sparse final slots, eviction before matching, whole catalog/map rollback, reset, projection/epoch/vocabulary binding and no-capture frames',
   compilerVersion:version.stdout.trim(),flags,referenceCFlags,profilePath,sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   estimatorGraphCommit:false,fullSlamAccepted:false};

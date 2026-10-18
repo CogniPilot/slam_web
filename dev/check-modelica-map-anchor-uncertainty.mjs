@@ -7,11 +7,11 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const model='RGBDMapAnchorUncertaintyAcceptance';
-const checkCount=32;
+const checkCount=33;
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
 const output=fs.mkdtempSync(path.join(root,'map-anchor-uncertainty-semantics-'));
-const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo','models/Optimization/GraphGaugeUncertainty.mo','models/Mapping/RGBDMapAnchorUncertainty.mo','tests/modelica/GraphGaugeUncertaintyTests.mo','tests/modelica/RGBDMapAnchorUncertaintyTests.mo','tests/modelica/RGBDMapAnchorUncertaintyAcceptance.mo'];
+const names=['models/Estimation/Localization/RGBDRegistrationUncertainty.mo','models/Estimation/Inertial/SchmidtRelativePoseCorrection.mo','models/Optimization/GraphGaugeUncertainty.mo','models/Mapping/RGBDMapAnchors.mo','models/Mapping/RGBDMapAnchorUncertainty.mo','tests/modelica/GraphGaugeUncertaintyTests.mo','tests/modelica/RGBDMapAnchorUncertaintyTests.mo','tests/modelica/RGBDMapAnchorUncertaintyAcceptance.mo'];
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const sources=[...names,'dev/check-modelica-map-anchor-uncertainty.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const script=path.join(output,'map-anchor-uncertainty.mos');
@@ -48,7 +48,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===checkCount&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Per-landmark full3 covariance from full6 anchor and immutable local3 bound, unknown cross beta transport; independent manifold differences/all9cells/positive-negative extreme cross Gram; identity/capture/slot/revision/provenance and exact hold. Not fullmap or landmark/filter independence qualification',
+  scope:'Per-landmark full3 covariance from full6 anchor and immutable local3 bound, unknown cross beta transport; independent manifold differences/all9cells/positive-negative extreme cross Gram; identity/capture/slot/revision/provenance and exact hold, anchor slot capacity equal to the map-anchor ring. Not fullmap or landmark/filter independence qualification',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   referenceMapAnchorUncertaintyQualified:pass,callerBoundsCertified:false,productionGraphCorrectionIntegrated:false,fullSlamAccepted:false};

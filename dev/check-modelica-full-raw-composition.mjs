@@ -80,7 +80,7 @@ const simulationSucceeded=log.includes('The simulation finished successfully.');
 const pass=terminal.status===0&&bookendsEqual&&simulationSucceeded&&checks.length===checkCount&&checks.every(Boolean);
 let resources=null;try{resources=JSON.parse(terminal.stdout);}catch{}
 const report={status:pass?'OMC_FULL_RAW_COMPOSITION_PASS':'FAILED_OR_INCOMPLETE',phase,model,
-  scope:`Actual full90x160/350 FAST localization with ${phase==='raw-graph'?'RGB3/Z16 codes and 1mm scale':'RGBA/metric depth'}, measured vocabulary bootstrap, complete128/256/14400 State publication/map and optional graph correction. Compositional/control/known-geometry checks; lower filter math relies on separately qualified core. No browser/WASM/throughput admission.`,
+  scope:`Actual full90x160/350 FAST localization with ${phase==='raw-graph'?'RGB3/Z16 codes and 1mm scale':'RGBA/metric depth'}, measured vocabulary bootstrap, complete32/256/14400 State publication/map and optional graph correction. Compositional/control/known-geometry checks; lower filter math relies on separately qualified core. No browser/WASM/throughput admission.`,
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,result,metrics,generated,
   generatedScratchHomeRelative:path.relative(os.homedir(),output),processStatus:terminal.status,
   simulationSucceeded,resources,rawInitializationQualified:!!pass,

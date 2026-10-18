@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 24d4862b3ae263da8c9cc846d4456cc8afedb0d4; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
 // Appearance retrieval only; full descriptor matching and geometric registration
 // must verify each loop proposal.
 function NormalizeVisualWord
@@ -82,7 +82,7 @@ protected
   constant Integer featureCapacity = 350;
   constant Integer descriptorSize = 49;
   constant Integer vocabularyCapacity = 256;
-  constant Integer keyframeCapacity = 128;
+  constant Integer keyframeCapacity = 64;
   constant Integer candidateCapacity = 4;
   Real words[vocabularyCapacity,descriptorSize];
   Real usableWord[vocabularyCapacity];
@@ -292,7 +292,7 @@ model RGBDBagOfWords
   constant Integer featureCapacity = 350;
   constant Integer descriptorSize = 49;
   constant Integer vocabularyCapacity = 256;
-  constant Integer keyframeCapacity = 128;
+  constant Integer keyframeCapacity = 64;
   constant Integer candidateCapacity = 4;
   parameter Real maximumWordDistanceSquared = 0.8;
   parameter Real minimumAssignments = 8.0;

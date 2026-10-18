@@ -1,5 +1,7 @@
 import type {Estimate,SensorFrame} from './types';
 import {loopVerificationReason,loopRetrievalReason,loopGraphReason,loopKeyframeReason,loopFrameReason,loopPublicationReason} from './loop-closure-reasons';
+/** Mirrors RGBDKeyframes.keyframeCapacity in the authored Modelica catalog. */
+export const KEYFRAME_CATALOG_CAPACITY=64;
 export interface KeyframeImage {id:number;time:number;imageEpoch:number;width:number;height:number;rgba:Uint8ClampedArray}
 export interface ClosureImage {edgeId:number;referenceId:number;currentId:number;time:number;reference?:KeyframeImage;current?:KeyframeImage;similarity?:number}
 export interface LoopCandidateDecision {
@@ -74,9 +76,9 @@ export class LoopClosureHistory {
       else this.lastDecision='Waiting for an eligible keyframe';
       if(loop?.attempted&&loop.candidates.length)this.revision++;
     }
-    // The authored catalog holds 128 keyframes. External sources must not
-    // turn a presentation cache into an unbounded recording.
-    while(this.images.size>128)this.images.delete(this.images.keys().next().value!);
+    // Bound the cache by the authored catalog capacity. External sources must
+    // not turn a presentation cache into an unbounded recording.
+    while(this.images.size>KEYFRAME_CATALOG_CAPACITY)this.images.delete(this.images.keys().next().value!);
   }
 }
 

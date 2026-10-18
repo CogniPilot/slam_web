@@ -1,9 +1,11 @@
-// Generated from CogniPilot/modelica_models 24d4862b3ae263da8c9cc846d4456cc8afedb0d4; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
 // Per-landmark conditional first-order bound. No landmark/filter independence
 // or joint-landmark guarantee. Local geometry remains an immutable input.
 package RGBDMapAnchorUncertainty
 
-  constant Integer anchorCapacity = 128;
+  // Anchor slots are map-anchor ring slots (slot = mod(id-1,capacity)+1), so
+  // the capacity follows that ring instead of repeating its value.
+  constant Integer anchorCapacity = RGBDMapAnchors.keyframeCapacity;
   constant Integer landmarkCapacity = 14400;
   constant Integer positionDimension = 3;
   constant Integer anchorDimension = 6;

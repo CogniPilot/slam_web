@@ -22,7 +22,7 @@ package RGBDAnchoredLandmarkMapTests
     Boolean correct; Boolean insertion;
   algorithm
     assert(slots == RGBDMapAnchors.mapCapacity and features == 350 and nodes == RGBDMapAnchors.keyframeCapacity,
-      "Joint map/anchor acceptance requires the complete 14400/350/128 domains");
+      "Joint map/anchor acceptance requires the complete 14400/350/64 domains");
     passed := fill(false,20); slotsValidated := 0;
     for scenario in 1:20 loop
       previous := zeros(slots,7); local := zeros(slots,3); ids := fill(0,slots); owners := fill(0,slots);

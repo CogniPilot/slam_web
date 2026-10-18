@@ -35,7 +35,7 @@ const checks=match?match[1].split(',').map(value=>value.trim()==='true'):[];
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===40&&checks.every(Boolean);
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Full 14400 landmarks / 350 candidates / 128 keyframes: receipt-bound anchor assignment, retention, canonicalization, reset, tampering and whole-state rollback',
+  scope:'Full 14400 landmarks / 350 candidates / 64 keyframes: receipt-bound anchor assignment, retention, canonicalization, reset, tampering and whole-state rollback',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,
   lastPhase:fs.existsSync(path.join(output,'phase.txt'))?fs.readFileSync(path.join(output,'phase.txt'),'utf8'):null,
   processStatus:result.status,signal:result.signal,

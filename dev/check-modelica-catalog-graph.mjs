@@ -65,7 +65,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===10&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Joined full128 catalog / 256 graph edges / 350 features / 96 trials: capture, measured sequential and four loop edges, eviction, first capture, metadata, chain and late problem failure rollback',
+  scope:'Joined full-capacity catalog / 256 graph edges / 350 features / 96 trials: capture, measured sequential and four loop edges, eviction, first capture, metadata, chain and late problem failure rollback',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   loopConstraintsAdmitted:pass,fullSlamAccepted:false};

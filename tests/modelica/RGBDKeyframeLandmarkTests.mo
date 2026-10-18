@@ -98,7 +98,7 @@ package RGBDKeyframeLandmarkTests
     Boolean referenceAccepted; Integer unusedSlot; Integer unusedEvicted;
   algorithm
     assert(slots == RGBDMapAnchors.mapCapacity and features == RGBDKeyframes.featureCapacity
-      and nodes == RGBDKeyframes.keyframeCapacity,"Keyframe/map controls require full14400/350/128 domains");
+      and nodes == RGBDKeyframes.keyframeCapacity,"Keyframe/map controls require full14400/350/64 domains");
     fullCatalog := FullCatalog();
     passed := fill(false,16); slotsValidated := 0;
     for scenario in 1:16 loop

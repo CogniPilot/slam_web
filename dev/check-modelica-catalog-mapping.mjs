@@ -77,7 +77,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===checkCount&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:projectionOnly?'Separate full350 actual RGBDLandmarkProjection equation component against independent RDF-to-body/world closed form':'Actual joined full128 catalog / 256 graph edges / 350 features / 96 trials and full14400 anchored map: independent projection candidates, eviction, insertion, merge, pruning, metadata and all-owner late rollback',
+  scope:projectionOnly?'Separate full350 actual RGBDLandmarkProjection equation component against independent RDF-to-body/world closed form':'Actual joined full32 catalog / 256 graph edges / 350 features / 96 trials and full14400 anchored map: independent projection candidates, eviction, insertion, merge, pruning, metadata and all-owner late rollback',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   loopConstraintsAdmitted:pass&&!projectionOnly,fullSlamAccepted:false};

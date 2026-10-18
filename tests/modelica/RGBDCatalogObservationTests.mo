@@ -4,7 +4,7 @@ package RGBDCatalogObservationTests
     output Boolean empty;
   algorithm
     empty := not problem.accepted and problem.nodeCount == 0 and problem.edgeCount == 0 and problem.correlationInflation == 1;
-    for node in 1:128 loop
+    for node in 1:RGBDGraphMeasurements.nodeCapacity loop
       empty := empty and problem.nodeId[node] == 0 and problem.catalogSlot[node] == 0 and problem.nodeMask[node] == 0;
       for axis in 1:3 loop
         empty := empty and problem.positions[node,axis] == 0;
@@ -28,7 +28,7 @@ package RGBDCatalogObservationTests
     output RGBDKeyframes.Frame frame;
     output Real world[350,3];
   algorithm
-    frame := RGBDKeyframes.EmptyFrame(); frame.id := 129; frame.epoch := 200; frame.imageTime := 140; frame.count := 350;
+    frame := RGBDKeyframes.EmptyFrame(); frame.id := RGBDKeyframes.keyframeCapacity+1; frame.epoch := 200; frame.imageTime := 140; frame.count := 350;
     frame.bodyRotation := [0,-1,0;1,0,0;0,0,1]; frame.bodyPosition := {2,3,4};
     frame.opticalToBody := [0,0,1;-1,0,0;0,-1,0]; frame.cameraOriginBody := {0.18,0,-0.04};
     // None of these capture-only payloads may gate a noncapture observation.
@@ -58,8 +58,8 @@ package RGBDCatalogObservationTests
     Real world[350,3]; Real candidate[350,3]; Real mask[350]; Real lifetime; Real width;
     Boolean accepted; Boolean requested; Integer reason; Integer destination;
   algorithm
-    assert(slots == 14400 and features == 350 and nodes == 128 and edges == 256,
-      "Observation acceptance requires complete14400/350/128/256 domains");
+    assert(slots == 14400 and features == 350 and nodes == RGBDKeyframes.keyframeCapacity and edges == 256,
+      "Observation acceptance requires complete14400/350/64/256 domains");
     originalCatalog := RGBDCatalogLoopTests.FullCatalog(false); originalGraph := RGBDGraphMeasurementTests.FullState();
     reference := RGBDLoopVerificationTests.Reference(false); checks := fill(false,18);
     for scenario in 1:18 loop
@@ -69,11 +69,11 @@ package RGBDCatalogObservationTests
       for feature in 1:350 loop
         if measurement.enabled[feature] then candidate[feature,:] := world[feature,:]; mask[feature] := 1; end if;
       end for;
-      previous := RGBDCatalogMapping.Empty(1,17); previous.catalogRevision := 128;
+      previous := RGBDCatalogMapping.Empty(1,17); previous.catalogRevision := RGBDKeyframes.keyframeCapacity;
       previous.imageTime := 128; previous.frame := 128; previous.imageEpoch := 128;
       previous.point[14400,:] := world[1,:]; previous.occupied[14400] := 1; previous.confidence[14400] := 2;
       previous.lastSeen[14400] := 128; previous.lastFrame[14400] := 128;
-      previous.anchorId[14400] := 64; previous.anchorSlot[14400] := 64;
+      previous.anchorId[14400] := div(RGBDKeyframes.keyframeCapacity,2); previous.anchorSlot[14400] := div(RGBDKeyframes.keyframeCapacity,2);
       previous.localPoint[14400,:] := transpose(reference.bodyRotation)*(world[1,:]-reference.bodyPosition);
       requested := true; lifetime := 1000; width := 0.25; reason := 3;
       accepted := scenario <= 5 or scenario == 17 or scenario == 18;
@@ -88,7 +88,7 @@ package RGBDCatalogObservationTests
       elseif scenario == 6 then previous.imageEpoch := 200; previous.frame := 129; previous.imageTime := 139;
       elseif scenario == 7 then previous.imageEpoch := 201; previous.frame := 129; previous.imageTime := 139;
       elseif scenario == 8 then graph.generation := 2;
-      elseif scenario == 9 then graph.lastCaptureId := 127;
+      elseif scenario == 9 then graph.lastCaptureId := RGBDKeyframes.keyframeCapacity-1;
       elseif scenario == 10 then catalog.nextSlot := -1;
       elseif scenario == 11 then
         previous.localPoint[14400,1] := previous.localPoint[14400,1]+1; reason := 5;
@@ -116,18 +116,18 @@ package RGBDCatalogObservationTests
         and RGBDCatalogGraphTests.EqualCatalog(result.catalog,catalog)
         and RGBDGraphMeasurementTests.EqualState(result.graph,graph) and EmptyProblem(result.problem);
       if accepted then
-        expected := RGBDCatalogMapping.Empty(1,17); expected.catalogRevision := 128;
+        expected := RGBDCatalogMapping.Empty(1,17); expected.catalogRevision := RGBDKeyframes.keyframeCapacity;
         expected.imageTime := measurement.imageTime; expected.imageEpoch := measurement.epoch; expected.frame := previous.frame+1;
         if scenario <> 3 then
           expected.point[14400,:] := previous.point[14400,:]; expected.localPoint[14400,:] := previous.localPoint[14400,:];
           expected.occupied[14400] := 1; expected.confidence[14400] := if scenario == 17 then 2 else if scenario == 18 then 4 else 3;
-          expected.anchorId[14400] := 64; expected.anchorSlot[14400] := 64;
+          expected.anchorId[14400] := div(RGBDKeyframes.keyframeCapacity,2); expected.anchorSlot[14400] := div(RGBDKeyframes.keyframeCapacity,2);
           expected.lastSeen[14400] := if scenario == 17 then 128 else measurement.imageTime;
           expected.lastFrame[14400] := if scenario == 17 then 128 else previous.frame+1;
           if scenario == 1 then
             expected.point[1,:] := world[350,:]; expected.localPoint[1,:] := transpose(reference.bodyRotation)*(world[350,:]-reference.bodyPosition);
             expected.occupied[1] := 1; expected.confidence[1] := 1; expected.lastSeen[1] := 140; expected.lastFrame[1] := 129;
-            expected.anchorId[1] := 128; expected.anchorSlot[1] := 128;
+            expected.anchorId[1] := RGBDKeyframes.keyframeCapacity; expected.anchorSlot[1] := RGBDKeyframes.keyframeCapacity;
           elseif scenario == 4 then
             for feature in 2:350 loop
               destination := feature-1;
@@ -135,7 +135,7 @@ package RGBDCatalogObservationTests
               expected.localPoint[destination,:] := transpose(reference.bodyRotation)*(world[feature,:]-reference.bodyPosition);
               expected.occupied[destination] := 1; expected.confidence[destination] := 1;
               expected.lastSeen[destination] := 140; expected.lastFrame[destination] := 129;
-              expected.anchorId[destination] := 128; expected.anchorSlot[destination] := 128;
+              expected.anchorId[destination] := RGBDKeyframes.keyframeCapacity; expected.anchorSlot[destination] := RGBDKeyframes.keyframeCapacity;
             end for;
           end if;
         end if;

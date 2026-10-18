@@ -93,7 +93,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===checkCount&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Controlled accepted-estimator Publish proposals full350/49/15+6/128/256/14400/96: original19 controls retained, plus actual CanAdvance30Hz/.2/zero/negative/overbound/discontinuity/idle and unchanged initialization; no-image controlled Publish30Hz/.2 and overbound whole-State refusal. Actual localization/prediction/frontend/public model not executed or qualified.',
+  scope:'Controlled accepted-estimator Publish proposals full350/49/15+6/64/256/14400/96: original19 controls retained, plus actual CanAdvance30Hz/.2/zero/negative/overbound/discontinuity/idle and unchanged initialization; no-image controlled Publish30Hz/.2 and overbound whole-State refusal. Actual localization/prediction/frontend/public model not executed or qualified.',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   referencePublishControlledProposalsQualified:pass,actualLocalizationProducerExecuted:false,publicLocalizationCatalogModelQualified:false,productionLocalizationCatalogIntegrated:false,fullSlamAccepted:false};

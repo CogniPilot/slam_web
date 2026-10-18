@@ -121,7 +121,8 @@ package RGBDNoisyLoopReference
       if expected then
         checks[(scenario-1)*4+2] := result.accepted and result.rejectionReason == 0
           and result.graphDiagnostics.admittedSequential == 1 and result.graphDiagnostics.admittedLoops == 4
-          and result.problem.accepted and result.problem.nodeCount == 128 and result.problem.edgeCount == 256;
+          and result.problem.accepted and result.problem.nodeCount == RGBDKeyframes.keyframeCapacity
+          and result.problem.edgeCount == RGBDGraphMeasurements.edgeCapacity;
         checks[(scenario-1)*4+3] := proposal.inlierCount >= 16 and proposal.rms > 0.03
           and max(abs(proposal.opticalRotation-rotation)) < 0.03
           and max(abs(proposal.opticalTranslation-translation)) < 0.2
@@ -139,7 +140,8 @@ package RGBDNoisyLoopReference
               result.problem.edgeMask,result.problem.fromNode,result.problem.toNode,result.problem.measuredTranslation,
               result.problem.measuredRotation,result.problem.information,8,48,8,1e-3,0.5,0.15,1e-6);
           checks[4] := checks[4] and optimizerStatus == 2 and acceptedIterations > 0
-            and costAfter >= 0 and costAfter < costBefore and activeNodes == 128 and activeEdges == 256
+            and costAfter >= 0 and costAfter < costBefore and activeNodes == RGBDKeyframes.keyframeCapacity
+            and activeEdges == RGBDGraphMeasurements.edgeCapacity
             and max(abs(optimizedPosition[1,:]-result.problem.positions[1,:])) == 0;
         elseif scenario == 2 then
           for slot in 1:8 loop checks[8] := checks[8] and not proposal.inliers[slot] and proposal.partners[slot] == 0; end for;

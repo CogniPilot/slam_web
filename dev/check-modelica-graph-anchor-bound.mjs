@@ -53,7 +53,7 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(s=>sha(fs.readFileSync(path.join(app,s.path)))===s.sha256);
 const pass=processResult.status===0&&bookendsEqual&&checks.length===count&&checks.every(Boolean)&&modelResult?.simulationSucceeded;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
-  scope:'Full128 catalog metadata/ledger owner; oldest-anchor selection and capture mean/bound preserved; first-order6D recenter second-moment Young bound, independent Euler/matrix-log finite differences/all36 entries/signed Gram, identity/slot/capture/domain/PSD/late refusal controls. Not global nonlinear, outward rounding or browser qualification.',
+  scope:'Full-capacity catalog metadata/ledger owner; oldest-anchor selection and capture mean/bound preserved; first-order6D recenter second-moment Young bound, independent Euler/matrix-log finite differences/all36 entries/signed Gram, identity/slot/capture/domain/PSD/late refusal controls. Not global nonlinear, outward rounding or browser qualification.',
   compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,processStatus:processResult.status,
   rumocaArtifactIssued:false,browserIntegrated:false,fullSlamAccepted:false};
 fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');

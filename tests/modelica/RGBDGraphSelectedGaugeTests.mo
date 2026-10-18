@@ -1,5 +1,6 @@
 package RGBDGraphSelectedGaugeTests
   constant Integer checkCount = 60;
+  constant Integer capacity = RGBDKeyframes.keyframeCapacity;
 
   function Inverse6
     input Real A[6,6]; output Real inverse[6,6];
@@ -25,12 +26,28 @@ package RGBDGraphSelectedGaugeTests
     end for;
   end Inverse6;
 
+  function LoopNodes
+    // Full-fixture loop edges after the chain: distinct non-consecutive
+    // local node pairs, ordered by reference then current node.
+    input Integer edge; output Integer a; output Integer b;
+  protected
+    Integer index;
+  algorithm
+    index := capacity-1; a := 0; b := 0;
+    for reference in 1:capacity loop
+      for current in reference+2:capacity loop
+        index := index+1;
+        if index == edge then a := reference; b := current; end if;
+      end for;
+    end for;
+  end LoopNodes;
+
   function Fixture
     input Integer count; input Real clock;
     output RGBDKeyframes.Catalog catalog;
     output RGBDGraphMeasurements.State graph;
     output RGBDGraphSelectedGauge.Context context;
-    output Real positions[128,3]; output Real rotations[128,3,3];
+    output Real positions[capacity,3]; output Real rotations[capacity,3,3];
     output GraphGaugeUncertainty.Binding binding;
   protected
     Integer base = 133; Integer slot; Integer a; Integer b; Integer aSlot; Integer bSlot;
@@ -38,15 +55,15 @@ package RGBDGraphSelectedGaugeTests
   algorithm
     catalog := RGBDKeyframes.Empty(2,1); graph := RGBDGraphMeasurements.Empty(2);
     context.generation := 2; context.sourceRevision := 13; context.graphRevision := 9; context.catalogPoseRevision := 4;
-    context.captureIds := fill(-77,128); context.captureSequences := fill(-77,128);
-    positions := fill(1e100,128,3); rotations := fill(1e100,128,3,3);
+    context.captureIds := fill(-77,capacity); context.captureSequences := fill(-77,capacity);
+    positions := fill(1e100,capacity,3); rotations := fill(1e100,capacity,3,3);
     Ra := GraphGaugeUncertaintyTests.Rotation({0.4,-0.3,0.2});
-    catalog.nextId := if count == 128 then base+count+1 else count+1;
-    catalog.nextSlot := mod(catalog.nextId-1,128)+1;
+    catalog.nextId := if count == capacity then base+count+1 else count+1;
+    catalog.nextSlot := mod(catalog.nextId-1,capacity)+1;
     catalog.lastEpoch := 300+5*count; catalog.lastTime := 20+0.02*count+clock;
     for node in 1:count loop
-      slot := mod((if count == 128 then base else 0)+node-1,128)+1;
-      catalog.occupied[slot] := true; catalog.ids[slot] := (if count == 128 then base else 0)+node;
+      slot := mod((if count == capacity then base else 0)+node-1,capacity)+1;
+      catalog.occupied[slot] := true; catalog.ids[slot] := (if count == capacity then base else 0)+node;
       catalog.generations[slot] := 2; catalog.epochs[slot] := 300+5*node;
       catalog.imageTimes[slot] := 20+0.02*node+clock;
       context.captureIds[slot] := catalog.ids[slot]; context.captureSequences[slot] := 1000+7*node;
@@ -63,13 +80,12 @@ package RGBDGraphSelectedGaugeTests
     // symmetric-operator profile; this is not production canonicalization.
     information := (information+transpose(information))/2;
     graph.revision := 9; graph.lastCaptureId := catalog.nextId-1;
-    graph.nextEdgeId := if count == 128 then 257 else count;
+    graph.nextEdgeId := if count == capacity then 257 else count;
     for edge in 1:256 loop
-      if edge <= (if count == 128 then 256 else count-1) then
-        a := if edge <= 127 then edge else if edge <= 253 then 1 else 2;
-        b := if edge <= 127 then edge+1 else if edge <= 253 then edge-125 else edge-250;
-        aSlot := mod((if count == 128 then base else 0)+a-1,128)+1;
-        bSlot := mod((if count == 128 then base else 0)+b-1,128)+1;
+      if edge <= (if count == capacity then 256 else count-1) then
+        if edge <= count-1 then a := edge; b := edge+1; else (a,b) := LoopNodes(edge); end if;
+        aSlot := mod((if count == capacity then base else 0)+a-1,capacity)+1;
+        bSlot := mod((if count == capacity then base else 0)+b-1,capacity)+1;
         graph.edges[edge].enabled := true; graph.edges[edge].id := edge;
         graph.edges[edge].kind := if edge <= count-1 then 1 else 2;
         graph.edges[edge].referenceId := catalog.ids[aSlot]; graph.edges[edge].currentId := catalog.ids[bSlot];
@@ -84,14 +100,14 @@ package RGBDGraphSelectedGaugeTests
         graph.edges[edge].covariance := fill(-1e100,6,6); graph.edges[edge].information := fill(1e100,6,6);
       end if;
     end for;
-    slot := mod((if count == 128 then base else 0),128)+1;
+    slot := mod((if count == capacity then base else 0),capacity)+1;
     binding.generation := 2; binding.sourceRevision := 13; binding.graphRevision := 9; binding.catalogPoseRevision := 4;
     binding.anchorId := catalog.ids[slot]; binding.anchorEpoch := catalog.epochs[slot]; binding.anchorTime := catalog.imageTimes[slot];
     binding.anchorCaptureSequence := context.captureSequences[slot];
-    slot := mod(catalog.nextId-2,128)+1;
+    slot := mod(catalog.nextId-2,capacity)+1;
     binding.currentId := catalog.ids[slot]; binding.currentEpoch := catalog.epochs[slot]; binding.currentTime := catalog.imageTimes[slot];
     binding.currentCaptureSequence := context.captureSequences[slot];
-    slot := mod((if count == 128 then base else 0)+integer(count/2)-1,128)+1;
+    slot := mod((if count == capacity then base else 0)+integer(count/2)-1,capacity)+1;
     binding.referenceId := catalog.ids[slot]; binding.referenceEpoch := catalog.epochs[slot]; binding.referenceTime := catalog.imageTimes[slot];
     binding.referenceCaptureSequence := context.captureSequences[slot]; binding.chart := 1;
     binding.factorProvenance := 7; binding.anchorBoundProvenance := 11;
@@ -116,7 +132,7 @@ package RGBDGraphSelectedGaugeTests
     RGBDGraphMeasurements.Problem problem; RGBDGraphSelectedGauge.Context context;
     RGBDGraphSelectedGauge.Result result; GraphGaugeUncertainty.Binding binding;
     GraphGaugeUncertainty.Estimate previous; ModelicaPoseGraphCovariance.Result selected;
-    Real positions[128,3]; Real rotations[128,3,3]; Real anchorPosition[3]; Real anchorRotation[3,3];
+    Real positions[capacity,3]; Real rotations[capacity,3,3]; Real anchorPosition[3]; Real anchorRotation[3,3];
     Real anchorBound[6,6]; Real LA[6,6]; Real t[2,3]; Real Q[2,3,3]; Real JA[12,6]; Real ignored[12,12];
     Real oracle[12,12]; Real LR[12,12]; Real shared[12,6]; Real residual[12,6]; Real gapFactor[12,6];
     Real actual[12,12]; Real gap[12,12]; Real beta; Real tolerance; Real sign; Real scale;
@@ -126,10 +142,10 @@ package RGBDGraphSelectedGaugeTests
   algorithm
     checks := fill(false,checkCount);
     for scenario in 1:checkCount loop
-      count := if scenario == 4 or scenario == 57 then 4 else 128;
+      count := if scenario == 4 or scenario == 57 then 4 else capacity;
       (catalog,graph,context,positions,rotations,binding) := Fixture(count,clock);
       currentNode := count; referenceNode := integer(count/2);
-      aSlot := mod(binding.anchorId-1,128)+1; cSlot := mod(binding.currentId-1,128)+1; rSlot := mod(binding.referenceId-1,128)+1;
+      aSlot := mod(binding.anchorId-1,capacity)+1; cSlot := mod(binding.currentId-1,capacity)+1; rSlot := mod(binding.referenceId-1,capacity)+1;
       anchorPosition := positions[aSlot,:]; anchorRotation := rotations[aSlot,:,:];
       LA := zeros(6,6);
       for i in 1:6 loop for j in 1:6 loop LA[i,j] := (if i == j then 0.15 else 0)+0.0015*i*j; end for; end for;
@@ -146,7 +162,7 @@ package RGBDGraphSelectedGaugeTests
       elseif scenario == 7 then
         requested := false; reason := 1; catalog.nextId := -1; graph.generation := -1;
         context.generation := -1; currentNode := -1; referenceNode := -1; beta := -1;
-        positions := fill(1e100,128,3); rotations := fill(1e100,128,3,3); anchorBound := fill(-1e100,6,6);
+        positions := fill(1e100,capacity,3); rotations := fill(1e100,capacity,3,3); anchorBound := fill(-1e100,6,6);
       elseif scenario == 8 then context.generation := 3; reason := 2;
       elseif scenario == 9 then context.sourceRevision := -1; reason := 2;
       elseif scenario == 10 then context.graphRevision := 10; reason := 2;
@@ -161,7 +177,7 @@ package RGBDGraphSelectedGaugeTests
       elseif scenario == 19 then anchorProvenance := 0; reason := 2;
       elseif scenario == 20 then factorProvenance := 0; reason := 2;
       elseif scenario == 21 then currentNode := 0; reason := 3;
-      elseif scenario == 22 then referenceNode := 129; reason := 3;
+      elseif scenario == 22 then referenceNode := capacity+1; reason := 3;
       elseif scenario == 23 then referenceNode := currentNode; reason := 3;
       elseif scenario == 24 then binding.generation := 3; reason := 3;
       elseif scenario == 25 then binding.sourceRevision := 14; reason := 3;
@@ -196,12 +212,12 @@ package RGBDGraphSelectedGaugeTests
       elseif scenario == 52 then tolerance := 0; reason := 5; covarianceStatus := -1;
       elseif scenario == 53 then graph.edges[1].information[1,2] := graph.edges[1].information[1,2]+1e-12; reason := 5; covarianceStatus := -4;
       elseif scenario == 54 then context.captureSequences[cSlot] := 1000000001; reason := 2;
-      elseif scenario == 55 then context.captureIds[aSlot] := binding.anchorId-128; reason := 2;
+      elseif scenario == 55 then context.captureIds[aSlot] := binding.anchorId-capacity; reason := 2;
       elseif scenario == 56 then context.captureSequences[aSlot] := 0; reason := 2;
       elseif scenario == 57 then currentNode := 10; reason := 3;
       elseif scenario == 58 then binding.currentCaptureSequence := binding.currentId; reason := 3;
-      elseif scenario == 59 then context.captureIds[rSlot] := binding.referenceId-128; reason := 2;
-      elseif scenario == 60 then slot := mod(binding.anchorId+9-1,128)+1; positions[slot,1] := 1e100; reason := 4;
+      elseif scenario == 59 then context.captureIds[rSlot] := binding.referenceId-capacity; reason := 2;
+      elseif scenario == 60 then slot := mod(binding.anchorId+9-1,capacity)+1; positions[slot,1] := 1e100; reason := 4;
       end if;
       result := RGBDGraphSelectedGauge.SelectAndTransport(previous,catalog,graph,context,positions,rotations,
         currentNode,referenceNode,binding,anchorPosition,anchorRotation,anchorBound,anchorProvenance,factorProvenance,
@@ -235,7 +251,7 @@ package RGBDGraphSelectedGaugeTests
           and max(abs(result.estimate.rotations[1,:,:]-rotations[cSlot,:,:])) < 1e-12
           and max(abs(result.estimate.rotations[2,:,:]-rotations[rSlot,:,:])) < 1e-12;
         if scenario == 1 then
-          checks[scenario] := checks[scenario] and problem.nodeCount == 128 and problem.edgeCount == 256
+          checks[scenario] := checks[scenario] and problem.nodeCount == capacity and problem.edgeCount == 256
             and problem.correlationInflation == 256 and problem.catalogSlot[1] <> 1
             and context.captureSequences[cSlot] <> catalog.ids[cSlot]
             and context.captureSequences[cSlot] <> catalog.epochs[cSlot]
