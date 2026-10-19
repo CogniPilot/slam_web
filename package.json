@@ -17,6 +17,7 @@
     "assets": "node scripts/assets.mjs && node scripts/slam-native-assets.mjs",
     "pretest": "npm run models:init",
     "test": "vitest run",
+    "test:comparison": "bash scripts/test-slam-comparison.sh",
     "test:browser": "playwright test",
     "test:compiler-admission": "vitest run --config vitest.compiler.config.ts",
     "test:browser:gpu": "playwright test --config playwright.gpu.config.ts",

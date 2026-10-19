@@ -49,6 +49,11 @@ jobs:
           key: rumoca-main-${{ hashFiles('rumoca-package.json') }}
       - name: Build and verify the Modelica browser application
         run: nix develop --no-update-lock-file .#ci --command bash scripts/verify.sh --build-only
+      - name: Check RGB-D registration and evaluator contracts
+        run: |
+          mkdir -p "$HOME/scratch/slam_web/build"
+          nix build --impure --file scripts/slam-comparison-evaluator-env.nix --out-link "$HOME/scratch/slam_web/build/comparison-evaluator"
+          SLAM_COMPARISON_PYTHON="$HOME/scratch/slam_web/build/comparison-evaluator/bin/python3" nix develop --no-update-lock-file .#ci --command npm run test:comparison
       - name: Report pending full-SLAM compiler admission
         id: compiler-admission
         continue-on-error: true
