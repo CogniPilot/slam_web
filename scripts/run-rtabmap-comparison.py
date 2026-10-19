@@ -1,0 +1,519 @@
+"""Replay sealed RGB-D observations through isolated ROS2; truth is never read.
+
+Invoke with the pinned ros-env/bin/python3. DDS domain and loopback scope are
+isolated from other ROS users. Outputs retain dropped inputs and raw receipts.
+"""
+
+import argparse
+import fcntl
+import hashlib
+import json
+import os
+import platform
+import signal
+import subprocess
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+import rclpy
+from nav_msgs.msg import Odometry
+from rclpy.node import Node
+from rosidl_runtime_py.convert import message_to_ordereddict
+from rtabmap_msgs.msg import Info
+from rtabmap_msgs.srv import GetMap
+from sensor_msgs.msg import CameraInfo, Image
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def main():
+    runner_sha256 = digest(Path(__file__).read_bytes())
+    parser = argparse.ArgumentParser()
+    parser.add_argument("inputs", type=Path)
+    parser.add_argument("scene", choices=["city", "warehouse"])
+    parser.add_argument("output", type=Path)
+    parser.add_argument("--ros-env", type=Path, required=True)
+    parser.add_argument("--limit", type=int)
+    parser.add_argument("--rate", type=float, default=5)
+    parser.add_argument("--domain", type=int, default=173)
+    parser.add_argument("--feature-type", type=int, default=6)
+    parser.add_argument("--cpu-count", type=int, default=2)
+    parser.add_argument(
+        "--map-policy",
+        choices=["every-frame", "upstream-defaults"],
+        default="every-frame",
+    )
+    parser.add_argument("--estimator", choices=["rtabmap", "stella"], default="rtabmap")
+    parser.add_argument("--vocabulary", type=Path)
+    args = parser.parse_args()
+    lock_path = Path.home() / "scratch/slam_web/tmp/ros2-comparison.lock"
+    lock_path.parent.mkdir(exist_ok=True, parents=True)
+    admission_lock = lock_path.open("a")
+    fcntl.flock(admission_lock, fcntl.LOCK_EX)  # All estimators run serially.
+    available = sorted(os.sched_getaffinity(0))
+    if not 1 <= args.cpu_count <= len(available):
+        raise ValueError("Invalid CPU affinity budget")
+    affinity = available[: args.cpu_count]
+    os.sched_setaffinity(0, affinity)
+    args.output.mkdir()  # Never overwrite an earlier measurement.
+    os.environ.update(
+        ROS_DOMAIN_ID=str(args.domain),
+        ROS_AUTOMATIC_DISCOVERY_RANGE="LOCALHOST",
+        ROS_LOCALHOST_ONLY="1",
+        OMP_NUM_THREADS="2",
+        OPENBLAS_NUM_THREADS="1",
+        OPENCV_FOR_THREADS_NUM="2",
+        ROS_LOG_DIR=str(args.output / "ros-logs"),
+    )
+    raw = (args.inputs / "sensors.json").read_bytes()
+    manifest = json.loads((args.inputs / "manifest.json").read_text())
+    if digest(raw) != manifest["sensorsSha256"]:
+        raise ValueError("Sensor manifest integrity failure")
+    frames = [f for f in json.loads(raw)["sensorFrames"] if f["scene"] == args.scene]
+    if args.limit:
+        frames = frames[: args.limit]
+    if not frames or args.rate <= 0:
+        raise ValueError("No frames or invalid rate")
+    ros2 = str(args.ros_env / "bin/ros2")
+    commands = [
+        [
+            ros2,
+            "run",
+            "tf2_ros",
+            "static_transform_publisher",
+            "--x",
+            "0.18",
+            "--y",
+            "0",
+            "--z",
+            "-0.04",
+            "--qx",
+            "-0.5",
+            "--qy",
+            "0.5",
+            "--qz",
+            "-0.5",
+            "--qw",
+            "0.5",
+            "--frame-id",
+            "base_link",
+            "--child-frame-id",
+            "camera_optical",
+        ],
+        [
+            ros2,
+            "run",
+            "rtabmap_odom",
+            "rgbd_odometry",
+            "--ros-args",
+            "-p",
+            "frame_id:=base_link",
+            "-p",
+            "odom_frame_id:=odom",
+            "-p",
+            "approx_sync:=false",
+            "-p",
+            "sync_queue_size:=20",
+            "-p",
+            f"Vis/FeatureType:='{args.feature_type}'",
+            "-r",
+            "rgb/image:=/camera/rgb",
+            "-r",
+            "depth/image:=/camera/depth",
+            "-r",
+            "rgb/camera_info:=/camera/info",
+            "-r",
+            "odom:=/odom",
+        ],
+        [
+            ros2,
+            "run",
+            "rtabmap_slam",
+            "rtabmap",
+            "--delete_db_on_start",
+            "--ros-args",
+            "-r",
+            "__ns:=/rtabmap",
+            "-p",
+            "frame_id:=base_link",
+            "-p",
+            "subscribe_depth:=true",
+            "-p",
+            "approx_sync:=false",
+            "-p",
+            "sync_queue_size:=20",
+            "-p",
+            "database_path:=" + str(args.output / "rtabmap.db"),
+            "-p",
+            f"Kp/DetectorStrategy:='{args.feature_type}'",
+            "-r",
+            "rgb/image:=/camera/rgb",
+            "-r",
+            "depth/image:=/camera/depth",
+            "-r",
+            "rgb/camera_info:=/camera/info",
+            "-r",
+            "odom:=/odom",
+        ],
+    ]
+    if args.map_policy == "every-frame":
+        commands[2].extend(
+            [
+                "-p",
+                "Rtabmap/DetectionRate:='0'",
+                "-p",
+                "RGBD/LinearUpdate:='0'",
+                "-p",
+                "RGBD/AngularUpdate:='0'",
+            ]
+        )
+    if args.estimator == "stella":
+        if args.vocabulary is None:
+            raise ValueError("stella requires a pinned vocabulary file")
+        if (
+            digest(args.vocabulary.read_bytes())
+            != "310cdf3581b5dd5becfabd75823606e315b1f049f70e51fa23be05021dc4b107"
+        ):
+            raise ValueError("Official FBoW vocabulary hash mismatch")
+        k = frames[0]["calibration"]
+        settings = args.output / "stella-camera.yaml"
+        settings.write_text(
+            "\n".join(
+                [
+                    "Camera:",
+                    "  name: sealed-rgbd",
+                    "  setup: RGBD",
+                    "  model: perspective",
+                    "  color_order: RGB",
+                    f"  cols: {k['width']}",
+                    f"  rows: {k['height']}",
+                    f"  fps: {args.rate}",
+                    *[f"  {name}: {k[name]}" for name in ["fx", "fy", "cx", "cy"]],
+                    "  k1: 0.0",
+                    "  k2: 0.0",
+                    "  p1: 0.0",
+                    "  p2: 0.0",
+                    "  k3: 0.0",
+                    f"  focal_x_baseline: {k['fx'] * k['baseline']}",
+                    "  depth_threshold: 40.0",
+                    "Preprocessing:",
+                    "  descriptor_type: ORB",
+                    f"  depthmap_factor: {1 / frames[0]['imageLayout']['depth']['unitsMeters']}",
+                    "Feature:",
+                    "  name: default-orb",
+                    "",
+                ]
+            )
+            + "\n"
+        )
+        evaluation_directory = args.output / "stella-eval"
+        evaluation_directory.mkdir()
+        commands = [
+            [
+                ros2,
+                "run",
+                "stella_vslam_ros",
+                "run_slam",
+                "--vocab",
+                str(args.vocabulary.resolve()),
+                "--config",
+                str(settings.resolve()),
+                "--map-db-out",
+                str((args.output / "stella-map.msg").resolve()),
+                "--eval-log-dir",
+                str(evaluation_directory.resolve()),
+                "--viewer",
+                "none",
+                "--ros-args",
+                "-p",
+                "publish_tf:=false",
+                "-p",
+                "use_exact_time:=true",
+                "-p",
+                "encoding:=rgb8",
+                "-r",
+                "camera/color/image_raw:=/camera/rgb",
+                "-r",
+                "camera/depth/image_raw:=/camera/depth",
+            ]
+        ]
+    logs = []
+    processes = []
+    published = []
+    poses = []
+    infos = []
+    rclpy.init(args=None)
+    node = Node("sealed_rgbd_replay")
+    rgb_pub = node.create_publisher(Image, "/camera/rgb", 20)
+    depth_pub = node.create_publisher(Image, "/camera/depth", 20)
+    info_pub = node.create_publisher(CameraInfo, "/camera/info", 20)
+    sent = {}
+
+    def pose_callback(msg):
+        stamp = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
+        now = time.monotonic_ns()
+        poses.append(
+            {
+                "stamp": stamp,
+                "receivedMonoNs": now,
+                "latencyMs": (now - sent[round(stamp, 6)]) / 1e6
+                if round(stamp, 6) in sent
+                else None,
+                "message": message_to_ordereddict(msg),
+            }
+        )
+
+    def info_callback(msg):
+        row = message_to_ordereddict(msg)
+        stamp = round(msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9, 6)
+        row["_receivedMonoNs"] = time.monotonic_ns()
+        row["_latencyMs"] = (
+            (row["_receivedMonoNs"] - sent[stamp]) / 1e6 if stamp in sent else None
+        )
+        infos.append(row)
+
+    pose_topic = "/odom" if args.estimator == "rtabmap" else "/run_slam/camera_pose"
+    _subscriptions = [
+        node.create_subscription(Odometry, pose_topic, pose_callback, 20),
+        node.create_subscription(Info, "/rtabmap/info", info_callback, 20),
+    ]
+    # Sample RSS/CPU of wrappers and all descendants, not just the ros2 launcher.
+    peak_rss = 0
+    peak_threads = 0
+    cpu_ticks = {}
+    host_load = []
+
+    def sample():
+        nonlocal peak_rss, peak_threads
+        host_load.append(
+            {"monotonicNs": time.monotonic_ns(), "loadAverage": os.getloadavg()}
+        )
+        groups = {p.pid for p in processes}
+        rss = threads = 0
+        for entry in Path("/proc").iterdir():
+            if not entry.name.isdigit():
+                continue
+            try:
+                stat = (entry / "stat").read_text().rsplit(")", 1)[1].split()
+                if int(stat[2]) not in groups:
+                    continue  # process group field5
+                values = dict(
+                    line.split(":", 1)
+                    for line in (entry / "status").read_text().splitlines()
+                    if ":" in line
+                )
+                rss += int(values.get("VmRSS", "0 kB").split()[0])
+                threads += int(values.get("Threads", "0"))
+                cpu_ticks[(entry.name, stat[19])] = int(stat[11]) + int(stat[12])
+            except (FileNotFoundError, ProcessLookupError, PermissionError):
+                pass
+        peak_rss = max(peak_rss, rss)
+        peak_threads = max(peak_threads, threads)
+
+    def spin_for(seconds):
+        end = time.monotonic() + seconds
+        while time.monotonic() < end:
+            rclpy.spin_once(node, timeout_sec=min(0.02, max(0, end - time.monotonic())))
+
+    failure = None
+    final_map = None
+    started = time.monotonic_ns()
+    started_utc = datetime.now(timezone.utc).isoformat()
+    try:
+        for index, command in enumerate(commands):
+            log = (args.output / f"process-{index}.log").open("w")
+            logs.append(log)
+            processes.append(
+                subprocess.Popen(
+                    command,
+                    stdout=log,
+                    stderr=subprocess.STDOUT,
+                    start_new_session=True,
+                )
+            )
+        deadline = time.monotonic() + 30
+
+        def discovered():
+            if args.estimator == "stella":
+                return (
+                    min(
+                        rgb_pub.get_subscription_count(),
+                        depth_pub.get_subscription_count(),
+                    )
+                    >= 1
+                )
+            return (
+                min(
+                    rgb_pub.get_subscription_count(),
+                    depth_pub.get_subscription_count(),
+                    info_pub.get_subscription_count(),
+                )
+                >= 2
+            )
+
+        while not discovered():
+            if any(p.poll() is not None for p in processes):
+                raise RuntimeError("Estimator launch failed; see process logs")
+            if time.monotonic() > deadline:
+                raise RuntimeError("Required image subscribers not discovered in30s")
+            spin_for(0.1)
+        spin_for(2)
+        for index, frame in enumerate(frames):
+            frame_start = time.monotonic()
+            k = frame["calibration"]
+            stamp = 1 + frame["time"]
+            images = []
+            for kind, encoding in [("rgb", "rgb8"), ("depth", "16UC1")]:
+                image = frame["images"][kind]
+                path = (args.inputs / image["path"]).resolve()
+                if not path.is_relative_to(args.inputs.resolve()):
+                    raise ValueError("Image path escape")
+                data = path.read_bytes()
+                if digest(data) != image["sha256"] or len(data) != image["bytes"]:
+                    raise ValueError("Image integrity failure")
+                msg = Image()
+                msg.header.stamp.sec = int(stamp)
+                msg.header.stamp.nanosec = round((stamp - int(stamp)) * 1e9)
+                msg.header.frame_id = "camera_optical"
+                msg.height = k["height"]
+                msg.width = k["width"]
+                msg.encoding = encoding
+                msg.is_bigendian = 0
+                msg.step = k["width"] * (3 if kind == "rgb" else 2)
+                msg.data = data
+                images.append(msg)
+            camera = CameraInfo()
+            camera.header = images[0].header
+            camera.height = k["height"]
+            camera.width = k["width"]
+            camera.distortion_model = "plumb_bob"
+            camera.d = [0.0] * 5
+            camera.k = [k["fx"], 0.0, k["cx"], 0.0, k["fy"], k["cy"], 0.0, 0.0, 1.0]
+            camera.r = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+            camera.p = [
+                k["fx"],
+                0.0,
+                k["cx"],
+                0.0,
+                0.0,
+                k["fy"],
+                k["cy"],
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+            ]
+            sent[round(stamp, 6)] = time.monotonic_ns()
+            info_pub.publish(camera)
+            rgb_pub.publish(images[0])
+            depth_pub.publish(images[1])
+            published.append(
+                {
+                    "index": frame["index"],
+                    "stamp": stamp,
+                    "sentMonoNs": sent[round(stamp, 6)],
+                }
+            )
+            spin_for(max(0, 1 / args.rate - (time.monotonic() - frame_start)))
+            sample()
+            if any(p.poll() is not None for p in processes):
+                raise RuntimeError("Estimator exited during replay")
+        spin_for(10)
+        sample()
+        client = node.create_client(GetMap, "/rtabmap/rtabmap/get_map_data")
+        if args.estimator == "rtabmap" and client.wait_for_service(timeout_sec=3):
+            request = GetMap.Request()
+            request.global_map = True
+            request.optimized = True
+            request.graph_only = True
+            future = client.call_async(request)
+            rclpy.spin_until_future_complete(node, future, timeout_sec=10)
+            if future.done() and future.result():
+                final_map = message_to_ordereddict(future.result().data)
+    except (Exception, KeyboardInterrupt) as error:  # noqa: BLE001 - preserve partial evidence for any runner failure
+        failure = f"{type(error).__name__}: {error}"
+    finally:
+        sample()
+        # SIGINT lets RTAB-Map finish its database writes before forced cleanup.
+        for p in processes:
+            try:
+                os.killpg(p.pid, signal.SIGINT)
+            except ProcessLookupError:
+                pass
+        for p in processes:
+            try:
+                p.wait(timeout=15)
+            except subprocess.TimeoutExpired:
+                failure = (
+                    failure or "Shutdown deadline exceeded; estimator required SIGKILL"
+                )
+                os.killpg(p.pid, signal.SIGKILL)
+                p.wait()
+        for log in logs:
+            log.close()
+        node.destroy_node()
+        rclpy.shutdown()
+    receipt = {
+        "schema": 1,
+        "estimator": "RTAB-Map0.23.7"
+        if args.estimator == "rtabmap"
+        else "stella-vslam0.7.0-e445b545/ROS186f623d",
+        "scene": args.scene,
+        "track": "registered RGB-D only",
+        "inputSha256": digest(raw),
+        "framesExpected": len(frames),
+        "framesPublished": len(published),
+        "posesReceived": len(poses),
+        "uniquePoseStamps": len({p["stamp"] for p in poses}),
+        "wallSeconds": (time.monotonic_ns() - started) / 1e9,
+        "sampledPeakRssKiB": peak_rss,
+        "sampledPeakThreads": peak_threads,
+        "sampledCpuSeconds": sum(cpu_ticks.values()) / os.sysconf("SC_CLK_TCK"),
+        "resourceScope": "estimator process groups, including ros2 wrappers; replay excluded",
+        "outputPoseFrame": "body FLU"
+        if args.estimator == "rtabmap"
+        else "camera FLU in initial camera frame",
+        "cameraOriginBody": [
+            frames[0]["calibration"]["forward"],
+            0,
+            frames[0]["calibration"]["up"],
+        ],
+        "rateHz": args.rate,
+        "domain": args.domain,
+        "commands": commands,
+        "cpuAffinity": affinity,
+        "loadAverageAtFinish": os.getloadavg(),
+        "mapPolicy": args.map_policy
+        if args.estimator == "rtabmap"
+        else "native-defaults",
+        "featureType": args.feature_type if args.estimator == "rtabmap" else "ORB",
+        "startedAtUTC": started_utc,
+        "hostLoadSamples": host_load,
+        "kernel": platform.release(),
+        "python": platform.python_version(),
+        "runnerSha256": runner_sha256,
+        "rosEnvironment": str(args.ros_env.resolve()),
+        "exitCodes": [p.returncode for p in processes],
+        "failure": failure,
+    }
+    for name, data in [
+        ("published", published),
+        ("odometry", poses),
+        ("info", infos),
+        ("optimized-map", final_map),
+    ]:
+        (args.output / (name + ".json")).write_text(json.dumps(data, indent=2) + "\n")
+    receipt_temp = args.output / "receipt.json.tmp"
+    receipt_temp.write_text(json.dumps(receipt, indent=2) + "\n")
+    receipt_temp.replace(args.output / "receipt.json")
+    print(json.dumps(receipt, indent=2))
+    if failure:
+        raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()
