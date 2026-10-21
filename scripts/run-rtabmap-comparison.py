@@ -10,32 +10,445 @@ import hashlib
 import json
 import os
 import platform
+import re
 import signal
 import subprocess
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-import rclpy
-from nav_msgs.msg import Odometry
-from rclpy.node import Node
-from rosidl_runtime_py.convert import message_to_ordereddict
-from rtabmap_msgs.msg import Info
-from rtabmap_msgs.srv import GetMap
-from sensor_msgs.msg import CameraInfo, Image
+
+SCENE_ID = re.compile(r"[a-z][a-z0-9-]{0,31}")
+# Fields that must stay constant within one replayed scene: the camera mount is
+# published once as a static transform and RTAB-Map assumes one intrinsic set.
+CONSTANT_CALIBRATION = ["width", "height", "fx", "fy", "cx", "cy", "forward", "up"]
+# RTAB-Map tracks. Each run declares exactly one; the receipt names it.
+TRACKS = {
+    "rgbd-vo": "registered RGB-D only",
+    "rgbd-vo+imu-gravity": "registered RGB-D + sealed raw IMU, orientation from an "
+    "external Madgwick filter (gravity alignment)",
+    "rgbd-vio-openvins": "registered RGB as monocular OpenVINS (Odom/Strategy 10) + "
+    "sealed raw IMU; depth only as a feature mask, metric scale from the IMU",
+}
+# rtabmap_odom and rtabmap 0.23.7 drop sensor_msgs/Imu without orientation and do
+# not run RTAB-Map's own ImuFilter from ROS, so orientation must come from a node
+# in the pinned environment. Gain and zeta mirror ImuFilter/MadgwickGain and
+# ImuFilter/MadgwickZeta defaults in the pinned rtabmap Parameters.h.
+ORIENTATION_FILTER = "imu_filter_madgwick"
+ORIENTATION_FILTER_PARAMETERS = {
+    "use_mag": "false",
+    "publish_tf": "false",
+    "world_frame": "enu",
+    "gain": "0.1",
+    "zeta": "0.0",
+    "constant_dt": "0.0",
+}
+IMU_TRACKS = {"rgbd-vo+imu-gravity", "rgbd-vio-openvins"}
+# --odometry-log-level sets both of rgbd_odometry's loggers: the ROS one, and
+# RTAB-Map's ULogger, whose level the OpenVINS printer follows (a 50-frame hallway
+# smoke printed "Setting printing level to: DEBUG" only with --udebug). Both
+# default to warn, so only the levels with a ULogger switch are offered.
+ODOMETRY_LOG_LEVELS = {"debug": "--udebug", "info": "--uinfo"}
+OPENVINS_TRACK = "rgbd-vio-openvins"
+# OdometryOpenVINS (RTAB-Map 0.23.7 built WITH_OPENVINS) takes raw IMU without
+# orientation (canProcessAsyncIMU), the IMU-to-camera extrinsic from TF, and with
+# one camera runs monocular. Vis/DepthAsMask allows features only where the
+# registered depth lies in [Vis/MinDepth, Vis/MaxDepth]; depth never enters the
+# filter. Other OdomOpenVINS/* keep their RTAB-Map 0.23.7 defaults.
+OPENVINS_PARAMETERS = {
+    "Odom/Strategy": "10",
+    "OdomOpenVINS/UseStereo": "false",
+    "Vis/DepthAsMask": "true",
+}
+# RTAB-Map 0.23.7 Parameters.h defaults, used when the capture declares no noise.
+OPENVINS_DEFAULT_NOISE = {
+    "OdomOpenVINS/AccelerometerNoiseDensity": 0.01,
+    "OdomOpenVINS/AccelerometerRandomWalk": 0.001,
+    "OdomOpenVINS/GyroscopeNoiseDensity": 0.001,
+    "OdomOpenVINS/GyroscopeRandomWalk": 0.0001,
+}
+# The filter needs a positive bias random walk; a capture with constant biases
+# declares zero, which is raised to this floor and reported.
+OPENVINS_RANDOM_WALK_FLOOR = {
+    "OdomOpenVINS/AccelerometerRandomWalk": 1e-4,
+    "OdomOpenVINS/GyroscopeRandomWalk": 1e-6,
+}
+# Optional sealed sensors.json top-level block (covered by sensorsSha256):
+# per-sample white-noise standard deviations and bias random-walk densities.
+IMU_NOISE_FIELDS = {
+    "accelSdPerSample": "OdomOpenVINS/AccelerometerNoiseDensity",
+    "gyroSdPerSample": "OdomOpenVINS/GyroscopeNoiseDensity",
+    "accelBiasRandomWalkDensity": "OdomOpenVINS/AccelerometerRandomWalk",
+    "gyroBiasRandomWalkDensity": "OdomOpenVINS/GyroscopeRandomWalk",
+}
+# One convention for every IMU track. In the sealed format an interval stamped t
+# holds the sample measured at t - dt (zero-order hold), and a frame's imu field
+# is the sample measured at the frame time, so each frame's first interval
+# repeats the previous frame's snapshot.
+IMU_STAMP_CONVENTION = (
+    "measurement time: interval.time - interval.dt for each interval, frame imu "
+    "snapshot at frame time; an interval repeating the last published snapshot "
+    "is skipped; ROS stamp 1 + measurement time"
+)
 
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def package_version(ros_env, package):
+    """Version declared by the pinned environment, not a hardcoded label."""
+    text = (ros_env / "share" / package / "package.xml").read_text()
+    match = re.search(r"<version>([^<]+)</version>", text)
+    if match is None:
+        raise ValueError(f"No version in {package}/package.xml")
+    return match.group(1).strip()
+
+
+def scene_frames(raw, manifest, scene, expect_frames):
+    """Select one scene from the sealed inputs; scenes come from the data itself."""
+    frames = json.loads(raw)["sensorFrames"]
+    available = sorted({f["scene"] for f in frames})
+    declared = manifest.get("scenes")
+    if declared is not None and sorted(declared) != available:
+        raise ValueError("Manifest scene list disagrees with sealed frames")
+    if not SCENE_ID.fullmatch(scene) or scene not in available:
+        raise ValueError(f"Scene {scene!r} not in sealed inputs {available}")
+    frames = [f for f in frames if f["scene"] == scene]
+    if expect_frames is not None and len(frames) != expect_frames:
+        raise ValueError(f"Expected {expect_frames} {scene} frames, found {len(frames)}")
+    if [f["index"] for f in frames] != list(range(len(frames))):
+        raise ValueError("Scene frame indices are not contiguous from zero")
+    first = frames[0]["calibration"]
+    for previous, frame in zip([None, *frames], frames):
+        layout = frame["imageLayout"]
+        k = frame["calibration"]
+        if layout.get("aligned") is not True:
+            raise ValueError("Unregistered depth; run register-slam-comparison.mjs")
+        if (
+            layout["color"]["format"] != "RGB8"
+            or layout["depth"]["format"] != "Z16"
+            or layout["depth"]["unitsMeters"] != 0.001
+            or layout["depth"]["isBigEndian"]
+            or layout["rowOrder"] != "top-down"
+            or (layout["color"]["width"], layout["color"]["height"])
+            != (k["width"], k["height"])
+            or (layout["depth"]["width"], layout["depth"]["height"])
+            != (k["width"], k["height"])
+        ):
+            raise ValueError("Unsupported image layout for 16UC1 millimetre replay")
+        if any(k[name] != first[name] for name in CONSTANT_CALIBRATION):
+            raise ValueError("Calibration or camera mount changes within the scene")
+        # Fixed-period publishing preserves the source clock only if it is uniform.
+        if previous is not None and abs(
+            frame["time"] - previous["time"] - (frames[1]["time"] - frames[0]["time"])
+        ) > 1e-5:
+            raise ValueError("Non-uniform frame interval within the scene")
+    interval = frames[1]["time"] - frames[0]["time"] if len(frames) > 1 else None
+    if interval is not None and not interval > 0:
+        raise ValueError("Non-increasing frame times")
+    return frames, available, interval
+
+
+def sealed_imu(imu_inputs, registered_manifest, frames):
+    """IMU samples from the sealed raw inputs that the registered frames came from."""
+    raw = (imu_inputs / "sensors.json").read_bytes()
+    manifest = json.loads((imu_inputs / "manifest.json").read_text())
+    if digest(raw) != manifest["sensorsSha256"]:
+        raise ValueError("IMU source manifest integrity failure")
+    if registered_manifest.get("sourceSensorsSha256") != digest(raw):
+        raise ValueError("IMU source is not the sealed input these frames were registered from")
+    source = json.loads(raw)
+    if source.get("format") != "slam-lab-raw-rgbd-v1":
+        raise ValueError("IMU source is not a sealed raw RGB-D input")
+    by_key = {(f["scene"], f["index"]): f for f in source["sensorFrames"]}
+    samples = {}
+    previous_time = None
+    period = None
+    for frame in frames:
+        origin = by_key.get((frame["scene"], frame["index"]))
+        if origin is None or origin["time"] != frame["time"]:
+            raise ValueError("IMU source frames do not match the registered frames")
+        rows = []
+        for interval in origin.get("imuIntervals", []):
+            check_imu_values(interval["imu"])
+            if previous_time is not None and not interval["time"] > previous_time:
+                raise ValueError("Non-increasing IMU sample times")
+            if interval["time"] > frame["time"] + 1e-9:
+                raise ValueError("IMU sample later than its frame")
+            if period is None:
+                period = interval["dt"]
+            if not period > 0 or abs(interval["dt"] - period) > 1e-9:
+                raise ValueError("Non-uniform IMU interval")
+            previous_time = interval["time"]
+            rows.append(interval)
+        if rows and abs(rows[-1]["time"] - frame["time"]) > 1e-9:
+            raise ValueError("Last IMU interval does not end at its frame")
+        check_imu_values(origin["imu"])
+        samples[frame["index"]] = {"intervals": rows, "snapshot": origin["imu"]}
+    if period is None:
+        raise ValueError("Sealed input carries no IMU samples for this scene")
+    first = next(row for rows in samples.values() for row in rows["intervals"])
+    return samples, {
+        "source": "sealed raw sensors.json imuIntervals (specific force + rate, no orientation)",
+        "inputSha256": digest(raw),
+        "inputFormat": source["format"],
+        "rateHz": 1 / period,
+        "intervalSeconds": period,
+        "intervalsInScene": sum(len(rows["intervals"]) for rows in samples.values()),
+        "framesWithoutIntervals": [i for i, rows in samples.items() if not rows["intervals"]],
+        "declaredNoise": source.get("imuNoise"),
+    }
+
+
+def check_imu_values(imu):
+    values = [*imu["accel"], *imu["gyro"]]
+    if len(values) != 6 or not all(isinstance(v, (int, float)) and abs(v) < 1e6 for v in values):
+        raise ValueError("Non-finite or malformed IMU sample")
+
+
+def imu_messages(frames, samples, settle_seconds):
+    """IMU messages per frame, stamped at measurement time (IMU_STAMP_CONVENTION).
+
+    The track is not an input: every IMU track publishes the same messages for
+    the same sealed samples and settling window. Samples measured before the
+    first replayed frame time plus settle_seconds are dropped and listed, so a
+    replay that starts mid-capture publishes from its first frame like a capture.
+    """
+    if not settle_seconds >= 0:
+        raise ValueError("Invalid IMU settling window")
+    cutoff = frames[0]["time"] + settle_seconds
+    plan = {}
+    dropped = []
+    skipped = []
+    last = None  # (measurement time, imu) of the last snapshot considered
+    for frame in frames:
+        rows = samples[frame["index"]]
+        candidates = []
+        for j, interval in enumerate(rows["intervals"]):
+            measured = round(interval["time"] - interval["dt"], 9)  # ROS stamp resolution
+            if j == 0 and last is not None and abs(measured - last[0]) < 1e-9:
+                if interval["imu"] != last[1]:
+                    raise ValueError("IMU interval disagrees with the previous frame snapshot")
+                skipped.append({"frameIndex": frame["index"], "time": measured})
+                continue
+            if last is not None and not measured > last[0] + 1e-9:
+                raise ValueError("IMU interval measured before the previous frame")
+            candidates.append({"time": measured, "imu": interval["imu"]})
+        candidates.append({"time": frame["time"], "imu": rows["snapshot"]})
+        last = (frame["time"], rows["snapshot"])
+        kept = []
+        for message in candidates:
+            message = {"frameIndex": frame["index"], **message}
+            (kept if message["time"] >= cutoff - 1e-9 else dropped).append(message)
+        plan[frame["index"]] = kept
+    return plan, {
+        "stampConvention": IMU_STAMP_CONVENTION,
+        "settleSeconds": settle_seconds,
+        "settleCutoffTime": cutoff,
+        "droppedBySettle": [m["time"] for m in dropped],
+        "duplicatesSkipped": len(skipped),
+    }
+
+
+def imu_published_fields(imu_published):
+    """Receipt fields recomputed from the messages actually published."""
+    times = [m["time"] for m in imu_published]
+    first = imu_published[0] if imu_published else None
+    return {
+        "samplesPublished": len(times),
+        "firstPublishedTime": times[0] if times else None,
+        "lastPublishedTime": times[-1] if times else None,
+        "firstPublishedAccelNorm": sum(v * v for v in first["accel"]) ** 0.5 if first else None,
+        "publishedStampsUnique": len(set(times)) == len(times),
+        "publishedStampsIncreasing": all(b > a for a, b in zip(times, times[1:])),
+    }
+
+
+def openvins_noise(declared, rate_hz):
+    """OdomOpenVINS/* IMU noise and where it came from.
+
+    A declared per-sample standard deviation sd at rate f is the continuous
+    density sd / sqrt(f). Without a declaration the RTAB-Map defaults are used
+    and the receipt says so; no value is tuned on the replayed capture.
+    """
+    if declared is None:
+        return dict(OPENVINS_DEFAULT_NOISE), {
+            "source": "RTAB-Map 0.23.7 OdomOpenVINS defaults; the capture declares no "
+            "IMU noise model",
+            "floored": [],
+        }
+    if set(declared) != set(IMU_NOISE_FIELDS):
+        raise ValueError(f"imuNoise must declare exactly {sorted(IMU_NOISE_FIELDS)}")
+    values = [declared[field] for field in IMU_NOISE_FIELDS]
+    if not all(isinstance(v, (int, float)) and 0 <= v < 1e3 for v in values):
+        raise ValueError("Malformed imuNoise value")
+    if not (declared["accelSdPerSample"] > 0 and declared["gyroSdPerSample"] > 0):
+        raise ValueError("imuNoise white noise must be positive")
+    noise, floored = {}, []
+    for field, name in IMU_NOISE_FIELDS.items():
+        value = declared[field]
+        if field.endswith("PerSample"):
+            value = value / rate_hz**0.5
+        elif value < OPENVINS_RANDOM_WALK_FLOOR[name]:
+            value = OPENVINS_RANDOM_WALK_FLOOR[name]
+            floored.append(name)
+        noise[name] = value
+    return noise, {
+        "source": "sealed sensors.json imuNoise; per-sample sd converted to density "
+        "sd / sqrt(rateHz)",
+        "declared": declared,
+        "floored": floored,
+    }
+
+
+def imu_track_arguments(track, ros2, calibration, noise):
+    """Extra rgbd_odometry and rtabmap arguments and added nodes for an IMU track."""
+    if track == OPENVINS_TRACK:
+        parameters = {
+            **OPENVINS_PARAMETERS,
+            # Zero depth is invalid, so the mask must start above it.
+            "Vis/MinDepth": f"{calibration['near']:g}",
+            **{name: f"{value:g}" for name, value in noise.items()},
+        }
+        odometry = [
+            "-p",
+            "wait_imu_to_init:=true",
+            *[item for name, value in parameters.items() for item in ["-p", f"{name}:='{value}'"]],
+            "-r",
+            "imu:=/imu/data_raw",
+        ]
+        # The rtabmap graph runs as in rgbd-vo: only the odometry source changes.
+        return odometry, [], [], parameters
+    if track != "rgbd-vo+imu-gravity":
+        raise ValueError(f"{track} is not an IMU track")
+    odometry = [
+        "-p",
+        "wait_imu_to_init:=true",
+        "-p",
+        "Odom/AlignWithGround:='false'",
+        "-r",
+        "imu:=/imu/data",
+    ]
+    rtabmap = [
+        "-p",
+        "Optimizer/GravitySigma:='0.3'",
+        "-p",
+        "Mem/UseOdomGravity:='false'",
+        "-r",
+        "imu:=/imu/data",
+    ]
+    orientation_filter = [
+        ros2,
+        "run",
+        ORIENTATION_FILTER,
+        "imu_filter_madgwick_node",
+        "--ros-args",
+        *[
+            item
+            for name, value in ORIENTATION_FILTER_PARAMETERS.items()
+            for item in ["-p", f"{name}:={value}"]
+        ],
+        "-r",
+        "imu/data_raw:=/imu/data_raw",
+        "-r",
+        "imu/data:=/imu/data",
+    ]
+    return odometry, rtabmap, [orientation_filter], None
+
+
+def add_odometry_log_level(commands, level):
+    """Set both of rgbd_odometry's loggers to level, on that node's command only.
+
+    The node is found by name, and anything but exactly one match is refused, so a
+    reordered command list cannot move the flags to another node. The ULogger switch
+    is a node argument, before --ros-args; the ROS level goes last in its --ros-args.
+    """
+    matches = [c for c in commands if c[2:4] == ["rtabmap_odom", "rgbd_odometry"]]
+    if len(matches) != 1:
+        raise ValueError(f"Expected one rgbd_odometry command, found {len(matches)}")
+    odometry = matches[0]
+    odometry.insert(odometry.index("--ros-args"), ODOMETRY_LOG_LEVELS[level])
+    odometry.extend(["--log-level", level])
+
+
+def shutdown_status(command, code):
+    """What one estimator process's exit code means after the runner's SIGINT.
+
+    `ros2 run` exits with 256 - n when its child dies on signal n; Popen gives -n
+    for a process it started that died on a signal. Reported, never retried: a
+    crash during replay already fails the run, and one after SIGINT is stated
+    here while pass or fail is decided from the outputs.
+    """
+    signum = -code if code is not None and code < 0 else None
+    if code is not None and 192 < code < 256:
+        signum = 256 - code
+    if code == 0:
+        meaning = "clean exit"
+    elif signum is not None:
+        try:
+            name = signal.Signals(signum).name
+        except ValueError:
+            name = f"signal {signum}"
+        meaning = "stopped by the runner's SIGINT" if signum == signal.SIGINT else (
+            f"crashed on {name} after the runner's SIGINT (teardown)"
+        )
+    elif code is None:
+        meaning = "did not exit"
+    else:
+        meaning = f"nonzero exit {code} after the runner's SIGINT"
+    return {
+        "node": command[3] if len(command) > 3 else command[0],
+        "exitCode": code,
+        "meaning": meaning,
+        "teardownCrash": code not in (0, None) and signum not in (None, signal.SIGINT),
+    }
+
+
+def rtabmap_openvins_linkage(ros_env):
+    """Resolved rtabmap core and OpenVINS libraries of the env's rgbd_odometry.
+
+    Raises when rgbd_odometry does not load libov_msckf_lib.so: a RTAB-Map built
+    without OpenVINS would refuse Odom/Strategy 10 at run time.
+    """
+    binary = (ros_env / "lib/rtabmap_odom/rgbd_odometry").resolve()
+    lines = subprocess.run(
+        ["ldd", str(binary)], capture_output=True, text=True, check=True
+    ).stdout.splitlines()
+    resolved = {
+        name: path
+        for name, _, path in (
+            line.split()[:3] for line in lines if "=>" in line and len(line.split()) >= 3
+        )
+    }
+    core = next((p for n, p in resolved.items() if n.startswith("librtabmap_core.so")), None)
+    if "libov_msckf_lib.so" not in resolved or core is None:
+        raise ValueError(
+            "rgbd_odometry in this ros-env does not load OpenVINS; the "
+            f"{OPENVINS_TRACK} track needs RTAB-Map built WITH_OPENVINS"
+        )
+    return {"rgbdOdometry": str(binary), "rtabmapCore": core, "ovMsckf": resolved["libov_msckf_lib.so"]}
+
+
 def main():
+    # ROS imports stay here so the input functions above test without the pinned env.
+    import rclpy
+    from nav_msgs.msg import Odometry
+    from rclpy.node import Node
+    from rosidl_runtime_py.convert import message_to_ordereddict
+    from rtabmap_msgs.msg import Info
+    from rtabmap_msgs.srv import GetMap
+    from sensor_msgs.msg import CameraInfo, Image, Imu
+
     runner_sha256 = digest(Path(__file__).read_bytes())
     parser = argparse.ArgumentParser()
     parser.add_argument("inputs", type=Path)
-    parser.add_argument("scene", choices=["city", "warehouse"])
+    parser.add_argument(
+        "scene", help="scene id present in the sealed inputs, e.g. hallway or office-loop"
+    )
     parser.add_argument("output", type=Path)
     parser.add_argument("--ros-env", type=Path, required=True)
+    parser.add_argument("--expect-frames", type=int)
     parser.add_argument("--limit", type=int)
     parser.add_argument("--rate", type=float, default=5)
     parser.add_argument("--domain", type=int, default=173)
@@ -48,7 +461,124 @@ def main():
     )
     parser.add_argument("--estimator", choices=["rtabmap", "stella"], default="rtabmap")
     parser.add_argument("--vocabulary", type=Path)
+    parser.add_argument("--rtabmap-track", choices=sorted(TRACKS), default="rgbd-vo")
+    parser.add_argument(
+        "--imu-inputs",
+        type=Path,
+        help="sealed raw inputs the registered frames came from (IMU track only)",
+    )
+    parser.add_argument(
+        "--imu-settle-seconds",
+        type=float,
+        help="IMU samples measured before the first frame time plus this are not "
+        "published; required on IMU tracks, use the same value for every IMU track",
+    )
+    parser.add_argument(
+        "--odometry-log-level",
+        choices=ODOMETRY_LOG_LEVELS,
+        help="ROS and RTAB-Map (and so OpenVINS) log level for the rgbd_odometry process "
+        "only, for diagnostic runs; unset leaves the command line and the receipt as "
+        "without the option",
+    )
     args = parser.parse_args()
+    if args.rate <= 0 or (args.limit is not None and args.limit < 1):
+        raise ValueError("Invalid rate or limit")
+    if args.odometry_log_level and args.estimator != "rtabmap":
+        raise ValueError("--odometry-log-level applies to RTAB-Map rgbd_odometry only")
+    # Validate inputs before queueing for the lock or creating the output.
+    raw = (args.inputs / "sensors.json").read_bytes()
+    manifest = json.loads((args.inputs / "manifest.json").read_text())
+    if digest(raw) != manifest["sensorsSha256"]:
+        raise ValueError("Sensor manifest integrity failure")
+    frames, scenes_available, source_interval = scene_frames(
+        raw, manifest, args.scene, args.expect_frames
+    )
+    # Stamps always come from the source clock; only the wall period changes.
+    if source_interval is None or abs(source_interval * args.rate - 1) < 1e-4:
+        replay_mode = "paced at source rate"
+    else:
+        replay_mode = f"fixed {args.rate:g} Hz wall rate; source interval {source_interval:g} s"
+    scene_frame_count = len(frames)
+    if args.limit:
+        frames = frames[: args.limit]
+    rtabmap_version = None
+    if args.estimator == "rtabmap":
+        rtabmap_version = package_version(args.ros_env, "rtabmap_slam")
+        if package_version(args.ros_env, "rtabmap_odom") != rtabmap_version:
+            raise ValueError("rtabmap_odom and rtabmap_slam versions differ")
+    imu_track = args.rtabmap_track in IMU_TRACKS
+    imu_plan = imu_receipt = openvins_receipt = None
+    if imu_track:
+        if args.estimator != "rtabmap" or args.imu_inputs is None:
+            raise ValueError("The IMU track needs --estimator rtabmap and --imu-inputs")
+        if args.imu_settle_seconds is None:
+            raise ValueError("The IMU track needs a declared --imu-settle-seconds")
+        imu_samples, imu_receipt = sealed_imu(args.imu_inputs, manifest, frames)
+        imu_plan, imu_stamping = imu_messages(frames, imu_samples, args.imu_settle_seconds)
+        imu_receipt.update(imu_stamping)
+    if args.rtabmap_track == OPENVINS_TRACK:
+        if len({f["calibration"]["near"] for f in frames}) != 1:
+            raise ValueError("The depth mask needs one calibration near plane per scene")
+        openvins_noise_values, noise_source = openvins_noise(
+            imu_receipt["declaredNoise"], imu_receipt["rateHz"]
+        )
+        openvins_receipt = {
+            "mode": "monocular: one camera, OdomOpenVINS/UseStereo false",
+            "depthUse": "feature mask only (Vis/DepthAsMask): features where registered "
+            "depth >= Vis/MinDepth (calibration near); depth is not a filter measurement",
+            "scale": "metric scale from the IMU",
+            "extrinsics": "IMU at the body origin (messages in base_link); camera from the "
+            "base_link->camera_optical static transform; not calibrated online",
+            "initialization": "OpenVINS static initializer (RTAB-Map defaults); needs the "
+            "settled IMU stream to start stationary",
+            "noise": openvins_noise_values,
+            "noiseSource": noise_source,
+            "ovMsckfPackageVersion": package_version(args.ros_env, "ov_msckf"),
+            "linkage": rtabmap_openvins_linkage(args.ros_env),
+            "rtabmapGraph": "unchanged from rgbd-vo (no IMU or gravity links in rtabmap)",
+        }
+        imu_receipt.update(
+            messageFrame="base_link",
+            imuToBody="identity: samples are body FLU specific force (m/s^2) and rate (rad/s)",
+            rawTopic="/imu/data_raw",
+            consumedTopic="/imu/data_raw (no orientation filter)",
+            rawOrientation="all-zero quaternion, orientation_covariance[0] = -1",
+            rawVectorCovariances="all zero; OpenVINS uses OdomOpenVINS/* noise instead",
+            publishTiming="each frame's messages, measurement times in (previous frame, "
+            "frame], published back-to-back immediately before that frame's images",
+            rtabmapImuUse=[
+                "rgbd_odometry OpenVINS propagation and updates (Odom/Strategy 10)",
+                "rgbd_odometry waits for IMU before the first image (wait_imu_to_init)",
+            ],
+        )
+    elif imu_track:
+        if not (args.ros_env / "share" / ORIENTATION_FILTER / "package.xml").exists():
+            raise ValueError(
+                f"{ORIENTATION_FILTER} is not in the pinned ros-env. rtabmap_odom and "
+                f"rtabmap {rtabmap_version} ignore IMU messages without orientation and "
+                "do not run RTAB-Map's ImuFilter from ROS; this track needs an "
+                "orientation filter added to the pin before it can run"
+            )
+        imu_receipt.update(
+            orientationFilter=f"{ORIENTATION_FILTER} "
+            + package_version(args.ros_env, ORIENTATION_FILTER),
+            orientationFilterParameters=ORIENTATION_FILTER_PARAMETERS,
+            messageFrame="base_link",
+            imuToBody="identity: samples are body FLU specific force (m/s^2) and rate (rad/s)",
+            rawTopic="/imu/data_raw",
+            filteredTopic="/imu/data",
+            rawOrientation="all-zero quaternion, orientation_covariance[0] = -1",
+            rawVectorCovariances="all zero (unknown); the capture declares no IMU noise model",
+            publishTiming="each frame's messages, measurement times in (previous frame, "
+            "frame], published back-to-back immediately before that frame's images",
+            rtabmapImuUse=[
+                "rgbd_odometry initial orientation (wait_imu_to_init)",
+                "rgbd_odometry motion-guess rotation (Odom/GuessMotion true)",
+                "rtabmap graph gravity links (Optimizer/GravitySigma 0.3, Mem/UseOdomGravity false)",
+            ],
+        )
+    elif args.imu_inputs is not None or args.imu_settle_seconds is not None:
+        raise ValueError("--imu-inputs and --imu-settle-seconds are only used by IMU tracks")
     lock_path = Path.home() / "scratch/slam_web/tmp/ros2-comparison.lock"
     lock_path.parent.mkdir(exist_ok=True, parents=True)
     admission_lock = lock_path.open("a")
@@ -68,15 +598,7 @@ def main():
         OPENCV_FOR_THREADS_NUM="2",
         ROS_LOG_DIR=str(args.output / "ros-logs"),
     )
-    raw = (args.inputs / "sensors.json").read_bytes()
-    manifest = json.loads((args.inputs / "manifest.json").read_text())
-    if digest(raw) != manifest["sensorsSha256"]:
-        raise ValueError("Sensor manifest integrity failure")
-    frames = [f for f in json.loads(raw)["sensorFrames"] if f["scene"] == args.scene]
-    if args.limit:
-        frames = frames[: args.limit]
-    if not frames or args.rate <= 0:
-        raise ValueError("No frames or invalid rate")
+    mount = frames[0]["calibration"]
     ros2 = str(args.ros_env / "bin/ros2")
     commands = [
         [
@@ -85,11 +607,11 @@ def main():
             "tf2_ros",
             "static_transform_publisher",
             "--x",
-            "0.18",
+            str(mount["forward"]),
             "--y",
             "0",
             "--z",
-            "-0.04",
+            str(mount["up"]),
             "--qx",
             "-0.5",
             "--qy",
@@ -170,6 +692,20 @@ def main():
                 "RGBD/AngularUpdate:='0'",
             ]
         )
+    if imu_track:
+        odometry_args, rtabmap_args, added_nodes, odometry_parameters = imu_track_arguments(
+            args.rtabmap_track,
+            ros2,
+            mount,
+            openvins_receipt["noise"] if openvins_receipt else None,
+        )
+        commands[1].extend(odometry_args)
+        commands[2].extend(rtabmap_args)
+        commands.extend(added_nodes)
+        if openvins_receipt:
+            openvins_receipt["odometryParameters"] = odometry_parameters
+    if args.odometry_log_level:
+        add_odometry_log_level(commands, args.odometry_log_level)
     if args.estimator == "stella":
         if args.vocabulary is None:
             raise ValueError("stella requires a pinned vocabulary file")
@@ -250,6 +786,8 @@ def main():
     rgb_pub = node.create_publisher(Image, "/camera/rgb", 20)
     depth_pub = node.create_publisher(Image, "/camera/depth", 20)
     info_pub = node.create_publisher(CameraInfo, "/camera/info", 20)
+    imu_pub = node.create_publisher(Imu, "/imu/data_raw", 200) if imu_track else None
+    imu_published = []
     sent = {}
 
     def pose_callback(msg):
@@ -345,14 +883,11 @@ def main():
                     )
                     >= 1
                 )
-            return (
-                min(
-                    rgb_pub.get_subscription_count(),
-                    depth_pub.get_subscription_count(),
-                    info_pub.get_subscription_count(),
-                )
-                >= 2
-            )
+            return min(
+                rgb_pub.get_subscription_count(),
+                depth_pub.get_subscription_count(),
+                info_pub.get_subscription_count(),
+            ) >= 2 and (imu_pub is None or imu_pub.get_subscription_count() >= 1)
 
         while not discovered():
             if any(p.poll() is not None for p in processes):
@@ -407,6 +942,36 @@ def main():
                 1.0,
                 0.0,
             ]
+            for imu_message in imu_plan[frame["index"]] if imu_track else []:
+                imu_stamp = 1 + imu_message["time"]
+                imu = Imu()
+                imu.header.stamp.sec = int(imu_stamp)
+                imu.header.stamp.nanosec = round((imu_stamp - int(imu_stamp)) * 1e9)
+                imu.header.frame_id = "base_link"
+                # No orientation: zero quaternion (w defaults to 1) and the -1 flag.
+                imu.orientation.w = 0.0
+                imu.orientation_covariance[0] = -1.0
+                (
+                    imu.angular_velocity.x,
+                    imu.angular_velocity.y,
+                    imu.angular_velocity.z,
+                ) = map(float, imu_message["imu"]["gyro"])
+                (
+                    imu.linear_acceleration.x,
+                    imu.linear_acceleration.y,
+                    imu.linear_acceleration.z,
+                ) = map(float, imu_message["imu"]["accel"])
+                imu_pub.publish(imu)
+                imu_published.append(
+                    {
+                        "frameIndex": frame["index"],
+                        "time": imu_message["time"],
+                        "stamp": imu_stamp,
+                        "accel": imu_message["imu"]["accel"],
+                        "gyro": imu_message["imu"]["gyro"],
+                        "sentMonoNs": time.monotonic_ns(),
+                    }
+                )
             sent[round(stamp, 6)] = time.monotonic_ns()
             info_pub.publish(camera)
             rgb_pub.publish(images[0])
@@ -457,14 +1022,27 @@ def main():
             log.close()
         node.destroy_node()
         rclpy.shutdown()
+    shutdown = [shutdown_status(c, p.returncode) for c, p in zip(commands, processes)]
     receipt = {
         "schema": 1,
-        "estimator": "RTAB-Map0.23.7"
+        "estimator": f"RTAB-Map{rtabmap_version}"
         if args.estimator == "rtabmap"
         else "stella-vslam0.7.0-e445b545/ROS186f623d",
         "scene": args.scene,
-        "track": "registered RGB-D only",
+        "scenesAvailable": scenes_available,
+        "sceneFrames": scene_frame_count,
+        "sourceFrameIntervalSeconds": source_interval,
+        "replayMode": replay_mode,
+        "track": TRACKS[args.rtabmap_track]
+        if args.estimator == "rtabmap"
+        else "registered RGB-D only",
+        "rtabmapTrack": args.rtabmap_track if args.estimator == "rtabmap" else None,
+        "imuRateHz": imu_receipt["rateHz"] if imu_track else None,
+        "imuStampConvention": IMU_STAMP_CONVENTION if imu_track else None,
+        "imu": {**imu_receipt, **imu_published_fields(imu_published)} if imu_track else None,
+        "openvins": openvins_receipt,
         "inputSha256": digest(raw),
+        "inputFormat": json.loads(raw).get("format"),
         "framesExpected": len(frames),
         "framesPublished": len(published),
         "posesReceived": len(poses),
@@ -485,6 +1063,7 @@ def main():
         "rateHz": args.rate,
         "domain": args.domain,
         "commands": commands,
+        **({"odometryLogLevel": args.odometry_log_level} if args.odometry_log_level else {}),
         "cpuAffinity": affinity,
         "loadAverageAtFinish": os.getloadavg(),
         "mapPolicy": args.map_policy
@@ -497,7 +1076,13 @@ def main():
         "python": platform.python_version(),
         "runnerSha256": runner_sha256,
         "rosEnvironment": str(args.ros_env.resolve()),
+        "rtabmapPackageVersion": rtabmap_version,
         "exitCodes": [p.returncode for p in processes],
+        "shutdown": shutdown,
+        "teardownCrash": any(s["teardownCrash"] for s in shutdown),
+        "passFailBasis": "failure below, from the replay and its outputs; a crash during "
+        "replay fails the run, a teardown crash after SIGINT is stated in shutdown and "
+        "does not by itself fail it; no process is retried",
         "failure": failure,
     }
     for name, data in [
@@ -505,6 +1090,7 @@ def main():
         ("odometry", poses),
         ("info", infos),
         ("optimized-map", final_map),
+        *([("imu-published", imu_published)] if imu_track else []),
     ]:
         (args.output / (name + ".json")).write_text(json.dumps(data, indent=2) + "\n")
     receipt_temp = args.output / "receipt.json.tmp"

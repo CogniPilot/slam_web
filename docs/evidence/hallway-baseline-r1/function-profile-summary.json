@@ -1,0 +1,140 @@
+{
+  "scope": "First40s default hallway prefix, diagnostic call clocks. Inclusive overlaps; self excludes only selected descendants.",
+  "frames": 200,
+  "workerMs": 12168.899999380112,
+  "functions": [
+    {
+      "function": 471,
+      "name": "RGBDLocalizationProcessing.Publish(previous,proposed,measurement,\n    producerPr",
+      "calls": 400,
+      "totalMs": 7084.099997758865,
+      "selfMs": 4042.099994659424
+    },
+    {
+      "function": 369,
+      "name": "Consensus",
+      "calls": 605,
+      "totalMs": 1468.099999666214,
+      "selfMs": 1468.099999666214
+    },
+    {
+      "function": 587,
+      "name": "FastFrameScores(rgb,imageOn,FastSelectionScoreFloor(absoluteThreshold,1e8))",
+      "calls": 400,
+      "totalMs": 1398.2999987602234,
+      "selfMs": 1398.2999987602234
+    },
+    {
+      "function": 590,
+      "name": "AdvanceFastRGBDLocalization",
+      "calls": 400,
+      "totalMs": 3497.5999987125397,
+      "selfMs": 1136.299994468689
+    },
+    {
+      "function": 374,
+      "name": "MatchRGBDDescriptors",
+      "calls": 605,
+      "totalMs": 854.300003528595,
+      "selfMs": 854.300003528595
+    },
+    {
+      "function": 581,
+      "name": "SelectRasterFeatures",
+      "calls": 400,
+      "totalMs": 577.700001001358,
+      "selfMs": 577.700001001358
+    },
+    {
+      "function": 402,
+      "name": "RGBDCatalogGraphCapture.Capture(catalog,measurement,vocabulary,vocabularyEnabled",
+      "calls": 124,
+      "totalMs": 3005.7999992370605,
+      "selfMs": 483.799996137619
+    },
+    {
+      "function": 499,
+      "name": "MatchRGBDDescriptors",
+      "calls": 400,
+      "totalMs": 300.7000021934509,
+      "selfMs": 300.7000021934509
+    },
+    {
+      "function": 225,
+      "name": "RGBDGraphProcessing.Correct(publication.next,graphPolicy,\n    graphCorrectionReq",
+      "calls": 400,
+      "totalMs": 281.7999999523163,
+      "selfMs": 261.0
+    },
+    {
+      "function": 390,
+      "name": "RetrieveVisualWords",
+      "calls": 124,
+      "totalMs": 190.49999952316284,
+      "selfMs": 190.49999952316284
+    },
+    {
+      "function": 504,
+      "name": "DescribeRGBDFrame",
+      "calls": 400,
+      "totalMs": 68.1000018119812,
+      "selfMs": 68.1000018119812
+    },
+    {
+      "function": 612,
+      "name": "AdvanceFastSLAM(\n      previous=previous,\n      rgb=rgb,\n      depth=depth,\n    ",
+      "calls": 400,
+      "totalMs": 10970.000000238419,
+      "selfMs": 51.30000162124634
+    },
+    {
+      "function": 610,
+      "name": "RGBDLocalizationFrame.Build",
+      "calls": 400,
+      "totalMs": 32.99999976158142,
+      "selfMs": 32.99999976158142
+    },
+    {
+      "function": 592,
+      "name": "RGBDGraphProcessing.Valid(previous)",
+      "calls": 400,
+      "totalMs": 22.200002431869507,
+      "selfMs": 22.200002431869507
+    },
+    {
+      "function": 162,
+      "name": "OptimizeModelicaPoseGraph",
+      "calls": 2,
+      "totalMs": 20.799999952316284,
+      "selfMs": 20.799999952316284
+    },
+    {
+      "function": 249,
+      "name": "RGBDGraphProcessing.Valid(previous)",
+      "calls": 400,
+      "totalMs": 18.50000309944153,
+      "selfMs": 18.50000309944153
+    },
+    {
+      "function": 468,
+      "name": "RGBDGraphProcessing.Valid(candidate)",
+      "calls": 400,
+      "totalMs": 17.700000762939453,
+      "selfMs": 17.700000762939453
+    },
+    {
+      "function": 507,
+      "name": "RGBDRegistrationSandwich",
+      "calls": 400,
+      "totalMs": 16.500000476837158,
+      "selfMs": 16.500000476837158
+    },
+    {
+      "function": 345,
+      "name": "RGBDRegistrationSandwich",
+      "calls": 158,
+      "totalMs": 9.100000381469727,
+      "selfMs": 9.100000381469727
+    }
+  ]
+}

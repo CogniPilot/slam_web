@@ -1,0 +1,764 @@
+{
+  "truthSha256": "f018a19238db7b00f0cfc817dbb1e5a4c6a61aaa6c094f77a29ef1b8e2673053",
+  "summary": {
+    "sequential": {
+      "count": 60,
+      "translationErrorMeters": {
+        "p50": 0.006936675714227156,
+        "p95": 0.027200568697845175,
+        "p99": 0.06693129787181344
+      },
+      "rotationErrorRadians": {
+        "p50": 0.0015197883787038415,
+        "p95": 0.005305346262177283,
+        "p99": 0.010722725066520477
+      },
+      "normalizedSquaredResidual": {
+        "p50": 2.521079255181769,
+        "p95": 5.908152666979304,
+        "p99": 25.83593193547683
+      }
+    },
+    "loop": {
+      "count": 20,
+      "translationErrorMeters": {
+        "p50": 0.006585441858590349,
+        "p95": 0.01814879108887543,
+        "p99": 0.029828899481171574
+      },
+      "rotationErrorRadians": {
+        "p50": 0.0013201009415700492,
+        "p95": 0.003170528670591182,
+        "p99": 0.006044035939426862
+      },
+      "normalizedSquaredResidual": {
+        "p50": 2.4761735388472257,
+        "p95": 4.650792785872793,
+        "p99": 5.057052900417271
+      }
+    }
+  },
+  "edges": [
+    {
+      "id": 1,
+      "kind": 1,
+      "referenceTime": 0,
+      "currentTime": 0.6,
+      "translationErrorMeters": 0.0006811330172452622,
+      "rotationErrorRadians": 0.000179000528890066,
+      "normalizedSquaredResidual": 0.11828583515731395
+    },
+    {
+      "id": 2,
+      "kind": 1,
+      "referenceTime": 0.6,
+      "currentTime": 1.2,
+      "translationErrorMeters": 0.0050712500548936446,
+      "rotationErrorRadians": 0.0018469930805601119,
+      "normalizedSquaredResidual": 3.7941186937836457
+    },
+    {
+      "id": 3,
+      "kind": 1,
+      "referenceTime": 1.2,
+      "currentTime": 1.8,
+      "translationErrorMeters": 0.004189956630058328,
+      "rotationErrorRadians": 0.0009699243616485207,
+      "normalizedSquaredResidual": 1.4388467327145302
+    },
+    {
+      "id": 4,
+      "kind": 1,
+      "referenceTime": 1.8,
+      "currentTime": 2.6,
+      "translationErrorMeters": 0.011205419227782471,
+      "rotationErrorRadians": 0.0024251631461721184,
+      "normalizedSquaredResidual": 3.5433263401599513
+    },
+    {
+      "id": 5,
+      "kind": 1,
+      "referenceTime": 2.6,
+      "currentTime": 3.2,
+      "translationErrorMeters": 0.0061773412483538724,
+      "rotationErrorRadians": 0.001593314586204687,
+      "normalizedSquaredResidual": 3.0624197006933986
+    },
+    {
+      "id": 6,
+      "kind": 1,
+      "referenceTime": 3.2,
+      "currentTime": 4,
+      "translationErrorMeters": 0.004334647265592847,
+      "rotationErrorRadians": 0.0010680362865210715,
+      "normalizedSquaredResidual": 1.0067029987097655
+    },
+    {
+      "id": 7,
+      "kind": 1,
+      "referenceTime": 4,
+      "currentTime": 4.8,
+      "translationErrorMeters": 0.006665136048274952,
+      "rotationErrorRadians": 0.0018561616635014546,
+      "normalizedSquaredResidual": 3.6450677164939296
+    },
+    {
+      "id": 8,
+      "kind": 1,
+      "referenceTime": 4.8,
+      "currentTime": 5.4,
+      "translationErrorMeters": 0.006835117346686175,
+      "rotationErrorRadians": 0.0014822596456605444,
+      "normalizedSquaredResidual": 5.21487440259624
+    },
+    {
+      "id": 9,
+      "kind": 2,
+      "referenceTime": 0,
+      "currentTime": 5.4,
+      "translationErrorMeters": 0.001683537957279839,
+      "rotationErrorRadians": 0.000831435446187337,
+      "normalizedSquaredResidual": 1.1869644628504046
+    },
+    {
+      "id": 10,
+      "kind": 1,
+      "referenceTime": 5.4,
+      "currentTime": 6.2,
+      "translationErrorMeters": 0.005667237263428083,
+      "rotationErrorRadians": 0.0010311078650387603,
+      "normalizedSquaredResidual": 2.8246455051234944
+    },
+    {
+      "id": 11,
+      "kind": 2,
+      "referenceTime": 0,
+      "currentTime": 6.2,
+      "translationErrorMeters": 0.0028212310097872175,
+      "rotationErrorRadians": 0.0006067834557711622,
+      "normalizedSquaredResidual": 2.024744047614953
+    },
+    {
+      "id": 12,
+      "kind": 2,
+      "referenceTime": 0.6,
+      "currentTime": 6.2,
+      "translationErrorMeters": 0.003156739084640262,
+      "rotationErrorRadians": 0.0013810817251466202,
+      "normalizedSquaredResidual": 2.7487484545633056
+    },
+    {
+      "id": 13,
+      "kind": 2,
+      "referenceTime": 1.2,
+      "currentTime": 6.2,
+      "translationErrorMeters": 0.009800906312825299,
+      "rotationErrorRadians": 0.0023360367470511467,
+      "normalizedSquaredResidual": 3.641442457807077
+    },
+    {
+      "id": 14,
+      "kind": 1,
+      "referenceTime": 6.2,
+      "currentTime": 7,
+      "translationErrorMeters": 0.011108180889861465,
+      "rotationErrorRadians": 0.002042239315685591,
+      "normalizedSquaredResidual": 3.459737081778278
+    },
+    {
+      "id": 15,
+      "kind": 2,
+      "referenceTime": 0,
+      "currentTime": 7,
+      "translationErrorMeters": 0.003132818528935449,
+      "rotationErrorRadians": 0.001259120157993478,
+      "normalizedSquaredResidual": 3.580239226108974
+    },
+    {
+      "id": 16,
+      "kind": 2,
+      "referenceTime": 1.8,
+      "currentTime": 7,
+      "translationErrorMeters": 0.007594141001488968,
+      "rotationErrorRadians": 0.0006059403905198812,
+      "normalizedSquaredResidual": 1.4805526412741346
+    },
+    {
+      "id": 17,
+      "kind": 2,
+      "referenceTime": 0.6,
+      "currentTime": 7,
+      "translationErrorMeters": 0.009360186949000957,
+      "rotationErrorRadians": 0.002070925113732857,
+      "normalizedSquaredResidual": 3.344119245791878
+    },
+    {
+      "id": 18,
+      "kind": 1,
+      "referenceTime": 7,
+      "currentTime": 8,
+      "translationErrorMeters": 0.00465094520125303,
+      "rotationErrorRadians": 0.001023781758659433,
+      "normalizedSquaredResidual": 1.7859441026554448
+    },
+    {
+      "id": 19,
+      "kind": 2,
+      "referenceTime": 0,
+      "currentTime": 8,
+      "translationErrorMeters": 0.01138824326968578,
+      "rotationErrorRadians": 0.0029814821397467265,
+      "normalizedSquaredResidual": 5.158617929053391
+    },
+    {
+      "id": 20,
+      "kind": 2,
+      "referenceTime": 0.6,
+      "currentTime": 8,
+      "translationErrorMeters": 0.006799277075766495,
+      "rotationErrorRadians": 0.001126661869480544,
+      "normalizedSquaredResidual": 1.8810753008075467
+    },
+    {
+      "id": 21,
+      "kind": 2,
+      "referenceTime": 1.2,
+      "currentTime": 8,
+      "translationErrorMeters": 0.005292914161617359,
+      "rotationErrorRadians": 0.001162041842718407,
+      "normalizedSquaredResidual": 1.7129399648261905
+    },
+    {
+      "id": 22,
+      "kind": 2,
+      "referenceTime": 1.8,
+      "currentTime": 8,
+      "translationErrorMeters": 0.005143426833472363,
+      "rotationErrorRadians": 0.0011863604879864742,
+      "normalizedSquaredResidual": 1.8869730847524564
+    },
+    {
+      "id": 23,
+      "kind": 1,
+      "referenceTime": 8,
+      "currentTime": 8.8,
+      "translationErrorMeters": 0.006319027340762916,
+      "rotationErrorRadians": 0.0016484411184550542,
+      "normalizedSquaredResidual": 1.639110606095025
+    },
+    {
+      "id": 24,
+      "kind": 2,
+      "referenceTime": 0,
+      "currentTime": 8.8,
+      "translationErrorMeters": 0.0059181302787574535,
+      "rotationErrorRadians": 0.0017312763393650473,
+      "normalizedSquaredResidual": 2.2035986231311453
+    },
+    {
+      "id": 25,
+      "kind": 2,
+      "referenceTime": 2.6,
+      "currentTime": 8.8,
+      "translationErrorMeters": 0.006130353111658341,
+      "rotationErrorRadians": 0.0014036877854323394,
+      "normalizedSquaredResidual": 1.266186944136444
+    },
+    {
+      "id": 26,
+      "kind": 2,
+      "referenceTime": 1.8,
+      "currentTime": 8.8,
+      "translationErrorMeters": 0.008082172464863448,
+      "rotationErrorRadians": 0.0009546662015991607,
+      "normalizedSquaredResidual": 4.516982071763544
+    },
+    {
+      "id": 27,
+      "kind": 1,
+      "referenceTime": 8.8,
+      "currentTime": 9.6,
+      "translationErrorMeters": 0.01911906722945397,
+      "rotationErrorRadians": 0.0031956395837613536,
+      "normalizedSquaredResidual": 3.4385687126554556
+    },
+    {
+      "id": 28,
+      "kind": 2,
+      "referenceTime": 0.6,
+      "currentTime": 9.6,
+      "translationErrorMeters": 0.006512949725690669,
+      "rotationErrorRadians": 0.0014732954223787606,
+      "normalizedSquaredResidual": 1.4082961654867963
+    },
+    {
+      "id": 29,
+      "kind": 2,
+      "referenceTime": 0,
+      "currentTime": 9.6,
+      "translationErrorMeters": 0.007310133178479781,
+      "rotationErrorRadians": 0.0008442365230892918,
+      "normalizedSquaredResidual": 3.1800713460110366
+    },
+    {
+      "id": 30,
+      "kind": 2,
+      "referenceTime": 1.8,
+      "currentTime": 9.6,
+      "translationErrorMeters": 0.0066579339914900285,
+      "rotationErrorRadians": 0.0017235749355486159,
+      "normalizedSquaredResidual": 3.60805796495828
+    },
+    {
+      "id": 31,
+      "kind": 1,
+      "referenceTime": 9.6,
+      "currentTime": 10.4,
+      "translationErrorMeters": 0.005240655274437382,
+      "rotationErrorRadians": 0.0013254019783782412,
+      "normalizedSquaredResidual": 2.4053456830559488
+    },
+    {
+      "id": 32,
+      "kind": 2,
+      "referenceTime": 5.4,
+      "currentTime": 10.4,
+      "translationErrorMeters": 0.032748926579245635,
+      "rotationErrorRadians": 0.006762412756635789,
+      "normalizedSquaredResidual": 4.232408756975029
+    },
+    {
+      "id": 33,
+      "kind": 1,
+      "referenceTime": 10.4,
+      "currentTime": 11,
+      "translationErrorMeters": 0.014858370215405084,
+      "rotationErrorRadians": 0.002814149321862034,
+      "normalizedSquaredResidual": 3.080371074182259
+    },
+    {
+      "id": 34,
+      "kind": 2,
+      "referenceTime": 0,
+      "currentTime": 11,
+      "translationErrorMeters": 0.005120765452851458,
+      "rotationErrorRadians": 0.001592994297776537,
+      "normalizedSquaredResidual": 1.7148078522242225
+    },
+    {
+      "id": 35,
+      "kind": 2,
+      "referenceTime": 0.6,
+      "currentTime": 11,
+      "translationErrorMeters": 0.017380362905171722,
+      "rotationErrorRadians": 0.0008776986526704509,
+      "normalizedSquaredResidual": 4.624065146758024
+    },
+    {
+      "id": 36,
+      "kind": 1,
+      "referenceTime": 11,
+      "currentTime": 11.6,
+      "translationErrorMeters": 0.004481496655735419,
+      "rotationErrorRadians": 0.0008046889310993687,
+      "normalizedSquaredResidual": 0.7341458138358401
+    },
+    {
+      "id": 37,
+      "kind": 1,
+      "referenceTime": 11.6,
+      "currentTime": 12.2,
+      "translationErrorMeters": 0.012492945708865779,
+      "rotationErrorRadians": 0.002587431779806803,
+      "normalizedSquaredResidual": 1.4345431350470674
+    },
+    {
+      "id": 38,
+      "kind": 1,
+      "referenceTime": 12.2,
+      "currentTime": 12.8,
+      "translationErrorMeters": 0.007200035636266718,
+      "rotationErrorRadians": 0.0018327861759161105,
+      "normalizedSquaredResidual": 2.3348663175519895
+    },
+    {
+      "id": 39,
+      "kind": 1,
+      "referenceTime": 12.8,
+      "currentTime": 13.4,
+      "translationErrorMeters": 0.02600138503637708,
+      "rotationErrorRadians": 0.005201775184003709,
+      "normalizedSquaredResidual": 5.823906543089137
+    },
+    {
+      "id": 40,
+      "kind": 1,
+      "referenceTime": 13.4,
+      "currentTime": 14,
+      "translationErrorMeters": 0.004363061703076332,
+      "rotationErrorRadians": 0.0005281182054771989,
+      "normalizedSquaredResidual": 1.2173635122723012
+    },
+    {
+      "id": 41,
+      "kind": 1,
+      "referenceTime": 14,
+      "currentTime": 14.8,
+      "translationErrorMeters": 0.008397510976961781,
+      "rotationErrorRadians": 0.001883861779111569,
+      "normalizedSquaredResidual": 2.2941017848060063
+    },
+    {
+      "id": 42,
+      "kind": 1,
+      "referenceTime": 14.8,
+      "currentTime": 15.4,
+      "translationErrorMeters": 0.008937787174292923,
+      "rotationErrorRadians": 0.0023580283103568035,
+      "normalizedSquaredResidual": 3.9904379772126077
+    },
+    {
+      "id": 43,
+      "kind": 1,
+      "referenceTime": 15.4,
+      "currentTime": 16,
+      "translationErrorMeters": 0.0027777439302120155,
+      "rotationErrorRadians": 0.0007991670797625991,
+      "normalizedSquaredResidual": 0.53899321993941
+    },
+    {
+      "id": 44,
+      "kind": 1,
+      "referenceTime": 16,
+      "currentTime": 16.6,
+      "translationErrorMeters": 0.0035767306505115146,
+      "rotationErrorRadians": 0.000919414563473058,
+      "normalizedSquaredResidual": 2.698540916117899
+    },
+    {
+      "id": 45,
+      "kind": 1,
+      "referenceTime": 16.6,
+      "currentTime": 17.2,
+      "translationErrorMeters": 0.006563238148519079,
+      "rotationErrorRadians": 0.001050140251266639,
+      "normalizedSquaredResidual": 4.882255902515181
+    },
+    {
+      "id": 46,
+      "kind": 1,
+      "referenceTime": 17.2,
+      "currentTime": 17.8,
+      "translationErrorMeters": 0.04998505826574034,
+      "rotationErrorRadians": 0.007273196747475318,
+      "normalizedSquaredResidual": 8.727943836900334
+    },
+    {
+      "id": 47,
+      "kind": 1,
+      "referenceTime": 17.8,
+      "currentTime": 18.8,
+      "translationErrorMeters": 0.05415378496646978,
+      "rotationErrorRadians": 0.009895990885429478,
+      "normalizedSquaredResidual": 3.515566541206538
+    },
+    {
+      "id": 48,
+      "kind": 1,
+      "referenceTime": 18.8,
+      "currentTime": 19.4,
+      "translationErrorMeters": 0.010932995485765656,
+      "rotationErrorRadians": 0.0019131045590581636,
+      "normalizedSquaredResidual": 1.9100430705330607
+    },
+    {
+      "id": 49,
+      "kind": 1,
+      "referenceTime": 19.4,
+      "currentTime": 20,
+      "translationErrorMeters": 0.003359018518619144,
+      "rotationErrorRadians": 0.0007151565647803875,
+      "normalizedSquaredResidual": 0.8776596938130842
+    },
+    {
+      "id": 50,
+      "kind": 1,
+      "referenceTime": 20,
+      "currentTime": 20.6,
+      "translationErrorMeters": 0.009339966406014106,
+      "rotationErrorRadians": 0.001124318984126343,
+      "normalizedSquaredResidual": 1.9022192576494419
+    },
+    {
+      "id": 51,
+      "kind": 1,
+      "referenceTime": 20.6,
+      "currentTime": 21.2,
+      "translationErrorMeters": 0.007038234081768137,
+      "rotationErrorRadians": 0.0007366413846050767,
+      "normalizedSquaredResidual": 3.4385612551360634
+    },
+    {
+      "id": 52,
+      "kind": 1,
+      "referenceTime": 21.2,
+      "currentTime": 21.8,
+      "translationErrorMeters": 0.008833846032639474,
+      "rotationErrorRadians": 0.0012781107879599512,
+      "normalizedSquaredResidual": 1.5959501306587431
+    },
+    {
+      "id": 53,
+      "kind": 1,
+      "referenceTime": 21.8,
+      "currentTime": 22.6,
+      "translationErrorMeters": 0.005620433386146717,
+      "rotationErrorRadians": 0.0013711450274053079,
+      "normalizedSquaredResidual": 1.310368037272152
+    },
+    {
+      "id": 54,
+      "kind": 1,
+      "referenceTime": 22.6,
+      "currentTime": 23.2,
+      "translationErrorMeters": 0.009983261668027358,
+      "rotationErrorRadians": 0.002714020989254512,
+      "normalizedSquaredResidual": 5.156193632607119
+    },
+    {
+      "id": 55,
+      "kind": 1,
+      "referenceTime": 23.2,
+      "currentTime": 23.8,
+      "translationErrorMeters": 0.013110423710047989,
+      "rotationErrorRadians": 0.0017464018407209994,
+      "normalizedSquaredResidual": 5.287326142661028
+    },
+    {
+      "id": 56,
+      "kind": 1,
+      "referenceTime": 23.8,
+      "currentTime": 24.4,
+      "translationErrorMeters": 0.007285294208320878,
+      "rotationErrorRadians": 0.0021066362298924474,
+      "normalizedSquaredResidual": 4.650536938500812
+    },
+    {
+      "id": 57,
+      "kind": 1,
+      "referenceTime": 24.4,
+      "currentTime": 25,
+      "translationErrorMeters": 0.010007247836407857,
+      "rotationErrorRadians": 0.0024979177263270078,
+      "normalizedSquaredResidual": 3.582146234338544
+    },
+    {
+      "id": 58,
+      "kind": 1,
+      "referenceTime": 25,
+      "currentTime": 25.6,
+      "translationErrorMeters": 0.00637703708421255,
+      "rotationErrorRadians": 0.0011081245392781953,
+      "normalizedSquaredResidual": 1.3680158940236753
+    },
+    {
+      "id": 59,
+      "kind": 1,
+      "referenceTime": 25.6,
+      "currentTime": 26.2,
+      "translationErrorMeters": 0.008511942490723838,
+      "rotationErrorRadians": 0.0017014723291620287,
+      "normalizedSquaredResidual": 3.132027445825215
+    },
+    {
+      "id": 60,
+      "kind": 1,
+      "referenceTime": 26.2,
+      "currentTime": 26.8,
+      "translationErrorMeters": 0.08531845058925945,
+      "rotationErrorRadians": 0.011912415717358762,
+      "normalizedSquaredResidual": 50.454744077331156
+    },
+    {
+      "id": 61,
+      "kind": 1,
+      "referenceTime": 26.8,
+      "currentTime": 27.4,
+      "translationErrorMeters": 0.008329755750314147,
+      "rotationErrorRadians": 0.0009521593211408527,
+      "normalizedSquaredResidual": 2.602592407981903
+    },
+    {
+      "id": 62,
+      "kind": 1,
+      "referenceTime": 27.4,
+      "currentTime": 28,
+      "translationErrorMeters": 0.004176479121454215,
+      "rotationErrorRadians": 0.0009131220355268262,
+      "normalizedSquaredResidual": 0.7184517071797881
+    },
+    {
+      "id": 63,
+      "kind": 1,
+      "referenceTime": 28,
+      "currentTime": 28.6,
+      "translationErrorMeters": 0.010494913345445537,
+      "rotationErrorRadians": 0.001828476532934095,
+      "normalizedSquaredResidual": 1.8822197579670863
+    },
+    {
+      "id": 64,
+      "kind": 1,
+      "referenceTime": 28.6,
+      "currentTime": 29.2,
+      "translationErrorMeters": 0.0047000354355318475,
+      "rotationErrorRadians": 0.0012264902383893523,
+      "normalizedSquaredResidual": 1.4248138158840427
+    },
+    {
+      "id": 65,
+      "kind": 1,
+      "referenceTime": 29.2,
+      "currentTime": 29.8,
+      "translationErrorMeters": 0.006418577806669412,
+      "rotationErrorRadians": 0.0011640128184518077,
+      "normalizedSquaredResidual": 1.9374593983014732
+    },
+    {
+      "id": 66,
+      "kind": 1,
+      "referenceTime": 29.8,
+      "currentTime": 30.6,
+      "translationErrorMeters": 0.007337417072596468,
+      "rotationErrorRadians": 0.0021290061411024194,
+      "normalizedSquaredResidual": 2.8407013512608645
+    },
+    {
+      "id": 67,
+      "kind": 1,
+      "referenceTime": 30.6,
+      "currentTime": 31.2,
+      "translationErrorMeters": 0.005248500890171318,
+      "rotationErrorRadians": 0.0015573171117471384,
+      "normalizedSquaredResidual": 2.0813315970891413
+    },
+    {
+      "id": 68,
+      "kind": 1,
+      "referenceTime": 31.2,
+      "currentTime": 31.8,
+      "translationErrorMeters": 0.014763515167802667,
+      "rotationErrorRadians": 0.0025632177013565636,
+      "normalizedSquaredResidual": 5.29526557431228
+    },
+    {
+      "id": 69,
+      "kind": 1,
+      "referenceTime": 31.8,
+      "currentTime": 32.4,
+      "translationErrorMeters": 0.0017401524153828115,
+      "rotationErrorRadians": 0.0004074487354546512,
+      "normalizedSquaredResidual": 0.2930146403561511
+    },
+    {
+      "id": 70,
+      "kind": 1,
+      "referenceTime": 32.4,
+      "currentTime": 33,
+      "translationErrorMeters": 0.003696917100932812,
+      "rotationErrorRadians": 0.0009760840040971951,
+      "normalizedSquaredResidual": 3.188803598448003
+    },
+    {
+      "id": 71,
+      "kind": 1,
+      "referenceTime": 33,
+      "currentTime": 33.6,
+      "translationErrorMeters": 0.009358916413765846,
+      "rotationErrorRadians": 0.0024631396335467477,
+      "normalizedSquaredResidual": 3.421960626908079
+    },
+    {
+      "id": 72,
+      "kind": 1,
+      "referenceTime": 33.6,
+      "currentTime": 34.6,
+      "translationErrorMeters": 0.01516766893493232,
+      "rotationErrorRadians": 0.0030112910937892604,
+      "normalizedSquaredResidual": 2.9195808247543016
+    },
+    {
+      "id": 73,
+      "kind": 1,
+      "referenceTime": 34.6,
+      "currentTime": 35.2,
+      "translationErrorMeters": 0.007887795864961692,
+      "rotationErrorRadians": 0.00106318922158131,
+      "normalizedSquaredResidual": 1.8103908307854502
+    },
+    {
+      "id": 74,
+      "kind": 1,
+      "referenceTime": 35.2,
+      "currentTime": 35.8,
+      "translationErrorMeters": 0.0029651870172929156,
+      "rotationErrorRadians": 0.0003338707904641415,
+      "normalizedSquaredResidual": 0.43832719664559505
+    },
+    {
+      "id": 75,
+      "kind": 1,
+      "referenceTime": 35.8,
+      "currentTime": 36.4,
+      "translationErrorMeters": 0.015560346386098422,
+      "rotationErrorRadians": 0.0033304085705806153,
+      "normalizedSquaredResidual": 4.493337941667729
+    },
+    {
+      "id": 76,
+      "kind": 1,
+      "referenceTime": 36.4,
+      "currentTime": 37,
+      "translationErrorMeters": 0.004911059306675591,
+      "rotationErrorRadians": 0.000826842998738315,
+      "normalizedSquaredResidual": 0.9388024290624608
+    },
+    {
+      "id": 77,
+      "kind": 1,
+      "referenceTime": 37,
+      "currentTime": 37.6,
+      "translationErrorMeters": 0.014060271745510446,
+      "rotationErrorRadians": 0.0016256136824229005,
+      "normalizedSquaredResidual": 7.508829020892563
+    },
+    {
+      "id": 78,
+      "kind": 1,
+      "referenceTime": 37.6,
+      "currentTime": 38.2,
+      "translationErrorMeters": 0.004608491559572935,
+      "rotationErrorRadians": 0.0011794425475721365,
+      "normalizedSquaredResidual": 1.5162273369181705
+    },
+    {
+      "id": 79,
+      "kind": 1,
+      "referenceTime": 38.2,
+      "currentTime": 38.8,
+      "translationErrorMeters": 0.004236513000197081,
+      "rotationErrorRadians": 0.0011032671081509446,
+      "normalizedSquaredResidual": 2.439566102381635
+    },
+    {
+      "id": 80,
+      "kind": 1,
+      "referenceTime": 38.8,
+      "currentTime": 39.4,
+      "translationErrorMeters": 0.006268566982073314,
+      "rotationErrorRadians": 0.0013015880799936454,
+      "normalizedSquaredResidual": 1.5984845455782
+    }
+  ],
+  "scope": "Posthoc evaluator-only residuals under the source body-frame product-residual convention. Covariance-normalized values are descriptive; Gaussian coverage and general false-closure rejection are not established."
+}

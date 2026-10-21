@@ -1,0 +1,59 @@
+{
+  "result": {
+    "environment": "hallway",
+    "graphics": {
+      "api": "WebGL 2",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "vendor": "Google Inc. (Google)",
+      "acceleration": "software",
+      "powerPreference": "high-performance"
+    },
+    "roofEnabled": true,
+    "roofs": [
+      {
+        "minimum": [
+          -8,
+          -1.8,
+          0
+        ],
+        "maximum": [
+          154,
+          1.8,
+          3.2
+        ]
+      }
+    ],
+    "gps": null,
+    "sequence": 6,
+    "time": 1.2,
+    "dimensions": [
+      160,
+      90
+    ],
+    "imageLayout": {
+      "color": {
+        "width": 160,
+        "height": 90,
+        "strideBytes": 480,
+        "bytes": 43200,
+        "format": "RGB8"
+      },
+      "depth": {
+        "width": 160,
+        "height": 90,
+        "strideBytes": 320,
+        "bytes": 28800,
+        "format": "Z16",
+        "unitsMeters": 0.001,
+        "isBigEndian": false
+      },
+      "rowOrder": "top-down",
+      "aligned": false,
+      "clockDomain": "simulation"
+    },
+    "nonzeroDepth": 13554,
+    "sensorWorkerActive": true
+  },
+  "errors": [],
+  "scope": "Six-frame CPU SwiftShader scene/sensor smoke; not native-resolution capture or SLAM relocalization"
+}

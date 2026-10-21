@@ -72,6 +72,9 @@ for previous, current in itertools.pairwise(series):
         }
     )
 log = (args.run / "process-0.log").read_text()
+checkpoints = np.arange(min(truth), max(truth) + 1e-9, 10).tolist()
+if not checkpoints or abs(checkpoints[-1] - max(truth)) > 1e-6:
+    checkpoints.append(max(truth))
 result = {
     "scene": receipt["scene"],
     "trackingLostLogCount": len(re.findall(r"tracking lost: frame", log)),
@@ -82,7 +85,7 @@ result = {
     ),
     "errorAtTenSecondIntervals": [
         min(series, key=lambda s: abs(s["time"] - timestamp))
-        for timestamp in [0, 10, 20, 30, 40, 50, 60.6]
+        for timestamp in checkpoints
     ],
     "largestAdjacentSteps": sorted(
         steps, key=lambda s: s["estimatedStepMeters"], reverse=True

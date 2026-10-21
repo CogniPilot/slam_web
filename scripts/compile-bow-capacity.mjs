@@ -1,0 +1,15 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {pathToFileURL} from 'node:url';
+import {performance} from 'node:perf_hooks';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('..',import.meta.url));
+const capacity=Number(process.argv[2]),output=process.argv[3];
+if(![64,256,512,1000].includes(capacity))throw Error('Unexpected capacity');
+const compiler=await import(pathToFileURL(root+'/node_modules/@cognipilot/rumoca/rumoca_bind_wasm.js'));
+await compiler.default({module_or_path:await readFile(root+'/node_modules/@cognipilot/rumoca/rumoca_bind_wasm_bg.wasm')});
+const source=(await readFile(root+'/models/LoopClosure/RGBDBagOfWords.mo','utf8')).replaceAll('keyframeCapacity = 64;','keyframeCapacity = '+capacity+';');
+await writeFile(output+'.mo',source);
+const start=performance.now();
+const artifact=JSON.parse(compiler.prepare_native_program(source,'RGBDBagOfWords'));
+await writeFile(output+'.json',JSON.stringify(artifact));
+console.log(JSON.stringify({capacity,compileMs:performance.now()-start,profile:artifact.profile,moduleBytes:artifact.module_bytes?.length,memoryPages:artifact.abi?.memory_pages,error:artifact.error??null}));

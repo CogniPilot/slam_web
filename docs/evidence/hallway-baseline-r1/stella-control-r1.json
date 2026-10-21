@@ -1,0 +1,175 @@
+{
+  "schema": 1,
+  "scene": "hallway",
+  "truthSha256": "f018a19238db7b00f0cfc817dbb1e5a4c6a61aaa6c094f77a29ef1b8e2673053",
+  "onlineOdometry": {
+    "matched": 2322,
+    "expected": 3001,
+    "coverage": 0.7737420859713429,
+    "initialPoseAlignedAteRmseMeters": 98.55181334229987,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 39.308331807955,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9994418495378785,
+        -0.026117667162073477,
+        -0.020829230766310648
+      ],
+      [
+        0.0030676837905867014,
+        0.6926286023202075,
+        -0.721287881891909
+      ],
+      [
+        0.033265277820364654,
+        0.7208213972337156,
+        0.6923221320899451
+      ]
+    ],
+    "alignmentTranslation": [
+      90.38695344542606,
+      -0.035995768269731665,
+      1.0600636313137408
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 2319,
+    "rpeTranslationRmseMeters": 2.1132789605331976,
+    "rpeRotationRmseRadians": 0.002621755419710658
+  },
+  "onlinePoseFilterPolicy": "valid matrix/covariance, filtered by the official exporter's lost flags",
+  "optimizedGraph": {
+    "matched": 2322,
+    "expected": 3001,
+    "coverage": 0.7737420859713429,
+    "initialPoseAlignedAteRmseMeters": 97.36740394527814,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 38.371128496451846,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9999940908618841,
+        0.0003976886699196094,
+        0.003414686667237622
+      ],
+      [
+        -0.0014362669561125572,
+        0.9507742851308862,
+        0.30988093821834645
+      ],
+      [
+        -0.0031233601368353243,
+        -0.30988401149070877,
+        0.9507692380614142
+      ]
+    ],
+    "alignmentTranslation": [
+      89.4664642740263,
+      -1.4352573792036543,
+      0.49827626592112995
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 2319,
+    "rpeTranslationRmseMeters": 0.47801250491654035,
+    "rpeRotationRmseRadians": 0.05562280264866809
+  },
+  "loopClosuresReported": null,
+  "proximityDetectionsReported": null,
+  "mapCallbackLatencyMs": null,
+  "poseLatencyMs": {
+    "p50": 12.368829,
+    "p95": 66.45990859999999,
+    "p99": 76.68281329999999
+  },
+  "steadyStatePoseLatencyMs": {
+    "p50": 12.351684,
+    "p95": 66.462521,
+    "p99": 76.68397100000003
+  },
+  "postInitializationLatencySamples": 2321,
+  "percentileMethod": "NumPy linear interpolation",
+  "publishedInputs": 3001,
+  "invalidOrMissingPoseInputs": 679,
+  "observedReplayHz": 4.891748611155053,
+  "invalidOptimizedGraphPoses": 0,
+  "limits": [
+    "Single run is preliminary, not a scalability or speed ranking",
+    "Initial reference with sentinel covariance excluded; missing tracking is retained in coverage",
+    "Pose callback latency includes DDS and replay-side scheduling; image hashes checked before publish",
+    "Stella loop events are unavailable from the ROS pose interface; final TUM frame trajectory is scored when exported"
+  ],
+  "runReceipt": {
+    "schema": 1,
+    "estimator": "stella-vslam0.7.0-e445b545/ROS186f623d",
+    "scene": "hallway",
+    "track": "registered RGB-D only",
+    "inputSha256": "e31de4e9c3f0acf3a1d12a5560ccf83c50195a8b0feb43e69a7256e4ff722669",
+    "framesExpected": 3001,
+    "framesPublished": 3001,
+    "posesReceived": 2324,
+    "uniquePoseStamps": 2324,
+    "wallSeconds": 630.832774192,
+    "sampledPeakRssKiB": 770612,
+    "sampledPeakThreads": 23,
+    "sampledCpuSeconds": 206.5,
+    "resourceScope": "estimator process groups, including ros2 wrappers; replay excluded",
+    "outputPoseFrame": "camera FLU in initial camera frame",
+    "cameraOriginBody": [
+      0.18,
+      0,
+      -0.04
+    ],
+    "rateHz": 5.0,
+    "domain": 173,
+    "commands": [
+      [
+        "$HOME/scratch/slam_web/build/stella-env-r9/bin/ros2",
+        "run",
+        "stella_vslam_ros",
+        "run_slam",
+        "--vocab",
+        "/scratch/slam_web/tmp/ros2-nix/orb_vocab.fbow",
+        "--config",
+        "/scratch/slam_web/profiles/environment-scale-20261020-r1/hallway-stella-r1/stella-camera.yaml",
+        "--map-db-out",
+        "/scratch/slam_web/profiles/environment-scale-20261020-r1/hallway-stella-r1/stella-map.msg",
+        "--eval-log-dir",
+        "/scratch/slam_web/profiles/environment-scale-20261020-r1/hallway-stella-r1/stella-eval",
+        "--viewer",
+        "none",
+        "--ros-args",
+        "-p",
+        "publish_tf:=false",
+        "-p",
+        "use_exact_time:=true",
+        "-p",
+        "encoding:=rgb8",
+        "-r",
+        "camera/color/image_raw:=/camera/rgb",
+        "-r",
+        "camera/depth/image_raw:=/camera/depth"
+      ]
+    ],
+    "cpuAffinity": [
+      6,
+      7
+    ],
+    "loadAverageAtFinish": [
+      4.666015625,
+      3.478515625,
+      3.48828125
+    ],
+    "mapPolicy": "native-defaults",
+    "featureType": "ORB",
+    "startedAtUTC": "2026-10-20T04:10:41.943736+00:00",
+    "kernel": "6.18.39",
+    "python": "3.14.6",
+    "runnerSha256": "f7156d584b847b1956038999b7e4bb9a3fccbdc449cc6d5ba70446dbeb012a1c",
+    "rosEnvironment": "/nix/store/n4cpck09k95sckwz5sr446a9di131p6h-ros-env",
+    "exitCodes": [
+      0
+    ],
+    "failure": null
+  },
+  "fullEvaluationSha256": "f526b15f870d4377d27a9ad33c714e0e99bc320192a3f5a62c6bd30f4e15b8a8"
+}

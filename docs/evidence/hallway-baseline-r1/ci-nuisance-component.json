@@ -1,0 +1,98 @@
+{
+  "status": "pass",
+  "originalSourceSha256": "843d316165385fdcb5c64784d822fd669e9b2311ec5df0a22b74ddf097d4e868",
+  "sourceSha256": "7f37549ec963a1e056fe4c5ea3461185fed2f49a60524c5eab88ddc5a80e92f2",
+  "moduleSha256": "779973a7ac717d86ca7110b0d00eb1ff43f4cf88b3abb807136f9d9c97d799b0",
+  "compiler": {
+    "version": "0.10.3",
+    "git_commit": "5c68a1c67524",
+    "git_merge_parents": [
+      "ad00214a2294",
+      "383d0f6da6cc"
+    ]
+  },
+  "cases": [
+    {
+      "weight": 0.25,
+      "accepted": 1,
+      "reason": 0,
+      "varianceRatio": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "nuisanceMeanDelta": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "weight": 0.5,
+      "accepted": 1,
+      "reason": 0,
+      "varianceRatio": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "nuisanceMeanDelta": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "weight": 0.8,
+      "accepted": 1,
+      "reason": 0,
+      "varianceRatio": [
+        1.25,
+        1.25,
+        1.25,
+        1.25,
+        1.25,
+        1.25,
+        1.25,
+        1.25,
+        1.25
+      ],
+      "nuisanceMeanDelta": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "scope": "Existing exported Modelica correction source, synthetic valid binding and diagonal SPD inputs, executed after lowering by the current pinned Rumoca compiler. Constrained nuisance means unchanged while variance scales1/weight. Not an internal covariance capture from the archived flight module or a repair."
+}

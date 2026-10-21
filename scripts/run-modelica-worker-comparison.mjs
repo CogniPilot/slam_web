@@ -1,5 +1,5 @@
 import {chromium} from 'playwright';
-import {readFile,writeFile,mkdir,readdir,rename} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,readdir,rename,open} from 'node:fs/promises';
 import {createServer} from 'node:http';
 import {join,resolve} from 'node:path';
 import {createHash} from 'node:crypto';
@@ -7,9 +7,14 @@ import {performance} from 'node:perf_hooks';
 import {execFileSync} from 'node:child_process';
 
 const [inputsRoot,captureRoot,cacheRoot,scene,output]=process.argv.slice(2);
-if(!output||!['city','warehouse'].includes(scene))throw Error('Usage: run-modelica-worker-comparison.mjs INPUTS CAPTURE CACHE SCENE NEW_OUTPUT');
+const paced=process.env.SLAM_COMPARISON_PACED!=='0';
+if(!output||!['city','warehouse','hallway'].includes(scene))throw Error('Usage: run-modelica-worker-comparison.mjs INPUTS CAPTURE CACHE SCENE NEW_OUTPUT');
 await mkdir(output);
+const poseFile=await open(join(output,'poses.json.tmp'),'wx');
+await poseFile.write('[');
+let interrupted=false;process.once('SIGINT',()=>{interrupted=true;});process.once('SIGTERM',()=>{interrupted=true;});
 const sha=b=>createHash('sha256').update(b).digest('hex');
+const runnerSha256=sha(await readFile(new URL(import.meta.url)));
 const raw=await readFile(join(inputsRoot,'sensors.json'));
 const seal=JSON.parse(await readFile(join(inputsRoot,'manifest.json'),'utf8'));
 if(sha(raw)!==seal.sensorsSha256)throw Error('Sensor metadata integrity failure');
@@ -54,7 +59,7 @@ async function sample(root){
   resource.push({elapsedMs:performance.now()-wallStart,rssKiB:rss,threads,loadAverage:(await readFile('/proc/loadavg','utf8')).trim().split(' ').slice(0,3).map(Number)});
 }
 try{
-  browserServer=await chromium.launchServer({headless:true,executablePath:process.env.CHROMIUM_PATH,
+  browserServer=await chromium.launchServer({headless:true,handleSIGINT:false,handleSIGTERM:false,executablePath:process.env.CHROMIUM_PATH,
     args:['--disable-gpu','--renderer-process-limit=1']});
   browser=await chromium.connect(browserServer.wsEndpoint());page=await browser.newPage();
   page.on('console',message=>console.log('browser:',message.text()));
@@ -62,6 +67,7 @@ try{
   await page.evaluate(async()=>{const m=await import('/client.mjs');window.client=new m.ModelicaSlamClient(message=>console.log(message));});
   let previous=0;
   for(const [index,frame]of frames.entries()){
+    if(interrupted)throw Error('Replay interrupted; partial poses retained');
     const frameStarted=performance.now();
     const images={};
     for(const kind of ['rgb','depth']){
@@ -80,10 +86,13 @@ try{
         timings:window.client.lastTimings,result};
     },{frame,images,base,configuration,index,dt:index===0?0:frame.time-previous});
     if(index===0&&result.result.sourceSha256!==cacheReceipt.sourceSha256)throw Error('Worker loaded different Modelica source');
-    previous=frame.time;rows.push(result);
+    await poseFile.write((index?',':'')+JSON.stringify(result));
+    // Keep only timing metadata in the runner heap; map/feature histories are
+    // already durable on disk and must not grow the replay coordinator's heap.
+    previous=frame.time;rows.push({index,time:frame.time,timings:result.timings});
     if(index%25===0)console.log(JSON.stringify({scene,index,latencyMs:result.timings.roundTripMs}));
     await sample(browserServer.process().pid);
-    if(index>0)await new Promise(r=>setTimeout(r,Math.max(0,200-(performance.now()-frameStarted))));
+    if(index>0&&paced)await new Promise(r=>setTimeout(r,Math.max(0,200-(performance.now()-frameStarted))));
   }
 }catch(error){failure=String(error);}finally{
   if(page)await page.evaluate(()=>window.client?.close()).catch(()=>{});
@@ -92,18 +101,22 @@ try{
 }
 const latency=rows.slice(1).map(r=>r.timings.roundTripMs).sort((a,b)=>a-b);
 const percentile=p=>latency[Math.ceil(p*latency.length)-1]??null;
-const receipt={schema:1,startedAt,scene,framesExpected:frames.length,framesCompleted:rows.length,
-  mode:'paced5Hz sequential sensor replay; source timestamps and captured IMU intervals preserved',
+const receipt={schema:1,startedAt,runnerSha256,scene,framesExpected:frames.length,framesCompleted:rows.length,
+  mode:(paced?'paced5Hz':'unpaced')+' sequential sensor replay; source timestamps and captured IMU intervals preserved',
   workerSha256:cacheReceipt.workerSha256,sourceSha256:cacheReceipt.sourceSha256,
   clientBundleSha256:sha(allowed.get('/client.mjs')),configurationSha256:sha(await readFile(join(cacheRoot,'configuration.json'))),
-  sensorMetadataSha256:sha(raw),runtime:'published Chromium Web Worker, production ModelicaSlamClient',
+  sensorMetadataSha256:sha(raw),runtime:cacheReceipt.researchInstrumentation?'research-instrumented Chromium Web Worker, production ModelicaSlamClient':'published Chromium Web Worker, production ModelicaSlamClient',
+  ...(cacheReceipt.researchInstrumentation?{researchInstrumentation:cacheReceipt.researchInstrumentation}:{}),
+  ...(cacheReceipt.researchConfiguration?{researchConfiguration:cacheReceipt.researchConfiguration}:{}),
   chromiumVersion:browser?.version(),wallSeconds:(performance.now()-wallStart)/1000,
   steadyStateRoundTripMs:{p50:percentile(.5),p95:percentile(.95),p99:percentile(.99)},
   initializationMs:rows[0]?.timings.roundTripMs??null,sampledPeakRssKiB:peakRss,sampledPeakThreads:peakThreads,
   sampledCpuSeconds:[...cpuTicks.values()].reduce((a,b)=>a+b,0)/Number(execFileSync('getconf',['CLK_TCK'],{encoding:'utf8'}).trim()),
   cpuAffinity:execFileSync('taskset',['-pc',String(process.pid)],{encoding:'utf8'}).trim().split(': ').at(-1),
   resourceScope:'Chromium browser and all descendants including renderer/worker; replay Node/server excluded; no scene rendering or physics',failure:failure??null};
-await writeFile(join(output,'poses.json'),JSON.stringify(rows)+'\n');
+receipt.replayScope='Closed-loop sequential: Node image reads, IPC and per-frame resource sampling occur between requests. Unpaced wall includes harness overhead. Paced mode slows input when late; no open-loop queue/drop/throughput qualification.';
+await poseFile.write(']\n');await poseFile.close();
+await rename(join(output,'poses.json.tmp'),join(output,'poses.json'));
 await writeFile(join(output,'resources.json'),JSON.stringify(resource)+'\n');
 await writeFile(join(output,'receipt.json.tmp'),JSON.stringify(receipt,null,2)+'\n');
 await rename(join(output,'receipt.json.tmp'),join(output,'receipt.json'));
