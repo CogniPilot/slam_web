@@ -34,7 +34,7 @@ const definitions=[
   ['compile','Check the selected runnable example and its library sources with Rumoca. Excludes the full SLAM workspace and other experiment files; does not start or reset simulation.',{}],
   ['check_model','Check a named Modelica model in an existing project file with Rumoca. Use for edited flight physics or other components; checks accepted source, not pending proposals.',{path:{type:'string'},model:{type:'string'}}],
   ['scene_landmarks','Read authored room bounds, entrances, circulation points and inspection cameras. Coordinates are world ENU meters; use them to edit Modelica missions. Pass an empty environment for the current scene.',{environment:{type:'string'}}],
-  ['select_environment','Select a rendered map for a user-requested mission. Marks the project for rebuilding. Starting pose and flight behavior must still be edited in Modelica.',{environment:{type:'string',enum:['city','warehouse','courtyard','tokyo','asset-city','big-city']}}],
+  ['select_environment','Select a rendered map for a user-requested mission. Marks the project for rebuilding. Starting pose and flight behavior must still be edited in Modelica.',{environment:{type:'string',enum:['city','warehouse','courtyard','tokyo','asset-city','big-city','hallway','hallway-marked','office-loop']}}],
   ['search_docs','Search Modelica documentation',{query:{type:'string'}}],
   ['read_docs','Read Modelica class documentation and components',{name:{type:'string'}}],
   ['simulation_status','Read simulation time, selected model, sensor rates, pending features and latest metrics',{}],
@@ -129,7 +129,7 @@ export class AssistantAgent {
       case 'scene_landmarks':if(!this.host.landmarks)throw new Error('Scene landmarks are unavailable.');return this.host.landmarks(string('environment')||undefined);
       case 'select_environment':{
         const environment=string('environment');
-        if(!['city','warehouse','courtyard','tokyo','asset-city','big-city'].includes(environment))throw new Error('Unknown environment');
+        if(!['city','warehouse','courtyard','tokyo','asset-city','big-city','hallway','hallway-marked','office-loop'].includes(environment))throw new Error('Unknown environment');
         if(!this.host.selectEnvironment)throw new Error('Scene selection is unavailable.');
         signal.throwIfAborted();return this.host.selectEnvironment(environment);
       }

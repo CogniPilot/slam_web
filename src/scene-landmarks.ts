@@ -1,5 +1,10 @@
+import {OFFICE_LOOP_ROOF,OFFICE_LOOP_ROUTE} from './world-office-loop';
+import {HALLWAY_ROOF} from './world-hallway';
 type Point=[number,number,number];
 export const SCENE_CAMERAS:Partial<Record<string,{eye:Point;target:Point}>>={
+  'office-loop':{eye:[-15,-18,26],target:[12,8,0]},
+  'hallway-marked':{eye:[-5,0,1.8],target:[30,0,1.5]},
+  hallway:{eye:[-5,0,1.8],target:[30,0,1.5]},
   city:{eye:[-23,-3.8,5.2],target:[5,0,4.1]},
   tokyo:{eye:[-10,-29,20],target:[16,0,5]},
   'asset-city':{eye:[-10,-2.7,9],target:[8,0,3]},
@@ -31,9 +36,9 @@ export const BIG_CITY_INTERIORS:readonly BigCityInterior[]=[
 ];
 
 export function sceneLandmarks(environment:string){
-  const landmarks=environment==='big-city'?BIG_CITY_INTERIORS.map(room=>({...room,camera:INTERIOR_CAMERAS[room.id]})):
+  const landmarks=environment==='office-loop'?[{id:'office-loop',label:'Office loop',roofVolume:OFFICE_LOOP_ROOF,start:[0,0,1.5],circulation:OFFICE_LOOP_ROUTE}]:['hallway','hallway-marked'].includes(environment)?[{id:'long-hallway',label:'Long hallway',roofVolume:HALLWAY_ROOF,start:[0,0,1.5],circulation:[[0,0,1.5],[140,0,1.5],[0,0,1.5]]}]:environment==='big-city'?BIG_CITY_INTERIORS.map(room=>({...room,camera:INTERIOR_CAMERAS[room.id]})):
     ['city','asset-city'].includes(environment)?[{id:'training-building',label:'GPS / SLAM training building',roofVolume:TRAINING_ROOF,entrance:{outside:[34,0,1.5],inside:[38,0,1.5],clearWidth:3,clearHeight:2.8},circulation:[[38,0,1.5],[46,0,1.5]]}]:[];
   return {environment,frame:'World ENU, meters: x east, y north, z up. Three.js uses [x,z,-y].',overview:SCENE_CAMERAS[environment]??null,landmarks,
-    availableEnvironments:['city','warehouse','courtyard','tokyo','asset-city','big-city'],
+    availableEnvironments:['city','warehouse','courtyard','tokyo','asset-city','big-city','hallway','hallway-marked','office-loop'],
     notes:'Camera poses are inspection views, not drone poses. Circulation points are authored aisle references, not collision-checked routes. Write starting pose and trajectory in Modelica; preserve controller and motor dynamics. The store, loft and conference room exist only in big-city. Collision support is not implemented.'};
 }

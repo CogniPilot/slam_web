@@ -88,6 +88,7 @@ export class WorkerViewer {
     this.worker.postMessage({type:'diagnostics',estimate:{...estimate,points:[],features:[]},origin,map,trajectories,...flags},[...(map?[map.buffer]:[]),...trajectories.map(path=>path.positions.buffer)]);
   }
   visibility(flags:{uncertainty:boolean;graph:boolean;showMap:boolean;showPaths:boolean}){this.send('flags',flags);}
+  cutaway(enabled:boolean){this.send('cutaway',{enabled});}
   sceneVisible(visible:boolean){this.send('scene-visible',{visible});}
   lighting(mode:'day'|'night'|'cycle'){this.send('lighting',{mode});}
   lidar(scan:World['latestLidar'],source=this.world){

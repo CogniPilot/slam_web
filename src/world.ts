@@ -11,6 +11,9 @@ import {covarianceAxes} from './covariance';
 import { seededRandom } from './packet';
 import {WorldMaterials} from './world-materials';
 import {buildCity} from './world-city';
+import {buildOfficeLoop,OFFICE_LOOP_ROOF} from './world-office-loop';
+import {ViewerCutaway} from './viewer-cutaway';
+import {buildHallway,HALLWAY_ROOF} from './world-hallway';
 import {graphicsInfo,type GraphicsInfo} from './graphics-info';
 import {TokyoWorld} from './world-tokyo';
 import {WorldActors} from './world-actors';
@@ -78,8 +81,8 @@ export class World {
   private frameWall=100;
   private currentEnvironment:Environment='city';
   private currentDetail:SceneDetail='high';
-  get navigationRoofs():readonly RoofVolume[]{return this.currentEnvironment==='big-city'?(this.bigCity?.interiors.map(interior=>interior.roofVolume)??[]):[this.navigation.roofVolume];}
-  get navigationEnabled(){return this.environmentVisible&&['city','asset-city','big-city'].includes(this.currentEnvironment);}
+  get navigationRoofs():readonly RoofVolume[]{return this.currentEnvironment==='office-loop'?[OFFICE_LOOP_ROOF]:['hallway','hallway-marked'].includes(this.currentEnvironment)?[HALLWAY_ROOF]:this.currentEnvironment==='big-city'?(this.bigCity?.interiors.map(interior=>interior.roofVolume)??[]):[this.navigation.roofVolume];}
+  get navigationEnabled(){return this.environmentVisible&&['city','asset-city','big-city','hallway','hallway-marked','office-loop'].includes(this.currentEnvironment);}
   private carsEnabled=true;
   private peopleEnabled=true;
   private sensorConfigurationError?:Error;
@@ -233,7 +236,7 @@ export class World {
       // Shared materials and their textures survive rebuilding the scene.
       object.traverse(child=>{if(child instanceof THREE.Mesh){child.geometry.dispose();if(child instanceof THREE.InstancedMesh)child.dispose();}});
     }
-    if(kind!=='big-city'){
+    if(kind!=='big-city'&&kind!=='hallway'&&kind!=='hallway-marked'&&kind!=='office-loop'){
       const floor=this.box(0,0,-.1,80,.2,70,this.materials.surface('paving',0xb4baaf));floor.name='ground';
     }
     const random=seededRandom(42);
@@ -248,6 +251,11 @@ export class World {
       this.bigCity.build(detail);this.bigCity.group.visible=true;this.ready=this.bigCity.ready;
     } else if(kind==='city') {
       buildCity(this.box.bind(this),this.crown.bind(this),this.materials,detail);
+    } else if(kind==='office-loop'){
+      buildOfficeLoop(this.box.bind(this),this.materials);const fill=new THREE.AmbientLight(0xfff4df,.85);this.environment.add(fill);
+    } else if(kind==='hallway'||kind==='hallway-marked') {
+      buildHallway(this.box.bind(this),this.materials,kind==='hallway-marked');
+      if(kind==='hallway-marked'){const fill=new THREE.AmbientLight(0xfff4df,.85);fill.name='hallway-interior-fill';this.environment.add(fill);}
     } else if(kind==='warehouse') {
       const wall=this.materials.surface('plaster',0xd7d7c9),steel=this.materials.solid(0x536a7d,.6,.4),wood=this.materials.surface('wood',0xc39763);
       this.box(5,8,3,28,6,.2,wall);this.box(5,-8,3,28,6,.2,wall);
@@ -286,13 +294,13 @@ export class World {
   private instanceEnvironment() {
     const groups=new Map<string,THREE.Mesh[]>();
     for(const object of this.environment.children)if(object instanceof THREE.Mesh) {
-      const key=`${object.userData.shape}:${(object.material as THREE.Material).uuid}`;
+      const key=`${object.userData.viewerOccluder??""}:${object.userData.shape}:${(object.material as THREE.Material).uuid}`;
       const list=groups.get(key)??[];list.push(object);groups.set(key,list);
     }
     for(const meshes of groups.values()) {
       const first=meshes[0],instances=new THREE.InstancedMesh(first.geometry.clone(),first.material,meshes.length);
       instances.name=first.name||first.userData.shape;
-      instances.userData.sensorGeometryKey=first.userData.shape;
+      instances.userData.sensorGeometryKey=first.userData.shape;instances.userData.viewerOccluder=first.userData.viewerOccluder;
       meshes.forEach((mesh,i)=>{
         mesh.updateMatrix();instances.setMatrixAt(i,mesh.matrix);this.environment.remove(mesh);
       });
@@ -525,6 +533,8 @@ export class World {
       line.geometry.dispose();line.geometry=new THREE.BufferGeometry();line.geometry.setAttribute('position',new THREE.BufferAttribute(data,3));line.computeLineDistances();
     }
   }
+  viewerCutaway=false;
+  private readonly cutaway=new ViewerCutaway();
   render(interpolate=false) {
     const fraction=interpolate?Math.min(1,Math.max(0,(performance.now()-this.commitWall)/this.frameWall)):1;
     this.drone.render(fraction);
@@ -533,7 +543,7 @@ export class World {
     if(this.actors.group.visible)this.actors.render(interpolate);
     this.otherVehicle?.render(interpolate);
     this.controls.update();this.viewerCamera.update(this.view,this.cameraVehicle===1&&this.otherVehicle?this.otherVehicle.robot:this.robot,this.controls.target);
-    this.renderer.setRenderTarget(null);this.renderer.render(this.scene,this.view);
+    this.renderer.setRenderTarget(null);this.cutaway.render(this.environment,this.viewerCutaway,()=>this.renderer.render(this.scene,this.view));
   }
   private optics(fx: number, fy: number,far=this.calibration.far) {
     this.sensor.near = this.calibration.near; this.sensor.far = far;

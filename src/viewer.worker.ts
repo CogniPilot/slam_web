@@ -47,6 +47,7 @@ async function execute(data:any){
       }
       return {released:clouds.replace(data.cloud?.samples.buffer,data.lidar?.scan.samples.buffer)};
     case 'depth-cloud-enabled':world.setDepthCloudEnabled(data.enabled);break;
+    case 'cutaway':world.viewerCutaway=!!data.enabled;break;
     case 'flags':world.covariance.visible=data.uncertainty&&hasUncertainty;for(const object of [world.graphEdges,world.loopEdges,world.keyframes])object.visible=data.graph;world.showMap(data.showMap);world.trajectories.visible=data.showPaths;break;
     case 'diagnostics':hasUncertainty=!!data.estimate.uncertainty;if(data.map)world.setMapBuffer(data.map,data.origin);else world.setMapOrigin(data.origin);world.setEstimate(data.estimate);world.covariance.visible=data.uncertainty&&!!data.estimate.uncertainty;for(const object of [world.graphEdges,world.loopEdges,world.keyframes])object.visible=data.graph;world.showMap(data.showMap);world.trajectories.visible=data.showPaths;world.setTrajectoryBuffers(data.trajectories);break;
     case 'scene-visible':world.setEnvironmentVisible(data.visible);break;
