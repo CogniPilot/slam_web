@@ -44,6 +44,11 @@ ORIENTATION_FILTER_PARAMETERS = {
     "constant_dt": "0.0",
 }
 IMU_TRACKS = {"rgbd-vo+imu-gravity", "rgbd-vio-openvins"}
+# --odometry-log-level sets both of rgbd_odometry's loggers: the ROS one, and
+# RTAB-Map's ULogger, whose level the OpenVINS printer follows (a 50-frame hallway
+# smoke printed "Setting printing level to: DEBUG" only with --udebug). Both
+# default to warn, so only the levels with a ULogger switch are offered.
+ODOMETRY_LOG_LEVELS = {"debug": "--udebug", "info": "--uinfo"}
 OPENVINS_TRACK = "rgbd-vio-openvins"
 # OdometryOpenVINS (RTAB-Map 0.23.7 built WITH_OPENVINS) takes raw IMU without
 # orientation (canProcessAsyncIMU), the IMU-to-camera extrinsic from TF, and with
@@ -352,6 +357,21 @@ def imu_track_arguments(track, ros2, calibration, noise):
     return odometry, rtabmap, [orientation_filter], None
 
 
+def add_odometry_log_level(commands, level):
+    """Set both of rgbd_odometry's loggers to level, on that node's command only.
+
+    The node is found by name, and anything but exactly one match is refused, so a
+    reordered command list cannot move the flags to another node. The ULogger switch
+    is a node argument, before --ros-args; the ROS level goes last in its --ros-args.
+    """
+    matches = [c for c in commands if c[2:4] == ["rtabmap_odom", "rgbd_odometry"]]
+    if len(matches) != 1:
+        raise ValueError(f"Expected one rgbd_odometry command, found {len(matches)}")
+    odometry = matches[0]
+    odometry.insert(odometry.index("--ros-args"), ODOMETRY_LOG_LEVELS[level])
+    odometry.extend(["--log-level", level])
+
+
 def shutdown_status(command, code):
     """What one estimator process's exit code means after the runner's SIGINT.
 
@@ -453,9 +473,18 @@ def main():
         help="IMU samples measured before the first frame time plus this are not "
         "published; required on IMU tracks, use the same value for every IMU track",
     )
+    parser.add_argument(
+        "--odometry-log-level",
+        choices=ODOMETRY_LOG_LEVELS,
+        help="ROS and RTAB-Map (and so OpenVINS) log level for the rgbd_odometry process "
+        "only, for diagnostic runs; unset leaves the command line and the receipt as "
+        "without the option",
+    )
     args = parser.parse_args()
     if args.rate <= 0 or (args.limit is not None and args.limit < 1):
         raise ValueError("Invalid rate or limit")
+    if args.odometry_log_level and args.estimator != "rtabmap":
+        raise ValueError("--odometry-log-level applies to RTAB-Map rgbd_odometry only")
     # Validate inputs before queueing for the lock or creating the output.
     raw = (args.inputs / "sensors.json").read_bytes()
     manifest = json.loads((args.inputs / "manifest.json").read_text())
@@ -675,6 +704,8 @@ def main():
         commands.extend(added_nodes)
         if openvins_receipt:
             openvins_receipt["odometryParameters"] = odometry_parameters
+    if args.odometry_log_level:
+        add_odometry_log_level(commands, args.odometry_log_level)
     if args.estimator == "stella":
         if args.vocabulary is None:
             raise ValueError("stella requires a pinned vocabulary file")
@@ -1032,6 +1063,7 @@ def main():
         "rateHz": args.rate,
         "domain": args.domain,
         "commands": commands,
+        **({"odometryLogLevel": args.odometry_log_level} if args.odometry_log_level else {}),
         "cpuAffinity": affinity,
         "loadAverageAtFinish": os.getloadavg(),
         "mapPolicy": args.map_policy

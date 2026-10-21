@@ -233,6 +233,20 @@ class ImuStampTests(unittest.TestCase):
             self.assertEqual(status["teardownCrash"], crash, code)
             self.assertIn(text, status["meaning"])
 
+    def test_odometry_log_level_needs_exactly_one_rgbd_odometry_by_name(self):
+        odometry = ["ros2", "run", "rtabmap_odom", "rgbd_odometry", "--ros-args", "-p", "a:=1"]
+        rtabmap = ["ros2", "run", "rtabmap_slam", "rtabmap", "--ros-args"]
+        tf = ["ros2", "run", "tf2_ros", "static_transform_publisher", "--ros-args"]
+        # Last of three, so neither of the runner's usual positions holds rgbd_odometry.
+        commands = [list(tf), list(rtabmap), list(odometry)]
+        module.add_odometry_log_level(commands, "info")
+        self.assertEqual(commands[:2], [tf, rtabmap])
+        self.assertEqual(commands[2], ["ros2", "run", "rtabmap_odom", "rgbd_odometry", "--uinfo",
+                                       "--ros-args", "-p", "a:=1", "--log-level", "info"])
+        for found, count in (([list(rtabmap)], 0), ([list(odometry), list(odometry)], 2)):
+            with self.assertRaisesRegex(ValueError, f"found {count}$"):
+                module.add_odometry_log_level(found, "debug")
+
     @unittest.skipUnless(os.environ.get("SLAM_SEALED_HALLWAY"), "set SLAM_SEALED_HALLWAY")
     def test_sealed_hallway_publishes_each_sample_once_at_its_own_time(self):
         source = json.loads(
@@ -354,7 +368,11 @@ def seal(root, body, **manifest):
 
 
 class ReplayLoopTests(unittest.TestCase):
-    def test_imu_frames_replay_with_the_resource_sampler_live(self):
+    def replay(self, *extra):
+        """Run the runner's main() on 3 sealed IMU frames against stub ROS nodes.
+
+        The receipt's commands come back with the temporary root as "<root>", so two
+        runs can be compared."""
         frames, samples = capture(2, 3)
         calibration = {"width": 2, "height": 2, "fx": 2.0, "fy": 2.0, "cx": 0.5,
                        "cy": 0.5, "forward": 0.18, "up": -0.04, "near": 0.28,
@@ -406,13 +424,18 @@ class ReplayLoopTests(unittest.TestCase):
                  str(registered), "hallway", str(out), "--ros-env", str(env),
                  "--cpu-count", "1", "--domain", "199",
                  "--rtabmap-track", "rgbd-vo+imu-gravity", "--imu-inputs", str(raw),
-                 "--imu-settle-seconds", "0"],
+                 "--imu-settle-seconds", "0", *extra],
                 capture_output=True, text=True, timeout=120,
                 env={"HOME": str(root), "PATH": os.environ.get("PATH", "")},
             )
             self.assertEqual(result.returncode, 0, result.stderr[-2000:])
             receipt = json.loads((out / "receipt.json").read_text())
             published = json.loads((out / "imu-published.json").read_text())
+        receipt["commands"] = [[a.replace(tmp, "<root>") for a in c] for c in receipt["commands"]]
+        return receipt, published
+
+    def test_imu_frames_replay_with_the_resource_sampler_live(self):
+        receipt, published = self.replay()
         self.assertIsNone(receipt["failure"])
         self.assertEqual(receipt["framesPublished"], 3)
         # Frame 0 publishes its snapshot, then frames 1 and 2 two samples each.
@@ -424,6 +447,22 @@ class ReplayLoopTests(unittest.TestCase):
         # The stub nodes stop on the runner's SIGINT; real codes, no teardown crash.
         self.assertEqual([s["exitCode"] for s in receipt["shutdown"]], [-2] * 4)
         self.assertFalse(receipt["teardownCrash"])
+
+    def test_odometry_log_level_reaches_only_rgbd_odometry(self):
+        default, _ = self.replay()
+        debug, _ = self.replay("--odometry-log-level", "debug")
+        # Unset: no level anywhere and no receipt field, as before the option.
+        self.assertNotIn("odometryLogLevel", default)
+        self.assertFalse(any("--log-level" in c for c in default["commands"]))
+        # Set: the same commands, with --udebug before rgbd_odometry's --ros-args and
+        # the ROS level last in them, and no change to any other node.
+        self.assertEqual(debug["odometryLogLevel"], "debug")
+        odometry = [c[3] for c in default["commands"]].index("rgbd_odometry")
+        expected = [list(c) for c in default["commands"]]
+        expected[odometry].insert(expected[odometry].index("--ros-args"), "--udebug")
+        expected[odometry] += ["--log-level", "debug"]
+        self.assertEqual(debug["commands"], expected)
+        self.assertEqual(set(debug) - set(default), {"odometryLogLevel"})
 
 
 
