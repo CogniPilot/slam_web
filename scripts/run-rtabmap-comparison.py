@@ -17,14 +17,6 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-import rclpy
-from nav_msgs.msg import Odometry
-from rclpy.node import Node
-from rosidl_runtime_py.convert import message_to_ordereddict
-from rtabmap_msgs.msg import Info
-from rtabmap_msgs.srv import GetMap
-from sensor_msgs.msg import CameraInfo, Image, Imu
-
 
 SCENE_ID = re.compile(r"[a-z][a-z0-9-]{0,31}")
 # Fields that must stay constant within one replayed scene: the camera mount is
@@ -49,6 +41,16 @@ ORIENTATION_FILTER_PARAMETERS = {
     "zeta": "0.0",
     "constant_dt": "0.0",
 }
+IMU_TRACKS = {"rgbd-vo+imu-gravity"}
+# One convention for every IMU track. In the sealed format an interval stamped t
+# holds the sample measured at t - dt (zero-order hold), and a frame's imu field
+# is the sample measured at the frame time, so each frame's first interval
+# repeats the previous frame's snapshot.
+IMU_STAMP_CONVENTION = (
+    "measurement time: interval.time - interval.dt for each interval, frame imu "
+    "snapshot at frame time; an interval repeating the last published snapshot "
+    "is skipped; ROS stamp 1 + measurement time"
+)
 
 
 def digest(data):
@@ -130,11 +132,7 @@ def sealed_imu(imu_inputs, registered_manifest, frames):
             raise ValueError("IMU source frames do not match the registered frames")
         rows = []
         for interval in origin.get("imuIntervals", []):
-            values = [*interval["imu"]["accel"], *interval["imu"]["gyro"]]
-            if len(values) != 6 or not all(
-                isinstance(v, (int, float)) and abs(v) < 1e6 for v in values
-            ):
-                raise ValueError("Non-finite or malformed IMU sample")
+            check_imu_values(interval["imu"])
             if previous_time is not None and not interval["time"] > previous_time:
                 raise ValueError("Non-increasing IMU sample times")
             if interval["time"] > frame["time"] + 1e-9:
@@ -145,27 +143,98 @@ def sealed_imu(imu_inputs, registered_manifest, frames):
                 raise ValueError("Non-uniform IMU interval")
             previous_time = interval["time"]
             rows.append(interval)
-        samples[frame["index"]] = rows
+        if rows and abs(rows[-1]["time"] - frame["time"]) > 1e-9:
+            raise ValueError("Last IMU interval does not end at its frame")
+        check_imu_values(origin["imu"])
+        samples[frame["index"]] = {"intervals": rows, "snapshot": origin["imu"]}
     if period is None:
         raise ValueError("Sealed input carries no IMU samples for this scene")
-    first = next(row for rows in samples.values() for row in rows)
+    first = next(row for rows in samples.values() for row in rows["intervals"])
     return samples, {
         "source": "sealed raw sensors.json imuIntervals (specific force + rate, no orientation)",
         "inputSha256": digest(raw),
         "inputFormat": source["format"],
         "rateHz": 1 / period,
         "intervalSeconds": period,
-        "samplesInScene": sum(len(rows) for rows in samples.values()),
-        "framesWithoutSamples": [i for i, rows in samples.items() if not rows],
-        "firstSample": {
-            **first,
-            "accelNorm": sum(v * v for v in first["imu"]["accel"]) ** 0.5,
-        },
-        "unusedPerFrameField": "imu (frame snapshot); only imuIntervals are published",
+        "intervalsInScene": sum(len(rows["intervals"]) for rows in samples.values()),
+        "framesWithoutIntervals": [i for i, rows in samples.items() if not rows["intervals"]],
+    }
+
+
+def check_imu_values(imu):
+    values = [*imu["accel"], *imu["gyro"]]
+    if len(values) != 6 or not all(isinstance(v, (int, float)) and abs(v) < 1e6 for v in values):
+        raise ValueError("Non-finite or malformed IMU sample")
+
+
+def imu_messages(frames, samples, settle_seconds):
+    """IMU messages per frame, stamped at measurement time (IMU_STAMP_CONVENTION).
+
+    The track is not an input: every IMU track publishes the same messages for
+    the same sealed samples and settling window. Samples measured before the
+    first replayed frame time plus settle_seconds are dropped and listed, so a
+    replay that starts mid-capture publishes from its first frame like a capture.
+    """
+    if not settle_seconds >= 0:
+        raise ValueError("Invalid IMU settling window")
+    cutoff = frames[0]["time"] + settle_seconds
+    plan = {}
+    dropped = []
+    skipped = []
+    last = None  # (measurement time, imu) of the last snapshot considered
+    for frame in frames:
+        rows = samples[frame["index"]]
+        candidates = []
+        for j, interval in enumerate(rows["intervals"]):
+            measured = round(interval["time"] - interval["dt"], 9)  # ROS stamp resolution
+            if j == 0 and last is not None and abs(measured - last[0]) < 1e-9:
+                if interval["imu"] != last[1]:
+                    raise ValueError("IMU interval disagrees with the previous frame snapshot")
+                skipped.append({"frameIndex": frame["index"], "time": measured})
+                continue
+            if last is not None and not measured > last[0] + 1e-9:
+                raise ValueError("IMU interval measured before the previous frame")
+            candidates.append({"time": measured, "imu": interval["imu"]})
+        candidates.append({"time": frame["time"], "imu": rows["snapshot"]})
+        last = (frame["time"], rows["snapshot"])
+        kept = []
+        for message in candidates:
+            message = {"frameIndex": frame["index"], **message}
+            (kept if message["time"] >= cutoff - 1e-9 else dropped).append(message)
+        plan[frame["index"]] = kept
+    return plan, {
+        "stampConvention": IMU_STAMP_CONVENTION,
+        "settleSeconds": settle_seconds,
+        "settleCutoffTime": cutoff,
+        "droppedBySettle": [m["time"] for m in dropped],
+        "duplicatesSkipped": len(skipped),
+    }
+
+
+def imu_published_fields(imu_published):
+    """Receipt fields recomputed from the messages actually published."""
+    times = [m["time"] for m in imu_published]
+    first = imu_published[0] if imu_published else None
+    return {
+        "samplesPublished": len(times),
+        "firstPublishedTime": times[0] if times else None,
+        "lastPublishedTime": times[-1] if times else None,
+        "firstPublishedAccelNorm": sum(v * v for v in first["accel"]) ** 0.5 if first else None,
+        "publishedStampsUnique": len(set(times)) == len(times),
+        "publishedStampsIncreasing": all(b > a for a, b in zip(times, times[1:])),
     }
 
 
 def main():
+    # ROS imports stay here so the input functions above test without the pinned env.
+    import rclpy
+    from nav_msgs.msg import Odometry
+    from rclpy.node import Node
+    from rosidl_runtime_py.convert import message_to_ordereddict
+    from rtabmap_msgs.msg import Info
+    from rtabmap_msgs.srv import GetMap
+    from sensor_msgs.msg import CameraInfo, Image, Imu
+
     runner_sha256 = digest(Path(__file__).read_bytes())
     parser = argparse.ArgumentParser()
     parser.add_argument("inputs", type=Path)
@@ -193,6 +262,12 @@ def main():
         type=Path,
         help="sealed raw inputs the registered frames came from (IMU track only)",
     )
+    parser.add_argument(
+        "--imu-settle-seconds",
+        type=float,
+        help="IMU samples measured before the first frame time plus this are not "
+        "published; required on IMU tracks, use the same value for every IMU track",
+    )
     args = parser.parse_args()
     if args.rate <= 0 or (args.limit is not None and args.limit < 1):
         raise ValueError("Invalid rate or limit")
@@ -217,12 +292,16 @@ def main():
         rtabmap_version = package_version(args.ros_env, "rtabmap_slam")
         if package_version(args.ros_env, "rtabmap_odom") != rtabmap_version:
             raise ValueError("rtabmap_odom and rtabmap_slam versions differ")
-    imu_track = args.rtabmap_track == "rgbd-vo+imu-gravity"
-    imu_samples = imu_receipt = None
+    imu_track = args.rtabmap_track in IMU_TRACKS
+    imu_plan = imu_receipt = None
     if imu_track:
         if args.estimator != "rtabmap" or args.imu_inputs is None:
             raise ValueError("The IMU track needs --estimator rtabmap and --imu-inputs")
+        if args.imu_settle_seconds is None:
+            raise ValueError("The IMU track needs a declared --imu-settle-seconds")
         imu_samples, imu_receipt = sealed_imu(args.imu_inputs, manifest, frames)
+        imu_plan, imu_stamping = imu_messages(frames, imu_samples, args.imu_settle_seconds)
+        imu_receipt.update(imu_stamping)
         if not (args.ros_env / "share" / ORIENTATION_FILTER / "package.xml").exists():
             raise ValueError(
                 f"{ORIENTATION_FILTER} is not in the pinned ros-env. rtabmap_odom and "
@@ -240,16 +319,16 @@ def main():
             filteredTopic="/imu/data",
             rawOrientation="all-zero quaternion, orientation_covariance[0] = -1",
             rawVectorCovariances="all zero (unknown); the capture declares no IMU noise model",
-            publishTiming="each frame's samples, source times in (previous frame, frame], "
-            "published back-to-back immediately before that frame's images",
+            publishTiming="each frame's messages, measurement times in (previous frame, "
+            "frame], published back-to-back immediately before that frame's images",
             rtabmapImuUse=[
                 "rgbd_odometry initial orientation (wait_imu_to_init)",
                 "rgbd_odometry motion-guess rotation (Odom/GuessMotion true)",
                 "rtabmap graph gravity links (Optimizer/GravitySigma 0.3, Mem/UseOdomGravity false)",
             ],
         )
-    elif args.imu_inputs is not None:
-        raise ValueError("--imu-inputs is only used by the rgbd-vo+imu-gravity track")
+    elif args.imu_inputs is not None or args.imu_settle_seconds is not None:
+        raise ValueError("--imu-inputs and --imu-settle-seconds are only used by IMU tracks")
     lock_path = Path.home() / "scratch/slam_web/tmp/ros2-comparison.lock"
     lock_path.parent.mkdir(exist_ok=True, parents=True)
     admission_lock = lock_path.open("a")
@@ -638,8 +717,8 @@ def main():
                 1.0,
                 0.0,
             ]
-            for sample in imu_samples.get(frame["index"], []) if imu_track else []:
-                imu_stamp = 1 + sample["time"]
+            for imu_message in imu_plan[frame["index"]] if imu_track else []:
+                imu_stamp = 1 + imu_message["time"]
                 imu = Imu()
                 imu.header.stamp.sec = int(imu_stamp)
                 imu.header.stamp.nanosec = round((imu_stamp - int(imu_stamp)) * 1e9)
@@ -651,18 +730,20 @@ def main():
                     imu.angular_velocity.x,
                     imu.angular_velocity.y,
                     imu.angular_velocity.z,
-                ) = map(float, sample["imu"]["gyro"])
+                ) = map(float, imu_message["imu"]["gyro"])
                 (
                     imu.linear_acceleration.x,
                     imu.linear_acceleration.y,
                     imu.linear_acceleration.z,
-                ) = map(float, sample["imu"]["accel"])
+                ) = map(float, imu_message["imu"]["accel"])
                 imu_pub.publish(imu)
                 imu_published.append(
                     {
                         "frameIndex": frame["index"],
-                        "time": sample["time"],
+                        "time": imu_message["time"],
                         "stamp": imu_stamp,
+                        "accel": imu_message["imu"]["accel"],
+                        "gyro": imu_message["imu"]["gyro"],
                         "sentMonoNs": time.monotonic_ns(),
                     }
                 )
@@ -731,9 +812,8 @@ def main():
         else "registered RGB-D only",
         "rtabmapTrack": args.rtabmap_track if args.estimator == "rtabmap" else None,
         "imuRateHz": imu_receipt["rateHz"] if imu_track else None,
-        "imu": {**imu_receipt, "samplesPublished": len(imu_published)}
-        if imu_track
-        else None,
+        "imuStampConvention": IMU_STAMP_CONVENTION if imu_track else None,
+        "imu": {**imu_receipt, **imu_published_fields(imu_published)} if imu_track else None,
         "inputSha256": digest(raw),
         "inputFormat": json.loads(raw).get("format"),
         "framesExpected": len(frames),
