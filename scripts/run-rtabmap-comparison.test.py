@@ -164,10 +164,74 @@ class ImuStampTests(unittest.TestCase):
             got, receipt = module.sealed_imu(root, seal(sensor_frames), registered)
             self.assertEqual(got, samples)
             self.assertEqual(receipt["framesWithoutIntervals"], [0])
+            self.assertIsNone(receipt["declaredNoise"])
             self.assertAlmostEqual(receipt["rateHz"], 10)
             sensor_frames[2]["imuIntervals"] = sensor_frames[2]["imuIntervals"][:1]
             with self.assertRaises(ValueError):
                 module.sealed_imu(root, seal(sensor_frames), registered)
+
+    def test_openvins_noise_from_declaration_or_declared_defaults(self):
+        noise, source = module.openvins_noise(None, 180)
+        self.assertEqual(noise, module.OPENVINS_DEFAULT_NOISE)
+        self.assertIn("declares no IMU noise model", source["source"])
+        declared = {
+            "accelSdPerSample": 0.015,
+            "gyroSdPerSample": 0.0005,
+            "accelBiasRandomWalkDensity": 0,
+            "gyroBiasRandomWalkDensity": 2e-5,
+        }
+        noise, source = module.openvins_noise(declared, 180)
+        self.assertAlmostEqual(noise["OdomOpenVINS/AccelerometerNoiseDensity"], 0.015 / 180**0.5)
+        self.assertAlmostEqual(noise["OdomOpenVINS/GyroscopeNoiseDensity"], 0.0005 / 180**0.5)
+        # Constant biases declare zero random walk; the filter gets the floor.
+        self.assertEqual(
+            noise["OdomOpenVINS/AccelerometerRandomWalk"],
+            module.OPENVINS_RANDOM_WALK_FLOOR["OdomOpenVINS/AccelerometerRandomWalk"],
+        )
+        self.assertEqual(noise["OdomOpenVINS/GyroscopeRandomWalk"], 2e-5)
+        self.assertEqual(source["floored"], ["OdomOpenVINS/AccelerometerRandomWalk"])
+        for bad in [{**declared, "extra": 1}, {**declared, "gyroSdPerSample": 0}]:
+            with self.assertRaises(ValueError):
+                module.openvins_noise(bad, 180)
+
+    def test_openvins_track_uses_raw_imu_and_strategy_10_without_orientation_filter(self):
+        calibration = {"near": 0.28}
+        noise = dict(module.OPENVINS_DEFAULT_NOISE)
+        odometry, rtabmap, added, parameters = module.imu_track_arguments(
+            module.OPENVINS_TRACK, "ros2", calibration, noise
+        )
+        self.assertIn("imu:=/imu/data_raw", odometry)
+        self.assertIn("wait_imu_to_init:=true", odometry)
+        self.assertIn("Odom/Strategy:='10'", odometry)
+        self.assertIn("Vis/DepthAsMask:='true'", odometry)
+        self.assertIn("Vis/MinDepth:='0.28'", odometry)
+        self.assertEqual(parameters["OdomOpenVINS/AccelerometerNoiseDensity"], "0.01")
+        self.assertEqual((rtabmap, added), ([], []))
+        odometry, rtabmap, added, parameters = module.imu_track_arguments(
+            "rgbd-vo+imu-gravity", "ros2", calibration, None
+        )
+        self.assertIn("imu:=/imu/data", odometry)
+        self.assertEqual(added[0][2], module.ORIENTATION_FILTER)
+        self.assertIsNone(parameters)
+        with self.assertRaises(ValueError):
+            module.imu_track_arguments("rgbd-vo", "ros2", calibration, None)
+
+    def test_shutdown_status_states_teardown_crashes_without_hiding_them(self):
+        command = ["ros2", "run", "rtabmap_odom", "rgbd_odometry"]
+        cases = {
+            0: (False, "clean exit"),
+            245: (True, "crashed on SIGSEGV"),  # ros2 run: 256 - 11
+            -11: (True, "crashed on SIGSEGV"),
+            254: (False, "SIGINT"),  # ros2 run: 256 - 2
+            -9: (True, "SIGKILL"),
+            1: (False, "nonzero exit 1"),
+        }
+        for code, (crash, text) in cases.items():
+            status = module.shutdown_status(command, code)
+            self.assertEqual(status["node"], "rgbd_odometry")
+            self.assertEqual(status["exitCode"], code)
+            self.assertEqual(status["teardownCrash"], crash, code)
+            self.assertIn(text, status["meaning"])
 
     @unittest.skipUnless(os.environ.get("SLAM_SEALED_HALLWAY"), "set SLAM_SEALED_HALLWAY")
     def test_sealed_hallway_publishes_each_sample_once_at_its_own_time(self):
@@ -357,6 +421,9 @@ class ReplayLoopTests(unittest.TestCase):
         # The sampler ran after every frame, after the drain and in the finally.
         self.assertEqual(len(receipt["hostLoadSamples"]), 3 + 2)
         self.assertGreater(receipt["sampledPeakRssKiB"], 0)
+        # The stub nodes stop on the runner's SIGINT; real codes, no teardown crash.
+        self.assertEqual([s["exitCode"] for s in receipt["shutdown"]], [-2] * 4)
+        self.assertFalse(receipt["teardownCrash"])
 
 
 

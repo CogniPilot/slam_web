@@ -27,6 +27,8 @@ TRACKS = {
     "rgbd-vo": "registered RGB-D only",
     "rgbd-vo+imu-gravity": "registered RGB-D + sealed raw IMU, orientation from an "
     "external Madgwick filter (gravity alignment)",
+    "rgbd-vio-openvins": "registered RGB as monocular OpenVINS (Odom/Strategy 10) + "
+    "sealed raw IMU; depth only as a feature mask, metric scale from the IMU",
 }
 # rtabmap_odom and rtabmap 0.23.7 drop sensor_msgs/Imu without orientation and do
 # not run RTAB-Map's own ImuFilter from ROS, so orientation must come from a node
@@ -41,7 +43,39 @@ ORIENTATION_FILTER_PARAMETERS = {
     "zeta": "0.0",
     "constant_dt": "0.0",
 }
-IMU_TRACKS = {"rgbd-vo+imu-gravity"}
+IMU_TRACKS = {"rgbd-vo+imu-gravity", "rgbd-vio-openvins"}
+OPENVINS_TRACK = "rgbd-vio-openvins"
+# OdometryOpenVINS (RTAB-Map 0.23.7 built WITH_OPENVINS) takes raw IMU without
+# orientation (canProcessAsyncIMU), the IMU-to-camera extrinsic from TF, and with
+# one camera runs monocular. Vis/DepthAsMask allows features only where the
+# registered depth lies in [Vis/MinDepth, Vis/MaxDepth]; depth never enters the
+# filter. Other OdomOpenVINS/* keep their RTAB-Map 0.23.7 defaults.
+OPENVINS_PARAMETERS = {
+    "Odom/Strategy": "10",
+    "OdomOpenVINS/UseStereo": "false",
+    "Vis/DepthAsMask": "true",
+}
+# RTAB-Map 0.23.7 Parameters.h defaults, used when the capture declares no noise.
+OPENVINS_DEFAULT_NOISE = {
+    "OdomOpenVINS/AccelerometerNoiseDensity": 0.01,
+    "OdomOpenVINS/AccelerometerRandomWalk": 0.001,
+    "OdomOpenVINS/GyroscopeNoiseDensity": 0.001,
+    "OdomOpenVINS/GyroscopeRandomWalk": 0.0001,
+}
+# The filter needs a positive bias random walk; a capture with constant biases
+# declares zero, which is raised to this floor and reported.
+OPENVINS_RANDOM_WALK_FLOOR = {
+    "OdomOpenVINS/AccelerometerRandomWalk": 1e-4,
+    "OdomOpenVINS/GyroscopeRandomWalk": 1e-6,
+}
+# Optional sealed sensors.json top-level block (covered by sensorsSha256):
+# per-sample white-noise standard deviations and bias random-walk densities.
+IMU_NOISE_FIELDS = {
+    "accelSdPerSample": "OdomOpenVINS/AccelerometerNoiseDensity",
+    "gyroSdPerSample": "OdomOpenVINS/GyroscopeNoiseDensity",
+    "accelBiasRandomWalkDensity": "OdomOpenVINS/AccelerometerRandomWalk",
+    "gyroBiasRandomWalkDensity": "OdomOpenVINS/GyroscopeRandomWalk",
+}
 # One convention for every IMU track. In the sealed format an interval stamped t
 # holds the sample measured at t - dt (zero-order hold), and a frame's imu field
 # is the sample measured at the frame time, so each frame's first interval
@@ -158,6 +192,7 @@ def sealed_imu(imu_inputs, registered_manifest, frames):
         "intervalSeconds": period,
         "intervalsInScene": sum(len(rows["intervals"]) for rows in samples.values()),
         "framesWithoutIntervals": [i for i, rows in samples.items() if not rows["intervals"]],
+        "declaredNoise": source.get("imuNoise"),
     }
 
 
@@ -223,6 +258,156 @@ def imu_published_fields(imu_published):
         "publishedStampsUnique": len(set(times)) == len(times),
         "publishedStampsIncreasing": all(b > a for a, b in zip(times, times[1:])),
     }
+
+
+def openvins_noise(declared, rate_hz):
+    """OdomOpenVINS/* IMU noise and where it came from.
+
+    A declared per-sample standard deviation sd at rate f is the continuous
+    density sd / sqrt(f). Without a declaration the RTAB-Map defaults are used
+    and the receipt says so; no value is tuned on the replayed capture.
+    """
+    if declared is None:
+        return dict(OPENVINS_DEFAULT_NOISE), {
+            "source": "RTAB-Map 0.23.7 OdomOpenVINS defaults; the capture declares no "
+            "IMU noise model",
+            "floored": [],
+        }
+    if set(declared) != set(IMU_NOISE_FIELDS):
+        raise ValueError(f"imuNoise must declare exactly {sorted(IMU_NOISE_FIELDS)}")
+    values = [declared[field] for field in IMU_NOISE_FIELDS]
+    if not all(isinstance(v, (int, float)) and 0 <= v < 1e3 for v in values):
+        raise ValueError("Malformed imuNoise value")
+    if not (declared["accelSdPerSample"] > 0 and declared["gyroSdPerSample"] > 0):
+        raise ValueError("imuNoise white noise must be positive")
+    noise, floored = {}, []
+    for field, name in IMU_NOISE_FIELDS.items():
+        value = declared[field]
+        if field.endswith("PerSample"):
+            value = value / rate_hz**0.5
+        elif value < OPENVINS_RANDOM_WALK_FLOOR[name]:
+            value = OPENVINS_RANDOM_WALK_FLOOR[name]
+            floored.append(name)
+        noise[name] = value
+    return noise, {
+        "source": "sealed sensors.json imuNoise; per-sample sd converted to density "
+        "sd / sqrt(rateHz)",
+        "declared": declared,
+        "floored": floored,
+    }
+
+
+def imu_track_arguments(track, ros2, calibration, noise):
+    """Extra rgbd_odometry and rtabmap arguments and added nodes for an IMU track."""
+    if track == OPENVINS_TRACK:
+        parameters = {
+            **OPENVINS_PARAMETERS,
+            # Zero depth is invalid, so the mask must start above it.
+            "Vis/MinDepth": f"{calibration['near']:g}",
+            **{name: f"{value:g}" for name, value in noise.items()},
+        }
+        odometry = [
+            "-p",
+            "wait_imu_to_init:=true",
+            *[item for name, value in parameters.items() for item in ["-p", f"{name}:='{value}'"]],
+            "-r",
+            "imu:=/imu/data_raw",
+        ]
+        # The rtabmap graph runs as in rgbd-vo: only the odometry source changes.
+        return odometry, [], [], parameters
+    if track != "rgbd-vo+imu-gravity":
+        raise ValueError(f"{track} is not an IMU track")
+    odometry = [
+        "-p",
+        "wait_imu_to_init:=true",
+        "-p",
+        "Odom/AlignWithGround:='false'",
+        "-r",
+        "imu:=/imu/data",
+    ]
+    rtabmap = [
+        "-p",
+        "Optimizer/GravitySigma:='0.3'",
+        "-p",
+        "Mem/UseOdomGravity:='false'",
+        "-r",
+        "imu:=/imu/data",
+    ]
+    orientation_filter = [
+        ros2,
+        "run",
+        ORIENTATION_FILTER,
+        "imu_filter_madgwick_node",
+        "--ros-args",
+        *[
+            item
+            for name, value in ORIENTATION_FILTER_PARAMETERS.items()
+            for item in ["-p", f"{name}:={value}"]
+        ],
+        "-r",
+        "imu/data_raw:=/imu/data_raw",
+        "-r",
+        "imu/data:=/imu/data",
+    ]
+    return odometry, rtabmap, [orientation_filter], None
+
+
+def shutdown_status(command, code):
+    """What one estimator process's exit code means after the runner's SIGINT.
+
+    `ros2 run` exits with 256 - n when its child dies on signal n; Popen gives -n
+    for a process it started that died on a signal. Reported, never retried: a
+    crash during replay already fails the run, and one after SIGINT is stated
+    here while pass or fail is decided from the outputs.
+    """
+    signum = -code if code is not None and code < 0 else None
+    if code is not None and 192 < code < 256:
+        signum = 256 - code
+    if code == 0:
+        meaning = "clean exit"
+    elif signum is not None:
+        try:
+            name = signal.Signals(signum).name
+        except ValueError:
+            name = f"signal {signum}"
+        meaning = "stopped by the runner's SIGINT" if signum == signal.SIGINT else (
+            f"crashed on {name} after the runner's SIGINT (teardown)"
+        )
+    elif code is None:
+        meaning = "did not exit"
+    else:
+        meaning = f"nonzero exit {code} after the runner's SIGINT"
+    return {
+        "node": command[3] if len(command) > 3 else command[0],
+        "exitCode": code,
+        "meaning": meaning,
+        "teardownCrash": code not in (0, None) and signum not in (None, signal.SIGINT),
+    }
+
+
+def rtabmap_openvins_linkage(ros_env):
+    """Resolved rtabmap core and OpenVINS libraries of the env's rgbd_odometry.
+
+    Raises when rgbd_odometry does not load libov_msckf_lib.so: a RTAB-Map built
+    without OpenVINS would refuse Odom/Strategy 10 at run time.
+    """
+    binary = (ros_env / "lib/rtabmap_odom/rgbd_odometry").resolve()
+    lines = subprocess.run(
+        ["ldd", str(binary)], capture_output=True, text=True, check=True
+    ).stdout.splitlines()
+    resolved = {
+        name: path
+        for name, _, path in (
+            line.split()[:3] for line in lines if "=>" in line and len(line.split()) >= 3
+        )
+    }
+    core = next((p for n, p in resolved.items() if n.startswith("librtabmap_core.so")), None)
+    if "libov_msckf_lib.so" not in resolved or core is None:
+        raise ValueError(
+            "rgbd_odometry in this ros-env does not load OpenVINS; the "
+            f"{OPENVINS_TRACK} track needs RTAB-Map built WITH_OPENVINS"
+        )
+    return {"rgbdOdometry": str(binary), "rtabmapCore": core, "ovMsckf": resolved["libov_msckf_lib.so"]}
 
 
 def main():
@@ -293,7 +478,7 @@ def main():
         if package_version(args.ros_env, "rtabmap_odom") != rtabmap_version:
             raise ValueError("rtabmap_odom and rtabmap_slam versions differ")
     imu_track = args.rtabmap_track in IMU_TRACKS
-    imu_plan = imu_receipt = None
+    imu_plan = imu_receipt = openvins_receipt = None
     if imu_track:
         if args.estimator != "rtabmap" or args.imu_inputs is None:
             raise ValueError("The IMU track needs --estimator rtabmap and --imu-inputs")
@@ -302,6 +487,42 @@ def main():
         imu_samples, imu_receipt = sealed_imu(args.imu_inputs, manifest, frames)
         imu_plan, imu_stamping = imu_messages(frames, imu_samples, args.imu_settle_seconds)
         imu_receipt.update(imu_stamping)
+    if args.rtabmap_track == OPENVINS_TRACK:
+        if len({f["calibration"]["near"] for f in frames}) != 1:
+            raise ValueError("The depth mask needs one calibration near plane per scene")
+        openvins_noise_values, noise_source = openvins_noise(
+            imu_receipt["declaredNoise"], imu_receipt["rateHz"]
+        )
+        openvins_receipt = {
+            "mode": "monocular: one camera, OdomOpenVINS/UseStereo false",
+            "depthUse": "feature mask only (Vis/DepthAsMask): features where registered "
+            "depth >= Vis/MinDepth (calibration near); depth is not a filter measurement",
+            "scale": "metric scale from the IMU",
+            "extrinsics": "IMU at the body origin (messages in base_link); camera from the "
+            "base_link->camera_optical static transform; not calibrated online",
+            "initialization": "OpenVINS static initializer (RTAB-Map defaults); needs the "
+            "settled IMU stream to start stationary",
+            "noise": openvins_noise_values,
+            "noiseSource": noise_source,
+            "ovMsckfPackageVersion": package_version(args.ros_env, "ov_msckf"),
+            "linkage": rtabmap_openvins_linkage(args.ros_env),
+            "rtabmapGraph": "unchanged from rgbd-vo (no IMU or gravity links in rtabmap)",
+        }
+        imu_receipt.update(
+            messageFrame="base_link",
+            imuToBody="identity: samples are body FLU specific force (m/s^2) and rate (rad/s)",
+            rawTopic="/imu/data_raw",
+            consumedTopic="/imu/data_raw (no orientation filter)",
+            rawOrientation="all-zero quaternion, orientation_covariance[0] = -1",
+            rawVectorCovariances="all zero; OpenVINS uses OdomOpenVINS/* noise instead",
+            publishTiming="each frame's messages, measurement times in (previous frame, "
+            "frame], published back-to-back immediately before that frame's images",
+            rtabmapImuUse=[
+                "rgbd_odometry OpenVINS propagation and updates (Odom/Strategy 10)",
+                "rgbd_odometry waits for IMU before the first image (wait_imu_to_init)",
+            ],
+        )
+    elif imu_track:
         if not (args.ros_env / "share" / ORIENTATION_FILTER / "package.xml").exists():
             raise ValueError(
                 f"{ORIENTATION_FILTER} is not in the pinned ros-env. rtabmap_odom and "
@@ -443,44 +664,17 @@ def main():
             ]
         )
     if imu_track:
-        commands[1].extend(
-            [
-                "-p",
-                "wait_imu_to_init:=true",
-                "-p",
-                "Odom/AlignWithGround:='false'",
-                "-r",
-                "imu:=/imu/data",
-            ]
+        odometry_args, rtabmap_args, added_nodes, odometry_parameters = imu_track_arguments(
+            args.rtabmap_track,
+            ros2,
+            mount,
+            openvins_receipt["noise"] if openvins_receipt else None,
         )
-        commands[2].extend(
-            [
-                "-p",
-                "Optimizer/GravitySigma:='0.3'",
-                "-p",
-                "Mem/UseOdomGravity:='false'",
-                "-r",
-                "imu:=/imu/data",
-            ]
-        )
-        commands.append(
-            [
-                ros2,
-                "run",
-                ORIENTATION_FILTER,
-                "imu_filter_madgwick_node",
-                "--ros-args",
-                *[
-                    item
-                    for name, value in ORIENTATION_FILTER_PARAMETERS.items()
-                    for item in ["-p", f"{name}:={value}"]
-                ],
-                "-r",
-                "imu/data_raw:=/imu/data_raw",
-                "-r",
-                "imu/data:=/imu/data",
-            ]
-        )
+        commands[1].extend(odometry_args)
+        commands[2].extend(rtabmap_args)
+        commands.extend(added_nodes)
+        if openvins_receipt:
+            openvins_receipt["odometryParameters"] = odometry_parameters
     if args.estimator == "stella":
         if args.vocabulary is None:
             raise ValueError("stella requires a pinned vocabulary file")
@@ -797,6 +991,7 @@ def main():
             log.close()
         node.destroy_node()
         rclpy.shutdown()
+    shutdown = [shutdown_status(c, p.returncode) for c, p in zip(commands, processes)]
     receipt = {
         "schema": 1,
         "estimator": f"RTAB-Map{rtabmap_version}"
@@ -814,6 +1009,7 @@ def main():
         "imuRateHz": imu_receipt["rateHz"] if imu_track else None,
         "imuStampConvention": IMU_STAMP_CONVENTION if imu_track else None,
         "imu": {**imu_receipt, **imu_published_fields(imu_published)} if imu_track else None,
+        "openvins": openvins_receipt,
         "inputSha256": digest(raw),
         "inputFormat": json.loads(raw).get("format"),
         "framesExpected": len(frames),
@@ -850,6 +1046,11 @@ def main():
         "rosEnvironment": str(args.ros_env.resolve()),
         "rtabmapPackageVersion": rtabmap_version,
         "exitCodes": [p.returncode for p in processes],
+        "shutdown": shutdown,
+        "teardownCrash": any(s["teardownCrash"] for s in shutdown),
+        "passFailBasis": "failure below, from the replay and its outputs; a crash during "
+        "replay fails the run, a teardown crash after SIGINT is stated in shutdown and "
+        "does not by itself fail it; no process is retried",
         "failure": failure,
     }
     for name, data in [
