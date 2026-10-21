@@ -16,7 +16,7 @@ function fixture(){
   const classes=[{source:'models/Example.mo',destination:'SLAM/Example.mo',qualified_name:'SLAM.Example'}];
   write(path.join(upstream,'tools/slam/source-manifest.json'),JSON.stringify({classes}));
   execFileSync('git',['-C',upstream,'add','.']);
-  execFileSync('git',['-C',upstream,'-c','commit.gpgsign=false','commit','-s','-m','Add source manifest'],{stdio:'ignore',env:{...process.env,GIT_AUTHOR_NAME:'James Goppert',GIT_AUTHOR_EMAIL:'james.goppert@gmail.com',GIT_COMMITTER_NAME:'James Goppert',GIT_COMMITTER_EMAIL:'james.goppert@gmail.com'}});
+  execFileSync('git',['-C',upstream,'-c','commit.gpgsign=false','commit','-s','-m','Add source manifest'],{stdio:'ignore',env:{...process.env,GIT_AUTHOR_NAME:'Test User',GIT_AUTHOR_EMAIL:'test@example.com',GIT_COMMITTER_NAME:'Test User',GIT_COMMITTER_EMAIL:'test@example.com'}});
   const revision=execFileSync('git',['-C',upstream,'rev-parse','HEAD'],{encoding:'utf8'}).trim();
   const source=`// Generated from CogniPilot/modelica_models ${revision}\nmodel Example end Example;\n`;
   const receipt={repository:'https://github.com/CogniPilot/modelica_models',revision,generated:true,license:'Apache-2.0',sources:{'models/Example.mo':hash(source)},canonical_classes:classes};

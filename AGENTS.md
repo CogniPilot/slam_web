@@ -10,7 +10,7 @@ path into portable sources.
 
 # Commits in this checkout
 
-Use `James Goppert <james.goppert@gmail.com>` as the Git author and committer.
+Commit under your own Git identity.
 Create every commit with `git commit -s` so it includes the matching DCO
 `Signed-off-by` trailer. Do not add AI co-author or AI attribution trailers.
 Use neutral branch names and commit messages without assistant or tool branding.
