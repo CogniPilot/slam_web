@@ -134,6 +134,68 @@ export class WorldMaterials {
       return new THREE.MeshStandardMaterial({map:texture,roughness:.58});
     });
   }
+  hallwayTiles(ceiling:boolean,length:number,width:number) {
+    const key=`hallway-tiles:${ceiling}:${length}:${width}`;
+    return this.material(key,()=>{
+      const size=128,canvas=createWorldCanvas(size,size),ctx=canvasContext(canvas),pixels=ctx.createImageData(size,size);
+      for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+        const edge=x<2||y<2,perforation=ceiling&&x%9===4&&y%9===4;
+        const base=edge?(ceiling?144:104):perforation?160:ceiling?218:177;
+        const value=base+(grain(x,y,ceiling?87:31)-.5)*(ceiling?7:13),i=(y*size+x)*4;
+        pixels.data.set([value+(ceiling?0:7),value+(ceiling?0:4),value,255],i);
+      }
+      ctx.putImageData(pixels,0,0);
+      const texture=this.cacheTexture(key,canvas,true,true);texture.repeat.set(length/.6,width/.6);
+      return new THREE.MeshStandardMaterial({map:texture,roughness:ceiling?.97:.73});
+    });
+  }
+  hallwayLamp(){return this.material('hallway-lamp',()=>new THREE.MeshStandardMaterial({color:0xe9e7d9,emissive:0xfff4d9,emissiveIntensity:.65,roughness:.6}));}
+  hallwayNotice(id:number) {
+    return this.material(`hallway-notice:${id}`,()=>{
+      const canvas=createWorldCanvas(160,160),ctx=canvasContext(canvas);
+      const colors=['#806449','#526e70','#79667a','#8a824f','#556851','#946f60'];
+      ctx.fillStyle=colors[id%colors.length];ctx.fillRect(0,0,160,160);
+      ctx.fillStyle='#e1d4b5';ctx.globalAlpha=.75;
+      for(let i=0;i<4;i++){
+        const x=15+grain(i,8,id)*110,y=18+grain(i,9,id)*105;
+        if((id+i)%2){ctx.beginPath();ctx.arc(x,y,8+grain(i,10,id)*23,0,Math.PI*2);ctx.fill();}
+        else ctx.fillRect(x,y,12+grain(i,11,id)*42,5+grain(i,12,id)*25);
+      }
+      ctx.globalAlpha=1;ctx.fillStyle='#273538';ctx.fillRect(0,136,160,24);
+      ctx.fillStyle='#ded6bf';ctx.font='12px sans-serif';ctx.textAlign='center';
+      ctx.fillText(['STUDIO','ARCHIVE','EXHIBIT','WORKSHOP'][id%4]+' '+String(id+1),80,152);
+      const texture=this.cacheTexture(`hallway-notice:${id}`,canvas,false,true);
+      return new THREE.MeshStandardMaterial({map:texture,roughness:.9});
+    });
+  }
+  wallMarkings(id:number,cells:readonly number[]) {
+    return this.material(`hallway-wall:${id}:${cells.join('')}`,()=>{
+      const size=256,canvas=createWorldCanvas(size,size),ctx=canvasContext(canvas);
+      const pixels=ctx.createImageData(size,size);
+      for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+        const mottle=grain(Math.floor(x/24),Math.floor(y/29),id)*14;
+        const noise=(grain(x,y,id+53)-.5)*13,offset=(y*size+x)*4;
+        pixels.data.set([193+mottle+noise,188+mottle+noise,173+mottle+noise,255],offset);
+      }
+      ctx.putImageData(pixels,0,0);
+      // Borderless worn paint, not a sign, panel, or encoded fiducial.
+      const palette=['#334c50','#8e6746','#626b55','#55535d'];
+      for(let i=0;i<64;i++)if(cells[i]){
+        const x=(i%8+.1+grain(i,0,id)*.7)*32,y=(Math.floor(i/8)+.1)*32;
+        const width=12+grain(i,1,id)*33,height=9+grain(i,2,id)*30;
+        ctx.globalAlpha=.22+grain(i,3,id)*.42;ctx.fillStyle=palette[(id+i)%palette.length];
+        ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+width,y+3);ctx.lineTo(x+width*.8,y+height);ctx.lineTo(x-5,y+height*.7);ctx.closePath();ctx.fill();
+      }
+      // Abraded patches expose plaster; scratches remain deterministic on return.
+      for(let i=0;i<160;i++){
+        ctx.globalAlpha=.08+grain(i,7,id)*.2;ctx.fillStyle='#d5cdb8';
+        ctx.fillRect(grain(i,4,id)*size,grain(i,5,id)*size,1+grain(i,6,id)*12,1);
+      }
+      ctx.globalAlpha=1;
+      const texture=this.cacheTexture(`hallway-wall:${id}`,canvas,false,true);
+      return new THREE.MeshStandardMaterial({map:texture,roughness:.95});
+    });
+  }
   private material(key:string,create:()=>THREE.MeshStandardMaterial) {
     let result=this.materials.get(key);if(!result){result=create();this.materials.set(key,result);}return result;
   }

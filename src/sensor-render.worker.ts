@@ -56,7 +56,7 @@ async function configure(message:Message) {
   }
   if(message.depthNoise!==undefined){await world.setDepthNoise(message.depthNoise);candidate.depthNoise={...message.depthNoise};}
   if(message.environment!==undefined){
-    if(!['city','warehouse','courtyard','tokyo','asset-city','big-city'].includes(message.environment))throw new Error('Unknown sensor environment');
+    if(!['city','warehouse','courtyard','tokyo','asset-city','big-city','hallway','hallway-marked','office-loop'].includes(message.environment))throw new Error('Unknown sensor environment');
     candidate.environment=message.environment;
   }
   if(message.detail!==undefined){

@@ -27,5 +27,5 @@ export interface Estimate extends Pose {
     edges:{from:number;to:number;kind:'loop'|'odometry';id?:number;similarity?:number}[]};
 }
 export interface RunRecord { frame: SensorFrame; truth?: Truth; command: Command; estimate: Estimate }
-export type Environment = 'city' | 'warehouse' | 'courtyard' | 'tokyo' | 'asset-city' | 'big-city';
+export type Environment = 'city' | 'warehouse' | 'courtyard' | 'tokyo' | 'asset-city' | 'big-city' | 'hallway' | 'hallway-marked' | 'office-loop';
 export type SceneDetail='low'|'medium'|'high';

@@ -3,6 +3,7 @@ import {GLTFLoader,type GLTF} from 'three/addons/loaders/GLTFLoader.js';
 import {afterEach,expect,it,vi} from 'vitest';
 import {WorldActors} from '../src/world-actors';
 import {World} from '../src/world';
+import {ViewerCutaway} from '../src/viewer-cutaway';
 import type {ActorMotionFrame,ActorMotionVector} from '../src/modelica-actor-motion';
 
 afterEach(()=>vi.restoreAllMocks());
@@ -34,6 +35,7 @@ it('interpolates actor arrivals even when drone physics has advanced beyond the 
     lighting:{setMode:vi.fn(),invalidateShadows:vi.fn()},lastShadowTime:0,currentEnvironment:'city',
     controls:{update:vi.fn(),target:new THREE.Vector3()},viewerCamera:{update:vi.fn()},
     renderer:{setRenderTarget:vi.fn(),render:vi.fn()},scene:new THREE.Scene(),view:new THREE.PerspectiveCamera(),
+    environment:new THREE.Group(),viewerCutaway:false,cutaway:new ViewerCutaway(),
   });
   wall=1025;world.render(true);
   const car=model.group.getObjectByName('traffic-car-1')!;

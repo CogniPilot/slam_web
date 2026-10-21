@@ -134,7 +134,7 @@ export function parseProject(text: string): Project {
     if(p.mainSourcePath&&Object.hasOwn(p.modelicaSources,p.mainSourcePath))throw new Error('Main source must not be duplicated in the library');
   }
   if(p.runtime!=='modelica'||p.detectorLanguage!=='modelica'||p.graph?.nodes?.some((n:any)=>n.kind==='python'))throw new Error('This project uses a retired runtime. Convert its algorithm, detector and custom nodes to Modelica before opening it. Your saved source has not been changed.');
-  if(!['city','warehouse','courtyard','tokyo','asset-city','big-city'].includes(p.environment)||!Number.isInteger(p.seed)) throw new Error('Invalid project settings');
+  if(!['city','warehouse','courtyard','tokyo','asset-city','big-city','hallway','hallway-marked','office-loop'].includes(p.environment)||!Number.isInteger(p.seed)) throw new Error('Invalid project settings');
   if(p.sceneDetail!==undefined&&!['low','medium','high'].includes(p.sceneDetail))throw new Error('Invalid scene detail level');
   if(p.cameraResolution!==undefined&&!D435_PAIRED_RESOLUTIONS.some(mode=>mode.id===p.cameraResolution))throw new Error('Invalid D435 camera resolution');
   if(p.vehicleCount!==undefined&&p.vehicleCount!==1&&p.vehicleCount!==2)throw new Error('Vehicle count must be one or two');
