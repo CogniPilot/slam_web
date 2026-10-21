@@ -9,6 +9,8 @@ const wallStart = performance.now();
 if (!outputDirectory) throw Error('Usage: register-slam-comparison.mjs INPUTS CAPTURE NEW_OUTPUT');
 const input = resolve(inputDirectory), capture = resolve(captureDirectory), output = resolve(outputDirectory);
 const sha = b => createHash('sha256').update(b).digest('hex');
+// Scene ids are sealed by prepare-slam-comparison.mjs and also name output folders.
+const SCENE_ID = /^[a-z][a-z0-9-]{0,31}$/;
 const raw = await readFile(join(input, 'sensors.json'));
 const manifest = JSON.parse(await readFile(join(input, 'manifest.json')));
 if (sha(raw) !== manifest.sensorsSha256) throw Error('Sealed sensor manifest hash mismatch');
@@ -19,7 +21,7 @@ const rows = [], timings = [], frameTimings = [];
 let valid = 0, pixels = 0;
 for (const frame of sensors.sensorFrames) {
   const frameStart = performance.now();
-  if (!['city', 'warehouse'].includes(frame.scene) || !Number.isSafeInteger(frame.index) || frame.index < 0)
+  if (typeof frame.scene !== 'string' || !SCENE_ID.test(frame.scene) || !Number.isSafeInteger(frame.index) || frame.index < 0)
     throw Error('Invalid frame identity');
   const sourceBytes = {};
   for (const kind of ['rgb', 'depth']) {

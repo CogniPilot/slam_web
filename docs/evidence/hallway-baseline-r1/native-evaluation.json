@@ -1,0 +1,173 @@
+{
+  "schema": 1,
+  "receipt": {
+    "schema": 1,
+    "startedAt": "2026-10-20T03:44:03.989Z",
+    "scene": "hallway",
+    "framesExpected": 3001,
+    "framesCompleted": 3001,
+    "mode": "unpaced sequential sensor replay; source timestamps and captured IMU intervals preserved",
+    "workerSha256": "dcccc22429566cfdeb430332e1b523d90b04ce97089a73404ace14aa158a54aa",
+    "sourceSha256": "843d316165385fdcb5c64784d822fd669e9b2311ec5df0a22b74ddf097d4e868",
+    "clientBundleSha256": "72a70a721a2cf37b03dba16520be708a21dc55b7154c11762d45596d116d6ad7",
+    "configurationSha256": "41b4642fde2cf66ab22e65cb1af64f80af60a00265dfd243ac5fe499f31f3ea6",
+    "sensorMetadataSha256": "645b63473e27b0959743f6950525f192f0691ce34c8f39ff00d82277d0d1a9f4",
+    "runtime": "research-instrumented Chromium Web Worker, production ModelicaSlamClient",
+    "researchInstrumentation": {
+      "baseWorkerSha256": "90db19412d5c7068a9d3f1a1565292fcc4adf272433b86d257ff9bfce820734b",
+      "sources": [
+        {
+          "file": "modelica-slam.worker.ts",
+          "originalSha256": "95f80d459752b01d82d3da207c1ef70cd3ca059bee281ef267d9871f7dd75af0",
+          "instrumentedSha256": "31e0a5ff218b8f5fa47aeaa8ae4362ddfe01a8de55501e8fdabc7a53ece2619f"
+        },
+        {
+          "file": "slam-native-program.ts",
+          "originalSha256": "a2a8246f94ba7d9aa94a68f0045a1410ba7321346b20bb4933740766b96daf18",
+          "instrumentedSha256": "f77d47bc306ba48cc7d632b1353326e61a1bd75d770069894f573be27ef95e6b"
+        }
+      ],
+      "scope": "Current source host worker with boundary clocks. Exact cached Modelica WASM and configuration retained. Carry and entry are nested inside native step; worker and RPC times include them and must not be added. Includes timer/log overhead. Not a published-worker timing result."
+    },
+    "chromiumVersion": "154.0.8037.92",
+    "wallSeconds": 535.0176522549999,
+    "steadyStateRoundTripMs": {
+      "p50": 69.5,
+      "p95": 79,
+      "p99": 89.10000014305115
+    },
+    "initializationMs": 780.2999999523163,
+    "sampledPeakRssKiB": 3280328,
+    "sampledPeakThreads": 108,
+    "sampledCpuSeconds": 396.19,
+    "cpuAffinity": "6,7",
+    "resourceScope": "Chromium browser and all descendants including renderer/worker; replay Node/server excluded; no scene rendering or physics",
+    "failure": null
+  },
+  "poseMetrics": {
+    "matched": 3001,
+    "expected": 3001,
+    "coverage": 1.0,
+    "initialPoseAlignedAteRmseMeters": 14.224594759065845,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 8.481793129484807,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9998094020750415,
+        -0.01944914277258021,
+        -0.0017001081612456942
+      ],
+      [
+        -0.0030004364062579864,
+        -0.06702542840207042,
+        -0.9977467561104325
+      ],
+      [
+        0.019291368632633223,
+        0.9975616887155054,
+        -0.06707100941054288
+      ]
+    ],
+    "alignmentTranslation": [
+      1.8852966440723975,
+      0.6446619772445673,
+      -11.07572854619561
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 3000,
+    "rpeTranslationRmseMeters": 0.08028599192150271,
+    "rpeRotationRmseRadians": 0.0038600182872578098
+  },
+  "visualPoseMetrics": {
+    "matched": 1344,
+    "expected": 3001,
+    "coverage": 0.4478507164278574,
+    "initialPoseAlignedAteRmseMeters": 14.255269694105264,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 8.49096687944522,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9998054001232182,
+        -0.019653696254750348,
+        -0.0017012077996335416
+      ],
+      [
+        -0.0023517904376193074,
+        -0.03312676520229168,
+        -0.9994483911183054
+      ],
+      [
+        0.01958649958999934,
+        0.9992578994687801,
+        -0.03316654011278083
+      ]
+    ],
+    "alignmentTranslation": [
+      1.8894156344154993,
+      0.21972242226013916,
+      -11.1522635113229
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 0,
+    "rpeTranslationRmseMeters": null,
+    "rpeRotationRmseRadians": null
+  },
+  "lastAvailablePose": {
+    "time": 600,
+    "positionErrorMeters": 34.29060058751925,
+    "orientationErrorRadians": 0.3835934018524808,
+    "scope": "Last available pose after rigid initial-pose alignment; not proof of return localization or complete mission"
+  },
+  "mapRetention": {
+    "uniqueObservedKeyframeIds": 10,
+    "maxRetainedKeyframes": 10,
+    "earlyPlaceDefinition": "reference acquisition <=60s, proposal observed >=300s",
+    "verifiedEarlyProposals": [],
+    "scope": "Candidate verification diagnostics only; graph acceptance and independent false-closure validation remain required"
+  },
+  "maxPositionDifferenceFromOriginalMeters": null,
+  "visualObservationAcceptedFrames": 1344,
+  "scope": "research-instrumented Chromium Web Worker, production ModelicaSlamClient; scene rendering/physics excluded; initializer separate",
+  "hostStageBreakdown": {
+    "frames": 3000,
+    "percentiles": {
+      "roundTripMs": {
+        "p50": 69.5,
+        "p95": 79.0049999952316,
+        "p99": 89.10100014209745
+      },
+      "workerMs": {
+        "p50": 68.95000004768372,
+        "p95": 78.40000009536743,
+        "p99": 88.10499990701663
+      },
+      "entryMs": {
+        "p50": 68.29999995231628,
+        "p95": 77.79999995231628,
+        "p99": 87.20600004911408
+      },
+      "carryMs": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.09999990463256836
+      }
+    },
+    "totals": {
+      "roundTripMs": 209852.6000008583,
+      "workerMs": 208237.8000061512,
+      "entryMs": 206319.00000047684,
+      "carryMs": 3.299999475479126,
+      "carryBytes": 0
+    },
+    "scope": "Entry and carry are nested inside native step, worker and round trip; do not add nested intervals. Entry includes internal compiled state handling. Research instrumentation overhead included."
+  },
+  "postInitializationLatencyMs": {
+    "p50": 69.5,
+    "p95": 79.0049999952316,
+    "p99": 89.10100014209745
+  },
+  "postInitializationLatencySamples": 3000,
+  "percentileMethod": "NumPy linear interpolation"
+}

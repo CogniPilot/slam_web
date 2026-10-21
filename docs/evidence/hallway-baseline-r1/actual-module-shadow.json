@@ -1,0 +1,78 @@
+{
+  "parityFrames": 201,
+  "excludedFields": [
+    "diagnostics.stepMsMax",
+    "diagnostics.stepMsTotal"
+  ],
+  "scope": "Independent shadow instance of the exact archived step WASM. Each selected call receives a byte-for-byte copy of the live instance memory; only graphCorrectionRequested is zeroed in shadow. Shadow output never enters the actual run. Finite selected-event diagnostic, not a repair or full600s cause proof.",
+  "cases": [
+    {
+      "epoch": 6,
+      "time": 1.2,
+      "graphCorrectionAccepted": 1,
+      "nuisanceVarianceRatios": [
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0
+      ],
+      "nuisanceMeansExactlyEqual": true
+    },
+    {
+      "epoch": 31,
+      "time": 6.2,
+      "graphCorrectionAccepted": 1,
+      "nuisanceVarianceRatios": [
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0
+      ],
+      "nuisanceMeansExactlyEqual": true
+    },
+    {
+      "epoch": 109,
+      "time": 21.8,
+      "graphCorrectionAccepted": 1,
+      "nuisanceVarianceRatios": [
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0
+      ],
+      "nuisanceMeansExactlyEqual": true
+    },
+    {
+      "epoch": 191,
+      "time": 38.2,
+      "graphCorrectionAccepted": 1,
+      "nuisanceVarianceRatios": [
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0
+      ],
+      "nuisanceMeansExactlyEqual": true
+    }
+  ]
+}

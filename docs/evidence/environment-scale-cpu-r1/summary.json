@@ -1,0 +1,372 @@
+{
+  "status": "CPU research only; no mission-scale SLAM or replacement result",
+  "recordedAt": "2026-10-20T03:38:06.649778+00:00",
+  "sourceBase": "d546e6881f7a2df010052168575fd8a5bb9210a2",
+  "host": {
+    "cpu": "AMD Ryzen 9 5950X 16-Core Processor",
+    "logicalCpus": 32,
+    "affinity": "2,3",
+    "governor": "powersave",
+    "node": "v22.23.3",
+    "sharedMachine": true
+  },
+  "method": {
+    "freshProcessesPerCase": 5,
+    "order": "Within each sweep rotate [32graph,matching,64graph,128graph] or [64bow,256bow,512bow,1000bow] left by repeatIndex modulo4",
+    "graphMatchingWarmup": 30,
+    "graphMatchingSamples": 50,
+    "bowWarmup": 30,
+    "bowSamples": 100,
+    "quantiles": "linear interpolation within each process; report median p50 and range of p95s, do not pool",
+    "concurrency": "Kernel timing processes serialized. Other machine work continued. An owned Vite production build overlapped part of the BoW sweep; all observations are retained."
+  },
+  "compiler": {
+    "version": "0.10.3",
+    "git_commit": "5c68a1c67524",
+    "git_merge_parents": [
+      "ad00214a2294",
+      "383d0f6da6cc"
+    ]
+  },
+  "cases": [
+    {
+      "kernel": "bow64",
+      "scenario": "queryWords8",
+      "linearMemoryBytes": 1835008,
+      "p50MedianMs": 16.519754000000034,
+      "p95RangeMs": [
+        14.71446304999996,
+        26.220916600000116
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "retrievalValid": 1,
+        "assignmentCount": 350,
+        "candidateCount": 3,
+        "invalidHistoryCount": 0
+      },
+      "sourceSha256": "e83bde8590c6d151a4f4de41423a2c82620e8d48bcdf0ea9f08985919ff2785f",
+      "moduleSha256": "ba678b03406c9385e38ec419f863ea697b559e2291982978904bdf3ecb4425f1"
+    },
+    {
+      "kernel": "bow64",
+      "scenario": "queryWords256",
+      "linearMemoryBytes": 1835008,
+      "p50MedianMs": 16.84850150000034,
+      "p95RangeMs": [
+        14.756220550000126,
+        32.56961234999989
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "retrievalValid": 1,
+        "assignmentCount": 350,
+        "candidateCount": 0,
+        "invalidHistoryCount": 0
+      },
+      "sourceSha256": "e83bde8590c6d151a4f4de41423a2c82620e8d48bcdf0ea9f08985919ff2785f",
+      "moduleSha256": "ba678b03406c9385e38ec419f863ea697b559e2291982978904bdf3ecb4425f1"
+    },
+    {
+      "kernel": "bow256",
+      "scenario": "queryWords8",
+      "linearMemoryBytes": 4980736,
+      "p50MedianMs": 18.592735000000005,
+      "p95RangeMs": [
+        15.430565049999979,
+        30.848212550000323
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "retrievalValid": 1,
+        "assignmentCount": 350,
+        "candidateCount": 4,
+        "invalidHistoryCount": 0
+      },
+      "sourceSha256": "552699af75124687f78af111752f7896d75a852c2388b8a71eaba3d999c42e20",
+      "moduleSha256": "b495cb0a06df35299e0e8ecde3d673a11dfd52687e5996042aad2b449c63d496"
+    },
+    {
+      "kernel": "bow256",
+      "scenario": "queryWords256",
+      "linearMemoryBytes": 4980736,
+      "p50MedianMs": 17.9211765,
+      "p95RangeMs": [
+        15.48177349999994,
+        30.702695049999896
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "retrievalValid": 1,
+        "assignmentCount": 350,
+        "candidateCount": 0,
+        "invalidHistoryCount": 0
+      },
+      "sourceSha256": "552699af75124687f78af111752f7896d75a852c2388b8a71eaba3d999c42e20",
+      "moduleSha256": "b495cb0a06df35299e0e8ecde3d673a11dfd52687e5996042aad2b449c63d496"
+    },
+    {
+      "kernel": "bow512",
+      "scenario": "queryWords8",
+      "linearMemoryBytes": 9240576,
+      "p50MedianMs": 18.002376500000082,
+      "p95RangeMs": [
+        16.482984049999935,
+        37.132114000000115
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "retrievalValid": 1,
+        "assignmentCount": 350,
+        "candidateCount": 4,
+        "invalidHistoryCount": 0
+      },
+      "sourceSha256": "85cb6e6804e01f4151589ab3a832c7108d3fa9ae42868fe80e67a74020f903cb",
+      "moduleSha256": "e71507d44c9c9f9c8e6fbd6dd1250fdbae3d91d264227f3b73676e273c5d7244"
+    },
+    {
+      "kernel": "bow512",
+      "scenario": "queryWords256",
+      "linearMemoryBytes": 9240576,
+      "p50MedianMs": 17.34655850000013,
+      "p95RangeMs": [
+        16.59314999999997,
+        23.79959050000007
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "retrievalValid": 1,
+        "assignmentCount": 350,
+        "candidateCount": 0,
+        "invalidHistoryCount": 0
+      },
+      "sourceSha256": "85cb6e6804e01f4151589ab3a832c7108d3fa9ae42868fe80e67a74020f903cb",
+      "moduleSha256": "e71507d44c9c9f9c8e6fbd6dd1250fdbae3d91d264227f3b73676e273c5d7244"
+    },
+    {
+      "kernel": "bow1000",
+      "scenario": "queryWords8",
+      "linearMemoryBytes": 17301504,
+      "p50MedianMs": 23.416378000000122,
+      "p95RangeMs": [
+        18.52088855000004,
+        42.251706749999876
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "retrievalValid": 1,
+        "assignmentCount": 350,
+        "candidateCount": 4,
+        "invalidHistoryCount": 0
+      },
+      "sourceSha256": "6da1f9fc30f5e8c15c8532fbfcd16fbee8ef9d0cf3200c6f7affbdea4324ab39",
+      "moduleSha256": "bd0774779d09f733c342ff239681120122f47b2a30f4e2f18fc851f269686544"
+    },
+    {
+      "kernel": "bow1000",
+      "scenario": "queryWords256",
+      "linearMemoryBytes": 17301504,
+      "p50MedianMs": 25.17619599999989,
+      "p95RangeMs": [
+        18.564713500000245,
+        41.656468049999695
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "retrievalValid": 1,
+        "assignmentCount": 350,
+        "candidateCount": 0,
+        "invalidHistoryCount": 0
+      },
+      "sourceSha256": "6da1f9fc30f5e8c15c8532fbfcd16fbee8ef9d0cf3200c6f7affbdea4324ab39",
+      "moduleSha256": "bd0774779d09f733c342ff239681120122f47b2a30f4e2f18fc851f269686544"
+    },
+    {
+      "kernel": "matching",
+      "scenario": "full-350",
+      "linearMemoryBytes": 786432,
+      "p50MedianMs": 25.024181,
+      "p95RangeMs": [
+        25.051241499999993,
+        25.776624050000066
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "invalidReference": 0,
+        "invalidCurrent": 0,
+        "count": 350
+      },
+      "sourceSha256": "eb58f9f5a5421b853bd7658be11a71343246a2ae7eabed6a5d34af2b76866cd0",
+      "moduleSha256": "8b8f81d6a35fe8143509d75a7815d653c8f6ce9bbe2fff4cd9d2a0eb2cdd0128"
+    },
+    {
+      "kernel": "matching",
+      "scenario": "active-100",
+      "linearMemoryBytes": 786432,
+      "p50MedianMs": 2.2838659999997617,
+      "p95RangeMs": [
+        2.3012589499999194,
+        2.4561200000001007
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "configurationValid": 1,
+        "invalidReference": 0,
+        "invalidCurrent": 0,
+        "count": 100
+      },
+      "sourceSha256": "eb58f9f5a5421b853bd7658be11a71343246a2ae7eabed6a5d34af2b76866cd0",
+      "moduleSha256": "8b8f81d6a35fe8143509d75a7815d653c8f6ce9bbe2fff4cd9d2a0eb2cdd0128"
+    },
+    {
+      "kernel": "graph32",
+      "scenario": "consistent-chain",
+      "linearMemoryBytes": 262144,
+      "p50MedianMs": 0.2462459999999993,
+      "p95RangeMs": [
+        0.27691554999999896,
+        3.1810555500000066
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "status": 1,
+        "costBefore": 0,
+        "costAfter": 0,
+        "acceptedIterations": 0,
+        "pcgIterations": 0,
+        "activeNodes": 32,
+        "activeEdges": 31
+      },
+      "sourceSha256": "88147eb026ee90fd5d76005c235776f44acea98e42bdfbfde727bf7b00942870",
+      "moduleSha256": "f18e65ce8cf1c5d55d000dd127b9cab6e1a6c34a209571ef606459dd1641792f"
+    },
+    {
+      "kernel": "graph32",
+      "scenario": "drifted-chain-loop",
+      "linearMemoryBytes": 262144,
+      "p50MedianMs": 9.335414999999955,
+      "p95RangeMs": [
+        9.350576000000014,
+        9.43492754999997
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "status": 2,
+        "costBefore": 0.049599999999999596,
+        "costAfter": 3.398327397781255e-15,
+        "acceptedIterations": 4,
+        "pcgIterations": 234,
+        "activeNodes": 32,
+        "activeEdges": 32
+      },
+      "sourceSha256": "88147eb026ee90fd5d76005c235776f44acea98e42bdfbfde727bf7b00942870",
+      "moduleSha256": "f18e65ce8cf1c5d55d000dd127b9cab6e1a6c34a209571ef606459dd1641792f"
+    },
+    {
+      "kernel": "graph64",
+      "scenario": "consistent-chain",
+      "linearMemoryBytes": 458752,
+      "p50MedianMs": 0.4641924999999958,
+      "p95RangeMs": [
+        0.47767505000000554,
+        0.5179680499999975
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "status": 1,
+        "costBefore": 0,
+        "costAfter": 0,
+        "acceptedIterations": 0,
+        "pcgIterations": 0,
+        "activeNodes": 64,
+        "activeEdges": 63
+      },
+      "sourceSha256": "59c266ced0776d9ba6b03edff3fee24422eb92ae0370439f0af23af832f8ad83",
+      "moduleSha256": "1608c6cef1ccc4a1ce0c065a94c27d2cb5b41550cb64f406f524a68f5694d369"
+    },
+    {
+      "kernel": "graph64",
+      "scenario": "drifted-chain-loop",
+      "linearMemoryBytes": 458752,
+      "p50MedianMs": 27.50560299999995,
+      "p95RangeMs": [
+        27.511766550000015,
+        28.148577050000075
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "status": 2,
+        "costBefore": 0.20160000000000167,
+        "costAfter": 7.338389495150483e-14,
+        "acceptedIterations": 7,
+        "pcgIterations": 384,
+        "activeNodes": 64,
+        "activeEdges": 64
+      },
+      "sourceSha256": "59c266ced0776d9ba6b03edff3fee24422eb92ae0370439f0af23af832f8ad83",
+      "moduleSha256": "1608c6cef1ccc4a1ce0c065a94c27d2cb5b41550cb64f406f524a68f5694d369"
+    },
+    {
+      "kernel": "graph128",
+      "scenario": "consistent-chain",
+      "linearMemoryBytes": 851968,
+      "p50MedianMs": 0.8826740000000086,
+      "p95RangeMs": [
+        0.996692499999996,
+        1.1926235000000025
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "status": 1,
+        "costBefore": 0,
+        "costAfter": 0,
+        "acceptedIterations": 0,
+        "pcgIterations": 0,
+        "activeNodes": 128,
+        "activeEdges": 127
+      },
+      "sourceSha256": "3fbbcf7abe35d7711e49b395e7631be6cef7ec597acd8bc249040cef2d928bff",
+      "moduleSha256": "38d5d7cc39e4ef3271ff86511a9b4444d66a3f89704a9f2411beb2366f343944"
+    },
+    {
+      "kernel": "graph128",
+      "scenario": "drifted-chain-loop",
+      "linearMemoryBytes": 851968,
+      "p50MedianMs": 54.23994800000014,
+      "p95RangeMs": [
+        54.32687355000007,
+        55.19565804999995
+      ],
+      "checksIdenticalAcrossRepeats": true,
+      "checks": {
+        "status": 2,
+        "costBefore": 0.8128000000000131,
+        "costAfter": 3.4919636915803873e-06,
+        "acceptedIterations": 8,
+        "pcgIterations": 384,
+        "activeNodes": 128,
+        "activeEdges": 128
+      },
+      "sourceSha256": "3fbbcf7abe35d7711e49b395e7631be6cef7ec597acd8bc249040cef2d928bff",
+      "moduleSha256": "38d5d7cc39e4ef3271ff86511a9b4444d66a3f89704a9f2411beb2366f343944"
+    }
+  ],
+  "limits": [
+    "Separate algorithm kernels, not the full SLAM worker or production ABI. Research schema89 loader leaves production unchanged.",
+    "BoW combines vocabulary normalization/assignment, dense retrieval/history and output handling; not retrieval alone.",
+    "Graph includes validation and optimization but excludes covariance, global correction, catalog and transport. Drifted graph inputs are synthetic and are reused, not output-fed.",
+    "Matching is a single identical-descriptor pairing fixture with prediction disabled; no RANSAC or claim of real-image recall.",
+    "Graph128 consumes all8 outer iterations and384 accumulated PCG iterations; cost reduction is not convergence certification.",
+    "Linear memory belongs only to the selected kernel, not the mission map or browser. Reported rusage maximum RSS may include inherited launcher high-water marks; use actual observed RSS fields.",
+    "Load/frequency variations and the absence of matched mission runs prevent a clean end-to-end efficiency ranking."
+  ]
+}

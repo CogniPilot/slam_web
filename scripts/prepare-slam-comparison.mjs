@@ -8,9 +8,17 @@ const source=resolve(captureRoot),output=resolve(outputRoot);
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const receipt=JSON.parse(await readFile(join(source,'receipt.json'),'utf8'));
 if(receipt.failure)throw Error('Capture did not complete successfully');
-const sensors=[],truth=[],files=[];
+if(!Array.isArray(receipt.cases)||receipt.cases.length===0)throw Error('Capture has no completed scenes');
+// Older receipts mixed response-body archival warnings into pageErrors. They
+// remain visible, but are distinct from a runtime exception during acquisition.
+if(receipt.pageErrors?.some(error=>!String(error).startsWith('Asset archive: ')))throw Error('Capture has runtime page errors');
+const SCENE_ID=/^[a-z][a-z0-9-]{0,31}$/;
+const sensors=[],truth=[],files=[],seen=new Set();
 for(const {environment,frames} of receipt.cases){
-  if(!['city','warehouse'].includes(environment))throw Error('Unknown reference scene');
+  // Scene ids come from the capture receipt; the id also names a directory.
+  if(typeof environment!=='string'||!SCENE_ID.test(environment))throw Error('Invalid scene id');
+  if(seen.has(environment))throw Error('Duplicate scene');
+  seen.add(environment);
   const folder=join(source,environment);
   const names=(await readdir(join(folder,'frames'))).filter(n=>/^\d+\.json$/.test(n)).sort();
   if(names.length!==frames||frames<1)throw Error('Capture frame count mismatch');

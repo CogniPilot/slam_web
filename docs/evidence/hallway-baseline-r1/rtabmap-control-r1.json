@@ -1,0 +1,238 @@
+{
+  "schema": 1,
+  "scene": "hallway",
+  "truthSha256": "f018a19238db7b00f0cfc817dbb1e5a4c6a61aaa6c094f77a29ef1b8e2673053",
+  "onlineOdometry": {
+    "matched": 3000,
+    "expected": 3001,
+    "coverage": 0.9996667777407531,
+    "initialPoseAlignedAteRmseMeters": 5.177407617274688,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 1.5907426881691433,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9952352341610199,
+        0.09650073336779123,
+        -0.013944071999911139
+      ],
+      [
+        -0.00437171926206969,
+        0.18703241002086352,
+        0.9823440159498518
+      ],
+      [
+        0.09740491135026966,
+        -0.977602417172373,
+        0.18656311849768178
+      ]
+    ],
+    "alignmentTranslation": [
+      0.08303455263265391,
+      0.6488281439505206,
+      -2.6165685685519335
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 2999,
+    "rpeTranslationRmseMeters": 0.013694781006476895,
+    "rpeRotationRmseRadians": 0.002920485873147887
+  },
+  "onlinePoseFilterPolicy": "valid quaternion and covariance below9999 sentinel",
+  "optimizedGraph": {
+    "matched": 2254,
+    "expected": 3001,
+    "coverage": 0.7510829723425525,
+    "initialPoseAlignedAteRmseMeters": 5.132721849729591,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 0.8494625128243908,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9969198973132145,
+        0.07679700776829844,
+        -0.01590402272528307
+      ],
+      [
+        -0.0027612676526300992,
+        0.23703372661425018,
+        0.9714974976027015
+      ],
+      [
+        0.07837789064500873,
+        -0.9684612702866316,
+        0.23651569548941598
+      ]
+    ],
+    "alignmentTranslation": [
+      0.012427764140113595,
+      0.07994957276518089,
+      -0.2694846008262375
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 1524,
+    "rpeTranslationRmseMeters": 0.01212264202853082,
+    "rpeRotationRmseRadians": 0.002674932750255985
+  },
+  "loopClosuresReported": 371,
+  "proximityDetectionsReported": 740,
+  "mapCallbackLatencyMs": {
+    "p50": 180.652512,
+    "p95": 435.82455905,
+    "p99": 484.05416601999997
+  },
+  "poseLatencyMs": {
+    "p50": 31.295651,
+    "p95": 58.43262844999999,
+    "p99": 78.74362125
+  },
+  "steadyStatePoseLatencyMs": {
+    "p50": 31.295651,
+    "p95": 58.43262844999999,
+    "p99": 78.74362125
+  },
+  "postInitializationLatencySamples": 3000,
+  "percentileMethod": "NumPy linear interpolation",
+  "publishedInputs": 3001,
+  "invalidOrMissingPoseInputs": 1,
+  "observedReplayHz": 4.863697207494466,
+  "invalidOptimizedGraphPoses": 0,
+  "limits": [
+    "Single run is preliminary, not a scalability or speed ranking",
+    "Initial reference with sentinel covariance excluded; missing tracking is retained in coverage",
+    "Pose callback latency includes DDS and replay-side scheduling; image hashes checked before publish"
+  ],
+  "runReceipt": {
+    "schema": 1,
+    "estimator": "RTAB-Map0.23.7",
+    "scene": "hallway",
+    "track": "registered RGB-D only",
+    "inputSha256": "e31de4e9c3f0acf3a1d12a5560ccf83c50195a8b0feb43e69a7256e4ff722669",
+    "framesExpected": 3001,
+    "framesPublished": 3001,
+    "posesReceived": 3001,
+    "uniquePoseStamps": 3001,
+    "wallSeconds": 637.933825623,
+    "sampledPeakRssKiB": 2120136,
+    "sampledPeakThreads": 185,
+    "sampledCpuSeconds": 612.08,
+    "resourceScope": "estimator process groups, including ros2 wrappers; replay excluded",
+    "outputPoseFrame": "body FLU",
+    "cameraOriginBody": [
+      0.18,
+      0,
+      -0.04
+    ],
+    "rateHz": 5.0,
+    "domain": 173,
+    "commands": [
+      [
+        "$HOME/scratch/slam_web/build/ros2-env/bin/ros2",
+        "run",
+        "tf2_ros",
+        "static_transform_publisher",
+        "--x",
+        "0.18",
+        "--y",
+        "0",
+        "--z",
+        "-0.04",
+        "--qx",
+        "-0.5",
+        "--qy",
+        "0.5",
+        "--qz",
+        "-0.5",
+        "--qw",
+        "0.5",
+        "--frame-id",
+        "base_link",
+        "--child-frame-id",
+        "camera_optical"
+      ],
+      [
+        "$HOME/scratch/slam_web/build/ros2-env/bin/ros2",
+        "run",
+        "rtabmap_odom",
+        "rgbd_odometry",
+        "--ros-args",
+        "-p",
+        "frame_id:=base_link",
+        "-p",
+        "odom_frame_id:=odom",
+        "-p",
+        "approx_sync:=false",
+        "-p",
+        "sync_queue_size:=20",
+        "-p",
+        "Vis/FeatureType:='6'",
+        "-r",
+        "rgb/image:=/camera/rgb",
+        "-r",
+        "depth/image:=/camera/depth",
+        "-r",
+        "rgb/camera_info:=/camera/info",
+        "-r",
+        "odom:=/odom"
+      ],
+      [
+        "$HOME/scratch/slam_web/build/ros2-env/bin/ros2",
+        "run",
+        "rtabmap_slam",
+        "rtabmap",
+        "--delete_db_on_start",
+        "--ros-args",
+        "-r",
+        "__ns:=/rtabmap",
+        "-p",
+        "frame_id:=base_link",
+        "-p",
+        "subscribe_depth:=true",
+        "-p",
+        "approx_sync:=false",
+        "-p",
+        "sync_queue_size:=20",
+        "-p",
+        "database_path:=$HOME/scratch/slam_web/profiles/environment-scale-20261020-r1/hallway-rtabmap-r1/rtabmap.db",
+        "-p",
+        "Kp/DetectorStrategy:='6'",
+        "-r",
+        "rgb/image:=/camera/rgb",
+        "-r",
+        "depth/image:=/camera/depth",
+        "-r",
+        "rgb/camera_info:=/camera/info",
+        "-r",
+        "odom:=/odom",
+        "-p",
+        "Rtabmap/DetectionRate:='0'",
+        "-p",
+        "RGBD/LinearUpdate:='0'",
+        "-p",
+        "RGBD/AngularUpdate:='0'"
+      ]
+    ],
+    "cpuAffinity": [
+      6,
+      7
+    ],
+    "loadAverageAtFinish": [
+      6.142578125,
+      4.583984375,
+      4.44189453125
+    ],
+    "mapPolicy": "every-frame",
+    "featureType": 6,
+    "startedAtUTC": "2026-10-20T03:54:03.076828+00:00",
+    "kernel": "6.18.39",
+    "python": "3.14.6",
+    "runnerSha256": "f7156d584b847b1956038999b7e4bb9a3fccbdc449cc6d5ba70446dbeb012a1c",
+    "rosEnvironment": "/nix/store/rszlrcm39qh0dblx5lk2khv48nkgicqw-ros-env",
+    "exitCodes": [
+      0,
+      0,
+      0
+    ],
+    "failure": null
+  },
+  "fullEvaluationSha256": "c021f2ae2ffecb0036ff15b8038acb82c9f0236875301f5c912bfd530f383475"
+}

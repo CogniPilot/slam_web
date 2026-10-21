@@ -1,0 +1,34 @@
+{
+  "scope": "final retained map snapshot, not historical detection events",
+  "sha256": "fee2f3a434bbe7b5c160a03f88cb3a441c17989612068f2da06d0be7126ec4b1",
+  "databaseBytes": 22650390,
+  "keyframes": 1253,
+  "landmarks": 9377,
+  "finalLoopEdges": 6,
+  "loopEdges": [
+    {
+      "from": 113,
+      "to": 220
+    },
+    {
+      "from": 274,
+      "to": 382
+    },
+    {
+      "from": 405,
+      "to": 549
+    },
+    {
+      "from": 731,
+      "to": 1524
+    },
+    {
+      "from": 800,
+      "to": 1012
+    },
+    {
+      "from": 1299,
+      "to": 1538
+    }
+  ]
+}

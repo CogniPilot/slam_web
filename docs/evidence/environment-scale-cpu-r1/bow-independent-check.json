@@ -1,0 +1,485 @@
+{
+  "scope": "Independent reference for seeded synthetic fixtures, not general retrieval equivalence",
+  "checks": [
+    {
+      "path": "bow1000-r1-timing.json",
+      "capacity": 1000,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        513,
+        769
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow1000-r1-timing.json",
+      "capacity": 1000,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow1000-r2-timing.json",
+      "capacity": 1000,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        513,
+        769
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow1000-r2-timing.json",
+      "capacity": 1000,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow1000-r3-timing.json",
+      "capacity": 1000,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        513,
+        769
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow1000-r3-timing.json",
+      "capacity": 1000,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow1000-r4-timing.json",
+      "capacity": 1000,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        513,
+        769
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow1000-r4-timing.json",
+      "capacity": 1000,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow1000-r5-timing.json",
+      "capacity": 1000,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        513,
+        769
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow1000-r5-timing.json",
+      "capacity": 1000,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r1-timing.json",
+      "capacity": 256,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        74,
+        184,
+        147
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r1-timing.json",
+      "capacity": 256,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r2-timing.json",
+      "capacity": 256,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        74,
+        184,
+        147
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r2-timing.json",
+      "capacity": 256,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r3-timing.json",
+      "capacity": 256,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        74,
+        184,
+        147
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r3-timing.json",
+      "capacity": 256,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r4-timing.json",
+      "capacity": 256,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        74,
+        184,
+        147
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r4-timing.json",
+      "capacity": 256,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r5-timing.json",
+      "capacity": 256,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        74,
+        184,
+        147
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow256-r5-timing.json",
+      "capacity": 256,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r1-timing.json",
+      "capacity": 512,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        74,
+        330
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r1-timing.json",
+      "capacity": 512,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r2-timing.json",
+      "capacity": 512,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        74,
+        330
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r2-timing.json",
+      "capacity": 512,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r3-timing.json",
+      "capacity": 512,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        74,
+        330
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r3-timing.json",
+      "capacity": 512,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r4-timing.json",
+      "capacity": 512,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        74,
+        330
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r4-timing.json",
+      "capacity": 512,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r5-timing.json",
+      "capacity": 512,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        257,
+        74,
+        330
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow512-r5-timing.json",
+      "capacity": 512,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r1-timing.json",
+      "capacity": 64,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        38,
+        37,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r1-timing.json",
+      "capacity": 64,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r2-timing.json",
+      "capacity": 64,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        38,
+        37,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r2-timing.json",
+      "capacity": 64,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r3-timing.json",
+      "capacity": 64,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        38,
+        37,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r3-timing.json",
+      "capacity": 64,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r4-timing.json",
+      "capacity": 64,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        38,
+        37,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r4-timing.json",
+      "capacity": 64,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r5-timing.json",
+      "capacity": 64,
+      "queryWords": 8,
+      "expectedIds": [
+        1,
+        38,
+        37,
+        0
+      ],
+      "status": "pass"
+    },
+    {
+      "path": "bow64-r5-timing.json",
+      "capacity": 64,
+      "queryWords": 256,
+      "expectedIds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "pass"
+    }
+  ]
+}

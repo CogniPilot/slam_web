@@ -1,0 +1,249 @@
+{
+  "sourceVerifiedSha256": "843d316165385fdcb5c64784d822fd669e9b2311ec5df0a22b74ddf097d4e868",
+  "lastGraphKeyframeTime": 16.4,
+  "rows": [
+    {
+      "time": 0,
+      "estimatePosition": [
+        0,
+        0,
+        0
+      ],
+      "truthRelativePosition": [
+        0,
+        0,
+        0.0
+      ],
+      "translationErrorMeters": 0.0,
+      "keyframes": 1,
+      "captureReason": 0,
+      "sequentialReason": 1
+    },
+    {
+      "time": 10,
+      "estimatePosition": [
+        0.4401800743692087,
+        -0.027106350824311152,
+        -0.005950271554843571
+      ],
+      "truthRelativePosition": [
+        0.4589869153128546,
+        2.1800044249507003e-16,
+        0.002077604429521651
+      ],
+      "translationErrorMeters": 0.03395435633480026,
+      "keyframes": 5,
+      "captureReason": 4,
+      "sequentialReason": 7
+    },
+    {
+      "time": 16.4,
+      "estimatePosition": [
+        3.188660463781337,
+        -0.02185247837945445,
+        -0.002341476601524891
+      ],
+      "truthRelativePosition": [
+        3.1844460990200427,
+        1.1762940645238802e-16,
+        0.0017242107353279135
+      ],
+      "translationErrorMeters": 0.022623472217739103,
+      "keyframes": 10,
+      "captureReason": 0,
+      "sequentialReason": 0
+    },
+    {
+      "time": 20,
+      "estimatePosition": [
+        4.97236445839756,
+        0.08140774757798391,
+        -0.028869923130754996
+      ],
+      "truthRelativePosition": [
+        4.982217528155925,
+        8.46106641351511e-17,
+        0.0015824186864652479
+      ],
+      "translationErrorMeters": 0.0874737073156086,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 7
+    },
+    {
+      "time": 40,
+      "estimatePosition": [
+        14.77460974287483,
+        -0.006753481591931327,
+        -0.12315172710823308
+      ],
+      "truthRelativePosition": [
+        14.991041505388024,
+        2.0109255116645288e-17,
+        0.0009498730099224417
+      ],
+      "translationErrorMeters": 0.24957869398261287,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 11
+    },
+    {
+      "time": 60,
+      "estimatePosition": [
+        24.4507956037603,
+        1.8948574168482424,
+        -0.14945257348905605
+      ],
+      "truthRelativePosition": [
+        24.995568503809224,
+        -4.183117275821117e-18,
+        0.0005693381916098694
+      ],
+      "translationErrorMeters": 1.9773135099919863,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 7
+    },
+    {
+      "time": 100,
+      "estimatePosition": [
+        44.05462842984719,
+        1.5351901633344112,
+        -0.3341095873313305
+      ],
+      "truthRelativePosition": [
+        44.998915761114915,
+        -1.274155055711703e-16,
+        0.000203995258094114
+      ],
+      "translationErrorMeters": 1.8330992807524726,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 7
+    },
+    {
+      "time": 150,
+      "estimatePosition": [
+        68.67911848648419,
+        4.470918129132764,
+        -0.45673244721295936
+      ],
+      "truthRelativePosition": [
+        69.99981349308727,
+        -1.2156597771636446e-16,
+        5.635050169483513e-05
+      ],
+      "translationErrorMeters": 4.684228882494103,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 7
+    },
+    {
+      "time": 200,
+      "estimatePosition": [
+        93.01787703357205,
+        7.02633443219179,
+        -0.3103092344908921
+      ],
+      "truthRelativePosition": [
+        94.99996793665272,
+        -2.0932561637500227e-16,
+        1.5526813901711733e-05
+      ],
+      "translationErrorMeters": 7.307144542060049,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 11
+    },
+    {
+      "time": 300,
+      "estimatePosition": [
+        136.69891213168614,
+        13.893206486512126,
+        -0.3682027968147889
+      ],
+      "truthRelativePosition": [
+        140.01755635203287,
+        1.4856076655709465e-16,
+        2.6418623495727545e-05
+      ],
+      "translationErrorMeters": 14.288813061035043,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 7
+    },
+    {
+      "time": 400,
+      "estimatePosition": [
+        92.21349314573231,
+        12.325991176548586,
+        -0.29525520187883353
+      ],
+      "truthRelativePosition": [
+        95.0016156702663,
+        -2.6184474483238393e-16,
+        3.239468772342491e-06
+      ],
+      "translationErrorMeters": 12.640841081326606,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 11
+    },
+    {
+      "time": 500,
+      "estimatePosition": [
+        43.42779624841779,
+        18.193166773141698,
+        -0.3132747016847107
+      ],
+      "truthRelativePosition": [
+        45.000047898411836,
+        -5.415400658699965e-17,
+        4.937572566365844e-07
+      ],
+      "translationErrorMeters": 18.263664304688017,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 7
+    },
+    {
+      "time": 600,
+      "estimatePosition": [
+        1.4429635944568164,
+        34.258200759789986,
+        -0.29637348124877266
+      ],
+      "truthRelativePosition": [
+        -0.017555875919564253,
+        1.8474093734996733e-16,
+        2.5289585267707082e-05
+      ],
+      "translationErrorMeters": 34.29060058751925,
+      "keyframes": 10,
+      "captureReason": 4,
+      "sequentialReason": 7
+    }
+  ],
+  "counts": {
+    "keyframeDecisionReason": {
+      "0": 2919,
+      "6": 20,
+      "7": 56,
+      "1": 6
+    },
+    "keyframeRejectionReason": {
+      "0": 92,
+      "4": 2909
+    },
+    "loopGraphReason": {
+      "0": 92,
+      "4": 2909
+    },
+    "sequentialRejectionReason": {
+      "1": 1,
+      "0": 91,
+      "7": 2147,
+      "11": 762
+    }
+  }
+}

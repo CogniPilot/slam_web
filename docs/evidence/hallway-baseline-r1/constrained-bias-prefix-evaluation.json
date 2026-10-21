@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "receipt": {
+    "schema": 1,
+    "startedAt": "2026-10-20T04:21:53.532Z",
+    "runnerSha256": "635ba59e241a1e53aea78d4e845ad369f4cb3aef1884cac4c84ded12f0d33566",
+    "scene": "hallway",
+    "framesExpected": 201,
+    "framesCompleted": 201,
+    "mode": "unpaced sequential sensor replay; source timestamps and captured IMU intervals preserved",
+    "workerSha256": "90db19412d5c7068a9d3f1a1565292fcc4adf272433b86d257ff9bfce820734b",
+    "sourceSha256": "843d316165385fdcb5c64784d822fd669e9b2311ec5df0a22b74ddf097d4e868",
+    "clientBundleSha256": "72a70a721a2cf37b03dba16520be708a21dc55b7154c11762d45596d116d6ad7",
+    "configurationSha256": "69cb76afff484588681bde9964b84abc683f87eb361a25492ab56edd5c7275ec",
+    "sensorMetadataSha256": "dea72f9db2afc8403093fa0f29a86edcdf0a886cb85f39f8e266dc68d1077a66",
+    "runtime": "published Chromium Web Worker, production ModelicaSlamClient",
+    "researchConfiguration": {
+      "scope": "Single feedback-switch intervention relative to the cadence060 diagnostic; not a proposed production fix",
+      "before": {
+        "graphPolicy.filter.constrainVelocityAndBias": 0
+      },
+      "after": {
+        "graphPolicy.filter.constrainVelocityAndBias": 1
+      },
+      "parentConfigurationSha256": "2b9a09969c728a91fa4759bf65e96ea0d4aa34629a08c9443cf2e95f59081d91"
+    },
+    "chromiumVersion": "154.0.8037.92",
+    "wallSeconds": 38.586091591999995,
+    "steadyStateRoundTripMs": {
+      "p50": 42.40000009536743,
+      "p95": 220,
+      "p99": 266.09999990463257
+    },
+    "initializationMs": 732,
+    "sampledPeakRssKiB": 1730716,
+    "sampledPeakThreads": 103,
+    "sampledCpuSeconds": 30.64,
+    "cpuAffinity": "6,7",
+    "resourceScope": "Chromium browser and all descendants including renderer/worker; replay Node/server excluded; no scene rendering or physics",
+    "failure": null,
+    "replayScope": "Closed-loop sequential: Node image reads, IPC and per-frame resource sampling occur between requests. Unpaced wall includes harness overhead. Paced mode slows input when late; no open-loop queue/drop/throughput qualification."
+  },
+  "poseMetrics": {
+    "matched": 201,
+    "expected": 201,
+    "coverage": 1.0,
+    "initialPoseAlignedAteRmseMeters": 0.23347180151242242,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 0.19838651856410652,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9997696273979149,
+        0.01813434614867237,
+        0.011482056540311406
+      ],
+      [
+        -0.016354618011058312,
+        0.29717859634186006,
+        0.9546818361873203
+      ],
+      [
+        0.01390030943350338,
+        -0.9546496882972523,
+        0.2974067148394786
+      ]
+    ],
+    "alignmentTranslation": [
+      0.029619206126965558,
+      0.06593031674414412,
+      1.47432892939102
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 200,
+    "rpeTranslationRmseMeters": 0.08845767496637258,
+    "rpeRotationRmseRadians": 0.016261658181284857
+  },
+  "visualPoseMetrics": {
+    "matched": 91,
+    "expected": 201,
+    "coverage": 0.4527363184079602,
+    "initialPoseAlignedAteRmseMeters": 0.24323331356621058,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 0.20047619573973932,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9997086156094919,
+        0.020881475404643322,
+        0.012109824981339307
+      ],
+      [
+        -0.014627867220434758,
+        0.12499389724142602,
+        0.9920496717165838
+      ],
+      [
+        0.019201806600805147,
+        -0.9919377448395263,
+        0.12526292742044687
+      ]
+    ],
+    "alignmentTranslation": [
+      0.029340480897129595,
+      0.0635888201292511,
+      1.459887753485441
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 0,
+    "rpeTranslationRmseMeters": null,
+    "rpeRotationRmseRadians": null
+  },
+  "lastAvailablePose": {
+    "time": 40,
+    "positionErrorMeters": 0.6102245940193199,
+    "orientationErrorRadians": 0.1252792724173506,
+    "scope": "Last available pose after rigid initial-pose alignment; not proof of return localization or complete mission"
+  },
+  "mapRetention": {
+    "uniqueObservedKeyframeIds": 61,
+    "maxRetainedKeyframes": 61,
+    "earlyPlaceDefinition": "reference acquisition <=60s, proposal observed >=300s",
+    "verifiedEarlyProposals": [],
+    "scope": "Candidate verification diagnostics only; graph acceptance and independent false-closure validation remain required"
+  },
+  "maxPositionDifferenceFromOriginalMeters": null,
+  "visualObservationAcceptedFrames": 91,
+  "scope": "published Chromium Web Worker, production ModelicaSlamClient; scene rendering/physics excluded; initializer separate",
+  "hostStageBreakdown": null,
+  "postInitializationLatencyMs": {
+    "p50": 42.450000047683716,
+    "p95": 220.84000000953645,
+    "p99": 266.4059999060628
+  },
+  "postInitializationLatencySamples": 200,
+  "percentileMethod": "NumPy linear interpolation"
+}

@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "startedAt": "2026-10-20T03:44:03.989Z",
+  "scene": "hallway",
+  "framesExpected": 3001,
+  "framesCompleted": 3001,
+  "mode": "unpaced sequential sensor replay; source timestamps and captured IMU intervals preserved",
+  "workerSha256": "dcccc22429566cfdeb430332e1b523d90b04ce97089a73404ace14aa158a54aa",
+  "sourceSha256": "843d316165385fdcb5c64784d822fd669e9b2311ec5df0a22b74ddf097d4e868",
+  "clientBundleSha256": "72a70a721a2cf37b03dba16520be708a21dc55b7154c11762d45596d116d6ad7",
+  "configurationSha256": "41b4642fde2cf66ab22e65cb1af64f80af60a00265dfd243ac5fe499f31f3ea6",
+  "sensorMetadataSha256": "645b63473e27b0959743f6950525f192f0691ce34c8f39ff00d82277d0d1a9f4",
+  "runtime": "research-instrumented Chromium Web Worker, production ModelicaSlamClient",
+  "researchInstrumentation": {
+    "baseWorkerSha256": "90db19412d5c7068a9d3f1a1565292fcc4adf272433b86d257ff9bfce820734b",
+    "sources": [
+      {
+        "file": "modelica-slam.worker.ts",
+        "originalSha256": "95f80d459752b01d82d3da207c1ef70cd3ca059bee281ef267d9871f7dd75af0",
+        "instrumentedSha256": "31e0a5ff218b8f5fa47aeaa8ae4362ddfe01a8de55501e8fdabc7a53ece2619f"
+      },
+      {
+        "file": "slam-native-program.ts",
+        "originalSha256": "a2a8246f94ba7d9aa94a68f0045a1410ba7321346b20bb4933740766b96daf18",
+        "instrumentedSha256": "f77d47bc306ba48cc7d632b1353326e61a1bd75d770069894f573be27ef95e6b"
+      }
+    ],
+    "scope": "Current source host worker with boundary clocks. Exact cached Modelica WASM and configuration retained. Carry and entry are nested inside native step; worker and RPC times include them and must not be added. Includes timer/log overhead. Not a published-worker timing result."
+  },
+  "chromiumVersion": "154.0.8037.92",
+  "wallSeconds": 535.0176522549999,
+  "steadyStateRoundTripMs": {
+    "p50": 69.5,
+    "p95": 79,
+    "p99": 89.10000014305115
+  },
+  "initializationMs": 780.2999999523163,
+  "sampledPeakRssKiB": 3280328,
+  "sampledPeakThreads": 108,
+  "sampledCpuSeconds": 396.19,
+  "cpuAffinity": "6,7",
+  "resourceScope": "Chromium browser and all descendants including renderer/worker; replay Node/server excluded; no scene rendering or physics",
+  "failure": null
+}

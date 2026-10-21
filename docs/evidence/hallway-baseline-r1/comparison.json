@@ -1,0 +1,72 @@
+{
+  "status": "preliminary single-run comparison; no scalability or replacement proof",
+  "sensorMetadataSha256": "645b63473e27b0959743f6950525f192f0691ce34c8f39ff00d82277d0d1a9f4",
+  "truthSha256": "f018a19238db7b00f0cfc817dbb1e5a4c6a61aaa6c094f77a29ef1b8e2673053",
+  "rows": [
+    {
+      "system": "Native Modelica (instrumented)",
+      "run": "hallway-native-stage-r1",
+      "inputSha256": "645b63473e27b0959743f6950525f192f0691ce34c8f39ff00d82277d0d1a9f4",
+      "sensorMode": "raw RGB-D + IMU",
+      "replayMode": "unpaced sequential sensor replay; source timestamps and captured IMU intervals preserved",
+      "posePolicy": "state availability; visual acceptance is a separate count",
+      "poseOrStateCount": 3001,
+      "expected": 3001,
+      "initialPoseAlignedAteRmseMeters": 14.224594759065845,
+      "se3AlignedAteRmseMeters": 8.481793129484807,
+      "poseCallbackP95Ms": 79.0049999952316,
+      "mapCallbackP95Ms": null,
+      "summedProcessRssGiB": 3.1283645629882812,
+      "sampledCpuSeconds": 396.19,
+      "resourceScope": "Chromium browser and all descendants including renderer/worker; replay Node/server excluded; no scene rendering or physics",
+      "failure": null,
+      "evaluationSha256": "e84c6b07fd6dd1bebcc42bf76f9cc1da23fa680765ea7a69ed4d20f599454373"
+    },
+    {
+      "system": "RTAB-Map",
+      "run": "hallway-rtabmap-r1",
+      "inputSha256": "e31de4e9c3f0acf3a1d12a5560ccf83c50195a8b0feb43e69a7256e4ff722669",
+      "sensorMode": "registered RGB-D only",
+      "replayMode": "paced5Hz, observed input rate retained in evaluation",
+      "posePolicy": "valid quaternion and covariance below9999 sentinel",
+      "poseOrStateCount": 3000,
+      "expected": 3001,
+      "initialPoseAlignedAteRmseMeters": 5.177407617274688,
+      "se3AlignedAteRmseMeters": 1.5907426881691433,
+      "poseCallbackP95Ms": 58.43262844999999,
+      "mapCallbackP95Ms": 435.82455905,
+      "summedProcessRssGiB": 2.0219192504882812,
+      "sampledCpuSeconds": 612.08,
+      "resourceScope": "estimator process groups, including ros2 wrappers; replay excluded",
+      "failure": null,
+      "evaluationSha256": "c021f2ae2ffecb0036ff15b8038acb82c9f0236875301f5c912bfd530f383475"
+    },
+    {
+      "system": "stella",
+      "run": "hallway-stella-r1",
+      "inputSha256": "e31de4e9c3f0acf3a1d12a5560ccf83c50195a8b0feb43e69a7256e4ff722669",
+      "sensorMode": "registered RGB-D only",
+      "replayMode": "paced5Hz, observed input rate retained in evaluation",
+      "posePolicy": "valid matrix/covariance, filtered by the official exporter's lost flags",
+      "poseOrStateCount": 2322,
+      "expected": 3001,
+      "initialPoseAlignedAteRmseMeters": 98.55181334229987,
+      "se3AlignedAteRmseMeters": 39.308331807955,
+      "poseCallbackP95Ms": 66.462521,
+      "mapCallbackP95Ms": null,
+      "summedProcessRssGiB": 0.7349128723144531,
+      "sampledCpuSeconds": 206.5,
+      "resourceScope": "estimator process groups, including ros2 wrappers; replay excluded",
+      "failure": null,
+      "evaluationSha256": "f526b15f870d4377d27a9ad33c714e0e99bc320192a3f5a62c6bd30f4e15b8a8"
+    }
+  ],
+  "limits": [
+    "Different sensor modes, depth processing and pose-availability policies; quality is not matched.",
+    "Native is instrumented/unpaced; ROS runs are paced. Callback semantics and resource process scopes differ.",
+    "Closed-loop replay does not qualify open-loop backlog/drop behavior. Node replay/resource-sampling overhead is excluded from estimator process groups.",
+    "No numeric quality band was agreed; no advantage claim follows. All three outcomes and failures remain in evidence.",
+    "Native failed early-place return qualification. Stella has large pose jumps; their cause is not established by the table.",
+    "Real-world, multi-run and formal-verification acceptance remain outstanding."
+  ]
+}

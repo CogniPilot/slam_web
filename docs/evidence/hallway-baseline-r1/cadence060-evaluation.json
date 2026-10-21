@@ -1,0 +1,139 @@
+{
+  "schema": 1,
+  "receipt": {
+    "schema": 1,
+    "startedAt": "2026-10-20T04:04:50.121Z",
+    "runnerSha256": "635ba59e241a1e53aea78d4e845ad369f4cb3aef1884cac4c84ded12f0d33566",
+    "scene": "hallway",
+    "framesExpected": 201,
+    "framesCompleted": 201,
+    "mode": "unpaced sequential sensor replay; source timestamps and captured IMU intervals preserved",
+    "workerSha256": "90db19412d5c7068a9d3f1a1565292fcc4adf272433b86d257ff9bfce820734b",
+    "sourceSha256": "843d316165385fdcb5c64784d822fd669e9b2311ec5df0a22b74ddf097d4e868",
+    "clientBundleSha256": "72a70a721a2cf37b03dba16520be708a21dc55b7154c11762d45596d116d6ad7",
+    "configurationSha256": "2b9a09969c728a91fa4759bf65e96ea0d4aa34629a08c9443cf2e95f59081d91",
+    "sensorMetadataSha256": "dea72f9db2afc8403093fa0f29a86edcdf0a886cb85f39f8e266dc68d1077a66",
+    "runtime": "published Chromium Web Worker, production ModelicaSlamClient",
+    "researchConfiguration": {
+      "scope": "Controlled cadence diagnosis; geometric/admission verification gates unchanged",
+      "before": {
+        "maximumInterval": 2,
+        "translationThreshold": 0.6
+      },
+      "after": {
+        "maximumInterval": 0.6,
+        "translationThreshold": 0.2
+      },
+      "parentConfigurationSha256": "41b4642fde2cf66ab22e65cb1af64f80af60a00265dfd243ac5fe499f31f3ea6"
+    },
+    "chromiumVersion": "154.0.8037.92",
+    "wallSeconds": 38.364711177000004,
+    "steadyStateRoundTripMs": {
+      "p50": 42.19999980926514,
+      "p95": 207.59999990463257,
+      "p99": 257.7000000476837
+    },
+    "initializationMs": 720.0999999046326,
+    "sampledPeakRssKiB": 1787352,
+    "sampledPeakThreads": 101,
+    "sampledCpuSeconds": 30.17,
+    "cpuAffinity": "6,7",
+    "resourceScope": "Chromium browser and all descendants including renderer/worker; replay Node/server excluded; no scene rendering or physics",
+    "failure": null,
+    "replayScope": "Closed-loop sequential: Node image reads, IPC and per-frame resource sampling occur between requests. Unpaced wall includes harness overhead. Paced mode slows input when late; no open-loop queue/drop/throughput qualification."
+  },
+  "poseMetrics": {
+    "matched": 201,
+    "expected": 201,
+    "coverage": 1.0,
+    "initialPoseAlignedAteRmseMeters": 0.1498563840271517,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 0.1418515582636051,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9999701896616272,
+        -0.0024492468263549645,
+        0.0073226346401314415
+      ],
+      [
+        0.004133590869323401,
+        0.9708231459591099,
+        -0.2397609907732723
+      ],
+      [
+        -0.006521749352306405,
+        0.2397841121926964,
+        0.9708043295769472
+      ]
+    ],
+    "alignmentTranslation": [
+      0.0262308254677448,
+      -0.009572459492176713,
+      1.541857026872166
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 200,
+    "rpeTranslationRmseMeters": 0.0891548678817977,
+    "rpeRotationRmseRadians": 0.015463080118842754
+  },
+  "visualPoseMetrics": {
+    "matched": 91,
+    "expected": 201,
+    "coverage": 0.4527363184079602,
+    "initialPoseAlignedAteRmseMeters": 0.1534050354010358,
+    "initialAlignmentScope": "rigid initial pose",
+    "se3AlignedAteRmseMeters": 0.14604207252970133,
+    "alignmentScale": 1,
+    "alignmentRotation": [
+      [
+        0.9999703403119643,
+        -0.0015096252931708072,
+        0.007552451777284474
+      ],
+      [
+        0.0031119279722489567,
+        0.9761879604302542,
+        -0.21690408436752495
+      ],
+      [
+        -0.007045168604761913,
+        0.2169211537459941,
+        0.9761637048450618
+      ]
+    ],
+    "alignmentTranslation": [
+      0.02599295484907671,
+      -0.007644136875479222,
+      1.5438999709260846
+    ],
+    "rpeIntervalSeconds": 0.2,
+    "rpePairs": 0,
+    "rpeTranslationRmseMeters": null,
+    "rpeRotationRmseRadians": null
+  },
+  "lastAvailablePose": {
+    "time": 40,
+    "positionErrorMeters": 0.7745622339504081,
+    "orientationErrorRadians": 0.11952940128939743,
+    "scope": "Last available pose after rigid initial-pose alignment; not proof of return localization or complete mission"
+  },
+  "mapRetention": {
+    "uniqueObservedKeyframeIds": 61,
+    "maxRetainedKeyframes": 61,
+    "earlyPlaceDefinition": "reference acquisition <=60s, proposal observed >=300s",
+    "verifiedEarlyProposals": [],
+    "scope": "Candidate verification diagnostics only; graph acceptance and independent false-closure validation remain required"
+  },
+  "maxPositionDifferenceFromOriginalMeters": null,
+  "visualObservationAcceptedFrames": 91,
+  "scope": "published Chromium Web Worker, production ModelicaSlamClient; scene rendering/physics excluded; initializer separate",
+  "hostStageBreakdown": null,
+  "postInitializationLatencyMs": {
+    "p50": 42.199999928474426,
+    "p95": 207.85999990701666,
+    "p99": 257.76300004720684
+  },
+  "postInitializationLatencySamples": 200,
+  "percentileMethod": "NumPy linear interpolation"
+}
