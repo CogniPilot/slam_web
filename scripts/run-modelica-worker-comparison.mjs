@@ -8,7 +8,7 @@ import {execFileSync} from 'node:child_process';
 
 const [inputsRoot,captureRoot,cacheRoot,scene,output]=process.argv.slice(2);
 const paced=process.env.SLAM_COMPARISON_PACED!=='0';
-if(!output||!['city','warehouse','hallway'].includes(scene))throw Error('Usage: run-modelica-worker-comparison.mjs INPUTS CAPTURE CACHE SCENE NEW_OUTPUT');
+if(!output||!['city','warehouse','hallway','office-loop'].includes(scene))throw Error('Usage: run-modelica-worker-comparison.mjs INPUTS CAPTURE CACHE SCENE NEW_OUTPUT');
 await mkdir(output);
 const poseFile=await open(join(output,'poses.json.tmp'),'wx');
 await poseFile.write('[');

@@ -1,5 +1,6 @@
 // Diagnostic only: capture an actual accepted prediction at the WASM boundary.
 import {chromium} from '@playwright/test';
+import {launchHardwareBrowser,requireHardwareGraphics} from './hardware-browser.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {join,resolve} from 'node:path';
@@ -57,8 +58,8 @@ const profile=manifest.profiles?.['424x240'];
 if(!profile)throw Error('Capture requires an explicit 424x240 native profile');
 const layout=profile.models.step,sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 await mkdir(output,{recursive:true});
-const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,
-  args:['--no-sandbox','--enable-gpu','--use-gl=angle','--use-angle=gl']});
+const {browser,receipt:browserGpu}=await launchHardwareBrowser(chromium,{
+  args:['--no-sandbox'],receiptPath:join(output,'browser-gpu.json')});
 try{
   const page=await browser.newPage({viewport:{width:1440,height:1000}});
   await page.route('**/assets/modelica-slam.worker-*.js',async route=>{
@@ -87,8 +88,9 @@ try{
     };
     for(let i=0;i<warmupFrames;i++){command();await r.step();}
     command();
-    return {sourceSha256:r.slamProgram.sourceSha256,time:r.time};
+    return {sourceSha256:r.slamProgram.sourceSha256,time:r.time,graphics:r.world.graphics};
   },{warmupFrames,tour});
+  requireHardwareGraphics(preparation.graphics);
   if(preparation.sourceSha256!==profile.sourceSha256)throw Error('Prepared native source differs from capture manifest');
   const workers=page.workers().filter(worker=>worker.url().includes('/modelica-slam.worker-'));
   if(workers.length!==1)throw Error('Capture requires exactly one native worker');
@@ -145,7 +147,7 @@ try{
   await writeFile(join(output,'replay-verification.json'),JSON.stringify(verification,null,2)+'\n');
   if(replayStatus!==0||!verification.exact)throw Error('Independent native replay did not reproduce the captured post-call memory');
   await writeFile(join(output,'layout.json'),JSON.stringify(layout,null,2)+'\n');
-  await writeFile(join(output,'capture.json'),JSON.stringify({sourceSha256:profile.sourceSha256,preparation,warmupFrames,imageRequested,tour,...receipt,assets:[...assets.values()],
+  await writeFile(join(output,'capture.json'),JSON.stringify({sourceSha256:profile.sourceSha256,browserGpu,preparation,warmupFrames,imageRequested,tour,...receipt,assets:[...assets.values()],
     scope:`Accepted live warehouse prediction, imageRequested=${imageRequested}, after ${warmupFrames} camera frames (${tour}). Full memory immediately before eval_assignments, AFTER host carry and input writes; after memory immediately upon return, BEFORE next carry. Original WASM module unchanged. args are [y,p,time,scratch,typed]; replay eval_assignments once directly, without another host carry. Diagnostic copying invalidates timing.`},null,2)+'\n');
   console.log(JSON.stringify({output,outputs:receipt.outputs,args:receipt.args,files:receipt.files},null,2));
 }finally{await browser.close();}

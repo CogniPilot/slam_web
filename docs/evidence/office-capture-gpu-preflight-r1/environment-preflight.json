@@ -1,0 +1,10 @@
+{
+  "node": "22.23.3",
+  "nvidiaDevice": false,
+  "driDevices": false,
+  "chromiumPath": null,
+  "status": "blocked",
+  "error": "Error: Hardware capture needs the flake Chromium; run from nix develop (CHROMIUM_PATH is set there).",
+  "browserLaunched": false,
+  "throughputMeasured": false
+}

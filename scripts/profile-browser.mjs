@@ -1,4 +1,5 @@
 import {chromium} from '@playwright/test';
+import {launchHardwareBrowser,requireHardwareGraphics} from './hardware-browser.mjs';
 import {mkdir,writeFile,readFile,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
@@ -41,8 +42,11 @@ for(const name of ['rumoca_bind_wasm.js','rumoca_bind_wasm_bg.wasm']){
 await writeFile(path.join(output,'compiler.json'),JSON.stringify(compilerManifest,null,2));
 const hardware=process.env.SLAM_PROFILE_SOFTWARE!=='1';
 const phoneViewport=process.env.SLAM_PROFILE_PHONE_VIEWPORT==='1';
-const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,
-  args:['--no-sandbox',...(process.env.SLAM_PROFILE_JIT==='1'?['--js-flags=--perf-basic-prof --interpreted-frames-native-stack']:[]),...(hardware?['--enable-gpu','--use-gl=angle','--use-angle=gl']:['--use-angle=swiftshader','--enable-unsafe-swiftshader'])]});
+const jitArgs=process.env.SLAM_PROFILE_JIT==='1'?['--js-flags=--perf-basic-prof --interpreted-frames-native-stack']:[];
+const {browser,receipt:browserGpu}=hardware
+  ?await launchHardwareBrowser(chromium,{args:['--no-sandbox',...jitArgs],receiptPath:path.join(output,'browser-gpu.json')})
+  :{browser:await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,
+    args:['--no-sandbox',...jitArgs,'--use-angle=swiftshader','--enable-unsafe-swiftshader']}),receipt:{hardwareVerified:false,mode:'explicit-software-diagnostic'}};
 const perfProcesses=[];
 const stopPerf=async()=>{for(const child of perfProcesses){if(child.pid&&child.exitCode===null&&child.signalCode===null){child.kill('SIGINT');await new Promise(resolve=>child.once('exit',resolve));}}};
 try {
@@ -91,6 +95,7 @@ try {
     const rpc=window.__slamLab.runtime.world.sensorRpc,call=rpc.call.bind(rpc);
     rpc.call=(type,args,timeout)=>call(type,['capture','capture-lidar'].includes(type)?{...args,profileGpu:true}:args,timeout);
   });
+  if(hardware)requireHardwareGraphics(await page.evaluate(()=>window.__slamLab.runtime.world.graphics));
   for(let i=0;i<10;i++)await page.evaluate(()=>window.__slamLab.runtime.step());
   const workload=await page.evaluate(async()=>{
     const p=window.__slamLab.project;
@@ -181,7 +186,7 @@ try {
     worker.file=`worker-${i}.cpuprofile`;await root.send('Target.detachFromTarget',{sessionId:worker.sessionId});
   }
   const mean=values=>values.reduce((a,b)=>a+b,0)/values.length;
-  const summary={cpuProfiling,settings,workload,bundleManifest:'bundle.json',readback,targetSimulationRate:10,targetFrameMs:report.dt*1000/10,simulationRate:report.dt*count/(report.elapsedMs/1000),startSimulationTime:report.startSimulationTime,flowCounts:report.flowCounts,browserCpu:{seconds:cpuSeconds,meanActiveCores:cpuSeconds/(report.elapsedMs/1000),method:cpuProfiling?'CDP process CPU deltas after warmup; includes profiler overhead':'CDP process CPU deltas after warmup; CPU sampling disabled'},mainCpuThrottle:throttle,graphics:report.graphics,frames:count,elapsedMs:report.elapsedMs,meanFrameMs:mean(report.samples.map(s=>s.totalMs)),meanNodeMs:Object.fromEntries(Object.keys(report.samples[0].nodes).map(key=>[key,mean(report.samples.map(s=>s.nodes[key]))])),final:report.samples.at(-1),workers:workers.map(({url,file})=>({url,file})),errors};
+  const summary={cpuProfiling,browserGpu,settings,workload,bundleManifest:'bundle.json',readback,targetSimulationRate:10,targetFrameMs:report.dt*1000/10,simulationRate:report.dt*count/(report.elapsedMs/1000),startSimulationTime:report.startSimulationTime,flowCounts:report.flowCounts,browserCpu:{seconds:cpuSeconds,meanActiveCores:cpuSeconds/(report.elapsedMs/1000),method:cpuProfiling?'CDP process CPU deltas after warmup; includes profiler overhead':'CDP process CPU deltas after warmup; CPU sampling disabled'},mainCpuThrottle:throttle,graphics:report.graphics,frames:count,elapsedMs:report.elapsedMs,meanFrameMs:mean(report.samples.map(s=>s.totalMs)),meanNodeMs:Object.fromEntries(Object.keys(report.samples[0].nodes).map(key=>[key,mean(report.samples.map(s=>s.nodes[key]))])),final:report.samples.at(-1),workers:workers.map(({url,file})=>({url,file})),errors};
   summary.viewport={...page.viewportSize(),phoneEmulation:phoneViewport};
   if(packedReadback!==undefined)summary.packedReadback=packedReadback==='1';
   if(report.displayCloudTransferBefore)summary.displayCloudTransfer={before:report.displayCloudTransferBefore,after:report.displayCloudTransferAfter};

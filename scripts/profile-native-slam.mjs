@@ -1,4 +1,5 @@
 import {chromium} from '@playwright/test';
+import {launchHardwareBrowser,requireHardwareGraphics} from './hardware-browser.mjs';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
@@ -21,8 +22,8 @@ const mode=D435_PAIRED_RESOLUTIONS.find(mode=>mode.id===resolution);
 if(!mode||!Number.isInteger(count)||count<1||!Number.isInteger(warmupFrames)||warmupFrames<0||!Number.isFinite(cameraHz)||cameraHz<=0||cameraHz>mode.maxHz||!Number.isFinite(imuHz)||imuHz<=0)throw new Error('Invalid profile resolution, frame count, warmup count or rates');
 const cpuProfiling=process.env.SLAM_PROFILE_CPU_PROFILING==='1';
 await mkdir(output,{recursive:true});
-const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,
-  args:['--no-sandbox','--enable-gpu','--use-gl=angle','--use-angle=gl']});
+const {browser,receipt:browserGpu}=await launchHardwareBrowser(chromium,{
+  args:['--no-sandbox'],receiptPath:join(output,'browser-gpu.json')});
 const errors=[];
 try{
   const page=await browser.newPage({viewport:{width:1440,height:1000}});
@@ -84,6 +85,7 @@ try{
     return {prepareMs:performance.now()-started,program:r.slamProgram,graphics:r.world.graphics,
       camera:r.world.calibration,rates:r.sensorClock.rates,origin:r.evaluationOrigin,progress};
   },{cameraHz,imuHz,resolution,environment,tour,overlapSlamPrediction});
+  requireHardwareGraphics(preparation.graphics);
   console.log(JSON.stringify({preparation}));
   if(process.env.SLAM_PROFILE_SOURCE_SHA&&preparation.program.sourceSha256!==process.env.SLAM_PROFILE_SOURCE_SHA)
     throw new Error(`The served native source is ${preparation.program.sourceSha256}, expected ${process.env.SLAM_PROFILE_SOURCE_SHA}`);
@@ -203,7 +205,7 @@ try{
   }
   const mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
   const sorted=report.rows.map(r=>r.wallMs).sort((a,b)=>a-b);
-  const summary={recordedAt:new Date().toISOString(),browser:browser.version(),environment,tour,resolution,cameraHz,imuHz,frames:count,warmupFrames,cpuProfiling,overlapSlamPrediction,preparation,
+  const summary={recordedAt:new Date().toISOString(),browser:browser.version(),browserGpu,environment,tour,resolution,cameraHz,imuHz,frames:count,warmupFrames,cpuProfiling,overlapSlamPrediction,preparation,
     sessionTiming:!!sessionTiming,nativeFunctionTiming,browserCpu:{seconds:cpuSeconds,meanActiveCores:cpuSeconds/(report.elapsedMs/1000)},
     ...(executionBefore?{physicsExecution:{before:executionBefore,after:executionAfter}}:{}),
     meanFrameMs:mean(sorted),p50FrameMs:sorted[Math.floor(sorted.length*.5)],p95FrameMs:sorted[Math.floor(sorted.length*.95)],

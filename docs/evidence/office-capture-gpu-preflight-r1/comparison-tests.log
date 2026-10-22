@@ -1,0 +1,216 @@
+TAP version 13
+# Subtest: identity optics preserve depths, units, invalid samples and raster order
+ok 1 - identity optics preserve depths, units, invalid samples and raster order
+  ---
+  duration_ms: 1.70542
+  type: 'test'
+  ...
+# Subtest: known ray projects right/down under focal magnification without a baseline translation
+ok 2 - known ray projects right/down under focal magnification without a baseline translation
+  ---
+  duration_ms: 0.282321
+  type: 'test'
+  ...
+# Subtest: overlap takes near surface regardless of source order
+ok 3 - overlap takes near surface regardless of source order
+  ---
+  duration_ms: 0.243072
+  type: 'test'
+  ...
+# Subtest: constant plane covers the narrow RGB field, no invented depth for invalid source
+ok 4 - constant plane covers the narrow RGB field, no invented depth for invalid source
+  ---
+  duration_ms: 1.013826
+  type: 'test'
+  ...
+# Subtest: malformed calibration, byte count and endian are rejected
+ok 5 - malformed calibration, byte count and endian are rejected
+  ---
+  duration_ms: 0.369662
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 69.165338
+TAP version 13
+# Subtest: hallway sealing excludes truth/state while retaining valid images despite an archive warning
+ok 1 - hallway sealing excludes truth/state while retaining valid images despite an archive warning
+  ---
+  duration_ms: 53.54872
+  type: 'test'
+  ...
+# Subtest: office-loop sealing excludes truth/state while retaining valid images despite an archive warning
+ok 2 - office-loop sealing excludes truth/state while retaining valid images despite an archive warning
+  ---
+  duration_ms: 43.881726
+  type: 'test'
+  ...
+# Subtest: sealing refuses runtime failure
+ok 3 - sealing refuses runtime failure
+  ---
+  duration_ms: 43.425453
+  type: 'test'
+  ...
+# Subtest: sealing refuses empty completed capture
+ok 4 - sealing refuses empty completed capture
+  ---
+  duration_ms: 40.908009
+  type: 'test'
+  ...
+# Subtest: sealing accepts a new scene id and records it in the manifest scene list
+ok 5 - sealing accepts a new scene id and records it in the manifest scene list
+  ---
+  duration_ms: 46.44985
+  type: 'test'
+  ...
+# Subtest: sealing refuses a path-like scene id
+ok 6 - sealing refuses a path-like scene id
+  ---
+  duration_ms: 40.074935
+  type: 'test'
+  ...
+# Subtest: sealing refuses an uppercase scene id
+ok 7 - sealing refuses an uppercase scene id
+  ---
+  duration_ms: 40.743319
+  type: 'test'
+  ...
+# Subtest: sealing refuses a duplicated scene
+ok 8 - sealing refuses a duplicated scene
+  ---
+  duration_ms: 45.952907
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 421.521734
+TAP version 13
+# Subtest: capture scenes keep the 5 Hz frame budgets
+ok 1 - capture scenes keep the 5 Hz frame budgets
+  ---
+  duration_ms: 1.366618
+  type: 'test'
+  ...
+# Subtest: unknown capture scenes are refused
+ok 2 - unknown capture scenes are refused
+  ---
+  duration_ms: 0.443262
+  type: 'test'
+  ...
+# Subtest: office capture physics replaces only the four mission references
+ok 3 - office capture physics replaces only the four mission references
+  ---
+  duration_ms: 6.906238
+  type: 'test'
+  ...
+# Subtest: scene physics refuses a plant without the canonical references
+ok 4 - scene physics refuses a plant without the canonical references
+  ---
+  duration_ms: 0.426692
+  type: 'test'
+  ...
+# Subtest: hallway capture physics is unchanged by the scene table
+ok 5 - hallway capture physics is unchanged by the scene table
+  ---
+  duration_ms: 1.353958
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 73.371131
+TAP version 13
+# Subtest: automatically selects only a Nix NVIDIA ICD matching the loaded driver
+ok 1 - automatically selects only a Nix NVIDIA ICD matching the loaded driver
+  ---
+  duration_ms: 12.350859
+  type: 'test'
+  ...
+# Subtest: system ICD takes precedence over a Nix fallback; explicit selection is preserved
+ok 2 - system ICD takes precedence over a Nix fallback; explicit selection is preserved
+  ---
+  duration_ms: 4.837428
+  type: 'test'
+  ...
+# Subtest: missing flake browser, invalid manifests and ambiguous matching packages fail before launch
+ok 3 - missing flake browser, invalid manifests and ambiguous matching packages fail before launch
+  ---
+  duration_ms: 5.261919
+  type: 'test'
+  ...
+# Subtest: an unmatched driver is not replaced with an arbitrary Nix package
+ok 4 - an unmatched driver is not replaced with an arbitrary Nix package
+  ---
+  duration_ms: 2.647595
+  type: 'test'
+  ...
+# Subtest: software, unknown, and non-Vulkan renderers cannot qualify as hardware capture
+ok 5 - software, unknown, and non-Vulkan renderers cannot qualify as hardware capture
+  ---
+  duration_ms: 0.782094
+  type: 'test'
+  ...
+# Subtest: fallback is refused and browser closed before the caller can load a simulation; failure retains renderer
+ok 6 - fallback is refused and browser closed before the caller can load a simulation; failure retains renderer
+  ---
+  duration_ms: 3.873722
+  type: 'test'
+  ...
+# Subtest: accepted preflight retains executable, driver choice and actual renderer, leaving browser open
+ok 7 - accepted preflight retains executable, driver choice and actual renderer, leaving browser open
+  ---
+  duration_ms: 1.903561
+  type: 'test'
+  ...
+# Subtest: probe exceptions close both the probe page and browser
+ok 8 - probe exceptions close both the probe page and browser
+  ---
+  duration_ms: 1.696529
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 95.209504
+...........
+----------------------------------------------------------------------
+Ran 11 tests in 0.325s
+
+OK
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.263s
+
+OK
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.007s
+
+OK
+.........s....
+----------------------------------------------------------------------
+Ran 14 tests in 0.401s
+
+OK (skipped=1)
