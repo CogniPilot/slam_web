@@ -101,6 +101,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: nix develop --no-update-lock-file .#ci --command node scripts/restore-pages-artifact.mjs
+      # Allow user namespaces on this ephemeral Ubuntu runner while keeping
+      # Chromium's namespace sandbox enabled.
+      - name: Enable Chromium namespace sandbox
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - name: Install test dependencies and run this browser shard
         run: |
           nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && npm run test:browser -- --shard=${{ matrix.shard }}/4'
