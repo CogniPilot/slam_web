@@ -1,3 +1,4 @@
+import {chromiumLaunchOptions} from './browser-launch.mjs';
 import {chromium} from 'playwright';
 import {readFile,writeFile,mkdir,readdir,rename,open} from 'node:fs/promises';
 import {createServer} from 'node:http';
@@ -59,7 +60,7 @@ async function sample(root){
   resource.push({elapsedMs:performance.now()-wallStart,rssKiB:rss,threads,loadAverage:(await readFile('/proc/loadavg','utf8')).trim().split(' ').slice(0,3).map(Number)});
 }
 try{
-  browserServer=await chromium.launchServer({headless:true,handleSIGINT:false,handleSIGTERM:false,executablePath:process.env.CHROMIUM_PATH,
+  browserServer=await chromium.launchServer({headless:true,handleSIGINT:false,handleSIGTERM:false,...chromiumLaunchOptions(),
     args:['--disable-gpu','--renderer-process-limit=1']});
   browser=await chromium.connect(browserServer.wsEndpoint());page=await browser.newPage();
   page.on('console',message=>console.log('browser:',message.text()));

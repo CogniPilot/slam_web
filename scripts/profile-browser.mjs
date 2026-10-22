@@ -1,4 +1,5 @@
 import {chromium} from '@playwright/test';
+import {chromiumLaunchOptions} from './browser-launch.mjs';
 import {launchHardwareBrowser,requireHardwareGraphics} from './hardware-browser.mjs';
 import {mkdir,writeFile,readFile,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
@@ -44,9 +45,9 @@ const hardware=process.env.SLAM_PROFILE_SOFTWARE!=='1';
 const phoneViewport=process.env.SLAM_PROFILE_PHONE_VIEWPORT==='1';
 const jitArgs=process.env.SLAM_PROFILE_JIT==='1'?['--js-flags=--perf-basic-prof --interpreted-frames-native-stack']:[];
 const {browser,receipt:browserGpu}=hardware
-  ?await launchHardwareBrowser(chromium,{args:['--no-sandbox',...jitArgs],receiptPath:path.join(output,'browser-gpu.json')})
-  :{browser:await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,
-    args:['--no-sandbox',...jitArgs,'--use-angle=swiftshader','--enable-unsafe-swiftshader']}),receipt:{hardwareVerified:false,mode:'explicit-software-diagnostic'}};
+  ?await launchHardwareBrowser(chromium,{args:jitArgs,receiptPath:path.join(output,'browser-gpu.json')})
+  :{browser:await chromium.launch({headless:true,...chromiumLaunchOptions(),
+    args:[...jitArgs,'--use-angle=swiftshader','--enable-unsafe-swiftshader']}),receipt:{hardwareVerified:false,mode:'explicit-software-diagnostic'}};
 const perfProcesses=[];
 const stopPerf=async()=>{for(const child of perfProcesses){if(child.pid&&child.exitCode===null&&child.signalCode===null){child.kill('SIGINT');await new Promise(resolve=>child.once('exit',resolve));}}};
 try {

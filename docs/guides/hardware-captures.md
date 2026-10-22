@@ -1,7 +1,18 @@
 # Hardware browser captures
 
-Run capture and profiling scripts from `nix develop`. The flake supplies
-Chromium through `CHROMIUM_PATH` and Python with NumPy for comparison checks.
+Run capture and profiling scripts from `nix develop`, or the activated browser
+worker image with the project's pinned dependencies and built preview. The flake
+supplies Chromium through `CHROMIUM_PATH` and Python with NumPy for comparison
+checks. Launchers honor an explicit executable `CHROMIUM_PATH`; otherwise they
+resolve `chromium` or `chromium-browser` on PATH, as exposed by the browser image.
+An invalid explicit path fails without falling back to another browser. There is
+no automatic Playwright browser download or bundled-browser fallback.
+
+Playwright launches explicitly enable `chromiumSandbox: true`; this is needed
+in addition to omitting sandbox-disabling arguments. Namespace/sandbox failures
+block the run and require investigation of the worker policy. GPU capture
+launchers reject sandbox-disabling arguments or an explicit sandbox-off option.
+The source checks do not establish that Chromium's sandbox works in a container.
 A separate GPU-enable flag is not needed for these measurement scripts:
 
 - `capture-environment-scale.mjs`

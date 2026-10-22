@@ -59,7 +59,7 @@ if(!profile)throw Error('Capture requires an explicit 424x240 native profile');
 const layout=profile.models.step,sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 await mkdir(output,{recursive:true});
 const {browser,receipt:browserGpu}=await launchHardwareBrowser(chromium,{
-  args:['--no-sandbox'],receiptPath:join(output,'browser-gpu.json')});
+  receiptPath:join(output,'browser-gpu.json')});
 try{
   const page=await browser.newPage({viewport:{width:1440,height:1000}});
   await page.route('**/assets/modelica-slam.worker-*.js',async route=>{

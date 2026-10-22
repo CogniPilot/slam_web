@@ -23,7 +23,7 @@ if(!mode||!Number.isInteger(count)||count<1||!Number.isInteger(warmupFrames)||wa
 const cpuProfiling=process.env.SLAM_PROFILE_CPU_PROFILING==='1';
 await mkdir(output,{recursive:true});
 const {browser,receipt:browserGpu}=await launchHardwareBrowser(chromium,{
-  args:['--no-sandbox'],receiptPath:join(output,'browser-gpu.json')});
+  receiptPath:join(output,'browser-gpu.json')});
 const errors=[];
 try{
   const page=await browser.newPage({viewport:{width:1440,height:1000}});

@@ -1,0 +1,15 @@
+Chromium launch preparation validation
+
+Launchers explicitly enable the Chromium sandbox. Sandbox-disabling flags are
+removed; hardware launch also rejects sandbox-off overrides. Executable selection
+honors an explicit CHROMIUM_PATH or finds Chromium on PATH. Invalid explicit
+paths and absent browsers fail without a bundled browser fallback.
+
+Validation: 12 dependency-free launcher tests and one Playwright argv recorder
+test pass. The recorder checks generated argv against an unsafe-default negative
+control; it does not start a browser. Default, GPU and mobile configuration
+discovery passes using an executable placeholder. JavaScript syntax, whitespace
+and patch application checks pass.
+
+These checks establish launch settings only. Container sandbox operation,
+hardware rendering and application performance require separate runtime checks.

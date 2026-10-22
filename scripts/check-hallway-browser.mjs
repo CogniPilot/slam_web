@@ -1,3 +1,4 @@
+import {chromiumLaunchOptions} from './browser-launch.mjs';
 import {chromium} from 'playwright';
 import {readFile,writeFile} from 'node:fs/promises';
 import {hallwayPhysics} from './hallway-benchmark-physics.mjs';
@@ -6,7 +7,7 @@ if(!output)throw Error('Usage: check-hallway-browser.mjs ORIGINAL_PROJECT OUTPUT
 const project=JSON.parse(await readFile(projectPath));
 Object.assign(project,{name:'Hallway CPU render smoke',environment:'hallway',slamBackend:'inertial',physics:await hallwayPhysics(project.physics),algorithm:await readFile(new URL('../models/Estimation/Inertial/ModelicaInertial.mo',import.meta.url),'utf8'),algorithmPreset:'Modelica inertial propagation',runtime:'modelica',carsEnabled:false,peopleEnabled:false,lidarEnabled:false,depthCloudEnabled:false,sensorRates:{cameraHz:5,imuHz:10,lidarHz:5,gpsHz:1}});
 delete project.algorithmArtifact;delete project.entryPoint;delete project.mainSourcePath;
-const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const browser=await chromium.launch({...chromiumLaunchOptions(),headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const errors=[];
 try{
  const page=await browser.newPage({viewport:{width:1280,height:900}});page.on('pageerror',e=>errors.push(e.message));

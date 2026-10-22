@@ -44,7 +44,7 @@ test('system ICD takes precedence over a Nix fallback; explicit selection is pre
 
 test('missing flake browser, invalid manifests and ambiguous matching packages fail before launch',async t=>{
   const f=await fixture(t);
-  await assert.rejects(hardwareBrowserOptions({...f.configuration,env:{}}),/nix develop/);
+  await assert.rejects(hardwareBrowserOptions({...f.configuration,env:{}}),/Chromium unavailable/);
   const bad=join(f.root,'bad.json');await writeFile(bad,'{"ICD":{}}');
   await assert.rejects(hardwareBrowserOptions({...f.configuration,env:{...f.configuration.env,VK_DRIVER_FILES:bad}}),/Invalid Vulkan ICD/);
   for(const prefix of ['one','two'])await f.manifest(join(f.store,prefix+'-nvidia-x11-595.71.05/share/vulkan/icd.d/nvidia_icd.json'));
@@ -76,8 +76,17 @@ function fakeBrowser(graphics){
   const events=[];
   const page={evaluate:async()=>{events.push('renderer probe');return graphics;},close:async()=>events.push('page close')};
   const browser={newPage:async()=>{events.push('new page');return page;},close:async()=>events.push('browser close')};
-  return {events,browser,chromium:{launch:async options=>{events.push('launch');assert.ok(options.args.includes('--use-angle=vulkan'));return browser;}}};
+  return {events,browser,chromium:{launch:async options=>{events.push('launch');assert.equal(options.chromiumSandbox,true);assert.ok(options.args.includes('--use-angle=vulkan'));return browser;}}};
 }
+
+test('sandbox-disabling arguments and API overrides are refused before launch',async t=>{
+  const f=await fixture(t),fake=fakeBrowser(hardware);
+  for(const options of [{chromiumSandbox:false},{args:['--no-sandbox']},
+    {args:['--disable-gpu-sandbox']},{args:['--no-sandbox=true']}]){
+    await assert.rejects(launchHardwareBrowser(fake.chromium,options,f.configuration),/sandbox-disabling/);
+  }
+  assert.deepEqual(fake.events,[]);
+});
 
 test('fallback is refused and browser closed before the caller can load a simulation; failure retains renderer',async t=>{
   const f=await fixture(t),renderer={renderer:'ANGLE (Google, Vulkan SwiftShader Device)',vendor:'Google Inc.'},fake=fakeBrowser(renderer),receiptPath=join(f.root,'gpu.json');

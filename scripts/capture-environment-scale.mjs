@@ -67,7 +67,7 @@ let count=0,positionPrevious,positionFirst,pathLength=0;const bins=new Set(),bou
 const assets=[],pending=[],errors=[],archiveWarnings=[];let page,browser;
 try{
  sampleGpu();
- const launched=await launchHardwareBrowser(chromium,{handleSIGINT:false,handleSIGTERM:false,args:['--disable-gpu-sandbox']});
+ const launched=await launchHardwareBrowser(chromium,{handleSIGINT:false,handleSIGTERM:false});
  browser=launched.browser;receipt.browserGpu=launched.receipt;
  page=await browser.newPage({viewport:{width:1280,height:900}});
  page.on('pageerror',e=>errors.push(e.message));

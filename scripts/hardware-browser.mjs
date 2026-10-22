@@ -1,8 +1,9 @@
-// Hardware capture policy: select the flake's Chromium and resolve the host's
+// Hardware capture policy: select configured/image Chromium and resolve the host's
 // NVIDIA Vulkan manifest, then verify the actual renderer before loading SLAM.
 import {access,readFile,readdir,writeFile} from 'node:fs/promises';
 import {constants} from 'node:fs';
 import {delimiter,join} from 'node:path';
+import {chromiumLaunchOptions} from './browser-launch.mjs';
 
 export const HARDWARE_BROWSER_ARGS=Object.freeze([
   '--enable-gpu','--use-gl=angle','--use-angle=vulkan','--enable-features=Vulkan',
@@ -12,9 +13,7 @@ export const HARDWARE_BROWSER_ARGS=Object.freeze([
 export async function hardwareBrowserOptions({env=process.env,
   driverVersionPath='/sys/module/nvidia/version',storeDirectory='/nix/store',
   icdDirectories=['/run/opengl-driver/share/vulkan/icd.d','/etc/vulkan/icd.d','/usr/share/vulkan/icd.d']}={}){
-  const executablePath=env.CHROMIUM_PATH;
-  if(!executablePath)throw Error('Hardware capture needs the flake Chromium; run from nix develop (CHROMIUM_PATH is set there).');
-  await access(executablePath,constants.X_OK);
+  const browserOptions=chromiumLaunchOptions(env),{executablePath}=browserOptions;
   const launchEnv={...env};
   let driverVersion;
   try{driverVersion=(await readFile(driverVersionPath,'utf8')).trim();}
@@ -44,8 +43,8 @@ export async function hardwareBrowserOptions({env=process.env,
     const manifest=JSON.parse(await readFile(file,'utf8'));
     if(typeof manifest?.ICD?.library_path!=='string'||!manifest.ICD.library_path.trim())throw Error('Invalid Vulkan ICD manifest: '+file);
   }
-  return {options:{executablePath,env:launchEnv,args:[...HARDWARE_BROWSER_ARGS]},
-    receipt:{executablePath,driverVersion:driverVersion??null,vulkanDriverFiles:files,
+  return {options:{...browserOptions,env:launchEnv,args:[...HARDWARE_BROWSER_ARGS]},
+    receipt:{executablePath,chromiumSandbox:true,driverVersion:driverVersion??null,vulkanDriverFiles:files,
       vulkanSelection:explicit?'explicit':files.length?'auto-nvidia':'loader-default'}};
 }
 
@@ -62,6 +61,8 @@ export function requireHardwareGraphics(graphics){
 export async function launchHardwareBrowser(chromium,{receiptPath,...options}={},configuration={}){
   let browser,receipt={hardwareVerified:false};
   try{
+    if(options.chromiumSandbox===false||(options.args??[]).some(arg=>/^--(?:no-sandbox|disable-gpu-sandbox)(?:=|$)/.test(arg)))
+      throw Error('Hardware browser requires the Chromium sandbox; sandbox-disabling options are refused.');
     const selected=await hardwareBrowserOptions(configuration);receipt={...selected.receipt,hardwareVerified:false};
     browser=await chromium.launch({headless:true,...options,...selected.options,
       args:[...selected.options.args,...(options.args??[])]});
