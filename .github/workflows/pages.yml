@@ -10,6 +10,11 @@ on:
         type: boolean
         required: false
         default: false
+      office_loop_diagnostic:
+        description: 'Capture the full office mission with software WebGL and retain pair/consensus evidence (no deployment)'
+        type: boolean
+        required: false
+        default: false
 permissions:
   contents: read
   actions: read
@@ -121,6 +126,7 @@ jobs:
   deploy:
     if: >-
       always() && !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
+      !(github.event_name == 'workflow_dispatch' && inputs.office_loop_diagnostic) &&
       needs.build.result == 'success' &&
       (needs.browser.result == 'success' ||
       (github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks))
@@ -138,3 +144,52 @@ jobs:
         uses: actions/configure-pages@v6.0.0
       - uses: actions/deploy-pages@v5.0.1
         id: deployment
+
+  office:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.office_loop_diagnostic }}
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          submodules: true
+      - uses: cachix/install-nix-action@v31.11.1
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - uses: actions/cache@v6.1.0
+        with:
+          path: ~/scratch/slam_web/build/npm-cache
+          key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('package-lock.json') }}
+      - uses: actions/cache@v6.1.0
+        with:
+          path: ~/scratch/slam_web/downloads/rumoca-main-*
+          key: rumoca-main-${{ hashFiles('rumoca-package.json') }}
+      - name: Select fresh diagnostic output
+        run: echo "OFFICE_CI_OUTPUT=$HOME/scratch/slam_web/profiles/office-ci-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_ENV"
+      - name: Enable Chromium namespace sandbox
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - name: Restore this run's verified static build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: nix develop --no-update-lock-file .#ci --command node scripts/restore-pages-artifact.mjs
+      - name: Capture office mission and probe actual pairs
+        env:
+          OFFICE_CI_REUSE_DIST: '1'
+        run: |
+          mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
+          nix develop --no-update-lock-file .#ci --command bash scripts/run-office-ci.sh "$OFFICE_CI_OUTPUT"
+      - name: Retain capture, native snapshots, pairs and consensus evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: office-loop-software-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.OFFICE_CI_OUTPUT }}
+          if-no-files-found: warn
+          compression-level: 1
+          retention-days: 7
+      - name: Summarize diagnostic scope
+        if: always()
+        run: |
+          echo 'Software SwiftShader office diagnostic. Inspect capture/receipt.json and pipeline-status.json for completeness; partial artifacts do not establish GPU, accuracy or loop-closure acceptance.' >> "$GITHUB_STEP_SUMMARY"
