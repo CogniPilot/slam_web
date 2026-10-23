@@ -1,0 +1,16 @@
+{
+  "sourceHead": "73323cd717b085c689bb5b0bbc4e1e76af33e1e2",
+  "preservedSources": {
+    "slam-native-package.json": "8f0b5a3515d5c65a9e2139a65dc8c4539a33401747dccd1622b3d92ab336fb1f",
+    "src/native-assets.ts": "0139eecfde10243d1954c14464569da87b5e23d4c7a2ee539b9b3002c401e53a",
+    "src/slam-native-program.ts": "a2a8246f94ba7d9aa94a68f0045a1410ba7321346b20bb4933740766b96daf18",
+    "src/covariance.ts": "0d55f1454fb084200406f28c3aa824a02c1b5e049b10ab75c86ea3313cb03f8d",
+    "src/loop-closure-settings.ts": "ae3deababc5ded09458bbf19531b8ac2bfa8d612173fceaa358be4feafa27f51",
+    "src/model-parameters.ts": "ac72c5768ed12c7195c8af7b10b12620ddacee1877d4f2c7633e87f64de93281",
+    "src/modelica-slam-session.ts": "542df74a8c162ea72d75a773ed37fd90ac618092930a521ecca9bfd4e3551868",
+    "src/imu-intervals.ts": "06fb3c71163f84ba9226d9b158fc21d2649be9ed113e6a253139e2072613de98",
+    "src/packet.ts": "3378c79ea38a1b684ccd271ce8ba38abbd56fd1464139d569086fe5bce101e4b",
+    "src/modelica-slam-frame.ts": "7d565e77361a1df8ea5bac2e53f08ff238780fdbe8d2c7928d1a8bec8c186817",
+    "scripts/office-native-observation.mjs": "dd875e0a9b6d20f89e16a9d898726a764112dd12500d394db336db09fb34de4d"
+  }
+}
