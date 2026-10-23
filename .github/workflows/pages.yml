@@ -15,6 +15,11 @@ on:
         type: boolean
         required: false
         default: false
+      office_anchor_reference:
+        description: 'Run the bounded loop-anchor reference fixture (no new capture or deployment)'
+        type: boolean
+        required: false
+        default: false
 permissions:
   contents: read
   actions: read
@@ -126,7 +131,7 @@ jobs:
   deploy:
     if: >-
       always() && !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
-      !(github.event_name == 'workflow_dispatch' && inputs.office_loop_diagnostic) &&
+      !(github.event_name == 'workflow_dispatch' && (inputs.office_loop_diagnostic || inputs.office_anchor_reference)) &&
       needs.build.result == 'success' &&
       (needs.browser.result == 'success' ||
       (github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks))
@@ -193,3 +198,46 @@ jobs:
         if: always()
         run: |
           echo 'Software SwiftShader office diagnostic. Inspect capture/receipt.json and pipeline-status.json for completeness; partial artifacts do not establish GPU, accuracy or loop-closure acceptance.' >> "$GITHUB_STEP_SUMMARY"
+
+  anchor-reference:
+    name: Office anchor reference
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.office_anchor_reference }}
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    env:
+      GH_TOKEN: ''
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          submodules: true
+      - uses: cachix/install-nix-action@v31.11.1
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            cores = 2
+            max-jobs = 1
+      - name: Select fresh reference output
+        run: echo "SLAM_REFERENCE_OUTPUT=$HOME/scratch/slam_web/tmp/office-anchor-reference-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_ENV"
+      - name: Check reference limits and run the named fixture
+        env:
+          SLAM_REFERENCE_RSS_MIB: '2048'
+          SLAM_REFERENCE_AVAILABLE_MIB: '512'
+          SLAM_REFERENCE_SECONDS: '120'
+          SLAM_REFERENCE_CPUS: ''
+        run: |
+          nix-shell scripts/office-reference-env.nix --run '
+            set -e
+            node --test scripts/reference-resource-plan.test.mjs
+            node dev/check-modelica-loop-anchor-eviction.mjs
+          '
+      - name: Retain reference evidence even after a refusal
+        if: always()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: office-anchor-reference-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.SLAM_REFERENCE_OUTPUT }}
+          if-no-files-found: warn
+          retention-days: 7

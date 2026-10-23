@@ -6,10 +6,17 @@ import os from 'node:os';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
+import {referenceResourcePlan} from '../scripts/reference-resource-plan.mjs';
 const app=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=path.join(os.homedir(),'scratch/slam_web/tmp');
 fs.mkdirSync(root,{recursive:true});
-const output=fs.mkdtempSync(path.join(root,'loop-anchor-eviction-semantics-'));
+const resources=referenceResourcePlan();
+let output;
+if(process.env.SLAM_REFERENCE_OUTPUT){
+  output=path.resolve(process.env.SLAM_REFERENCE_OUTPUT);
+  if(!output.startsWith(root+path.sep))throw Error('Reference output must be a fresh child of the owned scratch directory');
+  fs.mkdirSync(output);
+}else output=fs.mkdtempSync(path.join(root,'loop-anchor-eviction-semantics-'));
 const names=[
   "models/Estimation/Localization/RGBDRegistrationUncertainty.mo",
   "models/LoopClosure/RGBDKeyframes.mo",
@@ -37,7 +44,7 @@ const staged=path.join(output,'RGBDGraphMeasurements.mo');
 fs.writeFileSync(staged,original.replace(flagOff,'constant Boolean loopAnchoredCapture = true;'));
 const load=name=>name===flagged?staged:path.join(app,name);
 const sha=value=>createHash('sha256').update(value).digest('hex');
-const sources=[...names,'dev/check-modelica-loop-anchor-eviction.mjs'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
+const sources=[...names,'dev/check-modelica-loop-anchor-eviction.mjs','scripts/reference-resource-plan.mjs','scripts/office-reference-env.nix'].map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(app,name)))}));
 const script=path.join(output,'loop-anchor-eviction.mos');
 fs.writeFileSync(script,'setDebugFlags("gen,-evalfunc,-nfEvalConstArgFuncs,-nfExpandFuncArgs,-nfExpandOperations,nfScalarize");\n'
   +names.map(name=>`loadFile(${JSON.stringify(load(name))});`).join('\n')
@@ -46,9 +53,10 @@ fs.writeFileSync(script,'setDebugFlags("gen,-evalfunc,-nfEvalConstArgFuncs,-nfEx
 const omc=process.env.OMC_BIN??'omc';
 const version=spawnSync(omc,['--version'],{encoding:'utf8',env:{...process.env,TMPDIR:output}});
 if(version.error||version.status!==0)throw version.error??Error(version.stderr);
-const command=[path.join(app,'dev/rumoca-bounded-run.mjs'),'--seconds','120','--rss-mib','8192',
-  '--available-mib','16384','--log',path.join(output,'semantics.log'),'--','nice','-n','15','taskset','-c','8,9',
-  'env','OMP_NUM_THREADS=1',`TMPDIR=${output}`,omc,'--numProcs=2','--vectorizationLimit=1',script];
+const command=[path.join(app,'dev/rumoca-bounded-run.mjs'),'--seconds',String(resources.seconds),'--rss-mib',String(resources.rssMiB),
+  '--available-mib',String(resources.availableMiB),'--log',path.join(output,'semantics.log'),'--','nice','-n','15',
+  ...(resources.cpus?['taskset','-c',resources.cpus]:[]),
+  'env',`OMP_NUM_THREADS=${resources.ompThreads}`,`TMPDIR=${output}`,omc,`--numProcs=${resources.compilerProcesses}`,'--vectorizationLimit=1',script];
 fs.writeFileSync(path.join(output,'command.json'),JSON.stringify(command,null,2)+'\n');
 const result=spawnSync(process.execPath,command,{cwd:output,encoding:'utf8',maxBuffer:4*1024*1024});
 fs.writeFileSync(path.join(output,'resources.json'),result.stdout??'');
@@ -72,8 +80,9 @@ if(fs.existsSync(file)){
 const bookendsEqual=sources.every(source=>sha(fs.readFileSync(path.join(app,source.path)))===source.sha256);
 const pass=result.status===0&&bookendsEqual&&checks.length===8&&checks.every(Boolean)&&modelResult?.simulationSucceeded===true;
 const report={status:pass?'OMC_MODELICA_SEMANTICS_PASS':'FAILED_OR_INCOMPLETE',
+  resourcePlan:resources,
   scope:'Full 64-slot catalog, flag on: keyframe 64 anchored by loops from ids 1 and 2 with no consecutive edge; evicting 1 keeps it attached, evicting 2 detaches ids 3-63; the gauge moves to 64, detachedNodes counts 61, the solve holds only the newest component, and five later captures are admitted',
-  compilerVersion:version.stdout.trim(),sources,bookendsEqual,checks,modelResult,
+  compilerVersion:version.stdout.trim(),compilerPath:omc,nodeVersion:process.version,sources,bookendsEqual,checks,modelResult,
   processStatus:result.status,signal:result.signal,rumocaArtifactIssued:false,browserIntegrated:false,
   flagOnStaged:true,referenceGraphAdmissionQualified:pass,productionGraphAdmissionIntegrated:false,fullSlamAccepted:false};
 fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');
