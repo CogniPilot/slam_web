@@ -5,6 +5,7 @@ import {resolve,join} from 'node:path';
 import {performance} from 'node:perf_hooks';
 import {chromiumLaunchOptions} from './browser-launch.mjs';
 import {officeLoopPhysics} from './office-loop-physics.mjs';
+import {prepareOfficeDiagnostic} from './office-ci-preparation.mjs';
 import {OFFICE_MISSION,SOFTWARE_ARGS,sha256,requireSoftwareGraphics,validateOfficeSample,assertCompleteOfficeCapture} from './office-ci-contract.mjs';
 
 const output=process.argv[2];
@@ -39,28 +40,11 @@ try{
   await page.route('**/assets/modelica-slam.worker-*.js',route=>route.fulfill({body:traceWorker,contentType:'text/javascript'}));
   await page.goto(base.href,{waitUntil:'domcontentloaded',timeout:120000});
   await page.waitForFunction(()=>window.__slamLab?.initialized&&window.__slamLab.ready&&!window.__slamLab.compiling,undefined,{timeout:180000});
-  const preparation=await page.evaluate(async({physics,mission})=>{
-    const lab=window.__slamLab,r=lab.runtime;r.pause();while(r.busy)await new Promise(done=>setTimeout(done,10));
-    // Use this build's default source closure; no external legacy capture is needed.
-    const project=structuredClone(lab.project);
-    Object.assign(project,{name:'Office loop software CI diagnostic',environment:'office-loop',physics,
-      slamBackend:'native',cameraResolution:'424x240',seed:7,vehicleCount:1,sceneDetail:'low',carsEnabled:false,peopleEnabled:false,
-      lidarEnabled:false,depthCloudEnabled:false,sensorRates:{cameraHz:mission.cameraHz,imuHz:10,lidarHz:5,gpsHz:1}});
-    delete project.algorithmArtifact;Object.assign(lab.project,project);
-    const originalInitial=r.onInitialFrame;let initial;
-    r.onInitialFrame=(vehicle,frame,estimate)=>{
-      if(vehicle===0)initial={frame,estimate,truth:structuredClone(r.world.truth)};
-      originalInitial.call(r,vehicle,frame,estimate);
-    };
-    try{await r.compile(project);}finally{r.onInitialFrame=originalInitial;}
-    if(!initial)throw Error('Native initialization did not retain its actual time-zero image');
-    r.autopilot=false;r.recording=false;
-    lab.viewer?.worker?.postMessage({type:'visibility',visible:false});
-    window.__officeInitial=initial;
-    return {project:structuredClone(r.project),graphics:r.world.graphics,calibration:r.world.calibration,
-      nativeProgram:structuredClone(r.slamProgram),physics:await r.physics.call('executionReceipt')};
-  },{physics,mission:OFFICE_MISSION});
+  const previousWorkers=new Set(page.workers());
+  const preparation=await page.evaluate(prepareOfficeDiagnostic,{physics,mission:OFFICE_MISSION,base:base.href});
   receipt.graphics=requireSoftwareGraphics(preparation.graphics);receipt.environment=preparation.project.environment;
+  receipt.sensorGraphics=requireSoftwareGraphics(preparation.sensorGraphics);
+  receipt.sensorSelection=preparation.sensorSelection;
   receipt.loadedPhysicsSourceSha256=sha256(preparation.project.physics);receipt.physics=preparation.physics;receipt.nativeProgram=preparation.nativeProgram;
   if(receipt.physicsSourceSha256!==receipt.loadedPhysicsSourceSha256||receipt.environment!=='office-loop'||preparation.project.sensorRates.cameraHz!==5)throw Error('Wrong office mission loaded');
   await writeFile(join(output,'project.json'),JSON.stringify(preparation.project)+'\n');
@@ -69,14 +53,14 @@ try{
   const selected=manifest.profiles?.['424x240']??manifest;
   if(selected.sourceSha256!==preparation.nativeProgram.sourceSha256)throw Error('Native source receipt mismatch');
   receipt.nativeManifestSha256=sha256(manifestBytes);await writeFile(join(output,'native-manifest.json'),manifestBytes);
-  const workers=page.workers().filter(worker=>worker.url().includes('/modelica-slam.worker-'));
+  const workers=page.workers().filter(worker=>!previousWorkers.has(worker)&&worker.url().includes('/modelica-slam.worker-'));
   if(workers.length!==1)throw Error('Expected exactly one native diagnostic worker');const worker=workers[0];
   await writeReceipt();
   for(let index=0;index<OFFICE_MISSION.frames;index++){
     if(stopped||performance.now()-started>wallSeconds*1000)throw Error(deadlineHit?'Capture hard wall deadline exceeded':'Capture interrupted');
     if(index%50===0){const d=await statfs(output);if(d.bavail*d.bsize<512*1024**2)throw Error('Capture free disk guard reached');}
     const sample=await page.evaluate(async index=>{
-      const lab=window.__slamLab,r=lab.runtime;
+      const r=window.__officeRuntime;
       if(index){r.command={forward:0,left:0,up:0,yaw:0};await r.step();}
       const data=index?r.lastFrame:window.__officeInitial,{rgb,depth,...metadata}=data.frame;
       const b64=array=>{const bytes=new Uint8Array(array.buffer,array.byteOffset,array.byteLength);let text='';for(let i=0;i<bytes.length;i+=16384)text+=String.fromCharCode(...bytes.subarray(i,i+16384));return btoa(text);};

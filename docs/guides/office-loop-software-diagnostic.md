@@ -33,6 +33,15 @@ The output directory must not already exist. The runner resolves Chromium from
 flags belong only to this diagnostic; its renderer receipt must identify
 SwiftShader. Native GPU/WebGPU acceptance is a separate experiment.
 
+The diagnostic constructs an isolated instance of the application's existing
+World and Runtime classes. It explicitly requests the `native` sensor profile,
+which selects calibrated D435 raster sizes, and sets 424×240 before starting its
+matching sensor worker. This is independent of hardware acceleration: both
+renderers must still identify SwiftShader software. The ordinary UI world keeps
+its automatic 160×90 software fallback; its readonly profile is not mutated.
+The receipt records this explicit raster selection, and only the newly created
+native-estimator worker supplies diagnostic observations.
+
 The prepared `OfficeLoopProfile` is composed into the existing physics model.
 Default project source dependencies are retained. The scene is `office-loop`,
 one vehicle, 5 Hz RGB-D, 10 Hz IMU, seed 7, zero manual commands and autopilot off.
