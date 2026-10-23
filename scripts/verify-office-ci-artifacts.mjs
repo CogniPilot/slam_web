@@ -36,7 +36,7 @@ if(consensus.status==='pass'){
 }else if(combined.cases.length)throw Error('No-pairs receipt contains consensus cases');
 await writeFile(join(root,'summary.json'),JSON.stringify({schemaVersion:1,captureComplete:true,frames:OFFICE_MISSION.frames,referenceSnapshots:references.size,consensusStatus:consensus.status,cases:consensus.cases,extraction:{status:extraction.status,caseErrors:extraction.caseErrors,missingLoopCountBaselines:extraction.missingLoopCountBaselines,reconstructionOnlyCases:extraction.reconstructionOnlyCases},scope:receipt.scope,claim:'Full software-rendered diagnostic acquisition; loop closure remains to be assessed from actual outcomes.'},null,2)+'\n');
 const files=[];
-async function visit(path){for(const entry of await readdir(path,{withFileTypes:true})){const file=join(path,entry.name);if(entry.isSymbolicLink())throw Error('Artifact symlinks are refused');if(entry.isDirectory())await visit(file);else if(entry.isFile()&&!['SHA256SUMS','pipeline-status.json'].includes(entry.name))files.push(file);}}
+async function visit(path){for(const entry of await readdir(path,{withFileTypes:true})){const file=join(path,entry.name);if(entry.isSymbolicLink())throw Error('Artifact symlinks are refused');if(entry.isDirectory())await visit(file);else if(entry.isFile()&&!['SHA256SUMS','pipeline-status.json'].includes(entry.name)&&file!==join(root,'seal.log'))files.push(file);}}
 await visit(root);const lines=[];
 for(const file of files.sort()){const hash=createHash('sha256');for await(const bytes of createReadStream(file))hash.update(bytes);lines.push(hash.digest('hex')+'  '+file.slice(resolve(root).length+1));}
 await writeFile(join(root,'SHA256SUMS'),lines.join('\n')+'\n');
