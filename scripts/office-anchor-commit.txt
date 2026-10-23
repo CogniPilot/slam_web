@@ -1,0 +1,13 @@
+tree 2fbaf4097235a7b27ba007eabe1f98150320f2ae
+parent 3e04d9ed9b29888bdb61ee91167d71b38df81389
+author James Goppert <jgoppert@users.noreply.github.com> 1792745503 +0000
+committer James Goppert <jgoppert@users.noreply.github.com> 1792745503 +0000
+
+Enable guarded loop anchors for an isolated comparison
+
+Exercise the existing loop-anchored capture policy on fixed office
+observations. Preserve its distinct-reference, pose-consistency, agreement
+and eviction guards. This experimental branch does not establish loop
+closure acceptance or change a released consumer pin.
+
+Signed-off-by: James Goppert <jgoppert@users.noreply.github.com>

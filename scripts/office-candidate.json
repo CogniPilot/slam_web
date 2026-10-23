@@ -1,0 +1,13 @@
+{
+  "canonicalRevision": "34c26cb4b3ad6f16a072582115acc68d35178d1f",
+  "canonicalParent": "3e04d9ed9b29888bdb61ee91167d71b38df81389",
+  "canonicalTree": "2fbaf4097235a7b27ba007eabe1f98150320f2ae",
+  "change": "loopAnchoredCapture false->true; isolated comparison comment only",
+  "manifestSha256": "094b22e5ae1c10e976ee2c2e9b3ee98252894f0a46a46128e73eb1691ec94213",
+  "baseSourceSha256": "5af151e0167089cec966add53e26c2dfe34461d1c8514179c8add68006303597",
+  "profileSourceSha256": "f05e8c1dee9a3c48b1cd0ea1ffb25bfa7fdb99d2fa066074f6a32d7e43a7add0",
+  "exporterRevision": "278475ff0d39f648f7b98c76abdc4da9a712ee62",
+  "referenceExporterSha256": "418a97c2284e61d9b88a69b4ed3fd5dd520c16ae6d18d12df96b3a51a388683c",
+  "resetSha256": "6e614cc25574c99a4c9659184c974b813f95fb954ff81399499a5a0ead6be4b1",
+  "scope": "CI builds its own pinned exporter and proves baseline parity before producing this exact candidate manifest. No supplied native bytes or release."
+}

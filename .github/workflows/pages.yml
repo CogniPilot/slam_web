@@ -20,6 +20,11 @@ on:
         type: boolean
         required: false
         default: false
+      office_candidate_comparison:
+        description: 'With office_loop_diagnostic: build the pinned exporter, prove baseline parity, then compare the experimental office source without deployment'
+        type: boolean
+        required: false
+        default: false
 permissions:
   contents: read
   actions: read
@@ -133,6 +138,7 @@ jobs:
       always() && !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
       !(github.event_name == 'workflow_dispatch' && inputs.office_loop_diagnostic) &&
       !(github.event_name == 'workflow_dispatch' && inputs.office_saved_replay) &&
+      !(github.event_name == 'workflow_dispatch' && inputs.office_candidate_comparison) &&
       needs.build.result == 'success' &&
       (needs.browser.result == 'success' ||
       (github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks))
@@ -181,19 +187,32 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: nix develop --no-update-lock-file .#ci --command node scripts/restore-pages-artifact.mjs
       - name: Capture office mission and probe actual pairs
-        if: ${{ !inputs.office_saved_replay }}
+        if: ${{ !inputs.office_saved_replay && !inputs.office_candidate_comparison }}
         env:
           OFFICE_CI_REUSE_DIST: '1'
         run: |
           mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
           nix develop --no-update-lock-file .#ci --command bash scripts/run-office-ci.sh "$OFFICE_CI_OUTPUT"
       - name: Replay pinned saved office observations without rendering
-        if: ${{ inputs.office_saved_replay }}
+        if: ${{ inputs.office_saved_replay && !inputs.office_candidate_comparison }}
         env:
           OFFICE_REPLAY_ARTIFACT_TOKEN: ${{ github.token }}
         run: |
           mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
           nix develop --no-update-lock-file .#ci --command bash scripts/run-office-replay.sh "$OFFICE_CI_OUTPUT"
+      - name: Build and compare the isolated office candidate
+        if: ${{ inputs.office_candidate_comparison }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OFFICE_REPLAY_ARTIFACT_TOKEN: ${{ github.token }}
+          OFFICE_COMPARE_CONFLICT: ${{ inputs.office_saved_replay }}
+        run: |
+          if [ "$OFFICE_COMPARE_CONFLICT" = true ]; then
+            echo 'Choose saved replay or candidate comparison, not both.' >&2
+            exit 2
+          fi
+          mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
+          nix develop --no-update-lock-file .#ci --command bash scripts/run-office-comparison.sh "$OFFICE_CI_OUTPUT"
       - name: Retain capture, native snapshots, pairs and consensus evidence
         if: always()
         uses: actions/upload-artifact@v7.0.2
@@ -204,10 +223,14 @@ jobs:
           compression-level: 1
           retention-days: 7
       - name: Summarize diagnostic scope
-        if: ${{ always() && !inputs.office_saved_replay }}
+        if: ${{ always() && !inputs.office_saved_replay && !inputs.office_candidate_comparison }}
         run: |
           echo 'Software SwiftShader office diagnostic. Inspect capture/receipt.json and pipeline-status.json for completeness; partial artifacts do not establish GPU, accuracy or loop-closure acceptance.' >> "$GITHUB_STEP_SUMMARY"
       - name: Summarize saved replay scope
-        if: ${{ always() && inputs.office_saved_replay }}
+        if: ${{ always() && inputs.office_saved_replay && !inputs.office_candidate_comparison }}
         run: |
           echo 'Saved RGB-D/IMU replay in pinned sandboxed Chromium; no new rendering. Inspect replay/receipt.json and pipeline-status.json. Only a complete exact baseline qualifies declared-state snapshots; no transient proposal, GPU, accuracy or closure acceptance.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Summarize candidate comparison scope
+        if: ${{ always() && inputs.office_candidate_comparison }}
+        run: |
+          echo 'Whole-native candidate collection. Inspect compiler provenance, baseline parity, exact prefix, declared snapshots and late edge/correction effects. No external native assets, new rendering, GPU, deployment or automatic closure acceptance.' >> "$GITHUB_STEP_SUMMARY"
