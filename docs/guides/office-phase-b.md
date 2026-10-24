@@ -59,13 +59,21 @@ Any failure from the baseline replay on is an infrastructure stop, not a
 result; job 3 may be dispatched once more, because it acquires nothing. Earlier
 failures, such as a mistyped grant, are pre-run refusals.
 
+Repeat a job only as a new dispatch, never with GitHub's re-run. The artifact
+name carries the run attempt, and every pin requires attempt 1.
+
 ## Grants and blindness
 
-Each pin is passed as exact JSON bytes and its granted sha256. The workflow
+Each pin is passed as exact JSON bytes and its granted sha256, which is the
+sha256 of exactly those input bytes with no trailing newline. The workflow
 writes the bytes to a file and refuses a hash mismatch; every loader checks the
 hash again and refuses unknown or missing fields. Plans, boundaries, recovery
 events and decoded state in these artifacts name loop evidence, so they stay
 with the coordinator and are not posted until the blind labels are sealed.
 Blindness is procedural, not enforced by file permissions.
 
-Each Phase B step has an explicit deadline inside the 75-minute job cap.
+Each Phase B step has an explicit deadline, and each job's cap is its worst
+case: setup, its run step and a 15-minute upload, so the one-shot capture always
+reaches the upload. The capture job is capped at 90 minutes, pass 1 at 105 and
+pass 2 at 92. Each Phase B dispatch has its own concurrency group, so no other
+run can cancel it.

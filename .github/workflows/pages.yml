@@ -63,9 +63,10 @@ env:
   # Stay inside Ubuntu's system UID range for Nix's eight build users.
   NIX_FIRST_BUILD_UID: '900'
 concurrency:
-  group: pages-${{ github.ref }}
-  # A Phase B job is one of three bound runs; another dispatch must never cancel it.
-  cancel-in-progress: ${{ !(github.event_name == 'workflow_dispatch' && inputs.office_phase_b_job != 'none') }}
+  # A Phase B job is one of three bound runs. Cancellation is decided by the newer run, so each Phase B dispatch gets its
+  # own group: nothing can cancel it, and it cancels nothing. Every other run keeps the per-ref group.
+  group: ${{ github.event_name == 'workflow_dispatch' && inputs.office_phase_b_job != 'none' && format('office-phase-b-{0}', github.run_id) || format('pages-{0}', github.ref) }}
+  cancel-in-progress: true
 jobs:
   build:
     name: Build and unit tests
@@ -192,26 +193,30 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.office_loop_diagnostic }}
     needs: build
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
-    # Hold 5: Phase B step deadlines (minutes) so setup, network and upload paths are bounded inside the 75-minute cap.
-    # Values are proposals for the deadline owner; other office modes keep GitHub's default step limit.
+    # Hold 5 (proposals for the deadline owner). Each Phase B job's cap is its worst case: setup 25 (checkout 3, Nix 8,
+    # two caches 3 each, static build 6, grant guard 2) + its run step + a 15-minute upload, so the one-shot capture
+    # always reaches the upload. Run steps carry their inner stage worst cases plus margin: capture 50 (31-minute capture
+    # + about 15 of setup, contracts and flight checks), pass 1 65 (compiler, two exports, comparison, plan), pass 2 52
+    # (restore, baseline replay pipeline, comparison, pass equality). Caps: capture 90, pass 1 105, pass 2 92. Other
+    # office modes keep the 75-minute cap and GitHub's default step limits.
+    timeout-minutes: ${{ inputs.office_phase_b_job == 'capture' && 90 || inputs.office_phase_b_job == 'pass1' && 105 || inputs.office_phase_b_job == 'pass2' && 92 || 75 }}
     steps:
       - uses: actions/checkout@v7.0.1
-        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 5 || 360 }}
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 3 || 360 }}
         with:
           submodules: true
       - uses: cachix/install-nix-action@v31.11.1
-        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 10 || 360 }}
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 8 || 360 }}
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
       - uses: actions/cache@v6.1.0
-        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 5 || 360 }}
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 3 || 360 }}
         with:
           path: ~/scratch/slam_web/build/npm-cache
           key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('package-lock.json') }}
       - uses: actions/cache@v6.1.0
-        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 5 || 360 }}
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 3 || 360 }}
         with:
           path: ~/scratch/slam_web/downloads/rumoca-main-*
           key: rumoca-main-${{ hashFiles('rumoca-package.json') }}
@@ -220,7 +225,7 @@ jobs:
       - name: Enable Chromium namespace sandbox
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - name: Restore this run's verified static build
-        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 10 || 360 }}
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 6 || 360 }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: nix develop --no-update-lock-file .#ci --command node scripts/restore-pages-artifact.mjs
@@ -289,7 +294,7 @@ jobs:
           nix develop --no-update-lock-file .#ci --command bash scripts/run-office-comparison.sh "$OFFICE_CI_OUTPUT"
       - name: Phase B pass 1 (job 2), candidate on the sealed capture
         if: ${{ inputs.office_phase_b_job == 'pass1' }}
-        timeout-minutes: 58
+        timeout-minutes: 65
         env:
           GH_TOKEN: ${{ github.token }}
           OFFICE_REPLAY_ARTIFACT_TOKEN: ${{ github.token }}
@@ -299,7 +304,7 @@ jobs:
           nix develop --no-update-lock-file .#ci --command bash scripts/run-office-comparison.sh "$OFFICE_CI_OUTPUT"
       - name: Phase B pass 2 (job 3), baseline and candidate replays of the sealed inputs
         if: ${{ inputs.office_phase_b_job == 'pass2' }}
-        timeout-minutes: 50
+        timeout-minutes: 52
         env:
           GH_TOKEN: ${{ github.token }}
           OFFICE_REPLAY_ARTIFACT_TOKEN: ${{ github.token }}
