@@ -25,6 +25,36 @@ on:
         type: boolean
         required: false
         default: false
+      office_phase_b_job:
+        description: 'With office_loop_diagnostic: Phase B job on the frozen head (capture, pass1 or pass2); none for the modes above'
+        type: choice
+        options: [none, capture, pass1, pass2]
+        default: none
+      office_phase_b_head:
+        description: 'Phase B: the frozen branch head; every Phase B job refuses to run on any other commit'
+        type: string
+        required: false
+        default: ''
+      office_phase_b_pin:
+        description: 'Phase B pass1/pass2: the granted job-1 capture pin, exact JSON bytes'
+        type: string
+        required: false
+        default: ''
+      office_phase_b_pin_sha256:
+        description: 'Phase B pass1/pass2: the granted sha256 of office_phase_b_pin'
+        type: string
+        required: false
+        default: ''
+      office_phase_b_candidate_pin:
+        description: 'Phase B pass2: the granted job-2 artifact pin, exact JSON bytes'
+        type: string
+        required: false
+        default: ''
+      office_phase_b_candidate_pin_sha256:
+        description: 'Phase B pass2: the granted sha256 of office_phase_b_candidate_pin'
+        type: string
+        required: false
+        default: ''
 permissions:
   contents: read
   actions: read
@@ -34,7 +64,8 @@ env:
   NIX_FIRST_BUILD_UID: '900'
 concurrency:
   group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  # A Phase B job is one of three bound runs; another dispatch must never cancel it.
+  cancel-in-progress: ${{ !(github.event_name == 'workflow_dispatch' && inputs.office_phase_b_job != 'none') }}
 jobs:
   build:
     name: Build and unit tests
@@ -162,19 +193,25 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     timeout-minutes: 75
+    # Hold 5: Phase B step deadlines (minutes) so setup, network and upload paths are bounded inside the 75-minute cap.
+    # Values are proposals for the deadline owner; other office modes keep GitHub's default step limit.
     steps:
       - uses: actions/checkout@v7.0.1
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 5 || 360 }}
         with:
           submodules: true
       - uses: cachix/install-nix-action@v31.11.1
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 10 || 360 }}
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
       - uses: actions/cache@v6.1.0
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 5 || 360 }}
         with:
           path: ~/scratch/slam_web/build/npm-cache
           key: ${{ runner.os }}-${{ runner.arch }}-npm-${{ hashFiles('package-lock.json') }}
       - uses: actions/cache@v6.1.0
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 5 || 360 }}
         with:
           path: ~/scratch/slam_web/downloads/rumoca-main-*
           key: rumoca-main-${{ hashFiles('rumoca-package.json') }}
@@ -183,25 +220,62 @@ jobs:
       - name: Enable Chromium namespace sandbox
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - name: Restore this run's verified static build
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 10 || 360 }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: nix develop --no-update-lock-file .#ci --command node scripts/restore-pages-artifact.mjs
+      - name: Check Phase B grants and the frozen head
+        if: ${{ inputs.office_phase_b_job != 'none' }}
+        timeout-minutes: 2
+        env:
+          PHASE_B_JOB: ${{ inputs.office_phase_b_job }}
+          PHASE_B_HEAD: ${{ inputs.office_phase_b_head }}
+          PHASE_B_CONFLICT: ${{ inputs.office_saved_replay || inputs.office_candidate_comparison }}
+          PHASE_B_PIN: ${{ inputs.office_phase_b_pin }}
+          PHASE_B_PIN_SHA256: ${{ inputs.office_phase_b_pin_sha256 }}
+          PHASE_B_CANDIDATE_PIN: ${{ inputs.office_phase_b_candidate_pin }}
+          PHASE_B_CANDIDATE_PIN_SHA256: ${{ inputs.office_phase_b_candidate_pin_sha256 }}
+        run: |
+          set -euo pipefail
+          if [ "$PHASE_B_CONFLICT" = true ]; then echo 'A Phase B job excludes saved replay and candidate comparison.' >&2; exit 2; fi
+          if [ "$GITHUB_SHA" != "$PHASE_B_HEAD" ]; then echo "Phase B runs only on the frozen head $PHASE_B_HEAD, not $GITHUB_SHA." >&2; exit 2; fi
+          # Grants are written byte for byte and must hash to the granted sha256 before any job step reads them.
+          grant() {
+            printf '%s' "$2" > "$RUNNER_TEMP/$1.json"
+            [ "$(sha256sum "$RUNNER_TEMP/$1.json" | cut -d' ' -f1)" = "$3" ] || { echo "$1 does not match its granted sha256" >&2; exit 2; }
+          }
+          case "$PHASE_B_JOB" in
+            capture)
+              if [ -n "$PHASE_B_PIN$PHASE_B_CANDIDATE_PIN" ]; then echo 'The capture job takes no pins.' >&2; exit 2; fi ;;
+            pass1)
+              if [ -n "$PHASE_B_CANDIDATE_PIN" ]; then echo 'Pass 1 takes no candidate pin.' >&2; exit 2; fi
+              grant capture-pin "$PHASE_B_PIN" "$PHASE_B_PIN_SHA256"
+              { echo "OFFICE_PHASE_B_PIN=$RUNNER_TEMP/capture-pin.json"; echo "OFFICE_PHASE_B_PIN_SHA256=$PHASE_B_PIN_SHA256"; } >> "$GITHUB_ENV" ;;
+            pass2)
+              grant capture-pin "$PHASE_B_PIN" "$PHASE_B_PIN_SHA256"
+              grant candidate-pin "$PHASE_B_CANDIDATE_PIN" "$PHASE_B_CANDIDATE_PIN_SHA256"
+              { echo "OFFICE_PHASE_B_PIN=$RUNNER_TEMP/capture-pin.json"; echo "OFFICE_PHASE_B_PIN_SHA256=$PHASE_B_PIN_SHA256"
+                echo "OFFICE_PHASE_B_CANDIDATE_PIN=$RUNNER_TEMP/candidate-pin.json"; echo "OFFICE_PHASE_B_CANDIDATE_PIN_SHA256=$PHASE_B_CANDIDATE_PIN_SHA256"; } >> "$GITHUB_ENV" ;;
+          esac
       - name: Capture office mission and probe actual pairs
-        if: ${{ !inputs.office_saved_replay && !inputs.office_candidate_comparison }}
+        if: ${{ !inputs.office_saved_replay && !inputs.office_candidate_comparison && (inputs.office_phase_b_job == 'none' || inputs.office_phase_b_job == 'capture') }}
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 50 || 360 }}
         env:
           OFFICE_CI_REUSE_DIST: '1'
+          # Phase B job 1 flies the two-circuit route; every other capture keeps the single loop.
+          OFFICE_CI_SCENE: ${{ inputs.office_phase_b_job == 'capture' && 'office-loop-two-circuit' || 'office-loop' }}
         run: |
           mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
           nix develop --no-update-lock-file .#ci --command bash scripts/run-office-ci.sh "$OFFICE_CI_OUTPUT"
       - name: Replay pinned saved office observations without rendering
-        if: ${{ inputs.office_saved_replay && !inputs.office_candidate_comparison }}
+        if: ${{ inputs.office_saved_replay && !inputs.office_candidate_comparison && inputs.office_phase_b_job == 'none' }}
         env:
           OFFICE_REPLAY_ARTIFACT_TOKEN: ${{ github.token }}
         run: |
           mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
           nix develop --no-update-lock-file .#ci --command bash scripts/run-office-replay.sh "$OFFICE_CI_OUTPUT"
       - name: Build and compare the isolated office candidate
-        if: ${{ inputs.office_candidate_comparison }}
+        if: ${{ inputs.office_candidate_comparison && inputs.office_phase_b_job == 'none' }}
         env:
           GH_TOKEN: ${{ github.token }}
           OFFICE_REPLAY_ARTIFACT_TOKEN: ${{ github.token }}
@@ -213,8 +287,28 @@ jobs:
           fi
           mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
           nix develop --no-update-lock-file .#ci --command bash scripts/run-office-comparison.sh "$OFFICE_CI_OUTPUT"
+      - name: Phase B pass 1 (job 2), candidate on the sealed capture
+        if: ${{ inputs.office_phase_b_job == 'pass1' }}
+        timeout-minutes: 58
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OFFICE_REPLAY_ARTIFACT_TOKEN: ${{ github.token }}
+          OFFICE_PHASE_B_PASS: '1'
+        run: |
+          mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
+          nix develop --no-update-lock-file .#ci --command bash scripts/run-office-comparison.sh "$OFFICE_CI_OUTPUT"
+      - name: Phase B pass 2 (job 3), baseline and candidate replays of the sealed inputs
+        if: ${{ inputs.office_phase_b_job == 'pass2' }}
+        timeout-minutes: 50
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OFFICE_REPLAY_ARTIFACT_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
+          nix develop --no-update-lock-file .#ci --command bash scripts/run-office-phase-b-pass2.sh "$OFFICE_CI_OUTPUT"
       - name: Retain capture, native snapshots, pairs and consensus evidence
         if: always()
+        timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 15 || 360 }}
         uses: actions/upload-artifact@v7.0.2
         with:
           name: office-loop-software-${{ github.run_id }}-${{ github.run_attempt }}
@@ -223,9 +317,15 @@ jobs:
           compression-level: 1
           retention-days: 7
       - name: Summarize diagnostic scope
-        if: ${{ always() && !inputs.office_saved_replay && !inputs.office_candidate_comparison }}
+        if: ${{ always() && !inputs.office_saved_replay && !inputs.office_candidate_comparison && inputs.office_phase_b_job == 'none' }}
         run: |
           echo 'Software SwiftShader office diagnostic. Inspect capture/receipt.json and pipeline-status.json for completeness; partial artifacts do not establish GPU, accuracy or loop-closure acceptance.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Summarize Phase B scope
+        if: ${{ always() && inputs.office_phase_b_job != 'none' }}
+        env:
+          PHASE_B_JOB: ${{ inputs.office_phase_b_job }}
+        run: |
+          echo "Phase B job: $PHASE_B_JOB on the frozen head. Inspect pipeline-status.json first. Plans, boundaries and loop evidence in this artifact stay coordinator-only until the blind labels are sealed; no verdict, GPU or deployment result." >> "$GITHUB_STEP_SUMMARY"
       - name: Summarize saved replay scope
         if: ${{ always() && inputs.office_saved_replay && !inputs.office_candidate_comparison }}
         run: |
