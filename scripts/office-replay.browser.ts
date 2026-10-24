@@ -28,8 +28,10 @@ async function catalog(pointer:any,actual:any){
  exact(await sha(new TextEncoder().encode(JSON.stringify(actual)+'\n')),pointer.sha256,'Replayed catalog serialization hash');
 }
 target.OfficeReplay={failure:null,
- async initialize(base:string,nativeBase:string,manifestHash:string){
+ async initialize(base:string,nativeBase:string,manifestHash:string,wanted?:number[]){
   captureBase=base;assetsBase=nativeBase;
+  // Phase B passes the sealed plan's epochs; Phase A keeps its fixed list.
+  if(wanted)context.wanted=new Set(wanted);
   const raw=await bytes(new URL('native-manifest.json',base).href);exact(await sha(raw),manifestHash,'Capture manifest');
   const full=JSON.parse(text(raw));manifest={schemaVersion:1,...full.profiles['424x240']};
   project=JSON.parse(text(await bytes(new URL('project.json',base).href)));

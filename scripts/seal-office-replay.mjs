@@ -1,7 +1,8 @@
 import{readFile,readdir,writeFile}from'node:fs/promises';import{createReadStream}from'node:fs';import{resolve,join}from'node:path';import{createHash}from'node:crypto';
 import{requireCompleteReplay,exact}from'./office-replay-contract.mjs';
+import{activeReplayPin}from'./office-phase-b-replay-pin.mjs';
 const root=resolve(process.argv[2]??'');if(!process.argv[2]||process.argv.length!==3)throw Error('Usage: seal-office-replay.mjs OUTPUT');
-const receipt=JSON.parse(await readFile(join(root,'replay/receipt.json'),'utf8'));requireCompleteReplay(receipt);
+const receipt=JSON.parse(await readFile(join(root,'replay/receipt.json'),'utf8'));requireCompleteReplay(receipt,activeReplayPin());
 if(receipt.qualified!==true)throw Error('Replay state snapshots remain unqualified');
 for(const snapshot of receipt.snapshots){
  const expected=`epoch-${String(snapshot.epoch).padStart(4,'0')}-${snapshot.side}.bin.gz`;

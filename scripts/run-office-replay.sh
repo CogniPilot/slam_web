@@ -21,7 +21,7 @@ JS
 trap finish EXIT
 stage() { export OFFICE_REPLAY_STAGE="$1"; shift; "$@" 2>&1 | tee "$OFFICE_REPLAY_OUTPUT/$OFFICE_REPLAY_STAGE.log"; }
 stage dependencies npm ci
-stage contracts node --test scripts/office-replay.test.mjs
+stage contracts node --test scripts/office-replay.test.mjs scripts/office-phase-b-replay-pin.test.mjs
 stage restore node scripts/restore-office-replay-input.mjs "$OFFICE_REPLAY_OUTPUT/input"
 stage bundle node scripts/build-office-replay.mjs "$OFFICE_REPLAY_OUTPUT/replay.js"
 stage replay node dev/rumoca-bounded-run.mjs --seconds 600 --rss-mib 3072 --available-mib 512 \

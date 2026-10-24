@@ -29,11 +29,13 @@ export function presented(estimate){
  if(result.diagnostics)for(const key of ['stepMsMax','stepMsTotal'])delete result.diagnostics[key];
  return result;
 }
-export function requireCompleteReplay(receipt){
- if(receipt.status!=='pass'||receipt.verifiedFrames!==OFFICE_REPLAY.frames||receipt.chromium!==OFFICE_REPLAY.chromium
-   ||receipt.originalFilesVerified!==3800||receipt.sourceHead!==OFFICE_REPLAY.head
-   ||receipt.snapshotEpochs.length!==OFFICE_REPLAY.snapshots.length||receipt.snapshotEpochs.some((v,i)=>v!==OFFICE_REPLAY.snapshots[i])
-   ||receipt.snapshots.length!==OFFICE_REPLAY.snapshots.length*2
-   ||OFFICE_REPLAY.snapshots.some(epoch=>['previous','next'].some(side=>receipt.snapshots.filter(s=>s.epoch===epoch&&s.side===side).length!==1)))throw Error('Replay baseline is incomplete; snapshots remain unqualified');
+export function requireCompleteReplay(receipt,pin=OFFICE_REPLAY){
+ // Phase A pins 3800 original files; a Phase B pin names its own sealed count.
+ const originalFiles=pin===OFFICE_REPLAY?3800:pin.originalFiles;
+ if(receipt.status!=='pass'||receipt.verifiedFrames!==pin.frames||receipt.chromium!==pin.chromium
+   ||receipt.originalFilesVerified!==originalFiles||receipt.sourceHead!==pin.head
+   ||receipt.snapshotEpochs.length!==pin.snapshots.length||receipt.snapshotEpochs.some((v,i)=>v!==pin.snapshots[i])
+   ||receipt.snapshots.length!==pin.snapshots.length*2
+   ||pin.snapshots.some(epoch=>['previous','next'].some(side=>receipt.snapshots.filter(s=>s.epoch===epoch&&s.side===side).length!==1)))throw Error('Replay baseline is incomplete; snapshots remain unqualified');
  return true;
 }

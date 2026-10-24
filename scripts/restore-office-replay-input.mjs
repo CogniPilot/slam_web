@@ -1,7 +1,9 @@
 import {execFile,spawn} from 'node:child_process';import {promisify} from 'node:util';
 import {mkdir,writeFile} from 'node:fs/promises';import {createReadStream,createWriteStream} from 'node:fs';
 import {pipeline} from 'node:stream/promises';import {createHash} from 'node:crypto';import {resolve,join} from 'node:path';
-import {OFFICE_REPLAY as pin,exact} from './office-replay-contract.mjs';
+import {exact} from './office-replay-contract.mjs';
+import {activeReplayPin} from './office-phase-b-replay-pin.mjs';
+const pin=activeReplayPin();
 const output=process.argv[2];if(!output||process.argv.length!==3)throw Error('Usage: restore-office-replay-input.mjs NEW_OUTPUT');
 const root=resolve(output);await mkdir(root);const run=promisify(execFile);
 // Keep same-repository Actions access separate from dependency artifact access.
