@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Phase B job 3: baseline and candidate pass 2 of the sealed two-circuit capture, with the sealed plan's snapshots.
-# Replays only granted, hash-pinned inputs; there is no capture, compiler or export stage. A pass-equality refusal is an
-# infrastructure stop, not a result: the plan allows one re-dispatch of this job, and the capture is never repeated.
+# Replays only granted, hash-pinned inputs; there is no capture, compiler or export stage. Any failure from the baseline
+# replay on is an infrastructure stop, not a result: the plan allows one re-dispatch of this job, and the capture is never
+# repeated. Failures before the baseline replay are pre-run refusals and do not use that re-dispatch.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 if [[ $# != 1 || "${GITHUB_ACTIONS:-}" != true || "${GITHUB_REPOSITORY:-}" != CogniPilot/slam_web ]]; then
@@ -22,9 +23,13 @@ finish() {
   OFFICE_PHASE_B_EXIT="$result" node --input-type=module <<'JS'
 import{writeFile}from'node:fs/promises';import{join}from'node:path';
 const stage=process.env.OFFICE_PHASE_B_STAGE,exitCode=Number(process.env.OFFICE_PHASE_B_EXIT);
+// Job 3 yields no verdict. Before the baseline replay nothing has been replayed: a failure there is a pre-run refusal
+// (for example a mistyped grant) and does not use the one re-dispatch. Any failure from the baseline replay on, including
+// a baseline that does not match the capture (the cross-runner check), is an infrastructure stop (Vale, C3 review).
+const preRun=['setup','dependencies','controls','restore-pass1'].includes(stage);
 await writeFile(join(process.env.OFFICE_PHASE_B_OUTPUT,'pipeline-status.json'),JSON.stringify({stage,exitCode,
- infrastructureStop:stage==='pass-equality'&&exitCode!==0,
- scope:'Phase B pass 2. A pass-equality refusal is an infrastructure stop, not a result; inspect pass-equality/ before anything else.'},null,2)+'\n');
+ preRunRefusal:exitCode!==0&&preRun,infrastructureStop:exitCode!==0&&!preRun,
+ scope:'Phase B pass 2. Job 3 produces no verdict: a failure from the baseline replay on is an infrastructure stop, earlier failures are pre-run refusals.'},null,2)+'\n');
 JS
   exit "$result"
 }
