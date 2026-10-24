@@ -387,6 +387,16 @@ The stateless geometric verifier remains independent of estimated poses;
 explicit relocalization callers can change the admission policy. Native
 keyframes, verified loop edges and covariance now appear in the viewer.
 
+Loop-anchored capture is enabled. When a capture's consecutive edge fails,
+two agreeing verified loops to distinct, non-anchored references may admit it
+instead, with the existing pose-consistency and eviction guards. In a fixed
+office replay at 424 × 240 this lets the final return to the start corridor
+close its loop. It does not fix the earlier catalog freeze on that route, and
+rejection of look-alike corridors after such a recovery is still being
+evaluated. Loop behaviour with this policy has evidence only at 424 × 240;
+the default 848 × 480 mode and the other camera sizes include it without
+their own office-loop evidence.
+
 The hardware browser regression runs a fixed-heading warehouse circuit with
 424 × 240 RGB-D at 5 Hz and an IMU at 10 Hz. It requires a corrected loop,
 position RMSE below 0.6 m and maximum position error below 1.2 m. The longer

@@ -5,7 +5,15 @@ import {createHash} from 'node:crypto';
 import {captureScene,CAPTURE_SCENES,CAPTURE_CAMERA_HZ} from './environment-scale-scenes.mjs';
 
 const sha=text=>createHash('sha256').update(text).digest('hex');
-const plant=()=>readFile(new URL('../models/Vehicles/LabQuadrotor.mo',import.meta.url),'utf8');
+// The sealed receipts were captured under models 3e04d9ed. Only the generated
+// header names the library revision, so map it back and compare the rest exactly.
+const RECEIPT_REVISION='3e04d9ed9b29888bdb61ee91167d71b38df81389';
+const asCaptured=text=>{
+ const [header,...rest]=text.split('\n');
+ assert.match(header,/^\/\/ Generated from CogniPilot\/modelica_models [0-9a-f]{40}; edit the canonical packages there\.$/);
+ return [header.replace(/[0-9a-f]{40}/,RECEIPT_REVISION),...rest].join('\n');
+};
+const plant=async()=>asCaptured(await readFile(new URL('../models/Vehicles/LabQuadrotor.mo',import.meta.url),'utf8'));
 
 test('capture scenes keep the 5 Hz frame budgets',()=>{
  assert.equal(CAPTURE_CAMERA_HZ,5);
