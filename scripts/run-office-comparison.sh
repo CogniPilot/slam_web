@@ -22,9 +22,15 @@ trap finish EXIT
 stage() { export OFFICE_COMPARE_STAGE="$1"; shift; "$@" 2>&1 | tee "$OFFICE_COMPARE_OUTPUT/$OFFICE_COMPARE_STAGE.log"; }
 stage dependencies npm ci
 stage controls node --test scripts/office-compare-contract.test.mjs scripts/office-replay.test.mjs scripts/office-native-observation.test.mjs
+if [[ -n "${OFFICE_PHASE_B_PASS:-}" ]]; then
+  # Phase B job 2 is pass 1 only; job 3 (pass 2) has its own runner and never rebuilds the candidate.
+  [[ "$OFFICE_PHASE_B_PASS" == 1 ]] || { echo 'run-office-comparison.sh runs Phase B pass 1 only' >&2; exit 2; }
+  stage phase-b-controls node --test scripts/office-phase-b-checks.test.mjs scripts/office-phase-b-replay-pin.test.mjs scripts/office-phase-b-compare.test.mjs
+fi
 stage restore node scripts/restore-office-comparison-input.mjs "$OFFICE_COMPARE_OUTPUT/input" "$comparison_work/qualified-baseline.zip"
 qualified="$OFFICE_COMPARE_OUTPUT/input/qualified"
-capture="$qualified/input/original/capture"
+# Phase A restores a qualified replay root; Phase B pass 1 restores the job-1 capture artifact itself.
+if [[ -n "${OFFICE_PHASE_B_PASS:-}" ]]; then capture="$qualified/capture"; else capture="$qualified/input/original/capture"; fi
 stage canonical node scripts/prepare-office-canonical.mjs models/Libraries/CogniPilot "$comparison_work/canonical"
 stage snapshot python3 "$comparison_work/canonical/tools/slam/export_legacy_sources.py" --repository "$comparison_work/canonical" --revision 34c26cb4b3ad6f16a072582115acc68d35178d1f --output "$OFFICE_COMPARE_OUTPUT/candidate-source"
 export OFFICE_NATIVE_BUILD_WORK="$comparison_work/compiler"
@@ -55,5 +61,10 @@ stage candidate-assets node dev/rumoca-bounded-run.mjs --seconds 60 --rss-mib 20
 stage bundle node scripts/build-office-compare.mjs "$OFFICE_COMPARE_OUTPUT/comparison.js"
 stage comparison node dev/rumoca-bounded-run.mjs --seconds 600 --rss-mib 3072 --available-mib 512 --log "$OFFICE_COMPARE_OUTPUT/comparison-resource.log" -- \
   node scripts/compare-office-browser.mjs "$qualified" "$OFFICE_COMPARE_OUTPUT/candidate-assets" "$OFFICE_COMPARE_OUTPUT/comparison" "$OFFICE_COMPARE_OUTPUT/comparison.js" scripts/office-candidate.json
+if [[ -n "${OFFICE_PHASE_B_PASS:-}" ]]; then
+  # The sealed plan (B, recovery events, snapshot epochs) is coordinator-only until labels seal; its sha256 is job 3's grant.
+  stage plan node dev/rumoca-bounded-run.mjs --seconds 300 --rss-mib 2048 --available-mib 512 --log "$OFFICE_COMPARE_OUTPUT/plan-resource.log" -- \
+    node scripts/office-phase-b-checks.mjs plan --capture "$capture" --candidate "$OFFICE_COMPARE_OUTPUT/comparison/capture" --out "$OFFICE_COMPARE_OUTPUT/plan"
+fi
 stage seal node scripts/seal-office-comparison.mjs "$OFFICE_COMPARE_OUTPUT"
 export OFFICE_COMPARE_STAGE=complete

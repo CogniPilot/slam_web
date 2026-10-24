@@ -2,7 +2,10 @@ import {execFile,spawn} from 'node:child_process';import {promisify} from 'node:
 import {mkdir,writeFile} from 'node:fs/promises';import {createReadStream,createWriteStream} from 'node:fs';
 import {pipeline} from 'node:stream/promises';import {createHash} from 'node:crypto';import {resolve,join} from 'node:path';
 import {exact} from './office-replay-contract.mjs';
-import {QUALIFIED_BASELINE as pin} from './office-compare-contract.mjs';
+import {QUALIFIED_BASELINE} from './office-compare-contract.mjs';
+import {loadPhaseBReplayPin} from './office-phase-b-replay-pin.mjs';
+// Phase B pass 1 restores the granted job-1 capture artifact; Phase A its fixed qualified baseline.
+const pin=process.env.OFFICE_PHASE_B_PASS?loadPhaseBReplayPin(process.env.OFFICE_PHASE_B_PIN,process.env.OFFICE_PHASE_B_PIN_SHA256):QUALIFIED_BASELINE;
 const[output,archive]=process.argv.slice(2);if(!archive||process.argv.length!==4)throw Error('Usage: restore-office-comparison-input.mjs NEW_OUTPUT NEW_ARCHIVE');
 const root=resolve(output);await mkdir(root);const run=promisify(execFile);
 // Keep same-repository Actions access separate from dependency artifact access.

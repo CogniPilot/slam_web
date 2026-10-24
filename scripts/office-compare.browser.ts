@@ -12,7 +12,8 @@ const sha=async(bytes:Uint8Array)=>Array.from(new Uint8Array(await crypto.subtle
 const bytes=async(url:string)=>{const r=await fetch(url);if(!r.ok)throw Error('Comparison input unavailable: '+url);return new Uint8Array(await r.arrayBuffer());};
 const text=(b:Uint8Array)=>new TextDecoder().decode(b);
 const b64=(b:Uint8Array)=>{let s='';for(let i=0;i<b.length;i+=16384)s+=String.fromCharCode(...b.subarray(i,i+16384));return btoa(s);};
-const context:any={epoch:-1,programs:new Map(),traceTarget:{},pending:[],wanted:new Set(OFFICE_REPLAY.snapshots)};
+// Phase A defaults; Phase B passes the plan's epochs and its boundary B as prefixEnd.
+const context:any={epoch:-1,programs:new Map(),traceTarget:{},pending:[],wanted:new Set(OFFICE_REPLAY.snapshots),prefixEnd:1206};
 installReplayObserver(SlamNativeProgram,context);
 let manifest:any,project:any,session:ModelicaSlamSession,captureBase:string,assetsBase:string;
 const assetRecords=new Map(),savedReferences=new Set();
@@ -37,8 +38,9 @@ async function saveReference(frame:any){
  return{file,sha256:digest,id:frame.id,epoch:frame.epoch,time:frame.imageTime,generation:frame.generation};
 }
 target.OfficeCompare={failure:null,
- async initialize(base:string,nativeBase:string,originalManifestHash:string,candidateManifestHash:string){
+ async initialize(base:string,nativeBase:string,originalManifestHash:string,candidateManifestHash:string,phaseB?:{wanted:number[],prefixEnd:number}){
   captureBase=base;assetsBase=nativeBase;
+  if(phaseB){context.wanted=new Set(phaseB.wanted);context.prefixEnd=phaseB.prefixEnd;}
   const old=await bytes(new URL('native-manifest.json',base).href);exact(await sha(old),originalManifestHash,'Original native manifest');
   const raw=await bytes(new URL('manifest.json',nativeBase).href);exact(await sha(raw),candidateManifestHash,'Pinned candidate manifest');
   const full=JSON.parse(text(raw));manifest={schemaVersion:1,...full.profiles['424x240']};
@@ -62,7 +64,7 @@ target.OfficeCompare={failure:null,
    else{const interval=slamIntervalFrameFromSensor(context.frame);for(const piece of interval.intervals.slice(0,-1))session.predict(interval.imageEpoch,piece);estimate=session.advance(interval).estimate;program=context.programs.get(manifest.models.step.model);}
    const trace=context.traceTarget.__officeNativeTrace;
    exact(trace.status,0,'Candidate native entry');exactCaptured(trace.inputs,sample.nativeTrace.inputs,'Original small native inputs');
-   if(epoch<=1205){
+   if(epoch<context.prefixEnd){
     exactCaptured(presented(estimate),presented(sample.native),'Exact prefix presented native estimate');
     exactCaptured(trace.derived,sample.nativeTrace.derived,'Exact prefix derived outputs');exactCaptured(trace.outputs,sample.nativeTrace.outputs,'Exact prefix sparse outputs');
     exactCaptured(trace.previousCatalog,sample.nativeTrace.previousCatalog,'Exact prefix catalog header');

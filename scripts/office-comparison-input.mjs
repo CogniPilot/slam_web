@@ -13,6 +13,11 @@ export async function verifyOfficeComparisonInput(inputArg,assetsArg,contractArg
  const pipeline=JSON.parse(await readFile(join(input,'pipeline-status.json')));if(pipeline.stage!=='complete'||pipeline.exitCode!==0)throw Error('Baseline pipeline incomplete');
  const manifestBytes=await readFile(join(capture,'native-manifest.json')),baseline=JSON.parse(manifestBytes);
  exact(sha(manifestBytes),'026a141c66af20f1d505938404127ab6f0e30e168b7fb28ec5e51dd96d5b1ea1','Original full native manifest');
+ const{candidateBytes,manifest,contract,assetCount}=await verifyCandidateAssets(assets,contractArg,baseline);
+ return{input,assets,capture,files,manifestBytes,baseline,candidateBytes,manifest,contract,qualified,assetCount};
+}
+/** The reviewed candidate: manifest pinned by the contract, profile against the baseline, every decoded asset hash. */
+async function verifyCandidateAssets(assets,contractArg,baseline){
  const candidateBytes=await readFile(join(assets,'manifest.json')),manifest=JSON.parse(candidateBytes),contract=JSON.parse(await readFile(contractArg));
  exact(sha(candidateBytes),contract.manifestSha256,'Reviewed local candidate manifest');requireCandidateProfile(manifest,baseline,contract);
  const bindings=new Map();for(const layout of Object.values(manifest.profiles['424x240'].models))for(const binding of Object.values(layout.files)){
@@ -23,5 +28,25 @@ export async function verifyOfficeComparisonInput(inputArg,assetsArg,contractArg
   let bytes=await readFile(join(assets,file));if(binding.encoding==='gzip')bytes=gunzipSync(bytes,{maxOutputLength:binding.bytes});else if(binding.encoding!=='identity')throw Error('Unknown candidate asset encoding');
   exact(bytes.length,binding.bytes,'Candidate decoded asset bytes');exact(sha(bytes),binding.sha256,'Candidate decoded asset hash');
  }
- return{input,assets,capture,files,manifestBytes,baseline,candidateBytes,manifest,contract,qualified,assetCount:bindings.size};
+ return{candidateBytes,manifest,contract,assetCount:bindings.size};
+}
+/** Phase B pass 1 input: the sealed job-1 two-circuit capture artifact, every pin from the granted Phase B pin. */
+export async function verifyPhaseBCaptureInput(inputArg,assetsArg,contractArg,pin){
+ const input=await realpath(inputArg),assets=await realpath(assetsArg),capture=join(input,'capture');
+ const seal=await readFile(join(input,'SHA256SUMS'));exact(sha(seal),pin.sealManifestSha256,'Granted job-1 capture seal');const files=new Map();
+ for(const line of seal.toString('utf8').trim().split('\n')){
+  const[digest,name]=line.split('  '),path=await realpath(join(input,name));if(files.has(name)||!path.startsWith(input+sep))throw Error('Invalid capture seal member');
+  const h=createHash('sha256');for await(const part of createReadStream(path))h.update(part);exact(h.digest('hex'),digest,'Capture file '+name);files.set(name,digest);
+ }
+ exact(files.size,pin.originalFiles,'Granted job-1 sealed file count');
+ const pipeline=JSON.parse(await readFile(join(input,'pipeline-status.json')));if(pipeline.stage!=='complete'||pipeline.exitCode!==0)throw Error('Job-1 pipeline incomplete');
+ const origin=JSON.parse(await readFile(join(input,'build-origin.json')));exact(origin.runId,pin.runId,'Job-1 run');exact(origin.head,pin.head,'Job-1 head');
+ const captureReceipt=JSON.parse(await readFile(join(capture,'receipt.json')));
+ if(captureReceipt.scene!=='office-loop-two-circuit'||captureReceipt.complete!==true)throw Error('Not a complete two-circuit capture');
+ const summary=JSON.parse(await readFile(join(input,'summary.json')));
+ if(summary.flight?.envelope!=='pass'||summary.flight?.return!=='pass')throw Error('Job-1 flight checks did not pass');
+ const manifestBytes=await readFile(join(capture,'native-manifest.json')),baseline=JSON.parse(manifestBytes);
+ exact(sha(manifestBytes),captureReceipt.nativeManifestSha256,'Job-1 baseline native manifest');
+ const{candidateBytes,manifest,contract,assetCount}=await verifyCandidateAssets(assets,contractArg,baseline);
+ return{input,assets,capture,files,manifestBytes,baseline,candidateBytes,manifest,contract,assetCount};
 }

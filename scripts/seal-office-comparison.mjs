@@ -1,8 +1,12 @@
 import{readFile,writeFile,readdir}from'node:fs/promises';import{createReadStream}from'node:fs';import{resolve,join}from'node:path';import{createHash}from'node:crypto';
 import{requireCompleteComparison}from'./office-compare-contract.mjs';
+import{phaseBComparison,requireCompletePhaseBComparison}from'./office-phase-b-compare.mjs';
 import{exact}from'./office-replay-contract.mjs';import{gunzipSync}from'node:zlib';
 const root=resolve(process.argv[2]??'');if(!process.argv[2]||process.argv.length!==3)throw Error('Usage: seal-office-comparison.mjs OUTPUT');
-const receipt=JSON.parse(await readFile(join(root,'comparison/receipt.json')));requireCompleteComparison(receipt);if(receipt.prefixQualified!==true)throw Error('Comparison prefix unqualified');
+const receipt=JSON.parse(await readFile(join(root,'comparison/receipt.json')));
+// Phase B recomputes its mode from the restored capture, so the receipt cannot choose its own completion rule.
+const mode=await phaseBComparison(join(root,'input/qualified/capture'));
+if(mode)requireCompletePhaseBComparison(receipt,mode);else requireCompleteComparison(receipt);if(receipt.prefixQualified!==true)throw Error('Comparison prefix unqualified');
 const sha=b=>createHash('sha256').update(b).digest('hex');
 for(const snapshot of receipt.snapshots){
  const stem=`epoch-${String(snapshot.epoch).padStart(4,'0')}-${snapshot.side}`;exact(snapshot.file,stem+'.bin.gz','Declared snapshot filename');
