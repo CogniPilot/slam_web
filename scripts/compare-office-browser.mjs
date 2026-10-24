@@ -4,15 +4,16 @@ import{createHash}from'node:crypto';import{gzipSync}from'node:zlib';
 import{chromiumLaunchOptions}from'./browser-launch.mjs';
 import{OFFICE_REPLAY,exact}from'./office-replay-contract.mjs';
 import{requireCompleteComparison,prefixSnapshot}from'./office-compare-contract.mjs';
-import{verifyOfficeComparisonInput,verifyPhaseBCaptureInput}from'./office-comparison-input.mjs';
+import{verifyOfficeComparisonInput,verifyPhaseBCaptureInput,verifyPhaseBReplayInput}from'./office-comparison-input.mjs';
+import{loadPhaseBCandidatePin}from'./office-phase-b-replay-pin.mjs';
 import{phaseBComparison,requireCompletePhaseBComparison}from'./office-phase-b-compare.mjs';
 const[inputArg,assetsArg,outputArg,bundleArg,contractArg]=process.argv.slice(2);
 if(!contractArg||process.argv.length!==7)throw Error('Usage: compare-office-browser.mjs QUALIFIED_REPLAY CANDIDATE_ASSETS NEW_OUTPUT BUNDLE CONTRACT');
 if(process.env.GITHUB_ACTIONS!=='true'||process.env.GITHUB_REPOSITORY!=='CogniPilot/slam_web')throw Error('Full native comparison requires reviewed CI');
-// Phase A input is a qualified replay root; Phase B pass 1 input is the sealed job-1 capture artifact itself.
-const passB=process.env.OFFICE_PHASE_B_PASS;if(passB==='2')throw Error('Phase B pass 2 comparison is wired in job 3 (checkpoint C3)');
-const input=await realpath(inputArg),original=join(input,'input/original'),capture=passB?join(input,'capture'):join(original,'capture'),assets=await realpath(assetsArg),output=resolve(outputArg);
-const frameKey=stem=>(passB?'capture':'input/original/capture')+`/frames/${stem}.json`;
+// Phase A and Phase B pass 2 input is a qualified replay root; Phase B pass 1 input is the sealed job-1 capture artifact.
+const passB=process.env.OFFICE_PHASE_B_PASS,captureInput=passB==='1';
+const input=await realpath(inputArg),original=join(input,'input/original'),capture=captureInput?join(input,'capture'):join(original,'capture'),assets=await realpath(assetsArg),output=resolve(outputArg);
+const frameKey=stem=>(captureInput?'capture':'input/original/capture')+`/frames/${stem}.json`;
 await mkdir(output);const candidate=join(output,'capture');await mkdir(candidate);for(const part of ['frames','native-frames','declared-state'])await mkdir(join(candidate,part));
 const sha=b=>createHash('sha256').update(b).digest('hex'),started=performance.now();
 const receipt={schemaVersion:1,status:'running',completedFrames:0,prefixFrames:0,prefixSnapshotChecks:0,snapshots:[],assets:[],
@@ -20,7 +21,13 @@ const receipt={schemaVersion:1,status:'running',completedFrames:0,prefixFrames:0
 const save=()=>writeFile(join(output,'receipt.json'),JSON.stringify(receipt,null,2)+'\n');await save();let browser,server;
 try{
  const mode=await phaseBComparison(capture);if(mode)receipt.phaseB={pass:mode.pass,B:mode.B,prefixEnd:mode.prefixEnd,captureRun:mode.pin.runId,captureHead:mode.pin.head};
- const{files,manifestBytes,candidateBytes,contract}=mode?await verifyPhaseBCaptureInput(input,assets,contractArg,mode.pin):await verifyOfficeComparisonInput(input,assets,contractArg);receipt.originalReplayFilesVerified=files.size;
+ const verified=!mode?await verifyOfficeComparisonInput(input,assets,contractArg)
+  :mode.pass===1?await verifyPhaseBCaptureInput(input,assets,contractArg,mode.pin)
+  :await verifyPhaseBReplayInput(input,process.env.OFFICE_PHASE_B_PASS1_ROOT,contractArg,mode,
+    loadPhaseBCandidatePin(process.env.OFFICE_PHASE_B_CANDIDATE_PIN,process.env.OFFICE_PHASE_B_CANDIDATE_PIN_SHA256));
+ // Pass 2 replays exactly job 2's candidate assets; the asset argument must be that directory.
+ if(mode?.pass===2)exact(assets,verified.assets,'Pass 2 candidate assets are the granted job-2 assets');
+ const{files,manifestBytes,candidateBytes,contract}=verified;receipt.originalReplayFilesVerified=files.size;if(mode?.pass===2)receipt.expectedInputFiles=files.size;
  receipt.contract=contract;receipt.nativeManifestSha256=sha(candidateBytes);receipt.originalNativeManifestSha256=sha(manifestBytes);
  const bundle=await readFile(bundleArg,'utf8'),sources=JSON.parse(await readFile(bundleArg+'.source.json'));
  exact(sources.sourceHead,mode?mode.pin.head:OFFICE_REPLAY.head,'Unchanged original host source');exact(sources.bundleSha256,sha(bundle),'Comparison bundle');receipt.sources=sources;
@@ -46,9 +53,10 @@ try{
   const raw=Buffer.from(base64,'base64');exact(raw.length,meta.rawBytes,'Candidate declared bytes');exact(sha(raw),meta.rawSha256,'Candidate raw snapshot');
   const oldStem=`epoch-${String(meta.epoch).padStart(4,'0')}-${meta.side}`,old=JSON.parse(await readFile(join(input,'replay/snapshots',oldStem+'.json')));
   exact(meta.runs,old.runs,'Named declared-state packing');exact(meta.stateHash,old.stateHash,'Declared state name identity');
-  if(prefixSnapshot(meta.epoch,meta.side)){exact(meta.rawSha256,old.rawSha256,'Exact predivergence declared state');receipt.prefixSnapshotChecks++;}
+  const prefix=mode?mode.prefixSnapshot(meta.epoch,meta.side):prefixSnapshot(meta.epoch,meta.side);
+  if(prefix){exact(meta.rawSha256,old.rawSha256,'Exact predivergence declared state');receipt.prefixSnapshotChecks++;}
   const compressed=gzipSync(raw),file=oldStem+'.bin.gz';await writeFile(join(candidate,'declared-state',file),compressed,{flag:'wx'});
-  const record={...meta,file,bytes:compressed.length,sha256:sha(compressed),prefixMatched:prefixSnapshot(meta.epoch,meta.side)};
+  const record={...meta,file,bytes:compressed.length,sha256:sha(compressed),prefixMatched:prefix};
   await writeFile(join(candidate,'declared-state',oldStem+'.json'),JSON.stringify(record)+'\n',{flag:'wx'});return record;
  });
  await page.goto(base,{waitUntil:'domcontentloaded'});await page.addScriptTag({content:bundle});

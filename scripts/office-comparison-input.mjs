@@ -1,5 +1,5 @@
 import{readFile,realpath}from'node:fs/promises';import{createReadStream}from'node:fs';import{join,sep}from'node:path';import{createHash}from'node:crypto';import{gunzipSync}from'node:zlib';
-import{exact,requireCompleteReplay}from'./office-replay-contract.mjs';import{QUALIFIED_BASELINE,requireCandidateProfile}from'./office-compare-contract.mjs';
+import{exact,requireCompleteReplay}from'./office-replay-contract.mjs';import{activeReplayPin}from'./office-phase-b-replay-pin.mjs';import{QUALIFIED_BASELINE,requireCandidateProfile}from'./office-compare-contract.mjs';
 const sha=b=>createHash('sha256').update(b).digest('hex');
 export async function verifyOfficeComparisonInput(inputArg,assetsArg,contractArg){
  const input=await realpath(inputArg),assets=await realpath(assetsArg),capture=join(input,'input/original/capture');
@@ -49,4 +49,33 @@ export async function verifyPhaseBCaptureInput(inputArg,assetsArg,contractArg,pi
  exact(sha(manifestBytes),captureReceipt.nativeManifestSha256,'Job-1 baseline native manifest');
  const{candidateBytes,manifest,contract,assetCount}=await verifyCandidateAssets(assets,contractArg,baseline);
  return{input,assets,capture,files,manifestBytes,baseline,candidateBytes,manifest,contract,assetCount};
+}
+/** Rehash every member of a seal manifest under root; returns name -> digest. */
+async function sealedFiles(root,seal,label){
+ const files=new Map();
+ for(const line of seal.toString('utf8').trim().split('\n')){
+  const[digest,name]=line.split('  '),path=await realpath(join(root,name));if(files.has(name)||!path.startsWith(root+sep))throw Error('Invalid '+label+' seal member');
+  const h=createHash('sha256');for await(const part of createReadStream(path))h.update(part);exact(h.digest('hex'),digest,label+' file '+name);files.set(name,digest);
+ }
+ return files;
+}
+/** Phase B pass 2 input: job 3's own qualified baseline replay of the granted capture, and the granted job-2 artifact,
+ * whose candidate assets are replayed byte for byte (never rebuilt). */
+export async function verifyPhaseBReplayInput(inputArg,pass1Arg,contractArg,mode,candidatePin){
+ const input=await realpath(inputArg),pass1=await realpath(pass1Arg),assets=join(pass1,'candidate-assets'),capture=join(input,'input/original/capture');
+ const files=await sealedFiles(input,await readFile(join(input,'SHA256SUMS')),'Baseline replay');
+ const qualified=JSON.parse(await readFile(join(input,'replay/receipt.json')));requireCompleteReplay(qualified,activeReplayPin());
+ if(qualified.qualified!==true)throw Error('Phase B baseline replay remains unqualified');
+ const pipeline=JSON.parse(await readFile(join(input,'pipeline-status.json')));if(pipeline.stage!=='complete'||pipeline.exitCode!==0)throw Error('Baseline replay pipeline incomplete');
+ exact(createHash('sha256').update(await readFile(join(input,'input/original/SHA256SUMS'))).digest('hex'),mode.pin.sealManifestSha256,'Granted job-1 capture seal');
+ const pass1Seal=await readFile(join(pass1,'SHA256SUMS'));exact(sha(pass1Seal),candidatePin.sealManifestSha256,'Granted job-2 seal');
+ const pass1Files=await sealedFiles(pass1,pass1Seal,'Job-2');exact(pass1Files.size,candidatePin.originalFiles,'Granted job-2 sealed file count');
+ const pass1Pipeline=JSON.parse(await readFile(join(pass1,'pipeline-status.json')));if(pass1Pipeline.stage!=='complete'||pass1Pipeline.exitCode!==0)throw Error('Job-2 pipeline incomplete');
+ const pass1Receipt=JSON.parse(await readFile(join(pass1,'comparison/receipt.json')));
+ if(pass1Receipt.status!=='complete'||pass1Receipt.phaseB?.pass!==1||pass1Receipt.phaseB.captureRun!==mode.pin.runId||pass1Receipt.phaseB.B!==mode.B)throw Error('Job-2 pass 1 does not match this capture');
+ exact(sha(await readFile(join(pass1,'plan/plan-receipt.json'))),mode.pin.snapshotPlanSha256,'Job-2 sealed plan');
+ const manifestBytes=await readFile(join(capture,'native-manifest.json')),baseline=JSON.parse(manifestBytes);
+ const{candidateBytes,manifest,contract,assetCount}=await verifyCandidateAssets(assets,contractArg,baseline);
+ exact(sha(candidateBytes),candidatePin.candidateManifestSha256,'Granted job-2 candidate manifest');
+ return{input,assets,capture,files,manifestBytes,baseline,candidateBytes,manifest,contract,qualified,assetCount,pass1};
 }

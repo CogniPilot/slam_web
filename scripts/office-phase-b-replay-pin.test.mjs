@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {mkdtempSync,writeFileSync} from 'node:fs';import {tmpdir} from 'node:os';import {join} from 'node:path';import {createHash} from 'node:crypto';
-import {loadPhaseBReplayPin,activeReplayPin} from './office-phase-b-replay-pin.mjs';
+import {loadPhaseBReplayPin,activeReplayPin,loadPhaseBCandidatePin} from './office-phase-b-replay-pin.mjs';
 import {OFFICE_REPLAY,requireCompleteReplay} from './office-replay-contract.mjs';
 const sha=raw=>createHash('sha256').update(raw).digest('hex');
 const dir=mkdtempSync(join(tmpdir(),'phase-b-pin-'));
@@ -41,4 +41,18 @@ test('a Phase B replay qualifies only against its own pin',()=>{
   assert.throws(()=>requireCompleteReplay({...complete,...change},active),/incomplete/);
  // The Phase A default still demands its own pins.
  assert.throws(()=>requireCompleteReplay(complete),/incomplete/);
+});
+test('the job-2 candidate pin loads only with its granted hash and exact fields',()=>{
+ const candidate={schemaVersion:1,experiment:'phase-b-candidate-pass-1',repository:'CogniPilot/slam_web',runId:'40300000000',head:'a'.repeat(40),
+  artifactId:12700000000,artifactName:'office-loop-software-40300000000-1',archiveBytes:500000000,archiveSha256:'e'.repeat(64),
+  sealManifestSha256:'f'.repeat(64),originalFiles:5000,candidateManifestSha256:'094b22e5ae1c10e976ee2c2e9b3ee98252894f0a46a46128e73eb1691ec94213'};
+ const {path,sha:digest}=file('candidate.json',candidate);
+ assert.equal(loadPhaseBCandidatePin(path,digest).runId,'40300000000');
+ assert.throws(()=>loadPhaseBCandidatePin(path,'0'.repeat(64)),/hash mismatch/);
+ for(const [name,change] of [['experiment',{experiment:'phase-b-baseline-pass-2'}],['manifest',{candidateManifestSha256:'short'}],['extra',{snapshotPlanSha256:null}]]){
+  const bad=file('candidate-'+name+'.json',{...candidate,...change});
+  assert.throws(()=>loadPhaseBCandidatePin(bad.path,bad.sha),/not valid|fields differ/,name);
+ }
+ // A capture pin is not a candidate pin.
+ const capture=file('capture-as-candidate.json',valid);assert.throws(()=>loadPhaseBCandidatePin(capture.path,capture.sha),/fields differ/);
 });

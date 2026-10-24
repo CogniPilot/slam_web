@@ -5,7 +5,8 @@ import{exact}from'./office-replay-contract.mjs';import{gunzipSync}from'node:zlib
 const root=resolve(process.argv[2]??'');if(!process.argv[2]||process.argv.length!==3)throw Error('Usage: seal-office-comparison.mjs OUTPUT');
 const receipt=JSON.parse(await readFile(join(root,'comparison/receipt.json')));
 // Phase B recomputes its mode from the restored capture, so the receipt cannot choose its own completion rule.
-const mode=await phaseBComparison(join(root,'input/qualified/capture'));
+// Job 2 restores the capture under input/qualified; job 3's capture is inside its own baseline replay root.
+const mode=await phaseBComparison(join(root,process.env.OFFICE_PHASE_B_PASS==='2'?'baseline/input/original/capture':'input/qualified/capture'));
 if(mode)requireCompletePhaseBComparison(receipt,mode);else requireCompleteComparison(receipt);if(receipt.prefixQualified!==true)throw Error('Comparison prefix unqualified');
 const sha=b=>createHash('sha256').update(b).digest('hex');
 for(const snapshot of receipt.snapshots){

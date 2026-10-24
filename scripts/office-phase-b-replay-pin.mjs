@@ -32,3 +32,17 @@ export function activeReplayPin(env=process.env){
  }
  return Object.freeze({...pin,phaseB:true,snapshots:Object.freeze(snapshots)});
 }
+const CANDIDATE_FIELDS=['schemaVersion','experiment','repository','runId','head','artifactId','artifactName','archiveBytes','archiveSha256',
+ 'sealManifestSha256','originalFiles','candidateManifestSha256'].sort();
+/** Job 3's second grant: the sealed job-2 artifact (pass-1 candidate frames, candidate assets and the plan). */
+export function loadPhaseBCandidatePin(path,expectedSha256){
+ if(!HEX.test(expectedSha256??''))throw Error('Phase B candidate pin requires the granted sha256');
+ const raw=readFileSync(path);if(sha(raw)!==expectedSha256)throw Error('Phase B candidate pin hash mismatch');
+ const p=JSON.parse(raw);
+ if(Object.keys(p).sort().join()!==CANDIDATE_FIELDS.join())throw Error('Phase B candidate pin fields differ');
+ if(p.schemaVersion!==1||p.experiment!=='phase-b-candidate-pass-1'||p.repository!=='CogniPilot/slam_web'||!/^[0-9]+$/.test(p.runId)
+   ||!COMMIT.test(p.head)||!Number.isInteger(p.artifactId)||p.artifactName!==`office-loop-software-${p.runId}-1`
+   ||!Number.isInteger(p.archiveBytes)||p.archiveBytes<1||!HEX.test(p.archiveSha256)||!HEX.test(p.sealManifestSha256)
+   ||!Number.isInteger(p.originalFiles)||p.originalFiles<1||!HEX.test(p.candidateManifestSha256))throw Error('Phase B candidate pin is not valid');
+ return p;
+}
