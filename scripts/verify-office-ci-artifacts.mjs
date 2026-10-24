@@ -24,17 +24,28 @@ for(let index=0;index<OFFICE_MISSION.frames;index++){
   const cached=references.get(reference.file);if(cached.sha256!==reference.sha256||cached.payload.id!==reference.id||cached.payload.epoch!==reference.epoch||cached.payload.generation!==reference.generation)throw Error('Reference artifact identity failure');
  }
 }
-const consensus=JSON.parse(await readFile(join(root,'consensus/receipt.json'),'utf8'));
-if(!['pass','no-eligible-pairs'].includes(consensus.status))throw Error('Consensus stage incomplete');
-if(sha256(await readFile(join(root,'consensus/combined-pairs.json')))!==consensus.inputSha256)throw Error('Consensus input hash mismatch');
-const combined=JSON.parse(await readFile(join(root,'consensus/combined-pairs.json'),'utf8'));
-const extraction=JSON.parse(await readFile(join(root,'pairs/extraction-receipt.json'),'utf8'));
-if(combined.cases.length!==consensus.cases.length||combined.cases.length!==extraction.identityVerifiedCases)throw Error('Consensus case inventory mismatch');
-if(consensus.status==='pass'){
- const probe=JSON.parse(await readFile(join(root,'consensus/probe/receipt.json'),'utf8'));
- if(probe.status!=='pass'||probe.inputSha256!==consensus.inputSha256||probe.results.length!==combined.cases.length||probe.results.some(row=>row.identity!==true))throw Error('Consensus probe identity receipt mismatch');
-}else if(combined.cases.length)throw Error('No-pairs receipt contains consensus cases');
-await writeFile(join(root,'summary.json'),JSON.stringify({schemaVersion:1,captureComplete:true,frames:OFFICE_MISSION.frames,referenceSnapshots:references.size,consensusStatus:consensus.status,cases:consensus.cases,extraction:{status:extraction.status,caseErrors:extraction.caseErrors,missingLoopCountBaselines:extraction.missingLoopCountBaselines,reconstructionOnlyCases:extraction.reconstructionOnlyCases},scope:receipt.scope,claim:'Full software-rendered diagnostic acquisition; loop closure remains to be assessed from actual outcomes.'},null,2)+'\n');
+if(receipt.scene==='office-loop-two-circuit'){
+ // Phase B job 1 has no pairs or consensus: it seals the capture with both flight receipts passing.
+ const flight={};
+ for(const check of ['envelope','return']){
+  const result=JSON.parse(await readFile(join(root,'flight',check,check+'-receipt.json'),'utf8'));
+  if(result.check!=='phase-b-'+check||result.route!=='two-circuit'||result.status!=='pass')throw Error('Phase B flight '+check+' receipt did not pass');
+  flight[check]=result.status;
+ }
+ await writeFile(join(root,'summary.json'),JSON.stringify({schemaVersion:1,scene:receipt.scene,captureComplete:true,frames:OFFICE_MISSION.frames,referenceSnapshots:references.size,flight},null,2)+'\n');
+}else{
+ const consensus=JSON.parse(await readFile(join(root,'consensus/receipt.json'),'utf8'));
+ if(!['pass','no-eligible-pairs'].includes(consensus.status))throw Error('Consensus stage incomplete');
+ if(sha256(await readFile(join(root,'consensus/combined-pairs.json')))!==consensus.inputSha256)throw Error('Consensus input hash mismatch');
+ const combined=JSON.parse(await readFile(join(root,'consensus/combined-pairs.json'),'utf8'));
+ const extraction=JSON.parse(await readFile(join(root,'pairs/extraction-receipt.json'),'utf8'));
+ if(combined.cases.length!==consensus.cases.length||combined.cases.length!==extraction.identityVerifiedCases)throw Error('Consensus case inventory mismatch');
+ if(consensus.status==='pass'){
+  const probe=JSON.parse(await readFile(join(root,'consensus/probe/receipt.json'),'utf8'));
+  if(probe.status!=='pass'||probe.inputSha256!==consensus.inputSha256||probe.results.length!==combined.cases.length||probe.results.some(row=>row.identity!==true))throw Error('Consensus probe identity receipt mismatch');
+ }else if(combined.cases.length)throw Error('No-pairs receipt contains consensus cases');
+ await writeFile(join(root,'summary.json'),JSON.stringify({schemaVersion:1,captureComplete:true,frames:OFFICE_MISSION.frames,referenceSnapshots:references.size,consensusStatus:consensus.status,cases:consensus.cases,extraction:{status:extraction.status,caseErrors:extraction.caseErrors,missingLoopCountBaselines:extraction.missingLoopCountBaselines,reconstructionOnlyCases:extraction.reconstructionOnlyCases},scope:receipt.scope,claim:'Full software-rendered diagnostic acquisition; loop closure remains to be assessed from actual outcomes.'},null,2)+'\n');
+}
 const files=[];
 async function visit(path){for(const entry of await readdir(path,{withFileTypes:true})){const file=join(path,entry.name);if(entry.isSymbolicLink())throw Error('Artifact symlinks are refused');if(entry.isDirectory())await visit(file);else if(entry.isFile()&&!['SHA256SUMS','pipeline-status.json'].includes(entry.name)&&file!==join(root,'seal.log'))files.push(file);}}
 await visit(root);const lines=[];

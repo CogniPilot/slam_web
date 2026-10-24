@@ -4,7 +4,7 @@ import {mkdir,readFile,writeFile,statfs} from 'node:fs/promises';
 import {resolve,join} from 'node:path';
 import {performance} from 'node:perf_hooks';
 import {chromiumLaunchOptions} from './browser-launch.mjs';
-import {officeLoopPhysics} from './office-loop-physics.mjs';
+import {captureScene} from './environment-scale-scenes.mjs';
 import {prepareOfficeDiagnostic} from './office-ci-preparation.mjs';
 import {OFFICE_MISSION,SOFTWARE_ARGS,sha256,requireSoftwareGraphics,validateOfficeSample,assertCompleteOfficeCapture} from './office-ci-contract.mjs';
 
@@ -15,13 +15,17 @@ if(base.protocol!=='http:'||!['127.0.0.1','localhost'].includes(base.hostname)||
 const tracePath=process.env.OFFICE_CI_TRACE_WORKER;if(!tracePath)throw Error('OFFICE_CI_TRACE_WORKER must name the separately built diagnostic worker');
 const traceWorker=await readFile(tracePath);
 const wallSeconds=1800,started=performance.now();
-const physics=await officeLoopPhysics(await readFile(new URL('../models/Vehicles/LabQuadrotor.mo',import.meta.url),'utf8'));
-const profile=await readFile(new URL('../models/Benchmarks/OfficeLoopProfile.mo',import.meta.url));
+// The default is the single office loop; Phase B names the two-circuit scene explicitly.
+const sceneName=process.env.OFFICE_CI_SCENE??'office-loop';
+if(!['office-loop','office-loop-two-circuit'].includes(sceneName))throw Error('OFFICE_CI_SCENE must be office-loop or office-loop-two-circuit');
+const scene=captureScene(sceneName);
+const physics=await scene.physics(await readFile(new URL('../models/Vehicles/LabQuadrotor.mo',import.meta.url),'utf8'));
+const profile=await readFile(new URL('../'+scene.profile,import.meta.url));
 await mkdir(output);await mkdir(join(output,'frames'));await mkdir(join(output,'native-frames'));
 await writeFile(join(output,'trace-worker.js'),traceWorker);
-await writeFile(join(output,'prepared-physics.mo'),physics);await writeFile(join(output,'OfficeLoopProfile.mo'),profile);
+await writeFile(join(output,'prepared-physics.mo'),physics);await writeFile(join(output,scene.profile.split('/').at(-1)),profile);
 const receipt={schemaVersion:1,scope:'Software SwiftShader office RGB-D+IMU diagnostic; no hardware GPU, estimator accuracy or loop-closure acceptance.',
-  startedAt:new Date().toISOString(),mission:OFFICE_MISSION,framesCompleted:0,firstTime:null,lastTime:null,complete:false,
+  startedAt:new Date().toISOString(),scene:sceneName,mission:OFFICE_MISSION,framesCompleted:0,firstTime:null,lastTime:null,complete:false,
   traceWorkerSha256:sha256(traceWorker),physicsSourceSha256:sha256(physics),flightProfileSha256:sha256(profile),wallSecondsLimit:wallSeconds,
   launcher:{chromiumSandbox:true,args:[...SOFTWARE_ARGS]},pageErrors:[]};
 let browser,stopped=false,deadlineHit=false,bytesWritten=0;const savedReferences=new Set(),bounds={min:[Infinity,Infinity,Infinity],max:[-Infinity,-Infinity,-Infinity]};let firstTruth,previousPosition,pathMeters=0;
