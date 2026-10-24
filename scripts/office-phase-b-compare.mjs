@@ -30,7 +30,11 @@ export async function phaseBComparison(capture,env=process.env){
  * Pass 1 input files must equal the granted job-1 seal count; pass 2 input is job 3's own qualified replay root, whose
  * count comes from that root's seal, checked by the driver against a replay qualified under the granted pin. */
 export function requireCompletePhaseBComparison(receipt,mode){
+ // D, the first frame where candidate and baseline outputs differ (null if never), must not precede B (Vale, C2 review):
+ // B is only a lower bound, often early, so D is what shows how far the outputs actually agree.
+ const D=receipt.firstObservedDivergence?.epoch??null;
  if(receipt.status!=='complete'||receipt.completedFrames!==PHASE_B_FRAMES||receipt.prefixFrames!==mode.prefixEnd
+  ||(D!==null&&mode.B!==null&&D<mode.B)||(D!==null&&mode.B===null)||receipt.phaseB?.D!==D
   ||receipt.prefixSnapshotChecks!==mode.expectedPrefixChecks||receipt.chromium!==mode.pin.chromium
   ||receipt.originalReplayFilesVerified!==(mode.pass===1?mode.pin.originalFiles:receipt.expectedInputFiles)||receipt.snapshots.length!==mode.snapshots.length*2
   ||mode.snapshots.some(epoch=>['previous','next'].some(side=>receipt.snapshots.filter(s=>s.epoch===epoch&&s.side===side).length!==1)))

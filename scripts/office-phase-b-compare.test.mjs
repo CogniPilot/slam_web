@@ -48,8 +48,16 @@ test('pass 2 takes the sealed plan only when its B matches the capture',async()=
 });
 test('a pass 1 receipt completes only with every frame, the exact prefix and the granted file count',async()=>{
  const pin=write('pin-c.json',pinBase),mode=await phaseBComparison(withB,env(pin,{OFFICE_PHASE_B_PASS:'1'}));
- const complete={status:'complete',completedFrames:1251,prefixFrames:300,prefixSnapshotChecks:0,chromium:pinBase.chromium,originalReplayFilesVerified:3801,snapshots:[]};
+ const complete={status:'complete',completedFrames:1251,prefixFrames:300,prefixSnapshotChecks:0,chromium:pinBase.chromium,originalReplayFilesVerified:3801,snapshots:[],
+  firstObservedDivergence:{epoch:900},phaseB:{D:900}};
  assert.equal(requireCompletePhaseBComparison(complete,mode),true);
+ // D, the first output divergence, may be at or after B, or never.
+ assert.equal(requireCompletePhaseBComparison({...complete,firstObservedDivergence:{epoch:300},phaseB:{D:300}},mode),true);
+ assert.equal(requireCompletePhaseBComparison({...complete,firstObservedDivergence:undefined,phaseB:{D:null}},mode),true);
+ for(const change of [{firstObservedDivergence:{epoch:299},phaseB:{D:299}},{phaseB:{D:901}},{phaseB:{}}])
+  assert.throws(()=>requireCompletePhaseBComparison({...complete,...change},mode),/Incomplete Phase B comparison/);
+ const noB=await phaseBComparison(withoutB,env(pin,{OFFICE_PHASE_B_PASS:'1'}));
+ assert.throws(()=>requireCompletePhaseBComparison({...complete,prefixFrames:1251,firstObservedDivergence:{epoch:1000},phaseB:{D:1000}},noB),/Incomplete Phase B comparison/);
  for(const change of [{prefixFrames:1206},{completedFrames:1250},{chromium:'other'},{originalReplayFilesVerified:3800},{prefixSnapshotChecks:15},
    {snapshots:[{epoch:299,side:'next'}]},{status:'failed'}])
   assert.throws(()=>requireCompletePhaseBComparison({...complete,...change},mode),/Incomplete Phase B comparison/);

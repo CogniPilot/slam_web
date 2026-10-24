@@ -74,6 +74,8 @@ try{
   receipt.snapshots.push(...result.snapshots);receipt.assets=result.assetRecords;
   if(epoch%25===0){receipt.elapsedMs=performance.now()-started;await save();console.log(JSON.stringify({epoch,completed:receipt.completedFrames,prefixFrames:receipt.prefixFrames,elapsedMs:receipt.elapsedMs}));}
  }
+ // Phase B records D, the first frame where candidate and baseline outputs differ; coordinator-only until labels seal.
+ if(mode)receipt.phaseB.D=receipt.firstObservedDivergence?.epoch??null;
  receipt.status='complete';if(mode)requireCompletePhaseBComparison(receipt,mode);else requireCompleteComparison(receipt);receipt.prefixQualified=true;
  await writeFile(join(candidate,'receipt.json'),JSON.stringify({complete:true,framesCompleted:1251,expectedFrames:1251,firstTime:0,lastTime:250,nativeManifestSha256:receipt.nativeManifestSha256,
   acquisition:'Immutable saved observations; no new rendering',prefixFrames:mode?mode.prefixEnd:1206,prefixSnapshotChecks:mode?mode.expectedPrefixChecks:15,scope:'Candidate capture collection, not closure/correction acceptance.'},null,2)+'\n');
