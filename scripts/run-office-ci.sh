@@ -50,8 +50,8 @@ if [[ "${OFFICE_CI_SCENE:-office-loop}" == office-loop-two-circuit ]]; then
   # Phase B job 1: the flight envelope and lap returns are checked on the captured truth before anything else.
   # A refusal exits nonzero and stops the job; there is no second capture.
   mkdir "$OFFICE_CI_OUTPUT/flight"
-  stage flight-envelope node scripts/office-phase-b-checks.mjs envelope --capture "$OFFICE_CI_OUTPUT/capture" --route two-circuit --out "$OFFICE_CI_OUTPUT/flight/envelope"
-  stage flight-return node scripts/office-phase-b-checks.mjs return --capture "$OFFICE_CI_OUTPUT/capture" --route two-circuit --out "$OFFICE_CI_OUTPUT/flight/return"
+  stage flight-envelope node dev/rumoca-bounded-run.mjs --seconds 120 --rss-mib 1024 --available-mib 512 --log "$OFFICE_CI_OUTPUT/flight-envelope-resource.log" -- node scripts/office-phase-b-checks.mjs envelope --capture "$OFFICE_CI_OUTPUT/capture" --route two-circuit --out "$OFFICE_CI_OUTPUT/flight/envelope"
+  stage flight-return node dev/rumoca-bounded-run.mjs --seconds 120 --rss-mib 1024 --available-mib 512 --log "$OFFICE_CI_OUTPUT/flight-return-resource.log" -- node scripts/office-phase-b-checks.mjs return --capture "$OFFICE_CI_OUTPUT/capture" --route two-circuit --out "$OFFICE_CI_OUTPUT/flight/return"
 else
   stage pairs node dev/rumoca-bounded-run.mjs --seconds 600 --rss-mib 4096 --available-mib 512 --log "$OFFICE_CI_OUTPUT/pair-extraction.log" -- node scripts/extract-office-loop-pairs.mjs "$OFFICE_CI_OUTPUT/capture" "$OFFICE_CI_OUTPUT/pairs"
   stage consensus node dev/rumoca-bounded-run.mjs --seconds 300 --rss-mib 2048 --available-mib 512 --log "$OFFICE_CI_OUTPUT/consensus.log" -- node scripts/run-office-consensus.mjs "$OFFICE_CI_OUTPUT/pairs" "$OFFICE_CI_OUTPUT/consensus"
