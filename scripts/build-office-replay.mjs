@@ -1,12 +1,14 @@
 import {build} from 'esbuild';import {resolve} from 'node:path';import {readFile,writeFile} from 'node:fs/promises';import{createHash}from'node:crypto';
 import{OFFICE_REPLAY,exact}from'./office-replay-contract.mjs';
 import{activeReplayPin}from'./office-phase-b-replay-pin.mjs';
+import{requirePhaseBHost}from'./office-phase-b-admission.mjs';
 const pin=activeReplayPin();
 const output=process.argv[2];if(!output)throw Error('Usage: build-office-replay.mjs OUTPUT_JS');
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const sourcePin=JSON.parse(await readFile(new URL('./office-replay-source-pin.json',import.meta.url),'utf8'));
 // Phase A replays on its original host source; Phase B on exactly the commit that made the capture.
-if(pin.phaseB)exact(process.env.GITHUB_SHA,pin.head,'Phase B replay host is the capture commit');
+// The capture commit, or an admitted successor that changes only the frozen admission paths.
+if(pin.phaseB)requirePhaseBHost(pin.head);
 else exact(sourcePin.sourceHead,OFFICE_REPLAY.head,'Original host source head');
 for(const [path,hash]of Object.entries(sourcePin.preservedSources))exact(sha(await readFile(resolve(path))),hash,'Unchanged original source '+path);
 const rawText={name:'raw-text',setup(builder){

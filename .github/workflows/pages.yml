@@ -45,13 +45,13 @@ on:
         type: string
         required: false
         default: ''
-      office_phase_b_candidate_pin:
-        description: 'Phase B pass2: the granted job-2 artifact pin, exact JSON bytes'
+      office_phase_b_second_grant:
+        description: 'Phase B pass1: the granted job-1 admission receipt, if any; pass2: the granted job-2 artifact pin. Exact JSON bytes'
         type: string
         required: false
         default: ''
-      office_phase_b_candidate_pin_sha256:
-        description: 'Phase B pass2: the granted sha256 of office_phase_b_candidate_pin'
+      office_phase_b_second_grant_sha256:
+        description: 'Phase B: the granted sha256 of office_phase_b_second_grant'
         type: string
         required: false
         default: ''
@@ -205,6 +205,9 @@ jobs:
         timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 3 || 360 }}
         with:
           submodules: true
+          # Phase B needs history back to the capture commit to check an admitted successor's diff.
+          # String values: in expressions 0 is falsy, so 'cond && 0 || 1' would always give 1.
+          fetch-depth: ${{ inputs.office_phase_b_job != 'none' && '0' || '1' }}
       - uses: cachix/install-nix-action@v31.11.1
         timeout-minutes: ${{ inputs.office_phase_b_job != 'none' && 8 || 360 }}
         with:
@@ -238,8 +241,8 @@ jobs:
           PHASE_B_CONFLICT: ${{ inputs.office_saved_replay || inputs.office_candidate_comparison }}
           PHASE_B_PIN: ${{ inputs.office_phase_b_pin }}
           PHASE_B_PIN_SHA256: ${{ inputs.office_phase_b_pin_sha256 }}
-          PHASE_B_CANDIDATE_PIN: ${{ inputs.office_phase_b_candidate_pin }}
-          PHASE_B_CANDIDATE_PIN_SHA256: ${{ inputs.office_phase_b_candidate_pin_sha256 }}
+          PHASE_B_SECOND_GRANT: ${{ inputs.office_phase_b_second_grant }}
+          PHASE_B_SECOND_GRANT_SHA256: ${{ inputs.office_phase_b_second_grant_sha256 }}
         run: |
           set -euo pipefail
           if [ "$PHASE_B_CONFLICT" = true ]; then echo 'A Phase B job excludes saved replay and candidate comparison.' >&2; exit 2; fi
@@ -251,16 +254,20 @@ jobs:
           }
           case "$PHASE_B_JOB" in
             capture)
-              if [ -n "$PHASE_B_PIN$PHASE_B_CANDIDATE_PIN" ]; then echo 'The capture job takes no pins.' >&2; exit 2; fi ;;
+              if [ -n "$PHASE_B_PIN$PHASE_B_SECOND_GRANT" ]; then echo 'The capture job takes no pins.' >&2; exit 2; fi ;;
             pass1)
-              if [ -n "$PHASE_B_CANDIDATE_PIN" ]; then echo 'Pass 1 takes no candidate pin.' >&2; exit 2; fi
               grant capture-pin "$PHASE_B_PIN" "$PHASE_B_PIN_SHA256"
-              { echo "OFFICE_PHASE_B_PIN=$RUNNER_TEMP/capture-pin.json"; echo "OFFICE_PHASE_B_PIN_SHA256=$PHASE_B_PIN_SHA256"; } >> "$GITHUB_ENV" ;;
+              { echo "OFFICE_PHASE_B_PIN=$RUNNER_TEMP/capture-pin.json"; echo "OFFICE_PHASE_B_PIN_SHA256=$PHASE_B_PIN_SHA256"; } >> "$GITHUB_ENV"
+              # Only the reviewed job-1 admission exception: job 2 then accepts a seal/1 capture bound to this receipt.
+              if [ -n "$PHASE_B_SECOND_GRANT" ]; then
+                grant admission "$PHASE_B_SECOND_GRANT" "$PHASE_B_SECOND_GRANT_SHA256"
+                { echo "OFFICE_PHASE_B_ADMISSION=$RUNNER_TEMP/admission.json"; echo "OFFICE_PHASE_B_ADMISSION_SHA256=$PHASE_B_SECOND_GRANT_SHA256"; } >> "$GITHUB_ENV"
+              fi ;;
             pass2)
               grant capture-pin "$PHASE_B_PIN" "$PHASE_B_PIN_SHA256"
-              grant candidate-pin "$PHASE_B_CANDIDATE_PIN" "$PHASE_B_CANDIDATE_PIN_SHA256"
+              grant candidate-pin "$PHASE_B_SECOND_GRANT" "$PHASE_B_SECOND_GRANT_SHA256"
               { echo "OFFICE_PHASE_B_PIN=$RUNNER_TEMP/capture-pin.json"; echo "OFFICE_PHASE_B_PIN_SHA256=$PHASE_B_PIN_SHA256"
-                echo "OFFICE_PHASE_B_CANDIDATE_PIN=$RUNNER_TEMP/candidate-pin.json"; echo "OFFICE_PHASE_B_CANDIDATE_PIN_SHA256=$PHASE_B_CANDIDATE_PIN_SHA256"; } >> "$GITHUB_ENV" ;;
+                echo "OFFICE_PHASE_B_CANDIDATE_PIN=$RUNNER_TEMP/candidate-pin.json"; echo "OFFICE_PHASE_B_CANDIDATE_PIN_SHA256=$PHASE_B_SECOND_GRANT_SHA256"; } >> "$GITHUB_ENV" ;;
           esac
       - name: Capture office mission and probe actual pairs
         if: ${{ !inputs.office_saved_replay && !inputs.office_candidate_comparison && (inputs.office_phase_b_job == 'none' || inputs.office_phase_b_job == 'capture') }}

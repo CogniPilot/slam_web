@@ -1,5 +1,5 @@
 import{readFile,realpath}from'node:fs/promises';import{createReadStream}from'node:fs';import{join,sep}from'node:path';import{createHash}from'node:crypto';import{gunzipSync}from'node:zlib';
-import{exact,requireCompleteReplay}from'./office-replay-contract.mjs';import{activeReplayPin}from'./office-phase-b-replay-pin.mjs';import{QUALIFIED_BASELINE,requireCandidateProfile}from'./office-compare-contract.mjs';
+import{exact,requireCompleteReplay}from'./office-replay-contract.mjs';import{activeReplayPin}from'./office-phase-b-replay-pin.mjs';import{requireJob1Pipeline}from'./office-phase-b-admission.mjs';import{QUALIFIED_BASELINE,requireCandidateProfile}from'./office-compare-contract.mjs';
 const sha=b=>createHash('sha256').update(b).digest('hex');
 export async function verifyOfficeComparisonInput(inputArg,assetsArg,contractArg){
  const input=await realpath(inputArg),assets=await realpath(assetsArg),capture=join(input,'input/original/capture');
@@ -39,7 +39,8 @@ export async function verifyPhaseBCaptureInput(inputArg,assetsArg,contractArg,pi
   const h=createHash('sha256');for await(const part of createReadStream(path))h.update(part);exact(h.digest('hex'),digest,'Capture file '+name);files.set(name,digest);
  }
  exact(files.size,pin.originalFiles,'Granted job-1 sealed file count');
- const pipeline=JSON.parse(await readFile(join(input,'pipeline-status.json')));if(pipeline.stage!=='complete'||pipeline.exitCode!==0)throw Error('Job-1 pipeline incomplete');
+ // complete/0, or the one admitted seal/1 exception bound to this archive (office-phase-b-admission.mjs).
+ const pipeline=JSON.parse(await readFile(join(input,'pipeline-status.json')));requireJob1Pipeline(pipeline,pin);
  const origin=JSON.parse(await readFile(join(input,'build-origin.json')));exact(origin.runId,pin.runId,'Job-1 run');exact(origin.head,pin.head,'Job-1 head');
  const captureReceipt=JSON.parse(await readFile(join(capture,'receipt.json')));
  if(captureReceipt.scene!=='office-loop-two-circuit'||captureReceipt.complete!==true)throw Error('Not a complete two-circuit capture');

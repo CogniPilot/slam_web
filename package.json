@@ -23,7 +23,7 @@
     "test:compiler-admission": "vitest run --config vitest.compiler.config.ts",
     "test:browser:gpu": "playwright test --config playwright.gpu.config.ts",
     "test:browser:mobile": "playwright test --config playwright.mobile.config.ts",
-    "test:office-ci": "node --test --test-concurrency=1 scripts/office-ci-contract.test.mjs scripts/verify-office-ci-artifacts.test.mjs scripts/office-native-observation.test.mjs scripts/office-consensus-orchestration.test.mjs scripts/office-ci-worker-boot.test.mjs scripts/office-ci-preparation.test.mjs",
+    "test:office-ci": "node --test --test-concurrency=1 scripts/office-ci-contract.test.mjs scripts/verify-office-ci-artifacts.test.mjs scripts/office-phase-b-admission.test.mjs scripts/admit-phase-b-capture.test.mjs scripts/office-native-observation.test.mjs scripts/office-consensus-orchestration.test.mjs scripts/office-ci-worker-boot.test.mjs scripts/office-ci-preparation.test.mjs",
     "test:office-ci-kernels": "node --test --test-concurrency=1 scripts/loop-consensus-probe.test.mjs scripts/loop-consensus-probe-numerics.test.mjs scripts/loop-catalog-snapshot.test.mjs scripts/office-pair-adapter.test.mjs scripts/loop-pair-reconstruction.test.mjs"
   },
   "dependencies": {

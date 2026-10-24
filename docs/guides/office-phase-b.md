@@ -46,8 +46,8 @@ not precede B. The job then writes the snapshot plan.
 ## Job 3: `pass2`
 
 Takes the job-1 pin again, now with `snapshotPlanSha256` set to the sha256 of
-job 2's `plan/plan-receipt.json`, and `office_phase_b_candidate_pin` with its
-sha256: job 2's run, head, artifact, archive digest, seal, file count and
+job 2's `plan/plan-receipt.json`, and `office_phase_b_second_grant` with its
+sha256, carrying the job-2 candidate pin: job 2's run, head, artifact, archive digest, seal, file count and
 candidate manifest, with `experiment: phase-b-candidate-pass-1`. It has no
 capture, compiler or export stage. It replays the capture through the saved
 baseline replay with snapshots at the plan's epochs, which must match the
@@ -61,6 +61,29 @@ failures, such as a mistyped grant, are pre-run refusals.
 
 Repeat a job only as a new dispatch, never with GitHub's re-run. The artifact
 name carries the run attempt, and every pin requires attempt 1.
+
+## The one admitted job-1 exception
+
+The original job-1 capture recorded `{stage: seal, exitCode: 1}`: the CI
+artifact verifier threw on its final diagnostic line after writing the seal
+manifest. Its bytes and status are never edited. A separately reviewed,
+read-only check, `scripts/admit-phase-b-capture.mjs`, run on the exact
+original zip (its granted digest, size, run, attempt 1 and the capture head),
+confirms that the artifact's inventory equals its seal manifest apart from
+`pipeline-status.json` and `seal.log`, that every sealed hash matches, that the
+status is exactly seal/1 and `seal.log`'s only error is that ReferenceError at
+line 54, and that the repaired verifier and both flight checks regenerate the
+archived summary, seal manifest and flight receipts byte for byte. It writes
+an admission receipt.
+
+Job 2 then takes that receipt as `office_phase_b_second_grant`; its capture
+loader accepts seal/1 only with a granted receipt bound to the same archive and
+seal, and the existing complete/0 rule stands otherwise. Jobs 2 and 3 may run
+on a successor of the capture commit only if `git diff` from it touches just
+the exact paths listed in `scripts/office-phase-b-admission.mjs`, and
+`package.json` only in its `test:office-ci` line. The replay and comparison
+bundles, drivers, contracts, run scripts and `src/` are not on that list, so
+everything they read stays byte-identical to the capture commit.
 
 ## Grants and blindness
 
