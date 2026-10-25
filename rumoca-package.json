@@ -7,5 +7,10 @@
   "files": {
     "rumoca_bind_wasm.js": "d9d2894f03eb24d730905204b32b86caff93d351a3cd7989240232e232eb8387",
     "rumoca_bind_wasm_bg.wasm": "67dbfaa2dfdb40f63c8571516dccd2df9f7c1f5f05354913458eeaa964de2c8f"
+  },
+  "release": {
+    "url": "https://github.com/CogniPilot/slam_web/releases/download/rumoca-wasm-2435ea68/wasm-package-2435ea68.zip",
+    "bytes": 27392677,
+    "sha256": "e6b33d053a9294ca1994cbd6b0b7a1a3e90a80387ef2941e7cb462eb795c58fc"
   }
 }

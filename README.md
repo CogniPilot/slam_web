@@ -135,13 +135,17 @@ submodule automatically. Git and network access are needed on the first build;
 visitors receive the sources in the static site and need neither.
 
 `npm ci` installs the verified Rumoca `main` WASM package pinned in
-[rumoca-package.json](rumoca-package.json). The first install downloads its CI
-artifact with GitHub CLI (`gh auth login`). CI uses its workflow token; if
-cross-repository artifact access is denied, provide a `RUMOCA_ARTIFACT_TOKEN`
-secret with Actions read access to `CogniPilot/rumoca`.
-Packages are cached in `~/scratch/slam_web/downloads` and checked by hash and
-embedded compiler revision before use. Set `RUMOCA_WASM_PACKAGE` to an existing
-copy of that exact package to install without downloading it.
+[rumoca-package.json](rumoca-package.json). The first install downloads it from
+the public release asset named by `release`, with no login or token, and refuses
+any download whose size or sha256 differs from the pin. If that fails, it falls
+back to the CI artifact through GitHub CLI (`gh auth login`); CI uses its
+workflow token, or a `RUMOCA_ARTIFACT_TOKEN` secret with Actions read access to
+`CogniPilot/rumoca` if cross-repository artifact access is denied.
+Packages are cached in `RUMOCA_DOWNLOAD_DIR`, else `$XDG_CACHE_HOME/slam_web/downloads`,
+else `~/scratch/slam_web/downloads`, and checked by hash and embedded compiler revision
+before use. `RUMOCA_RELEASE_TEST_ALLOW_HTTP=1` is for local tests only. Set
+`RUMOCA_WASM_PACKAGE` to an existing copy of that exact package to install
+without downloading it.
 
 `npm run build` produces a static site. GitHub Actions deploys it to Pages after
 the supported demo's CI checks pass on `main`.
