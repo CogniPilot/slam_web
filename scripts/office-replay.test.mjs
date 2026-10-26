@@ -67,11 +67,14 @@ test('actual emitted browser IIFE boots with raw-text import contract and no Wor
  vm.runInContext(result.outputFiles[0].text,context);assert.equal(typeof context.OfficeReplay.initialize,'function');assert.equal(typeof context.OfficeReplay.epoch,'function');
 });
 test('only complete replay evidence seals; root active log excluded and nested original logs retained',async()=>{
+ // The seal child reads the Phase B pin from its environment; this control seals the fixed Phase A experiment, so a
+ // Phase B job's exported pin must not reach it.
+ const env=Object.fromEntries(Object.entries(process.env).filter(([name])=>!name.startsWith('OFFICE_PHASE_B_')));
  const parent=join(homedir(),'scratch/slam_web/tmp');await mkdir(parent,{recursive:true});const root=await mkdtemp(join(parent,'replay-seal-control-'));
  try{
   await mkdir(join(root,'replay/snapshots'),{recursive:true});await mkdir(join(root,'input/original'),{recursive:true});
   const file=join(root,'replay/receipt.json');await writeFile(file,JSON.stringify({status:'running',verifiedFrames:0}));
-  let run=spawnSync(process.execPath,['scripts/seal-office-replay.mjs',root],{encoding:'utf8'});assert.notEqual(run.status,0);await assert.rejects(()=>access(join(root,'SHA256SUMS')));
+  let run=spawnSync(process.execPath,['scripts/seal-office-replay.mjs',root],{encoding:'utf8',env});assert.notEqual(run.status,0);await assert.rejects(()=>access(join(root,'SHA256SUMS')));
   const snapshots=[];
   for(const epoch of OFFICE_REPLAY.snapshots)for(const side of ['previous','next']){
    const name=`epoch-${String(epoch).padStart(4,'0')}-${side}.bin.gz`,bytes=Buffer.from('synthetic transport control');
@@ -80,8 +83,8 @@ test('only complete replay evidence seals; root active log excluded and nested o
   await writeFile(file,JSON.stringify({status:'pass',qualified:true,verifiedFrames:1251,chromium:OFFICE_REPLAY.chromium,sourceHead:OFFICE_REPLAY.head,originalFilesVerified:3800,snapshotEpochs:OFFICE_REPLAY.snapshots,snapshots}));
   await writeFile(join(root,'seal.log'),'active');await writeFile(join(root,'pipeline-status.json'),'pending');
   await writeFile(join(root,'input/original/seal.log'),'original');await writeFile(join(root,'input/original/SHA256SUMS'),'original');
-  run=spawnSync(process.execPath,['scripts/seal-office-replay.mjs',root],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);
+  run=spawnSync(process.execPath,['scripts/seal-office-replay.mjs',root],{encoding:'utf8',env});assert.equal(run.status,0,run.stderr);
   const sealed=await readFile(join(root,'SHA256SUMS'),'utf8');assert.match(sealed,/  input\/original\/seal.log\n/);assert.match(sealed,/  input\/original\/SHA256SUMS\n/);assert.doesNotMatch(sealed,/  seal.log\n|  pipeline-status.json\n/);
-  await writeFile(join(root,'replay/snapshots',snapshots[0].file),'changed');run=spawnSync(process.execPath,['scripts/seal-office-replay.mjs',root],{encoding:'utf8'});assert.notEqual(run.status,0);assert.match(run.stderr,/Snapshot compressed hash/);
+  await writeFile(join(root,'replay/snapshots',snapshots[0].file),'changed');run=spawnSync(process.execPath,['scripts/seal-office-replay.mjs',root],{encoding:'utf8',env});assert.notEqual(run.status,0);assert.match(run.stderr,/Snapshot compressed hash/);
  }finally{await rm(root,{recursive:true,force:true});}
 });
