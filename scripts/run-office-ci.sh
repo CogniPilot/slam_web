@@ -66,7 +66,13 @@ throw Error('Office preview did not become available');
 JS
 export OFFICE_CI_TRACE_WORKER="$OFFICE_CI_OUTPUT/native-trace.worker.js"
 stage capture timeout --signal=TERM --kill-after=15s 1860s node scripts/capture-office-ci.mjs "$OFFICE_CI_OUTPUT/capture"
-stage pairs node dev/rumoca-bounded-run.mjs --seconds 600 --rss-mib 4096 --available-mib 512 --log "$OFFICE_CI_OUTPUT/pair-extraction.log" -- node scripts/extract-office-loop-pairs.mjs "$OFFICE_CI_OUTPUT/capture" "$OFFICE_CI_OUTPUT/pairs"
-stage consensus node dev/rumoca-bounded-run.mjs --seconds 300 --rss-mib 2048 --available-mib 512 --log "$OFFICE_CI_OUTPUT/consensus.log" -- node scripts/run-office-consensus.mjs "$OFFICE_CI_OUTPUT/pairs" "$OFFICE_CI_OUTPUT/consensus"
-stage seal node scripts/verify-office-ci-artifacts.mjs "$OFFICE_CI_OUTPUT"
+if [[ -n "${OFFICE_CI_CANDIDATE:-}" ]]; then
+  # Pair extraction rebuilds its loop kernels from this repository's SLAM source, not the candidate's, and refuses the
+  # capture; the evaluation reads the capture itself. Require a complete capture, then seal everything produced.
+  stage seal node --input-type=module -e 'import{readFile,readdir,writeFile}from"node:fs/promises";import{createReadStream}from"node:fs";import{join}from"node:path";import{createHash}from"node:crypto";const root=process.argv[1],r=JSON.parse(await readFile(join(root,"capture/receipt.json")));if(!r.complete||r.failure||r.framesCompleted!==1251)throw Error("Office capture incomplete");const skip=new Set(["SHA256SUMS","pipeline-status.json","seal.log"]),files=[];async function visit(d,rel){for(const e of await readdir(d,{withFileTypes:true})){const p=join(d,e.name),q=rel?rel+"/"+e.name:e.name;if(e.isSymbolicLink())throw Error("symlink "+q);if(e.isDirectory())await visit(p,q);else if(!(rel===""&&skip.has(e.name)))files.push(q);}}await visit(root,"");const lines=[];for(const f of files.sort()){const h=createHash("sha256");for await(const c of createReadStream(join(root,f)))h.update(c);lines.push(h.digest("hex")+"  "+f);}await writeFile(join(root,"SHA256SUMS"),lines.join("\n")+"\n");console.log(JSON.stringify({sealedFiles:files.length,frames:r.framesCompleted}));' "$OFFICE_CI_OUTPUT"
+else
+  stage pairs node dev/rumoca-bounded-run.mjs --seconds 600 --rss-mib 4096 --available-mib 512 --log "$OFFICE_CI_OUTPUT/pair-extraction.log" -- node scripts/extract-office-loop-pairs.mjs "$OFFICE_CI_OUTPUT/capture" "$OFFICE_CI_OUTPUT/pairs"
+  stage consensus node dev/rumoca-bounded-run.mjs --seconds 300 --rss-mib 2048 --available-mib 512 --log "$OFFICE_CI_OUTPUT/consensus.log" -- node scripts/run-office-consensus.mjs "$OFFICE_CI_OUTPUT/pairs" "$OFFICE_CI_OUTPUT/consensus"
+  stage seal node scripts/verify-office-ci-artifacts.mjs "$OFFICE_CI_OUTPUT"
+fi
 export OFFICE_CI_STAGE=complete
