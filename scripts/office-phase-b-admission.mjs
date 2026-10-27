@@ -10,7 +10,7 @@ export const SUCCESSOR_PATHS=Object.freeze([
  'scripts/admit-phase-b-capture.mjs','scripts/admit-phase-b-capture.test.mjs',
  'scripts/build-office-compare.mjs','scripts/build-office-replay.mjs','scripts/office-comparison-input.mjs',
  'scripts/office-phase-b-admission.mjs','scripts/office-phase-b-admission.test.mjs',
- 'scripts/office-replay.test.mjs',
+ 'scripts/office-replay.test.mjs','scripts/restore-office-comparison-input.mjs','scripts/restore-office-comparison-input.test.mjs',
  'scripts/verify-office-ci-artifacts.mjs','scripts/verify-office-ci-artifacts.test.mjs']);
 const HEX=/^[a-f0-9]{64}$/,COMMIT=/^[a-f0-9]{40}$/;
 const sha=raw=>createHash('sha256').update(raw).digest('hex');

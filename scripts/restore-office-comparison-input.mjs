@@ -23,18 +23,21 @@ let stderr='';child.stderr.on('data',b=>{stderr+=String(b);});
 const done=new Promise((ok,fail)=>{child.on('error',fail);child.on('close',code=>code===0?ok():fail(Error('Pinned artifact download failed: '+stderr)));});
 try{await Promise.all([pipeline(child.stdout,createWriteStream(archive,{flags:'wx'})),done]);}finally{if(child.exitCode===null)child.kill();}
 const h=createHash('sha256');for await(const b of createReadStream(archive))h.update(b);exact(h.digest('hex'),pin.archiveSha256,'Original archive digest');
+// Pass 2 restores the whole job-2 artifact (the job-1 capture input and the pass-1 comparison, about twice the
+// files of one replay root); its bytes are already pinned by digest. Every other restore keeps the 5000 budget.
+const entryBudget=pass==='2'?8000:5000;
 const destination=join(root,'qualified');
 await run('python3',['-c',`import pathlib,stat,sys,zipfile
 root=pathlib.Path(sys.argv[2]);root.mkdir()
 with zipfile.ZipFile(sys.argv[1]) as archive:
     entries=archive.infolist()
-    if len(entries)>5000 or sum(e.file_size for e in entries)>4*1024**3: raise ValueError('Archive exceeds fixed replay budget')
+    if len(entries)>int(sys.argv[3]) or sum(e.file_size for e in entries)>4*1024**3: raise ValueError('Archive exceeds fixed replay budget')
     seen=set()
     for entry in entries:
         name=pathlib.PurePosixPath(entry.filename)
         if name.is_absolute() or '..' in name.parts or entry.filename in seen or stat.S_ISLNK(entry.external_attr>>16): raise ValueError('Unsafe archive member')
         seen.add(entry.filename)
     archive.extractall(root)
-`,archive,destination],{maxBuffer:1024**2});
+`,archive,destination,String(entryBudget)],{maxBuffer:1024**2});
 await writeFile(join(root,'input-receipt.json'),JSON.stringify({pin,apiDigest:artifact.digest,archiveSha256:pin.archiveSha256,sourceHead:originalRun.head_sha,original:destination},null,2)+'\n');
 console.log(JSON.stringify({artifactId:pin.artifactId,sourceHead:pin.head,archiveSha256:pin.archiveSha256,destination}));
