@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 34c26cb4b3ad6f16a072582115acc68d35178d1f; edit the canonical packages there.
 // The keyframe catalog owns nodes. This owner retains measured body edges,
 // never poses inferred from them. All results are proposals for an outer
 // estimator/reference/catalog/map transaction; callers must publish together.
@@ -10,10 +10,10 @@ package RGBDGraphMeasurements
   constant Integer dimension = RGBDKeyframes.dimension;
   constant Integer poseDimension = RGBDKeyframes.poseDimension;
   constant Integer identifierLimit = RGBDKeyframes.identifierLimit;
-  // Loop-anchored capture (experiment, off by default). When the consecutive
+  // Loop-anchored capture (isolated comparison). When the consecutive
   // edge fails, agreeing verified loops may admit the capture without it, so a
   // refused capture can no longer pin the catalog to a receding keyframe.
-  constant Boolean loopAnchoredCapture = false;
+  constant Boolean loopAnchoredCapture = true;
   constant Integer anchorMinimumLoops = 2 "Agreeing verified loops to distinct non-anchored references";
   constant Integer anchorEvictionMargin = div(nodeCapacity,2) "Captures left before the newest agreeing reference is evicted";
   constant Real anchorConsistencySquared = 9.0;
