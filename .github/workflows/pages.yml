@@ -149,7 +149,8 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.office_loop_diagnostic }}
     needs: build
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    # Evaluation branch: the capture also builds an exporter and exports the candidate (pass-1 budget for those stages).
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -177,6 +178,7 @@ jobs:
       - name: Capture office mission and probe actual pairs
         env:
           OFFICE_CI_REUSE_DIST: '1'
+          OFFICE_CI_CANDIDATE: eval/office-d2-d3
         run: |
           mkdir -p "$(dirname "$OFFICE_CI_OUTPUT")"
           nix develop --no-update-lock-file .#ci --command bash scripts/run-office-ci.sh "$OFFICE_CI_OUTPUT"

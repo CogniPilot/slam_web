@@ -32,6 +32,30 @@ else
   stage assets npm run assets
   stage build npm run build
 fi
+# Evaluation only: replace the build's native SLAM with a candidate exported here from OFFICE_CI_CANDIDATE
+# (source snapshot + reset state), using an exporter built in this job. The capture then flies the same mission.
+if [[ -n "${OFFICE_CI_CANDIDATE:-}" ]]; then
+  candidate="$PWD/$OFFICE_CI_CANDIDATE"
+  mkdir -p "$HOME/scratch/slam_web/tmp"
+  candidate_work=$(mktemp -d "$HOME/scratch/slam_web/tmp/office-candidate-XXXXXXXX")
+  export OFFICE_NATIVE_BUILD_WORK="$candidate_work/compiler"
+  export OFFICE_NATIVE_BUILD_RECEIPTS="$OFFICE_CI_OUTPUT/compiler"
+  stage compiler env GH_TOKEN= nix-shell scripts/office-native-build-env.nix --run '
+    node dev/rumoca-bounded-run.mjs --seconds 600 --rss-mib 4096 --available-mib 512 \
+      --cache-dir "$OFFICE_NATIVE_BUILD_WORK" --cache-mib 6144 \
+      --log "$OFFICE_NATIVE_BUILD_RECEIPTS-resource.log" -- \
+      node scripts/build-office-native-step.mjs "$OFFICE_NATIVE_BUILD_WORK" "$OFFICE_NATIVE_BUILD_RECEIPTS"
+  '
+  node --input-type=module -e 'import{readFile}from"node:fs/promises";const p=JSON.parse(await readFile(process.argv[1]));if(p.status!=="built-unqualified")process.exit(1);' "$OFFICE_CI_OUTPUT/compiler/provenance.json"
+  # Reset state for the candidate layout: the released reset plus zero-initialized arrays, names hash 8ad289e707119f89.
+  stage candidate-reset node --input-type=module -e 'import{readFile,writeFile}from"node:fs/promises";import{gunzipSync}from"node:zlib";import{createHash}from"node:crypto";const b=gunzipSync(await readFile(process.argv[1]));if(b.length!==11875192||createHash("sha256").update(b).digest("hex")!=="0911f1e67ff3e457172ff78a430ffe1c95d4a437c4c0529d5f14d6002be48e96")throw Error("Candidate reset identity differs");await writeFile(process.argv[2],b,{flag:"wx"});' "$candidate/state-init.bin.gz" "$OFFICE_CI_OUTPUT/state-init.bin"
+  stage candidate-export node dev/rumoca-bounded-run.mjs --seconds 600 --rss-mib 3072 --available-mib 512 --log "$OFFICE_CI_OUTPUT/candidate-export-resource.log" -- \
+    node scripts/export-slam-profiles.mjs --binary "$OFFICE_CI_OUTPUT/compiler/native_step" --reset-bin "$OFFICE_CI_OUTPUT/state-init.bin" --state-hash 8ad289e707119f89 \
+    --source-root "$candidate/source" --output "$OFFICE_CI_OUTPUT/candidate-export" --resolution 424x240 --revision 278475ff0d39f648f7b98c76abdc4da9a712ee62 --private-bytes 134217728
+  stage static-compiler node scripts/assets.mjs
+  stage candidate-assets node dev/rumoca-bounded-run.mjs --seconds 60 --rss-mib 2048 --available-mib 512 --log "$OFFICE_CI_OUTPUT/candidate-assets-resource.log" -- \
+    node scripts/slam-native-assets.mjs --exports "$OFFICE_CI_OUTPUT/candidate-export" --source-root "$candidate/source" --destination dist/vendor/slam --require
+fi
 stage trace-worker node scripts/build-office-ci-trace.mjs "$OFFICE_CI_OUTPUT/native-trace.worker.js"
 node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > "$OFFICE_CI_OUTPUT/preview.log" 2>&1 &
 preview_pid=$!
