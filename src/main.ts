@@ -4,6 +4,7 @@ import {poseSnapshot} from './trajectory';
 import { World } from './world';
 import { Runtime,type Metrics } from './runtime';
 import { sourceFor,setSource,nodeRuntimeLabel,type GraphNode } from './graph';
+import {FLIGHT_TOURS,isFlightTour,selectedFlightTour,selectMapFlightTour} from './flight-tour';
 import { algorithms,detectors,visibleDetectorPresets,defaultProject,readSavedProjectText,readProjectRecovery,saveProjectRecovery,withDefaultModels,estimatorModelicaSources,estimatorExampleSources,type ProjectRecoveryBackup,saveProject,parseProject,download,offsetQuadrotorPath,offsetQuadrotorSource } from './project';
 import {mountModelParameters} from './model-parameters-panel';
 import {modelParameterTargets,parameterTargetVersion} from './model-parameter-targets';
@@ -63,7 +64,8 @@ el('scene-detail').title='Controls viewer resolution, textures, shadows, clouds 
 el('environment').insertAdjacentHTML('afterend','<select id="interior-view" aria-label="Inspect Big city" title="Move the viewer camera; simulation and sensor pose stay on the flight path" hidden><option value="overview">City overview</option><option value="store">Corner Market</option><option value="apartment">Daylight Loft</option><option value="conference">Civic Workspace</option></select>');
 el('scene-detail').insertAdjacentHTML('afterend','<label class="check"><input id="cutaway-3d" type="checkbox">Cutaway 3D</label>');
 el('scene-detail').insertAdjacentHTML('afterend','<span id="sensor-rate-summary" class="badge"></span><label class="check"><input id="lidar-enabled" type="checkbox">64-beam LiDAR</label><label class="check"><input id="show-paths" type="checkbox" checked>3D paths</label>');
-el('flight-control').insertAdjacentHTML('afterend','<select id="tour-mode" aria-label="Flight tour route"><option value="circuit">Street circuit</option><option value="indoor">Outdoor → indoor → outdoor</option></select>');
+el('flight-control').insertAdjacentHTML('afterend','<select id="tour-mode" aria-label="Flight tour route"></select>');
+for(const route of FLIGHT_TOURS)el<HTMLSelectElement>('tour-mode').add(new Option(route.label,route.id));
 el('lidar-enabled').parentElement!.insertAdjacentHTML('afterend','<label class="check"><input id="cars-enabled" type="checkbox" checked>Cars</label><label class="check"><input id="people-enabled" type="checkbox" checked>People</label>');
 el('lidar-enabled').parentElement!.insertAdjacentHTML('afterend','<label class="check"><input id="depth-cloud-enabled" type="checkbox">Raw depth cloud</label>');
 document.querySelector('.scene .panel-label .right')!.innerHTML='<span id="world-fps">— FPS · target 30</span> · Three.js';
@@ -382,6 +384,7 @@ function syncProject() {
   if(activeLibraryFile&&!Object.hasOwn(project.modelicaSources??{},activeLibraryFile))activeLibraryFile='';
   el<HTMLInputElement>('name').value=project.name;
   el<HTMLSelectElement>('environment').value=project.environment;
+  runtime.setFlightTour(selectedFlightTour(project));el<HTMLSelectElement>('tour-mode').value=runtime.tourMode;
   el<HTMLSelectElement>('scene-detail').value=project.sceneDetail??'high';
   el('graphics-budget').textContent=graphicsDescription();
   el<HTMLInputElement>('lidar-enabled').checked=project.lidarEnabled??false;
@@ -498,12 +501,14 @@ el<HTMLSelectElement>('preset').onchange=async e=>{
 };
 el<HTMLInputElement>('name').oninput=e=>{project.name=(e.target as HTMLInputElement).value;changed();};
 el<HTMLSelectElement>('environment').onchange=async e=>{
-  project.environment=(e.target as HTMLSelectElement).value as typeof project.environment;changed();ready=false;disableRun(true);
+  selectMapFlightTour(project,(e.target as HTMLSelectElement).value as typeof project.environment);
+  runtime.setFlightTour(selectedFlightTour(project));el<HTMLSelectElement>('tour-mode').value=runtime.tourMode;
+  changed();ready=false;disableRun(true);
   await initializationReady;
   while(runtime.busy||compiling)await new Promise(resolve=>setTimeout(resolve,20));
   ready=false;
   compiling=true;configuration.setBusy(true);el<HTMLSelectElement>('environment').disabled=true;el<HTMLSelectElement>('scene-detail').disabled=true;
-  try {await buildProjectScene();status('Environment updated · apply an available experiment before running');}
+  try {await buildProjectScene();status('Environment updated · flight tour route selected · press Reset to prepare');}
   catch(error){status(String(error),true);}
   finally {compiling=false;configuration.setBusy(false);disableRun(true);syncApplyButton();el<HTMLButtonElement>('reset').disabled=false;el<HTMLSelectElement>('environment').disabled=false;el<HTMLSelectElement>('scene-detail').disabled=false;}
 };
@@ -590,7 +595,11 @@ for(const id of ['cars-enabled','people-enabled'])el<HTMLInputElement>(id).oncha
 };
 el<HTMLSelectElement>('speed').onchange=e=>runtime.speed=Number((e.target as HTMLSelectElement).value);
 el('flight-control').onclick=()=>setManualFlight(runtime.autopilot);
-el<HTMLSelectElement>('tour-mode').onchange=e=>{runtime.tourMode=(e.target as HTMLSelectElement).value as 'circuit'|'indoor';};
+el<HTMLSelectElement>('tour-mode').onchange=e=>{
+  const route=(e.target as HTMLSelectElement).value;if(!isFlightTour(route))return;
+  project.flightTour=route;runtime.setFlightTour(route);changed(false);
+  el<HTMLButtonElement>('reset').click();
+};
 el<HTMLInputElement>('show-map').onchange=e=>{world.showMap((e.target as HTMLInputElement).checked);syncViewerFlags();};
 el<HTMLInputElement>('show-uncertainty').onchange=()=>{if(latest){world.setEstimate(latest.estimate);world.covariance.visible=!!latest.estimate.uncertainty&&el<HTMLInputElement>('show-uncertainty').checked;}syncViewerFlags();};
 el<HTMLInputElement>('show-graph').onchange=()=>{for(const object of [world.graphEdges,world.loopEdges,world.keyframes])object.visible=el<HTMLInputElement>('show-graph').checked;syncViewerFlags();};
@@ -645,7 +654,7 @@ async function recoverDefaultModels(text:string,reason:unknown){
   }catch(error){status(String(error),true);showRecoveryBackup(backup,'Recovery failed. Your original source is available below. Automatic saving is disabled.');}
   finally{recovering=false;el<HTMLButtonElement>('default-models').disabled=false;el<HTMLInputElement>('open').disabled=false;}
 }
-async function compile() {
+async function compile(reusePrepared=false) {
   await initializationReady;
   if(compiling||assistantSimulation)return;
   compilationError=undefined;compiling=true;ready=false;disableRun(true);el<HTMLSelectElement>('scene-detail').disabled=true;el<HTMLSelectElement>('preset').disabled=true;runtime.pause();
@@ -655,7 +664,8 @@ async function compile() {
   loopPanel.render(loopHistories[0]);
   const snapshot=structuredClone(project),revision=JSON.stringify(project);
   try {
-    await runtime.compile(snapshot);
+    if(reusePrepared)clearKeys();
+    await runtime.prepare(snapshot,reusePrepared);
     if(JSON.stringify(project)!==revision){dirty=true;status('Source changed during compilation · apply your latest edits');return;}
     project.detectorArtifact=snapshot.detectorArtifact;
     project.algorithmArtifact=snapshot.algorithmArtifact;
@@ -681,7 +691,7 @@ async function compile() {
     syncApplyButton();syncEstimatorMode();
   }
 }
-el('apply').onclick=()=>{if(!viewingSlamFile())void compile();};el('reset').onclick=()=>void compile();
+el('apply').onclick=()=>{if(!viewingSlamFile())void compile();};el('reset').onclick=()=>void compile(true);
 el('run').onclick=async()=>{
   if(assistantSimulation)return;
   if(runtime.running){runtime.pause();el('run').textContent='▶ Run';return;}
@@ -752,7 +762,7 @@ function syncFlightHelp(){
   const mode=(runtime.vehicleCount===2?'Drone '+(runtime.activeVehicleIndex+1)+' · ':'')+(runtime.autopilot?'Flight tour':drone?'Manual flight':'Manual flight · viewer keys');
   const view=CAMERA_VIEWS.find(view=>view.id===world.viewerCamera.mode)!.label;
   document.querySelector('.scene-bottom')!.firstChild!.textContent=mode+' · '+view+' · V change view ';
-  el('flight-help').textContent=runtime.autopilot?'Flight tour is flying the drone. Choose Manual flight in the toolbar to take control.':drone?'Click Run, then use WASD to fly, Q/E to yaw and R/F to climb or descend. V changes the camera view.':'WASD moves the camera; Q/E orbit or yaw, R/F altitude, Shift faster. Follow views move relative to the drone. V changes the camera view.';
+  el('flight-help').textContent=world.viewerCamera.mode==='orbit-follow'?'Drag to orbit and scroll to zoom around the followed drone. Vehicle turns do not rotate the view. V changes the camera view.':runtime.autopilot?'Flight tour is flying the drone. Choose Manual flight in the toolbar to take control.':drone?'Click Run, then use WASD to fly, Q/E to yaw and R/F to climb or descend. V changes the camera view.':'WASD moves the camera; Q/E orbit or yaw, R/F altitude, Shift faster. Follow views move relative to the drone. V changes the camera view.';
 }
 function setCameraView(mode:CameraView){
   world.setCameraView(mode);el<HTMLSelectElement>('camera-view').value=mode;

@@ -5,7 +5,7 @@ import type {SlamInitialFrame,SlamIntervalFrame} from './modelica-slam-frame';
 import type {LoopClosureSettings} from './loop-closure-settings';
 import type {ParameterValues} from './model-parameters';
 
-export type SlamRequest={id:number}&({type:'init';base:string;frame:SlamInitialFrame;settings?:LoopClosureSettings;parameters?:ParameterValues}|{type:'configureParameters';values:ParameterValues}|{type:'configure';settings:LoopClosureSettings}|{type:'step';frame:SlamIntervalFrame}|{type:'predict';imageEpoch:number;interval:SlamIntervalFrame['intervals'][number]});
+export type SlamRequest={id:number}&({type:'init';base:string;frame:SlamInitialFrame;settings?:LoopClosureSettings;parameters?:ParameterValues}|{type:'reset';frame:SlamInitialFrame;settings?:LoopClosureSettings;parameters?:ParameterValues}|{type:'configureParameters';values:ParameterValues}|{type:'configure';settings:LoopClosureSettings}|{type:'step';frame:SlamIntervalFrame}|{type:'predict';imageEpoch:number;interval:SlamIntervalFrame['intervals'][number]});
 let session:ModelicaSlamSession|undefined;
 async function execute(message:SlamRequest){
   if(message.type==='init'){
@@ -18,6 +18,7 @@ async function execute(message:SlamRequest){
     return {estimate:session.initialEstimate,tuningSupported:session.tuningSupported,parameters:manifest.models.step.parameters,sourceSha256:manifest.sourceSha256,models:Object.fromEntries(Object.entries(manifest.models).map(([key,layout])=>[key,{model:layout.model,pages:layout.pages}]))};
   }
   if(!session)throw new Error('Initialize native SLAM first');
+  if(message.type==='reset')return session.reset(message.frame,message.settings,message.parameters);
   if(message.type==='configure'){session.configure(message.settings);return {};}
   if(message.type==='configureParameters'){session.configureParameters(message.values);return {};}
   if(message.type==='predict'){session.predict(message.imageEpoch,message.interval);return {};}

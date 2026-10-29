@@ -27,14 +27,28 @@ export class ModelicaSlamSession {
   private clock=0;
   private predicted:{epoch:number;intervals:ImuInterval[];stepMs:number[]}={epoch:-1,intervals:[],stepMs:[]};
   private initial!:Estimate;
-  private constructor(readonly manifest:SlamNativeManifest,private readonly step:SlamNativeProgram){}
+  private constructor(readonly manifest:SlamNativeManifest,private readonly step:SlamNativeProgram,private readonly makeInitialize:()=>Promise<SlamNativeProgram>){}
 
   static async create(manifest:SlamNativeManifest,fetchFile:SlamNativeFetch,initial:SlamInitialFrame,progress:(text:string)=>void=()=>{},settings?:LoopClosureSettings,parameters?:ParameterValues){
     progress('Loading native SLAM initialization program');
-    const initialize=await SlamNativeProgram.load(manifest.models.initialize,fetchFile);
+    const makeInitialize=await SlamNativeProgram.prepare(manifest.models.initialize,fetchFile);
+    const initialize=await makeInitialize();
     progress('Loading native SLAM step program');
     const step=await SlamNativeProgram.load(manifest.models.step,fetchFile);
-    const session=new ModelicaSlamSession(manifest,step);
+    const session=new ModelicaSlamSession(manifest,step,makeInitialize);
+    session.initialize(initial,initialize,progress,settings,parameters);
+    return session;
+  }
+
+  async reset(initial:SlamInitialFrame,settings?:LoopClosureSettings,parameters?:ParameterValues){
+    await this.step.reset();
+    this.initialize(initial,await this.makeInitialize(),()=>{},settings,parameters);
+    return this.initialEstimate;
+  }
+
+  private initialize(initial:SlamInitialFrame,initialize:SlamNativeProgram,progress:(text:string)=>void,settings?:LoopClosureSettings,parameters?:ParameterValues){
+    const session=this,step=this.step;
+    this.frames=0;this.visualUpdates=0;this.predicted={epoch:-1,intervals:[],stepMs:[]};
     const tuning=checkedLoopClosureSettings(settings);
     validateSettings(initialize,tuning);validateSettings(step,tuning);
     writeSettings(initialize,tuning);writeSettings(step,tuning);
@@ -52,7 +66,6 @@ export class ModelicaSlamSession {
     session.epoch=initial.imageEpoch;session.clock=initial.frameTime;
     session.initial=session.estimateFrom(initialize,[]);
     progress(`Native SLAM initialized in ${(performance.now()-started).toFixed(0)} ms`);
-    return session;
   }
 
   get initialEstimate():Estimate {return structuredClone(this.initial);}

@@ -65,7 +65,7 @@ test('follow view defaults, V cycling and manual flight toggle stay in sync',asy
   await expect(view).toHaveValue('follow');
   await expect(page.getByLabel('Flight tour route')).toBeDisabled();
   await page.locator('#world').focus();
-  for(const mode of ['chase','side','overhead','free','follow']){
+  for(const mode of ['orbit-follow','chase','side','overhead','free','follow']){
     await page.keyboard.press('v');await expect(view).toHaveValue(mode);
   }
   await page.locator('#name').focus();await page.keyboard.type('vv');await expect(view).toHaveValue('follow');
@@ -82,4 +82,40 @@ test('follow view defaults, V cycling and manual flight toggle stay in sync',asy
   await page.locator('#world').focus();await page.keyboard.down('w');
   expect(await page.evaluate(()=>(window as any).__slamLab.runtime.command.forward)).toBe(1.6);
   await page.keyboard.up('w');
+});
+
+test('free-orbit follow accepts drag and wheel while preserving vehicle-relative view through translation and yaw',async({page})=>{
+  await openEconomicalPropagation(page,true);
+  await page.evaluate(()=>(window as any).__slamLab.runtime.pause());
+  await expect.poll(()=>page.evaluate(()=>(window as any).__slamLab.runtime.busy)).toBe(false);
+  await page.getByRole('tab',{name:'Configuration',exact:true}).click();
+  await page.getByLabel('Camera view',{exact:true}).selectOption('orbit-follow');
+  const state=()=>page.evaluate(()=>{
+    const lab=(window as any).__slamLab,w=lab.runtime.world;
+    return {eye:w.view.position.toArray(),target:w.controls.target.toArray(),
+      offset:w.view.position.clone().sub(w.controls.target).toArray(),distance:w.view.position.distanceTo(w.controls.target),
+      time:lab.runtime.time,truth:JSON.stringify(w.committedTruth),command:lab.runtime.command,
+      enabled:w.controls.enabled,pan:w.controls.enablePan};
+  });
+  const initial=await state();expect(initial.enabled).toBe(true);expect(initial.pan).toBe(false);
+  const box=(await page.locator('#world').boundingBox())!;
+  await page.mouse.move(box.x+box.width*.5,box.y+box.height*.5);await page.mouse.down();
+  await page.mouse.move(box.x+box.width*.5+100,box.y+box.height*.5+30,{steps:8});await page.mouse.up();
+  await expect.poll(async()=>JSON.stringify((await state()).offset)!==JSON.stringify(initial.offset)).toBe(true);
+  const orbited=await state();await page.mouse.wheel(0,-400);
+  await expect.poll(async()=>(await state()).distance).toBeLessThan(orbited.distance*.9);
+  // Settle ordinary orbit damping before introducing a synthetic presentation
+  // pose. This does not step the plant or make a flight/SLAM claim.
+  await page.evaluate(()=>{const w=(window as any).__slamLab.runtime.world;w.controls.enableDamping=false;w.controls.update();});
+  const selected=await state();
+  expect(selected.time).toBe(initial.time);expect(selected.truth).toBe(initial.truth);expect(selected.command).toEqual(initial.command);
+  await page.evaluate(()=>{
+    const w=(window as any).__slamLab.runtime.world,t=w.committedTruth;
+    w.update({...t,x:t.x+6,z:t.z+3,quaternion:[Math.SQRT1_2,0,0,Math.SQRT1_2]});
+  });
+  await expect.poll(async()=>(await state()).target[0]).toBeCloseTo(initial.target[0]+6,8);
+  const moved=await state();
+  for(let i=0;i<3;i++)expect(moved.offset[i]).toBeCloseTo(selected.offset[i],8);
+  expect(moved.distance).toBeCloseTo(selected.distance,8);expect(moved.time).toBe(initial.time);
+  await page.screenshot({path:'test-results/orbit-follow-camera.png',fullPage:true});
 });
