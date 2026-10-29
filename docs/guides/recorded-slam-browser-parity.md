@@ -8,6 +8,14 @@ compares the entire final graph. Timing fields are excluded. There is no
 interpolation or numerical tolerance. The expected output stays in the Node
 evaluator and is never served to the browser.
 
+An exact comparison mismatch is recorded while later frames continue within
+the original operation bounds. Every mismatch still makes the final result
+fail. `completed` counts processed frames; `matchedFrames` counts exact matches.
+`frameMismatches`, `graphMismatch` and the first five mismatch messages accompany
+the complete raw observations and final graph. Input, transport, nonfinite-value
+or resource failures still stop immediately. This preserves loop-section
+evidence when early numerical differences would otherwise truncate the route.
+
 `recorded-slam-parity.json` pins the recording archive, sensor metadata,
 production source inventory, published kernel manifest and canonical revision.
 The browser receives only hash-checked sensor observations and published

@@ -30,3 +30,25 @@ export function compareRecordedFrame(actual,expected){
   // Exact scientific results: no tolerance, interpolation or changed acceptance threshold.
   assert.deepStrictEqual(actual,expected,`Recorded worker parity at frame ${expected.index}, t=${expected.time}`);
 }
+
+/** Collect diagnostic coverage without turning any exact mismatch into a pass. */
+export class RecordedComparisonAudit {
+  frameMismatches=0;
+  graphMismatch=false;
+  firstMismatches=[];
+  record(kind,compare,identity={}){
+    try{compare();}
+    catch(error){
+      if(!(error instanceof assert.AssertionError))throw error;
+      if(kind==='frame')this.frameMismatches++;else this.graphMismatch=true;
+      if(this.firstMismatches.length<5)this.firstMismatches.push({kind,...identity,error:String(error)});
+    }
+  }
+  frame(actual,expected){this.record('frame',()=>compareRecordedFrame(actual,expected),{index:expected.index,time:expected.time});}
+  graph(actual,expected){this.record('graph',()=>assert.deepStrictEqual(actual,expected,'Recorded final graph parity'));}
+  summary(){return {frameMismatches:this.frameMismatches,graphMismatch:this.graphMismatch,firstMismatches:this.firstMismatches};}
+  assertExact(){
+    assert.equal(this.frameMismatches,0,'Recorded scientific frames differ; inspect firstMismatches and OBSERVATIONS.jsonl');
+    assert.equal(this.graphMismatch,false,'Recorded final graph differs; inspect FINAL-GRAPH.json');
+  }
+}

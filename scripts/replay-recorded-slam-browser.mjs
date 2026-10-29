@@ -6,7 +6,7 @@ import {execFileSync} from 'node:child_process';
 import {join,resolve,dirname} from 'node:path';
 import assert from 'node:assert/strict';
 import {chromiumLaunchOptions} from './browser-launch.mjs';
-import {validateRecordedFixture,compareRecordedFrame} from './recorded-slam-contract.mjs';
+import {validateRecordedFixture,RecordedComparisonAudit} from './recorded-slam-contract.mjs';
 
 const project=resolve(dirname(new URL(import.meta.url).pathname),'..');
 const [fixtureArg,outputArg,cacheArg,mode]=process.argv.slice(2);
@@ -65,6 +65,7 @@ const base=`http://127.0.0.1:${server.address().port}/`;
 const file=await open(join(output,'OBSERVATIONS.jsonl'),'wx');
 let browserServer,browser,page,failure,completed=0,corrections=0,retired=0,finalGraph,browserVersion;
 const started=Date.now();
+const comparison=new RecordedComparisonAudit();
 try{
   const launch={...chromiumLaunchOptions(),headless:true,handleSIGINT:false,handleSIGTERM:false,args:['--disable-gpu','--renderer-process-limit=1']};
   assert.equal(launch.chromiumSandbox,true);
@@ -85,16 +86,17 @@ try{
       return {row:JSON.parse(JSON.stringify(row)),...(index===2500?{graph:JSON.parse(JSON.stringify(e.poseGraph))}:{})};
     },{index,frame,dt:index===0?0:frame.time-previous,base,source:pin.publishedProfileSha256});
     await file.write(JSON.stringify(actual.row)+'\n');
-    compareRecordedFrame(actual.row,golden[index]);if(serverFailure)throw Error(serverFailure);
+    comparison.frame(actual.row,golden[index]);if(serverFailure)throw Error(serverFailure);
     corrections+=actual.row.diagnostics.graphCorrectionAccepted===1?1:0;retired+=actual.row.diagnostics.retiredLoopFactors??0;
     completed++;previous=frame.time;if(actual.graph)finalGraph=actual.graph;
     if(index%100===0)console.log(JSON.stringify({completed,time:frame.time,wallSeconds:(Date.now()-started)/1000}));
   }
-  assert.equal(completed,2501);assert.equal(corrections,49);assert.equal(retired,19);assert.deepStrictEqual(finalGraph,expectedGraph);
+  comparison.graph(finalGraph,expectedGraph);
+  assert.equal(completed,2501);assert.equal(corrections,49);assert.equal(retired,19);comparison.assertExact();
 }catch(error){failure=String(error);}finally{
   await file.close();if(page)await page.evaluate(()=>window.recordedClient?.close()).catch(()=>{});
   await browser?.close().catch(()=>{});await browserServer?.close().catch(()=>{});server.closeAllConnections();await new Promise(done=>server.close(done));
 }
-const result={at:new Date().toISOString(),status:failure?'FAIL':'PASS',completed,expected:2501,firstTime:0,lastTime:completed?golden[completed-1].time:null,corrections,retiredFactors:retired,browserVersion,wallSeconds:(Date.now()-started)/1000,failure:failure??null,scope:'Exact full recorded-input scientific output/final-graph parity through the production Chromium Web Worker and ModelicaSlamClient. CPU only; no scene rendering, physics, new sensor capture, GPU/stress or throughput acceptance.'};
+const result={at:new Date().toISOString(),status:failure?'FAIL':'PASS',completed,matchedFrames:completed-comparison.frameMismatches,expected:2501,firstTime:0,lastTime:completed?golden[completed-1].time:null,corrections,retiredFactors:retired,...comparison.summary(),browserVersion,wallSeconds:(Date.now()-started)/1000,failure:failure??null,scope:'Exact full recorded-input scientific output/final-graph parity through the production Chromium Web Worker and ModelicaSlamClient. CPU only; no scene rendering, physics, new sensor capture, GPU/stress or throughput acceptance.'};
 if(finalGraph)await writeFile(join(output,'FINAL-GRAPH.json'),JSON.stringify(finalGraph)+'\n');
 await writeFile(join(output,'RESULT.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));if(failure)process.exitCode=1;

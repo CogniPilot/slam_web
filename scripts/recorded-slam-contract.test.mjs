@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {scientificProjection,compareRecordedFrame,validateRecordedFixture} from './recorded-slam-contract.mjs';
+import {scientificProjection,compareRecordedFrame,validateRecordedFixture,RecordedComparisonAudit} from './recorded-slam-contract.mjs';
 const estimate=()=>({x:1,y:2,z:3,quaternion:[1,0,0,0],diagnostics:{accepted:1,retiredLoopFactors:3,stepMsMax:4,stepMsTotal:8},poseGraph:{keyframes:[{id:9}]},loopClosure:{attempted:true,candidates:[{referenceId:1,currentId:9}]}});
 test('timing variation cannot alter the scientific comparison',()=>{
   const a=estimate(),b=estimate();b.diagnostics.stepMsMax=1000;b.diagnostics.stepMsTotal=2000;
@@ -23,6 +23,18 @@ test('nonfinite pose and diagnostic values are refused',()=>{
 test('comparison uses the retained JSON zero representation',()=>{
   const a=estimate(),b=estimate();a.x=-0;b.x=0;
   compareRecordedFrame(scientificProjection(a,1,.2),scientificProjection(b,1,.2));
+});
+test('retaining later frames never erases an exact mismatch or graph failure',()=>{
+  const expected=scientificProjection(estimate(),1,.2),audit=new RecordedComparisonAudit();
+  audit.frame(expected,expected);audit.graph({keyframes:[]},{keyframes:[]});audit.assertExact();
+  const actual=structuredClone(expected);actual.position[0]=1+Number.EPSILON;
+  audit.frame(actual,expected);audit.frame(expected,expected);
+  assert.equal(audit.summary().frameMismatches,1);assert.throws(()=>audit.assertExact());
+  for(let i=0;i<10;i++)audit.frame(actual,expected);
+  assert.equal(audit.summary().firstMismatches.length,5);assert.equal(audit.summary().frameMismatches,11);
+  const graphAudit=new RecordedComparisonAudit();graphAudit.graph({keyframes:[1]},{keyframes:[]});
+  assert.equal(graphAudit.summary().graphMismatch,true);assert.throws(()=>graphAudit.assertExact());
+  assert.throws(()=>audit.record('frame',()=>{throw Error('Transport failure');}),/Transport failure/);
 });
 test('fixture admission refuses evaluator leakage, gaps and mismatched clocks',()=>{
   const make=()=>{
