@@ -1,10 +1,10 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Per-landmark conditional first-order bound. No landmark/filter independence
 // or joint-landmark guarantee. Local geometry remains an immutable input.
 package RGBDMapAnchorUncertainty
 
-  // Anchor slots are map-anchor ring slots (slot = mod(id-1,capacity)+1), so
-  // the capacity follows that ring instead of repeating its value.
+  // Anchor slots are catalog slots, assigned by keyframe retention rather
+  // than derived from ids, so the capacity follows the map-anchor owner.
   constant Integer anchorCapacity = RGBDMapAnchors.keyframeCapacity;
   constant Integer landmarkCapacity = 14400;
   constant Integer positionDimension = 3;
@@ -40,11 +40,10 @@ package RGBDMapAnchorUncertainty
       and b.anchorTime >= 0 and b.observationTime <= 1e12
       and (if b.rawObservationEpoch == b.anchorEpoch then b.observationTime == b.anchorTime
         else b.observationTime > b.anchorTime);
-    if valid then
-      // Certify domains before subtraction/modulo. Slot reuse never preserves
-      // a stable anchor identity, even when the caller repeats bad metadata.
-      valid := b.anchorSlot == mod(b.anchorId-1,anchorCapacity)+1;
-    end if;
+    // Slots are not a function of ids under retention; the slot range is
+    // certified above and the anchor owner checks the stored id
+    // (RGBDMapAnchors: nodeId[slot] == anchorId), so slot reuse never
+    // preserves a stale anchor identity.
   end ValidBinding;
   function Transport
     input Estimate previous; input Binding binding; input Binding expectedBinding;

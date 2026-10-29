@@ -10,12 +10,12 @@ const sha=(bytes:Buffer)=>createHash('sha256').update(bytes).digest('hex');
 // A synthetic compiler pair: glue that names its module, and the smallest valid WASM module.
 const pair=(tag:string)=>[Buffer.from(`// ${tag}\nnew URL('rumoca_bind_wasm_bg.wasm', import.meta.url);\n`),Buffer.from([0,97,115,109,1,0,0,0])];
 
-async function sandbox(){
+async function sandbox(version?:string){
   // scripts/assets.mjs reads ../rumoca-package.json beside itself, so run a copy under a synthetic pin.
   const root=await mkdtemp(join(tmpdir(),'slam-rumoca-assets-'));
   await mkdir(join(root,'scripts'));await copyFile('scripts/assets.mjs',join(root,'scripts/assets.mjs'));
   const pinned=pair('pinned'),other=pair('other build');
-  await writeFile(join(root,'rumoca-package.json'),JSON.stringify({revision:'0'.repeat(40),runId:1,files:Object.fromEntries(names.map((name,i)=>[name,sha(pinned[i])]))}));
+  await writeFile(join(root,'rumoca-package.json'),JSON.stringify({revision:'0'.repeat(40),runId:1,...(version?{version}:{}),files:Object.fromEntries(names.map((name,i)=>[name,sha(pinned[i])]))}));
   for(const [directory,bytes] of [['pinned',pinned],['other',other]] as const){
     await mkdir(join(root,directory));for(const [i,name] of names.entries())await writeFile(join(root,directory,name),bytes[i]);
   }
@@ -25,28 +25,35 @@ async function sandbox(){
   return {root,run,manifest};
 }
 
-it('checks a RUMOCA_WASM_PACKAGE copy against the pin and installs it as the pinned package',async()=>{
-  const {root,run,manifest}=await sandbox();
+for(const version of [undefined,'0.10.3']){
+const kind=version?'release':'main';
+it(`checks a ${kind} RUMOCA_WASM_PACKAGE copy against the pin and installs it as the pinned package`,async()=>{
+  const {root,run,manifest}=await sandbox(version);
   try{
     const result=run([],{RUMOCA_WASM_PACKAGE:join(root,'pinned')});
     expect(result.status,result.stderr).toBe(0);
-    expect((await manifest()).source).toBe('pinned-main-package');
+    const resultManifest=await manifest();
+    expect(resultManifest.source).toBe(version?'pinned-release-package':'pinned-main-package');
+    expect(resultManifest.revision).toBe('0'.repeat(40));
+    expect(resultManifest.runId).toBe(1);
+    expect(resultManifest.version).toBe(version);
   }finally{await rm(root,{recursive:true,force:true});}
 });
 
-it('refuses a RUMOCA_WASM_PACKAGE that differs from the pin and leaves prior assets in place',async()=>{
-  const {root,run}=await sandbox();
+it(`refuses a ${kind} RUMOCA_WASM_PACKAGE that differs from the pin and leaves prior assets in place`,async()=>{
+  const {root,run}=await sandbox(version);
   try{
     await mkdir(join(root,'out'));await writeFile(join(root,'out',names[0]),'prior');
     const result=run([],{RUMOCA_WASM_PACKAGE:join(root,'other')});
     expect(result.status).not.toBe(0);
-    expect(result.stderr).toMatch(/RUMOCA_WASM_PACKAGE is not the pinned Rumoca main package/);
+    expect(result.stderr).toContain(`RUMOCA_WASM_PACKAGE is not the pinned Rumoca ${kind} package`);
+    expect(result.stderr).toContain('--rumoca-dir');
     expect(await readFile(join(root,'out',names[0]),'utf8')).toBe('prior');
   }finally{await rm(root,{recursive:true,force:true});}
 });
 
-it('keeps --rumoca-dir as the only unpinned local package, even with RUMOCA_WASM_PACKAGE set',async()=>{
-  const {root,run,manifest}=await sandbox();
+it(`keeps --rumoca-dir (${kind} pin) as the only unpinned local package, even with RUMOCA_WASM_PACKAGE set`,async()=>{
+  const {root,run,manifest}=await sandbox(version);
   try{
     const result=run(['--rumoca-dir',join(root,'other')],{RUMOCA_WASM_PACKAGE:join(root,'pinned')});
     expect(result.status,result.stderr).toBe(0);
@@ -55,3 +62,5 @@ it('keeps --rumoca-dir as the only unpinned local package, even with RUMOCA_WASM
     expect(files.map((file:{sha256:string})=>file.sha256)).toEqual(pair('other build').map(sha));
   }finally{await rm(root,{recursive:true,force:true});}
 });
+
+}

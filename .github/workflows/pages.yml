@@ -20,6 +20,8 @@ permissions:
   actions: read
 env:
   GH_TOKEN: ${{ secrets.RUMOCA_ARTIFACT_TOKEN || github.token }}
+  # Keep the Rumoca download cache at the actions/cache path below (~ is /home/runner on the hosted runners).
+  RUMOCA_DOWNLOAD_DIR: /home/runner/scratch/slam_web/downloads
   # Stay inside Ubuntu's system UID range for Nix's eight build users.
   NIX_FIRST_BUILD_UID: '900'
 concurrency:

@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Mapping consumes an admitted visual/catalog/graph proposal. Publication is
 // still local until estimator/reference and any graph correction also accept.
 package RGBDCatalogMapping
@@ -34,6 +34,7 @@ package RGBDCatalogMapping
   record Diagnostics
     Real mapAccepted; Real catalogUpdateRejectionReason;
     Integer keyframeRejectionReason; Integer sequentialRejectionReason;
+    Integer retiredLoopFactors "Actual node-budget factor retirement, gated by outer publication";
     Integer catalogRejectionReason; Integer correctionReason;
     Real updateRejectionReason; Real mapRejectionReason; Integer anchorRejectionReason;
     Real occupiedCount; Real confirmedCount; Real tentativeCount;
@@ -58,6 +59,7 @@ package RGBDCatalogMapping
   algorithm
     result.mapAccepted := 0.0; result.catalogUpdateRejectionReason := 0.0;
     result.keyframeRejectionReason := 0; result.sequentialRejectionReason := 0;
+    result.retiredLoopFactors := 0;
     result.catalogRejectionReason := 0; result.correctionReason := 0;
     result.updateRejectionReason := 0.0; result.mapRejectionReason := 0.0; result.anchorRejectionReason := 0;
     result.occupiedCount := 0.0; result.confirmedCount := 0.0; result.tentativeCount := 0.0;
@@ -143,7 +145,7 @@ package RGBDCatalogMapping
           valid := visual.catalog.nextId == previousCatalog.nextId+1
             and visual.graph.revision == previousGraph.revision+1
             and visual.graph.lastCaptureId == visual.catalog.nextId-1
-            and visual.storedSlot == previousCatalog.nextSlot;
+            and visual.storedSlot == RGBDKeyframes.SlotOf(visual.catalog,previousCatalog.nextId);
           if valid then
             slot := visual.storedSlot;
             measurement := RGBDKeyframes.ReadSlot(visual.catalog,slot);

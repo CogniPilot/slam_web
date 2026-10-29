@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Public lifecycle adapter; Rumoca compiles the complete Modelica implementation.
 model RGBDFastSLAMInitialize
 
@@ -12,7 +12,7 @@ equation
     captureAccepted,matchCount,features,featureEnabled,
     trackingCurrentPixel,trackingReferencePixel,trackingEnabled,
     keyframeDecisionReason,keyframeRejectionReason,sequentialRejectionReason,frameRejectionDiagnostic,
-    loopAttempted,loopRetrievalReason,loopGraphReason,loopCandidateCount,loopCandidateReferenceId,loopCandidateCurrentId,loopCandidateScore,loopCandidateReason,loopCandidateMatchedCount,loopCandidateInliers,loopCandidateRms,loopCandidateVerified) =
+    loopAttempted,loopRetrievalReason,loopGraphReason,loopCandidateCount,loopCandidateReferenceId,loopCandidateCurrentId,loopCandidateScore,loopCandidateReason,loopCandidateMatchedCount,loopCandidateInliers,loopCandidateRms,loopCandidateVerified,retiredLoopFactors) =
     InitializeFastSLAM(
       previous=previous,
       rgb=rgb,
@@ -144,6 +144,7 @@ function InitializeFastSLAM
   output Integer loopCandidateInliers[RGBDKeyframeRetrieval.proposalCapacity];
   output Real loopCandidateRms[RGBDKeyframeRetrieval.proposalCapacity];
   output Boolean loopCandidateVerified[RGBDKeyframeRetrieval.proposalCapacity];
+  output Integer retiredLoopFactors;
   input Boolean depthQualifiedSelection = true;
   input Real depthUnits = 1.0 "Meters per depth sample; 1 for metric depth, SDK scale for Z16";
   input Real loopMinimumSimilarity = 0.35;
@@ -383,7 +384,9 @@ algorithm
     proposed.position,proposed.rotation,proposed.covariance,previous.estimator.localization.catalog.vocabularyVersion,
     if producerFrameValid > 0.5 and (producerObservationAccepted > 0.5
       or producerCaptureAccepted > 0.5) then 1.0 else 0.0,
-    imageOn and producerInitializationAccepted > 0.5);
+    imageOn and producerInitializationAccepted > 0.5,
+    filterSourceRevision=previous.estimator.localization.sourceRevision,
+    filterCorrectionRevision=previous.estimator.correctionRevision);
   publication := RGBDLocalizationProcessing.Publish(previous,proposed,measurement,
     producerInitializationAccepted,
     producerObservationAccepted,producerCaptureAccepted,imageOn,imageEpoch,intervalTime,h,
@@ -398,6 +401,7 @@ algorithm
   keyframeDecisionReason := publication.publication.decision.reason;
   keyframeRejectionReason := publication.publication.mapDiagnostics.keyframeRejectionReason;
   sequentialRejectionReason := publication.publication.mapDiagnostics.sequentialRejectionReason;
+  retiredLoopFactors := 0;
   frameRejectionDiagnostic := publication.publication.frameRejectionReason;
   accepted := publication.accepted;
   imageCompleted := publication.publication.imageCompleted;

@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Shared Cholesky factorization of a 6×6 geometric innovation covariance.
 // Sixteen RHS carry cross-covariance transpose plus innovation; inputs are finite.
 // valid=0 rejects nonsymmetric/nonpositive covariance and returns zero solutions.

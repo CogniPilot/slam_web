@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Selection only: every camera observation still passes the processing barrier.
 // The estimated pose determines motion; sensor identity never comes from time.
 package RGBDKeyframePolicy
@@ -70,7 +70,7 @@ package RGBDKeyframePolicy
             end if;
           end for;
           if catalog.nextId > 1 then
-            latestSlot := mod(catalog.nextId-2,RGBDKeyframes.keyframeCapacity)+1;
+            latestSlot := max(1,RGBDKeyframes.NewestSlot(catalog));
             valid := valid and RGBDMapAnchors.ProperRotation(catalog.bodyRotations[latestSlot,:,:]);
             for axis in 1:RGBDKeyframes.dimension loop
               valid := valid and abs(catalog.bodyPositions[latestSlot,axis]) <= coordinateLimit;

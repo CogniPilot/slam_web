@@ -134,14 +134,18 @@ npm run dev
 submodule automatically. Git and network access are needed on the first build;
 visitors receive the sources in the static site and need neither.
 
-`npm ci` installs the verified Rumoca `main` WASM package pinned in
-[rumoca-package.json](rumoca-package.json). The first install downloads its CI
-artifact with GitHub CLI (`gh auth login`). CI uses its workflow token; if
-cross-repository artifact access is denied, provide a `RUMOCA_ARTIFACT_TOKEN`
-secret with Actions read access to `CogniPilot/rumoca`.
-Packages are cached in `~/scratch/slam_web/downloads` and checked by hash and
-embedded compiler revision before use. Set `RUMOCA_WASM_PACKAGE` to an existing
-copy of that exact package to install without downloading it.
+`npm ci` installs the published Rumoca **0.10.3** browser compiler from npm,
+using the exact version and integrity in `package-lock.json`. The postinstall
+check verifies the JS/WASM pair and embedded compiler revision against
+[rumoca-package.json](rumoca-package.json); it refuses a different version,
+revision or file hash. This release path needs no GitHub login or Actions token.
+Set `RUMOCA_WASM_PACKAGE` to an existing copy of that exact package to verify
+and install it without a separate compiler download.
+
+The precompiled native SLAM kernels have their own immutable pin in
+[slam-native-package.json](slam-native-package.json). They retain their recorded
+compiler revision until regenerated and qualified; updating the browser compiler
+does not rewrite these kernels or transfer earlier performance/accuracy results.
 
 `npm run build` produces a static site. GitHub Actions deploys it to Pages after
 the supported demo's CI checks pass on `main`.
