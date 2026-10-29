@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 34c26cb4b3ad6f16a072582115acc68d35178d1f; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Capture of a descriptor/calibration/pose/histogram record joins the map
 // transaction. The enclosing estimator/reference/graph must join this commit.
 function UpdateKeyframeLandmarks
@@ -115,7 +115,7 @@ algorithm
           poseRevision := if resetRequested == 1.0 then 0 else previousPoseRevision+(if stored then 1 else 0);
           selectedId := 0; selectedSlot := 0;
           if proposedCatalog.nextId > 1 then
-            selectedSlot := mod(proposedCatalog.nextId-2,RGBDKeyframes.keyframeCapacity)+1;
+            selectedSlot := max(1,RGBDKeyframes.NewestSlot(proposedCatalog));
             selectedId := proposedCatalog.ids[selectedSlot];
           end if;
           (point,occupied,confidence,lastSeen,lastFrame,confirmed,accepted,catalogUpdateRejectionReason,nextTime,nextFrame,nextWorldFrame,

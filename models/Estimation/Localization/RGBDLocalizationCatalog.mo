@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 34c26cb4b3ad6f16a072582115acc68d35178d1f; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // One source-owned publication of localization and optional catalog/map work.
 // The enclosing model binds proposed to the actual localization outputs once.
 // This is not graph correction, independent graph noise, or a complete SLAM preset.
@@ -281,6 +281,50 @@ package RGBDLocalizationCatalog
     end if;
   end ReferenceHeld;
 
+  function CloneConsumedImage
+    input Estimator previous;
+    input RGBDKeyframes.Frame measurement "Same already-admitted frame, never a host reconstruction";
+    output Estimator next;
+    output Boolean accepted;
+  protected
+    Estimator candidate;
+    Real cloneAccepted; Real cloneRejected;
+  algorithm
+    next := previous; accepted := false;
+    // This image has already supplied its one localization observation. Clone
+    // its pose into the graph reference without making its raw noise eligible
+    // again. The next camera frame must capture a fresh tracking reference.
+    if SLAMExactRealEqual(previous.referenceUsed,1.0)
+        and SLAMExactRealEqual(previous.lastUsedEpoch,measurement.epoch) then
+      candidate := previous;
+      (cloneAccepted,cloneRejected,candidate.referenceAvailable,
+        candidate.referencePosition,candidate.referenceRotation,candidate.covariance,
+        candidate.crossCovariance,candidate.referenceCovariance) := SchmidtCaptureReference(
+          previous.position,previous.rotation,previous.covariance,
+          previous.referencePosition,previous.referenceRotation,previous.crossCovariance,
+          previous.referenceCovariance,previous.referenceAvailable,1.0,1.0);
+      if SLAMExactRealEqual(cloneAccepted,1.0) then
+        candidate.referenceEpoch := measurement.epoch;
+        candidate.referenceUsed := 1.0;
+        candidate.referenceCount := measurement.count;
+        candidate.referenceDescriptor := measurement.descriptor;
+        candidate.referencePoint := measurement.opticalPoint;
+        candidate.referenceRgbCalibration := measurement.rgbCalibration;
+        candidate.referenceDepthCalibration := measurement.depthCalibration;
+        candidate.referenceNoiseReferenceFx := measurement.noiseReferenceFx;
+        candidate.referenceDisparityNoise := measurement.disparityNoise;
+        candidate.referenceBaseline := measurement.baseline;
+        candidate.referenceOpticalToBody := measurement.opticalToBody;
+        candidate.referenceCameraOriginBody := measurement.cameraOriginBody;
+        for feature in 1:featureCapacity loop
+          candidate.referenceEnabled[feature] := if measurement.enabled[feature] then 1.0 else 0.0;
+          for axis in 1:2 loop candidate.referencePixels[feature,axis] := measurement.pixels[feature,axis]; end for;
+        end for;
+        if ValidEstimator(candidate) then next := candidate; accepted := true; end if;
+      end if;
+    end if;
+  end CloneConsumedImage;
+
   function Publish
     input State previous;
     input Estimator proposed "Same compiled localization invocation; no host reconstruction";
@@ -319,6 +363,8 @@ package RGBDLocalizationCatalog
   protected
     Boolean valid; Boolean frameBound;
     RGBDCatalogMapping.Result mapped;
+    Estimator cloned;
+    Boolean cloneAccepted;
   algorithm
     result.next := previous; result.accepted := false; result.rejectionReason := 1;
     result.imageCompleted := false; result.mappingAccepted := false;
@@ -467,6 +513,21 @@ package RGBDLocalizationCatalog
                         and result.next.referenceBirth.epoch == imageEpoch
                         and result.next.referenceBirth.generation == previous.generation then
                         result.next.referenceBirth.catalogId := measurement.id;
+                      end if;
+                      if result.next.catalog.nextId == previous.catalog.nextId+1
+                          and SLAMExactRealEqual(observationAccepted,1.0)
+                          and result.next.referenceBirth.catalogId == 0 then
+                        // FrameBound and actual graph admission precede this
+                        // owner transition. ID, birth and covariance commit
+                        // together; a refused clone leaves the old owner held.
+                        (cloned,cloneAccepted) := CloneConsumedImage(result.next.estimator,measurement);
+                        if cloneAccepted then
+                          result.next.estimator := cloned;
+                          result.next.referenceBirth.generation := previous.generation;
+                          result.next.referenceBirth.epoch := imageEpoch;
+                          result.next.referenceBirth.sequence := result.next.steps;
+                          result.next.referenceBirth.catalogId := measurement.id;
+                        end if;
                       end if;
                     end if;
                   end if;

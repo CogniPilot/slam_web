@@ -28,7 +28,7 @@
     "test:office-ci-kernels": "node --test --test-concurrency=1 scripts/loop-consensus-probe.test.mjs scripts/loop-consensus-probe-numerics.test.mjs scripts/loop-catalog-snapshot.test.mjs scripts/office-pair-adapter.test.mjs scripts/loop-pair-reconstruction.test.mjs"
   },
   "dependencies": {
-    "@cognipilot/rumoca": "0.10.2",
+    "@cognipilot/rumoca": "0.10.3",
     "@cognipilot/synapse-fbs": "0.10.0",
     "@mlc-ai/web-llm": "0.2.86",
     "flatbuffers": "^25.9.23",

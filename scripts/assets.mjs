@@ -19,7 +19,7 @@ const files = await Promise.all(names.map(async name => ({
 })));
 const pin=override?undefined:JSON.parse(await readFile(new URL('../rumoca-package.json',import.meta.url),'utf8'));
 if(pin)for(const {name,bytes} of files){
-  if(createHash('sha256').update(bytes).digest('hex')!==pin.files[name])throw new Error(`Run npm ci to install the pinned Rumoca main package (${name} differs).`);
+  if(createHash('sha256').update(bytes).digest('hex')!==pin.files[name])throw new Error(`Run npm ci to install the pinned Rumoca package (${name} differs).`);
 }
 if (!WebAssembly.validate(files[1].bytes)) throw new Error('Invalid Rumoca WASM module');
 if (!files[0].bytes.toString('utf8').includes('rumoca_bind_wasm_bg.wasm')) {
@@ -27,8 +27,8 @@ if (!files[0].bytes.toString('utf8').includes('rumoca_bind_wasm_bg.wasm')) {
 }
 const manifest = {
   schemaVersion: 1,
-  source: override ? 'explicit-local-package' : 'pinned-main-package',
-  ...(pin?{revision:pin.revision,runId:pin.runId}:{}),
+  source: override ? 'explicit-local-package' : (pin.version?'pinned-release-package':'pinned-main-package'),
+  ...(pin?{revision:pin.revision,runId:pin.runId,...(pin.version?{version:pin.version}:{})}:{}),
   files: files.map(({ name, bytes }) => ({
     file: name,
     bytes: bytes.length,

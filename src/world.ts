@@ -543,7 +543,8 @@ export class World {
     if(this.actors.group.visible)this.actors.render(interpolate);
     this.otherVehicle?.render(interpolate);
     this.controls.update();this.viewerCamera.update(this.view,this.cameraVehicle===1&&this.otherVehicle?this.otherVehicle.robot:this.robot,this.controls.target);
-    this.renderer.setRenderTarget(null);this.cutaway.render(this.environment,this.viewerCutaway,()=>this.renderer.render(this.scene,this.view));
+    const vehicle=this.cameraVehicle===1&&this.otherVehicle?this.otherVehicle.robot:this.robot;
+    this.renderer.setRenderTarget(null);this.cutaway.render(this.environment,this.viewerCutaway,this.view,vehicle,()=>this.renderer.render(this.scene,this.view));
   }
   private optics(fx: number, fy: number,far=this.calibration.far) {
     this.sensor.near = this.calibration.near; this.sensor.far = far;

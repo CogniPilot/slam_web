@@ -12,7 +12,7 @@ export function buildHallway(rawBox:Box,materials:WorldMaterials,marked=false){
   const {minimumX,maximumX,width,height,baySpacing}=HALLWAY,length=maximumX-minimumX,center=(minimumX+maximumX)/2;
   const wall=materials.surface('plaster',0xd4d0bd),floor=marked?materials.hallwayTiles(false,length,width):materials.surface('paving',0x797b75);
   const trim=materials.solid(0x343f48),ceiling=marked?materials.hallwayTiles(true,length,width):materials.surface('plaster',0xbfc0b6);
-  const floorMesh=box(center,0,-.1,length,.2,width+.4,floor);floorMesh.name='hallway-floor';delete floorMesh.userData.viewerOccluder;
+  const floorMesh=box(center,0,-.1,length,.2,width+.4,floor);floorMesh.name='hallway-floor';floorMesh.userData.viewerOccluder='floor';
   const ceilingMesh=box(center,0,height+.1,length,.2,width+.4,ceiling);ceilingMesh.name='hallway-ceiling';ceilingMesh.userData.viewerOccluder='roof';
   if(marked)for(let x=minimumX+4;x<maximumX;x+=8){const light=box(x,0,height-.035,1.2,.04,.5,materials.hallwayLamp());light.name='hallway-light-fixture';light.userData.viewerOccluder='roof';}
   for(const side of [-1,1]){

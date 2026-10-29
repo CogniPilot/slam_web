@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 34c26cb4b3ad6f16a072582115acc68d35178d1f; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // A catalog proposal changes map geometry before the spatial index is built.
 // Stable identities prevent an evicted anchor from merging into its successor.
 package RGBDLandmarkCatalog

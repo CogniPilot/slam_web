@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 34c26cb4b3ad6f16a072582115acc68d35178d1f; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Raw sensor data and the complete persistent Modelica session owner.
 partial model RGBDFastSLAMInterface
 
@@ -110,6 +110,7 @@ partial model RGBDFastSLAMInterface
   output Integer loopCandidateInliers[RGBDKeyframeRetrieval.proposalCapacity];
   output Real loopCandidateRms[RGBDKeyframeRetrieval.proposalCapacity];
   output Boolean loopCandidateVerified[RGBDKeyframeRetrieval.proposalCapacity];
+  output Integer retiredLoopFactors;
   annotation(Documentation(info = "<html>
     <h4>Runtime loop tuning</h4>
 <p>The loopMinimumSimilarity, loopMinimumAge, loopMinimumInliers, loopMinimumFraction, loopInlierDistance, loopMaximumRms, loopCalibratedResiduals and loopMaximumNormalizedSquared inputs tune retrieved-loop verification. The loopMaximumPoseInnovation, loopPoseConsistencySquared and loopPoseConsistency controls tune retained-pose screening. All loop controls preserve the separate consecutive-frame odometry settings. Calibrated residuals use the squared uncertainty-normalized gate; metric distance and RMS limits apply in metric mode. Keyframe interval, translation and rotation inputs tune capture cadence. Defaults retain the existing behavior.</p>

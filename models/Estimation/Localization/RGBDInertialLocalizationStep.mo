@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 34c26cb4b3ad6f16a072582115acc68d35178d1f; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Concrete carried-state localization transaction. Persistence copies these
 // inputs/outputs verbatim; all image, pose, covariance and commit math is Modelica.
 // Image dimensions are structural parameters;350 selected slots remain bounded.
@@ -469,7 +469,8 @@ algorithm
     referenceCount=usableReferenceCount,referenceRgbFocal={referenceRgbCalibration[1],referenceRgbCalibration[2]},
     referenceNoiseReferenceFx=referenceNoiseReferenceFx,imageEnabled=imageOn,disparityNoise=disparityNoise,baseline=baseline,
     referenceBodyPosition=referencePosition,referenceBodyRotation=referenceRotation,
-    opticalToBody=opticalToBody,cameraOriginBody=cameraOriginBody,depthUnits=depthUnits);
+    opticalToBody=opticalToBody,cameraOriginBody=cameraOriginBody,depthUnits=depthUnits,
+    pairRequested=imageOn and pairEligible > 0.5);
   frameValid := if imageOn and activeCount >= 0.0 and activeCount <= featureCapacity
     and SLAMExactRealEqual(activeCount,floor(activeCount)) and sum(currentEnabled) >= 3.0
     and disparityNoise > 0.0 and disparityNoise <= 1.0 and noiseReferenceFx >= 1e-6 and noiseReferenceFx <= 1e6
