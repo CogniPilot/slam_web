@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 34c26cb4b3ad6f16a072582115acc68d35178d1f; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Source-owned transport from one accepted localization image to the catalog
 // measurement API. This is not another visual update or an independence claim.
 // Dependencies: RGBDKeyframes, RGBDRegistrationUncertainty, SLAMExactRealEqual.
@@ -38,6 +38,8 @@ package RGBDLocalizationFrame
     output RGBDKeyframes.Frame frame;
     output Boolean accepted;
     output Integer rejectionReason "0 accepted; 1 idle; 2 metadata; 3 domain/mask; 4 calibration; 5 pose; 6 pose covariance; 7 feature payload";
+    input Integer filterSourceRevision = 0 "Estimator source revision this pose belongs to";
+    input Integer filterCorrectionRevision = 0 "Accepted graph-to-filter commits before this pose";
   protected
     RGBDKeyframes.Frame candidate;
     Boolean valid;
@@ -146,6 +148,8 @@ package RGBDLocalizationFrame
               candidate.disparityNoise := disparityNoise;
               candidate.noiseReferenceFx := noiseReferenceFx; candidate.baseline := baseline;
               candidate.bodyPosition := bodyPosition; candidate.bodyRotation := bodyRotation;
+              candidate.filterSourceRevision := filterSourceRevision;
+              candidate.filterCorrectionRevision := filterCorrectionRevision;
               candidate.vocabularyVersion := vocabularyVersion;
               // Histogram stays canonical zero; PrepareCapture alone owns BoW.
               for feature in 1:RGBDKeyframes.featureCapacity loop

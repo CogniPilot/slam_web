@@ -1,14 +1,14 @@
 import {afterEach,expect,it,vi} from 'vitest';
 import {readFile,mkdir,writeFile,mkdtemp,rm} from 'node:fs/promises';
 import {join} from 'node:path';
-import {homedir} from 'node:os';
+import {tmpdir} from 'node:os';
 import {installPublishedNativeAssets} from '../scripts/install-slam-native-package.mjs';
 
 afterEach(()=>vi.unstubAllEnvs());
 it('refuses stale source or an unverified archive before replacing existing assets',async()=>{
-  const parent=join(homedir(),'scratch/slam_web/tmp');await mkdir(parent,{recursive:true});
-  const directory=await mkdtemp(join(parent,'native-package-test-'));
+  const directory=await mkdtemp(join(tmpdir(),'slam-native-package-test-'));
   try{
+    vi.stubEnv('SLAM_NATIVE_CACHE_ROOT',join(directory,'cache'));
     const destination=join(directory,'assets');await mkdir(destination);
     await writeFile(join(destination,'manifest.json'),'preserved');
     await expect(installPublishedNativeAssets(destination,'edited-source')).rejects.toThrow('source differs');

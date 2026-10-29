@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 34c26cb4b3ad6f16a072582115acc68d35178d1f; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Geometric verification of a retrieved keyframe. A verified measurement is a
 // proposal: graph identity/eviction and shared-image correlation policies must
 // still admit it before any optimizer or estimator state can change.

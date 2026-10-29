@@ -44,8 +44,39 @@ and caches the download in
 the Pages build. Set `SLAM_NATIVE_PACKAGE` to that exact archive for an offline
 install. Explicit `SLAM_NATIVE_EXPORTS` overrides still require local exports;
 edited Modelica sources require new compiler exports.
+Set `SLAM_NATIVE_CACHE_ROOT` to a task-owned directory to put the verified
+archive cache and temporary extraction there instead of the default cache.
 `node scripts/slam-native-assets.mjs --package` selects the pinned delivery
 explicitly, even on a development machine that already has local exports.
+
+### Office-loop repair candidate
+
+The `native-slam-office-loop-repair-20261029` package binds canonical Modelica
+revision `1e0afae78308b7596c9ff6fc1bd6adf5b03567a2` and all five camera modes.
+It repairs admission/consumed-image identity binding, permits bounded retirement
+of old loop factors when required for a topology-safe keyframe replacement,
+and triggers graph feedback only for a fresh admitted loop. Thresholds and
+the 64-node/256-edge limits stay unchanged. The existing cutaway view and
+Rumoca 0.10.3 browser compiler are retained.
+
+On the retained 2,501-frame, 500-second 640 × 360 office route, CPU execution
+under Node reduced initial-pose-aligned online position RMSE from 0.929 m to
+0.666 m and mean host processing time from 145.9 ms to 92.0 ms. There were
+49 accepted fresh-loop corrections, capture continued through 500 seconds,
+and final return error was 7.7 mm. These are one-run results against our prior
+baseline, not browser/GPU or matched ROS 2 throughput qualification.
+The retained final map remains less accurate than RTAB-Map: rigidly aligned
+RMSE is 0.223 m versus 0.103 m; at 14 exact shared timestamps it is 0.087 m
+versus 0.021 m. The systems' retained maps and online feedback streams differ.
+
+All execution resources and compact layouts for the published-revision
+640 × 360 profile match the evaluated generation byte for byte; only source
+provenance comments changed. The canonical branch is based on the tested
+`34c26cb4` generation. Reconciliation with newer canonical-main observability
+changes remains a review requirement before merging. Local sandboxed Chromium
+exited before estimator startup, so browser parity remains unverified.
+This candidate publishes execution kernels only: no rebuilt FMI-LS package is
+included, and the optional FMU download is unavailable for this revision.
 
 The resolution selector offers the ordinary sizes shared by D435 RGB and Z16
 depth: 424 × 240, 640 × 360, 640 × 480, 848 × 480 and 1280 × 720.
@@ -426,7 +457,9 @@ WebAssembly package of `D435FastSLAMStep` (FMI 3 co-simulation,
 `binaries/wasm32-wasip2/` component, `modelDescription.xml` with Int64 Integer
 and Boolean variables) when the site publishes it. `npm run assets` copies
 `package/published/D435FastSLAMStep.fmu` from the export directory next to the native
-programs. The package is the compiler's current build (about 7 MB zipped, a 28 MB
-component): functionally complete, but not yet wired to CPU/GPU execution
-planning or hardware sensor interfaces on a host.
+programs. The office-loop repair prerelease does not include a rebuilt FMU,
+so its **Download SLAM FMU** control is unavailable. The earlier package
+(about 7 MB zipped, a 28 MB component) belongs to the previous model revision
+and must not be used as the repaired model. CPU/GPU execution planning and
+hardware sensor interfaces on a host remain separate integration work.
 The header **Download** button still exports the project, not the FMU.

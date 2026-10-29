@@ -10,7 +10,7 @@ type Box=(x:number,y:number,z:number,w:number,h:number,d:number,material:THREE.M
 export function buildOfficeLoop(rawBox:Box,m:WorldMaterials){
  const height=OFFICE_LOOP.height;
  const box:Box=(...args)=>{const mesh=rawBox(...args);mesh.userData.viewerOccluder='wall';return mesh;};
- const floor=box(12,8,-.1,24+2*half,.2,16+2*half,m.hallwayTiles(false,24+2*half,16+2*half));floor.name='office-floor';delete floor.userData.viewerOccluder;
+ const floor=box(12,8,-.1,24+2*half,.2,16+2*half,m.hallwayTiles(false,24+2*half,16+2*half));floor.name='office-floor';floor.userData.viewerOccluder='floor';
  const roof=box(12,8,height+.1,24+2*half,.2,16+2*half,m.hallwayTiles(true,24+2*half,16+2*half));roof.name='office-ceiling';roof.userData.viewerOccluder='roof';
  let id=0;
  function run(ax:number,ay:number,bx:number,by:number,inner:boolean){
