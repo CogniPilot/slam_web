@@ -6,6 +6,7 @@ export interface AlgebraicSession {
   set_inputs(inputs:string):void;
   advance_to(time:number):void;
   state_json():string;
+  reset():void;
   free():void;
 }
 export type AlgebraicFactory=(source:string,model:string)=>AlgebraicSession;
@@ -62,6 +63,10 @@ export class ModelicaRuntimeMath {
         }catch(error){throw new Error(`Modelica ActorMotion initialization failed: ${String(error)}`,{cause:error});}
       }
     }catch(error){for(const session of created)session.free();throw error;}
+  }
+  reset(origin:Pose){
+    for(const session of [this.sensor,this.availability,this.evaluation,this.actor])session?.reset();
+    this.actorTick=0;this.setOrigin(origin);
   }
   private originInputs(){return [...vector('originPosition',[this.origin.x,this.origin.y,this.origin.z]),...vector('originQuaternion',this.origin.quaternion)];}
   setOrigin(origin:Pose){this.origin=structuredClone(origin);this.sum=0;}

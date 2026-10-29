@@ -45,6 +45,10 @@ export class ModelicaSlamClient {
     const initial=owned(slamInitialFrameFromSensor(frame));
     return this.call<SlamReady>({type:'init',base,frame:initial,settings,parameters},transferable(initial),600_000);
   }
+  reset(frame:InitialSensorFrame,settings?:LoopClosureSettings,parameters?:ParameterValues){
+    const initial=owned(slamInitialFrameFromSensor(frame));
+    return this.call<Estimate>({type:'reset',frame:initial,settings,parameters},transferable(initial),600_000);
+  }
   configure(settings:LoopClosureSettings){return this.call({type:'configure',settings},[],30_000);}
   configureParameters(values:ParameterValues){return this.call({type:'configureParameters',values},[],30_000);}
   step(frame:SensorFrame){

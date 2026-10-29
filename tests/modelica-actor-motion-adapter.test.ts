@@ -19,7 +19,7 @@ it('production WASM adapter returns complete edited actor batches for negative/r
     return model!=='ActorMotion'?session:{
       set_inputs(input){inputs.push(JSON.parse(input)[0][1]);session.set_inputs(input);},
       advance_to(time){clocks.push(time);session.advance_to(time);},
-      state_json:()=>session.state_json(),free:()=>session.free(),
+      state_json:()=>session.state_json(),reset:()=>session.reset(),free:()=>session.free(),
     };
   };
   const math=new ModelicaRuntimeMath(tracked,project.sensorModelica!,project.evaluationModelica!,origin,source);
@@ -61,7 +61,7 @@ it('actor initialization refuses missing/renamed interfaces and frees every crea
     let created=0,freed=0;
     const traced:AlgebraicFactory=(text,model)=>{
       const session=make(text,model);created++;
-      return {set_inputs:input=>session.set_inputs(input),advance_to:time=>session.advance_to(time),state_json:()=>session.state_json(),free(){freed++;session.free();}};
+      return {set_inputs:input=>session.set_inputs(input),advance_to:time=>session.advance_to(time),state_json:()=>session.state_json(),reset:()=>session.reset(),free(){freed++;session.free();}};
     };
     expect(()=>new ModelicaRuntimeMath(traced,project.sensorModelica!,project.evaluationModelica!,origin,actorSource)).toThrow(message);
     expect(created).toBe(count);expect(freed).toBe(count);

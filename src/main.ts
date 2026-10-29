@@ -645,7 +645,7 @@ async function recoverDefaultModels(text:string,reason:unknown){
   }catch(error){status(String(error),true);showRecoveryBackup(backup,'Recovery failed. Your original source is available below. Automatic saving is disabled.');}
   finally{recovering=false;el<HTMLButtonElement>('default-models').disabled=false;el<HTMLInputElement>('open').disabled=false;}
 }
-async function compile() {
+async function compile(reusePrepared=false) {
   await initializationReady;
   if(compiling||assistantSimulation)return;
   compilationError=undefined;compiling=true;ready=false;disableRun(true);el<HTMLSelectElement>('scene-detail').disabled=true;el<HTMLSelectElement>('preset').disabled=true;runtime.pause();
@@ -655,7 +655,8 @@ async function compile() {
   loopPanel.render(loopHistories[0]);
   const snapshot=structuredClone(project),revision=JSON.stringify(project);
   try {
-    await runtime.compile(snapshot);
+    if(reusePrepared)clearKeys();
+    await runtime.prepare(snapshot,reusePrepared);
     if(JSON.stringify(project)!==revision){dirty=true;status('Source changed during compilation · apply your latest edits');return;}
     project.detectorArtifact=snapshot.detectorArtifact;
     project.algorithmArtifact=snapshot.algorithmArtifact;
@@ -681,7 +682,7 @@ async function compile() {
     syncApplyButton();syncEstimatorMode();
   }
 }
-el('apply').onclick=()=>{if(!viewingSlamFile())void compile();};el('reset').onclick=()=>void compile();
+el('apply').onclick=()=>{if(!viewingSlamFile())void compile();};el('reset').onclick=()=>void compile(true);
 el('run').onclick=async()=>{
   if(assistantSimulation)return;
   if(runtime.running){runtime.pause();el('run').textContent='▶ Run';return;}

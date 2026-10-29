@@ -23,6 +23,7 @@ export default defineConfig({
     '**/slam-build.spec.ts',
     '**/editor.spec.ts',
     '**/startup.spec.ts',
+    '**/reset.spec.ts',
     '**/native-slam.spec.ts',
   ],
   testDir:'tests/browser',timeout:120_000,workers:1,reporter:'list',

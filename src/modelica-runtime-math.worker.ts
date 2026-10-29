@@ -15,6 +15,7 @@ async function execute(message:any){
     return {runtime:'Modelica IMU/GPS, evaluation and actor motion'};
   }
   if(!math)throw new Error('Initialize Modelica runtime math first');
+  if(message.type==='reset'){math.reset(message.origin);actorRoute=message.actorRoute;return {};}
   if(message.type==='origin'){math.setOrigin(message.origin);return {};}
   if(message.type==='actors')return math.actors(message.time,message.route??actorRoute);
   if(message.type==='availability')return math.gpsAvailable(message.truth,message.roof,message.enabled);
