@@ -75,7 +75,7 @@ jobs:
           path: dist
   browser:
     if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks) }}
-    name: Browser smoke (${{ matrix.shard }}/4)
+    name: Browser smoke (${{ matrix.shard }}/5)
     needs: build
     runs-on: ubuntu-24.04
     # Allow Nix/dependency setup plus the bounded twelve-minute browser suite.
@@ -83,7 +83,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5]
     steps:
       - name: Configure checkout branch default
         run: git config --global init.defaultBranch main
@@ -114,7 +114,7 @@ jobs:
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - name: Install test dependencies and run this browser shard
         run: |
-          nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && npm run test:browser -- --shard=${{ matrix.shard }}/4'
+          nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && npm run test:browser -- --shard=${{ matrix.shard }}/5'
       - name: Retain browser failure evidence
         if: failure()
         uses: actions/upload-artifact@v7.0.2
