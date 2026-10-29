@@ -15,6 +15,11 @@ on:
         type: boolean
         required: false
         default: false
+      recorded_worker_parity:
+        description: 'Replay the sealed 500 s RGB-D/IMU recording through the sandboxed CPU browser worker (no capture or deployment)'
+        type: boolean
+        required: false
+        default: false
 permissions:
   contents: read
   actions: read
@@ -25,10 +30,11 @@ env:
   # Stay inside Ubuntu's system UID range for Nix's eight build users.
   NIX_FIRST_BUILD_UID: '900'
 concurrency:
-  group: pages-${{ github.ref }}
+  group: pages-${{ github.ref }}${{ github.event_name == 'workflow_dispatch' && inputs.recorded_worker_parity && '-recorded-worker' || '' }}
   cancel-in-progress: true
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.recorded_worker_parity }}
     name: Build and unit tests
     runs-on: ubuntu-24.04
     timeout-minutes: 25
@@ -74,7 +80,7 @@ jobs:
         with:
           path: dist
   browser:
-    if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks) }}
+    if: ${{ !(github.event_name == 'workflow_dispatch' && (inputs.skip_browser_checks || inputs.recorded_worker_parity)) }}
     name: Browser smoke (${{ matrix.shard }}/4)
     needs: build
     runs-on: ubuntu-24.04
@@ -128,7 +134,7 @@ jobs:
   deploy:
     if: >-
       always() && !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
-      !(github.event_name == 'workflow_dispatch' && inputs.office_loop_diagnostic) &&
+      !(github.event_name == 'workflow_dispatch' && (inputs.office_loop_diagnostic || inputs.recorded_worker_parity)) &&
       needs.build.result == 'success' &&
       (needs.browser.result == 'success' ||
       (github.event_name == 'workflow_dispatch' && inputs.skip_browser_checks))
@@ -195,3 +201,52 @@ jobs:
         if: always()
         run: |
           echo 'Software SwiftShader office diagnostic. Inspect capture/receipt.json and pipeline-status.json for completeness; partial artifacts do not establish GPU, accuracy or loop-closure acceptance.' >> "$GITHUB_STEP_SUMMARY"
+
+  recorded-worker:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.recorded_worker_parity }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          submodules: true
+      - uses: cachix/install-nix-action@v31.11.1
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Select task-owned storage
+        run: |
+          parity_root="$RUNNER_TEMP/recorded-slam-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          echo "RECORDED_SLAM_ROOT=$parity_root" >> "$GITHUB_ENV"
+          echo "npm_config_cache=$parity_root/npm-cache" >> "$GITHUB_ENV"
+          echo "RUMOCA_DOWNLOAD_DIR=$parity_root/rumoca-downloads" >> "$GITHUB_ENV"
+          echo "SLAM_NATIVE_CACHE_ROOT=$parity_root/native-cache" >> "$GITHUB_ENV"
+      - name: Check exclusive diagnostic mode
+        if: ${{ inputs.skip_browser_checks || inputs.office_loop_diagnostic }}
+        run: |
+          echo 'Recorded worker parity must be selected alone.'
+          exit 1
+      - name: Install dependencies and verify comparison contract
+        run: nix develop --no-update-lock-file .#ci --command bash -c 'npm ci && node --test scripts/recorded-slam-contract.test.mjs && node scripts/slam-native-assets.mjs --package'
+      - name: Verify and unpack the pinned recording
+        run: timeout --kill-after=5s 600s python3 scripts/prepare-recorded-slam-replay.py "$RECORDED_SLAM_ROOT/inputs"
+      - name: Enable Chromium namespace sandbox
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - name: Replay recorded input once within executable bounds
+        run: nix develop --no-update-lock-file .#ci --command python3 scripts/run-recorded-slam-browser.py "$RECORDED_SLAM_ROOT/inputs/fixture" "$RECORDED_SLAM_ROOT/run/output" "$RECORDED_SLAM_ROOT/run/cache"
+      - name: Retain source binding, partial output and terminal evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: recorded-slam-worker-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ env.RECORDED_SLAM_ROOT }}/inputs/SETUP-*.json
+            ${{ env.RECORDED_SLAM_ROOT }}/run/OPERATION*
+            ${{ env.RECORDED_SLAM_ROOT }}/run/output
+          if-no-files-found: warn
+          retention-days: 7
+      - name: State verification scope
+        if: always()
+        run: echo 'Recorded CPU worker parity only. Inspect RESULT.json and OPERATION-TERMINAL.json; no scene, new capture, GPU/stress, browser-throughput or deployment acceptance.' >> "$GITHUB_STEP_SUMMARY"

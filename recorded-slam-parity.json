@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "fixtureUrl": "https://github.com/CogniPilot/slam_web/releases/download/native-slam-office-loop-repair-20261029/office-recorded-browser-parity.tar.gz",
+  "fixtureBytes": 1647967263,
+  "fixtureSha256": "2405001063f9664043ab34ce4c627526920ad4a3936dee308ce5f87162261e2d",
+  "sensorMetadataSha256": "a2fd53f216969e361d833be0f9a87b63bef45f708140fba833d8d1124293e744",
+  "nativeManifestSha256": "5204bab5b1f13c3e4a452bf99bd988383468841d47a4fe872ef51cfd78b4708d",
+  "publishedProfileSha256": "ac12fb981857ab76bab2160b7c5e7f47c4946f84fea3c25e757673baee9a4749",
+  "nativeArchiveSha256": "e4b3cc3954085ffe921d3f583a5533e77a79a48cbd96015fb5e5169721a4a03d",
+  "canonicalCommit": "1e0afae78308b7596c9ff6fc1bd6adf5b03567a2",
+  "appBaseCommit": "8076ef728f9d74d707644ae8c29f341ec72f642c",
+  "productionInventorySha256": "b68f1a570c2faad87b1c6688fd1dbebfe2bfda82ca733b634f6c5298077ca22b",
+  "sourceExcludedPaths": [
+    ".github/workflows/pages.yml",
+    "recorded-slam-parity.json",
+    "scripts/recorded-slam-contract.mjs",
+    "scripts/recorded-slam-contract.test.mjs",
+    "scripts/replay-recorded-slam-browser.mjs",
+    "scripts/prepare-recorded-slam-replay.py",
+    "scripts/run-recorded-slam-browser.py",
+    "docs/guides/recorded-slam-browser-parity.md"
+  ],
+  "frames": 2501,
+  "endTime": 500,
+  "scope": "CPU Chromium worker/client parity against retained Node outputs; no new capture, scene rendering, GPU/stress or throughput acceptance."
+}
