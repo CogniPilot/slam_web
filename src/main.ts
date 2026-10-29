@@ -762,7 +762,7 @@ function syncFlightHelp(){
   const mode=(runtime.vehicleCount===2?'Drone '+(runtime.activeVehicleIndex+1)+' · ':'')+(runtime.autopilot?'Flight tour':drone?'Manual flight':'Manual flight · viewer keys');
   const view=CAMERA_VIEWS.find(view=>view.id===world.viewerCamera.mode)!.label;
   document.querySelector('.scene-bottom')!.firstChild!.textContent=mode+' · '+view+' · V change view ';
-  el('flight-help').textContent=runtime.autopilot?'Flight tour is flying the drone. Choose Manual flight in the toolbar to take control.':drone?'Click Run, then use WASD to fly, Q/E to yaw and R/F to climb or descend. V changes the camera view.':'WASD moves the camera; Q/E orbit or yaw, R/F altitude, Shift faster. Follow views move relative to the drone. V changes the camera view.';
+  el('flight-help').textContent=world.viewerCamera.mode==='orbit-follow'?'Drag to orbit and scroll to zoom around the followed drone. Vehicle turns do not rotate the view. V changes the camera view.':runtime.autopilot?'Flight tour is flying the drone. Choose Manual flight in the toolbar to take control.':drone?'Click Run, then use WASD to fly, Q/E to yaw and R/F to climb or descend. V changes the camera view.':'WASD moves the camera; Q/E orbit or yaw, R/F altitude, Shift faster. Follow views move relative to the drone. V changes the camera view.';
 }
 function setCameraView(mode:CameraView){
   world.setCameraView(mode);el<HTMLSelectElement>('camera-view').value=mode;

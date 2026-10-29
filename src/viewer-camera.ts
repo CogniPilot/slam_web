@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 export const CAMERA_VIEWS = [
   {id:'follow',label:'Follow · world heading'},
+  {id:'orbit-follow',label:'Follow · free orbit'},
   {id:'chase',label:'Chase · vehicle heading'},
   {id:'side',label:'Side follow'},
   {id:'overhead',label:'Overhead follow'},
@@ -41,7 +42,7 @@ export class ViewerCamera {
   }
   move(keys:ReadonlySet<string>,seconds:number){
     const dt=Math.min(.1,Math.max(0,seconds));
-    if(this.mode==='free'||!dt||!keys.size)return;
+    if(this.mode==='free'||this.mode==='orbit-follow'||!dt||!keys.size)return;
     const axis=(positive:string,negative:string)=>Number(keys.has(positive))-Number(keys.has(negative));
     const speed=dt*(keys.has('shift')?12:4);
     this.offset.x+=axis('w','s')*speed;this.offset.z+=axis('d','a')*speed;
@@ -49,6 +50,14 @@ export class ViewerCamera {
   }
   update(camera:THREE.Camera,drone:THREE.Object3D,target:THREE.Vector3) {
     if(this.mode==='free')return;
+    if(this.mode==='orbit-follow'){
+      // OrbitControls owns the eye-to-target vector (drag/zoom). Translate
+      // both ends together to the rendered vehicle, ignoring its attitude.
+      this.displacement.copy(drone.position).sub(target);
+      camera.position.add(this.displacement);target.copy(drone.position);
+      camera.up.copy(this.up);camera.lookAt(target);camera.updateMatrixWorld();
+      return;
+    }
     this.right.set(1,0,0).applyQuaternion(drone.quaternion);this.right.y=0;
     if(this.right.lengthSq()>1e-8)this.heading.copy(this.right).normalize();
     const heading=this.mode==='follow'?this.worldHeading:this.heading;

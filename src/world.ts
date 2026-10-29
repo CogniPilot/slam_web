@@ -496,7 +496,14 @@ export class World {
   }
   setCameraView(mode:CameraView){
     this.viewerCamera.select(mode,this.view,this.controls.target);
-    this.controls.enabled=mode==='free';
+    this.controls.enabled=mode==='free'||mode==='orbit-follow';
+    this.controls.enablePan=mode!=='orbit-follow';
+    this.controls.maxPolarAngle=mode==='orbit-follow'?Math.PI:Math.PI*.49;
+    this.trackOrbitCamera();
+  }
+  /** UI controls and the worker renderer track the same selected vehicle. */
+  trackOrbitCamera(){
+    if(this.viewerCamera.mode==='orbit-follow')this.viewerCamera.update(this.view,this.cameraVehicle===1&&this.otherVehicle?this.otherVehicle.robot:this.robot,this.controls.target);
   }
   setLighting(mode:DaylightMode){this.lightingMode=mode;this.lighting.setMode(mode,this.simulationTime);this.onLighting(mode);this.configureSensor({lightingMode:mode});}
   setEnvironmentVisible(visible:boolean){
