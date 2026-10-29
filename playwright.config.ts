@@ -24,6 +24,7 @@ export default defineConfig({
     '**/editor.spec.ts',
     '**/startup.spec.ts',
     '**/reset.spec.ts',
+    '**/map-flight-tour.spec.ts',
     '**/native-slam.spec.ts',
   ],
   testDir:'tests/browser',timeout:120_000,workers:1,reporter:'list',

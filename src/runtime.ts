@@ -18,6 +18,7 @@ import {checkedLoopClosureSettings,type LoopClosureSettings} from './loop-closur
 import {nativeParametersFor,NATIVE_SLAM_PARAMETERS,type ParameterValues} from './model-parameters';
 import {FrameClock} from './frame-clock';
 import {runtimeProjectKey} from './runtime-project-key';
+import {selectedFlightTour,type FlightTour} from './flight-tour';
 export interface Metrics { time:number; ate:number|null; currentError:number|null; orientationError:number|null; confidence:number; points:number; features:number; rtf:number; frames:number; loops:number; dropped:number }
 export interface FlowTiming {totalMs:number;bufferBytes:number|null}
 export interface VehicleFrame {frame:SensorFrame;estimate:Estimate;truth:Truth|undefined;metrics:Metrics}
@@ -35,7 +36,7 @@ export class Runtime {
   private random=seededRandom(7);
   private gpsRandom=seededRandom(9);
   gps:GpsSample|null=null;
-  tourMode:'circuit'|'indoor'='circuit';
+  tourMode:FlightTour='circuit';
   private sequence=0;
   private cameraSequence=0;
   private stepping=false;
@@ -91,6 +92,10 @@ export class Runtime {
   }
   get vehicleCount():1|2{return this.secondary?2:1;}
   get activeVehicleIndex(){return this.selectedVehicle;}
+  setFlightTour(route:FlightTour){
+    this.tourMode=route;if(this.project)this.project.flightTour=route;
+    if(this.secondary)this.secondary.setFlightTour(route);
+  }
   selectVehicle(index:0|1){
     this.getVehicle(index);
     this.command={forward:0,left:0,up:0,yaw:0};this.selectedVehicle=index;this.world.cameraVehicle=index;
@@ -169,7 +174,7 @@ export class Runtime {
     this.resetSensorClock(sensorRates(project));
     this.heldImu=(await this.sampleSensors(truth,true,false)).imu;
     this.reference=undefined;this.records=[];this.replay=undefined;
-    this.project=structuredClone(project);this.order=order;
+    this.project=structuredClone(project);this.order=order;this.tourMode=selectedFlightTour(project);
     if(project.slamBackend==='native'&&order.some(node=>node.kind==='slam')){
       this.onStatus('Loading native SLAM programs…');
       const client=new ModelicaSlamClient(text=>this.onStatus(text));
@@ -239,7 +244,7 @@ export class Runtime {
     this.world.setActorMotion(await this.modelicaMath!.call<ActorMotionFrame>('actors',{time:0}));
     this.world.setEstimate({x:0,y:0,z:0,quaternion:[1,0,0,0],confidence:0,points:[]});
     this.world.setEnvironmentVisible(true);
-    this.project=structuredClone(project);this.order=validateGraph(project.graph);
+    this.project=structuredClone(project);this.order=validateGraph(project.graph);this.tourMode=selectedFlightTour(project);
     this.random=seededRandom(project.seed);this.gpsRandom=seededRandom(project.seed^0x475053);this.gps=null;
     this.sequence=0;this.cameraSequence=0;this.time=0;this.resetSensorClock(sensorRates(project));
     this.imuIntervals=[];this.cameraLidar=false;this.heldImu=(await this.sampleSensors(truth,true,false)).imu;
@@ -359,7 +364,7 @@ export class Runtime {
               else {
                 let intervalStart=this.time;const commandTime=this.time;
                 for(const event of this.sensorClock.nextFrame(this.project.lidarEnabled??false)){
-                  truth=await this.physics.call<Truth>('step',{time:event.time,command,autopilot:this.autopilot,indoorTour:this.tourMode==='indoor',commandTime});
+                  truth=await this.physics.call<Truth>('step',{time:event.time,command,autopilot:this.autopilot,indoorTour:this.tourMode==='indoor',tourMode:this.tourMode,commandTime});
                   this.world.update(truth);
                   if(barrier)await barrier.arrive();
                   // Zero-order hold: an endpoint IMU measurement applies to

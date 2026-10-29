@@ -97,3 +97,10 @@ it('the UI preparation entry dispatches unchanged Reset to reset, edited Reset t
   await r.prepare(changed,true);expect(r.compile).toHaveBeenLastCalledWith(changed);
   await r.prepare(project);expect(r.compile).toHaveBeenLastCalledWith(project);expect(r.compile).toHaveBeenCalledTimes(2);
 });
+
+it('resetting a prepared project applies its selected map tour without recompiling',async()=>{
+  const {r,project}=fixture();
+  await r.reset({...project,flightTour:'office-loop'});
+  expect(r.tourMode).toBe('office-loop');expect(r.project.flightTour).toBe('office-loop');
+  expect(r.compile).not.toHaveBeenCalled();
+});
