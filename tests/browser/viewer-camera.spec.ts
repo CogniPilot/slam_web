@@ -20,7 +20,9 @@ test('free camera keys move the actual worker view while simulation is paused an
   });
   const state=()=>page.evaluate(()=>{
     const lab=(window as any).__slamLab,w=lab.runtime.world;
-    return {position:w.view.position.toArray(),quaternion:w.view.quaternion.toArray(),time:lab.runtime.time,sequence:lab.latest?.frame.sequence,truth:JSON.stringify(w.committedTruth),command:lab.runtime.command};
+    // Read the last posted camera and its source pose in the same browser task.
+    // A render during an awaited screenshot can renormalize the quaternion by one ulp.
+    return {position:w.view.position.toArray(),quaternion:w.view.quaternion.toArray(),time:lab.runtime.time,sequence:lab.latest?.frame.sequence,truth:JSON.stringify(w.committedTruth),command:lab.runtime.command,posted:(window as any).__cameraMessages.at(-1)};
   });
   await page.locator('#world').click({position:{x:350,y:220}});
   const initial=await state();
@@ -44,7 +46,7 @@ test('free camera keys move the actual worker view while simulation is paused an
   const moved=await state(),after=await page.locator('#world').screenshot();expect(after.equals(before)).toBe(false);
   expect(moved.time).toBe(initial.time);expect(moved.sequence).toBe(initial.sequence);expect(moved.truth).toBe(initial.truth);
   expect(moved.command).toEqual({forward:0,left:0,up:0,yaw:0});
-  const posted=await page.evaluate(()=>(window as any).__cameraMessages.at(-1));
+  const posted=moved.posted;
   expect(posted.position).toEqual(moved.position);expect(posted.quaternion).toEqual(moved.quaternion);
   await page.locator('#name').focus();await page.keyboard.type('wasdqerf');await page.waitForTimeout(160);
   expect((await state()).position).toEqual(moved.position);
