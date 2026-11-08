@@ -14,7 +14,9 @@ test('Reset reuses unchanged compiled workers, reproduces the initial step, and 
   });
   const step=async()=>{
     await page.getByRole('button',{name:'Step',exact:true}).click();
-    await expect.poll(()=>page.evaluate(()=>{const r=(window as any).__slamLab.runtime;return !r.busy&&r.time>0;})).toBe(true);
+    // The first sensor frame can need shader/worker warm-up on software-rendered CI.
+    // Keep the same ready condition and the test's existing 180 s overall budget.
+    await expect.poll(()=>page.evaluate(()=>{const r=(window as any).__slamLab.runtime;return !r.busy&&r.time>0;}),{timeout:30_000}).toBe(true);
     return page.evaluate(()=>{const lab=(window as any).__slamLab;return {truth:lab.latest.truth,estimate:lab.latest.estimate,imu:lab.latest.frame.imu,actors:lab.runtime.world.actorMotion};});
   };
   const first=await step();
