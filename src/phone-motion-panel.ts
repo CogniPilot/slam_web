@@ -6,8 +6,8 @@ import './phone-motion.css';
 
 const inertialOnlyPath='models/Libraries/CogniPilot/SLAM/Examples/InertialOnly.mo';
 const MODELS={
-  PhoneMotionEKF:{path:phoneMotionEKFPath,label:'EKF · phone-tuned',bundled:phoneMotionEKFSource,tilt:true},
-  'SLAM.Examples.InertialOnly':{path:inertialOnlyPath,label:'Inertial only · no corrections',bundled:modelicaModelsSources[inertialOnlyPath],tilt:false},
+  PhoneMotionEKF:{path:phoneMotionEKFPath,label:'EKF · phone-tuned',bundled:phoneMotionEKFSource,tilt:true,library:false},
+  'SLAM.Examples.InertialOnly':{path:inertialOnlyPath,label:'Inertial only · no corrections',bundled:modelicaModelsSources[inertialOnlyPath],tilt:false,library:true},
 } as const;
 type ModelName=keyof typeof MODELS;
 const OBSERVE=['gyroBias[1]','gyroBias[2]','gyroBias[3]','attitudeStd[1]','attitudeStd[2]','stationarity','gravityWeight'];
@@ -64,7 +64,10 @@ export function mountPhoneMotionPanel(parent:Element,project:()=>Project){
     const accel=[0,1,2].map(i=>accelSign*aligning.reduce((sum,sample)=>sum+sample.accel[i],0)/aligning.length);
     const name=select.value as ModelName,model=MODELS[name],current=project();
     const source=model.path===current.mainSourcePath?current.algorithm:current.modelicaSources?.[model.path]??model.bundled;
-    const workspaceSources=estimatorModelicaSources(current);delete workspaceSources[model.path];
+    // Loading the library costs over 100 MB in each compiler instance, enough
+    // for iOS to kill the tab next to the running simulation. The phone EKF is
+    // self-contained, so it compiles without it.
+    const workspaceSources:Record<string,string>=model.library?estimatorModelicaSources(current):{};delete workspaceSources[model.path];
     const parameters={...current.modelParameters?.[name],...(model.tilt?initialTilt(accel):{})};
     status('Compiling the estimator…');
     const worker=new WorkerRpc(new Worker(new URL('./modelica-state.worker.ts',import.meta.url),{type:'module'}));
