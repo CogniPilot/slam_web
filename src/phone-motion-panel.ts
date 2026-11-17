@@ -37,7 +37,9 @@ export function mountPhoneMotionPanel(parent:Element,project:()=>Project){
   let running=false,rpc:WorkerRpc|undefined,generation=0,busy=false,ready=false;
   let detector=new AccelSignDetector(),aligning:MotionSample[]=[],alignStart:number|undefined,accelSign=1;
   let orientation:{beta:number;gamma:number}|undefined;
-  const batcher=new MotionBatcher();
+  // About 30 estimator updates a second keeps the horizon smooth; each costs one
+  // worker round trip on top of the integration it would do anyway.
+  const batcher=new MotionBatcher(1/30);
   let samples=0,rateStart=performance.now(),rate=0;
 
   const onOrientation=(event:DeviceOrientationEvent)=>{
@@ -118,7 +120,10 @@ export function mountPhoneMotionPanel(parent:Element,project:()=>Project){
     rpc?.stop();rpc=undefined;generation++;busy=false;ready=false;running=false;
     aligning=[];alignStart=undefined;batcher.reset();
     button.textContent='Use this phone\'s motion sensors';select.disabled=false;
+    active(false);
   }
+  /** Lets the page pause its 3D view while the sensors run. */
+  function active(on:boolean){document.dispatchEvent(new CustomEvent('phone-motion-active',{detail:on}));}
   button.onclick=()=>{
     if(running){stop();status('Stopped');return;}
     // iOS grants motion access only from a tap; request both before any await.
@@ -126,7 +131,7 @@ export function mountPhoneMotionPanel(parent:Element,project:()=>Project){
     const tilt=typeof DeviceOrientationEvent==='undefined'?undefined:(DeviceOrientationEvent as unknown as PermissionRequest).requestPermission?.();
     void Promise.all([motion,tilt].map(request=>request?.catch(()=>'denied' as const))).then(([motionState])=>{
       if(motionState==='denied'){status('Motion access was denied. Allow it in Safari settings for this site and try again.',true);return;}
-      running=true;button.textContent='Stop phone sensors';select.disabled=true;
+      running=true;button.textContent='Stop phone sensors';select.disabled=true;active(true);
       detector=new AccelSignDetector();aligning=[];alignStart=undefined;
       window.addEventListener('deviceorientation',onOrientation);window.addEventListener('devicemotion',onMotion);
       status('Hold the phone still while the estimator aligns…');

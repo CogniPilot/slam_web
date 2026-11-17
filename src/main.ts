@@ -131,7 +131,7 @@ let initialized=false;
 const navigation=new NavigationHandoff();
 let viewer:WorkerViewer|undefined;
 el<HTMLInputElement>('cutaway-3d').onchange=()=>{world.viewerCutaway=el<HTMLInputElement>('cutaway-3d').checked;viewer?.cutaway(world.viewerCutaway);};
-let viewerPresented=true;
+let viewerPresented=true,phoneMotionActive=false;
 el('graphics-state').insertAdjacentHTML('afterend','<div id="performance-state"></div>');
 const performanceMonitor=new BrowserPerformanceMonitor({targetFps:30,onUpdate:s=>{
   syncEstimatorMode();
@@ -233,10 +233,14 @@ const workspacePanes=mountWorkspacePanes([
   {name:'viewer',panel:document.querySelector('.scene')!,header:document.querySelector('.scene .panel-label')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!},
   {name:'editor',panel:document.querySelector('aside.editor')!,header:document.querySelector('.configuration-tabs')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!},
   {name:'plot',panel:telemetryPlot.panel,header:telemetryPlot.header,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!}
-],()=>{
-  viewerPresented=!document.querySelector('.scene.pane-collapsed, aside.editor.pane-fullscreen, .telemetry-plot.pane-fullscreen');
+],presentViewer);
+// Phone motion sensors share a phone's CPU and GPU with the 3D view; pause the
+// view while they run so the estimator and its readout keep up.
+function presentViewer(){
+  viewerPresented=!phoneMotionActive&&!document.querySelector('.scene.pane-collapsed, aside.editor.pane-fullscreen, .telemetry-plot.pane-fullscreen');
   viewer?.presentationVisible(viewerPresented);
-});
+}
+document.addEventListener('phone-motion-active',event=>{phoneMotionActive=(event as CustomEvent<boolean>).detail;presentViewer();});
 const slamBuildPanel=document.createElement('div');slamBuildPanel.className='slam-source-build';slamBuildPanel.hidden=true;
 slamBuildPanel.innerHTML='<button id="check-slam-build">Check WASM build</button> <button id="cancel-slam-build" hidden>Cancel build</button><pre id="slam-build-result" role="status">Checks all saved SLAM sources using Rumoca in this browser. Execution integration is pending.</pre>';
 document.querySelector('.editor-selects')!.after(slamBuildPanel);
