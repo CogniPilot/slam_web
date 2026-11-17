@@ -42,6 +42,7 @@ import {nativeManifestUrl} from './native-assets';
 import './loop-closure.css';
 import './modelica-docs.css';
 import './workspace.css';
+import {mountPhoneMotionPanel} from './phone-motion-panel';
 
 const startup=startupScreen();
 document.querySelector('#app')!.innerHTML=`
@@ -151,6 +152,7 @@ function syncEstimatorMode(){
 
 const code=el<HTMLTextAreaElement>('code');
 const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,onResolutionChange:changeCameraResolution,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
+mountPhoneMotionPanel(document.getElementById('configuration-view')!,()=>project);
 const parameterButton=document.createElement('button');parameterButton.id='parameters';parameterButton.textContent='Parameters';parameterButton.onclick=()=>showParameters();
 document.querySelector('.run-controls')!.append(parameterButton);
 function showParameters(){workspacePanes.reveal('editor');parameterView.show();}
@@ -190,7 +192,7 @@ async function refreshRunModels(){
   try{
     const models=await sourceEditor.simulationModels(source,entryPoint,estimatorExampleSources(project));
     if(token!==modelDiscovery||owner!==project||source!==project.algorithm||companions!==project.modelicaSources)return;
-    const labels:Record<string,string>={'SLAM.Examples.InertialOnly':'Inertial navigation','SLAM.Examples.SmoothedInertial':'Inertial navigation · smoothed IMU','SLAM.Examples.ResponsiveInertial':'Inertial navigation · responsive IMU'};
+    const labels:Record<string,string>={'SLAM.Examples.InertialOnly':'Inertial navigation','SLAM.Examples.SmoothedInertial':'Inertial navigation · smoothed IMU','SLAM.Examples.ResponsiveInertial':'Inertial navigation · responsive IMU','PhoneMotionEKF':'EKF · phone-tuned attitude and velocity'};
     runModel.replaceChildren(...models.map(name=>new Option(labels[name]??name,name)));
     if(!models.includes(entryPoint)){
       const missing=new Option(entryPoint+' · missing from source',entryPoint);missing.disabled=true;runModel.add(missing);

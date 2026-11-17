@@ -1,0 +1,10 @@
+.phone-motion { display: flex; flex-direction: column; gap: 10px; }
+.phone-motion label { display: flex; flex-direction: column; gap: 6px; }
+.phone-motion select { width: 100%; }
+.phone-motion canvas { width: 100%; max-width: 320px; aspect-ratio: 2 / 1; border: 1px solid var(--line); border-radius: 6px; background: #0d151e; }
+.phone-motion-readout { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 0; font-size: 11px; }
+.phone-motion-readout dt { color: var(--muted); }
+.phone-motion-readout dd { margin: 0; font-variant-numeric: tabular-nums; }
+.phone-motion-status { margin: 0; }
+.phone-motion-status.error { color: #efb29d; }
+@media (pointer: coarse) { .phone-motion button { min-height: 44px; } }

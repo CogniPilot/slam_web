@@ -95,5 +95,16 @@ export class ModelicaInertialSession {
     return {x:position[0],y:position[1],z:position[2],quaternion,points:[],confidence:.1,
       diagnostics:{model:'Modelica nominal INS',backend:'Rumoca Solve IR session',executionPolicy:'auto'}};
   }
+  /** Optional model outputs, such as an EKF's bias or uncertainty; names the
+   * model does not declare are omitted rather than treated as faults. */
+  observe(names:readonly string[]){
+    const values:Record<string,number>={};
+    for(const name of names){
+      if(!/^[A-Za-z_]\w*(?:\[\d+\])?$/.test(name))throw new Error(`Invalid Modelica output name ${name}`);
+      const value=this.solver.get(name);
+      if(typeof value==='number'&&Number.isFinite(value))values[name]=value;
+    }
+    return values;
+  }
   free(){this.solver.free();}
 }

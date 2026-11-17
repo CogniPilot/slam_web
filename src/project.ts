@@ -8,6 +8,7 @@ import fastProfile from '../models/Vision/Features/D435FastFeatures.mo?raw';
 import sensorEquations from '../models/Sensors/SensorObservations.mo?raw';
 import sensorAvailability from '../models/Sensors/SensorAvailability.mo?raw';
 import actorMotion from '../models/Scene/ActorMotion.mo?raw';
+import phoneMotionEKF from '../models/Phone/PhoneMotionEKF.mo?raw';
 import evaluationEquations from '../models/Evaluation/RuntimeEvaluation.mo?raw';
 import type { Environment,SceneDetail } from './types';
 import { defaultGraph, type Graph } from './graph';
@@ -33,6 +34,10 @@ const defaultModelicaSources=Object.fromEntries(Object.entries(modelicaModelsSou
 export const offsetQuadrotorPath='models/Vehicles/OffsetQuadrotor.mo';
 export const offsetQuadrotorSource=offsetQuadrotor;
 defaultModelicaSources[offsetQuadrotorPath]=offsetQuadrotor;
+/** Repository-owned EKF example for phone or airframe IMU input. */
+export const phoneMotionEKFPath='models/Phone/PhoneMotionEKF.mo';
+export const phoneMotionEKFSource=phoneMotionEKF;
+defaultModelicaSources[phoneMotionEKFPath]=phoneMotionEKF;
 /** Add the new editable component without replacing a saved sensor model. */
 export function withActorMotion(source:string):string {
   return /\bmodel\s+ActorMotion\b/.test(source)?source:`${source}\n${actorMotion}`;
@@ -105,7 +110,7 @@ export function estimatorModelicaSources(project:Project):Record<string,string> 
 }
 /** The vehicle, sensor and library components are dependencies, not estimator examples. */
 export function estimatorExampleSources(project:Project):Record<string,string>{
-  const examples=['InertialOnly','SmoothedInertial','ResponsiveInertial'].map(name=>`models/Libraries/CogniPilot/SLAM/Examples/${name}.mo`);
+  const examples=[...['InertialOnly','SmoothedInertial','ResponsiveInertial'].map(name=>`models/Libraries/CogniPilot/SLAM/Examples/${name}.mo`),phoneMotionEKFPath];
   return Object.fromEntries(Object.entries(project.modelicaSources??{}).filter(([path])=>path!==project.mainSourcePath&&examples.includes(path)));
 }
 /** Replace executable source with this release's defaults, retaining only valid settings. */

@@ -67,6 +67,10 @@ are proposed for review. Generated missions still need inspection and testing.
 The app includes a pinned local copy of [CogniPilot Modelica Models](models/Libraries/README.md),
 including the position, attitude and body-rate controllers that drive the drone's motors.
 
+On a phone, **Configuration → Phone motion sensors** runs a Modelica EKF on the
+phone's own accelerometer and gyroscope; see
+[Phone motion sensors](docs/guides/using-the-lab.md#phone-motion-sensors).
+
 Use **WASD** to move the viewer, **Q/E** to turn, and **R/F** to change altitude.
 Hold **Shift** to move faster. On a phone, scroll below the viewer for controls
 and the editor. Performance depends on the device and selected settings.
