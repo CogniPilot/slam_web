@@ -70,3 +70,27 @@ below the viewer to reach the editor and configuration. Low graphics and its
 15 Hz RGB-D rate are the default everywhere so simulation stays close to real
 time; raise them in **Configuration**. See [Editing Modelica](editing-modelica.md)
 to keep your work.
+
+## Phone motion sensors
+
+**Configuration → Phone motion sensors** runs a Modelica estimator on your
+phone's own accelerometer and gyroscope, separately from the drone simulation.
+Tap **Use this phone's motion sensors** and allow motion access; iPhone Safari
+asks once per site and only offers motion events over HTTPS, so use the
+published site rather than a plain-HTTP development server. Hold the phone
+still for a moment while the estimator aligns.
+
+The default estimator, `PhoneMotionEKF` (`models/Phone/PhoneMotionEKF.mo`), is
+a continuous-time extended Kalman filter over velocity, attitude and gyro bias.
+The accelerometer corrects roll and pitch against gravity, with less weight
+while the phone accelerates, and a zero-velocity correction applies while the
+phone is still. Its initial roll and pitch come from the first samples. The
+panel shows roll, pitch, the filter's tilt uncertainty and its gyro bias
+estimate. Heading has no compass reference and drifts slowly; position drifts
+within seconds, as it does for any IMU without camera or GPS aiding. Choose
+**Inertial only** to compare against the uncorrected integrator. Phone samples
+arrive at about 60 Hz and the filter takes well under a millisecond per sample.
+
+`PhoneMotionEKF` also appears under **Run model**, so the same filter can run on
+the simulated airframe IMU. Its parameters, including the noise densities, are
+ordinary Modelica parameters you can edit in **Parameters** or the source.

@@ -43,6 +43,7 @@ import {nativeManifestUrl} from './native-assets';
 import './loop-closure.css';
 import './modelica-docs.css';
 import './workspace.css';
+import {mountPhoneMotionPanel,mountPhoneMotionShortcut} from './phone-motion-panel';
 
 const startup=startupScreen();
 document.querySelector('#app')!.innerHTML=`
@@ -130,7 +131,7 @@ let initialized=false;
 const navigation=new NavigationHandoff();
 let viewer:WorkerViewer|undefined;
 el<HTMLInputElement>('cutaway-3d').onchange=()=>{world.viewerCutaway=el<HTMLInputElement>('cutaway-3d').checked;viewer?.cutaway(world.viewerCutaway);};
-let viewerPresented=true;
+let viewerPresented=true,phoneMotionActive=false;
 el('graphics-state').insertAdjacentHTML('afterend','<div id="performance-state"></div>');
 const performanceMonitor=new BrowserPerformanceMonitor({targetFps:30,onUpdate:s=>{
   syncEstimatorMode();
@@ -153,6 +154,7 @@ function syncEstimatorMode(){
 
 const code=el<HTMLTextAreaElement>('code');
 const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,onResolutionChange:changeCameraResolution,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
+mountPhoneMotionShortcut(document.querySelector('.run-controls')!,mountPhoneMotionPanel(document.getElementById('configuration-view')!,()=>project));
 const parameterButton=document.createElement('button');parameterButton.id='parameters';parameterButton.textContent='Parameters';parameterButton.onclick=()=>showParameters();
 document.querySelector('.run-controls')!.append(parameterButton);
 function showParameters(){workspacePanes.reveal('editor');parameterView.show();}
@@ -192,7 +194,7 @@ async function refreshRunModels(){
   try{
     const models=await sourceEditor.simulationModels(source,entryPoint,estimatorExampleSources(project));
     if(token!==modelDiscovery||owner!==project||source!==project.algorithm||companions!==project.modelicaSources)return;
-    const labels:Record<string,string>={'SLAM.Examples.InertialOnly':'Inertial navigation','SLAM.Examples.SmoothedInertial':'Inertial navigation · smoothed IMU','SLAM.Examples.ResponsiveInertial':'Inertial navigation · responsive IMU'};
+    const labels:Record<string,string>={'SLAM.Examples.InertialOnly':'Inertial navigation','SLAM.Examples.SmoothedInertial':'Inertial navigation · smoothed IMU','SLAM.Examples.ResponsiveInertial':'Inertial navigation · responsive IMU','PhoneMotionEKF':'EKF · phone-tuned attitude and velocity'};
     runModel.replaceChildren(...models.map(name=>new Option(labels[name]??name,name)));
     if(!models.includes(entryPoint)){
       const missing=new Option(entryPoint+' · missing from source',entryPoint);missing.disabled=true;runModel.add(missing);
@@ -231,10 +233,14 @@ const workspacePanes=mountWorkspacePanes([
   {name:'viewer',panel:document.querySelector('.scene')!,header:document.querySelector('.scene .panel-label')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!},
   {name:'editor',panel:document.querySelector('aside.editor')!,header:document.querySelector('.configuration-tabs')!,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!},
   {name:'plot',panel:telemetryPlot.panel,header:telemetryPlot.header,fullScreenControls:document.querySelector<HTMLElement>('.run-controls')!}
-],()=>{
-  viewerPresented=!document.querySelector('.scene.pane-collapsed, aside.editor.pane-fullscreen, .telemetry-plot.pane-fullscreen');
+],presentViewer);
+// Phone motion sensors share a phone's CPU and GPU with the 3D view; pause the
+// view while they run so the estimator and its readout keep up.
+function presentViewer(){
+  viewerPresented=!phoneMotionActive&&!document.querySelector('.scene.pane-collapsed, aside.editor.pane-fullscreen, .telemetry-plot.pane-fullscreen');
   viewer?.presentationVisible(viewerPresented);
-});
+}
+document.addEventListener('phone-motion-active',event=>{phoneMotionActive=(event as CustomEvent<boolean>).detail;presentViewer();});
 const slamBuildPanel=document.createElement('div');slamBuildPanel.className='slam-source-build';slamBuildPanel.hidden=true;
 slamBuildPanel.innerHTML='<button id="check-slam-build">Check WASM build</button> <button id="cancel-slam-build" hidden>Cancel build</button><pre id="slam-build-result" role="status">Checks all saved SLAM sources using Rumoca in this browser. Execution integration is pending.</pre>';
 document.querySelector('.editor-selects')!.after(slamBuildPanel);

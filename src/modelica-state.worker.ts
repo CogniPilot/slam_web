@@ -29,7 +29,9 @@ async function execute(message:any) {
   if(message.type!=='step')throw new Error(`Unknown Modelica state request: ${message.type}`);
   const frame=message.frame as SensorFrame;
   const features=message.features??(frame as any).features;
-  return {...session.step(frame),...(features===undefined?{}:{features})};
+  const estimate=session.step(frame);
+  const observed=Array.isArray(message.observe)?{observed:session.observe(message.observe)}:{};
+  return {...estimate,...(features===undefined?{}:{features}),...observed};
 }
 let queue=Promise.resolve();
 self.onmessage=({data})=>{queue=queue.then(async()=>{try{self.postMessage({id:data.id,result:await execute(data)});}catch(error){self.postMessage({id:data.id,error:String(error)});}});};

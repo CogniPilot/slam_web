@@ -2,10 +2,20 @@ import type {ParameterValues} from './model-parameters';
 import {modelParameterDeclarations} from './modelica-parameter-declarations.mjs';
 import {inspectModelParameters} from './modelica-parameter-inspection';
 
+let multiMemory:boolean|undefined;
+/** Rumoca lowers compiled programs to multi-memory WebAssembly, which Safari/WebKit rejects. */
+export function supportsWasmMultiMemory(){
+  // A module with two declared memories validates only where multi-memory is supported.
+  return multiMemory??=WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,5,5,2,0,1,0,1]));
+}
+/** Compile natively where possible; otherwise run Rumoca's interpreter. */
+export function modelicaExecutionPolicy(){return supportsWasmMultiMemory()?'auto':'interpreter';}
+
 /** Rumoca recompiles and reinitializes dependent equations for parameter edits. */
 export function configuredModelicaSession(compiler:typeof import('@cognipilot/rumoca'),source:string,model:string,
-  dt:number,solver:string,atol:number,rtol:number,initialInputs:string,parameters:ParameterValues={},workspaceSources:Readonly<Record<string,string>>={}){
-  if(!Object.keys(parameters).length)return compiler.WasmSimulationSession.withInteractiveOptions(source,model,dt,solver,atol,rtol,initialInputs);
+  dt:number,solver:string,atol:number,rtol:number,initialInputs:string,parameters:ParameterValues={},workspaceSources:Readonly<Record<string,string>>={},
+  executionPolicy:'auto'|'interpreter'=modelicaExecutionPolicy()){
+  if(!Object.keys(parameters).length&&executionPolicy==='auto')return compiler.WasmSimulationSession.withInteractiveOptions(source,model,dt,solver,atol,rtol,initialInputs);
   const fields: {name:string}[]=inspectModelParameters(compiler,source,model,compiler.model_parameter_metadata,workspaceSources);
   const known=new Set(fields.map(field=>field.name)),numeric:ParameterValues={},bindings:Record<string,any>=Object.create(null);
   const declarations=modelParameterDeclarations(source,JSON.parse(compiler.lsp_document_symbols(source)));
@@ -25,5 +35,5 @@ export function configuredModelicaSession(compiler:typeof import('@cognipilot/ru
     model=namespace?`${namespace}.${wrapper}`:wrapper;
   }
   return compiler.WasmSimulationSession.withInteractiveConfiguration(source,model,JSON.stringify({dt,solver,atol,rtol,
-    initial_inputs:JSON.parse(initialInputs),execution_policy:'auto',parameters:numeric}));
+    initial_inputs:JSON.parse(initialInputs),execution_policy:executionPolicy,parameters:numeric}));
 }

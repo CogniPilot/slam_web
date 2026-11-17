@@ -22,7 +22,8 @@ it('discovers estimator examples without vehicle and internal component sources'
   const project=defaultProject();
   const sources=estimatorExampleSources(project);
   expect(Object.keys(sources).map(path=>path.split('/').at(-1))).toEqual(expect.arrayContaining(['SmoothedInertial.mo','ResponsiveInertial.mo']));
-  expect(Object.keys(sources).every(path=>/SLAM\/Examples\/(?:InertialOnly|SmoothedInertial|ResponsiveInertial)\.mo$/.test(path))).toBe(true);
+  expect(Object.keys(sources).every(path=>/(?:SLAM\/Examples\/(?:InertialOnly|SmoothedInertial|ResponsiveInertial)|Phone\/PhoneMotionEKF)\.mo$/.test(path))).toBe(true);
+  expect(Object.keys(sources)).toContain('models/Phone/PhoneMotionEKF.mo');
   expect(Object.keys(sources).some(path=>/Quadrotor|RigidBody|ModelicaInertial/.test(path))).toBe(false);
   project.mainSourcePath='models/Libraries/CogniPilot/SLAM/Examples/SmoothedInertial.mo';
   project.algorithm=project.modelicaSources![project.mainSourcePath];
