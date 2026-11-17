@@ -5,10 +5,12 @@ test('a phone visitor streams motion sensors into the phone EKF',async({page},te
   test.skip(testInfo.project.name!=='android-chromium','Synthetic motion events need Chromium');
   await page.goto('/');
   await expect(page.locator('#startup-screen')).toBeHidden({timeout:90_000});
-  await page.getByRole('tab',{name:'Configuration'}).click();
   const panel=page.locator('.phone-motion');
   await expect(panel.getByLabel('Phone motion estimator')).toHaveValue('PhoneMotionEKF');
-  await panel.getByRole('button',{name:'Use this phone\'s motion sensors'}).click();
+  // One tap in the toolbar opens the panel and starts the sensors.
+  await page.getByRole('button',{name:'Phone sensors'}).click();
+  await expect(page.getByRole('tab',{name:'Configuration'})).toHaveAttribute('aria-selected','true');
+  await expect(panel.getByRole('button',{name:'Stop phone sensors'})).toBeVisible();
   // A phone rolled 30° and held still, at 60 Hz, with matching orientation angles.
   await page.evaluate(()=>{
     const g=9.81,roll=Math.PI/6;

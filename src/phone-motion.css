@@ -8,3 +8,4 @@
 .phone-motion-status { margin: 0; }
 .phone-motion-status.error { color: #efb29d; }
 @media (pointer: coarse) { .phone-motion button { min-height: 44px; } }
+.phone-motion-shortcut { border-color: var(--green); color: var(--green); }

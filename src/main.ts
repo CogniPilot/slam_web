@@ -43,7 +43,7 @@ import {nativeManifestUrl} from './native-assets';
 import './loop-closure.css';
 import './modelica-docs.css';
 import './workspace.css';
-import {mountPhoneMotionPanel} from './phone-motion-panel';
+import {mountPhoneMotionPanel,mountPhoneMotionShortcut} from './phone-motion-panel';
 
 const startup=startupScreen();
 document.querySelector('#app')!.innerHTML=`
@@ -154,7 +154,7 @@ function syncEstimatorMode(){
 
 const code=el<HTMLTextAreaElement>('code');
 const configuration=mountConfigurationPanel(document.querySelector<HTMLElement>('aside.editor')!,{project:()=>project,onRatesChange:changeSensorRates,onResolutionChange:changeCameraResolution,camera:()=>({...world.calibration,software:world.sensorProfile==='software'})});
-mountPhoneMotionPanel(document.getElementById('configuration-view')!,()=>project);
+mountPhoneMotionShortcut(document.querySelector('.run-controls')!,mountPhoneMotionPanel(document.getElementById('configuration-view')!,()=>project));
 const parameterButton=document.createElement('button');parameterButton.id='parameters';parameterButton.textContent='Parameters';parameterButton.onclick=()=>showParameters();
 document.querySelector('.run-controls')!.append(parameterButton);
 function showParameters(){workspacePanes.reveal('editor');parameterView.show();}

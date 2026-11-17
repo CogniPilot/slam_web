@@ -130,7 +130,26 @@ export function mountPhoneMotionPanel(parent:Element,project:()=>Project){
       setTimeout(()=>{if(running&&!samples&&!ready)status('No motion events yet. iPhone Safari needs HTTPS and motion access.',true);},2000);
     });
   };
-  return {stop};
+  /** Show the panel and start the sensors in one tap. Call from a click handler:
+   * iOS only grants motion access during the tap itself. */
+  function open(){
+    document.getElementById('configuration-tab')?.click();
+    section.scrollIntoView({behavior:'smooth',block:'start'});
+    if(!running&&!button.disabled)button.click();
+  }
+  return {stop,open};
+}
+
+/** A toolbar shortcut on touch devices that report motion, where the panel is
+ * otherwise far down the page. */
+export function mountPhoneMotionShortcut(toolbar:Element,panel:{open():void}){
+  const view=toolbar.ownerDocument.defaultView;
+  if(!view||typeof view.DeviceMotionEvent==='undefined')return;
+  if(!(view.navigator.maxTouchPoints>0||view.matchMedia('(pointer: coarse)').matches))return;
+  const shortcut=toolbar.ownerDocument.createElement('button');
+  shortcut.id='phone-motion-shortcut';shortcut.className='phone-motion-shortcut';shortcut.textContent='Phone sensors';
+  shortcut.onclick=()=>panel.open();
+  toolbar.append(shortcut);
 }
 
 /** An artificial horizon: the sky tilts against roll and slides with pitch. */
