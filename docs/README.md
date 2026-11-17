@@ -8,6 +8,7 @@
 | [Editing Modelica](guides/editing-modelica.md) | Select an example, edit source and save your project. |
 | [Sensors and timing](guides/sensors.md) | Set camera, LiDAR, IMU and GPS rates and understand their outputs. |
 | [Hosting and deployment](guides/deployment.md) | Build the static site and understand the deployment roadmap. |
+| [Hardware captures](guides/hardware-captures.md) | Record office/hallway inputs and refuse software fallback before performance runs. |
 
 The demo runs quadrotor physics, inertial navigation and GPU sensors. Full visual
 SLAM execution is still being integrated; opening its source does not activate it.

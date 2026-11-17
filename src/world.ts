@@ -496,7 +496,14 @@ export class World {
   }
   setCameraView(mode:CameraView){
     this.viewerCamera.select(mode,this.view,this.controls.target);
-    this.controls.enabled=mode==='free';
+    this.controls.enabled=mode==='free'||mode==='orbit-follow';
+    this.controls.enablePan=mode!=='orbit-follow';
+    this.controls.maxPolarAngle=mode==='orbit-follow'?Math.PI:Math.PI*.49;
+    this.trackOrbitCamera();
+  }
+  /** UI controls and the worker renderer track the same selected vehicle. */
+  trackOrbitCamera(){
+    if(this.viewerCamera.mode==='orbit-follow')this.viewerCamera.update(this.view,this.cameraVehicle===1&&this.otherVehicle?this.otherVehicle.robot:this.robot,this.controls.target);
   }
   setLighting(mode:DaylightMode){this.lightingMode=mode;this.lighting.setMode(mode,this.simulationTime);this.onLighting(mode);this.configureSensor({lightingMode:mode});}
   setEnvironmentVisible(visible:boolean){
@@ -543,7 +550,8 @@ export class World {
     if(this.actors.group.visible)this.actors.render(interpolate);
     this.otherVehicle?.render(interpolate);
     this.controls.update();this.viewerCamera.update(this.view,this.cameraVehicle===1&&this.otherVehicle?this.otherVehicle.robot:this.robot,this.controls.target);
-    this.renderer.setRenderTarget(null);this.cutaway.render(this.environment,this.viewerCutaway,()=>this.renderer.render(this.scene,this.view));
+    const vehicle=this.cameraVehicle===1&&this.otherVehicle?this.otherVehicle.robot:this.robot;
+    this.renderer.setRenderTarget(null);this.cutaway.render(this.environment,this.viewerCutaway,this.view,vehicle,()=>this.renderer.render(this.scene,this.view));
   }
   private optics(fx: number, fy: number,far=this.calibration.far) {
     this.sensor.near = this.calibration.near; this.sensor.far = far;

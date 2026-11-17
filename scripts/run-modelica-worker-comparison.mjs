@@ -1,3 +1,4 @@
+import {chromiumLaunchOptions} from './browser-launch.mjs';
 import {chromium} from 'playwright';
 import {readFile,writeFile,mkdir,readdir,rename,open} from 'node:fs/promises';
 import {createServer} from 'node:http';
@@ -8,7 +9,7 @@ import {execFileSync} from 'node:child_process';
 
 const [inputsRoot,captureRoot,cacheRoot,scene,output]=process.argv.slice(2);
 const paced=process.env.SLAM_COMPARISON_PACED!=='0';
-if(!output||!['city','warehouse','hallway'].includes(scene))throw Error('Usage: run-modelica-worker-comparison.mjs INPUTS CAPTURE CACHE SCENE NEW_OUTPUT');
+if(!output||!['city','warehouse','hallway','office-loop'].includes(scene))throw Error('Usage: run-modelica-worker-comparison.mjs INPUTS CAPTURE CACHE SCENE NEW_OUTPUT');
 await mkdir(output);
 const poseFile=await open(join(output,'poses.json.tmp'),'wx');
 await poseFile.write('[');
@@ -59,7 +60,7 @@ async function sample(root){
   resource.push({elapsedMs:performance.now()-wallStart,rssKiB:rss,threads,loadAverage:(await readFile('/proc/loadavg','utf8')).trim().split(' ').slice(0,3).map(Number)});
 }
 try{
-  browserServer=await chromium.launchServer({headless:true,handleSIGINT:false,handleSIGTERM:false,executablePath:process.env.CHROMIUM_PATH,
+  browserServer=await chromium.launchServer({headless:true,handleSIGINT:false,handleSIGTERM:false,...chromiumLaunchOptions(),
     args:['--disable-gpu','--renderer-process-limit=1']});
   browser=await chromium.connect(browserServer.wsEndpoint());page=await browser.newPage();
   page.on('console',message=>console.log('browser:',message.text()));

@@ -71,3 +71,24 @@ describe('viewer follow camera',()=>{
     expect(seen).toEqual(CAMERA_VIEWS.map(view=>view.id));expect(view).toBe('follow');
   });
 });
+
+it('keeps user orbit and zoom while tracking translation, ignoring airframe yaw and roll',()=>{
+  const {rig,camera,drone,target}=fixture();
+  rig.select('orbit-follow',camera,target);rig.update(camera,drone,target);
+  expect(target.toArray()).toEqual(drone.position.toArray());
+  // This is the eye/target transform produced by an orbit plus a wheel zoom.
+  camera.position.copy(target).add(new THREE.Vector3(2,1,-3));
+  rig.update(camera,drone,target);
+  const offset=camera.position.clone().sub(target),orientation=camera.quaternion.clone();
+  drone.position.add(new THREE.Vector3(7,3,-9));
+  drone.quaternion.setFromEuler(new THREE.Euler(.5,2.1,.7));
+  const pose=drone.position.clone(),attitude=drone.quaternion.clone();
+  rig.update(camera,drone,target);
+  expect(camera.position.clone().sub(target).distanceTo(offset)).toBeLessThan(1e-12);
+  expect(camera.quaternion.angleTo(orientation)).toBeLessThan(1e-7);
+  expect(target.toArray()).toEqual(pose.toArray());
+  expect(drone.position.toArray()).toEqual(pose.toArray());expect(drone.quaternion.toArray()).toEqual(attitude.toArray());
+  // A paused repeat must neither snap the eye nor consume another translation.
+  const eye=camera.position.clone();rig.update(camera,drone,target);
+  expect(camera.position.toArray()).toEqual(eye.toArray());
+});

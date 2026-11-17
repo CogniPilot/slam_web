@@ -34,7 +34,8 @@ export class SlamNativeProgram {
   private needsCarry=false;
   private constructor(readonly layout:SlamNativeLayout,readonly memory:WebAssembly.Memory,
     private readonly entry:(y:number,p:number,time:number,scratch:number,typed:number)=>number,
-    private readonly state:{in:Uint32Array;out:Uint32Array;lane:Uint8Array}){}
+    private readonly state:{in:Uint32Array;out:Uint32Array;lane:Uint8Array},
+    private readonly fetchFile:SlamNativeFetch){}
 
   static allocateMemory(pages:number){
     try{return new WebAssembly.Memory({initial:pages,maximum:pages});}
@@ -42,14 +43,26 @@ export class SlamNativeProgram {
   }
 
   static async load(layout:SlamNativeLayout,fetchFile:SlamNativeFetch){
+    return (await this.prepare(layout,fetchFile))();
+  }
+
+  /** Compile once; later state initialization reuses this exact module. */
+  static async prepare(layout:SlamNativeLayout,fetchFile:SlamNativeFetch){
+    const asset=layout.files.module;
+    if(!asset)throw new Error(`Native program ${layout.model} lacks module`);
+    const bytes=await fetchFile(asset.file,asset.encoding);
+    const module=await WebAssembly.compile(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength) as ArrayBuffer);
+    return ()=>this.instantiate(layout,fetchFile,module);
+  }
+
+  private static async instantiate(layout:SlamNativeLayout,fetchFile:SlamNativeFetch,module:WebAssembly.Module){
     const file=(key:string)=>{const entry=layout.files[key];if(!entry)throw new Error(`Native program ${layout.model} lacks ${key}`);return fetchFile(entry.file,entry.encoding);};
-    const [moduleBytes,y,p,lanes,stateIn,stateOut,stateLane]=await Promise.all(['module','y','p','lanes','state_in','state_out','state_lane'].map(file));
+    const [y,p,lanes,stateIn,stateOut,stateLane]=await Promise.all(['y','p','lanes','state_in','state_out','state_lane'].map(file));
     const stateInit=layout.files.state_init?await file('state_init'):undefined;
     if(y.length!==layout.y_bytes)throw new Error('Native program Y image size mismatch');
     if(p.length!==layout.p_count*8)throw new Error('Native program P image size mismatch');
     if(lanes.length!==layout.typed_bytes&&lanes.length!==Math.ceil(layout.typed_bytes/8)*8)throw new Error('Native program typed lane image size mismatch');
     if(stateIn.length!==layout.state.count*4||stateOut.length!==layout.state.count*4||stateLane.length!==layout.state.count)throw new Error('Native program state tables do not match the declared state count');
-    const module=await WebAssembly.compile(moduleBytes.buffer.slice(moduleBytes.byteOffset,moduleBytes.byteOffset+moduleBytes.byteLength) as ArrayBuffer);
     const memory=SlamNativeProgram.allocateMemory(layout.pages);
     const env:Record<string,WebAssembly.ImportValue>={memory};
     for(const item of WebAssembly.Module.imports(module)){
@@ -64,7 +77,7 @@ export class SlamNativeProgram {
     const bytes=new Uint8Array(memory.buffer);
     bytes.set(y,0);bytes.set(p,layout.p_offset);bytes.set(lanes.subarray(0,layout.typed_bytes),layout.typed_offset);
     const tables={in:aligned(stateIn,Uint32Array),out:aligned(stateOut,Uint32Array),lane:new Uint8Array(stateLane)};
-    const program=new SlamNativeProgram(layout,memory,entry as never,tables);
+    const program=new SlamNativeProgram(layout,memory,entry as never,tables,fetchFile);
     if(stateInit){
       const values=aligned(stateInit,Float64Array);
       if(values.length!==layout.state.count)throw new Error('Native program initial state size mismatch');
@@ -77,6 +90,27 @@ export class SlamNativeProgram {
       }
     }
     return program;
+  }
+
+  async reset(){
+    const file=(key:string)=>{const asset=this.layout.files[key];return this.fetchFile(asset.file,asset.encoding);};
+    const [y,p,lanes,stateInit]=await Promise.all([file('y'),file('p'),file('lanes'),this.layout.files.state_init?file('state_init'):undefined]);
+    if(y.length!==this.layout.y_bytes||p.length!==this.layout.p_count*8||
+      (lanes.length!==this.layout.typed_bytes&&lanes.length!==Math.ceil(this.layout.typed_bytes/8)*8))throw new Error('Native reset image size mismatch');
+    const values=stateInit?aligned(stateInit,Float64Array):undefined;
+    if(values&&values.length!==this.layout.state.count)throw new Error('Native program initial state size mismatch');
+    const bytes=new Uint8Array(this.memory.buffer);bytes.fill(0);
+    bytes.set(y);bytes.set(p,this.layout.p_offset);bytes.set(lanes.subarray(0,this.layout.typed_bytes),this.layout.typed_offset);
+    if(values){
+      const view=new DataView(this.memory.buffer);
+      for(let i=0;i<this.layout.state.count;i++){
+        const at=this.state.in[i],value=values[i];
+        if(this.state.lane[i]===0)view.setFloat64(at,value,true);
+        else if(this.state.lane[i]===1)view.setBigInt64(at,BigInt(value),true);
+        else view.setUint8(at,value!==0?1:0);
+      }
+    }
+    this.needsCarry=false;
   }
 
   /** Declared Real input as a live view over linear memory. */

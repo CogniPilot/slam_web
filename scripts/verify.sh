@@ -10,6 +10,7 @@ esac
 if (( $# > 1 )); then echo "Unexpected extra arguments" >&2; exit 2; fi
 npm ci
 npm run assets
+node --test scripts/install-rumoca-package.test.mjs
 npm test
 npm run build
 if "$browser"; then npm run test:browser; fi

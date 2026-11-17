@@ -42,6 +42,7 @@ test('canonical library edits persist and the reloaded example executes the edit
 });
 
 test('model selection executes the chosen example and preserves independent source edits',async({page})=>{
+  test.setTimeout(180_000); // Two startups, model selection, and persistence/export checks.
   await page.goto('/');
   await expect(page.getByRole('button',{name:'▶ Run',exact:true})).toBeEnabled({timeout:90000});
   const selector=page.getByLabel('Run model');

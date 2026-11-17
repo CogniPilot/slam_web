@@ -3,8 +3,9 @@ import {createHash} from 'node:crypto';
 import {expect,it} from 'vitest';
 import init,* as compiler from '@cognipilot/rumoca';
 
-it('uses the same pinned main compiler package in Node and browser assets',async()=>{
+it('uses the same pinned compiler package in Node and browser assets',async()=>{
   const pin=JSON.parse(readFileSync('rumoca-package.json','utf8'));
+  expect(JSON.parse(readFileSync('node_modules/@cognipilot/rumoca/package.json','utf8')).version).toBe(pin.version);
   for(const [name,sha] of Object.entries(pin.files)){
     for(const root of ['node_modules/@cognipilot/rumoca','public/vendor/rumoca'])expect(createHash('sha256').update(readFileSync(`${root}/${name}`)).digest('hex')).toBe(sha);
   }

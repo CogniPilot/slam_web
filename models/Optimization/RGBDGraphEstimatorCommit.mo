@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Staged graph/map/filter publication. Raw captures and measured edges never
 // change during correction. Graph pose means have a separate versioned owner.
 // Geometry-only map outputs are not independent filter measurements.
@@ -101,8 +101,9 @@ package RGBDGraphEstimatorCommit
     result.lastUsedEpoch := integer(localization.estimator.lastUsedEpoch);
     result.predictionTime := localization.predictionTime; result.referenceTime := 0;
     if result.referenceAvailable then
-      slot := mod(result.referenceId-1,nodeCapacity)+1;
-      result.referenceTime := localization.catalog.imageTimes[slot];
+      // Retention assigns slots; an evicted reference reads no time.
+      slot := RGBDKeyframes.SlotOf(localization.catalog,result.referenceId);
+      if slot >= 1 then result.referenceTime := localization.catalog.imageTimes[slot]; end if;
     end if;
   end EstimatorState;
 
@@ -154,7 +155,7 @@ package RGBDGraphEstimatorCommit
         and expectedBinding.currentTime == previous.localization.predictionTime
         and expectedBinding.currentCaptureSequence == previous.localization.steps
         and (RGBDGraphMeasurements.loopAnchoredCapture
-          or expectedBinding.anchorId == max(1,previous.localization.catalog.nextId-nodeCapacity))
+          or expectedBinding.anchorId == RGBDKeyframes.OldestId(previous.localization.catalog))
         and previousAttempt.generation == previous.localization.generation
         and previousAttempt.graphRevision >= previous.graphRevisionUsed
         and (if previousAttempt.graphRevision == 0 then previousAttempt.factorProvenance == 0
@@ -167,9 +168,10 @@ package RGBDGraphEstimatorCommit
           previous.localization.graph);
       end if;
       if valid then
-        currentSlot := mod(expectedBinding.currentId-1,nodeCapacity)+1;
-        referenceSlot := mod(expectedBinding.referenceId-1,nodeCapacity)+1;
-        anchorSlot := mod(expectedBinding.anchorId-1,nodeCapacity)+1;
+        // A missing id maps to slot 1, which Bound refuses.
+        currentSlot := max(1,RGBDKeyframes.SlotOf(previous.localization.catalog,expectedBinding.currentId));
+        referenceSlot := max(1,RGBDKeyframes.SlotOf(previous.localization.catalog,expectedBinding.referenceId));
+        anchorSlot := max(1,RGBDKeyframes.SlotOf(previous.localization.catalog,expectedBinding.anchorId));
         valid := RGBDGraphMeasurements.Bound(previous.localization.catalog,expectedBinding.referenceId,
             referenceSlot,expectedBinding.referenceEpoch)
           and RGBDGraphMeasurements.Bound(previous.localization.catalog,expectedBinding.anchorId,

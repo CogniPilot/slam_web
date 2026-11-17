@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Corrected pose metadata is explicit; immutable raw catalog poses stay raw.
 // This package does not import RGBDGraphEstimatorCommit (no cyclic dependency).
 package RGBDCatalogPoseMapping

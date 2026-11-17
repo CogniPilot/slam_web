@@ -31,7 +31,8 @@
         let
           inherit (environment system) pkgs rust;
           shell = pkgs.mkShell {
-            packages = [ pkgs.nodejs_24 rust pkgs.chromium pkgs.git pkgs.gh pkgs.pkg-config pkgs.perf pkgs.wasm-tools ];
+            packages = [ pkgs.nodejs_24 rust pkgs.chromium pkgs.git pkgs.gh pkgs.pkg-config pkgs.perf pkgs.wasm-tools
+              (pkgs.python3.withPackages (ps: [ ps.numpy ])) ];
             CARGO_BUILD_JOBS = "2";
             RUST_TEST_THREADS = "2";
             RAYON_NUM_THREADS = "2";

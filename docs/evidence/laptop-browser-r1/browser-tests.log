@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: real Playwright argv preserves the sandbox; its default is a negative control
+ok 1 - real Playwright argv preserves the sandbox; its default is a negative control
+  ---
+  duration_ms: 39.129889
+  type: 'test'
+  ...
+# Subtest: explicit Chromium takes precedence; an invalid override never falls back to PATH
+ok 2 - explicit Chromium takes precedence; an invalid override never falls back to PATH
+  ---
+  duration_ms: 8.468959
+  type: 'test'
+  ...
+# Subtest: image PATH discovery follows executable symlinks and skips unusable candidates
+ok 3 - image PATH discovery follows executable symlinks and skips unusable candidates
+  ---
+  duration_ms: 3.810497
+  type: 'test'
+  ...
+# Subtest: missing image browser fails with an actionable error, without a bundled fallback
+ok 4 - missing image browser fails with an actionable error, without a bundled fallback
+  ---
+  duration_ms: 0.327831
+  type: 'test'
+  ...
+# Subtest: automatically selects only a Nix NVIDIA ICD matching the loaded driver
+ok 5 - automatically selects only a Nix NVIDIA ICD matching the loaded driver
+  ---
+  duration_ms: 15.30788
+  type: 'test'
+  ...
+# Subtest: system ICD takes precedence over a Nix fallback; explicit selection is preserved
+ok 6 - system ICD takes precedence over a Nix fallback; explicit selection is preserved
+  ---
+  duration_ms: 5.360185
+  type: 'test'
+  ...
+# Subtest: missing flake browser, invalid manifests and ambiguous matching packages fail before launch
+ok 7 - missing flake browser, invalid manifests and ambiguous matching packages fail before launch
+  ---
+  duration_ms: 5.762437
+  type: 'test'
+  ...
+# Subtest: an unmatched driver is not replaced with an arbitrary Nix package
+ok 8 - an unmatched driver is not replaced with an arbitrary Nix package
+  ---
+  duration_ms: 2.897823
+  type: 'test'
+  ...
+# Subtest: software, unknown, and non-Vulkan renderers cannot qualify as hardware capture
+ok 9 - software, unknown, and non-Vulkan renderers cannot qualify as hardware capture
+  ---
+  duration_ms: 0.817233
+  type: 'test'
+  ...
+# Subtest: sandbox-disabling arguments and API overrides are refused before launch
+ok 10 - sandbox-disabling arguments and API overrides are refused before launch
+  ---
+  duration_ms: 2.626442
+  type: 'test'
+  ...
+# Subtest: fallback is refused and browser closed before the caller can load a simulation; failure retains renderer
+ok 11 - fallback is refused and browser closed before the caller can load a simulation; failure retains renderer
+  ---
+  duration_ms: 2.504591
+  type: 'test'
+  ...
+# Subtest: accepted preflight retains executable, driver choice and actual renderer, leaving browser open
+ok 12 - accepted preflight retains executable, driver choice and actual renderer, leaving browser open
+  ---
+  duration_ms: 2.23889
+  type: 'test'
+  ...
+# Subtest: probe exceptions close both the probe page and browser
+ok 13 - probe exceptions close both the probe page and browser
+  ---
+  duration_ms: 2.900563
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 458.415198

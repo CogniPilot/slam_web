@@ -1,3 +1,4 @@
+import {chromiumLaunchOptions} from './browser-launch.mjs';
 // Verify a static preview under a directory prefix before console integration.
 import {chromium} from 'playwright';
 import {createServer} from 'node:http';
@@ -23,7 +24,7 @@ const server=createServer(async(req,res)=>{
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
 let browser;const errors=[];
 try{
- browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ browser=await chromium.launch({...chromiumLaunchOptions(),headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const page=await browser.newPage({viewport:{width:1280,height:900}});page.on('pageerror',error=>errors.push(error.message));
  await page.goto(`http://127.0.0.1:${server.address().port}${prefix}hallway.html`);
  await page.waitForFunction(()=>window.__slamLab?.ready&&window.__slamLab.runtime.world.viewerCamera.mode==='free',undefined,{timeout:120000});

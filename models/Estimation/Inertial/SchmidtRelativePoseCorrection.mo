@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // A correlated, frozen reference pose is a Schmidt state, not pose truth.
 // World-additive p/v; right-local body attitude; current state order p,v,theta,ba,bg.
 // Registration maps reference optical points to current optical coordinates.

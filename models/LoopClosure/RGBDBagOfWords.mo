@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Appearance retrieval only; full descriptor matching and geometric registration
 // must verify each loop proposal.
 function NormalizeVisualWord
@@ -59,6 +59,7 @@ function RetrieveVisualWords
   input Real minimumAssignments;
   input Real minimumSimilarity;
   input Real minimumAge;
+  input Real catalogSlot = 0.0 "Keyframe catalog slot this capture was stored in; 0 keeps the standalone ring";
   output Real wordIndex[featureCapacity];
   output Real histogram[vocabularyCapacity];
   output Real candidateId[candidateCapacity];
@@ -166,7 +167,8 @@ algorithm
     and (resetRequested == 0.0 or resetRequested == 1.0) and (stateValid or resetRequested == 1.0)
     and maximumWordDistanceSquared >= 0.0 and maximumWordDistanceSquared <= 4.0
     and minimumAssignments >= 1.0 and minimumAssignments <= featureCapacity and floor(minimumAssignments) == minimumAssignments
-    and minimumSimilarity >= 0.0 and minimumSimilarity <= 1.0 and minimumAge >= 0.0 and minimumAge <= 1e6;
+    and minimumSimilarity >= 0.0 and minimumSimilarity <= 1.0 and minimumAge >= 0.0 and minimumAge <= 1e6
+    and (catalogSlot == 0.0 or (catalogSlot >= 1.0 and catalogSlot <= keyframeCapacity and floor(catalogSlot) == catalogSlot));
   resetHistory := configuration and (resetRequested == 1.0 or vocabularyVersion <> previousVersion);
   nextVersion := if configuration then vocabularyVersion else if stateValid then previousVersion else 0.0;
   nextSlot := if stateValid and not resetHistory then previousNextSlot else 1.0;
@@ -276,7 +278,11 @@ algorithm
     end if;
   end for;
   // Query history before inserting the geometrically admitted keyframe.
-  destination := if existingSlot > 0 then existingSlot else if nextSlot >= 1.0 and nextSlot <= keyframeCapacity then integer(nextSlot) else 1;
+  // Beside a retention catalog the histogram follows the catalog's stored
+  // slot (Store chooses it); alone, it keeps its own ring.
+  destination := if existingSlot > 0 then existingSlot
+    else if catalogSlot >= 1.0 and catalogSlot <= keyframeCapacity then integer(catalogSlot)
+    else if nextSlot >= 1.0 and nextSlot <= keyframeCapacity then integer(nextSlot) else 1;
   stored := if retrievalValid == 1.0 and storeKeyframe == 1.0 then 1.0 else 0.0;
   if stored == 1.0 then
     nextHistogram[destination,:] := histogram;
@@ -315,6 +321,7 @@ model RGBDBagOfWords
   input Real timeNow = 0.0;
   input Real storeKeyframe = 0.0;
   input Real resetRequested = 0.0;
+  input Real catalogSlot = 0.0 "Keyframe catalog stored slot to follow; 0 keeps the standalone ring";
   output Real wordIndex[featureCapacity];
   output Real histogram[vocabularyCapacity];
   output Real candidateId[candidateCapacity];
@@ -339,5 +346,5 @@ equation
     nextVersion,nextSlot,nextTime,configurationValid,vocabularyCount,assignmentCount,retrievalValid,candidateCount,stored,invalidHistoryCount) =
     RetrieveVisualWords(descriptor,descriptorEnabled,descriptorCount,vocabulary,vocabularyEnabled,vocabularyVersion,
       previousHistogram,previousEnabled,previousKeyframeId,previousKeyframeTime,previousVersion,previousNextSlot,previousTime,
-      queryKeyframeId,timeNow,storeKeyframe,resetRequested,maximumWordDistanceSquared,minimumAssignments,minimumSimilarity,minimumAge);
+      queryKeyframeId,timeNow,storeKeyframe,resetRequested,maximumWordDistanceSquared,minimumAssignments,minimumSimilarity,minimumAge,catalogSlot);
 end RGBDBagOfWords;

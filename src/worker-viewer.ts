@@ -58,7 +58,7 @@ export class WorkerViewer {
   private send(type:string,args:Record<string,unknown>={}){this.worker.postMessage({type,...args});}
   async configure(environment:Environment,detail:SceneDetail,cars:boolean,people:boolean,preservePresentation=false){if(!preservePresentation)this.cloudTransfer.reset();await this.ready;await this.call('configure',{environment,detail,carsEnabled:cars,peopleEnabled:people,preservePresentation});this.camera(true);}
   camera(force=false){
-    this.world.controls.update();
+    this.world.controls.update();this.world.trackOrbitCamera();
     const position=this.world.view.position.toArray(),quaternion=this.world.view.quaternion.toArray();
     const target=this.world.controls.target.toArray(),mode=this.world.viewerCamera.mode;
     const offset=this.world.viewerCamera.offset.toArray(),yawOffset=this.world.viewerCamera.yawOffset;

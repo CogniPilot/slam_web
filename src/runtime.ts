@@ -17,6 +17,8 @@ import {SensorClock,sensorRates,validateSensorRates,type SensorRates} from './se
 import {checkedLoopClosureSettings,type LoopClosureSettings} from './loop-closure-settings';
 import {nativeParametersFor,NATIVE_SLAM_PARAMETERS,type ParameterValues} from './model-parameters';
 import {FrameClock} from './frame-clock';
+import {runtimeProjectKey} from './runtime-project-key';
+import {selectedFlightTour,type FlightTour} from './flight-tour';
 export interface Metrics { time:number; ate:number|null; currentError:number|null; orientationError:number|null; confidence:number; points:number; features:number; rtf:number; frames:number; loops:number; dropped:number }
 export interface FlowTiming {totalMs:number;bufferBytes:number|null}
 export interface VehicleFrame {frame:SensorFrame;estimate:Estimate;truth:Truth|undefined;metrics:Metrics}
@@ -34,10 +36,11 @@ export class Runtime {
   private random=seededRandom(7);
   private gpsRandom=seededRandom(9);
   gps:GpsSample|null=null;
-  tourMode:'circuit'|'indoor'='circuit';
+  tourMode:FlightTour='circuit';
   private sequence=0;
   private cameraSequence=0;
   private stepping=false;
+  private resetting=false;
   private playbackEpoch=0;
   private reference?:{truth:Truth;pose:Pose};
   private origin:Pose={x:0,y:0,z:1.5,quaternion:[1,0,0,0]};
@@ -89,6 +92,10 @@ export class Runtime {
   }
   get vehicleCount():1|2{return this.secondary?2:1;}
   get activeVehicleIndex(){return this.selectedVehicle;}
+  setFlightTour(route:FlightTour){
+    this.tourMode=route;if(this.project)this.project.flightTour=route;
+    if(this.secondary)this.secondary.setFlightTour(route);
+  }
   selectVehicle(index:0|1){
     this.getVehicle(index);
     this.command={forward:0,left:0,up:0,yaw:0};this.selectedVehicle=index;this.world.cameraVehicle=index;
@@ -167,7 +174,7 @@ export class Runtime {
     this.resetSensorClock(sensorRates(project));
     this.heldImu=(await this.sampleSensors(truth,true,false)).imu;
     this.reference=undefined;this.records=[];this.replay=undefined;
-    this.project=structuredClone(project);this.order=order;
+    this.project=structuredClone(project);this.order=order;this.tourMode=selectedFlightTour(project);
     if(project.slamBackend==='native'&&order.some(node=>node.kind==='slam')){
       this.onStatus('Loading native SLAM programs…');
       const client=new ModelicaSlamClient(text=>this.onStatus(text));
@@ -195,6 +202,63 @@ export class Runtime {
       }catch(error){if(candidate)candidate.dispose();else otherWorld.dispose();await this.world.setVehicleCount(1);this.project=undefined;throw error;}
     }
     this.onStatus(this.slam?`Ready · camera + native Modelica SLAM (${this.slamProgram?.models.step.model}) · inertial baseline retained`:'Ready · camera + Modelica inertial baseline · native feature detection and SLAM pending');
+  }
+  async prepare(project:Project,reusePrepared=false){
+    if(reusePrepared&&this.canReset(project))await this.reset(project);
+    else await this.compile(project);
+  }
+  canReset(project:Project){
+    return !!this.project&&!this.fleetFailure&&runtimeProjectKey(project)===runtimeProjectKey(this.project);
+  }
+  /** Reinitialize the prepared worker programs, never the compiler. */
+  async reset(project:Project){
+    this.pause();
+    if(this.busy)throw new Error('Wait for the current lockstep frame to finish');
+    if(!this.canReset(project))throw new Error('The model changed or is unavailable; compile it before resetting');
+    this.resetting=true;
+    try{
+      await this.resetVehicle(project);
+      if(this.secondary)await this.secondary.reset({...structuredClone(project),vehicleCount:1,seed:project.seed^0x44524f4e});
+      this.selectedVehicle=0;this.world.cameraVehicle=0;
+      this.publishVehiclePoses();
+      this.onStatus('Simulation reset · compiled models reused · press Run to continue');
+    }catch(error){
+      // A partially reset fleet must never be stepped or reused as a valid run.
+      this.project=undefined;if(this.secondary)this.secondary.project=undefined;
+      throw error;
+    }finally{this.resetting=false;}
+  }
+  private async resetVehicle(project:Project){
+    const truth=await this.physics.call<Truth>('reset');validatePose(truth);
+    if(truth.time!==0)throw new Error('Physics reset did not return to time zero');
+    this.origin={x:truth.x,y:truth.y,z:truth.z,quaternion:[...truth.quaternion]};
+    const actorRoute=project.environment==='city'?{pedestrianRadius:7.1,carRadius:1.65,pedestrianCrossings:true,streetCars:true,carStreetHalfLength:33}:project.environment==='big-city'?{pedestrianRadius:5.8,carRadius:1.65}:undefined;
+    await this.modelicaMath!.call('reset',{origin:this.origin,actorRoute});
+    if(this.modelicaState)await this.modelicaState.call('reset');
+    this.world.build(project.environment,project.sceneDetail??'high');await this.world.ready;
+    this.world.configureActors(project.carsEnabled??true,project.peopleEnabled??true);
+    this.world.setDepthCloudEnabled(project.depthCloudEnabled??false);this.world.setLighting(project.lightingMode??'day');
+    this.world.update(truth);this.world.setMap([]);
+    const calibration=this.world.calibration;
+    await this.world.setDepthNoise({seed:project.seed,disparityNoisePx:calibration.depthNoiseDisparityPx!,referenceFx:calibration.depthNoiseReferenceFx!,baselineMeters:calibration.baseline,dropoutProbability:.005,unitsMeters:.001});
+    this.world.setActorMotion(await this.modelicaMath!.call<ActorMotionFrame>('actors',{time:0}));
+    this.world.setEstimate({x:0,y:0,z:0,quaternion:[1,0,0,0],confidence:0,points:[]});
+    this.world.setEnvironmentVisible(true);
+    this.project=structuredClone(project);this.order=validateGraph(project.graph);this.tourMode=selectedFlightTour(project);
+    this.random=seededRandom(project.seed);this.gpsRandom=seededRandom(project.seed^0x475053);this.gps=null;
+    this.sequence=0;this.cameraSequence=0;this.time=0;this.resetSensorClock(sensorRates(project));
+    this.imuIntervals=[];this.cameraLidar=false;this.heldImu=(await this.sampleSensors(truth,true,false)).imu;
+    this.reference=undefined;this.records=[];this.replay=undefined;this.lastFrame=undefined;
+    this.pendingFrame=undefined;this.pendingRecord=undefined;this.externalStep=false;
+    this.command={forward:0,left:0,up:0,yaw:0};this.flow.stats.clear();
+    this.frameClock.reset();this.pacingSince=undefined;this.pacedWaitMs=0;this.startWall=0;this.startTime=0;
+    this.lastTimings={};this.lastWorkerTimings={};this.lastTransportTimings={};
+    if(this.slam){
+      const frame=await this.captureInitialFrame();
+      const estimate=await this.slam.reset(frame,project.loopClosureSettings,nativeParametersFor(project));
+      this.slamProgram={...this.slamProgram!,estimate};
+      this.onInitialFrame(this.vehicleIndex,frame,estimate);
+    }
   }
   /** Optional full-SLAM initialization image. It consumes no physics/sensor tick
    * and publishes no estimate. A failed capture leaves the image ID available. */
@@ -244,6 +308,7 @@ export class Runtime {
     if(this.sequence!==sequence)this.frameClock.record(started,performance.now(),this.time,paced);
   }
   private async stepFrame(){
+    if(this.resetting)throw new Error('Wait for simulation reset to finish');
     if(this.fleetFailure)throw this.fleetFailure;
     if(this.fleetStepping)throw new Error('A fleet lockstep frame is already executing');
     if(!this.secondary)return this.stepVehicle();
@@ -299,7 +364,7 @@ export class Runtime {
               else {
                 let intervalStart=this.time;const commandTime=this.time;
                 for(const event of this.sensorClock.nextFrame(this.project.lidarEnabled??false)){
-                  truth=await this.physics.call<Truth>('step',{time:event.time,command,autopilot:this.autopilot,indoorTour:this.tourMode==='indoor',commandTime});
+                  truth=await this.physics.call<Truth>('step',{time:event.time,command,autopilot:this.autopilot,indoorTour:this.tourMode==='indoor',tourMode:this.tourMode,commandTime});
                   this.world.update(truth);
                   if(barrier)await barrier.arrive();
                   // Zero-order hold: an endpoint IMU measurement applies to
@@ -423,6 +488,7 @@ export class Runtime {
     this.frameClock.reset();
   }
   play() {
+    if(this.resetting)throw new Error('Wait for simulation reset to finish');
     if(this.running) return;
     this.running=true;this.startWall=performance.now();this.startTime=this.time;this.frameClock.reset();
     this.pacingSince=undefined;this.pacedWaitMs=0;
@@ -480,7 +546,7 @@ export class Runtime {
     }
     for(const vehicle of vehicles)if(vehicle.project)vehicle.project.loopClosureSettings={...checked};
   }
-  get busy():boolean{return this.stepping||this.fleetStepping||!!this.secondary?.busy;}
+  get busy():boolean{return this.resetting||this.stepping||this.fleetStepping||!!this.secondary?.busy;}
   get evaluationOrigin(){return structuredClone(this.origin);}
   referenceTruth(truth:Pose){
     if(!this.reference||truth.x!==this.reference.truth.x||truth.y!==this.reference.truth.y||truth.z!==this.reference.truth.z||truth.quaternion.some((v,i)=>v!==this.reference!.truth.quaternion[i]))throw new Error('Modelica reference observation is unavailable for this pose');

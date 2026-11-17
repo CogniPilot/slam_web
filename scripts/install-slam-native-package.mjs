@@ -6,7 +6,7 @@ import {pipeline} from 'node:stream/promises';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {homedir} from 'node:os';
-import {join,dirname} from 'node:path';
+import {join,dirname,resolve} from 'node:path';
 import {D435_PAIRED_RESOLUTIONS} from '../src/camera-resolutions.mjs';
 
 const run=promisify(execFile);
@@ -21,7 +21,8 @@ async function verify(path,pin){
 export async function installPublishedNativeAssets(destination,sourceSha256){
   const pin=JSON.parse(await readFile(new URL('../slam-native-package.json',import.meta.url),'utf8'));
   if(pin.sourceSha256!==sourceSha256)throw new Error('Published native SLAM source differs from this checkout; export the current models locally');
-  const cache=join(homedir(),'scratch/slam_web/downloads/native-slam',pin.sha256);
+  const cacheRoot=process.env.SLAM_NATIVE_CACHE_ROOT||join(homedir(),'scratch/slam_web/downloads/native-slam');
+  const cache=join(resolve(cacheRoot),pin.sha256);
   await mkdir(cache,{recursive:true});
   const archive=process.env.SLAM_NATIVE_PACKAGE??join(cache,pin.asset);
   try{await verify(archive,pin);}

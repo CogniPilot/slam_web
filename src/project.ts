@@ -1,3 +1,5 @@
+import {isFlightTour,type FlightTour} from './flight-tour';
+import {mapFlightTourSources} from './modelica-flight-tour';
 import physics from '../models/Vehicles/LabQuadrotor.mo?raw';
 import offsetQuadrotor from '../models/Vehicles/OffsetQuadrotor.mo?raw';
 import imageProfile from '../models/Sensors/D435ImageProfile.mo?raw';
@@ -34,6 +36,7 @@ const defaultModelicaSources=Object.fromEntries(Object.entries(modelicaModelsSou
 export const offsetQuadrotorPath='models/Vehicles/OffsetQuadrotor.mo';
 export const offsetQuadrotorSource=offsetQuadrotor;
 defaultModelicaSources[offsetQuadrotorPath]=offsetQuadrotor;
+Object.assign(defaultModelicaSources,mapFlightTourSources);
 /** Repository-owned EKF example for phone or airframe IMU input. */
 export const phoneMotionEKFPath='models/Phone/PhoneMotionEKF.mo';
 export const phoneMotionEKFSource=phoneMotionEKF;
@@ -46,6 +49,8 @@ export const defaultSensorModelica=withActorMotion(`${sensorEquations}\n${sensor
 export const defaultEvaluationModelica=evaluationEquations;
 export interface Project {
   format: 'slam-lab-project'; version: 1; name: string;
+  /** Selected route; absent legacy values use the current map default. */
+  flightTour?:FlightTour;
   environment: Environment; seed: number; algorithm: string; detector: string; physics: string;
   algorithmPreset: string; detectorPreset: string;
   runtime: 'modelica';
@@ -118,7 +123,7 @@ export function withDefaultModels(saved:unknown,mobile=false):Project {
   let project=defaultProject(mobile);
   if(!saved||typeof saved!=='object'||Array.isArray(saved))return project;
   const settings=saved as Record<string,unknown>;
-  for(const key of ['name','environment','seed','sceneDetail','sensorRates','cameraResolution','lidarEnabled','depthCloudEnabled','carsEnabled','peopleEnabled','lightingMode','vehicleCount','slamBackend','loopClosureSettings','modelParameters'] as const){
+  for(const key of ['name','environment','flightTour','seed','sceneDetail','sensorRates','cameraResolution','lidarEnabled','depthCloudEnabled','carsEnabled','peopleEnabled','lightingMode','vehicleCount','slamBackend','loopClosureSettings','modelParameters'] as const){
     if(settings[key]===undefined)continue;
     // Validate each setting independently: one invalid value must not discard
     // the remaining settings, or reintroduce incompatible saved sources.
@@ -140,6 +145,7 @@ export function parseProject(text: string): Project {
   }
   if(p.runtime!=='modelica'||p.detectorLanguage!=='modelica'||p.graph?.nodes?.some((n:any)=>n.kind==='python'))throw new Error('This project uses a retired runtime. Convert its algorithm, detector and custom nodes to Modelica before opening it. Your saved source has not been changed.');
   if(!['city','warehouse','courtyard','tokyo','asset-city','big-city','hallway','hallway-marked','office-loop'].includes(p.environment)||!Number.isInteger(p.seed)) throw new Error('Invalid project settings');
+  if(p.flightTour!==undefined&&!isFlightTour(p.flightTour))throw new Error('Invalid flight tour route');
   if(p.sceneDetail!==undefined&&!['low','medium','high'].includes(p.sceneDetail))throw new Error('Invalid scene detail level');
   if(p.cameraResolution!==undefined&&!D435_PAIRED_RESOLUTIONS.some(mode=>mode.id===p.cameraResolution))throw new Error('Invalid D435 camera resolution');
   if(p.vehicleCount!==undefined&&p.vehicleCount!==1&&p.vehicleCount!==2)throw new Error('Vehicle count must be one or two');

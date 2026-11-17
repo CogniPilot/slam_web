@@ -1,5 +1,5 @@
 import {expect,it} from 'vitest';
-import {Group,Mesh,MeshStandardMaterial} from 'three';
+import {Group,Mesh,MeshStandardMaterial,PerspectiveCamera} from 'three';
 import {buildOfficeLoop,OFFICE_LOOP_ROUTE,OFFICE_LOOP_ROOF} from '../src/world-office-loop';
 import {ViewerCutaway} from '../src/viewer-cutaway';
 import type {WorldMaterials} from '../src/world-materials';
@@ -22,10 +22,14 @@ it('has a closed80m four-sided route inside connected clear corridors',()=>{
  const p={...defaultProject(),environment:'office-loop' as const};expect(parseProject(JSON.stringify(p))).toEqual(p);expect(sceneLandmarks('office-loop').landmarks[0].circulation).toEqual(OFFICE_LOOP_ROUTE);
 });
 it('restores opaque sensor materials and roof visibility after each viewer render',()=>{
- const root=new Group(),original=new MeshStandardMaterial(),wall=new Mesh(undefined,original),roof=new Mesh();root.add(wall,roof);
- wall.userData.viewerOccluder='wall';roof.userData.viewerOccluder='roof';const cutaway=new ViewerCutaway();
- cutaway.render(root,true,()=>{expect(wall.material).not.toBe(original);expect((wall.material as MeshStandardMaterial).opacity).toBe(.12);expect(roof.visible).toBe(false);expect(original.opacity).toBe(1);});
- expect(wall.material).toBe(original);expect(roof.visible).toBe(true);
- expect(()=>cutaway.render(root,true,()=>{throw Error('Render failed');})).toThrow('Render failed');expect(wall.material).toBe(original);expect(roof.visible).toBe(true);
- cutaway.render(root,false,()=>{expect(wall.material).toBe(original);expect(roof.visible).toBe(true);});
+ const root=new Group(),original=new MeshStandardMaterial(),wall=new Mesh(undefined,original),roof=new Mesh(),floor=new Mesh(undefined,original),camera=new PerspectiveCamera(),drone=new Group();root.add(wall,roof,floor);
+ wall.userData.viewerOccluder='wall';roof.userData.viewerOccluder='roof';floor.userData.viewerOccluder='floor';const cutaway=new ViewerCutaway();camera.position.set(0,2,6);
+ const originalColor=original.color.clone();
+ cutaway.render(root,true,camera,drone,()=>{
+  expect(wall.material).not.toBe(original);expect((wall.material as MeshStandardMaterial).opacity).toBe(1);expect((wall.material as MeshStandardMaterial).transparent).toBe(false);
+  expect((floor.material as MeshStandardMaterial).color.getHex()).toBe(0x687483);expect(roof.visible).toBe(false);expect(original.color).toEqual(originalColor);
+ });
+ expect(wall.material).toBe(original);expect(floor.material).toBe(original);expect(roof.visible).toBe(true);
+ expect(()=>cutaway.render(root,true,camera,drone,()=>{throw Error('Render failed');})).toThrow('Render failed');expect(wall.material).toBe(original);expect(floor.material).toBe(original);expect(roof.visible).toBe(true);
+ cutaway.render(root,false,camera,drone,()=>{expect(wall.material).toBe(original);expect(floor.material).toBe(original);expect(roof.visible).toBe(true);});
 });

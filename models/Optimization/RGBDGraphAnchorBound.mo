@@ -1,4 +1,4 @@
-// Generated from CogniPilot/modelica_models 3e04d9ed9b29888bdb61ee91167d71b38df81389; edit the canonical packages there.
+// Generated from CogniPilot/modelica_models 1e0afae78308b7596c9ff6fc1bd6adf5b03567a2; edit the canonical packages there.
 // Local first-order ERROR SECOND-MOMENT bound about a graph anchor mean.
 // Raw capture means/bounds stay immutable; changing gauge never creates a zero
 // absolute bound. Input capture covariance is assumed a valid local error bound.
@@ -60,8 +60,9 @@ package RGBDGraphAnchorBound
         and provenance >= 1 and provenance <= identifierLimit;
       id := 1; slot := 1; unchanged := false;
       if valid then
-        id := max(1,catalog.nextId-capacity); slot := mod(id-1,capacity)+1;
-        if gaugeId > 0 then id := gaugeId; slot := mod(id-1,capacity)+1; end if;
+        id := RGBDKeyframes.OldestId(catalog);
+        if gaugeId > 0 then id := gaugeId; end if;
+        slot := max(1,RGBDKeyframes.SlotOf(catalog,id));
         valid := catalog.occupied[slot] and catalog.ids[slot] == id;
       end if;
       if valid then
